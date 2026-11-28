@@ -331,7 +331,7 @@ theorem ker_hamiltonian_restrict_parentChainInteraction_eq_of_local_kernel (A : 
     {R W N n : ℕ}
     (hR : 0 < R) (hRW : R ≤ W) (hWn : W ≤ n) (hnN : n ≤ N)
     (hker : LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R W).hamiltonian) =
-        groundSpaceES A W) :
+        ((groundSpace A W).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     LinearMap.ker
         (Matrix.toEuclideanLin
             ((parentChainInteraction A R N).restrict fun i ↦ n - W ≤ i.val ∧ i.val + R ≤
@@ -376,7 +376,7 @@ theorem ker_hamiltonian_restrict_parentChainInteraction_eq_range_reassocTailBoun
     (A : MPSTensor d D) {R K L Q : ℕ}
     (hR : 0 < R) (hRW : R ≤ L + Q)
     (hker : LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R (L + Q)).hamiltonian) =
-      groundSpaceES A (L + Q)) :
+      ((groundSpace A (L + Q)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     LinearMap.ker
         (Matrix.toEuclideanLin
             ((parentChainInteraction A R (K + L + Q)).restrict fun i ↦ K + L + Q - (L + Q) ≤ i.val ∧

@@ -26,6 +26,12 @@ nonminimal tensor need not be normal, so the MPU normality capstone below still
 assumes full support for that named tensor and does not claim bare `IsMPU`
 implies its ambient normality. See
 `docs/paper-gaps/mpu_canonical_form_full_support.tex`.
+
+**Bridge (T.2b):** The blocking step of this module still reads an operator tensor through
+`MPOTensor.toMPSTensor`, because the Fin-encoded blocking `Kraus.blockTensor` (with
+`MPOTensor.toMPSTensor_blockTensor`, `MPOTensor.toMPSTensor_blockTwo`) is stated on the alphabet
+`Fin (d * d)`. The bridge is removed when the blocking moves to `Kraus.block` (step T.2b of
+`docs/tensor_type_unification.md`).
 -/
 
 open MPTensor
@@ -87,6 +93,7 @@ section CPSVCanonicalFormData
 
 open MPTensor.CPSVCanonicalFormData
 
+omit [Fintype α] in
 /-- Tensor irreducibility is invariant under simultaneous bond-index reindexing. -/
 private theorem _root_.MPTensor.CPSVCanonicalFormData.isIrreducibleFamily_reindexBond
     {n m : ℕ} (e : Fin n ≃ Fin m) (B : MPTensor α (Fin n))

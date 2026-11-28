@@ -34,7 +34,8 @@ arXiv:1010.3732, Appendix A; arXiv:2011.12127, lines 2170--2172. -/
 theorem exists_uniform_pos_toMatrix'_parentInteraction_le_of_compact
     {X : Type*} [TopologicalSpace X] {d D R : ℕ}
     (A : X → MPSTensor d D)
-    (hProj : Continuous fun x => (groundSpaceES (A x) R).starProjection)
+    (hProj : Continuous fun x => ((groundSpace (A x) R).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap).starProjection)
     (H : X → Matrix (Cfg d R) (Cfg d R) ℂ)
     (hH : Continuous H) (hParent : ∀ x, IsParentInteraction (A x) R (Matrix.toEuclideanLin (H x)))
     {S : Set X} (hS : IsCompact S) :
@@ -63,7 +64,8 @@ Source: arXiv:1010.3732, Appendix A, lines 2477--2480 and 2575--2578. -/
 theorem exists_uniform_hamiltonian_translationInvariant_gap_of_compact_canonical_gap
     {X : Type*} [TopologicalSpace X] {d D R N₀ : ℕ}
     (A : X → MPSTensor d D)
-    (hProj : Continuous fun x => (groundSpaceES (A x) R).starProjection)
+    (hProj : Continuous fun x => ((groundSpace (A x) R).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap).starProjection)
     (H : X → Matrix (Cfg d R) (Cfg d R) ℂ)
     (hH : Continuous H) (hParent : ∀ x, IsParentInteraction (A x) R (Matrix.toEuclideanLin (H x)))
     {S : Set X} (hS : IsCompact S) {γ : ℝ} (hγ : 0 < γ)
@@ -112,7 +114,7 @@ theorem exists_uniform_parentInteraction_gap_of_compact_isNormal_at_range
       A hA hNormal hR hS
   obtain ⟨δ, hδ, h⟩ :=
     exists_uniform_hamiltonian_translationInvariant_gap_of_compact_canonical_gap (N₀ := R) A
-      (continuous_groundSpaceES_starProjection_family A hA R hInj) H hH hParent hS hγ
+      (continuous_map_groundSpace_starProjection_family A hA R hInj) H hH hParent hS hγ
       fun x hx N _ hN ↦ (ManyBody.isGapped_zero_iff.mp (hGap x hx N hN)).2
   exact ⟨δ, hδ, fun x hx N hN ↦
     haveI : NeZero N := ⟨by omega⟩
@@ -164,7 +166,7 @@ theorem exists_uniform_block_parentInteraction_gap_of_compact
   obtain ⟨δ, hδ, h⟩ :=
     exists_uniform_hamiltonian_translationInvariant_gap_of_compact_canonical_gap (N₀ := R)
       (fun x => toTensorFromBlocks (α := Fin d) (μ := μ x) (A x))
-      (continuous_groundSpaceES_toTensorFromBlocks_starProjection_family μ A hμ hA R hSpanR)
+      (continuous_map_groundSpace_toTensorFromBlocks_starProjection_family μ A hμ hA R hSpanR)
       H hH hParent hK hγ fun x hx N _ hN ↦ hGap x hx N hN
   exact ⟨δ, hδ, fun x hx N hN ↦
     haveI : NeZero N := ⟨by omega⟩

@@ -1,13 +1,12 @@
 \begin{definition}[Injective inverse map for a simple MPO tensor]
     \label{def:mpdo_injective_inverse_layer}
     \lean{MPOTensor.inverseTensor}
-    \lean{MPSTensor.physRealize}
     \lean{MPSTensor.physRealizeLeft}
     \leanok
-    \uses{def:mpo_tensor,def:mpo_to_mps,def:injective}
-    A simple MPO tensor $K$ is called injective if its doubled-index MPS tensor
-    is injective. For such a tensor, the chosen decomposition map of the
-    doubled-index MPS furnishes a concrete inverse tensor $K^{-1}$ together
+    \uses{def:mpo_tensor,def:mpo_to_mps,def:injective,def:phys_realize}
+    A simple MPO tensor $K$ is called injective if it is injective as a tensor
+    on the pair alphabet of its physical index pairs. For such a tensor, the
+    chosen decomposition map of $K$ furnishes a concrete inverse tensor $K^{-1}$ together
     with right- and left-physical realization maps that turn virtual bond
     insertions back into local physical operators.
 \end{definition}
@@ -15,11 +14,9 @@
 \begin{lemma}[Inverse-map identities for an injective simple MPO tensor]
     \label{thm:mpdo_injective_inverse_layer_spec}
     \lean{MPOTensor.inverseTensor_spec}
-    \lean{MPSTensor.physRealize_spec}
-    \lean{MPSTensor.physRealize_mul}
     \lean{MPSTensor.physRealizeLeft_spec}
     \leanok
-    \uses{def:mpdo_injective_inverse_layer}
+    \uses{def:mpdo_injective_inverse_layer,lem:physRealize_spec,thm:physRealize_mul}
     For an injective simple MPO tensor, contracting $K^{-1}$ with $K$ recovers
     the matrix units on the virtual bond space. Likewise, every right virtual
     insertion admits a physical realization, this realization is multiplicative,

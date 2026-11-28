@@ -102,9 +102,10 @@ private theorem linearExtension_nonzero {D' : ℕ} {A B : MPTensor α (Fin (Nat.
 
 If `A` is injective and `A` and `B` generate the same MPV family, then they are gauge equivalent,
 meaning `B i = X * A i * X⁻¹` for some invertible matrix `X`. -/
-theorem fundamentalTheorem_singleBlock [Fintype α] {A B : MPTensor α (Fin D)}
+theorem fundamentalTheorem_singleBlock [Finite α] {A B : MPTensor α (Fin D)}
     (hA : Kraus.IsInjective A) (hAB : SameMPV A B) : GaugeEquiv A B := by
   classical
+  have := Fintype.ofFinite α
   cases D with
   | zero =>
       -- All `0×0` matrices are equal.
@@ -121,7 +122,7 @@ theorem fundamentalTheorem_singleBlock [Fintype α] {A B : MPTensor α (Fin D)}
       exact (hT i).symm.trans (hX (A i))
 
 /-- For injective `A`, MPV equality with any `B` is equivalent to gauge equivalence. -/
-theorem sameMPV_iff_gaugeEquiv_of_injective [Fintype α] {A B : MPTensor α (Fin D)}
+theorem sameMPV_iff_gaugeEquiv_of_injective [Finite α] {A B : MPTensor α (Fin D)}
     (hA : Kraus.IsInjective A) :
     SameMPV A B ↔ GaugeEquiv A B :=
   ⟨fundamentalTheorem_singleBlock hA, GaugeEquiv.sameMPV⟩
@@ -169,10 +170,11 @@ lemma SameMPVFrom.trace_evalWord_of_length_ge
 /-! ## Auxiliary: word span for injective tensors -/
 
 /-- For an injective tensor, `Kraus.wordSpan A n = ⊤` for all `n ≥ 1`. -/
-theorem wordSpan_eq_top_of_isInjective [Fintype α]
+theorem wordSpan_eq_top_of_isInjective [Finite α]
     {A : MPTensor α (Fin D)} (hA : Kraus.IsInjective A)
     {n : ℕ} (hn : 0 < n) : Kraus.wordSpan A n = ⊤ := by
   classical
+  have := Fintype.ofFinite α
   obtain ⟨c, hc⟩ := hA.exists_decomposition 1
   induction n with
   | zero => omega
@@ -210,11 +212,12 @@ If `SameMPVFrom N₀ A B` with `A` injective, then `SameMPV A B`.  The proof
 proceeds in three steps: (1) `Kraus.wordSpan B N₀ = ⊤` by composition identity
 and finrank transfer; (2) `S = Σ cᵢ Bⁱ = 1` by trace nondegeneracy;
 (3) downward induction on word length using the `A`-decomposition of `1`. -/
-theorem sameMPV_of_sameMPVFrom_of_injective [NeZero D] [Fintype α]
+theorem sameMPV_of_sameMPVFrom_of_injective [NeZero D] [Finite α]
     {A B : MPTensor α (Fin D)}
     (hA : Kraus.IsInjective A)
     {N₀ : ℕ} (hFrom : SameMPVFrom N₀ A B) :
     SameMPV A B := by
+  have := Fintype.ofFinite α
   -- Handle N₀ = 0 trivially.
   rcases N₀.eq_zero_or_pos with rfl | hN₀
   · exact sameMPVFrom_zero_iff.mp hFrom
@@ -351,7 +354,7 @@ theorem sameMPV_of_sameMPVFrom_of_injective [NeZero D] [Fintype α]
 
 If `A` is injective and `SameMPVFrom N₀ A B` for any threshold `N₀`, then
 `A` and `B` are gauge equivalent. -/
-theorem fundamentalTheorem_singleBlock_finiteLength [NeZero D] [Fintype α]
+theorem fundamentalTheorem_singleBlock_finiteLength [NeZero D] [Finite α]
     {A B : MPTensor α (Fin D)}
     (hA : Kraus.IsInjective A)
     {N₀ : ℕ} (hFrom : SameMPVFrom N₀ A B) :

@@ -60,7 +60,7 @@ theorem boundary_eq_zero_of_toEuclideanLin_hamiltonian_translationInvariant_eq_z
 
 /-- The finite-ring hypothesis puts each entire local MPS space in the kernel of the arbitrary
 positive semidefinite local matrix. Source: SPWC10, Theorem 5 proof, lines 869–880. -/
-theorem groundSpaceES_le_ker_of_toEuclideanLin_hamiltonian_translationInvariant_eq_zero
+theorem map_groundSpace_le_ker_of_toEuclideanLin_hamiltonian_translationInvariant_eq_zero
     (A : (j : Fin r) → MPSTensor d (dim j)) (c : Fin r → ℂ)
     (hc : ∀ j, c j ≠ 0)
     (h : Matrix (Cfg d L) (Cfg d L) ℂ) (hh : h.PosSemidef)
@@ -68,13 +68,14 @@ theorem groundSpaceES_le_ker_of_toEuclideanLin_hamiltonian_translationInvariant_
     (hzero : haveI : NeZero N := ⟨by omega⟩;
       Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant N h).hamiltonian
       (∑ j, c j • mpvState (A j) N) = 0) :
-    ∀ j, groundSpaceES (A j) L ≤ LinearMap.ker (Matrix.toEuclideanLin h) := by
+    ∀ j, ((groundSpace (A j) L).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap) ≤ LinearMap.ker (Matrix.toEuclideanLin h) := by
   have : NeZero N := ⟨by omega⟩
   have hboundaries :=
     boundary_eq_zero_of_toEuclideanLin_hamiltonian_translationInvariant_eq_zero
       A c hc h hh hN hLN hSpan hzero
   intro j ψ hψ
-  obtain ⟨X, hX⟩ := (mem_groundSpaceES_iff (A j) L ψ).mp hψ
+  obtain ⟨X, hX⟩ := (mem_map_groundSpace_iff (A j) L ψ).mp hψ
   have heq : (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm
       (groundSpaceMap (A j) L X) = ψ := by
     rw [hX, LinearEquiv.symm_apply_apply]
@@ -84,9 +85,10 @@ theorem groundSpaceES_le_ker_of_toEuclideanLin_hamiltonian_translationInvariant_
 /-- If a local matrix annihilates the active MPS space, each of its translates on the ring
 annihilates the actual periodic vector at every permitted volume. Source: SPWC10, Theorem 5
 proof, lines 877–880. -/
-theorem toEuclideanLin_translationInvariant_term_mpvState_eq_zero_of_groundSpaceES_le_ker
+theorem toEuclideanLin_translationInvariant_term_mpvState_eq_zero_of_map_groundSpace_le_ker
     (A : MPSTensor d D) (h : Matrix (Cfg d L) (Cfg d L) ℂ)
-    (hker : groundSpaceES A L ≤ LinearMap.ker (Matrix.toEuclideanLin h))
+    (hker : ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ LinearMap.ker
+        (Matrix.toEuclideanLin h))
     {M : ℕ} (hLM : L ≤ M) (i : Fin M) :
     haveI : NeZero M := NeZero.of_pos i.pos;
     Matrix.toEuclideanLin ((ManyBody.Interaction.translationInvariant M h).term i)
@@ -105,8 +107,9 @@ theorem toEuclideanLin_translationInvariant_term_mpvState_eq_zero_of_groundSpace
     simpa only [ContinuousLinearMap.rightFiber, PiLp.toLp_apply,
       WithLp.coe_symm_linearEquiv, U] using
       cyclicActiveBlock_mpvState_apply A hLM i σ' τ
-  have hmem : ContinuousLinearMap.rightFiber (U (mpvState A M)) τ ∈ groundSpaceES A L := by
-    rw [mem_groundSpaceES_iff, hfiber, LinearEquiv.apply_symm_apply]
+  have hmem : ContinuousLinearMap.rightFiber (U (mpvState A M)) τ ∈ ((groundSpace A L).map
+      (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+    rw [mem_map_groundSpace_iff, hfiber, LinearEquiv.apply_symm_apply]
     exact ⟨Kraus.evalWord A (List.ofFn τ), rfl⟩
   have hzero := hker hmem
   rw [ContinuousLinearMap.rightFiberwiseMap_apply_apply]
@@ -114,15 +117,16 @@ theorem toEuclideanLin_translationInvariant_term_mpvState_eq_zero_of_groundSpace
 
 /-- The local-kernel inclusion implies zero energy of the Hamiltonian of the translates on every
 larger ring. Source: SPWC10, Theorem 5 proof, lines 877–880. -/
-theorem toEuclideanLin_hamiltonian_translationInvariant_mpvState_eq_zero_of_groundSpaceES_le_ker
+theorem toEuclideanLin_hamiltonian_translationInvariant_mpvState_eq_zero_of_map_groundSpace_le_ker
     (A : MPSTensor d D) (h : Matrix (Cfg d L) (Cfg d L) ℂ)
-    (hker : groundSpaceES A L ≤ LinearMap.ker (Matrix.toEuclideanLin h))
+    (hker : ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ LinearMap.ker
+        (Matrix.toEuclideanLin h))
     {M : ℕ} [NeZero M] (hLM : L ≤ M) :
     Matrix.toEuclideanLin (ManyBody.Interaction.translationInvariant M h).hamiltonian
       (mpvState A M) = 0 := by
   rw [ManyBody.Interaction.hamiltonian, map_sum, LinearMap.sum_apply]
   exact Finset.sum_eq_zero fun i _ =>
-    toEuclideanLin_translationInvariant_term_mpvState_eq_zero_of_groundSpaceES_le_ker
+    toEuclideanLin_translationInvariant_term_mpvState_eq_zero_of_map_groundSpace_le_ker
       A h hker hLM i
 
 /-- A single finite-ring equation for the translates of a positive semidefinite local matrix and
@@ -143,10 +147,10 @@ theorem toEuclideanLin_hamiltonian_translationInvariant_mpvState_eq_zero_all_vol
     wordTupleSpanTop_of_le_one blocks (by omega) (fun _ => hInj)
   have hsum : (∑ j : Fin 1, (1 : ℂ) • mpvState (blocks j) N) = mpvState A N := by
     simp only [Fin.sum_univ_one, one_smul, blocks]
-  have hker := groundSpaceES_le_ker_of_toEuclideanLin_hamiltonian_translationInvariant_eq_zero
+  have hker := map_groundSpace_le_ker_of_toEuclideanLin_hamiltonian_translationInvariant_eq_zero
     blocks (fun _ => 1) (fun _ => one_ne_zero) h hh hN hLN hSpan (by rwa [hsum])
   intro M _ hLM
-  exact toEuclideanLin_hamiltonian_translationInvariant_mpvState_eq_zero_of_groundSpaceES_le_ker
+  exact toEuclideanLin_hamiltonian_translationInvariant_mpvState_eq_zero_of_map_groundSpace_le_ker
     A h (hker 0) hLM
 
 end MPSTensor

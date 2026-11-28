@@ -538,7 +538,7 @@
         MPSTensor.ker_hamiltonian_prefix_parentChainInteraction_eq_openChainLeftGroundSpaceES,
         MPSTensor.hamiltonian_restrict_parentChainInteraction_full_window_eq_term,
         MPSTensor.ker_hamiltonian_restrict_parentChainInteraction_eq_openChainTailGroundSpaceES,
-        MPSTensor.ker_hamiltonian_prefix_parentChainInteraction_self_eq_groundSpaceES,
+        MPSTensor.ker_hamiltonian_prefix_parentChainInteraction_self_eq_map_groundSpace,
         MPSTensor.openPrefixGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv,
         MPSTensor.openPrefixWholeGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv,
         MPSTensor.openIntervalGroundProjectionES_conj_rightSpectatorConfigLinearIsometryEquiv}
@@ -2321,7 +2321,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Open-boundary vectors have zero compatible energy]
     \label{thm:open_ground_space_le_hamiltonian_kernel}
-    \lean{MPSTensor.groundSpaceES_le_ker_hamiltonian_parentChainInteraction}
+    \lean{MPSTensor.map_groundSpace_le_ker_hamiltonian_parentChainInteraction}
     \leanok
     \uses{def:open_parent_hamiltonian_es,def:ground_space_es}
     For every $A$, $L$, and $N$,
@@ -2379,7 +2379,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Compatible zero energy has open-boundary form]
     \label{thm:open_hamiltonian_kernel_le_ground_space}
-    \lean{MPSTensor.ker_hamiltonian_parentChainInteraction_le_groundSpaceES_of_isNBlkInjective}
+    \lean{MPSTensor.ker_hamiltonian_parentChainInteraction_le_map_groundSpace_of_isNBlkInjective}
     \leanok
     \uses{def:open_parent_hamiltonian_es,def:ground_space_es,def:l_blk_injective}
     Assume $D\geq1$, $L_0>0$, and $N\geq L_0+1$. If $A$ is
@@ -2407,7 +2407,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Ground-state property of the compatible open chain]
     \label{thm:open_parent_hamiltonian_kernel_ground_space}
-    \lean{MPSTensor.ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_isNBlkInjective}
+    \lean{MPSTensor.ker_hamiltonian_parentChainInteraction_eq_map_groundSpace_of_isNBlkInjective}
     \leanok
     \uses{def:open_parent_hamiltonian_es,def:ground_space_es,def:l_blk_injective}
     Assume $D\geq1$, $L_0>0$, and $N\geq L_0+1$. As the canonical MPS
@@ -2458,7 +2458,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Dimension of the open-chain ground space]
     \label{thm:open_parent_hamiltonian_kernel_finrank}
-    \lean{MPSTensor.groundSpaceES_finrank_eq_of_isNBlkInjective, MPSTensor.finrank_ker_hamiltonian_parentChainInteraction_of_isNBlkInjective}
+    \lean{MPSTensor.map_groundSpace_finrank_eq_of_isNBlkInjective, MPSTensor.finrank_ker_hamiltonian_parentChainInteraction_of_isNBlkInjective}
     \leanok
     \uses{def:open_parent_hamiltonian_es,def:ground_space_es,def:l_blk_injective}
     If $A$ is $L$-block-injective, then $\dim G_{L}^{\mathrm{ES}}(A)=D^{2}$.
@@ -2517,7 +2517,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Whole ground space lies in the C3 tail space]
     \label{lem:whole_ground_space_le_c3_tail_space}
-    \lean{MPSTensor.groundSpaceES_le_openChainTailGroundSpaceES}
+    \lean{MPSTensor.map_groundSpace_le_openChainTailGroundSpaceES}
     \leanok
     \uses{lem:ground_space_in_tail_ground}
     For every $K,l\in\N$, set $n=K+l$.  Then
@@ -4400,7 +4400,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Ground-space overlap from mixed Gram bounds]
     \label{thm:ground_space_overlap_mixed_gram}
-    \lean{MPSTensor.norm_inner_groundSpaceES_le_mixedGram}
+    \lean{MPSTensor.norm_inner_map_groundSpace_le_mixedGram}
     \leanok
     \uses{def:ground_space_map_es}
     Suppose that $\Gamma_n^{\mathrm{ES}}(A)$ and $\Gamma_n^{\mathrm{ES}}(B)$ are injective, and put
@@ -4431,7 +4431,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Uniform decay of block ground-space overlaps]
     \label{thm:block_ground_space_overlap_decay}
-    \lean{Kraus.HasComplementaryFixedPointGap.eventually_norm_inner_groundSpaceES_le_of_mixed_gap}
+    \lean{Kraus.HasComplementaryFixedPointGap.eventually_norm_inner_map_groundSpace_le_of_mixed_gap}
     \leanok
     \uses{thm:mixed_boundary_gram_decay,thm:ground_space_overlap_mixed_gram,thm:primitive_ground_space_gram_eventual_inverse_bound,thm:primitive_ground_space_gram_inverse_tendsto,def:mixed_transfer_rect}
     Let $A$ and $B$ be trace-preserving tensors with positive-definite
@@ -4475,7 +4475,7 @@ $d_{l+1}=\gamma_{l+1}=1$ and overlap bound $\epsilon_l$.
 
 \begin{lemma}[Asymptotic orthogonality of inequivalent blocks]
     \label{thm:inequivalent_block_ground_space_overlap_decay}
-    \lean{Kraus.HasComplementaryFixedPointGap.eventually_norm_inner_groundSpaceES_le_of_inequivalent}
+    \lean{Kraus.HasComplementaryFixedPointGap.eventually_norm_inner_map_groundSpace_le_of_inequivalent}
     \leanok
     \uses{thm:block_ground_space_overlap_decay,thm:transfer_operator_gap_irr_tp,thm:transfer_operator_gap_rect_irr_tp,lem:irreducible_map_from_primitive}
     Let $A$ and $B$ be trace-preserving tensors with positive-definite
@@ -4763,7 +4763,7 @@ Definition~\ref{def:ground_space_es}.
 
 \begin{lemma}[Overlap from restrictions to a common interval]
     \label{thm:ph_middle_interval_overlap}
-    \lean{MPSTensor.norm_inner_le_of_middle_groundSpaceES}
+    \lean{MPSTensor.norm_inner_le_of_middle_map_groundSpace}
     \leanok
     Let $A,B$ be tensors with the same physical dimension and arbitrary bond
     dimensions. Suppose $\varepsilon\geq0$ and
@@ -4831,7 +4831,7 @@ Definition~\ref{def:ground_space_es}.
 
 \begin{lemma}[Joint projectors on overlapping MPS intervals]
     \label{thm:ph_block_interval_projectors}
-    \lean{MPSTensor.norm_iSup_groundSpaceES_sub_comp_le_of_overlapMatrix}
+    \lean{MPSTensor.norm_iSup_map_groundSpace_sub_comp_le_of_overlapMatrix}
     \leanok
     Let $(A_i)$ be a finite family of tensors with the same physical dimension,
     with bond dimensions allowed to depend on $i$. Let $B$ be a nonnegative
@@ -4865,7 +4865,7 @@ Definition~\ref{def:ground_space_es}.
 
 \begin{lemma}[Uniform decay of the joint projector error]
     \label{thm:ph_block_interval_defect_decay}
-    \lean{MPSTensor.eventually_iSup_groundSpaceES_projector_defect_le}
+    \lean{MPSTensor.eventually_iSup_map_groundSpace_projector_defect_le}
     \leanok
     \uses{thm:ph_block_interval_projectors}
     Let $(A_i)_{i\in I}$ be a finite family of tensors, and use the interval
@@ -4906,7 +4906,7 @@ Definition~\ref{def:ground_space_es}.
 
 \begin{lemma}[Uniform projector error decay for primitive blocks]
     \label{thm:ph_primitive_block_interval_defect_decay}
-    \lean{MPSTensor.eventually_iSup_groundSpaceES_projector_defect_le_of_inequivalent}
+    \lean{MPSTensor.eventually_iSup_map_groundSpace_projector_defect_le_of_inequivalent}
     \leanok
     \uses{thm:ph_block_interval_projectors,def:primitive_mps}
     Let $(A_i)_{i\in I}$ be a finite family of normalized primitive tensors

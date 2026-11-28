@@ -93,12 +93,13 @@ word of `B`, and block injectivity leaves no nontrivial invariant subspace.
 This is the use of the single-block property of `B` in the proof of Theorem 7
 of PGVWC07 (arXiv:quant-ph/0608197, MPSarchive.tex lines 1105-1108), which the
 source attributes to the proposition on condition C1. -/
-theorem isUnit_of_intertwines_of_isNBlkInjective [NeZero D] {α : Type*} [Fintype α]
+theorem isUnit_of_intertwines_of_isNBlkInjective [NeZero D] {α : Type*} [Finite α]
     {B C : MPTensor α (Fin D)}
     {L : ℕ} (hB : Kraus.IsNBlkInjective B L) {R : Matrix (Fin D) (Fin D) ℂ} {x : ℂ}
     (hR : R ≠ 0) (hx : x ≠ 0) (hrel : ∀ i, R * C i = x⁻¹ • (B i * R)) :
     IsUnit R := by
   classical
+  have := Fintype.ofFinite α
   have hAct : Matrix.IsIrreducibleAction (Kraus.block B L) :=
     Kraus.isIrreducibleAction_of_isIrreducibleFamily _
       (Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM _

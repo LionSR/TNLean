@@ -118,8 +118,6 @@ noncomputable def isingThreeTargets : (s : Fin 4) → MPOTensor 10 (isingThreeBl
 This applies the P5 note, Theorem 7.7, to the word identity of data file §1.4. -/
 theorem isingBondObjectThree_compression_exists :
     Nonempty (MultiBlockCompression isingBondObjectThree Finset.univ isingThreeTargets) := by
-  -- The compression theorem is stated on the letters `Fin (10 * 10)` (it runs through the word
-  -- algebra of `Fin d`); it is applied to the doubled-index views and the datum is read back.
   have hsmul : ∀ {D : ℕ} {c : ℂ} (A : MPOTensor 10 D), c ≠ 0 → Kraus.IsNormal A →
       Kraus.IsNormal (c • A) := fun A hc hA => (isNormal_smul_iff hc A).2 hA
   have hsqrt : (2 * (Real.sqrt 2 : ℂ)) ≠ 0 :=
@@ -149,23 +147,8 @@ theorem isingBondObjectThree_compression_exists :
       hscale (2 * (Real.sqrt 2 : ℂ)) isingOne,
       hscale (2 * (Real.sqrt 2 : ℂ)) isingPsi]
     ring
-  obtain ⟨P⟩ := exists_multiBlockCompression_of_isNormal Finset.univ
-    (fun s => (isingThreeTargets s).toMPSTensor)
-    (fun s _ => (MPOTensor.isNormal_toMPSTensor_iff _).2 (hnormal s))
-    (fun s _ => by fin_cases s <;> decide) isingBondObjectThree.toMPSTensor
-    (fun w hw => by
-      simp only [MPOTensor.evalWord_toMPSTensor]
-      exact htr _ (by simpa using hw))
-  exact ⟨{ z := P.z, ord := P.ord, gauge := P.gauge
-           triangular := fun i => by
-             simpa only [MPOTensor.toMPSTensor_eq_reindexPhysical, Kraus.reindexPhysical,
-               Equiv.symm_apply_apply] using P.triangular (finProdFinEquiv i)
-           matched := fun i s => by
-             simpa only [MPOTensor.toMPSTensor_eq_reindexPhysical, Kraus.reindexPhysical,
-               Equiv.symm_apply_apply] using P.matched (finProdFinEquiv i) s
-           unmatched := fun i t => by
-             simpa only [MPOTensor.toMPSTensor_eq_reindexPhysical, Kraus.reindexPhysical,
-               Equiv.symm_apply_apply] using P.unmatched (finProdFinEquiv i) t }⟩
+  exact exists_multiBlockCompression_of_isNormal Finset.univ isingThreeTargets
+    (fun s _ => hnormal s) (fun s _ => by fin_cases s <;> decide) isingBondObjectThree htr
 
 /-- A four-block compression supplied by the asymmetric compression theorem. -/
 noncomputable def isingThreeCompression :

@@ -50,6 +50,11 @@ decomposition are separate steps.
 ## References
 
 * arXiv:1606.00608, lines 999--1016.
+
+**Bridge (T.2c):** The basis-of-normal-tensors hypothesis of this module still reads an operator
+tensor through `MPOTensor.toMPSTensor`, because the vertical canonical form and the basis of normal
+tensors are stated on the vertical alphabet `Fin (D * D)`. The bridge is removed when the vertical
+alphabet moves to `Fin D × Fin D` (step T.2c of `docs/tensor_type_unification.md`).
 -/
 
 open scoped Matrix Kronecker

@@ -134,11 +134,12 @@ theorem blockGroundSpaceMapES_shortRangeHeisenbergBlock_apply
 
 /-- A two-site vector belongs to the local ground space exactly when its
 \(|01\rangle\) and \(|10\rangle\) coefficients agree. -/
-theorem mem_groundSpaceES_shortRangeHeisenbergTensor_two_iff
+theorem mem_map_groundSpace_shortRangeHeisenbergTensor_two_iff
     (v : EuclideanSpace ℂ (Cfg 2 2)) :
-    v ∈ groundSpaceES shortRangeHeisenbergTensor 2 ↔ v ![0, 1] = v ![1, 0] := by
+    v ∈ ((groundSpace shortRangeHeisenbergTensor 2).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap) ↔ v ![0, 1] = v ![1, 0] := by
   rw [shortRangeHeisenbergTensor,
-    groundSpaceES_toTensorFromBlocks_eq_iSup (fun _ => (1 : ℂ))
+    map_groundSpace_toTensorFromBlocks_eq_iSup (fun _ => (1 : ℂ))
       shortRangeHeisenbergBlock (fun _ => one_ne_zero),
     ← range_blockGroundSpaceMapES]
   constructor
@@ -171,16 +172,17 @@ private theorem cfg_two_comp_rev (a b : Fin 2) :
 
 /-- The local ground-space projection is the symmetrizer
 \((1+\mathrm{Swap})/2\). -/
-theorem groundSpaceES_shortRangeHeisenbergTensor_two_starProjection
+theorem map_groundSpace_shortRangeHeisenbergTensor_two_starProjection
     (v : EuclideanSpace ℂ (Cfg 2 2)) :
-    (groundSpaceES shortRangeHeisenbergTensor 2).starProjection v =
+    ((groundSpace shortRangeHeisenbergTensor 2).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap).starProjection v =
       WithLp.toLp 2 (fun σ => (v σ + v (σ ∘ Fin.rev)) / 2) := by
   apply Submodule.eq_starProjection_of_mem_of_inner_eq_zero
-  · apply (mem_groundSpaceES_shortRangeHeisenbergTensor_two_iff _).2
+  · apply (mem_map_groundSpace_shortRangeHeisenbergTensor_two_iff _).2
     simp only [cfg_two_comp_rev]
     exact congrArg (fun z : ℂ => z / 2) (add_comm _ _)
   · intro w hw
-    have hwsym := (mem_groundSpaceES_shortRangeHeisenbergTensor_two_iff w).1 hw
+    have hwsym := (mem_map_groundSpace_shortRangeHeisenbergTensor_two_iff w).1 hw
     simp only [PiLp.inner_apply, sum_cfg_two, Fin.sum_univ_two, PiLp.sub_apply,
       RCLike.inner_apply, cfg_two_comp_rev]
     simp only [hwsym, map_sub, map_add, map_div₀, map_ofNat]
@@ -196,9 +198,10 @@ theorem toEuclideanLin_toMatrix'_parentInteraction_shortRangeHeisenbergTensor_tw
         v σ =
       (v σ - v (σ ∘ Fin.rev)) / 2 := by
   rw [toEuclideanLin_toMatrix'_parentInteraction]
-  change ((groundSpaceES shortRangeHeisenbergTensor 2)ᗮ.starProjection v) σ = _
+  change (((groundSpace shortRangeHeisenbergTensor 2).map (WithLp.linearEquiv 2 ℂ
+      _).symm.toLinearMap)ᗮ.starProjection v) σ = _
   rw [Submodule.starProjection_orthogonal_val,
-    groundSpaceES_shortRangeHeisenbergTensor_two_starProjection]
+    map_groundSpace_shortRangeHeisenbergTensor_two_starProjection]
   change v σ - (v σ + v (σ ∘ Fin.rev)) / 2 = _
   ring
 

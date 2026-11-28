@@ -100,7 +100,8 @@ theorem blockGroundSpaceMapES_injective_of_wordTupleSpanTop
 Source: PGVWC07, Theorem 12, proof lines 1430--1434. -/
 theorem range_blockGroundSpaceMapES
     (A : (j : Fin r) → MPSTensor d (dim j)) (L : ℕ) :
-    (blockGroundSpaceMapES A L).range = ⨆ j, groundSpaceES (A j) L := by
+    (blockGroundSpaceMapES A L).range = ⨆ j, ((groundSpace (A j) L).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap) := by
   apply le_antisymm
   · rintro ψ ⟨v, rfl⟩
     change (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm
@@ -128,12 +129,13 @@ theorem range_blockGroundSpaceMapES
 /-- The orthogonal projection onto the sum of the block local spaces is
 continuous when the simultaneous word span is full at that length.
 Source: arXiv:1010.3732, Appendix A, lines 2575--2578. -/
-theorem continuous_iSup_groundSpaceES_starProjection_family
+theorem continuous_iSup_map_groundSpace_starProjection_family
     {X : Type*} [TopologicalSpace X]
     (A : X → (j : Fin r) → MPSTensor d (dim j))
     (hA : ∀ j, Continuous fun x => A x j) (L : ℕ)
     (hSpan : ∀ x, WordTupleSpanTop (A x) L) :
-    Continuous fun x => (⨆ j, groundSpaceES (A x j) L).starProjection := by
+    Continuous fun x => (⨆ j, ((groundSpace (A x j) L).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap)).starProjection := by
   have hInj (x : X) := blockGroundSpaceMapES_injective_of_wordTupleSpanTop (A x) (hSpan x)
   have hProj := ContinuousLinearMap.continuous_injectiveRangeProjector
     (fun x => blockGroundSpaceMapES (A x) L)
@@ -144,30 +146,32 @@ theorem continuous_iSup_groundSpaceES_starProjection_family
 /-- Nonzero weights do not affect continuity of the local projection of a
 block sum. Only the block tensors need to vary continuously.
 Source: arXiv:1010.3732, Appendix A, lines 2575--2578. -/
-theorem continuous_groundSpaceES_toTensorFromBlocks_starProjection_family
+theorem continuous_map_groundSpace_toTensorFromBlocks_starProjection_family
     {X : Type*} [TopologicalSpace X]
     (μ : X → Fin r → ℂ) (A : X → (j : Fin r) → MPSTensor d (dim j))
     (hμ : ∀ x j, μ x j ≠ 0) (hA : ∀ j, Continuous fun x => A x j)
     (L : ℕ) (hSpan : ∀ x, WordTupleSpanTop (A x) L) :
     Continuous fun x =>
-      (groundSpaceES (toTensorFromBlocks (α := Fin d) (μ := μ x) (A x)) L).starProjection := by
-  have hEq (x : X) := groundSpaceES_toTensorFromBlocks_eq_iSup (μ x) (A x) (hμ x) L
+      (((groundSpace (toTensorFromBlocks (α := Fin d) (μ := μ x) (A x)) L).map (WithLp.linearEquiv 2
+          ℂ _).symm.toLinearMap)).starProjection := by
+  have hEq (x : X) := map_groundSpace_toTensorFromBlocks_eq_iSup (μ x) (A x) (hμ x) L
   simpa only [hEq] using
-    continuous_iSup_groundSpaceES_starProjection_family A hA L hSpan
+    continuous_iSup_map_groundSpace_starProjection_family A hA L hSpan
 
 /-- At a fixed injective window, the overlap \(\|P_{G_L^i}P_{G_L^j}\|\)
 between two block local spaces depends continuously on the tensor family.
 Source: arXiv:1010.3732, Appendix A, lines 2510--2533. -/
-theorem continuous_norm_groundSpaceES_overlap_family
+theorem continuous_norm_map_groundSpace_overlap_family
     {X : Type*} [TopologicalSpace X]
     (A : X → (j : Fin r) → MPSTensor d (dim j))
     (hA : ∀ j, Continuous fun x => A x j) (L : ℕ)
     (hInj : ∀ x j, Kraus.IsNBlkInjective (A x j) L) (i j : Fin r) :
-    Continuous fun x => ‖(groundSpaceES (A x i) L).starProjection.comp
-      (groundSpaceES (A x j) L).starProjection‖ :=
-  ((continuous_groundSpaceES_starProjection_family (fun x => A x i) (hA i) L
+    Continuous fun x => ‖((groundSpace (A x i) L).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap).starProjection.comp
+      ((groundSpace (A x j) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection‖ :=
+  ((continuous_map_groundSpace_starProjection_family (fun x => A x i) (hA i) L
     (fun x => hInj x i)).clm_comp
-      (continuous_groundSpaceES_starProjection_family (fun x => A x j) (hA j) L
+      (continuous_map_groundSpace_starProjection_family (fun x => A x j) (hA j) L
         (fun x => hInj x j))).norm
 
 end MPSTensor

@@ -256,14 +256,15 @@ theorem exists_toEuclideanLin_hamiltonian_chainTranslates_gap_of_canonical_gaps_
     (A : MPSTensor d D) {R₀ : ℕ} (_hR₀ : 0 < R₀)
     (hCanonical : ∀ W, R₀ ≤ W →
       (∀ N, W ≤ N → LinearMap.ker (Matrix.toEuclideanLin
-        (parentChainInteraction A W N).hamiltonian) = groundSpaceES A N) ∧
+        (parentChainInteraction A W N).hamiltonian) = ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap)) ∧
       ∃ δ : ℝ, 0 < δ ∧ ∀ N, ∀ μ : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin (parentChainInteraction A W N).hamiltonian) μ →
           μ = 0 ∨ (δ : ℂ) ≤ μ)
     {R : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
     (hKernel : ∀ᶠ N : ℕ in atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-        groundSpaceES A N) :
+        ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     ∃ γ : ℝ, 0 < γ ∧ ∀ N, ∀ μ : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) μ → μ = 0 ∨ (γ : ℂ) ≤ μ := by
   obtain ⟨N₀, hN₀⟩ := Filter.eventually_atTop.1 hKernel

@@ -178,11 +178,8 @@ theorem czMPUTensor_apply_same (j : Fin 2) :
 /-- **The controlled-`Z` tensor is normal**: its letters `(j, j)` carry the columns of the
 invertible matrix `√2 H`. -/
 theorem czMPUTensor_isNormal : Kraus.IsNormal czMPUTensor := by
-  refine (isNormal_toMPSTensor_iff _).1 (isNormal_of_forced_column
-    (fun j ↦ finProdFinEquiv (j, j)) (fun j l ↦ czSign l j) (fun j ↦ ?_)
-    (fun _ _ ↦ czSign_ne_zero _ _) ?_)
-  · rw [toMPSTensor_eq_reindexPhysical, Kraus.reindexPhysical, Equiv.symm_apply_apply,
-      czMPUTensor_apply_same]
+  refine isNormal_of_forced_column (fun j ↦ (j, j)) (fun j l ↦ czSign l j)
+    (fun j ↦ czMPUTensor_apply_same j) (fun _ _ ↦ czSign_ne_zero _ _) ?_
   · rw [Matrix.det_fin_two]
     simp [czSign]
     norm_num

@@ -521,7 +521,7 @@ finite families of nonzero weights whose power sums give an expansion of the
 periodic vectors of `B` at all sufficiently large lengths have, target by
 target, the same multiset of weights, counting repetitions.  The physical alphabet is
 relabelled by `Fin (Fintype.card β)`. -/
-theorem exists_unblocked_powerSum_coeff_unique {β : Type*} [Fintype β]
+theorem exists_unblocked_powerSum_coeff_unique {β : Type*} [Finite β]
     {DB : ℕ} (B : MPTensor β (Fin DB)) {Γ : Type*} [Fintype Γ] {DM : Γ → ℕ}
     (M : ∀ γ, MPTensor β (Fin (DM γ)))
     (hM : ∀ γ, Kraus.IsNormal (M γ)) (hD : ∀ γ, 0 < DM γ)
@@ -541,6 +541,7 @@ theorem exists_unblocked_powerSum_coeff_unique {β : Type*} [Fintype β]
         (∃ L₁ : ℕ, ∀ L, L₁ ≤ L → ∀ σ : Fin L → β,
           mpv B σ = ∑ γ, (∑ k, (μ' γ k) ^ L) * mpv (M γ) σ) →
         ∀ γ, (↑(List.ofFn (μ' γ)) : Multiset ℂ) = ↑(List.ofFn (μ γ)) := by
+  have := Fintype.ofFinite β
   let f : Fin (Fintype.card β) ≃ β := (Fintype.equivFin β).symm
   have hσ : ∀ {L : ℕ} (σ : Fin L → β), (fun n ↦ f (f.symm (σ n))) = σ := fun σ ↦ by
     funext n; exact f.apply_symm_apply (σ n)

@@ -56,6 +56,11 @@ a normalization-free variant of the question after Theorem 4.14 of CPSV16.
 
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
   Theorem 4.14 and the question at lines 995--997.
+
+**Bridge (T.2c):** The vertical component `verticalComponent` of this module still reads an operator
+tensor through `MPOTensor.toMPSTensor`, because the vertical canonical form and the basis of normal
+tensors are stated on the vertical alphabet `Fin (D * D)`. The bridge is removed when the vertical
+alphabet moves to `Fin D × Fin D` (step T.2c of `docs/tensor_type_unification.md`).
 -/
 
 section

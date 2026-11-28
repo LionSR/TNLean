@@ -190,6 +190,7 @@ def withBasis (P : SectorDecomposition α)
   basis := B
   sectors := P.sectors
 
+omit [Fintype α] in
 /-- Gauging every basis tensor does not change the assembled matrix product
 vectors (arXiv:1606.00608, lines 281--301). -/
 theorem sameMPV₂Pos_toTensor_withBasis (P : SectorDecomposition α)
@@ -245,8 +246,9 @@ theorem IsBNTSectorPresentation.exists_leftCanonical_withBasis {D' : ℕ}
 preserves a basis-of-normal-tensors presentation.
 
 Source: arXiv:1606.00608, eq. `II_CF1`, lines 237--244. -/
-theorem IsBNTSectorPresentation.smul_left {d D : ℕ} {A : MPSTensor d D}
-    {P : SectorDecomposition (Fin d)} (h : IsBNTSectorPresentation A P) (c : ℂ) (hc : c ≠ 0) :
+theorem IsBNTSectorPresentation.smul_left {α : Type*} [Fintype α] {D : ℕ}
+    {A : MPTensor α (Fin D)} {P : SectorDecomposition α} (h : IsBNTSectorPresentation A P)
+    (c : ℂ) (hc : c ≠ 0) :
     IsBNTSectorPresentation (c • A) (P.scaleWeights c hc) := by
   refine ⟨h.basisCount_pos, ?_, h.basis_normal, h.eventually_li⟩
   intro N hN σ

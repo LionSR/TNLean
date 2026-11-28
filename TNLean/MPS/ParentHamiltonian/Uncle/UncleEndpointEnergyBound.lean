@@ -62,13 +62,14 @@ def uncleTrialPinnedGlobalState
 /-- Restricting each actual globally pinned trial gives exactly the
 explicit local pinned endpoint vector, including every exterior word.
 Source: arXiv:1210.6613, proof of Lemma lowenergystates, lines 1289–1296. -/
-theorem cyclicRestrictES_pinnedGlobalState_eq
+theorem withLpMap_cyclicRestrictₗ_pinnedGlobalState_eq
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     (N : ℕ) (hN : 0 < N) (i : Fin (6 * N + 1))
     (hi : i ∈ uncleTrialEndpointBonds N hN) (τ : Cfg d (6 * N + 1)) :
-    cyclicRestrictES (Fin.pos i) 2 i τ (uncleTrialPinnedGlobalState A B R L N hN i) =
+    LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) 2 i τ) (uncleTrialPinnedGlobalState A B R L N
+        hN i) =
       uncleTrialPinnedEndpointState A B R L N hN i τ := by
   have h01 : N - 1 < 2 * N := by omega
   have h12 : 2 * N < 4 * N - 1 := by omega
@@ -281,8 +282,8 @@ theorem re_inner_hamiltonian_uncleInteraction_trial_le_mul
       rw [Finset.mul_sum]
       apply Finset.sum_congr rfl
       intro i hi
-      simp_rw [← cyclicRestrictES_pinnedGlobalState_eq A B R L N hN i hi]
-      exact inv_pow_mul_sum_norm_sq_cyclicRestrictES hd (by omega) i _
+      simp_rw [← withLpMap_cyclicRestrictₗ_pinnedGlobalState_eq A B R L N hN i hi]
+      exact inv_pow_mul_sum_norm_sq_withLpMap_cyclicRestrictₗ hd (by omega) i _
     _ ≤ ∑ _i ∈ uncleTrialEndpointBonds N hN, C * ((N + 1 : ℕ) : ℝ) :=
       Finset.sum_le_sum fun i hi ↦ hPinned N hN i hi
     _ = 4 * (C * ((N + 1 : ℕ) : ℝ)) := by

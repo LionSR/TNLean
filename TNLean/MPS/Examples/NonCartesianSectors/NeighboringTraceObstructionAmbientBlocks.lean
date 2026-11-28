@@ -183,48 +183,32 @@ nonzero coefficient of norm strictly below one. The representative is obtained
 by applying the literal physical inclusion to the already-constructed
 Perron-gauged representative. -/
 theorem exists_embedded_leftCanonical_normal_obstruction_block :
-    ∃ (mu : ℂ) (B : MPSTensor (5 * 5) 2),
+    ∃ (mu : ℂ) (B : MPOTensor 5 2),
       mu ≠ 0 ∧ ‖mu‖ < 1 ∧ Kraus.IsInjective B ∧
         MPTensor.IsLeftCanonical B ∧ MPTensor.IsNormalTensor B ∧
-        MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B) ∧
-        physicalSupportProj (verticalBNTMPO B) = obstructionPhysicalSupport := by
+        MPTensor.GaugeEquiv embeddedObstruction (mu • B) ∧
+        physicalSupportProj B = obstructionPhysicalSupport := by
   obtain ⟨mu, Bsource, hmu, hmuNorm, hBInj, hBLeft, hBNormal, hTensorGauge⟩ :=
     exists_leftCanonical_normalTensor_scalar_representation
   let C : MPOTensor 5 2 := changePhysicalBasis physicalInclusion Bsource
-  let Bambient : MPSTensor (5 * 5) 2 := C.toMPSTensor
-  have hAmbientInj : Kraus.IsInjective Bambient :=
-    (isInjective_toMPSTensor_iff C).2
-      ((isInjective_changePhysicalBasis_iff
-        physicalInclusion physicalInclusion_isometry Bsource).2 hBInj)
-  have hAmbientLeft : MPTensor.IsLeftCanonical Bambient :=
-    (isTP_toMPSTensor_iff C).2
-      (isLeftCanonical_changePhysicalBasis
-        physicalInclusion physicalInclusion_isometry Bsource hBLeft)
-  have hAmbientNormal : MPTensor.IsNormalTensor Bambient :=
-    ((isNormalTensor_changePhysicalBasis_iff
-      physicalInclusion physicalInclusion_isometry Bsource).2 hBNormal).reindexPhysical
-        finProdFinEquiv.symm
-  have hAmbientGauge :
-      MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • Bambient) := by
+  have hGauge : MPTensor.GaugeEquiv embeddedObstruction (mu • C) := by
     have h := gaugeEquiv_changePhysicalBasis physicalInclusion hTensorGauge
     rw [changePhysicalBasis_smul] at h
-    exact (gaugeEquiv_toMPSTensor_iff _ _).2 h
-  have hC : verticalBNTMPO Bambient = C := by
-    funext ab
-    change C (finProdFinEquiv.symm (finProdFinEquiv ab)) = C ab
-    rw [Equiv.symm_apply_apply]
-  have hAmbientSupport :
-      physicalSupportProj (verticalBNTMPO Bambient) = obstructionPhysicalSupport := by
-    rw [hC]
+    exact h
+  have hSupport : physicalSupportProj C = obstructionPhysicalSupport :=
     calc
       physicalSupportProj C = physicalSupportProj (mu • C) :=
         (physicalSupportProj_smul_of_ne C hmu).symm
       _ = physicalSupportProj embeddedObstruction :=
-        (physicalSupportProj_eq_of_gaugeEquiv
-          ((gaugeEquiv_toMPSTensor_iff _ _).1 hAmbientGauge)).symm
+        (physicalSupportProj_eq_of_gaugeEquiv hGauge).symm
       _ = obstructionPhysicalSupport := embeddedObstruction_physicalSupportProj
-  exact ⟨mu, Bambient, hmu, hmuNorm, hAmbientInj, hAmbientLeft,
-    hAmbientNormal, hAmbientGauge, hAmbientSupport⟩
+  exact ⟨mu, C, hmu, hmuNorm,
+    (isInjective_changePhysicalBasis_iff physicalInclusion physicalInclusion_isometry Bsource).2
+      hBInj,
+    isLeftCanonical_changePhysicalBasis physicalInclusion physicalInclusion_isometry Bsource hBLeft,
+    (isNormalTensor_changePhysicalBasis_iff physicalInclusion physicalInclusion_isometry
+      Bsource).2 hBNormal,
+    hGauge, hSupport⟩
 
 /-! ## The terminal physical block -/
 
@@ -242,7 +226,7 @@ theorem terminalPhysicalInclusion_isometry :
 
 /-- The scalar product-state MPO before inclusion into the ambient coordinate. -/
 private noncomputable def terminalSource : MPOTensor 1 1 :=
-  doubledTensor MPSTensor.scalarUnitTensor
+  doubledTensor (MPSTensor.scalarUnitTensor (α := Fin 1))
 
 @[simp] private theorem terminalSource_apply (i j : Fin 1) :
     terminalSource (i, j) = 1 := by
@@ -254,7 +238,7 @@ private noncomputable def terminalSource : MPOTensor 1 1 :=
   simp [terminalSource, doubledTensor, MPSTensor.scalarUnitTensor]
 
 private theorem scalarUnitTensor_transferMap_eq_id :
-    Kraus.transferMap MPSTensor.scalarUnitTensor = LinearMap.id := by
+    Kraus.transferMap (MPSTensor.scalarUnitTensor (α := Fin 1)) = LinearMap.id := by
   apply LinearMap.ext
   intro X
   ext a b
@@ -315,7 +299,7 @@ theorem terminalBlock_isNormalTensor : MPTensor.IsNormalTensor terminalBlock :=
 
 private theorem terminalSource_isMPDO : terminalSource.IsMPDO := by
   intro N _hN
-  exact doubledTensor_posSemidef MPSTensor.scalarUnitTensor N
+  exact doubledTensor_posSemidef (MPSTensor.scalarUnitTensor (α := Fin 1)) N
 
 private theorem terminalSource_physTraceTransfer_eq_one :
     physTraceTransfer terminalSource = 1 := by
@@ -325,12 +309,12 @@ private theorem terminalSource_physTraceTransfer_eq_one :
   simp [physTraceTransfer, terminalSource_apply]
 
 private theorem scalarUnitTensor_pureState_trace_ne_zero (N : ℕ) :
-    Matrix.trace (MPSTensor.pureState MPSTensor.scalarUnitTensor N) ≠ 0 := by
+    Matrix.trace (MPSTensor.pureState (MPSTensor.scalarUnitTensor (α := Fin 1)) N) ≠ 0 := by
   have hMpv : ∀ σ : Fin N → Fin 1,
-      MPTensor.mpv MPSTensor.scalarUnitTensor σ = 1 := by
+      MPTensor.mpv (MPSTensor.scalarUnitTensor (α := Fin 1)) σ = 1 := by
     intro σ
     simp [MPTensor.mpv, MPSTensor.scalarUnitTensor_evalWord, Matrix.trace]
-  have hPure : MPSTensor.pureState MPSTensor.scalarUnitTensor N = 1 := by
+  have hPure : MPSTensor.pureState (MPSTensor.scalarUnitTensor (α := Fin 1)) N = 1 := by
     ext σ τ
     obtain rfl : τ = σ := Subsingleton.elim τ σ
     simp only [MPSTensor.pureState, Matrix.vecMulVec_apply, Pi.star_apply,
@@ -341,21 +325,21 @@ private theorem scalarUnitTensor_pureState_trace_ne_zero (N : ℕ) :
   simp
 
 private theorem terminalSource_isSAL : terminalSource.IsSAL := by
-  have hPureRFP : MPSTensor.IsTransferIdempotent MPSTensor.scalarUnitTensor := by
+  have hPureRFP : MPSTensor.IsTransferIdempotent (MPSTensor.scalarUnitTensor (α := Fin 1)) := by
     rw [MPSTensor.IsTransferIdempotent, scalarUnitTensor_transferMap_eq_id,
       LinearMap.comp_id]
   have hPureSAL := MPSTensor.isSAL_of_isTransferIdempotent
-    MPSTensor.scalarUnitTensor hPureRFP
+    (MPSTensor.scalarUnitTensor (α := Fin 1)) hPureRFP
   refine ⟨terminalSource_isMPDO, ?_, ?_⟩
   · intro N _hN
     rw [terminalSource, mpo_doubledTensor]
     exact scalarUnitTensor_pureState_trace_ne_zero N
   · intro N L hL hLN
-    change (doubledTensor MPSTensor.scalarUnitTensor).mutualInfoChain N L _ _ =
-      (doubledTensor MPSTensor.scalarUnitTensor).mutualInfoChain N (L + 1) _ _
-    rw [mutualInfoChain_doubledTensor MPSTensor.scalarUnitTensor N L _
+    change (doubledTensor (MPSTensor.scalarUnitTensor (α := Fin 1))).mutualInfoChain N L _ _ =
+      (doubledTensor (MPSTensor.scalarUnitTensor (α := Fin 1))).mutualInfoChain N (L + 1) _ _
+    rw [mutualInfoChain_doubledTensor (MPSTensor.scalarUnitTensor (α := Fin 1)) N L _
         (scalarUnitTensor_pureState_trace_ne_zero N),
-      mutualInfoChain_doubledTensor MPSTensor.scalarUnitTensor N (L + 1) _
+      mutualInfoChain_doubledTensor (MPSTensor.scalarUnitTensor (α := Fin 1)) N (L + 1) _
         (scalarUnitTensor_pureState_trace_ne_zero N)]
     congr 1
     exact hPureSAL N L hL hLN
@@ -430,14 +414,14 @@ theorem obstructionPhysicalSupport_add_terminalPhysicalSupport :
 /-- The two-sector, one-copy-per-sector decomposition has obstruction-block
 coefficient `mu` and terminal-block coefficient exactly one. -/
 @[reducible] noncomputable def obstructionTerminalDecomposition
-    (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0) :
-    MPSTensor.SectorDecomposition (5 * 5) where
+    (mu : ℂ) (B : MPOTensor 5 2) (hmu : mu ≠ 0) :
+    MPSTensor.SectorDecomposition (Fin 5 × Fin 5) where
   basisCount := 2
   basisDim := Fin.cons (α := fun _ : Fin 2 ↦ ℕ) 2 (fun _ : Fin 1 ↦ 1)
   basis := Fin.cons
-    (α := fun j : Fin 2 ↦ MPSTensor (5 * 5)
+    (α := fun j : Fin 2 ↦ MPOTensor 5
       (Fin.cons (α := fun _ : Fin 2 ↦ ℕ) 2 (fun _ : Fin 1 ↦ 1) j))
-    B (fun _ : Fin 1 ↦ terminalBlock.toMPSTensor)
+    B (fun _ : Fin 1 ↦ terminalBlock)
   sectors :=
     { copies := fun _ ↦ 1
       copies_pos := fun _ ↦ Nat.one_pos
@@ -451,7 +435,7 @@ coefficient `mu` and terminal-block coefficient exactly one. -/
 
 /-- The two basis bond dimensions are exactly two and one. -/
 theorem obstructionTerminalDecomposition_basisDim
-    (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0) :
+    (mu : ℂ) (B : MPOTensor 5 2) (hmu : mu ≠ 0) :
     (obstructionTerminalDecomposition mu B hmu).basisDim 0 = 2 ∧
       (obstructionTerminalDecomposition mu B hmu).basisDim (Fin.succ 0) = 1 := by
   constructor
@@ -461,10 +445,9 @@ theorem obstructionTerminalDecomposition_basisDim
 /-- The basis blocks are literally the unabsorbed obstruction normal block and the
 terminal bond-one block. -/
 theorem obstructionTerminalDecomposition_basis
-    (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0) :
+    (mu : ℂ) (B : MPOTensor 5 2) (hmu : mu ≠ 0) :
     (obstructionTerminalDecomposition mu B hmu).basis 0 = B ∧
-      (obstructionTerminalDecomposition mu B hmu).basis (Fin.succ 0) =
-        terminalBlock.toMPSTensor := by
+      (obstructionTerminalDecomposition mu B hmu).basis (Fin.succ 0) = terminalBlock := by
   constructor
   · rfl
   · rfl
@@ -474,61 +457,52 @@ tensors in left-canonical gauge: both blocks are normal and left-canonical, and
 their matrix product vectors are eventually linearly independent
 (arXiv:1606.00608, lines 271--301). -/
 theorem obstructionTerminalDecomposition_isLeftCanonicalBNTPresentation
-    (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0)
-    (hBInj : Kraus.IsInjective B) (hBLeft : MPTensor.IsLeftCanonical B)
-    (hBNormal : MPTensor.IsNormalTensor B) :
+    (mu : ℂ) (B : MPOTensor 5 2) (hmu : mu ≠ 0)
+    (hBLeft : MPTensor.IsLeftCanonical B) (hBNormal : MPTensor.IsNormalTensor B) :
     MPSTensor.IsLeftCanonicalBNTPresentation (obstructionTerminalDecomposition mu B hmu) := by
-  have hTerminalNormal : MPTensor.IsNormalTensor terminalBlock.toMPSTensor :=
-    terminalBlock_isNormalTensor.reindexPhysical finProdFinEquiv.symm
-  have hTerminalLeft : MPTensor.IsLeftCanonical terminalBlock.toMPSTensor :=
-    (isTP_toMPSTensor_iff terminalBlock).2 terminalBlock_isLeftCanonical
-  have hTerminalInj : Kraus.IsInjective terminalBlock.toMPSTensor :=
-    (isInjective_toMPSTensor_iff terminalBlock).2 terminalBlock_isInjective
-  have hBSelf : Filter.Tendsto
-      (fun N : ℕ ↦ MPTensor.mpvOverlap (α := Fin (5 * 5)) B B N)
-      Filter.atTop (nhds (1 : ℂ)) :=
-    MPSTensor.overlap_tendsto_one_of_peripheralPrimitive_of_irreducible B
-      hBNormal.no_invariant_proj hBLeft hBNormal.primitive_transfer
-  have hTerminalSelf : Filter.Tendsto
-      (fun N : ℕ ↦ MPTensor.mpvOverlap (α := Fin (5 * 5))
-        terminalBlock.toMPSTensor terminalBlock.toMPSTensor N)
-      Filter.atTop (nhds (1 : ℂ)) :=
-    MPSTensor.overlap_tendsto_one_of_peripheralPrimitive_of_irreducible
-      terminalBlock.toMPSTensor hTerminalNormal.no_invariant_proj
-      hTerminalLeft hTerminalNormal.primitive_transfer
-  have hCrossBT : Filter.Tendsto
-      (fun N : ℕ ↦ MPTensor.mpvOverlap (α := Fin (5 * 5))
-        B terminalBlock.toMPSTensor N) Filter.atTop (nhds 0) :=
-    MPSTensor.mpvOverlap_tendsto_zero_of_dim_ne B terminalBlock.toMPSTensor
-      hBInj hTerminalInj hBLeft hTerminalLeft (by omega)
-  have hCrossTB : Filter.Tendsto
-      (fun N : ℕ ↦ MPTensor.mpvOverlap (α := Fin (5 * 5))
-        terminalBlock.toMPSTensor B N) Filter.atTop (nhds 0) :=
-    MPSTensor.mpvOverlap_tendsto_zero_of_dim_ne terminalBlock.toMPSTensor B
-      hTerminalInj hBInj hTerminalLeft hBLeft (by omega)
-  refine ⟨⟨Nat.two_pos, fun _ _ _ ↦ rfl, ?_, ?_⟩, ?_⟩
-  · intro j
+  let P := obstructionTerminalDecomposition mu B hmu
+  have hNormal : ∀ j, MPTensor.IsNormalTensor (P.basis j) := by
+    intro j
     change Fin 2 at j
     fin_cases j
     · exact hBNormal
-    · exact hTerminalNormal
-  · have hLI := MPSTensor.eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal
-        (obstructionTerminalDecomposition mu B hmu).basis
-        (fun j ↦ by
-          change Fin 2 at j
-          fin_cases j
-          · exact hBSelf
-          · exact hTerminalSelf)
-        (fun i j hij ↦ by
-          change Fin 2 at i j
-          fin_cases i <;> fin_cases j
-          · exact absurd rfl hij
-          · exact hCrossBT
-          · exact hCrossTB
-          · exact absurd rfl hij)
-    rw [Filter.Eventually] at hLI
-    obtain ⟨N0, hN0⟩ := Filter.mem_atTop_sets.mp hLI
-    exact ⟨N0, fun N hN ↦ hN0 N (Nat.le_of_lt hN)⟩
+    · exact terminalBlock_isNormalTensor
+  have hSelf : ∀ j, Filter.Tendsto
+      (fun N : ℕ ↦ MPTensor.mpvOverlap (P.basis j) (P.basis j) N)
+      Filter.atTop (nhds (1 : ℂ)) := fun j ↦ (hNormal j).selfOverlap_tendsto_one
+  have hCrossBT : Filter.Tendsto (fun N : ℕ ↦ MPTensor.mpvOverlap B terminalBlock N)
+      Filter.atTop (nhds 0) :=
+    (hBNormal.overlap_dichotomy terminalBlock_isNormalTensor).2.resolve_right
+      (by rintro ⟨_, hdim, _⟩; omega)
+  have hCrossTB : Filter.Tendsto (fun N : ℕ ↦ MPTensor.mpvOverlap terminalBlock B N)
+      Filter.atTop (nhds 0) :=
+    (terminalBlock_isNormalTensor.overlap_dichotomy hBNormal).2.resolve_right
+      (by rintro ⟨_, hdim, _⟩; omega)
+  have hCross : ∀ i j, i ≠ j → Filter.Tendsto
+      (fun N : ℕ ↦ MPTensor.mpvOverlap (P.basis i) (P.basis j) N)
+      Filter.atTop (nhds 0) := by
+    intro i j hij
+    change Fin 2 at i j
+    fin_cases i <;> fin_cases j
+    · exact absurd rfl hij
+    · exact hCrossBT
+    · exact hCrossTB
+    · exact absurd rfl hij
+  -- The eventual linear independence is stated on a `Fin` alphabet: relabel along
+  -- `finProdFinEquiv`.
+  have hLI := MPSTensor.eventually_linearIndependent_of_finite_overlap_tendsto_orthonormal
+    (fun j ↦ Kraus.reindexPhysical finProdFinEquiv.symm (P.basis j))
+    (fun j ↦ by simpa only [MPSTensor.mpvOverlap_reindexPhysical_equiv] using hSelf j)
+    (fun i j hij ↦ by
+      simpa only [MPSTensor.mpvOverlap_reindexPhysical_equiv] using hCross i j hij)
+  rw [Filter.Eventually] at hLI
+  obtain ⟨N0, hN0⟩ := Filter.mem_atTop_sets.mp hLI
+  refine ⟨⟨Nat.two_pos, fun _ _ _ ↦ rfl, hNormal, N0, fun N hN ↦ ?_⟩, ?_⟩
+  · exact MPSTensor.linearIndependent_mpvState_of_configEquiv
+      (Equiv.arrowCongr (Equiv.refl (Fin N)) finProdFinEquiv) P.basis
+      (fun j ↦ Kraus.reindexPhysical finProdFinEquiv.symm (P.basis j))
+      (fun j σ ↦ by rw [MPTensor.mpv_reindexPhysical]; rfl)
+      (hN0 N (Nat.le_of_lt hN))
   · intro j
     change Fin 2 at j
     fin_cases j
@@ -541,39 +515,39 @@ remains unabsorbed and normal; only the gauge target carries the coefficient
 `mu`. Its MPO presentation has the first-four-coordinate support, orthogonal
 to the terminal support in both multiplication orders. -/
 theorem exists_obstruction_terminal_twoBlock_BNT_witness :
-    ∃ (mu : ℂ) (B : MPSTensor (5 * 5) 2) (hmu : mu ≠ 0),
+    ∃ (mu : ℂ) (B : MPOTensor 5 2) (hmu : mu ≠ 0),
       ‖mu‖ < 1 ∧
       Kraus.IsInjective B ∧
       MPTensor.IsLeftCanonical B ∧
       MPTensor.IsNormalTensor B ∧
-      MPTensor.GaugeEquiv embeddedObstruction.toMPSTensor (mu • B) ∧
+      MPTensor.GaugeEquiv embeddedObstruction (mu • B) ∧
       (obstructionTerminalDecomposition mu B hmu).basisCount = 2 ∧
       (obstructionTerminalDecomposition mu B hmu).copies 0 = 1 ∧
       (obstructionTerminalDecomposition mu B hmu).copies (Fin.succ 0) = 1 ∧
       (obstructionTerminalDecomposition mu B hmu).basisDim 0 = 2 ∧
       (obstructionTerminalDecomposition mu B hmu).basisDim (Fin.succ 0) = 1 ∧
       (obstructionTerminalDecomposition mu B hmu).basis 0 = B ∧
-      (obstructionTerminalDecomposition mu B hmu).basis (Fin.succ 0) = terminalBlock.toMPSTensor ∧
+      (obstructionTerminalDecomposition mu B hmu).basis (Fin.succ 0) = terminalBlock ∧
       (obstructionTerminalDecomposition mu B hmu).weight 0 0 = mu ∧
       (obstructionTerminalDecomposition mu B hmu).weight (Fin.succ 0) 0 = 1 ∧
-      physicalSupportProj (verticalBNTMPO B) = obstructionPhysicalSupport ∧
+      physicalSupportProj B = obstructionPhysicalSupport ∧
       physicalSupportProj terminalBlock = terminalPhysicalSupport ∧
-      physicalSupportProj (verticalBNTMPO B) * physicalSupportProj terminalBlock = 0 ∧
-      physicalSupportProj terminalBlock * physicalSupportProj (verticalBNTMPO B) = 0 ∧
-      physicalSupportProj (verticalBNTMPO B) + physicalSupportProj terminalBlock = 1 ∧
+      physicalSupportProj B * physicalSupportProj terminalBlock = 0 ∧
+      physicalSupportProj terminalBlock * physicalSupportProj B = 0 ∧
+      physicalSupportProj B + physicalSupportProj terminalBlock = 1 ∧
       MPSTensor.IsLeftCanonicalBNTPresentation (obstructionTerminalDecomposition mu B hmu) := by
   obtain ⟨mu, B, hmu, hmuNorm, hBInj, hBLeft, hBNormal, hGauge, hObstructionSupport⟩ :=
     exists_embedded_leftCanonical_normal_obstruction_block
   have hObstructionTerminal :
-      physicalSupportProj (verticalBNTMPO B) * physicalSupportProj terminalBlock = 0 := by
+      physicalSupportProj B * physicalSupportProj terminalBlock = 0 := by
     rw [hObstructionSupport, terminalBlock_physicalSupportProj]
     exact obstructionPhysicalSupport_mul_terminalPhysicalSupport
   have hTerminalObstruction :
-      physicalSupportProj terminalBlock * physicalSupportProj (verticalBNTMPO B) = 0 := by
+      physicalSupportProj terminalBlock * physicalSupportProj B = 0 := by
     rw [hObstructionSupport, terminalBlock_physicalSupportProj]
     exact terminalPhysicalSupport_mul_obstructionPhysicalSupport
   have hSupportSum :
-      physicalSupportProj (verticalBNTMPO B) + physicalSupportProj terminalBlock = 1 := by
+      physicalSupportProj B + physicalSupportProj terminalBlock = 1 := by
     rw [hObstructionSupport, terminalBlock_physicalSupportProj]
     exact obstructionPhysicalSupport_add_terminalPhysicalSupport
   obtain ⟨hDimZero, hDimOne⟩ := obstructionTerminalDecomposition_basisDim mu B hmu
@@ -584,6 +558,6 @@ theorem exists_obstruction_terminal_twoBlock_BNT_witness :
     terminalBlock_physicalSupportProj, hObstructionTerminal,
     hTerminalObstruction, hSupportSum, ?_⟩
   exact obstructionTerminalDecomposition_isLeftCanonicalBNTPresentation
-    mu B hmu hBInj hBLeft hBNormal
+    mu B hmu hBLeft hBNormal
 
 end MPOTensor.NeighboringTraceObstructionAmbientBlocks

@@ -318,8 +318,8 @@ theorem hasFullSupport_normalizedDiagonalLiftCFIIData {α : Type*} [Fintype α]
 physical identity ancilla.
 
 The construction first uses the normalized diagonal lift and then regroups the letters by
-`pairProdEquiv`. It preserves virtual canonical data, but makes no claim that source cuts, ranks, or chosen
-compact-SVD factors are unchanged.
+`pairProdEquiv`. It preserves virtual canonical data, but makes no claim that source cuts, ranks, or
+chosen compact-SVD factors are unchanged.
 
 Source: arXiv:1703.09188, lines 706--724; CFII is used as in lines 271--281. -/
 noncomputable def tensorPhysicalIdCFIIData (U : MPOTensor d D)

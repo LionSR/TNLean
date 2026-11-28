@@ -35,6 +35,11 @@ argument.
   line 269; see also lines 427--431 for the blocked direct-sum span input
 * [Cirac--Perez-Garcia--Schuch--Verstraete 2017] arXiv:1606.00608,
   lines 995--1010
+
+**Bridge (T.2c):** The basis-of-normal-tensors hypothesis of this module still reads an operator
+tensor through `MPOTensor.toMPSTensor`, because the vertical canonical form and the basis of normal
+tensors are stated on the vertical alphabet `Fin (D * D)`. The bridge is removed when the vertical
+alphabet moves to `Fin D × Fin D` (step T.2c of `docs/tensor_type_unification.md`).
 -/
 
 open scoped Matrix BigOperators ComplexOrder Kronecker
@@ -60,32 +65,6 @@ variable (Fam : BNTFusionIsometryFamily Λ p)
     (Fam.rightFinalIndexEquiv α β γ ε).symm (⟨⟨δ, μ, ν⟩, b⟩) =
       ⟨δ, μ, ν, b⟩ := by
   rfl
-
-/-- A common finite family of word polynomials separates every final-label
-tensor from all the others.  This is the arbitrary-finite-label form of
-`MPSTensor.HasBlockSelectorWords` on the pair alphabet.
-
-For each `ε`, the same coefficients evaluate to the identity on `tensor ε`
-and to zero on every `tensor ε'` with `ε' ≠ ε`.
-
-Source: arXiv:1511.08090, simultaneous inverse relation
-`B_d^+ B_{d'} = δ_{d,d'} 1` at line 269, after the common blocking described
-at lines 427--431. -/
-def HasFinalLabelSelectorWords (S : ℕ) : Prop :=
-  ∀ ε : Λ, ∃ c : (Fin S → Fin p × Fin p) → ℂ,
-    (∑ w : Fin S → Fin p × Fin p,
-      c w • Kraus.evalWord (Fam.tensor ε) (List.ofFn w)) = 1 ∧
-    ∀ ε' : Λ, ε' ≠ ε →
-      (∑ w : Fin S → Fin p × Fin p,
-        c w • Kraus.evalWord (Fam.tensor ε') (List.ofFn w)) = 0
-
-/-- Simultaneous block selectors for the labelled MPO tensors are precisely
-final-label selectors for their fusion family. -/
-theorem hasFinalLabelSelectorWords_of_hasBlockSelectorWords
-    {g : ℕ} (Fam : BNTFusionIsometryFamily (Fin g) p) {S : ℕ}
-    (hSel : MPSTensor.HasBlockSelectorWords Fam.tensor S) :
-    Fam.HasFinalLabelSelectorWords S :=
-  hSel
 
 /-- A word of a finite length evaluates to the ordered product of its letters. -/
 private theorem kraus_evalWord_ofFn_eq_prod {α κ : Type*} [Fintype κ] [DecidableEq κ]
@@ -148,7 +127,7 @@ theorem fusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selector
     (c : BNTLabelCoefficientFamily Λ)
     (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
     (hLI : c.LengthIndependent) {S : ℕ} (hS : 0 < S)
-    (hSel : Fam.HasFinalLabelSelectorWords S) (α β : Λ) :
+    (hSel : MPSTensor.HasBlockSelectorWords Fam.tensor S) (α β : Λ) :
     Fam.fusionIsometry α β * (Fam.fusionIsometry α β)ᴴ = 1 := by
   classical
   obtain ⟨n, rfl⟩ : ∃ n, S = n + 1 := ⟨S - 1, (Nat.succ_pred_eq_of_pos hS).symm⟩
@@ -272,18 +251,19 @@ theorem fusionIsometry_mul_conjTranspose_eq_one_of_bnt_of_lengthIndependent
     (hLI : c.LengthIndependent) (α β : Fin g) :
     Fam.fusionIsometry α β * (Fam.fusionIsometry α β)ᴴ = 1 := by
   obtain ⟨S, hS, hSpan⟩ := hBNT.exists_positive_wordTupleSpanTop
-  have hBlockSelectors := MPSTensor.hasBlockSelectorWords_of_wordTupleSpanTop Fam.tensor
-    ((MPSTensor.wordTupleSpanTop_reindexPhysical_equiv finProdFinEquiv.symm Fam.tensor S).1 hSpan)
+  have hBlockSelectors :=
+    MPSTensor.hasBlockSelectorWords_of_wordTupleSpanTop Fam.tensor
+      ((MPSTensor.wordTupleSpanTop_reindexPhysical_equiv finProdFinEquiv.symm _ S).1 hSpan)
   exact Fam.fusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords
     c hχ hLI hS
-      (Fam.hasFinalLabelSelectorWords_of_hasBlockSelectorWords hBlockSelectors)
+      hBlockSelectors
       α β
 
 private theorem card_fusionIndex_eq_of_lengthIndependent_of_selectorWords
     (c : BNTLabelCoefficientFamily Λ)
     (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
     (hLI : c.LengthIndependent) {S : ℕ} (hS : 0 < S)
-    (hSel : Fam.HasFinalLabelSelectorWords S) (α β : Λ) :
+    (hSel : MPSTensor.HasBlockSelectorWords Fam.tensor S) (α β : Λ) :
     Fintype.card ((γ : Λ) ×
         (Fin (Fam.chi.dim α β γ) × Fin (Fam.bondDim γ))) =
       Fintype.card (Fin (Fam.bondDim α * Fam.bondDim β)) := by
@@ -317,7 +297,7 @@ private theorem card_leftTripleFusionIndex_eq_of_lengthIndependent_of_selectorWo
     (c : BNTLabelCoefficientFamily Λ)
     (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
     (hLI : c.LengthIndependent) {S : ℕ} (hS : 0 < S)
-    (hSel : Fam.HasFinalLabelSelectorWords S) (α β γ : Λ) :
+    (hSel : MPSTensor.HasBlockSelectorWords Fam.tensor S) (α β γ : Λ) :
     Fintype.card (Fam.LeftTripleFusionIndex α β γ) =
       Fintype.card (Fin (Fam.bondDim α * Fam.bondDim β * Fam.bondDim γ)) := by
   have hpair (a b : Λ) :
@@ -348,7 +328,7 @@ private theorem card_rightTripleFusionIndex_eq_of_lengthIndependent_of_selectorW
     (c : BNTLabelCoefficientFamily Λ)
     (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
     (hLI : c.LengthIndependent) {S : ℕ} (hS : 0 < S)
-    (hSel : Fam.HasFinalLabelSelectorWords S) (α β γ : Λ) :
+    (hSel : MPSTensor.HasBlockSelectorWords Fam.tensor S) (α β γ : Λ) :
     Fintype.card (Fam.RightTripleFusionIndex α β γ) =
       Fintype.card (Fin (Fam.bondDim α * (Fam.bondDim β * Fam.bondDim γ))) := by
   have hpair (a b : Λ) :
@@ -389,7 +369,7 @@ theorem leftFusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_sele
     (c : BNTLabelCoefficientFamily Λ)
     (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
     (hLI : c.LengthIndependent) {S : ℕ} (hS : 0 < S)
-    (hSel : Fam.HasFinalLabelSelectorWords S) (α β γ : Λ) :
+    (hSel : MPSTensor.HasBlockSelectorWords Fam.tensor S) (α β γ : Λ) :
     Fam.leftFusionIsometry α β γ * (Fam.leftFusionIsometry α β γ)ᴴ = 1 := by
   exact (Matrix.mul_eq_one_comm_of_card_eq _ _ _
     (Fam.card_leftTripleFusionIndex_eq_of_lengthIndependent_of_selectorWords
@@ -407,7 +387,7 @@ theorem rightFusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_sel
     (c : BNTLabelCoefficientFamily Λ)
     (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
     (hLI : c.LengthIndependent) {S : ℕ} (hS : 0 < S)
-    (hSel : Fam.HasFinalLabelSelectorWords S) (α β γ : Λ) :
+    (hSel : MPSTensor.HasBlockSelectorWords Fam.tensor S) (α β γ : Λ) :
     Fam.rightFusionIsometry α β γ * (Fam.rightFusionIsometry α β γ)ᴴ = 1 := by
   exact (Matrix.mul_eq_one_comm_of_card_eq _ _ _
     (Fam.card_rightTripleFusionIndex_eq_of_lengthIndependent_of_selectorWords
@@ -427,7 +407,7 @@ theorem tripleFusionComparison_mul_conjTranspose_eq_one_of_lengthIndependent_of_
     (c : BNTLabelCoefficientFamily Λ)
     (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
     (hLI : c.LengthIndependent) {S : ℕ} (hS : 0 < S)
-    (hSel : Fam.HasFinalLabelSelectorWords S) (α β γ : Λ) :
+    (hSel : MPSTensor.HasBlockSelectorWords Fam.tensor S) (α β γ : Λ) :
     Fam.tripleFusionComparison α β γ * (Fam.tripleFusionComparison α β γ)ᴴ = 1 := by
   rw [Fam.tripleFusionComparison_mul_conjTranspose,
     Fam.leftFusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords
@@ -448,7 +428,7 @@ theorem conjTranspose_mul_tripleFusionComparison_eq_one_of_lengthIndependent_of_
     (c : BNTLabelCoefficientFamily Λ)
     (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
     (hLI : c.LengthIndependent) {S : ℕ} (hS : 0 < S)
-    (hSel : Fam.HasFinalLabelSelectorWords S) (α β γ : Λ) :
+    (hSel : MPSTensor.HasBlockSelectorWords Fam.tensor S) (α β γ : Λ) :
     (Fam.tripleFusionComparison α β γ)ᴴ * Fam.tripleFusionComparison α β γ = 1 := by
   rw [Fam.conjTranspose_mul_tripleFusionComparison,
     Fam.rightFusionIsometry_mul_conjTranspose_eq_one_of_lengthIndependent_of_selectorWords
@@ -548,7 +528,7 @@ theorem tripleFusionComparison_finalSector_submatrix_eq_zero
     (c : BNTLabelCoefficientFamily Λ)
     (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
     (hLI : c.LengthIndependent) {S : ℕ}
-    (hSel : Fam.HasFinalLabelSelectorWords S)
+    (hSel : MPSTensor.HasBlockSelectorWords Fam.tensor S)
     (α β γ ε ε' : Λ) (hε : ε' ≠ ε) :
     (Fam.tripleFusionComparison α β γ).submatrix
         (Fam.leftFinalRow α β γ ε) (Fam.rightFinalRow α β γ ε') = 0 := by
@@ -597,7 +577,7 @@ theorem exists_tripleFusionComparison_finalSector_eq_kronecker_one_of_separation
     (c : BNTLabelCoefficientFamily Λ)
     (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
     (hLI : c.LengthIndependent) {S : ℕ}
-    (hSel : Fam.HasFinalLabelSelectorWords S)
+    (hSel : MPSTensor.HasBlockSelectorWords Fam.tensor S)
     (α β γ ε : Λ)
     (hε : Kraus.IsInjective (Fam.tensor ε)) :
     ∃ F : Matrix (Fam.LeftFinalMultiplicity α β γ ε)

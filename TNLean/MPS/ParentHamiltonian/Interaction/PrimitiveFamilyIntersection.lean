@@ -38,8 +38,8 @@ Lemma existenceinteraction in Section 5, equations (3.10)--(3.13).
 
 It also contains the following results.
 
-* `MPSTensor.toMatrix'_parentInteraction_eq_of_groundSpaceES_eq`,
-  `MPSTensor.hamiltonian_parentChainInteraction_eq_of_groundSpaceES_eq`: canonical interactions
+* `MPSTensor.toMatrix'_parentInteraction_eq_of_map_groundSpace_eq`,
+  `MPSTensor.hamiltonian_parentChainInteraction_eq_of_map_groundSpace_eq`: canonical interactions
   determined by their local support.
 * `exists_posSemidef_eq_toMatrix'_parentInteraction_of_ker_hamiltonian_parentChainInteraction`
   (in `MPSTensor`):
@@ -76,12 +76,12 @@ theorem exists_posSemidef_eq_toMatrix'_parentInteraction_of_ker_hamiltonian_pare
     (A : MPSTensor d D)
     (hKernel : ∀ N, R ≤ N →
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) =
-        groundSpaceES A N) :
+        ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h = LinearMap.toMatrix' (parentInteraction A R) ∧ h.PosSemidef ∧
       ∀ N, R ≤ N →
         LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-          groundSpaceES A N :=
+          ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) :=
   ⟨LinearMap.toMatrix' (parentInteraction A R), rfl, posSemidef_toMatrix'_parentInteraction A R,
     hKernel⟩
 
@@ -137,8 +137,8 @@ theorem eventually_iSup_groundSpace_restriction_intersection_of_hasComplementary
     (IsPeriodic.one_iff_primitive (A j)).mpr
       ⟨(hP j).isIrreducibleFamily_of_posDef (hρ j), (hP j).norm, (hP j).isPrimitive⟩
   apply eventually_iSup_groundSpace_restriction_intersection_of_independent_middle A
-  · exact (eventually_groundSpaceES_iSupIndep_of_primitive A ρ hP hρ hDistinct).mono
-      fun n hn => (groundSpace_iSupIndep_iff_groundSpaceES_iSupIndep A n).mpr hn
+  · exact (eventually_map_groundSpace_iSupIndep_of_primitive A ρ hP hρ hDistinct).mono
+      fun n hn => (groundSpace_iSupIndep_iff_map_groundSpace_iSupIndep A n).mpr hn
   · intro j
     obtain ⟨n₀, hn₀⟩ := (hPeriodic j).exists_eventually_groundSpace_restriction_intersection
     exact (eventually_ge_atTop n₀).mono fun n hn => hn₀ n hn
@@ -158,8 +158,9 @@ theorem exists_ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_p
     ∃ R₀, 0 < R₀ ∧ ∀ R N, R₀ ≤ R → R ≤ N →
       LinearMap.ker (Matrix.toEuclideanLin
           (parentChainInteraction (toTensorFromBlocks μ A) R N).hamiltonian) =
-        groundSpaceES (toTensorFromBlocks μ A) N := by
-  apply exists_ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_eventually_intersection
+        ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap) := by
+  apply exists_ker_hamiltonian_parentChainInteraction_eq_map_groundSpace_of_eventually_intersection
   filter_upwards [
     eventually_iSup_groundSpace_restriction_intersection_of_hasComplementaryFixedPointGap
       A ρ hP hρ hDistinct] with n hn
@@ -181,7 +182,8 @@ theorem exists_positive_parent_interaction_of_primitive_overlap
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h.PosSemidef ∧ ∀ N : ℕ, R ≤ N →
         LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-          groundSpaceES (toTensorFromBlocks μ A) N := by
+          ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ
+              _).symm.toLinearMap) := by
   obtain ⟨R, hR, hKernel⟩ :=
     exists_ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_primitive_overlap
       μ A hμ ρ hP hρ hDistinct
@@ -213,8 +215,9 @@ variable {d DA DB R : ℕ} {A : MPSTensor d DA} {B : MPSTensor d DB}
 /-- Equal local support spaces give equal canonical interaction matrices,
 also for tensors of different bond dimensions. Source: Nachtergaele,
 arXiv:cond-mat/9410110, Lemma `existenceinteraction`, lines 2195--2230. -/
-theorem toMatrix'_parentInteraction_eq_of_groundSpaceES_eq
-    (h : groundSpaceES A R = groundSpaceES B R) :
+theorem toMatrix'_parentInteraction_eq_of_map_groundSpace_eq
+    (h : ((groundSpace A R).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) = ((groundSpace B
+        R).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     LinearMap.toMatrix' (parentInteraction A R) = LinearMap.toMatrix' (parentInteraction B R) := by
   apply Matrix.toEuclideanLin.injective
   rw [toEuclideanLin_toMatrix'_parentInteraction, toEuclideanLin_toMatrix'_parentInteraction, h]
@@ -222,8 +225,9 @@ theorem toMatrix'_parentInteraction_eq_of_groundSpaceES_eq
 /-- Equal local support spaces give equal Hamiltonians of the parent interaction on the open
 chain at every volume, independently of the bond dimensions. Source: Nachtergaele,
 arXiv:cond-mat/9410110, Lemma `existenceinteraction`, lines 2195--2230. -/
-theorem hamiltonian_parentChainInteraction_eq_of_groundSpaceES_eq
-    (h : groundSpaceES A R = groundSpaceES B R) (N : ℕ) :
+theorem hamiltonian_parentChainInteraction_eq_of_map_groundSpace_eq
+    (h : ((groundSpace A R).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) = ((groundSpace B
+        R).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) (N : ℕ) :
     (parentChainInteraction A R N).hamiltonian = (parentChainInteraction B R N).hamiltonian := by
   have hP : parentInteraction A R = parentInteraction B R := by
     simp only [parentInteraction, h]

@@ -348,7 +348,8 @@ Source: arXiv:1606.00608, equations (3.16)--(3.18), lines 549--578. -/
 private theorem sectorSupportSumES_eq
     (h : ResidualFamilyAppendixBData B) :
     h.sectorSupportSumES =
-      ∑ j : Fin r, (groundSpaceES (h.sector j).coreTensor 2).starProjection.toLinearMap := by
+      ∑ j : Fin r, ((groundSpace (h.sector j).coreTensor 2).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection.toLinearMap := by
   classical
   apply LinearMap.ext
   intro v
@@ -371,11 +372,13 @@ private theorem sectorSupportSumES_isSymmetricProjection
     rw [h.sectorSupportSumES_eq]
     exact Finset.sum_induction
       (fun j : Fin r ↦
-        (groundSpaceES (h.sector j).coreTensor 2).starProjection.toLinearMap)
+        ((groundSpace (h.sector j).coreTensor 2).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection.toLinearMap)
       LinearMap.IsSymmetric
       (fun _ _ ha hb ↦ ha.add hb)
       LinearMap.IsSymmetric.zero
-      (fun j _ ↦ (groundSpaceES (h.sector j).coreTensor 2).starProjection_isSymmetric)
+      (fun j _ ↦ ((groundSpace (h.sector j).coreTensor 2).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection_isSymmetric)
 
 /-- The Euclidean sector support sum has the direct-sum two-site ground space
 as its range.
@@ -385,11 +388,11 @@ Source: arXiv:1606.00608, equations `III_CFI_RFP` and (3.16)--(3.18), lines
 private theorem sectorSupportSumES_range
     (h : ResidualFamilyAppendixBData B) :
     LinearMap.range h.sectorSupportSumES =
-      groundSpaceES (directSumTensor B) 2 := by
+      ((groundSpace (directSumTensor B) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   ext ψ
   constructor
   · rintro ⟨v, rfl⟩
-    apply (mem_groundSpaceES_iff (directSumTensor B) 2 _).2
+    apply (mem_map_groundSpace_iff (directSumTensor B) 2 _).2
     change h.sectorSupportSum
       ((WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)) v) ∈
         groundSpace (directSumTensor B) 2
@@ -401,7 +404,7 @@ private theorem sectorSupportSumES_range
         LinearMap.range h.sectorSupportSum := by
       rw [h.sectorSupportSum_range, ← h.twoSiteBondEmbedding_range,
         h.twoSiteBondEmbedding_range_eq_directSum_groundSpace]
-      exact (mem_groundSpaceES_iff (directSumTensor B) 2 ψ).1 hψ
+      exact (mem_map_groundSpace_iff (directSumTensor B) 2 ψ).1 hψ
     obtain ⟨v, hv⟩ := hraw
     refine ⟨(WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).symm v, ?_⟩
     apply (WithLp.linearEquiv 2 ℂ (NSiteSpace d 2)).injective
@@ -416,7 +419,8 @@ theorem sectorSupportSum_eq_twoSiteBondSupportProjection
     (h : ResidualFamilyAppendixBData B) :
     h.sectorSupportSum = twoSiteBondSupportProjection B := by
   have hEq : h.sectorSupportSumES =
-      (groundSpaceES (directSumTensor B) 2).starProjection.toLinearMap :=
+      ((groundSpace (directSumTensor B) 2).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection.toLinearMap :=
     h.sectorSupportSumES_isSymmetricProjection.ext
       (Submodule.isSymmetricProjection_starProjection _)
       (by

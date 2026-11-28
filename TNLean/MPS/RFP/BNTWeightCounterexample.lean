@@ -109,7 +109,7 @@ theorem halvedWeightTensor_isLeftCanonicalBNTPresentation :
     have h := congrArg
       (fun v : MPVSpace (Fin 1) N => v (fun _ : Fin N => (0 : Fin 1))) hzero
     have : (1 : ℂ) = 0 := by
-      simp [mpvState_apply, mpv, scalarUnitTensor_evalWord, Matrix.trace] at h
+      simp [mpv, scalarUnitTensor_evalWord, Matrix.trace] at h
     exact one_ne_zero this
   · intro j
     simp [IsLeftCanonical, Kraus.IsTP, scalarUnitTensor]

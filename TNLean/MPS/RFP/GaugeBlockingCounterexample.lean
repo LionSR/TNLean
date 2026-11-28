@@ -26,6 +26,12 @@ virtually gauge equivalent to the original tensor with the orientation printed i
 **Scope restriction (one-letter MPS lift):** The counterexample realizes the exact
 source diagram for one physical letter. It does not decide the mixed-state continuation.
 See `docs/paper-gaps/cpsv16_rfp_gauge_pure_equivalence_false.tex`.
+
+**Bridge (T.2b):** The predicate `IsOneLetterRFPViaTSUpToVirtualGauge` still reads an operator
+tensor through `MPOTensor.toMPSTensor`, because the Fin-encoded blocking `Kraus.blockTensor` (with
+`MPOTensor.toMPSTensor_blockTensor`, `MPOTensor.toMPSTensor_blockTwo`) is stated on the alphabet
+`Fin (d * d)`. The bridge is removed when the blocking moves to `Kraus.block` (step T.2b of
+`docs/tensor_type_unification.md`).
 -/
 
 open MPTensor
@@ -113,8 +119,9 @@ private noncomputable def cubePhaseDoubledWeight (q : Fin 4) : ℂ :=
 
 Source: arXiv:1606.00608, equation `II_CF1` and canonical-form data at lines 219--246. -/
 private theorem cubePhaseDoubledTensor_eq_toTensorFromBlocks :
-    (doubledTensor cubePhaseTensor).toMPSTensor =
-      toTensorFromBlocks cubePhaseDoubledWeight (fun _ : Fin 4 => scalarUnitTensor (α := Fin (1 * 1))) := by
+    doubledTensor cubePhaseTensor =
+      toTensorFromBlocks cubePhaseDoubledWeight
+        (fun _ : Fin 4 => scalarUnitTensor (α := Fin 1 × Fin 1)) := by
   have hflat_symm (q : Fin 4) :
       (finSigmaFinEquiv : (Σ _q : Fin 4, Fin 1) ≃ Fin 4).symm q = ⟨q, 0⟩ := by
     fin_cases q <;> rfl
@@ -140,8 +147,9 @@ private theorem cubePhaseDoubledTensor_eq_toTensorFromBlocks :
               finSigmaFinEquiv ⟨k₂, (0 : Fin (cubePhaseBondDim k₂))⟩)) =
         cubePhaseWeight k₁ * star (cubePhaseWeight k₂) := by
     simp [cubePhaseDoubledWeight]
-  have hblocks (p : Fin 1) (q r : Fin 4) :
-      toTensorFromBlocks cubePhaseDoubledWeight (fun _ : Fin 4 => scalarUnitTensor (α := Fin (1 * 1))) p q r =
+  have hblocks (p : Fin 1 × Fin 1) (q r : Fin 4) :
+      toTensorFromBlocks cubePhaseDoubledWeight
+          (fun _ : Fin 4 => scalarUnitTensor (α := Fin 1 × Fin 1)) p q r =
         if q = r then cubePhaseDoubledWeight q else 0 := by
     change Matrix.blockDiagonal' (fun k : Fin 4 =>
       cubePhaseDoubledWeight k • scalarUnitTensor p)
@@ -187,7 +195,7 @@ private theorem cubePhaseDoubledTensor_eq_toTensorFromBlocks :
   fin_cases ka₁ <;> fin_cases ka₂ <;> fin_cases kb₁ <;> fin_cases kb₂ <;>
     simp only [cubePhaseBondDim] at ua₁ ua₂ ub₁ ub₂ <;>
     fin_cases ua₁ <;> fin_cases ua₂ <;> fin_cases ub₁ <;> fin_cases ub₂ <;>
-    simp only [MPOTensor.toMPSTensor, doubledTensor, cubePhaseTensor,
+    simp only [doubledTensor, cubePhaseTensor,
       cubePhaseWeight, Fin.zero_eta, Fin.isValue, Fin.mk_one, Matrix.submatrix_apply,
       finProdFinEquiv.symm_apply_apply, Matrix.kroneckerMap_apply, zero_ne_one,
       one_ne_zero, Matrix.map_apply, map_zero, map_one, mul_zero, zero_mul,
@@ -220,11 +228,12 @@ private theorem norm_cubePhaseDoubledWeight (q : Fin 4) :
 /-- Canonical-form data for the four scalar normal blocks of the doubled cube-phase tensor. -/
 private noncomputable def cubePhaseDoubledCanonicalData :
     CPSVCanonicalFormData
-      (toTensorFromBlocks cubePhaseDoubledWeight (fun _ : Fin 4 => scalarUnitTensor (α := Fin (1 * 1)))) :=
+      (toTensorFromBlocks cubePhaseDoubledWeight
+        (fun _ : Fin 4 => scalarUnitTensor (α := Fin 1 × Fin 1))) :=
   CPSVCanonicalFormData.ofBlocks (fun _ => by simp) cubePhaseDoubledWeight
     (fun q => norm_ne_zero_iff.mp (by rw [norm_cubePhaseDoubledWeight]; exact one_ne_zero))
-    (fun _ : Fin 4 => scalarUnitTensor (α := Fin (1 * 1)))
-    (fun _ => @scalarUnitTensor_isNormalTensor (Fin (1 * 1)) _ (inferInstanceAs (Unique (Fin 1))))
+    (fun _ : Fin 4 => scalarUnitTensor (α := Fin 1 × Fin 1))
+    (fun _ => @scalarUnitTensor_isNormalTensor (Fin 1 × Fin 1) _ (Unique.mk' _))
 
 /-- The doubled cube-phase tensor generates positive semidefinite operators on every
 nonempty chain and hence satisfies the MPDO standing hypothesis.
@@ -241,14 +250,14 @@ theorem cubePhaseDoubledTensor_isMPDO :
 Source: arXiv:1606.00608, Definition `RFPMixedTS`, lines 657--660, and Appendix D,
 lines 2091--2110. -/
 theorem cubePhaseDoubledTensor_isCPSVCanonicalForm :
-    IsCPSVCanonicalForm (doubledTensor cubePhaseTensor).toMPSTensor := by
+    IsCPSVCanonicalForm (doubledTensor cubePhaseTensor) := by
   rw [cubePhaseDoubledTensor_eq_toTensorFromBlocks]
   exact cubePhaseDoubledCanonicalData.isCPSVCanonicalForm
 
 /-- The doubled cube-phase MPO admits canonical data satisfying the normalization at
 arXiv:1606.00608, line 246. -/
 theorem cubePhaseDoubledTensor_exists_weightNormalized :
-    ∃ data : CPSVCanonicalFormData (doubledTensor cubePhaseTensor).toMPSTensor,
+    ∃ data : CPSVCanonicalFormData (doubledTensor cubePhaseTensor),
       data.IsWeightNormalized := by
   rw [cubePhaseDoubledTensor_eq_toTensorFromBlocks]
   refine ⟨cubePhaseDoubledCanonicalData, ?_⟩
@@ -259,7 +268,7 @@ theorem cubePhaseDoubledTensor_exists_weightNormalized :
     intro q
     rw [norm_cubePhaseDoubledWeight]
   · change toTensorFromBlocks cubePhaseDoubledWeight
-      (fun _ : Fin 4 => scalarUnitTensor (α := Fin (1 * 1))) ≠ 0 →
+      (fun _ : Fin 4 => scalarUnitTensor (α := Fin 1 × Fin 1)) ≠ 0 →
         ∃ q : Fin 4, ‖cubePhaseDoubledWeight q‖ = 1
     intro _
     exact ⟨0, norm_cubePhaseDoubledWeight 0⟩
@@ -500,8 +509,8 @@ $M=A\otimes\overline A$, as in Definition `RFPMixedTS`, lines 657--660. -/
 theorem cpsv16_pure_rfp_gauge_equivalence_false :
     ¬ ∀ (D : ℕ) (A : MPSTensor 1 D),
       MPOTensor.IsMPDO (doubledTensor A) →
-      IsCPSVCanonicalForm (doubledTensor A).toMPSTensor →
-      (∃ data : CPSVCanonicalFormData (doubledTensor A).toMPSTensor,
+      IsCPSVCanonicalForm (doubledTensor A) →
+      (∃ data : CPSVCanonicalFormData (doubledTensor A),
         data.IsWeightNormalized) →
       (IsPureOneLetterRFPViaTSUpToVirtualGauge A ↔ IsTransferIdempotent A) := by
   intro hEquiv

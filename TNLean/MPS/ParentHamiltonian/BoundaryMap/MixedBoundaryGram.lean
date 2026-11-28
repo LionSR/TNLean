@@ -31,7 +31,9 @@ theorem inner_single_mixed_groundSpaceGram_single
         (EuclideanSpace.single (e, c) 1)⟫_ℂ =
       ((Kraus.mixedMapLM B A) ^ n) (Matrix.single c a 1) e b := by
   rw [ContinuousLinearMap.comp_apply, ContinuousLinearMap.adjoint_inner_right,
-    groundSpaceMapES_single, groundSpaceMapES_single]
+    ← Matrix.frobeniusEquivEuclidean_single,
+      ← Matrix.frobeniusEquivEuclidean_single, groundSpaceMapES_frobeniusEquivEuclidean_apply,
+      groundSpaceMapES_frobeniusEquivEuclidean_apply]
   change inner ℂ (WithLp.toLp 2 (groundSpaceMap A n (Matrix.single a b 1)))
     (WithLp.toLp 2 (groundSpaceMap B n (Matrix.single c e 1))) = _
   rw [EuclideanSpace.inner_toLp_toLp, Kraus.mixedMapLM_pow_apply]
@@ -102,12 +104,13 @@ private theorem norm_le_sqrt_inverseGram_mul_norm
 with the inverse Gram norms accounting for boundary normalization. This is
 the estimate combining `ip` with `C1C2` in Nachtergaele,
 arXiv:cond-mat/9410110, proof of Lemma `disjoint`, lines 1744--1815. -/
-theorem norm_inner_groundSpaceES_le_mixedGram
+theorem norm_inner_map_groundSpace_le_mixedGram
     (A : MPSTensor d D₁) (B : MPSTensor d D₂) (n : ℕ)
     (hA : Function.Injective (groundSpaceMapES A n))
     (hB : Function.Injective (groundSpaceMapES B n))
     {x y : EuclideanSpace ℂ (Cfg d n)}
-    (hx : x ∈ groundSpaceES A n) (hy : y ∈ groundSpaceES B n) :
+    (hx : x ∈ ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) (hy : y ∈
+        ((groundSpace B n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     ‖⟪x, y⟫_ℂ‖ ≤
       (Real.sqrt ‖ContinuousLinearMap.inverseGram (groundSpaceMapES A n) hA‖ *
         ‖(groundSpaceMapES A n).adjoint.comp (groundSpaceMapES B n)‖ *

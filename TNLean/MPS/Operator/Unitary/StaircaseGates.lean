@@ -121,7 +121,8 @@ theorem sourceWL_kronecker_sourceWR_eq
     (hu : (sourceU U S).IsCoisometry) :
     sourceWL U S ⊗ₖ sourceWR U S =
       staircaseMiddle (A := Fin ℓ[U]) (E := Fin r[U]) (sourceV U S) *
-        (sourceU U S ⊗ₖ sourceU U S) * staircaseMiddle (A := Fin d) (E := Fin d) ((sourceU U S)ᴴ) := by
+        (sourceU U S ⊗ₖ sourceU U S) *
+          staircaseMiddle (A := Fin d) (E := Fin d) ((sourceU U S)ᴴ) := by
   calc
     _ = ((sourceWL U S ⊗ₖ sourceWR U S) *
           staircaseMiddle (A := Fin d) (E := Fin d) (sourceU U S)) *

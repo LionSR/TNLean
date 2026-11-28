@@ -77,6 +77,11 @@ Theorem 4.14 (lines 995--1010); it is not a tensor stated in that source.
   Proposition 4.12 and Proposition 4.13, lines 945--959 and 1861--1922 (the
   vertical canonical form) and lines 995--1010 (the length-dependence question
   motivating this project example)
+
+**Bridge (T.2c):** The vertical canonical form of this module still reads an operator tensor through
+`MPOTensor.toMPSTensor`, because the vertical canonical form and the basis of normal tensors are
+stated on the vertical alphabet `Fin (D * D)`. The bridge is removed when the vertical alphabet
+moves to `Fin D × Fin D` (step T.2c of `docs/tensor_type_unification.md`).
 -/
 
 open scoped BigOperators Matrix ComplexOrder

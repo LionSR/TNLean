@@ -165,7 +165,8 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.eventually_projector_defect_l
     ∀ᶠ m : ℕ in atTop, c * (rate : ℝ) ^ m < 1 ∧ ∀ r ℓ : ℕ, 0 < ℓ →
       ‖(reassocTailBoundaryMapES A r m ℓ).range.starProjection ∘L
             (leftBoundaryMapES A (r + m) ℓ).range.starProjection -
-          (groundSpaceES A (r + m + ℓ)).starProjection‖ ≤
+          ((groundSpace A (r + m + ℓ)).map (WithLp.linearEquiv 2 ℂ
+              _).symm.toLinearMap).starProjection‖ ≤
         c * (rate : ℝ) ^ m * (1 + c * (rate : ℝ) ^ m) /
           (1 - c * (rate : ℝ) ^ m) := by
   obtain ⟨L, hL, hInj⟩ := isNormal_of_hasComplementaryFixedPointGap_with_posDef hP hρ

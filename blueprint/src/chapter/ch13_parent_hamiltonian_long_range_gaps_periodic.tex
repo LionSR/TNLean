@@ -131,7 +131,7 @@
 \begin{lemma}[Open MPS spaces from an isometric sector resolution]
     \label{thm:isometric_sector_ground_space_resolution}
     \lean{MPSTensor.groundSpace_eq_iSup_of_isometric_sector_resolution,
-        MPSTensor.groundSpaceES_eq_iSup_of_isometric_sector_resolution}
+        MPSTensor.map_groundSpace_eq_iSup_of_isometric_sector_resolution}
     \leanok
     Let $C$ be an MPS tensor of bond dimension $D$, and let
     $(B_j)_{j\in J}$ be a finite family of tensors with the same physical
@@ -290,8 +290,8 @@
 
 \begin{lemma}[Exact open-boundary support under gauge and phase equivalence]
     \label{thm:primitive_representative_support_gauge}
-    \lean{MPTensor.GaugePhaseEquiv.groundSpaceES_eq,
-        MPSTensor.MPVBlockPhaseEquiv.groundSpaceES_eq_of_isNormalTensor}
+    \lean{MPTensor.GaugePhaseEquiv.map_groundSpace_eq,
+        MPSTensor.MPVBlockPhaseEquiv.map_groundSpace_eq_of_isNormalTensor}
     \leanok
     Gauge-equivalent MPS tensors, including a common nonzero scalar factor
     on every physical matrix, have the same open-boundary MPS space at every
@@ -311,7 +311,7 @@
 
 \begin{lemma}[Primitive representatives preserve the joint MPS spaces]
     \label{thm:primitive_sector_representatives_exact_support}
-    \lean{MPSTensor.MPVPhaseClassData.groundSpaceES_toTensorFromBlocks_eq_representatives,
+    \lean{MPSTensor.MPVPhaseClassData.map_groundSpace_toTensorFromBlocks_eq_representatives,
         MPSTensor.exists_primitive_sector_representatives}
     \leanok
     Let $(A_j)_{j=0}^{r-1}$ be a finite family of normalized primitive tensors
@@ -627,7 +627,7 @@
 
 \begin{lemma}[Blocking distributes over the joint boundary space]
     \label{thm:blocking_joint_boundary_space}
-    \lean{MPSTensor.groundSpaceES_blockTensor_toTensorFromBlocks_eq_iSup}
+    \lean{MPSTensor.map_groundSpace_blockTensor_toTensorFromBlocks_eq_iSup}
     \leanok
     Let $A_j$ be a finite family of tensors and let $\mu_j\neq0$.
     For all integers $L,N\geq0$, the open-boundary space of the blocked
@@ -806,7 +806,7 @@
 \begin{lemma}[Eventual MPS kernels persist under grouping]
     \label{thm:blocked_interaction_eventual_kernel}
     \lean{MPSTensor.eventually_ker_blockedInteractionMatrix_reindex_eq_groundSpace,
-        MPSTensor.eventually_ker_hamiltonian_chainTranslates_blockedInteractionMatrix_eq_groundSpaceES}
+        MPSTensor.eventually_ker_hamiltonian_chainTranslates_blockedInteractionMatrix_eq_map_groundSpace}
     \leanok
     Let $d,L>0$, $R+L\leq KL+1$, $h\geq0$, and let $A$ be any
     MPS tensor. Suppose that $\ker H_h(n)=\mathcal G_n(A)$ for all
@@ -1173,7 +1173,7 @@
 \begin{lemma}[Residual sector resolution of local support]
     \label{thm:blocked_residual_ground_space_resolution}
     \lean{MPSTensor.groundSpace_eq_iSup_range_blockedResidualBoundaryMap,
-        MPSTensor.groundSpaceES_eq_iSup_range_blockedResidualBoundaryMapES}
+        MPSTensor.map_groundSpace_eq_iSup_range_blockedResidualBoundaryMapES}
     \leanok
     Let $B_a,V_a$ be a finite family satisfying
     $\sum_aV_aV_a^\dagger=I$ and
@@ -2174,8 +2174,8 @@
 
 \begin{lemma}[Canonical original-chain interaction for a periodic tensor]
     \label{thm:periodic_original_parent_interaction}
-    \lean{MPSTensor.IsPeriodic.exists_ker_hamiltonian_parentChainInteraction_eq_groundSpaceES,
-        MPSTensor.IsPeriodic.exists_posSemidef_ker_hamiltonian_chainTranslates_eq_groundSpaceES}
+    \lean{MPSTensor.IsPeriodic.exists_ker_hamiltonian_parentChainInteraction_eq_map_groundSpace,
+        MPSTensor.IsPeriodic.exists_posSemidef_ker_hamiltonian_chainTranslates_eq_map_groundSpace}
     \leanok
     For the same tensor $A$, there is $R_0>0$ such that, for every $R\ge R_0$
     and every $N\ge R$, the canonical range-$R$ open parent Hamiltonian has
@@ -2510,7 +2510,7 @@
     \label{thm:open_cover_energy_kernel}
     \lean{MPSTensor.ker_hamiltonian_parentChainInteraction_le_ker_hamiltonian_prefix,
         MPSTensor.ker_hamiltonian_prefix_inf_ker_hamiltonian_restrict_parentChainInteraction,
-        MPSTensor.leftBoundary_inf_reassocTail_range_eq_groundSpaceES_of_open_kernel}
+        MPSTensor.leftBoundary_inf_reassocTail_range_eq_map_groundSpace_of_open_kernel}
     \leanok
     Let $H_N$ be the canonical range-$R$ open Hamiltonian, and let $H_L,H_T$
     be its restrictions to a prefix of length $n$ and a terminal interval of
@@ -3099,7 +3099,7 @@
 
 \begin{lemma}[Joint full residual window range]
     \label{thm:residual_window_full_joint_range}
-    \lean{MPSTensor.iSup_range_residualWindowMapES_eq_reindex_groundSpaceES}
+    \lean{MPSTensor.iSup_range_residualWindowMapES_eq_reindex_map_groundSpace}
     \leanok
     Suppose $\sum_jV_jV_j^*=1$ and
     $V_j^*A^{(L)}_i=(B_j)_iV_j^*$.
@@ -3265,7 +3265,7 @@
 \begin{lemma}[Original ground space of the aligned left residual window]
     \label{thm:residual_window_left_original_ground_space}
     \lean{MPSTensor.residualWindowLeftMapES_blockTensor_eq_reindex_leftBoundaryMapES,
-        MPSTensor.iSup_range_residualWindowLeftMapES_eq_of_groundSpaceES_eq_iSup,
+        MPSTensor.iSup_range_residualWindowLeftMapES_eq_of_map_groundSpace_eq_iSup,
         MPSTensor.iSup_range_residualWindowLeftMapES_eq_reindex_leftBoundaryMapES}
     \leanok
     Let $A$ be an MPS tensor and let $U_{K,M,r}$ be the unitary from original
@@ -3312,7 +3312,7 @@
 
 \begin{lemma}[Full joint range in physical cover coordinates]
     \label{thm:residual_window_full_joint_range_cover}
-    \lean{MPSTensor.iSup_range_residualWindowMapES_eq_reindex_groundSpaceES_cover}
+    \lean{MPSTensor.iSup_range_residualWindowMapES_eq_reindex_map_groundSpace_cover}
     \leanok
     Under the virtual resolution and blocked cointertwining hypotheses of
     Lemma~\ref{thm:residual_window_full_joint_range}, let $U$ be the
@@ -3635,7 +3635,7 @@
 \begin{lemma}[Periodic phase relations preserve open-boundary support]
     \label{thm:periodic_phase_relation_support}
     \lean{MPSTensor.MPVBlockPhaseEquiv.dim_eq_and_gaugePhaseEquiv_of_isPeriodic,
-        MPSTensor.MPVBlockPhaseEquiv.groundSpaceES_eq_of_isPeriodic}
+        MPSTensor.MPVBlockPhaseEquiv.map_groundSpace_eq_of_isPeriodic}
     \leanok
     Let $A$ and $B$ be normalized periodic tensors. Suppose that there is
     $z\ne0$ such that their periodic vectors satisfy
@@ -3656,7 +3656,7 @@
 
 \begin{lemma}[Periodic representatives with exact joint support]
     \label{thm:periodic_sector_representatives_exact_support}
-    \lean{MPSTensor.MPVPhaseClassData.groundSpaceES_toTensorFromBlocks_eq_representatives_of_isPeriodic,
+    \lean{MPSTensor.MPVPhaseClassData.map_groundSpace_toTensorFromBlocks_eq_representatives_of_isPeriodic,
         MPSTensor.exists_periodic_sector_representatives}
     \leanok
     Let $(A_j)_{j=0}^{b-1}$ be a finite family of normalized periodic tensors,
@@ -3743,7 +3743,7 @@
 
 \begin{lemma}[Finite MPS densities and their ranges]
     \label{thm:local_mps_density_support}
-    \lean{MPSTensor.exists_local_density_range_eq_groundSpaceES}
+    \lean{MPSTensor.exists_local_density_range_eq_map_groundSpace}
     \leanok
     \uses{def:primitive_insertion_expectation}
     Let $A$ have positive bond dimension and satisfy
@@ -3823,7 +3823,7 @@
 
 \begin{lemma}[Eventual independence of primitive boundary spaces]
     \label{thm:primitive_ground_space_eventual_independence}
-    \lean{MPSTensor.eventually_groundSpaceES_iSupIndep_of_primitive}
+    \lean{MPSTensor.eventually_map_groundSpace_iSupIndep_of_primitive}
     \leanok
     \uses{def:primitive_mps,def:ground_space_es}
     A finite family of pairwise gauge and phase inequivalent primitive
@@ -3844,7 +3844,7 @@
     \lean{Submodule.iSup_inf_iSup_eq_of_le_independent,
         Submodule.iSupIndep_iInf_comap_of_separating,
         MPSTensor.iSupIndep_middleRestriction_comap,
-        MPSTensor.groundSpace_iSupIndep_iff_groundSpaceES_iSupIndep}
+        MPSTensor.groundSpace_iSupIndep_iff_map_groundSpace_iSupIndep}
     \leanok
     Let $(W_i)_{i\in I}$ be an independent family of subspaces, with $I$
     finite, and let $U_i,V_i\subseteq W_i$. Then
@@ -3928,7 +3928,7 @@
 
 \begin{lemma}[Finite restrictions of a faithful MPS state]
     \label{thm:faithful_quasi_local_state_density_support}
-    \lean{MPSTensor.exists_quasiLocalExpectation_density_range_eq_groundSpaceES}
+    \lean{MPSTensor.exists_quasiLocalExpectation_density_range_eq_map_groundSpace}
     \leanok
     \uses{def:mps_quasi_local_expectation,def:ground_space_es}
     Let $A$ have positive bond dimension, assume
@@ -4081,8 +4081,8 @@
 
 \begin{lemma}[Canonical open kernels from eventual intersections]
     \label{thm:canonical_open_kernel_from_eventual_intersection}
-    \lean{MPSTensor.ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_restriction_intersection,
-        MPSTensor.exists_ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_eventually_intersection}
+    \lean{MPSTensor.ker_hamiltonian_parentChainInteraction_eq_map_groundSpace_of_restriction_intersection,
+        MPSTensor.exists_ker_hamiltonian_parentChainInteraction_eq_map_groundSpace_of_eventually_intersection}
     \leanok
     Let $d\ge1$ and let $A$ be any tensor. Suppose that, for every $q\ge R$,
     \begin{align}
@@ -4235,7 +4235,7 @@
 \begin{lemma}[Boundary space of an isometric compression]
     \label{thm:isometric_compression_corner_boundary}
     \lean{MPSTensor.groundSpace_eq_map_cornerSubmodule_of_isometric_bond_intertwiner,
-        MPSTensor.groundSpaceES_eq_cornerGroundSpaceES_of_isometric_bond_intertwiner}
+        MPSTensor.map_groundSpace_eq_cornerGroundSpaceES_of_isometric_bond_intertwiner}
     \leanok
     \uses{def:corner_boundary_space}
     Let $V^*V=I$ and $A_iV=VB_i$ for every $i$. Then for every $L\geq0$,
@@ -4339,7 +4339,7 @@
 
 \begin{lemma}[Vanishing overlap of inequivalent periodic boundary spaces]
     \label{thm:periodic_boundary_overlap_decay}
-    \lean{MPSTensor.IsPeriodic.eventually_norm_inner_groundSpaceES_le_of_inequivalent}
+    \lean{MPSTensor.IsPeriodic.eventually_norm_inner_map_groundSpace_le_of_inequivalent}
     \leanok
     Let $A,B$ be normalized irreducible periodic tensors, possibly of
     different periods and bond dimensions. Suppose that whenever their
@@ -4363,7 +4363,7 @@
 
 \begin{lemma}[Eventual independence of periodic boundary spaces]
     \label{thm:periodic_ground_space_eventual_independence}
-    \lean{MPSTensor.eventually_groundSpaceES_iSupIndep_of_isPeriodic}
+    \lean{MPSTensor.eventually_map_groundSpace_iSupIndep_of_isPeriodic}
     \leanok
     A finite family of pairwise gauge and phase inequivalent normalized
     irreducible periodic tensors has independent original-chain boundary
@@ -4460,8 +4460,8 @@
 
 \begin{lemma}[Canonical interactions depend only on local support]
     \label{lem:canonical_interaction_support_transport}
-    \lean{MPSTensor.toMatrix'_parentInteraction_eq_of_groundSpaceES_eq,
-        MPSTensor.hamiltonian_parentChainInteraction_eq_of_groundSpaceES_eq}
+    \lean{MPSTensor.toMatrix'_parentInteraction_eq_of_map_groundSpace_eq,
+        MPSTensor.hamiltonian_parentChainInteraction_eq_of_map_groundSpace_eq}
     \leanok
     If two tensors have the same $R$-site boundary space, their canonical
     interaction matrices agree. For $R>0$, their canonical open Hamiltonians
@@ -4477,7 +4477,7 @@
 
 \begin{lemma}[Boundary-space inclusion under an isometric intertwiner]
     \label{thm:isometric_cointertwiner_ground_space_inclusion}
-    \lean{MPSTensor.groundSpaceES_le_of_isometric_cointertwiner}
+    \lean{MPSTensor.map_groundSpace_le_of_isometric_cointertwiner}
     \leanok
     Suppose that $V^*V=I$ and $V^*A_i=B_iV^*$ for every physical letter.
     Then $\mathcal G_N(B)\subseteq\mathcal G_N(A)$ for every $N\geq0$.

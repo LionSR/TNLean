@@ -61,15 +61,13 @@ the slot `s` of a multi-block compression whose blocks are the weighted doubled-
 `λ s • (C s)` returns the corresponding pair word of `C s` scaled by `λ s ^ N`. -/
 theorem left_mul_evalWord_mul_right_smul {DB : ℕ} {Dγ : ι → ℕ} {B : MPOTensor d DB}
     {S : Finset ι} {lam : ι → ℂ} {C : ∀ s, MPOTensor d (Dγ s)}
-    (P : MPSTensor.MultiBlockCompression B.toMPSTensor S
-      fun s => lam s • (C s).toMPSTensor)
+    (P : MPSTensor.MultiBlockCompression B S fun s => lam s • C s)
     (s : {s // s ∈ S}) {N : ℕ} (σ τ : Fin N → Fin d) :
     P.left s * evalWord B (List.ofFn σ) (List.ofFn τ) * P.right s =
       lam s.1 ^ N • evalWord (C s.1) (List.ofFn σ) (List.ofFn τ) := by
-  have h := P.left_mul_evalWord_mul_right_smul s
-    (List.ofFn fun k => finProdFinEquiv (σ k, τ k))
+  have h := P.left_mul_evalWord_mul_right_smul s (List.ofFn fun k => (σ k, τ k))
   rw [List.length_ofFn] at h
-  simpa only [evalWord_toMPSTensor_pairConfig] using h
+  simpa only [kraus_evalWord_ofFn_pair] using h
 
 /-- **Compression of an MPO product** (P5 note, Theorem 7.12, `cor:p5-mpo-product`). Let the
 periodic operators of the stacked product `B^{ij} = ∑_m M_α^{im} ⊗ M_β^{mj}` decompose as
@@ -89,15 +87,12 @@ theorem exists_multiBlockCompression_mulTensor_of_mpo_eq_sum {Dα Dβ : ℕ} {D�
     (hMγ : ∀ s ∈ S, Kraus.IsNormal (Mγ s)) (hD : ∀ s ∈ S, 0 < Dγ s)
     (hmpo : ∀ N : ℕ, 0 < N →
       mpo (mulTensor Mα Mβ) N = ∑ s ∈ S, lam s ^ N • mpo (Mγ s) N) :
-    Nonempty (MPSTensor.MultiBlockCompression (mulTensor Mα Mβ).toMPSTensor S
-      fun s => lam s • (Mγ s).toMPSTensor) := by
-  refine MPSTensor.exists_weightedMultiBlockCompression_of_isNormal S lam
-    (fun s => (Mγ s).toMPSTensor) hlam
-    (fun s hs => (isNormal_toMPSTensor_iff (Mγ s)).2 (hMγ s hs)) hD _ ?_
+    Nonempty (MPSTensor.MultiBlockCompression (mulTensor Mα Mβ) S fun s => lam s • Mγ s) := by
+  refine MPSTensor.exists_weightedMultiBlockCompression_of_isNormal S lam Mγ hlam hMγ hD _ ?_
   intro N hN ρ
-  rw [mpv_toMPSTensor_eq, mpv_eq_mpo, hmpo N hN, Matrix.sum_apply]
+  rw [mpv_eq_mpo, hmpo N hN, Matrix.sum_apply]
   exact Finset.sum_congr rfl fun s _ => by
-    rw [Matrix.smul_apply, smul_eq_mul, mpv_toMPSTensor_eq, mpv_eq_mpo]
+    rw [Matrix.smul_apply, smul_eq_mul, mpv_eq_mpo]
 
 /-! ### Fusion tensors of a matrix product operator group representation -/
 
@@ -183,23 +178,9 @@ theorem IsNormalRepresentation.exists_fusionTensors {F : GroupFamily G d}
           F.bondDim g * F.bondDim h - F.bondDim (g * h) + 1 ≤ w.length →
             Kraus.evalWord (fun i => mulTensor (F.tensor g) (F.tensor h) i -
               W * F.tensor (g * h) i * V) w = 0 := by
-  obtain ⟨V, W, hR, hnil⟩ := MPSTensor.exists_isReduction_and_nilpotent_of_isNormal
-    (F.tensor (g * h)).toMPSTensor ((isNormal_toMPSTensor_iff _).2 (hF.isNormal (g * h)))
-    (F.bondDim_pos (g * h)) (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
-    ((sameMPV₂Pos_toMPSTensor_iff _ _).2 (hF.sameMPV₂Pos_mulTensor g h))
-  have hmap : ∀ w : List (Fin d × Fin d),
-      (w.map finProdFinEquiv).map finProdFinEquiv.symm = w := fun w ↦ by
-    simp only [List.map_map, Equiv.symm_comp_self, List.map_id]
-  refine ⟨V, W, ⟨hR.mul_eq_one, fun w ↦ ?_⟩, fun w hw ↦ ?_⟩
-  · have hev := hR.evalWord (w.map finProdFinEquiv)
-    rwa [evalWord_toMPSTensor, evalWord_toMPSTensor, hmap] at hev
-  · have hzero := hnil (w.map finProdFinEquiv) (by rwa [List.length_map])
-    have hr := Kraus.evalWord_reindexPhysical finProdFinEquiv.symm
-      (fun i => mulTensor (F.tensor g) (F.tensor h) i - W * F.tensor (g * h) i * V)
-      (w.map finProdFinEquiv)
-    rw [hmap] at hr
-    rw [← hr]
-    exact hzero
+  exact MPSTensor.exists_isReduction_and_nilpotent_of_isNormal (F.tensor (g * h))
+    (hF.isNormal (g * h)) (F.bondDim_pos (g * h)) (mulTensor (F.tensor g) (F.tensor h))
+    (hF.sameMPV₂Pos_mulTensor g h)
 
 end GroupFamily
 

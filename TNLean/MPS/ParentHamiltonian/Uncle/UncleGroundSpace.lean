@@ -71,7 +71,7 @@ theorem mem_uncleBoundarySpace_two_iff
       subst i
       exact (decodeBlockEquiv d 2).symm_apply_apply (σ 0)
     rw [hcfg]
-  rw [uncleInteraction_apply_eq_zero_iff, mem_groundSpaceES_iff]
+  rw [uncleInteraction_apply_eq_zero_iff, mem_map_groundSpace_iff]
   have hcoords :
       (WithLp.linearEquiv 2 ℂ (NSiteSpace (blockPhysDim d 2) 1))
           ((blockedConfigLinearIsometryEquiv d 1 2).symm
@@ -101,7 +101,7 @@ theorem hamiltonian_uncleInteraction_apply_eq_zero_iff_boundary_windows
         cyclicRestrictₗ (Fin.pos i) 2 i τ ψ ∈ uncleBoundarySpace A B R L 2 := by
   rw [hamiltonian_uncleInteraction_apply_eq_zero_iff A B R L hN]
   apply forall_congr' fun i ↦ forall_congr' fun τ ↦ ?_
-  simpa [cyclicRestrictES, LinearMap.withLpMap] using
+  simpa [LinearMap.withLpMap] using
     (mem_uncleBoundarySpace_two_iff A B R L
       (cyclicRestrictₗ (Fin.pos i) 2 i τ ψ)).symm
 

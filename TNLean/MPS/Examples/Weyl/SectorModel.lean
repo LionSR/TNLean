@@ -39,7 +39,8 @@ local kernel equal to the actual Weyl boundary sector plus the actual pure
 particle sector. Source context: SPWC10, Theorem 5, lines 850--880, with the
 permitted-volume and translation-phase distinctions explicit in this module. -/
 noncomputable def sevenSectorInteraction (ζ q : ℂ) : Matrix (Cfg 5 7) (Cfg 5 7) ℂ :=
-  Matrix.toEuclideanLin.symm <| ((groundSpaceES (threeLetterTensor ζ) 7).map
+  Matrix.toEuclideanLin.symm <| ((((groundSpace (threeLetterTensor ζ) 7).map (WithLp.linearEquiv 2 ℂ
+      _).symm.toLinearMap)).map
       (Function.Embedding.euclideanExtendByZero (Function.Embedding.piCongrRight
         (fun _ : Fin 7 ↦ (Fin.castAddEmb 2 : Fin 3 ↪ Fin 5)))).toLinearMap ⊔
     (Submodule.span ℂ {WithLp.toLp 2 (pvbsEdge q 7)}).map
@@ -69,7 +70,8 @@ theorem ker_sevenSectorHamiltonian_of_eight_le {ζ q : ℂ}
   have : NeZero M := ⟨by omega⟩
   have hmain : LinearMap.ker (Matrix.toEuclideanLin (translationInvariant M
       (Matrix.toEuclideanLin.symm
-        (groundSpaceES (threeLetterTensor ζ) 7)ᗮ.starProjection.toLinearMap)).hamiltonian) =
+        (((groundSpace (threeLetterTensor ζ) 7).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap))ᗮ.starProjection.toLinearMap)).hamiltonian) =
       Submodule.span ℂ {mpvState (threeLetterTensor ζ) M} := by
     rw [← toEuclideanLin_toMatrix'_parentInteraction, LinearEquiv.symm_apply_apply]
     exact ker_hamiltonian_parentRingInteraction_threeLetterTensor_eq_span hζ M hM
@@ -118,7 +120,8 @@ theorem ker_sevenSectorHamiltonian_seven {ζ q : ℂ}
           (WithLp.toLp 2 (pvbsEdge q 7)))} := by
   have hmain : LinearMap.ker (Matrix.toEuclideanLin (translationInvariant 7
       (Matrix.toEuclideanLin.symm
-        (groundSpaceES (threeLetterTensor ζ) 7)ᗮ.starProjection.toLinearMap)).hamiltonian) =
+        (((groundSpace (threeLetterTensor ζ) 7).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap))ᗮ.starProjection.toLinearMap)).hamiltonian) =
       ⊥ := by
     rw [← toEuclideanLin_toMatrix'_parentInteraction, LinearEquiv.symm_apply_apply]
     exact ker_hamiltonian_parentRingInteraction_threeLetterTensor_seven_eq_bot hζ

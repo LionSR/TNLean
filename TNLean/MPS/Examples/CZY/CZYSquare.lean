@@ -270,22 +270,10 @@ theorem czySquare_remainder_ne_zero
 /-- **The virtual algebra of the stacked tensor is not star closed.** A star-closed algebra
 would give a nonzero sitewise right intertwiner with the normal target `δ`. -/
 theorem czySquare_not_starClosed :
-    ¬ ∀ i, (czySquare i)ᴴ ∈ Algebra.adjoin ℂ (Set.range czySquare) := by
-  -- The splitting criterion is stated on the letters `Fin (2 * 2)` (it runs through the word
-  -- algebra of `Fin d`); it is applied to the doubled-index views.
-  have hrange : Set.range czySquare.toMPSTensor = Set.range czySquare :=
-    finProdFinEquiv.symm.surjective.range_comp czySquare
-  intro hstar
-  refine MPSTensor.not_forall_conjTranspose_mem_adjoin_of_forall_right_intertwiner_eq_zero
-    oneSlot (fun s => (czySquareTarget s).toMPSTensor)
-    (fun s _ => (MPOTensor.isNormal_toMPSTensor_iff _).2 (czySquareTarget_isNormal s))
-    (fun _ _ => Nat.one_pos) czySquare.toMPSTensor
-    (fun w hw => by
-      simp only [MPOTensor.evalWord_toMPSTensor]
-      exact czySquare_compression.trace_evalWord_eq_sum _ (by simpa using hw)) oneSlotMem
-    (fun X hX => czySquare_right_intertwiner_eq_zero X fun i => by
-      simpa [MPOTensor.toMPSTensor_eq_reindexPhysical, Kraus.reindexPhysical] using
-        hX (finProdFinEquiv i))
-    (fun i => by rw [hrange]; exact hstar _)
+    ¬ ∀ i, (czySquare i)ᴴ ∈ Algebra.adjoin ℂ (Set.range czySquare) :=
+  MPSTensor.not_forall_conjTranspose_mem_adjoin_of_forall_right_intertwiner_eq_zero
+    oneSlot czySquareTarget (fun s _ => czySquareTarget_isNormal s) (fun _ _ => Nat.one_pos)
+    czySquare (fun w hw => czySquare_compression.trace_evalWord_eq_sum w hw) oneSlotMem
+    czySquare_right_intertwiner_eq_zero
 
 end CZYCompression

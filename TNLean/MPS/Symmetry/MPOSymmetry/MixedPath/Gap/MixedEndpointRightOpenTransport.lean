@@ -44,12 +44,13 @@ theorem reindex_cyclicCfg
 
 /-- The actual cyclic window restriction intertwines physical alphabet
 reindexing with its shorter-window counterpart. -/
-theorem cyclicRestrictES_physicalReindex
+theorem withLpMap_cyclicRestrictₗ_physicalReindex
     (e : Fin d₁ ≃ Fin d₂) (i : Fin N) (τ : Cfg d₁ N)
     (v : EuclideanSpace ℂ (Cfg d₂ N)) :
-    cyclicRestrictES (Fin.pos i) R i τ (physicalReindexLinearIsometryEquiv e N v) =
+    LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) R i τ) (physicalReindexLinearIsometryEquiv e
+        N v) =
       physicalReindexLinearIsometryEquiv e R
-        (cyclicRestrictES (Fin.pos i) R i (fun k => e (τ k)) v) := by
+        (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) R i (fun k => e (τ k))) v) := by
   apply PiLp.ext
   intro ω
   change v (fun k => e (cyclicCfg (Fin.pos i) R i ω τ k)) =
@@ -75,11 +76,11 @@ theorem toEuclideanLin_translationInvariant_term_physicalReindex_apply
   · apply PiLp.ext
     intro σ
     rw [toEuclideanLin_translationInvariant_term_apply hRN, hh,
-      cyclicRestrictES_physicalReindex]
+      withLpMap_cyclicRestrictₗ_physicalReindex]
     change physicalReindexLinearIsometryEquiv e R
         (Matrix.toEuclideanLin h ((physicalReindexLinearIsometryEquiv e R).symm
           (physicalReindexLinearIsometryEquiv e R
-            (cyclicRestrictES (Fin.pos i) R i (fun k => e (σ k)) v))))
+            (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) R i (fun k => e (σ k))) v))))
         (extractWindow R i σ) =
       Matrix.toEuclideanLin ((translationInvariant N h).term i) v (fun k => e (σ k))
     rw [LinearIsometryEquiv.symm_apply_apply,

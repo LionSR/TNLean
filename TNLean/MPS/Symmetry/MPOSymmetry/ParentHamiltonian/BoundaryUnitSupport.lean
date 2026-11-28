@@ -90,40 +90,44 @@ theorem IsBoundaryCompatible.mulVec_eq_of_mem_groundSpace_of_one_length_eq_one
   simpa only [MPSTensor.mpvWithBoundary_eq_groundSpaceMap] using
     h.mpoWithBoundary_mulVec_eq_of_one_length_eq_one hInj hL hU X hn
 
-attribute [local instance] MPSTensor.groundSpaceES_hasOrthogonalProjection
 
 /-- The actual canonical ground-space projection satisfies \(Q_nP_n=P_n\).
 This is the unit-support normalization needed in GLM23 Appendix B,
 lines 2463--2466. Adjoint closure, positivity, and idempotence of \(Q_n\)
 are not needed for this one-sided composition identity. -/
-theorem IsBoundaryCompatible.toEuclideanLin_comp_groundSpaceES_starProjection
+theorem IsBoundaryCompatible.toEuclideanLin_comp_map_groundSpace_starProjection
     (h : IsBoundaryCompatible T A) (hInj : Kraus.IsNBlkInjective A L)
     (hL : 0 < L) {U : Matrix (Fin D₁) (Fin D₁) ℂ}
     (hU : mpoWithBoundary T U L = 1) (hn : 0 < n) :
     Matrix.toEuclideanLin (mpoWithBoundary T U n) ∘ₗ
-        (MPSTensor.groundSpaceES A n).starProjection.toLinearMap =
-      (MPSTensor.groundSpaceES A n).starProjection.toLinearMap := by
+        ((MPSTensor.groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection.toLinearMap =
+      ((MPSTensor.groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection.toLinearMap := by
   apply LinearMap.ext
   intro ψ
   apply (WithLp.linearEquiv 2 ℂ (MPSTensor.NSiteSpace d n)).injective
   change mpoWithBoundary T U n *ᵥ
       ((WithLp.linearEquiv 2 ℂ (MPSTensor.NSiteSpace d n))
-        ((MPSTensor.groundSpaceES A n).starProjection ψ)) = _
+        (((MPSTensor.groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection ψ)) = _
   exact h.mulVec_eq_of_mem_groundSpace_of_one_length_eq_one hInj hL hU hn
-    ((MPSTensor.mem_groundSpaceES_iff A n _).mp
+    ((MPSTensor.mem_map_groundSpace_iff A n _).mp
       (Submodule.starProjection_apply_mem _ _))
 
 /-- One-site injectivity and a one-site physical unit imply the canonical
 projection normalization at every positive length. This specializes the
 unit-support criterion for GLM23 Appendix B, lines 2463--2466. -/
-theorem IsBoundaryCompatible.toEuclideanLin_comp_groundSpaceES_starProjection_of_one_site
+theorem IsBoundaryCompatible.toEuclideanLin_comp_map_groundSpace_starProjection_of_one_site
     (h : IsBoundaryCompatible T A) (hInj : Kraus.IsInjective A)
     {U : Matrix (Fin D₁) (Fin D₁) ℂ} (hU : mpoWithBoundary T U 1 = 1)
     (hn : 0 < n) :
     Matrix.toEuclideanLin (mpoWithBoundary T U n) ∘ₗ
-        (MPSTensor.groundSpaceES A n).starProjection.toLinearMap =
-      (MPSTensor.groundSpaceES A n).starProjection.toLinearMap :=
-  h.toEuclideanLin_comp_groundSpaceES_starProjection
+        ((MPSTensor.groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection.toLinearMap =
+      ((MPSTensor.groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection.toLinearMap :=
+  h.toEuclideanLin_comp_map_groundSpace_starProjection
     (Kraus.isNBlkInjective_one_of_isInjective hInj) Nat.one_pos hU hn
 
 end MPOTensor

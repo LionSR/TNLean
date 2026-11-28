@@ -583,11 +583,11 @@ range of the two-site periodic Hamiltonian. No source-defined coincident-edge
 convention extends this statement to $N=1$.\footnote{\ghissue{4400}.}
 
 At every positive length, the loop vectors are nonzero,\footnote{Formal
-theorem: \leanid{MPSTensor.BeigiSectorGraphData.loopProductStateES_ne_zero}.}
+theorem: \leanid{MPSTensor.BeigiSectorGraphData.loopProductState_ne_zero}.}
 distinct loop vectors are orthogonal,\footnote{Formal theorem:
-\leanid{MPSTensor.BeigiSectorGraphData.loopProductStateES_inner_eq_zero_of_ne}.}
+\leanid{MPSTensor.BeigiSectorGraphData.inner_toLp_loopProductState_eq_zero_of_ne}.}
 and hence linearly independent.\footnote{Formal theorem:
-\leanid{MPSTensor.BeigiSectorGraphData.loopProductStateES_linearIndependent}.}
+\leanid{MPSTensor.BeigiSectorGraphData.linearIndependent_toLp_loopProductState}.}
 If the parent-ground-space dimension is eventually constant, membership and
 the loop-count formula give, for every $N>2$,
 \begin{align}
@@ -598,9 +598,9 @@ the loop-count formula give, for every $N>2$,
     \label{eq:cpsv16_nncph_ground_state_scope_loop_ground_space_spanning}
 \end{align}
 \footnote{Formal theorem:
-\leanid{MPSTensor.BeigiSectorGraphData.span_loopProductStateES_eq_groundSpace_hamiltonian_parentRingInteraction};
+\leanid{MPSTensor.BeigiSectorGraphData.span_toLp_loopProductState_eq_groundSpace};
 under BNT sector data,
-\leanid{MPSTensor.BeigiSectorGraphData.span_loopProductStateES_eq_groundSpace_hamiltonian_parentRingInteraction_of_hasBNTSectorData}.}
+\leanid{MPSTensor.BeigiSectorGraphData.span_toLp_loopProductState_eq_groundSpace_of_hasBNTSectorData}.}
 These results do not by themselves identify the loop states with the original
 BNT representatives.
 

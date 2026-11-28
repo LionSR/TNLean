@@ -233,7 +233,7 @@ theorem complexVirtualMatrix_reconstruction (X : Matrix (Fin 2) (Fin 2) ℂ) :
   ext i j
   fin_cases i <;> fin_cases j <;>
     simp [reconstructionCoefficients, complexVirtualMatrix_apply, virtualMatrix,
-      pairingL, pairingQ, Fin.sum_univ_four] <;> push_cast <;> ring
+      pairingL, pairingQ, Fin.sum_univ_four] <;> ring
 
 lemma complexVirtualMatrix_mem_tensor_span (k : Fin 4) :
     complexVirtualMatrix k ∈
