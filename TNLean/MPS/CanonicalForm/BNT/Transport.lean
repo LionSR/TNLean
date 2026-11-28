@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.CanonicalForm.Definitions
+import TNLean.MPS.CanonicalForm.PhysicalReindex
 
 /-!
 # Transport of bases of normal tensors
@@ -28,7 +29,7 @@ open scoped BigOperators
 
 namespace MPSTensor
 
-variable {d D₁ D₂ g g₁ g₂ : ℕ}
+variable {α : Type*} [Fintype α] {D₁ D₂ g g₁ g₂ : ℕ}
 
 /-- A basis of normal tensors remains such after replacing the represented tensor by one with
 the same matrix product vectors at every positive length.
@@ -36,8 +37,8 @@ the same matrix product vectors at every positive length.
 This transports the spanning clause in arXiv:1606.00608, lines 271--274; normality and eventual
 linear independence concern only the basis family and are unchanged. -/
 theorem IsCPSVBasisOfNormalTensors.of_sameMPV₂Pos
-    {A : MPSTensor d D₁} {B : MPSTensor d D₂}
-    {basis : (j : Fin g) → Σ Dj : ℕ, MPSTensor d Dj}
+    {A : MPTensor α (Fin D₁)} {B : MPTensor α (Fin D₂)}
+    {basis : (j : Fin g) → Σ Dj : ℕ, MPTensor α (Fin Dj)}
     (hBNT : IsCPSVBasisOfNormalTensors A basis) (hAB : SameMPV₂Pos A B) :
     IsCPSVBasisOfNormalTensors B basis := by
   refine ⟨hBNT.blocks_normal, ?_, hBNT.eventually_li⟩
@@ -50,7 +51,7 @@ linear-independence properties.
 
 This is the label-invariance of the definition in arXiv:1606.00608, lines 271--274. -/
 theorem IsCPSVBasisOfNormalTensors.reindex
-    {A : MPSTensor d D₁} {basis : (j : Fin g₂) → Σ Dj : ℕ, MPSTensor d Dj}
+    {A : MPTensor α (Fin D₁)} {basis : (j : Fin g₂) → Σ Dj : ℕ, MPTensor α (Fin Dj)}
     (hBNT : IsCPSVBasisOfNormalTensors A basis) (e : Fin g₁ ≃ Fin g₂) :
     IsCPSVBasisOfNormalTensors A (fun j ↦ basis (e j)) := by
   refine ⟨fun j ↦ hBNT.blocks_normal (e j), ?_, ?_⟩
@@ -62,7 +63,24 @@ theorem IsCPSVBasisOfNormalTensors.reindex
   · obtain ⟨N₀, hLI⟩ := hBNT.eventually_li
     refine ⟨N₀, fun N hN ↦ ?_⟩
     change LinearIndependent ℂ
-      ((fun j : Fin g₂ ↦ mpvState (α := Fin d) (basis j).2 N) ∘ e)
+      ((fun j : Fin g₂ ↦ mpvState (α := α) (basis j).2 N) ∘ e)
     exact (linearIndependent_equiv e).mpr (hLI N hN)
+
+/-- A bijective relabelling of the physical alphabet preserves a basis of normal tensors.
+
+The three clauses of arXiv:1606.00608, lines 271--274, are invariant: normality, the spanning
+identities read at relabelled configurations, and linear independence of the relabelled states. -/
+theorem IsCPSVBasisOfNormalTensors.reindexPhysical {α' : Type*} [Fintype α']
+    {A : MPTensor α (Fin D₁)} {basis : (j : Fin g) → Σ Dj : ℕ, MPTensor α (Fin Dj)}
+    (hBNT : IsCPSVBasisOfNormalTensors A basis) (e : α' ≃ α) :
+    IsCPSVBasisOfNormalTensors (Kraus.reindexPhysical e A)
+      (fun j ↦ ⟨(basis j).1, Kraus.reindexPhysical e (basis j).2⟩) := by
+  refine ⟨fun j ↦ (hBNT.blocks_normal j).reindexPhysical e, ?_, ?_⟩
+  · intro N hN
+    obtain ⟨c, hc⟩ := hBNT.spans_mpv N hN
+    exact ⟨c, fun σ ↦ by simpa only [mpv_reindexPhysical] using hc fun n ↦ e (σ n)⟩
+  · obtain ⟨N₀, hLI⟩ := hBNT.eventually_li
+    exact ⟨N₀, fun N hN ↦
+      linearIndependent_mpvState_reindexPhysical_equiv e (fun j ↦ (basis j).2) (hLI N hN)⟩
 
 end MPSTensor

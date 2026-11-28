@@ -44,6 +44,16 @@ theorem BlocksNotGaugePhaseEquiv.comp {α : Type*} {r s : ℕ} {dim : Fin r → 
     BlocksNotGaugePhaseEquiv (fun j => A (f j)) :=
   fun j k hjk h => hA (f j) (f k) (hf.ne hjk) h
 
+/-- A bijective relabelling of the physical alphabet preserves pairwise scalar-gauge
+separation of a block family. -/
+theorem BlocksNotGaugePhaseEquiv.reindexPhysical {α α' : Type*} {r : ℕ} {dim : Fin r → ℕ}
+    {A : (k : Fin r) → MPTensor α (Fin (dim k))} (hA : BlocksNotGaugePhaseEquiv A)
+    (e : α' ≃ α) : BlocksNotGaugePhaseEquiv fun k ↦ Kraus.reindexPhysical e (A k) := by
+  intro j k hjk h hG
+  apply hA j k hjk h
+  rw [← gaugePhaseEquiv_reindexPhysical_equiv e, reindexPhysical_cast_dim e h]
+  exact hG
+
 /-- Block-permutation gauge-phase matching between two block families.
 
 Source: arXiv:1606.00608, Theorem `thm1`, statement lines 1167--1170 and proof

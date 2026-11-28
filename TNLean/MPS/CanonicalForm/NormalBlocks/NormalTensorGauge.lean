@@ -333,25 +333,25 @@ members of a basis of normal tensors.
 This is condition (ii) in the characterization of arXiv:1606.00608,
 Proposition 2.7 (`prop:char-BNT`, lines 278--280 and 1137--1142). -/
 theorem IsCPSVBasisOfNormalTensors.blocks_not_gaugePhaseEquiv
-    {g : ℕ} {dim : Fin g → ℕ}
-    {A : MPSTensor d D} {B : (j : Fin g) → MPSTensor d (dim j)}
+    {α : Type*} [Fintype α] {g : ℕ} {dim : Fin g → ℕ}
+    {A : MPTensor α (Fin D)} {B : (j : Fin g) → MPTensor α (Fin (dim j))}
     (hBNT : IsCPSVBasisOfNormalTensors A (fun j => ⟨dim j, B j⟩)) :
-    BlocksNotGaugePhaseEquiv (α := Fin d) B := by
+    BlocksNotGaugePhaseEquiv B := by
   intro j k hjk hdim hGPE
   obtain ⟨N₀, hLI⟩ := hBNT.eventually_li
   have hN := hLI (N₀ + 1) (by omega)
   obtain ⟨X, ζ, _hζ, hConj⟩ := hGPE
-  have hState : ζ ^ (N₀ + 1) • mpvState (α := Fin d) (B j) (N₀ + 1) =
-      mpvState (α := Fin d) (B k) (N₀ + 1) := by
+  have hState : ζ ^ (N₀ + 1) • mpvState (B j) (N₀ + 1) =
+      mpvState (B k) (N₀ + 1) := by
     apply PiLp.ext
     intro σ
     simp only [PiLp.smul_apply, mpvState_apply, smul_eq_mul]
     rw [mpv_eq_pow_mul_of_gaugePhase
-      (A := cast (congr_arg (MPSTensor d) hdim) (B j))
+      (A := cast (congr_arg (fun n ↦ MPTensor α (Fin n)) hdim) (B j))
       (B := B k) X ζ hConj (N₀ + 1) σ,
       mpv_cast_dim hdim (B j) (N₀ + 1) σ]
   have hPair : LinearIndepOn ℂ
-      (fun l : Fin g => mpvState (α := Fin d) (B l) (N₀ + 1)) {j, k} :=
+      (fun l : Fin g => mpvState (B l) (N₀ + 1)) {j, k} :=
     hN.linearIndepOn {j, k}
   have hNot := (linearIndepOn_pair_iff _ hjk (hN.ne_zero j)).mp hPair
   exact hNot (ζ ^ (N₀ + 1)) hState
@@ -363,7 +363,7 @@ This is the corollary to Lemma `equalMPS` at arXiv:1606.00608, lines
 1121--1132.  The proof puts each tensor into its trace-preserving Perron gauge,
 applies the overlap orthogonality criterion there, and uses gauge invariance of
 the matrix product vectors. -/
-theorem exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhaseEquiv
+private theorem exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhaseEquiv_fin
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     (A : (k : Fin r) → MPSTensor d (dim k))
     (hNormal : ∀ k, IsNormalTensor (A k))
@@ -398,6 +398,24 @@ theorem exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhas
     exact (GaugeEquiv.sameMPV (hGauge k) N w).symm
   rw [← hFamily]
   exact hLI N hN
+
+/-- **Eventual linear independence of separated normal blocks**, over any finite physical
+alphabet: the statement above, transported along `Fintype.equivFin`. -/
+theorem exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhaseEquiv
+    {α : Type*} [Fintype α] [DecidableEq α] {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
+    (hNormal : ∀ k, IsNormalTensor (A k))
+    (hDistinct : BlocksNotGaugePhaseEquiv A) :
+    ∃ N₀ : ℕ, ∀ N > N₀, LinearIndependent ℂ (fun k : Fin r => mpvState (A k) N) := by
+  let e : Fin (Fintype.card α) ≃ α := (Fintype.equivFin α).symm
+  obtain ⟨N₀, hLI⟩ :=
+    exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhaseEquiv_fin
+      (fun k ↦ Kraus.reindexPhysical e (A k)) (fun k ↦ (hNormal k).reindexPhysical e)
+      (hDistinct.reindexPhysical e)
+  refine ⟨N₀, fun N hN ↦ ?_⟩
+  exact linearIndependent_mpvState_of_configEquiv (Equiv.arrowCongr (Equiv.refl _) e.symm) A
+    (fun k ↦ Kraus.reindexPhysical e (A k))
+    (fun k σ ↦ by rw [mpv_reindexPhysical]; rfl) (hLI N hN)
 
 /-- **Bases of normal tensors of a weighted direct sum.** A finite family of normal tensors is a
 basis of normal tensors of the weighted direct sum `⊕_k μ_k A_k` exactly when distinct members

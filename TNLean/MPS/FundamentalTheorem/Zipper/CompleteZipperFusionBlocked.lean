@@ -173,16 +173,6 @@ theorem wordTupleSpanTop_of_smul {d r : ℕ} {dim : Fin r → ℕ}
   obtain ⟨Y, hY, hYX⟩ := (Submodule.mem_map).1 (h ▸ Submodule.mem_top : Φ X ∈ _)
   exact hΦ hYX ▸ hY
 
-/-- A bijective relabelling of the physical alphabet preserves pairwise scalar-gauge
-separation of a block family. -/
-theorem BlocksNotGaugePhaseEquiv.reindexPhysical {α α' : Type*} {r : ℕ} {dim : Fin r → ℕ}
-    {A : (k : Fin r) → MPTensor α (Fin (dim k))} (hA : BlocksNotGaugePhaseEquiv A)
-    (e : α' ≃ α) : BlocksNotGaugePhaseEquiv fun k ↦ Kraus.reindexPhysical e (A k) := by
-  intro j k hjk h hG
-  apply hA j k hjk h
-  rw [← gaugePhaseEquiv_reindexPhysical_equiv e, reindexPhysical_cast_dim e h]
-  exact hG
-
 end MPSTensor
 
 namespace MPOTensor

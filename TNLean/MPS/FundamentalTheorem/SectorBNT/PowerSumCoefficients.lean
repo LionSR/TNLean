@@ -127,7 +127,7 @@ theorem exists_eventually_linearIndependent_of_normalTensor_distinct
   set e := Fintype.equivFin ι with he
   obtain ⟨N₀, hLI⟩ :=
     exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhaseEquiv
-      (d := d) (dim := fun k => dim (e.symm k)) (fun k => A (e.symm k))
+      (α := Fin d) (dim := fun k => dim (e.symm k)) (fun k => A (e.symm k))
       (fun k => hNormal (e.symm k))
       (fun j k hjk h => hDistinct (e.symm j) (e.symm k)
         (fun hEq => hjk (by simpa using congrArg e hEq)) h)

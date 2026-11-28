@@ -41,7 +41,7 @@ noncomputable def collapsedBntSectorDecomp
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPTensor α (Fin (dim k)))
-    (hμne : ∀ k, μ k ≠ 0) : SectorDecomposition (α) :=
+    (hμne : ∀ k, μ k ≠ 0) : SectorDecomposition α :=
   let classes := mpvPhaseClassData blocks
   let ζFn : (j : Fin classes.g) → Fin (classes.copies j) → ℂ :=
     fun j q => (classes.enum_phase j q).choose
@@ -60,6 +60,7 @@ noncomputable def collapsedBntSectorDecomp
     sectors := sectors
   }
 
+omit [Fintype α] in
 /-- The total tensor of `collapsedBntSectorDecomp` has the same MPV at every positive
 length as the original `toTensorFromBlocks μ blocks`.
 
@@ -69,8 +70,8 @@ theorem collapsedBntSectorDecomp_sameMPV₂Pos
     (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hμne : ∀ k, μ k ≠ 0) :
-    SameMPV₂Pos (collapsedBntSectorDecomp (α := α) μ blocks hμne).toTensor
-      (toTensorFromBlocks (α := α) (μ := μ) blocks) := by
+    SameMPV₂Pos (collapsedBntSectorDecomp μ blocks hμne).toTensor
+      (toTensorFromBlocks (μ := μ) blocks) := by
   classical
   let classes := mpvPhaseClassData blocks
   let ζFn : (j : Fin classes.g) → Fin (classes.copies j) → ℂ :=
@@ -78,7 +79,7 @@ theorem collapsedBntSectorDecomp_sameMPV₂Pos
   have hζ_mpv : ∀ j q (N : ℕ), 0 < N → ∀ σ : Fin N → α,
       mpv (blocks (classes.enum j q)) σ = (ζFn j q) ^ N * mpv (blocks (classes.repr j)) σ :=
     fun j q N hN σ => (classes.enum_phase j q).choose_spec.2 N hN σ
-  let P := collapsedBntSectorDecomp (α := α) μ blocks hμne
+  let P := collapsedBntSectorDecomp μ blocks hμne
   intro N hN σ
   calc mpv P.toTensor σ
       = ∑ j : Fin P.basisCount,
@@ -98,10 +99,11 @@ theorem collapsedBntSectorDecomp_sameMPV₂Pos
             ring
     _ = ∑ k : Fin r, (μ k) ^ N * mpv (blocks k) σ :=
           classes.regroup (fun k => (μ k) ^ N * mpv (blocks k) σ)
-    _ = mpv (toTensorFromBlocks (α := α) (μ := μ) blocks) σ := by
+    _ = mpv (toTensorFromBlocks (μ := μ) blocks) σ := by
             symm
             simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ blocks σ
 
+omit [Fintype α] in
 /-- **Total dimension of a dimension-preserving phase-class quotient.**
 
 If every block in an MPV phase class has the same bond dimension as the
@@ -118,11 +120,11 @@ theorem collapsedBntSectorDecomp_totalDim_eq_sum_dim
     (hDim : ∀ j q,
       dim ((mpvPhaseClassData blocks).enum j q) =
         dim ((mpvPhaseClassData blocks).repr j)) :
-    (collapsedBntSectorDecomp (α := α) μ blocks hμne).totalDim =
+    (collapsedBntSectorDecomp μ blocks hμne).totalDim =
       ∑ k : Fin r, dim k := by
   classical
   let classes := mpvPhaseClassData blocks
-  let P := collapsedBntSectorDecomp (α := α) μ blocks hμne
+  let P := collapsedBntSectorDecomp μ blocks hμne
   have hRegroupC :
       (∑ j : Fin classes.g, ∑ q : Fin (classes.copies j),
           (dim (classes.enum j q) : ℂ)) =
@@ -171,10 +173,10 @@ theorem collapsedBntSectorDecomp_hasBNT
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (blocks k))
     (hPrim : ∀ k, _root_.IsPrimitive (Kraus.transferMap (ι := α) (n := Fin (dim k)) (blocks k)))
     (hμne : ∀ k, μ k ≠ 0) :
-    HasBNTSectorData (collapsedBntSectorDecomp (α := α) μ blocks hμne) := by
+    HasBNTSectorData (collapsedBntSectorDecomp μ blocks hμne) := by
   classical
   let classes := mpvPhaseClassData blocks
-  let P := collapsedBntSectorDecomp (α := α) μ blocks hμne
+  let P := collapsedBntSectorDecomp μ blocks hμne
   have hLI : ∃ N0 : ℕ, ∀ N > N0,
       LinearIndependent ℂ
         (fun j : Fin classes.g => mpvState (α := α) (blocks (classes.repr j)) N) := by

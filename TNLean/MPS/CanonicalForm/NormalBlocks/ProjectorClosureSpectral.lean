@@ -344,11 +344,12 @@ theorem isNormalTensor_invSqrt_smul_of_unique_peripheral {n : ℕ} [NeZero n]
       rw [norm_mul, hμnorm, mul_one, Complex.norm_real, Real.norm_eq_abs, abs_of_pos hr]
     exact mul_left_cancel₀ hr_ne ((huniq _ hBμ hnorm).trans (mul_one (r : ℂ)).symm)
 
+omit [Fintype α] in
 /-- At positive length, a tensor whose letter matrices all vanish has vanishing
 matrix product vector coefficients.  These are the zero blocks of
 arXiv:1606.00608, eq:II_Aiplusk1, line 219. -/
-private lemma mpv_eq_zero_of_letter_zero {n : ℕ} (B : MPSTensor d n)
-    (hB : ∀ i, B i = 0) {N : ℕ} (hN : 0 < N) (σ : Fin N → Fin d) :
+private lemma mpv_eq_zero_of_letter_zero {n : ℕ} (B : MPTensor α (Fin n))
+    (hB : ∀ i, B i = 0) {N : ℕ} (hN : 0 < N) (σ : Fin N → α) :
     mpv B σ = 0 := by
   obtain ⟨M, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hN.ne'
   simp only [mpv, coeff, List.ofFn_succ, Kraus.evalWord_cons, hB, Matrix.zero_mul,
@@ -377,22 +378,22 @@ one and are omitted from the direct sum because they vanish at every positive
 length. The positive-length convention is recorded in
 `docs/paper-gaps/cpsv16_projector_closure_canonical_form.tex`. -/
 theorem exists_normalTensor_blockDecomp_with_isometry_of_hasInvariantProjectorClosure
-    (A : MPSTensor d D) (hClosure : HasInvariantProjectorClosure A)
+    (A : MPTensor α (Fin D)) (hClosure : HasInvariantProjectorClosure A)
     (hPer : HasNoPeriodicVectors A) :
     ∃ (r : ℕ) (dim : Fin r → ℕ) (μ : Fin r → ℂ)
-      (blocks : (k : Fin r) → MPSTensor d (dim k))
+      (blocks : (k : Fin r) → MPTensor α (Fin (dim k)))
       (V : (k : Fin r) → Matrix (Fin D) (Fin (dim k)) ℂ),
       (∀ k, 0 < dim k) ∧
       (∀ k, (0 : ℂ) < μ k) ∧
       (∀ k, IsNormalTensor (blocks k)) ∧
       (∀ k, (V k)ᴴ * V k = 1) ∧
       (∀ k l, k ≠ l → (V k)ᴴ * V l = 0) ∧
-      (∀ (k : Fin r) (i : Fin d), A i * V k = V k * (μ k • blocks k i)) ∧
-      (∀ (k : Fin r) (i : Fin d), (V k)ᴴ * A i =
+      (∀ (k : Fin r) (i : α), A i * V k = V k * (μ k • blocks k i)) ∧
+      (∀ (k : Fin r) (i : α), (V k)ᴴ * A i =
         (μ k • blocks k i) * (V k)ᴴ) ∧
-      (∀ (k : Fin r) (i : Fin d), μ k • blocks k i = (V k)ᴴ * A i * V k) ∧
-      (∀ i : Fin d, A i = ∑ k, V k * (μ k • blocks k i) * (V k)ᴴ) ∧
-      SameMPV₂Pos A (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) ∧
+      (∀ (k : Fin r) (i : α), μ k • blocks k i = (V k)ᴴ * A i * V k) ∧
+      (∀ i : α, A i = ∑ k, V k * (μ k • blocks k i) * (V k)ᴴ) ∧
+      SameMPV₂Pos A (toTensorFromBlocks (α := α) (μ := μ) blocks) ∧
       (∑ k, dim k) ≤ D := by
   classical
   obtain ⟨r₀, dim₀, blocks₀, V₀, hpos, hiso, hsum, horth, hint, hintStar,
@@ -401,7 +402,7 @@ theorem exists_normalTensor_blockDecomp_with_isometry_of_hasInvariantProjectorCl
   have hPF : ∀ k : Fin r₀, (∃ i, blocks₀ k i ≠ 0) →
       ∃ (ρ : Matrix (Fin (dim₀ k)) (Fin (dim₀ k)) ℂ) (t : ℝ),
         ρ.PosDef ∧ 0 < t ∧
-        Kraus.transferMap (ι := Fin d) (n := Fin (dim₀ k)) (blocks₀ k) ρ = (t : ℂ) • ρ := by
+        Kraus.transferMap (ι := α) (n := Fin (dim₀ k)) (blocks₀ k) ρ = (t : ℂ) • ρ := by
     intro k hk
     have : NeZero (dim₀ k) := ⟨(hpos k).ne'⟩
     exact exists_posDef_transferMap_eigenvector_of_irreducible (blocks₀ k) (hirr k) hk
@@ -409,14 +410,14 @@ theorem exists_normalTensor_blockDecomp_with_isometry_of_hasInvariantProjectorCl
   let κ := {k : Fin r₀ // ∃ i, blocks₀ k i ≠ 0}
   let e : Fin (Fintype.card κ) ≃ κ := (Fintype.equivFin κ).symm
   let μf : κ → ℂ := fun x => ((Real.sqrt (tf x.1 x.2) : ℝ) : ℂ)
-  let normalized : (x : κ) → MPSTensor d (dim₀ x.1) := fun x i =>
+  let normalized : (x : κ) → MPTensor α (Fin (dim₀ x.1)) := fun x i =>
     (μf x)⁻¹ • blocks₀ x.1 i
   have hμpos : ∀ x : κ, (0 : ℂ) < μf x := by
     intro x
     change (0 : ℂ) < ((Real.sqrt (tf x.1 x.2) : ℝ) : ℂ)
     exact Complex.zero_lt_real.mpr (Real.sqrt_pos.mpr (htf x.1 x.2))
   have hμne : ∀ x : κ, μf x ≠ 0 := fun x => (hμpos x).ne'
-  have hrecover : ∀ (x : κ) (i : Fin d),
+  have hrecover : ∀ (x : κ) (i : α),
       μf x • normalized x i = blocks₀ x.1 i := by
     intro x i
     simp only [normalized, smul_smul, mul_inv_cancel₀ (hμne x), one_smul]
@@ -535,11 +536,11 @@ This is the positive-length matrix-product-vector consequence of
 `exists_normalTensor_blockDecomp_with_isometry_of_hasInvariantProjectorClosure`.
 It forgets the ambient isometries and the literal reconstruction. -/
 theorem exists_normalTensor_blockDecomp_sameMPV₂Pos_of_hasInvariantProjectorClosure
-    (A : MPSTensor d D) (hClosure : HasInvariantProjectorClosure A)
+    (A : MPTensor α (Fin D)) (hClosure : HasInvariantProjectorClosure A)
     (hPer : HasNoPeriodicVectors A) :
     ∃ (r : ℕ) (dim : Fin r → ℕ) (μ : Fin r → ℂ)
-      (blocks : (k : Fin r) → MPSTensor d (dim k)),
-      SameMPV₂Pos A (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) ∧
+      (blocks : (k : Fin r) → MPTensor α (Fin (dim k))),
+      SameMPV₂Pos A (toTensorFromBlocks (α := α) (μ := μ) blocks) ∧
       (∀ k, IsNormalTensor (blocks k)) ∧
       (∀ k, μ k ≠ 0) ∧
       (∀ k, 0 < dim k) ∧
