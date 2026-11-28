@@ -23,7 +23,6 @@ arXiv:1708.00029, Theorem 4.1, lines 717--731.
 open MPTensor
 
 open scoped Matrix BigOperators
-open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 
@@ -50,17 +49,17 @@ version, if there exists another tensor \(A\) with the same bond dimension as \(
 and an isometry \(W : \mathbb C^d \to (\mathbb C^d)^{\otimes p}\) (encoded as a
 matrix with \(W^\dagger W = 1\)) such that the \(p\)-blocked tensor \(A^{[p]}\)
 matches the \(W^{\otimes N}\)-image of \(B\) at the level of MPV coefficients:
-`coeff (blockTensor A p) (List.ofFn τ) = ∑_σ (∏_k W (τ k) (σ k)) · coeff B (List.ofFn σ)`
-for every length `N` and every `τ : Fin N → Fin (blockPhysDim d p)`.
+`coeff (Kraus.block A p) (List.ofFn τ) = ∑_σ (∏_k W (τ k) (σ k)) · coeff B (List.ofFn σ)`
+for every length `N` and every `τ : Fin N → Fin p → Fin d`.
 
 In the paper notation of arXiv:1708.00029, lines 719--724, this encodes
 \(|V_{pN}(A)\rangle = W^{\otimes N}|V_N(B)\rangle\) for every \(N\). -/
 def IsPRefinable (B : MPSTensor d D) (p : ℕ) : Prop :=
   ∃ (A : MPSTensor d D)
-    (W : Matrix (Fin (blockPhysDim d p)) (Fin d) ℂ),
+    (W : Matrix (Fin p → Fin d) (Fin d) ℂ),
     Wᴴ * W = 1 ∧
-    ∀ (N : ℕ) (τ : Fin N → Fin (blockPhysDim d p)),
-      coeff (blockTensor A p) (List.ofFn τ) =
+    ∀ (N : ℕ) (τ : Fin N → Fin p → Fin d),
+      coeff (Kraus.block A p) (List.ofFn τ) =
         ∑ σ : Fin N → Fin d,
           (∏ k : Fin N, W (τ k) (σ k)) * coeff B (List.ofFn σ)
 

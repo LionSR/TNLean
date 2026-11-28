@@ -18,7 +18,6 @@ Theorem 4.1; it does not select such a root.
 -/
 
 open scoped Matrix
-open Kraus (wordOfBlock blockTensor)
 
 namespace MPSTensor
 
@@ -36,29 +35,29 @@ private theorem invariant_evalWord {d D : ℕ}
 /-- If a blocked tensor is irreducible, then the original tensor is
 irreducible. No positivity assumption on the block length is required.
 Source context: arXiv:1708.00029, Theorem 4.1, converse. -/
-theorem isIrreducibleFamily_of_blockTensor {d D : ℕ}
+theorem isIrreducibleFamily_of_block {d D : ℕ}
     (A : MPSTensor d D) (p : ℕ)
-    (hBlock : Kraus.IsIrreducibleFamily (blockTensor A p)) :
+    (hBlock : Kraus.IsIrreducibleFamily (Kraus.block A p)) :
     Kraus.IsIrreducibleFamily A := by
   apply Kraus.isIrreducibleFamily_of_isIrreducibleAction A
   intro W hW
   apply (Kraus.isIrreducibleAction_of_isIrreducibleFamily
-    (blockTensor A p) hBlock) W
+    (Kraus.block A p) hBlock) W
   intro i v hv
-  exact invariant_evalWord A W hW (wordOfBlock d p i) v hv
+  exact invariant_evalWord A W hW (List.ofFn i) v hv
 
 /-- If an irreducible target transfer map equals the transfer map of a
 blocked root, then the root tensor is irreducible. Source context:
 arXiv:1708.00029, Theorem 4.1, converse. -/
-theorem isIrreducibleFamily_of_transferMap_eq_blockTensor
+theorem isIrreducibleFamily_of_transferMap_eq_block
     {d e D : ℕ} (B : MPSTensor d D) (A : MPSTensor e D) (p : ℕ)
     (hB : Kraus.IsIrreducibleFamily B)
-    (hEq : Kraus.transferMap B = Kraus.transferMap (blockTensor A p)) :
+    (hEq : Kraus.transferMap B = Kraus.transferMap (Kraus.block A p)) :
     Kraus.IsIrreducibleFamily A := by
-  apply isIrreducibleFamily_of_blockTensor A p
+  apply isIrreducibleFamily_of_block A p
   apply Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM
-    (blockTensor A p)
-  change IsIrreducibleMap (Kraus.transferMap (blockTensor A p))
+    (Kraus.block A p)
+  change IsIrreducibleMap (Kraus.transferMap (Kraus.block A p))
   rw [← hEq]
   exact Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily B hB
 

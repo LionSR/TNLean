@@ -17,7 +17,6 @@ assert existence of a root with a prescribed number of Kraus operators.
 -/
 
 open scoped Matrix
-open Kraus (blockTensor)
 
 namespace MPSTensor
 
@@ -25,9 +24,9 @@ namespace MPSTensor
 Thus its original period is coprime to the blocking length.
 Source: arXiv:1708.00029, Section 4.1, lines 765--806; used in the
 root-selection problem of Theorem 4.1, lines 812--818. -/
-theorem IsPeriodic.coprime_of_isIrreducibleFamily_blockTensor
+theorem IsPeriodic.coprime_of_isIrreducibleFamily_block
     {d D m : ℕ} (A : MPSTensor d D) (hA : IsPeriodic m A)
-    (p : ℕ) (hIrr : Kraus.IsIrreducibleFamily (blockTensor A p)) :
+    (p : ℕ) (hIrr : Kraus.IsIrreducibleFamily (Kraus.block A p)) :
     Nat.Coprime m p := by
   classical
   have : NeZero m := ⟨hA.period_pos.ne'⟩

@@ -40,7 +40,6 @@ open MPTensor
 section
 
 open scoped Matrix BigOperators
-open Kraus (blockPhysDim blockPhysDim_eq_pow blockTensor)
 
 namespace MPSTensor
 
@@ -67,7 +66,7 @@ shows that it is enough to prove a bounded-Kraus-rank statement for the root cha
 def PRefinementInverseCanonicalization (d D p : ℕ) : Prop :=
   ∀ {B : MPSTensor d D}, IsIrreducibleForm B →
     IsPDivisibleChannel (Kraus.transferMap B) p →
-    ∃ A : MPSTensor d D, Kraus.transferMap B = Kraus.transferMap (blockTensor A p)
+    ∃ A : MPSTensor d D, Kraus.transferMap B = Kraus.transferMap (Kraus.block A p)
 
 /-- A bounded Kraus-rank witness for a channel root can be expressed as an
 `MPSTensor` with the ambient physical dimension by zero-padding the Kraus family. -/
@@ -102,7 +101,7 @@ theorem pRefinementInverseCanonicalization_of_rootKrausRankBound
   calc
     Kraus.transferMap B = E' ^ p := hpow
     _ = (Kraus.transferMap A) ^ p := by rw [← hA]
-    _ = Kraus.transferMap (blockTensor A p) := by rw [Kraus.transferMap_blockTensor]
+    _ = Kraus.transferMap (Kraus.block A p) := by rw [Kraus.transferMap_block]
 
 /-- Equality with a blocked transfer map gives a refinement isometry.
 No irreducible-form assumption is needed for this Kraus representation step:
@@ -111,34 +110,34 @@ the two Kraus representations of the same map are related by an isometry
 coefficients with `evalWord_sum_smul_ofFn` gives the weighted coefficient
 identity defining `IsPRefinable B p`.
 Source: arXiv:1708.00029, Theorem 4.1, converse paragraph, lines 812--818. -/
-theorem isPRefinable_of_transferMap_eq_blockTensor
+theorem isPRefinable_of_transferMap_eq_block
     (B A : MPSTensor d D) {p : ℕ} (hp : 0 < p)
-    (hTransferEq : Kraus.transferMap B = Kraus.transferMap (blockTensor A p)) :
+    (hTransferEq : Kraus.transferMap B = Kraus.transferMap (Kraus.block A p)) :
     IsPRefinable B p := by
   classical
-  -- `d ≤ d^p = blockPhysDim d p` whenever `p ≥ 1`: the Kraus-rank comparison needed by
+  -- `d ≤ d^p` whenever `p ≥ 1`: the Kraus-rank comparison needed by
   -- Wolf Theorem 2.1(4).
-  have hCard : Fintype.card (Fin d) ≤ Fintype.card (Fin (blockPhysDim d p)) := by
-    simp only [Fintype.card_fin, blockPhysDim_eq_pow]
+  have hCard : Fintype.card (Fin d) ≤ Fintype.card (Fin p → Fin d) := by
+    simp only [Fintype.card_fin, Fintype.card_fun]
     exact Nat.le_self_pow hp.ne' d
   -- Translate the linear-map equality into the Kraus-family equality needed by the freedom
   -- lemma.
   have hKraus :
       ∀ X : Matrix (Fin D) (Fin D) ℂ,
-        ∑ α : Fin (blockPhysDim d p), blockTensor A p α * X * (blockTensor A p α)ᴴ =
+        ∑ α : Fin p → Fin d, Kraus.block A p α * X * (Kraus.block A p α)ᴴ =
           ∑ j : Fin d, B j * X * (B j)ᴴ := by
     intro X
-    have hEq : Kraus.transferMap (blockTensor A p) X = Kraus.transferMap B X := by
+    have hEq : Kraus.transferMap (Kraus.block A p) X = Kraus.transferMap B X := by
       rw [← hTransferEq]
     simpa [Kraus.transferMap_apply] using hEq
   -- Extract the isometric mixing matrix `V` from Wolf Theorem 2.1(4).
   obtain ⟨V, hV, hBA⟩ :=
-    (kraus_isometry_freedom_iff (blockTensor A p) B hCard).mp hKraus
+    (kraus_isometry_freedom_iff (Kraus.block A p) B hCard).mp hKraus
   refine ⟨A, V, hV, ?_⟩
   intro N τ
   simp only [coeff_eq]
-  -- Pointwise rewrite `blockTensor A p` as the `V`-mixing of `B`.
-  have hAeq : (blockTensor A p : MPSTensor (blockPhysDim d p) D) =
+  -- Pointwise rewrite `Kraus.block A p` as the `V`-mixing of `B`.
+  have hAeq : (Kraus.block A p : MPTensor (Fin p → Fin d) (Fin D)) =
       fun α => ∑ j : Fin d, V α j • B j := funext hBA
   rw [hAeq, evalWord_sum_smul_ofFn B V N τ, Matrix.trace_sum]
   refine Finset.sum_congr rfl ?_
@@ -161,8 +160,8 @@ theorem isPRefinable_of_channel_root_hasKrausRankLE
     (hRank : Channel.HasKrausRankLE E d) :
     IsPRefinable B p := by
   obtain ⟨A, hA⟩ := exists_tensor_of_hasKrausRankLE hRank
-  apply isPRefinable_of_transferMap_eq_blockTensor B A hp
-  rw [Kraus.transferMap_blockTensor, hA]
+  apply isPRefinable_of_transferMap_eq_block B A hp
+  rw [Kraus.transferMap_block, hA]
   exact hpow
 
 /-- **Reverse direction of Theorem 4.1 (conditional form).**
@@ -171,7 +170,7 @@ Let `B` be an MPS tensor in irreducible form II and let `p ≥ 1`. Assume the in
 canonicalization hypothesis `PRefinementInverseCanonicalization` (which states the
 remaining analytic passage from `p`-divisibility of `Kraus.transferMap B` to a compatible
 Kraus-reducible witness). Then `IsPDivisibleChannel (Kraus.transferMap B) p` implies
-`IsPRefinable B p`, by `isPRefinable_of_transferMap_eq_blockTensor`.
+`IsPRefinable B p`, by `isPRefinable_of_transferMap_eq_block`.
 Source: arXiv:1708.00029, Section 4.1, converse paragraph. -/
 theorem thm_4_1_p_refinement_reverse
     (B : MPSTensor d D) (hB : IsIrreducibleForm B)
@@ -180,7 +179,7 @@ theorem thm_4_1_p_refinement_reverse
     (hDivisible : IsPDivisibleChannel (Kraus.transferMap B) p) :
     IsPRefinable B p := by
   obtain ⟨A, hTransferEq⟩ := hInverse hB hDivisible
-  exact isPRefinable_of_transferMap_eq_blockTensor B A hp hTransferEq
+  exact isPRefinable_of_transferMap_eq_block B A hp hTransferEq
 
 end Theorem41Reverse
 
@@ -294,9 +293,9 @@ theorem _root_.TNLean.MPS.FundamentalTheorem.choiRank_le_pow_fin_two
       rw [hA, choiRank_mapLM_eq_finrank_wordSpan_one]
     _ ≤ Module.finrank ℂ (Kraus.wordSpan A p) :=
       Kraus.wordSpan_one_finrank_le_of_isUnit_mem_wordSpan_one A hp hX hUnit
-    _ = choiRank (Kraus.transferMap (Kraus.blockTensor A p)) := by
-      rw [choiRank_mapLM_eq_finrank_wordSpan_one, Kraus.wordSpan_blockTensor_one]
-    _ = choiRank (F ^ p) := by rw [Kraus.transferMap_blockTensor, hA]
+    _ = choiRank (Kraus.transferMap (Kraus.block A p)) := by
+      rw [choiRank_mapLM_eq_finrank_wordSpan_one, Kraus.wordSpan_block_one]
+    _ = choiRank (F ^ p) := by rw [Kraus.transferMap_block, hA]
 
 end Channel
 

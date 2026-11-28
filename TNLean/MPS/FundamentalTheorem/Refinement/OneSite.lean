@@ -20,7 +20,6 @@ forward implication of arXiv:1708.00029, Theorem 4.1, lines 717--731. See
 open MPTensor
 
 open scoped Matrix BigOperators
-open Kraus (blockPhysDim singleBlockEquiv blockTensor)
 
 namespace MPSTensor
 
@@ -28,8 +27,8 @@ namespace MPSTensor
 physical labels. Source: arXiv:1708.00029, lines 719--724. -/
 theorem isPRefinable_one {d D : ℕ} (B : MPSTensor d D) : IsPRefinable B 1 := by
   classical
-  let E : Fin d ≃ Fin (blockPhysDim d 1) := (singleBlockEquiv d).symm
-  let W : Matrix (Fin (blockPhysDim d 1)) (Fin d) ℂ := permMatrixOfEquiv E
+  let E : Fin d ≃ (Fin 1 → Fin d) := (Equiv.funUnique (Fin 1) (Fin d)).symm
+  let W : Matrix (Fin 1 → Fin d) (Fin d) ℂ := permMatrixOfEquiv E
   refine ⟨B, W, ?_, ?_⟩
   · have h : Wᴴ = Wᵀ := by
       ext i j
@@ -37,9 +36,14 @@ theorem isPRefinable_one {d D : ℕ} (B : MPSTensor d D) : IsPRefinable B 1 := b
     rw [h]
     exact permMatrixOfEquiv_transpose_mul E
   · intro N τ
-    change mpv (blockTensor B 1) τ =
+    change mpv (Kraus.block B 1) τ =
       ∑ σ : Fin N → Fin d, (∏ k : Fin N, W (τ k) (σ k)) * mpv B σ
-    rw [mpv_blockTensor_one]
+    have hτ : mpv (Kraus.block B 1) τ = mpv B (fun x => E.symm (τ x)) := by
+      have h1 : ∀ x, List.ofFn (τ x) = [E.symm (τ x)] := fun x => by
+        simp [E, List.ofFn_succ]
+      simp only [mpv, coeff, Kraus.evalWord_block, h1, List.flatMap_singleton', List.map_ofFn,
+        Function.comp_def]
+    rw [hτ]
     rw [Finset.sum_eq_single (fun x => E.symm (τ x))]
     · simp [W, permMatrixOfEquiv, E]
     · intro σ _ hσ

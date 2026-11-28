@@ -462,9 +462,9 @@ theorem square_isIrreducibleFamily : Kraus.IsIrreducibleFamily square := by
 /-- The original cyclic-reset root is irreducible because its square is.
 Source context: arXiv:1708.00029, Theorem 4.1 converse. -/
 theorem root_isIrreducibleFamily : Kraus.IsIrreducibleFamily root := by
-  apply isIrreducibleFamily_of_transferMap_eq_blockTensor square root 2
+  apply isIrreducibleFamily_of_transferMap_eq_block square root 2
     square_isIrreducibleFamily
-  rw [Kraus.transferMap_blockTensor]
+  rw [Kraus.transferMap_block]
   exact transferMap_square_eq_pow
 
 end MPSTensor.CyclicResetCounterexample

@@ -505,8 +505,8 @@ private theorem mul_blockInclusion_apply (U : Matrix (Fin D) (Fin (∑ a, dim a)
 /-- Assemble an identity resolution into a unitary block decomposition, preserving
 its prescribed inclusions. The total column count prevents a proper coisometry.
 Source: arXiv:1708.00029, `lem:blocking-arbitrary`, lines 432–456. -/
-theorem exists_unitary_toTensorFromBlocks_of_resolution {d : ℕ} (A : MPSTensor d D)
-    (B : (a : Fin r) → MPSTensor d (dim a))
+theorem exists_unitary_toTensorFromBlocks_of_resolution {α : Type*} [Fintype α]
+    (A : MPTensor α (Fin D)) (B : (a : Fin r) → MPTensor α (Fin (dim a)))
     (V : (a : Fin r) → Matrix (Fin D) (Fin (dim a)) ℂ)
     (hsum : ∑ a, V a * (V a)ᴴ = 1) (hdim : ∑ a, dim a = D)
     (hinter : ∀ a i, A i * V a = V a * B a i) :

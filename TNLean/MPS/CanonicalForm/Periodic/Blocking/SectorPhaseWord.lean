@@ -30,7 +30,7 @@ The word identities allow arbitrary complex coefficients. The final existence th
 constructs unit phases from the prescribed roots on the step-`p` orbits. Canonicalization
 and the blocked equal-case theorem are separate parts of the root construction in
 Theorem 4.1.
-* `MPSTensor.exists_isLeftCanonical_blockTensor_eq_of_orbit_action`,
+* `MPSTensor.exists_isLeftCanonical_block_eq_of_orbit_action`,
   `MPSTensor.exists_isLeftCanonical_blockTensor_eq_of_unitary_conj`: absorbing an orbitwise phase
   into a blocked tensor root.
 -/
@@ -197,7 +197,7 @@ private theorem sum_orbit_weighted (P : Fin m → Matrix (Fin D) (Fin D) ℂ) (p
 /-- Absorb the orbitwise action of `Z` into unit phases on the original letters.
 The resulting tensor remains left-canonical and blocks to `Z A^(p)`.
 Source: arXiv:1708.00029, `eq:ZPA-is-cPA`, `eq:Aprime-is-cPA`, lines 778–807. -/
-theorem exists_isLeftCanonical_blockTensor_eq_of_orbit_action
+theorem exists_isLeftCanonical_block_eq_of_orbit_action
     (A : MPTensor α (Fin D)) (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
     (hP : ∀ u v, P u * P v = if u = v then P u else 0)
     (hHerm : ∀ u, (P u)ᴴ = P u) (hSum : ∑ u, P u = 1)

@@ -23,7 +23,6 @@ not asserted by channel divisibility alone; see
 -/
 
 open scoped Matrix
-open Kraus (blockTensor)
 
 namespace MPSTensor
 
@@ -39,8 +38,8 @@ theorem choiRank_transferMap_le_of_isUnit_mem_root_wordSpan_pred
     (hX : X ∈ Kraus.wordSpan A (p - 1)) (hUnit : IsUnit X) :
     Channel.choiRank (Kraus.transferMap A) ≤
       Channel.choiRank (Kraus.transferMap B) := by
-  have hBblock : Kraus.transferMap B = Kraus.transferMap (blockTensor A p) := by
-    rw [Kraus.transferMap_blockTensor]
+  have hBblock : Kraus.transferMap B = Kraus.transferMap (Kraus.block A p) := by
+    rw [Kraus.transferMap_block]
     exact hpow
   calc
     Channel.choiRank (Kraus.transferMap A) =
@@ -48,10 +47,10 @@ theorem choiRank_transferMap_le_of_isUnit_mem_root_wordSpan_pred
       Channel.choiRank_mapLM_eq_finrank_wordSpan_one A
     _ ≤ Module.finrank ℂ (Kraus.wordSpan A p) :=
       Kraus.wordSpan_one_finrank_le_of_isUnit_mem_wordSpan_pred A hp hX hUnit
-    _ = Module.finrank ℂ (Kraus.wordSpan (blockTensor A p) 1) := by
-      rw [Kraus.wordSpan_blockTensor_one]
-    _ = Channel.choiRank (Kraus.transferMap (blockTensor A p)) :=
-      (Channel.choiRank_mapLM_eq_finrank_wordSpan_one (blockTensor A p)).symm
+    _ = Module.finrank ℂ (Kraus.wordSpan (Kraus.block A p) 1) := by
+      rw [Kraus.wordSpan_block_one]
+    _ = Channel.choiRank (Kraus.transferMap (Kraus.block A p)) :=
+      (Channel.choiRank_mapLM_eq_finrank_wordSpan_one (Kraus.block A p)).symm
     _ = Channel.choiRank (Kraus.transferMap B) := by
       rw [hBblock]
 

@@ -568,7 +568,7 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
 
 \begin{lemma}[Refinement from a blocked transfer identity]
     \label{thm:periodic_refinement_from_blocked_transfer}
-    \lean{MPSTensor.isPRefinable_of_transferMap_eq_blockTensor}
+    \lean{MPSTensor.isPRefinable_of_transferMap_eq_block}
     \leanok
     \uses{def:p_refinable}
     Let $A$ and $B$ have the same one-site physical and bond
@@ -615,9 +615,9 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
 
 \begin{lemma}[Irreducibility and period constraints on a refinement root]
     \label{thm:periodic_irreducible_root_constraints}
-    \lean{MPSTensor.isIrreducibleFamily_of_blockTensor,
-        MPSTensor.isIrreducibleFamily_of_transferMap_eq_blockTensor,
-        MPSTensor.IsPeriodic.coprime_of_isIrreducibleFamily_blockTensor}
+    \lean{MPSTensor.isIrreducibleFamily_of_block,
+        MPSTensor.isIrreducibleFamily_of_transferMap_eq_block,
+        MPSTensor.IsPeriodic.coprime_of_isIrreducibleFamily_block}
     \leanok
     \uses{def:blocked_tensor,def:periodic_tensor}
     Let $A$ be a tensor and let $p\geq0$. If its blocked tensor
@@ -948,7 +948,7 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
 
 \begin{lemma}[Absorbing the orbitwise gauge into the root]
     \label{thm:periodic_absorb_orbit_gauge}
-    \lean{MPSTensor.exists_isLeftCanonical_blockTensor_eq_of_orbit_action}
+    \lean{MPSTensor.exists_isLeftCanonical_block_eq_of_orbit_action}
     \leanok
     \uses{def:periodic_step_orbit_projection}
     Let $A$ be left canonical with orthogonal cyclic projections $P_u$
@@ -1250,7 +1250,7 @@ see \cite{gap:dccsp17_root_kraus_rank_thm41}.
 
 \begin{lemma}[Trace-preserving root with prescribed blocking]
     \label{thm:periodic_trace_preserving_root}
-    \lean{MPSTensor.exists_isLeftCanonical_blockTensor_eq_toTensorFromBlocks}
+    \lean{MPSTensor.exists_isLeftCanonical_block_eq_toTensorFromBlocks}
     \leanok
     \uses{def:periodic_tensor,def:same_mpv2_pos,def:block_diagonal_tensor}
     Let $p>0$, let $B_k$ be left-canonical periodic tensors on the blocked

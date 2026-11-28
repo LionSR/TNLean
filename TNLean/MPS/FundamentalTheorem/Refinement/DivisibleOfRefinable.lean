@@ -43,7 +43,7 @@ makes `𝔼_B` trace preserving. Documented in
 
 * `MPSTensor.exists_unitary_stepOrbit_decomposition_toTensorFromBlocks`: the
   step-orbit decomposition of a blocked unit-weight block sum, with phase lifts.
-* `MPSTensor.exists_isLeftCanonical_blockTensor_eq_toTensorFromBlocks`: a
+* `MPSTensor.exists_isLeftCanonical_block_eq_toTensorFromBlocks`: a
   trace-preserving root with exactly prescribed blocking.
 * `MPSTensor.isPDivisibleChannel_of_isPRefinable_toTensorFromBlocks`: the
   corrected forward implication of Theorem 4.1.
@@ -95,7 +95,6 @@ is false as printed without it; see
 -/
 
 open scoped Matrix BigOperators ComplexOrder
-open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 
@@ -133,27 +132,27 @@ theorem weight_norm_and_dim_eq_of_blocked_sameMPV₂Pos (μ : Fin r → ℂ) (h�
     (A : (k : Fin r) → MPSTensor d (dim k))
     (period : Fin r → ℕ) (hper : ∀ k, IsPeriodic (period k) (A k))
     {p : ℕ} (hp : 0 < p)
-    (Q : SectorDecomposition (Fin (blockPhysDim d p))) (periodQ : Fin Q.basisCount → ℕ)
+    (Q : SectorDecomposition (Fin p → Fin d)) (periodQ : Fin Q.basisCount → ℕ)
     (hPerQ : ∀ j, IsPeriodic (periodQ j) (Q.basis j))
     (hNonRepQ : ∀ i j, i ≠ j → ¬ HetRepeatedBlocks (Q.basis i) (Q.basis j))
-    (hSame : SameMPV₂Pos (blockTensor (toTensorFromBlocks μ A) p) Q.toTensor)
+    (hSame : SameMPV₂Pos (Kraus.block (toTensorFromBlocks μ A) p) Q.toTensor)
     (hQweight : ∀ j q, ‖Q.weight j q‖ = 1) :
     (∀ k, ‖μ k‖ = 1) ∧ (∑ k, dim k) = Q.totalDim := by
   classical
   let n : Fin r → ℕ := fun k ↦ (period k).gcd p
   have hex (k : Fin r) :
       ∃ (sd : Fin (n k) → ℕ)
-        (B : (a : Fin (n k)) → MPSTensor (blockPhysDim d p) (sd a)),
+        (B : (a : Fin (n k)) → MPTensor (Fin p → Fin d) (Fin (sd a))),
         (∑ a, sd a) = dim k ∧
         (∀ a, IsPeriodic (period k / n k) (B a)) ∧
-        SameMPV₂ (blockTensor (A k) p) (toTensorFromBlocks (fun _ ↦ 1) B) := by
+        SameMPV₂ (Kraus.block (A k) p) (toTensorFromBlocks (fun _ ↦ 1) B) := by
     obtain ⟨_, sd, B, _, _, _, _, _, _, hd, _, hSame, _, _, _, hperB⟩ :=
       (hper k).exists_stepOrbit_blockDecomposition p
     exact ⟨sd, B, hd, hperB hp, hSame⟩
   choose sd B hdimB hperB hSameB using hex
   let e := (finSigmaFinEquiv (n := n)).symm
   have hflat := sameMPV₂_toTensorFromBlocks_refinement (fun k ↦ μ k ^ p)
-    (fun k ↦ blockTensor (A k) p) n sd B hSameB
+    (fun k ↦ Kraus.block (A k) p) n sd B hSameB
   have hbase := sameMPV₂_block_toTensorFromBlocks μ A p
   have hPQ : SameMPV₂Pos
       (toTensorFromBlocks (fun j ↦ μ (e j).1 ^ p) (fun j ↦ B (e j).1 (e j).2))
@@ -190,10 +189,10 @@ unitary similarity of the original arbitrary tensor; the corrected forward proof
 continues with the presented blocks. -/
 theorem exists_unitWeight_periodic_presentation_of_blocked_sameMPV₂Pos
     (A : MPSTensor d D) {p : ℕ} (hp : 0 < p)
-    (Q : SectorDecomposition (Fin (blockPhysDim d p))) (periodQ : Fin Q.basisCount → ℕ)
+    (Q : SectorDecomposition (Fin p → Fin d)) (periodQ : Fin Q.basisCount → ℕ)
     (hPerQ : ∀ j, IsPeriodic (periodQ j) (Q.basis j))
     (hNonRepQ : ∀ i j, i ≠ j → ¬ HetRepeatedBlocks (Q.basis i) (Q.basis j))
-    (hSame : SameMPV₂Pos (blockTensor A p) Q.toTensor)
+    (hSame : SameMPV₂Pos (Kraus.block A p) Q.toTensor)
     (hQweight : ∀ j q, ‖Q.weight j q‖ = 1) :
     ∃ (r : ℕ) (dim : Fin r → ℕ)
       (B : (k : Fin r) → MPSTensor d (dim k)) (period : Fin r → ℕ),
@@ -241,7 +240,6 @@ The source's displayed peripheral root set omits the exponent `p`; see
 -/
 
 open scoped Matrix BigOperators
-open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 
@@ -261,16 +259,16 @@ private theorem exists_root_of_orbit_phase (A : MPSTensor d D) (hA : IsLeftCanon
     (hproj : ∀ u, IsOrthogonalProjection (P u)) (hsum : ∑ u, P u = 1)
     (hshift : ∀ u i, P u * A i = A i * P (u + 1)) (p : ℕ)
     (dim : Fin (m.gcd p) → ℕ)
-    (B : (a : Fin (m.gcd p)) → MPSTensor (blockPhysDim d p) (dim a))
+    (B : (a : Fin (m.gcd p)) → MPTensor (Fin p → Fin d) (Fin (dim a)))
     (V : (a : Fin (m.gcd p)) → Matrix (Fin D) (Fin (dim a)) ℂ)
     (hrange : ∀ a, V a * (V a)ᴴ = stepOrbitProjection P p a)
     (U : Matrix (Fin D) (Fin (∑ a, dim a)) ℂ)
     (hiso : Uᴴ * U = 1)
     (hinc : ∀ a, U * blockInclusion dim a = V a)
-    (hconj : ∀ i, blockTensor A p i = U * toTensorFromBlocks (fun _ ↦ 1) B i * Uᴴ)
+    (hconj : ∀ i, Kraus.block A p i = U * toTensorFromBlocks (fun _ ↦ 1) B i * Uᴴ)
     (c : Fin (m.gcd p) → ℂ) (hc : ∀ a, c a ^ (m / m.gcd p) = 1) :
     ∃ A' : MPSTensor d D, IsLeftCanonical A' ∧
-      ∀ i, blockTensor A' p i = U * toTensorFromBlocks c B i * Uᴴ := by
+      ∀ i, Kraus.block A' p i = U * toTensorFromBlocks c B i * Uᴴ := by
   let Z := U * blockScalarMatrix dim c * Uᴴ
   have hZV (a) : Z * V a = c a • V a := by
     rw [← hinc]
@@ -278,18 +276,18 @@ private theorem exists_root_of_orbit_phase (A : MPSTensor d D) (hA : IsLeftCanon
     simp only [Matrix.mul_assoc]
     rw [← Matrix.mul_assoc Uᴴ U, hiso, Matrix.one_mul, blockScalarMatrix_mul_blockInclusion,
       Matrix.mul_smul]
-  have hZ (a i) : Z * (stepOrbitProjection P p a * blockTensor A p i) =
-      c a • (stepOrbitProjection P p a * blockTensor A p i) := by
+  have hZ (a i) : Z * (stepOrbitProjection P p a * Kraus.block A p i) =
+      c a • (stepOrbitProjection P p a * Kraus.block A p i) := by
     rw [← hrange]
     simp only [← Matrix.mul_assoc]
     rw [hZV]
     simp only [Matrix.smul_mul]
   have hmul := orthogonalProjection_mul_eq_ite_of_sum_eq_one P hproj hsum
-  obtain ⟨A', hA', hblock⟩ := exists_isLeftCanonical_blockTensor_eq_of_orbit_action
+  obtain ⟨A', hA', hblock⟩ := exists_isLeftCanonical_block_eq_of_orbit_action
     A P hmul (fun u ↦ (hproj u).1.eq) hsum hshift hA p c hc Z hZ
   refine ⟨A', hA', fun i ↦ ?_⟩
   rw [hblock]
-  change Z * blockTensor A p i = _
+  change Z * Kraus.block A p i = _
   rw [hconj]
   dsimp only [Z]
   simp only [Matrix.mul_assoc]
@@ -309,7 +307,7 @@ theorem IsPeriodic.exists_unitary_stepOrbit_decomposition
     let _ : NeZero m := ⟨Nat.ne_of_gt hA.period_pos⟩
     ∃ (P : Fin m → Matrix (Fin D) (Fin D) ℂ)
       (dim : Fin (m.gcd p) → ℕ)
-      (B : (a : Fin (m.gcd p)) → MPSTensor (blockPhysDim d p) (dim a))
+      (B : (a : Fin (m.gcd p)) → MPTensor (Fin p → Fin d) (Fin (dim a)))
       (V : (a : Fin (m.gcd p)) → Matrix (Fin D) (Fin (dim a)) ℂ)
       (U : Matrix (Fin D) (Fin (∑ a, dim a)) ℂ),
       (∀ u, IsOrthogonalProjection (P u)) ∧ (∑ u, P u = 1) ∧
@@ -319,20 +317,20 @@ theorem IsPeriodic.exists_unitary_stepOrbit_decomposition
       (∀ a, V a * (V a)ᴴ = stepOrbitProjection P p a) ∧
       U * Uᴴ = 1 ∧ Uᴴ * U = 1 ∧
       (∀ a, U * blockInclusion dim a = V a) ∧
-      (∀ i, blockTensor A p i = U * toTensorFromBlocks (fun _ ↦ 1) B i * Uᴴ) ∧
+      (∀ i, Kraus.block A p i = U * toTensorFromBlocks (fun _ ↦ 1) B i * Uᴴ) ∧
       ∀ c : Fin (m.gcd p) → ℂ, (∀ a, c a ^ (m / m.gcd p) = 1) →
         ∃ A' : MPSTensor d D, IsLeftCanonical A' ∧
-          ∀ i, blockTensor A' p i = U * toTensorFromBlocks c B i * Uᴴ := by
+          ∀ i, Kraus.block A' p i = U * toTensorFromBlocks c B i * Uᴴ := by
   let : NeZero m := ⟨Nat.ne_of_gt hA.period_pos⟩
   obtain ⟨P, dim, B, V, hproj, hsum, _, hshift, _, hdim, _, _, hiso, hrange, hB, hper⟩ :=
     hA.exists_stepOrbit_blockDecomposition p
-  have hinter (a) (i) : blockTensor A p i * V a = V a * B a i := by
+  have hinter (a) (i) : Kraus.block A p i * V a = V a * B a i := by
     have hPV : stepOrbitProjection P p a * V a = V a := by
       rw [← hrange, Matrix.mul_assoc, hiso, Matrix.mul_one]
     rw [hB, ← Matrix.mul_assoc, ← Matrix.mul_assoc, hrange,
       stepOrbitProjection_mul_block P A hshift, Matrix.mul_assoc, hPV]
   obtain ⟨U, hco, hU, hinc, hconj⟩ :=
-    exists_unitary_toTensorFromBlocks_of_resolution (blockTensor A p) B V
+    exists_unitary_toTensorFromBlocks_of_resolution (Kraus.block A p) B V
       (by simp only [hrange, sum_stepOrbitProjection, hsum]) hdim hinter
   refine ⟨P, dim, B, V, U, hproj, hsum, hshift, hdim, hper hp, hrange,
     hco, hU, hinc, hconj, ?_⟩
@@ -346,7 +344,6 @@ end OrbitUnitary
 section DivisibleOfRefinable
 
 open scoped Matrix BigOperators
-open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 
@@ -414,14 +411,14 @@ theorem exists_unitary_stepOrbit_decomposition_toTensorFromBlocks
     (A : (k : Fin r) → MPSTensor d (dim k)) (period : Fin r → ℕ)
     (hPer : ∀ k, IsPeriodic (period k) (A k)) {p : ℕ} (hp : 0 < p) :
     ∃ (fdim : Fin (∑ k, (period k).gcd p) → ℕ)
-      (C : (s : Fin (∑ k, (period k).gcd p)) → MPSTensor (blockPhysDim d p) (fdim s))
+      (C : (s : Fin (∑ k, (period k).gcd p)) → MPTensor (Fin p → Fin d) (Fin (fdim s)))
       (Y : Matrix (Fin (∑ k, dim k)) (Fin (∑ s, fdim s)) ℂ),
       (∀ s, IsPeriodic
         (period ((finSigmaFinEquiv (n := fun k ↦ (period k).gcd p)).symm s).1 /
           (period ((finSigmaFinEquiv (n := fun k ↦ (period k).gcd p)).symm s).1).gcd p)
         (C s)) ∧
       Y * Yᴴ = 1 ∧ Yᴴ * Y = 1 ∧
-      (∀ i, blockTensor (toTensorFromBlocks (fun _ ↦ 1) A) p i =
+      (∀ i, Kraus.block (toTensorFromBlocks (fun _ ↦ 1) A) p i =
         Y * toTensorFromBlocks (fun _ ↦ 1) C i * Yᴴ) ∧
       ∀ c : Fin (∑ k, (period k).gcd p) → ℂ,
         (∀ s, c s ^
@@ -429,20 +426,20 @@ theorem exists_unitary_stepOrbit_decomposition_toTensorFromBlocks
             (period ((finSigmaFinEquiv (n := fun k ↦ (period k).gcd p)).symm s).1).gcd p) =
             1) →
         ∃ A' : MPSTensor d (∑ k, dim k), IsLeftCanonical A' ∧
-          ∀ i, blockTensor A' p i = Y * toTensorFromBlocks c C i * Yᴴ := by
+          ∀ i, Kraus.block A' p i = Y * toTensorFromBlocks c C i * Yᴴ := by
   classical
   let n : Fin r → ℕ := fun k ↦ (period k).gcd p
   let e := (finSigmaFinEquiv (n := n)).symm
   have hEach (k : Fin r) := IsPeriodic.exists_unitary_stepOrbit_decomposition (A k) (hPer k) hp
   choose P sd B V U hproj hsum _ hdim hperB hrange hUU hU hinc hconj hlift using hEach
   let fdim : Fin (∑ k, n k) → ℕ := fun s ↦ sd (e s).1 (e s).2
-  let C : (s : Fin (∑ k, n k)) → MPSTensor (blockPhysDim d p) (fdim s) :=
+  let C : (s : Fin (∑ k, n k)) → MPTensor (Fin p → Fin d) (Fin (fdim s)) :=
     fun s ↦ B (e s).1 (e s).2
   let W : (s : Fin (∑ k, n k)) → Matrix (Fin (∑ k, dim k)) (Fin (fdim s)) ℂ :=
     fun s ↦ blockInclusion dim (e s).1 * V (e s).1 (e s).2
   -- each blocked summand intertwines its orbit isometries, also after a phase lift
   have hblockV (k : Fin r) (a : Fin (n k)) (c : Fin (n k) → ℂ)
-      (X : MPSTensor (blockPhysDim d p) (dim k))
+      (X : MPTensor (Fin p → Fin d) (Fin (dim k)))
       (hX : ∀ i, X i = U k * toTensorFromBlocks c (B k) i * (U k)ᴴ) (i) :
       X i * V k a = V k a * (c a • B k a i) := by
     rw [hX, ← hinc k a]
@@ -469,28 +466,28 @@ theorem exists_unitary_stepOrbit_decomposition_toTensorFromBlocks
     rw [Equiv.sum_comp e (fun x ↦ sd x.1 x.2), Fintype.sum_sigma]
     exact Finset.sum_congr rfl fun k _ ↦ hdim k
   -- the blocked sum intertwines the flattened isometries
-  have hblock (X : (k : Fin r) → MPSTensor (blockPhysDim d p) (dim k))
+  have hblock (X : (k : Fin r) → MPTensor (Fin p → Fin d) (Fin (dim k)))
       (c : Fin (∑ k, n k) → ℂ)
       (hX : ∀ k a i, X k i * V k a = V k a * (c (finSigmaFinEquiv ⟨k, a⟩) • B k a i))
-      (s : Fin (∑ k, n k)) (i : Fin (blockPhysDim d p)) :
+      (s : Fin (∑ k, n k)) (i : Fin p → Fin d) :
       toTensorFromBlocks (fun _ ↦ 1) X i * W s = W s * (c s • C s i) := by
     dsimp only [W, C]
     rw [← Matrix.mul_assoc, toTensorFromBlocks_mul_blockInclusion, one_smul, Matrix.mul_assoc,
       hX, ← Matrix.mul_assoc]
     simp only [e, Sigma.eta, Equiv.apply_symm_apply]
-  have hT (i : Fin (blockPhysDim d p)) :
-      blockTensor (toTensorFromBlocks (fun _ ↦ 1) A) p i =
-        toTensorFromBlocks (fun _ ↦ 1) (fun k ↦ blockTensor (A k) p) i := by
+  have hT (i : Fin p → Fin d) :
+      Kraus.block (toTensorFromBlocks (fun _ ↦ 1) A) p i =
+        toTensorFromBlocks (fun _ ↦ 1) (fun k ↦ Kraus.block (A k) p) i := by
     rw [block_toTensorFromBlocks_apply]
     simp only [one_pow]
-  have hinter (s : Fin (∑ k, n k)) (i : Fin (blockPhysDim d p)) :
-      blockTensor (toTensorFromBlocks (fun _ ↦ 1) A) p i * W s = W s * C s i := by
+  have hinter (s : Fin (∑ k, n k)) (i : Fin p → Fin d) :
+      Kraus.block (toTensorFromBlocks (fun _ ↦ 1) A) p i * W s = W s * C s i := by
     rw [hT]
-    simpa only [one_smul] using hblock (fun k ↦ blockTensor (A k) p) (fun _ ↦ 1)
+    simpa only [one_smul] using hblock (fun k ↦ Kraus.block (A k) p) (fun _ ↦ 1)
       (fun k a i ↦ hblockV k a (fun _ ↦ 1) _ (hconj k) i) s i
   obtain ⟨Y, hYY, hY'Y, hYinc, hYconj⟩ :=
     exists_unitary_toTensorFromBlocks_of_resolution
-      (blockTensor (toTensorFromBlocks (fun _ ↦ 1) A) p) C W hres hdim' hinter
+      (Kraus.block (toTensorFromBlocks (fun _ ↦ 1) A) p) C W hres hdim' hinter
   refine ⟨fdim, C, Y, fun s ↦ hperB (e s).1 (e s).2, hYY, hY'Y, hYconj, ?_⟩
   intro c hc
   have hroot (k : Fin r) (a : Fin (n k)) :
@@ -507,7 +504,7 @@ theorem exists_unitary_stepOrbit_decomposition_toTensorFromBlocks
     rw [← Matrix.mul_assoc Yᴴ Y, hY'Y, Matrix.one_mul, toTensorFromBlocks_mul_blockInclusion]
   rw [hYW, block_toTensorFromBlocks_apply]
   simp only [one_pow]
-  exact hblock (fun k ↦ blockTensor (A' k) p) c
+  exact hblock (fun k ↦ Kraus.block (A' k) p) c
     (fun k a i ↦ hblockV k a _ _ (hA'block k) i) s i
 
 /-- **Trace-preserving root with prescribed blocking.** Let `ν_k` have modulus
@@ -520,14 +517,14 @@ No normalization of `A` is assumed. Source: arXiv:1708.00029, Theorem 4.1,
 lines 750--810: the periodic blocks of `A` are normalized (lines 750--756),
 matched with the target by `thm:bdequal` (`eq:ZPA-is-cPA`), and the phases are
 absorbed into a trace-preserving tensor (`eq:Aprime-is-cPA`, lines 778--810). -/
-theorem exists_isLeftCanonical_blockTensor_eq_toTensorFromBlocks
+theorem exists_isLeftCanonical_block_eq_toTensorFromBlocks
     {d D s p : ℕ} {dim' : Fin s → ℕ} (A : MPSTensor d D) (hp : 0 < p)
-    (B : (k : Fin s) → MPSTensor (blockPhysDim d p) (dim' k))
+    (B : (k : Fin s) → MPTensor (Fin p → Fin d) (Fin (dim' k)))
     (ν : Fin s → ℂ) (hν : ∀ k, ‖ν k‖ = 1)
     (period : Fin s → ℕ) (hPer : ∀ k, IsPeriodic (period k) (B k))
-    (hSame : SameMPV₂Pos (blockTensor A p) (toTensorFromBlocks ν B)) :
+    (hSame : SameMPV₂Pos (Kraus.block A p) (toTensorFromBlocks ν B)) :
     ∃ R : MPSTensor d (∑ k, dim' k),
-      IsLeftCanonical R ∧ blockTensor R p = toTensorFromBlocks ν B := by
+      IsLeftCanonical R ∧ Kraus.block R p = toTensorFromBlocks ν B := by
   classical
   have hν0 (k : Fin s) : ν k ≠ 0 := Complex.ne_zero_of_norm_eq_one (hν k)
   -- group the target into a basis of periodic tensors with unit-modulus weights
@@ -543,7 +540,7 @@ theorem exists_isLeftCanonical_blockTensor_eq_toTensorFromBlocks
   obtain ⟨fdim, C, Y, hPerC, hYY, hY'Y, hYconj, hlift⟩ :=
     exists_unitary_stepOrbit_decomposition_toTensorFromBlocks A₁ period₁ hPer₁ hp
   have hSameC : SameMPV₂Pos (toTensorFromBlocks (fun _ ↦ 1) C) (toTensorFromBlocks ν B) := by
-    have hCY : SameMPV₂Pos (blockTensor (toTensorFromBlocks (fun _ ↦ 1) A₁) p)
+    have hCY : SameMPV₂Pos (Kraus.block (toTensorFromBlocks (fun _ ↦ 1) A₁) p)
         (toTensorFromBlocks (fun _ ↦ 1) C) := by
       apply sameMPV₂Pos_of_coisometry_reconstruction _ _ Yᴴ
         (by simpa only [Matrix.conjTranspose_conjTranspose] using hY'Y)
@@ -577,14 +574,14 @@ theorem exists_isLeftCanonical_blockTensor_eq_toTensorFromBlocks
         rw [← Matrix.mul_assoc T Tᴴ, hTT, Matrix.one_mul]
       _ = 1 := by rw [hA'TP, Matrix.mul_one, hT'T]
   · funext I
-    have hw : Kraus.wordOfBlock d p I ≠ [] := by
+    have hw : List.ofFn I ≠ [] := by
       intro h
       have := congrArg List.length h
-      simp only [Kraus.length_wordOfBlock, List.length_nil] at this
+      simp only [List.length_ofFn, List.length_nil] at this
       exact hp.ne' this
     have h := evalWord_eq_coisometry_reconstruction_of_ne_nil T hTT
-      (A := R) (B := A') (fun _ ↦ rfl) (Kraus.wordOfBlock d p I) hw
-    change blockTensor R p I = Tᴴ * blockTensor A' p I * T at h
+      (A := R) (B := A') (fun _ ↦ rfl) (List.ofFn I) hw
+    change Kraus.block R p I = Tᴴ * Kraus.block A' p I * T at h
     rw [h, hA'block, hMatch]
     simp only [T, Matrix.conjTranspose_mul, Matrix.mul_assoc]
     rw [← Matrix.mul_assoc Yᴴ Y, hY'Y, Matrix.one_mul, ← Matrix.mul_assoc Wᴴ W, hW'W,
@@ -603,17 +600,17 @@ theorem exists_isLeftCanonical_transferMap_eq_pow_of_isPRefinable
   classical
   obtain ⟨A, W, hW, hTransfer, hSame⟩ :=
     pRefinementCanonicalization_pullback (toTensorFromBlocks μ B) p hRefine
-  let C : (k : Fin r) → MPSTensor (blockPhysDim d p) (dim k) :=
+  let C : (k : Fin r) → MPTensor (Fin p → Fin d) (Fin (dim k)) :=
     fun k τ ↦ ∑ σ, W τ σ • B k σ
   have hLetters : (fun τ ↦ ∑ σ, W τ σ • toTensorFromBlocks μ B σ) = toTensorFromBlocks μ C :=
     funext (toTensorFromBlocks_sum_smul μ B W)
-  have hTarget : SameMPV₂Pos (blockTensor A p) (toTensorFromBlocks μ C) := by
+  have hTarget : SameMPV₂Pos (Kraus.block A p) (toTensorFromBlocks μ C) := by
     rw [← hLetters]
     exact fun N _ σ ↦ (hSame N σ).symm
-  obtain ⟨R, hR, hRoot⟩ := exists_isLeftCanonical_blockTensor_eq_toTensorFromBlocks A hp C μ hμ
+  obtain ⟨R, hR, hRoot⟩ := exists_isLeftCanonical_block_eq_toTensorFromBlocks A hp C μ hμ
     period (fun k ↦ isPeriodic_kraus_isometry (B k) W hW (hPer k)) hTarget
   refine ⟨R, hR, ?_⟩
-  rw [← Kraus.transferMap_blockTensor, hRoot, ← hLetters, hTransfer]
+  rw [← Kraus.transferMap_block, hRoot, ← hLetters, hTransfer]
 
 /-- **Corrected forward implication of Theorem 4.1.** A `p`-refinable direct
 sum of left-canonical periodic blocks with unit-modulus weights has a
@@ -648,7 +645,6 @@ map multiplies by `16`, so it has no channel square root. See
 -/
 
 open scoped Matrix BigOperators
-open Kraus (blockTensor)
 
 namespace MPSTensor
 
@@ -698,22 +694,21 @@ private noncomputable def refinementScalarCounterexample_irreducibleForm :
 /-- The target family has a two-site refinement with root letter two. -/
 private theorem refinementScalarCounterexample_refinable :
     IsPRefinable refinementScalarCounterexample 2 := by
-  apply isPRefinable_of_transferMap_eq_blockTensor refinementScalarCounterexample rootTensor
+  apply isPRefinable_of_transferMap_eq_block refinementScalarCounterexample rootTensor
     (by norm_num)
-  have hTensor : refinementScalarCounterexample = blockTensor rootTensor 2 := by
+  have hTensor : refinementScalarCounterexample =
+      Kraus.reindexPhysical (Equiv.ofUnique (Fin 1) (Fin 2 → Fin 1)) (Kraus.block rootTensor 2) := by
     funext i
-    have hw : Kraus.wordOfBlock 1 2 i = List.replicate 2 (0 : Fin 1) := by
-      have hdecode : Kraus.decodeBlock 1 2 i = fun _ => (0 : Fin 1) :=
-        Subsingleton.elim _ _
-      simp only [Kraus.wordOfBlock, hdecode, List.ofFn_const]
+    have hw : Equiv.ofUnique (Fin 1) (Fin 2 → Fin 1) i = fun _ => (0 : Fin 1) :=
+      Subsingleton.elim _ _
     change (4 : ℂ) • (1 : Matrix (Fin 1) (Fin 1) ℂ) =
-      Kraus.evalWord rootTensor (Kraus.wordOfBlock 1 2 i)
-    rw [hw, Kraus.evalWord_replicate]
+      Kraus.evalWord rootTensor (List.ofFn (Equiv.ofUnique (Fin 1) (Fin 2 → Fin 1) i))
+    rw [hw, List.ofFn_const, Kraus.evalWord_replicate]
     ext a b
     fin_cases a
     fin_cases b
     norm_num [rootTensor, pow_two, Matrix.mul_apply]
-  exact congrArg Kraus.transferMap hTensor
+  rw [hTensor, Kraus.transferMap_reindexPhysical_equiv]
 
 /-- The target transfer map has no channel square root. -/
 private theorem refinementScalarCounterexample_not_divisible :
