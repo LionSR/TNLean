@@ -132,7 +132,8 @@ private theorem pairEquiv_snd {κ : ℕ} (e : (Fin 2 → Fin κ)) :
     (pairEquiv κ e).2 = e 1 := rfl
 
 /-- A tensor read through its polar decomposition: `B^a = ∑_y ⟨a|V|y⟩ P^y`. -/
-private theorem eq_sum_polarIsoMatrix_smul {m : ℕ} (B : MPSTensor m D) (a : Fin m) :
+private theorem eq_sum_polarIsoMatrix_smul {α : Type*} [Fintype α] (B : MPTensor α (Fin D))
+    (a : α) :
     B a = ∑ y, polarIsoMatrix B a y • polarPosTensor B y := by
   conv_lhs => rw [← rotatePhysical_polarIsoMatrix_polarPosTensor B]
   rfl

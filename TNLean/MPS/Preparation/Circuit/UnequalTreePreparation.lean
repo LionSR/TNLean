@@ -292,9 +292,9 @@ theorem exists_isMeasurementConversion_blockIsometryState (d s c : ℕ) [NeZero 
     exact blockIsometryState_eq_mulVec hd hN hr hdig A ω
       (U := fun b => treeBlockOp (hT b) (cfgPolarIso A) (mergeIso A) (ι₀ b) enc) (fun b l r τ => by
         rw [hroot, treeBlockOp_apply (hT b)
-          (fun m hm => isIsometry_cfgPolarIso A (hinj m hm))
+          (fun m hm => isIsometry_polarIsoMatrix_of_isInjective (hinj m hm))
           (fun m₁ m₂ hm₁ _ => isIsometry_mergeIso A (hinj _ (by omega)))
-          (fun _ _ hn τ x => cfgPolarIso_split A hn τ x) (hι₀ b) enc.injective]
+          (fun _ _ hn τ x => polarIsoMatrix_block_split A hn τ x) (hι₀ b) enc.injective]
         rfl) hW x
   rw [hψ]
   exact ⟨v₀, hprep⟩

@@ -80,7 +80,7 @@ private theorem exists_polarForest {d D s h c M N : ℕ} (A : MPSTensor d D)
     ∃ 𝓜 : UnequalMERA d D c h N, 𝓜.state = blockIsometryState A ω hN := by
   classical
   choose T hT using fun k =>
-    exists_isometryTree_matrix_eq_cfgPolarIso A hs hinj h (ℓ k) c (hlower k) (hupper k)
+    exists_isometryTree_matrix_eq_polarIsoMatrix_block A hs hinj h (ℓ k) c (hlower k) (hupper k)
   exact UnequalMERA.exists_of_trees_eq_blockIsometryState hD A hM hN T hT ω hω
 
 /-- **Every-length bounded-dimension MERA approximation.** For a normal tensor, there are

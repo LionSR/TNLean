@@ -153,7 +153,7 @@ theorem exists_isMeasurementConversion_sum_blockIsometryState
     have hex : e x = finProdFinEquiv (l, r) := by
       apply (virtualPairEquiv D).injective
       simpa [virtualPairEquiv] using hx
-    simpa only [hex, cfgPolarIso, virtualPairEquiv, Equiv.symm_apply_apply] using hu
+    simpa only [hex, virtualPairEquiv, Equiv.symm_apply_apply] using hu
   obtain ⟨W, hWu, hW⟩ := exists_pairFamilyUnitary hdig hdig₀ ω hω
   obtain ⟨u, -, hud, huop⟩ := isUnitaryCircuitOn_pairLayerOp hN hr fun _ => hK W hWu
   set seed := windowGHZState hN hr (Function.extend dig₀ α 0)

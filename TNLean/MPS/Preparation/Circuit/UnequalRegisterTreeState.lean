@@ -724,7 +724,7 @@ theorem treeBlockOp_apply_supportedCfgPolarIso {d D χ s h n : ℕ} [NeZero d] [
     (x : Fin χ) (τ : Cfg d n) :
     treeBlockOp hT (supportedCfgPolarIso A e) (supportedMergeIso A e) ι₀ enc τ
       (placeCfg (fun p : Fin (2 ^ 0) => nodeWindow hT 0 p) fun _ => ι₀ x) =
-        cfgPolarIso A n τ (e x) := by
+        polarIsoMatrix (Kraus.block A n) τ (e x) := by
   exact treeBlockOp_apply hT (fun m hm => isIsometry_supportedCfgPolarIso (hinj m hm))
     (fun m₁ m₂ hm₁ hm₂ => isIsometry_supportedMergeIso (hinj m₁ hm₁) (hinj m₂ hm₂)
       (hinj _ (by omega)))
@@ -757,7 +757,7 @@ theorem exists_rounds_blockLayerOp_supportedPolarTree (d s c : ℕ) [NeZero d] [
               R.kraus KrausGate.ev m *ᵥ v = a • ((blockLayerOp hN U) *ᵥ v)) ∧
           ∀ b x τ, U b τ
             (placeCfg (fun p : Fin (2 ^ 0) => nodeWindow (hT b) 0 p) fun _ => ι₀ b x) =
-              cfgPolarIso A (ℓ b) τ (e x) := by
+              polarIsoMatrix (Kraus.block A (ℓ b)) τ (e x) := by
   obtain ⟨C, hC⟩ := exists_rounds_blockLayerOp_treeBlockOp d s c
   refine ⟨C, fun {D χ} A e hinj h {M N} _ ℓ hN w hT hbound ι₀ enc hι₀ henc => ?_⟩
   obtain ⟨R, hRf, hRd, himpl, hscalar⟩ := hC (supportedCfgPolarIso A e) (supportedMergeIso A e)

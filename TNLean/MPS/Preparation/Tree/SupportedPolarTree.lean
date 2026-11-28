@@ -40,13 +40,13 @@ variable {d D χ : ℕ}
 /-- The polar factor restricted to an enumerated set of supported bond pairs. -/
 noncomputable def supportedCfgPolarIso (A : MPSTensor d D)
     (e : Fin χ ↪ Fin (D * D)) (n : ℕ) : Matrix (Cfg d n) (Fin χ) ℂ :=
-  (cfgPolarIso A n).submatrix id e
+  (polarIsoMatrix (Kraus.block A n)).submatrix id e
 
-private theorem cfgPolarIso_eq_zero_of_notMem {A : MPSTensor d D} {n : ℕ}
+private theorem polarIsoMatrix_block_eq_zero_of_notMem {A : MPSTensor d D} {n : ℕ}
     {e : Fin χ ↪ Fin (D * D)}
     (hinj : IsInjectiveOn (Kraus.block A n) (Set.range (virtualPairEquiv D ∘ e)))
     {x : Fin (D * D)} (hx : x ∉ Set.range e) (τ : Cfg d n) :
-    cfgPolarIso A n τ x = 0 := by
+    polarIsoMatrix (Kraus.block A n) τ x = 0 := by
   classical
   have hxS : virtualPairEquiv D x ∉ Set.range (virtualPairEquiv D ∘ e) := by
     rintro ⟨y, hy⟩
@@ -66,25 +66,16 @@ theorem isIsometry_supportedCfgPolarIso {A : MPSTensor d D} {n : ℕ}
   ext x y
   rw [Matrix.mul_apply, Matrix.one_apply]
   simp only [supportedCfgPolarIso, Matrix.conjTranspose_apply, Matrix.submatrix_apply,
-    id_eq, cfgPolarIso]
-  rw [.sum_comp (fun i =>
-    star (polarIsoMatrix (Kraus.block A n) i (e x)) *
-      polarIsoMatrix (Kraus.block A n) i (e y))]
+    id_eq]
   rw [MPSTensor.sum_star_polarIsoMatrix_mul hinj]
   simp only [e.injective.eq_iff, Set.mem_range, Function.comp_apply]
   simp
 
-private theorem pairIndexEquiv_symm_fst (κ : ℕ) (a b : Fin κ) :
-    ((IsometryTree.pairIndexEquiv κ).symm (a, b)) 0 = a := by
-  change (IsometryTree.pairIndexEquiv κ
-    ((IsometryTree.pairIndexEquiv κ).symm (a, b))).1 = a
-  rw [Equiv.apply_symm_apply]
+private theorem piFinTwoEquiv_symm_zero (κ : ℕ) (a b : Fin κ) :
+    ((piFinTwoEquiv fun _ => Fin κ).symm (a, b)) 0 = a := rfl
 
-private theorem pairIndexEquiv_symm_snd (κ : ℕ) (a b : Fin κ) :
-    ((IsometryTree.pairIndexEquiv κ).symm (a, b)) 1 = b := by
-  change (IsometryTree.pairIndexEquiv κ
-    ((IsometryTree.pairIndexEquiv κ).symm (a, b))).2 = b
-  rw [Equiv.apply_symm_apply]
+private theorem piFinTwoEquiv_symm_one (κ : ℕ) (a b : Fin κ) :
+    ((piFinTwoEquiv fun _ => Fin κ).symm (a, b)) 1 = b := rfl
 
 /-- The polar merge restricted to the supported input and the supported outputs of its
 children. The two output labels are encoded in the same order as an isometry tree. -/
@@ -92,7 +83,7 @@ noncomputable def supportedMergeIso (A : MPSTensor d D)
     (e : Fin χ ↪ Fin (D * D)) (n₁ n₂ : ℕ) :
     Matrix (Fin 2 → Fin χ) (Fin χ) ℂ := fun t x =>
   mergeIso A n₁ n₂
-    ((IsometryTree.pairIndexEquiv (D * D)).symm
+    ((piFinTwoEquiv fun _ => Fin (D * D)).symm
       (e (t 0), e (t 1))) (e x)
 
 /-- The supported polar factor of a joined block factors exactly through its two supported
@@ -107,20 +98,20 @@ theorem supportedCfgPolarIso_append {A : MPSTensor d D} {n₁ n₂ : ℕ}
         supportedCfgPolarIso A e n₂ τ₂ (t 1) *
         supportedMergeIso A e n₁ n₂ t x := by
   classical
-  change cfgPolarIso A (n₁ + n₂) (Fin.append τ₁ τ₂) (e x) = _
-  rw [cfgPolarIso_append, ← (IsometryTree.pairIndexEquiv (D * D)).symm.sum_comp,
-    ← (IsometryTree.pairIndexEquiv χ).symm.sum_comp, Fintype.sum_prod_type,
+  change polarIsoMatrix (Kraus.block A (n₁ + n₂)) (Fin.append τ₁ τ₂) (e x) = _
+  rw [polarIsoMatrix_block_append, ← (piFinTwoEquiv fun _ => Fin (D * D)).symm.sum_comp,
+    ← (piFinTwoEquiv fun _ => Fin χ).symm.sum_comp, Fintype.sum_prod_type,
     Fintype.sum_prod_type]
   simp only [supportedCfgPolarIso, Matrix.submatrix_apply, id_eq, supportedMergeIso,
-    pairIndexEquiv_symm_fst, pairIndexEquiv_symm_snd]
+    piFinTwoEquiv_symm_zero, piFinTwoEquiv_symm_one]
   symm
   apply Fintype.sum_of_injective e e.injective
   · intro a ha
-    simp [cfgPolarIso_eq_zero_of_notMem h₁ ha]
+    simp [polarIsoMatrix_block_eq_zero_of_notMem h₁ ha]
   · intro a
     apply Fintype.sum_of_injective e e.injective
     · intro b hb
-      simp [cfgPolarIso_eq_zero_of_notMem h₂ hb]
+      simp [polarIsoMatrix_block_eq_zero_of_notMem h₂ hb]
     · intro b
       rfl
 
