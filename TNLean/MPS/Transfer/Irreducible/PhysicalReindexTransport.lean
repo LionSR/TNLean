@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Transfer.Irreducible.BlockingInfrastructure
-import QICLean.Channel.Irreducible.InvariantProjection
+import QICLean.Kraus.PrimitiveFixedPoint.Blocking
 
 /-!
 # Physical reindexing along alphabet equivalences
