@@ -56,7 +56,7 @@ triplet for every \(N\ge2\). See
 ## Main results
 * `MPSTensor.akltBondTerm_shift_eq_parentInteraction` :
   \(\tfrac12(h+\tfrac23)\) is the two-site parent interaction
-* `MPSTensor.akltSpinTwoES_eq_orthogonal_groundSpaceES` : the total-spin-2
+* `MPSTensor.akltSpinTwoES_eq_orthogonal_map_groundSpace` : the total-spin-2
   subspace is the orthogonal complement of the two-site ground space
 * `MPSTensor.akltBondTerm_shift_eq_spinTwo_starProjection` :
   \(\tfrac12(h+\tfrac23)=P^{(2)}\)
@@ -167,9 +167,9 @@ theorem akltBondTerm_shift_eq_parentInteraction :
       parentInteraction akltTensor 2 := by
   set Q := 𝐐 with hQ
   set e := WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin 3) 2)
-  set G := groundSpaceES akltTensor 2
+  set G := ((groundSpace akltTensor 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)
   have hker : ∀ u, u ∈ G ↔ Q (e u) = 0 := fun u => by
-    rw [mem_groundSpaceES_iff, mem_aklt_groundSpace_two_iff_shift]
+    rw [mem_map_groundSpace_iff, mem_aklt_groundSpace_two_iff_shift]
   have hperp : ∀ v, e.symm (Q v) ∈ Gᗮ := by
     intro v
     rw [Submodule.mem_orthogonal]
@@ -236,8 +236,9 @@ private lemma spinExchange_eq_self_iff (v : NSiteSpace (Fin 3) 2) :
 
 /-- The total-spin-\(2\) subspace is the orthogonal complement of the two-site local
 ground space of `akltTensor`. -/
-theorem akltSpinTwoES_eq_orthogonal_groundSpaceES :
-    akltSpinTwoES = (groundSpaceES akltTensor 2)ᗮ := by
+theorem akltSpinTwoES_eq_orthogonal_map_groundSpace :
+    akltSpinTwoES = (((groundSpace akltTensor 2).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap))ᗮ := by
   set e := WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin 3) 2)
   ext v
   rw [akltSpinTwoES, Submodule.mem_map_equiv, LinearEquiv.symm_symm,
@@ -261,7 +262,7 @@ theorem akltBondTerm_shift_eq_spinTwo_starProjection :
         akltSpinTwoES.starProjection.toLinearMap ∘ₗ
           (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin 3) 2)).symm.toLinearMap := by
   rw [akltBondTerm_shift_eq_parentInteraction, parentInteraction,
-    akltSpinTwoES_eq_orthogonal_groundSpaceES]
+    akltSpinTwoES_eq_orthogonal_map_groundSpace]
 
 /-! ### The periodic Hamiltonian -/
 

@@ -36,8 +36,8 @@ theorem reindex_piKronecker_blockKron
   symm
   exact Matrix.ext fun σ τ => by
     simpa [Matrix.piKronecker_apply, MPSTensor.blockKron, Matrix.reindex_apply,
-      Kraus.blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry, Function.comp,
-      Fintype.prod_prod_type] using
+      Kraus.blockedConfigEquiv, Equiv.arrowCongr, Kraus.blockConfigEquiv_apply,
+      Function.comp_apply, Fintype.prod_prod_type] using
       (finProdFinEquiv.prod_comp (fun v : Fin (N * k) =>
         Q (Kraus.blockedConfigEquiv d N k σ v)
           (Kraus.blockedConfigEquiv d N k τ v)))

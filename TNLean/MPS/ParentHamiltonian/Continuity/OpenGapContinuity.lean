@@ -61,9 +61,9 @@ theorem exists_uniform_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap
     ∃ δ : ℝ, 0 < δ ∧ ∀ x ∈ K, ∀ ν : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
         (parentChainInteraction (toTensorFromBlocks (μ x) (A x)) R N).hamiltonian) ν →
       ν = 0 ∨ (δ : ℂ) ≤ ν := by
-  have hProjR := continuous_groundSpaceES_toTensorFromBlocks_starProjection_family
+  have hProjR := continuous_map_groundSpace_toTensorFromBlocks_starProjection_family
     μ A hμ hA R (fun x ↦ wordTupleSpanTop_of_ge (A x) hS (hSpan x) (by omega))
-  have hProjN := continuous_groundSpaceES_toTensorFromBlocks_starProjection_family
+  have hProjN := continuous_map_groundSpace_toTensorFromBlocks_starProjection_family
     μ A hμ hA N (fun x ↦ wordTupleSpanTop_of_ge (A x) hS (hSpan x) (by omega))
   exact hK.exists_uniform_forall_hasEigenvalue
     (H := fun x ↦ (parentChainInteraction (toTensorFromBlocks (μ x) (A x)) R N).hamiltonian)
@@ -132,9 +132,9 @@ theorem eventually_hamiltonian_parentChainInteraction_toTensorFromBlocks_gap_fix
     ∀ᶠ x in 𝓝 x₀, ∀ ν : ℂ, Module.End.HasEigenvalue (Matrix.toEuclideanLin
         (parentChainInteraction (toTensorFromBlocks (μ x) (A x)) R N).hamiltonian) ν →
       ν = 0 ∨ (δ : ℂ) ≤ ν := by
-  have hProjR := continuous_groundSpaceES_toTensorFromBlocks_starProjection_family
+  have hProjR := continuous_map_groundSpace_toTensorFromBlocks_starProjection_family
     μ A hμ hA R (fun x ↦ wordTupleSpanTop_of_ge (A x) hS (hSpan x) (by omega))
-  have hProjN := continuous_groundSpaceES_toTensorFromBlocks_starProjection_family
+  have hProjN := continuous_map_groundSpace_toTensorFromBlocks_starProjection_family
     μ A hμ hA N (fun x ↦ wordTupleSpanTop_of_ge (A x) hS (hSpan x) (by omega))
   exact ManyBody.eventually_forall_hasEigenvalue
     (H := fun x ↦ (parentChainInteraction (toTensorFromBlocks (μ x) (A x)) R N).hamiltonian)

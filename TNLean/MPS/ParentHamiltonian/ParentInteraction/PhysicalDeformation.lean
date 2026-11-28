@@ -158,12 +158,13 @@ theorem groundSpace_rotatePhysical (Λ : Matrix (Fin d) (Fin d) ℂ) (A : MPSTen
 
 /-- The Hilbert-space realization of the local ground space of the deformed tensor is the
 image under the tensor power of the realization for the original tensor. -/
-theorem groundSpaceES_rotatePhysical (Λ : Matrix (Fin d) (Fin d) ℂ) (A : MPSTensor d D)
+theorem map_groundSpace_rotatePhysical (Λ : Matrix (Fin d) (Fin d) ℂ) (A : MPSTensor d D)
     (L : ℕ) :
-    groundSpaceES (rotatePhysical Λ A) L =
-      (groundSpaceES A L).map (Matrix.toEuclideanLin (onSiteTensorPow L Λ)) := by
+    ((groundSpace (rotatePhysical Λ A) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
+      ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map (Matrix.toEuclideanLin
+          (onSiteTensorPow L Λ)) := by
   simpa only [onSiteTensorPow_eq_piKronecker] using
-    groundSpaceES_rotatePhysical_rectangular Λ A L
+    map_groundSpace_rotatePhysical_rectangular Λ A L
 
 /-! ### The deformed parent interaction -/
 
@@ -175,7 +176,7 @@ structure IsParentInteraction (A : MPSTensor d D) (L : ℕ)
   /-- The interaction is hermitian and positive semidefinite. -/
   isPositive : h.IsPositive
   /-- The kernel of the interaction is the local ground space. -/
-  ker_eq : LinearMap.ker h = groundSpaceES A L
+  ker_eq : LinearMap.ker h = ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)
 
 /-- The deformed interaction
 \(h' = ({\Lambda^{-1}}^\dagger)^{\otimes L}\, h\, (\Lambda^{-1})^{\otimes L}\) of
@@ -216,9 +217,10 @@ lemma toEuclideanLin_onSiteTensorPow_mul_apply (L : ℕ) (Λ Λ' : Matrix (Fin d
 tensor: \(\ker h' = \Lambda^{\otimes L}\ker h = \mathcal G_L(\Lambda A)\). -/
 theorem ker_toEuclideanLin_deformedInteraction (L : ℕ) {Λ : Matrix (Fin d) (Fin d) ℂ}
     (hΛ : IsUnit Λ) {A : MPSTensor d D} {h : Matrix (Cfg d L) (Cfg d L) ℂ}
-    (hker : LinearMap.ker (Matrix.toEuclideanLin h) = groundSpaceES A L) :
+    (hker : LinearMap.ker (Matrix.toEuclideanLin h) = ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap)) :
     LinearMap.ker (Matrix.toEuclideanLin (deformedInteraction L Λ h)) =
-      groundSpaceES (rotatePhysical Λ A) L := by
+      ((groundSpace (rotatePhysical Λ A) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   have hdet : IsUnit Λ.det := (Matrix.isUnit_iff_isUnit_det Λ).1 hΛ
   have hleft : ∀ v : EuclideanSpace ℂ (Cfg d L),
       Matrix.toEuclideanLin (onSiteTensorPow L Λ)
@@ -239,7 +241,7 @@ theorem ker_toEuclideanLin_deformedInteraction (L : ℕ) {Λ : Matrix (Fin d) (F
     rw [toEuclideanLin_onSiteTensorPow_mul_apply, ← Matrix.conjTranspose_mul,
       Matrix.nonsing_inv_mul Λ hdet, Matrix.conjTranspose_one, onSiteTensorPow_one,
       Matrix.toEuclideanLin, Matrix.toLpLin_one, LinearMap.id_apply]
-  rw [groundSpaceES_rotatePhysical, ← hker]
+  rw [map_groundSpace_rotatePhysical, ← hker]
   ext v
   simp only [LinearMap.mem_ker, toEuclideanLin_deformedInteraction, LinearMap.comp_apply,
     Submodule.mem_map]

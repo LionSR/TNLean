@@ -102,7 +102,8 @@ theorem exists_positive_parent_finite_and_quasiLocal_gap_of_leftCanonical_of_pos
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h.PosSemidef ∧
       (∀ N, R ≤ N → LinearMap.ker
-        (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) = groundSpaceES B N) ∧
+        (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) = ((groundSpace B N).map
+            (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) ∧
       quasiLocalExpectation A hA hρ hFix htr ∈
         parentGroundStateFace h ∧
       ∃ δ : ℝ, 0 < δ ∧
@@ -173,7 +174,8 @@ theorem exists_positive_parent_interaction_quasiLocal_gap_of_leftCanonical_of_po
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h.PosSemidef ∧
       (∀ N, R ≤ N → LinearMap.ker
-        (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) = groundSpaceES B N) ∧
+        (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) = ((groundSpace B N).map
+            (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) ∧
       quasiLocalExpectation A hA hρ hFix htr ∈
         parentGroundStateFace h ∧
       ∃ γ : ℝ, 0 < γ ∧
@@ -258,7 +260,8 @@ theorem exists_positive_parent_finite_and_quasiLocal_gap_of_physical_isometry
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h.PosSemidef ∧
       (∀ N, R ≤ N → LinearMap.ker
-        (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) = groundSpaceES B N) ∧
+        (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) = ((groundSpace B N).map
+            (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) ∧
       quasiLocalExpectation A hA hρ hFix htr ∈
         parentGroundStateFace h ∧
       ∃ δ : ℝ, 0 < δ ∧

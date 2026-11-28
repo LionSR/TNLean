@@ -68,13 +68,13 @@ theorem exists_hamiltonian_parentChainInteraction_uniform_gap_of_isNBlkInjective
         hl hInjB hε hC3 N n (Finset.mem_range.mp hn))
   have hShortKer : ∀ N, l + 1 ≤ N →
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A (p + 1) N).hamiltonian) =
-          groundSpaceES A N :=
-    fun N hN => ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_isNBlkInjective
+          ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) :=
+    fun N hN => ker_hamiltonian_parentChainInteraction_eq_map_groundSpace_of_isNBlkInjective
       hA hp (by omega)
   have hLongKer : ∀ N, l + 1 ≤ N →
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A (l + 1) N).hamiltonian) =
-          groundSpaceES A N :=
-    fun N hN => ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_isNBlkInjective
+          ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) :=
+    fun N hN => ker_hamiltonian_parentChainInteraction_eq_map_groundSpace_of_isNBlkInjective
       (Kraus.isNBlkInjective_of_le hp hA hlp) hl.le hN
   obtain ⟨κ, C, hκ, _hC, hLocal, _hUpper⟩ :=
     exists_pos_toMatrix'_parentInteraction_hamiltonian_parentChainInteraction_comparison
@@ -144,12 +144,12 @@ theorem eventually_hamiltonian_parentRingInteraction_gap_of_strict_openGap_of_is
     (Filter.Eventually.of_forall fun x ↦
       posSemidef_hamiltonian_parentChainInteraction (A x) (p + 1) (m + p))
     (by
-      refine (continuous_groundSpaceES_starProjection_family A hA (m + p) fun x ↦
+      refine (continuous_map_groundSpace_starProjection_family A hA (m + p) fun x ↦
         Kraus.isNBlkInjective_of_le hp (hInj x) (by omega : p ≤ m + p)).continuousAt.congr
         (Filter.Eventually.of_forall fun x ↦ ?_)
       dsimp only
       rw [ManyBody.groundSpace_zero,
-        ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_isNBlkInjective
+        ker_hamiltonian_parentChainInteraction_eq_map_groundSpace_of_isNBlkInjective
           (hInj x) hp (by omega)])
     hgap hγ'upper
   have hnum' : (((p + 1 : ℕ) : ℝ) - 1) ^ 2 < (m : ℝ) * γ' := by

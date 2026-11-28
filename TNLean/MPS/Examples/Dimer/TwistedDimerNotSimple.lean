@@ -89,25 +89,33 @@ private lemma blockTensor_eq_reindexPhysical_finBlock (M : MPOTensor d D) (L : �
     Kraus.reindexPhysical, Kraus.block_apply, Kraus.evalWord_reindexPhysical, List.map_ofFn,
     Function.comp_def, Equiv.arrowCongr_apply]
 
+/-- Relabelling the physical alphabet commutes with identifying equal bond dimensions. -/
+private lemma reindexPhysical_cast {α α' : Type*} (e : α' ≃ α) {n m : ℕ} (h : n = m)
+    (X : MPTensor α (Fin n)) :
+    Kraus.reindexPhysical e (cast (congr_arg (fun k ↦ MPTensor α (Fin k)) h) X) =
+      cast (congr_arg (fun k ↦ MPTensor α' (Fin k)) h) (Kraus.reindexPhysical e X) := by
+  subst h
+  rfl
+
 namespace TwistedDimer
 
 /-- The literal canonical form of the $L$-site blocking of the twisted dimer: the one-site
-canonical form `canonicalFormData`, relabelled to the alphabet `Fin (8 * 8)`, blocked by `L`
-and relabelled to the blocked pair alphabet.
+canonical form `canonicalFormData`, relabelled to the alphabet `Fin (8 * 8)` and blocked by `L`.
+The blocked pair-alphabet tensor is its relabelling along `blockedPairFinEquiv`
+(`blockTensor_eq_reindexPhysical_finBlock`).
 
 Source: arXiv:1606.00608, Section 2.3, lines 214--245, blocked as in lines
 317--345 (project example). -/
 def blockedCanonicalFormData (L : ℕ) (hL : 0 < L) :
     MPTensor.CPSVCanonicalFormData
-      (Kraus.reindexPhysical (blockedPairFinEquiv 8 L)
-        (Kraus.blockTensor (Kraus.reindexPhysical finProdFinEquiv.symm T) L)) :=
-  ((canonicalFormData.reindexPhysical finProdFinEquiv.symm).blockTensor L hL).reindexPhysical
-    (blockedPairFinEquiv 8 L)
+      (Kraus.blockTensor (Kraus.reindexPhysical finProdFinEquiv.symm T) L) :=
+  (canonicalFormData.reindexPhysical finProdFinEquiv.symm).blockTensor L hL
 
-/-- The retained blocks of the blocked canonical form are the blocked rescaled horizontal
-blocks. -/
+/-- The retained blocks of the blocked canonical form, relabelled to the blocked pair alphabet,
+are the blocked rescaled horizontal blocks. -/
 lemma blockedCanonicalFormData_blocks (L : ℕ) (hL : 0 < L) (k : Fin 2) :
-    (blockedCanonicalFormData L hL).blocks k = blockTensor (normalizedBlock k) L := by
+    Kraus.reindexPhysical (blockedPairFinEquiv 8 L) ((blockedCanonicalFormData L hL).blocks k) =
+      blockTensor (normalizedBlock k) L := by
   rw [blockTensor_eq_reindexPhysical_finBlock]
   rfl
 
@@ -116,18 +124,20 @@ contraction: the one-site physical-trace transfer vanishes
 (`physTraceTransfer_normalizedBlock_one`), and blocking raises it to a
 positive power. -/
 lemma physTraceTransfer_blockedCanonicalFormData_blocks_one (L : ℕ) (hL : 0 < L) :
-    physTraceTransfer ((blockedCanonicalFormData L hL).blocks (1 : Fin 2)) = 0 := by
-  rw [blockedCanonicalFormData_blocks, physTraceTransfer_blockTensor,
-    physTraceTransfer_normalizedBlock_one, zero_pow hL.ne']
+    physTraceTransfer (Kraus.reindexPhysical (blockedPairFinEquiv 8 L)
+      ((blockedCanonicalFormData L hL).blocks (1 : Fin 2))) = 0 := by
+  have h : physTraceTransfer (blockTensor (normalizedBlock 1) L) = 0 := by
+    rw [physTraceTransfer_blockTensor, physTraceTransfer_normalizedBlock_one, zero_pow hL.ne']
+  exact (congrArg physTraceTransfer (blockedCanonicalFormData_blocks L hL 1)).trans h
 
 /-- **The twisted quantum dimer is not simple** in the sense of
 arXiv:1606.00608, Definition 4.7, lines 815--822.
 
 Fix a positive blocking length $L$ and a BNT sector presentation $P$ of the
 blocked tensor. The BNT refinement of the blocked literal
-canonical form `blockedCanonicalFormData` is another presentation $Q$, whose
-representatives are chosen among the two blocked rescaled horizontal blocks.
-The blocked block $k = 1$ is a gauge-phase multiple of its class
+canonical form `blockedCanonicalFormData`, relabelled to the blocked pair alphabet, is another
+presentation $Q$, whose representatives are chosen among the two blocked rescaled horizontal
+blocks. The blocked block $k = 1$ is a gauge-phase multiple of its class
 representative, and its ket-against-bra contraction vanishes, so that
 representative has nilpotent contraction. By presentation independence
 (`bnt_basis_not_isNilpotent_iff`), $P$ also has a representative with
@@ -137,16 +147,15 @@ This is a project example, not a tensor stated in the source. -/
 theorem T_not_isSimple : ¬ IsSimple T := by
   rintro ⟨_, L, hL, P, hPres, hNonNil⟩
   rw [blockTensor_eq_reindexPhysical_finBlock] at hPres
+  let e := blockedPairFinEquiv 8 L
   let data := blockedCanonicalFormData L hL
   let ref := data.bntRefinement
-  have hQ : MPSTensor.IsBNTSectorPresentation _ ref.representativeSectorDecomposition :=
-    ref.isBNTSectorPresentation (show (0 : ℕ) < 2 by norm_num)
+  have hQ := (ref.isBNTSectorPresentation (show (0 : ℕ) < 2 by norm_num)).reindexPhysical e
   have hAll := (bnt_basis_not_isNilpotent_iff hPres hQ).mp hNonNil
   let k₁ : Fin data.r := (1 : Fin 2)
   apply hAll (data.classCopy k₁).1
   have hGauge : MPTensor.GaugePhaseEquiv
-      (cast (congr_arg (fun n ↦
-            MPTensor (Fin (Kraus.blockPhysDim 8 L) × Fin (Kraus.blockPhysDim 8 L)) (Fin n))
+      (cast (congr_arg (fun n ↦ MPTensor (Fin (Kraus.blockPhysDim (8 * 8) L)) (Fin n))
           (ref.copyDimEq k₁))
         (data.blocks (data.representativeIndex (data.classCopy k₁).1)))
       (data.blocks k₁) := by
@@ -154,11 +163,13 @@ theorem T_not_isSimple : ¬ IsSimple T := by
       Complex.ne_zero_of_norm_eq_one (ref.copyPhaseNorm k₁), fun i => ?_⟩
     rw [ref.blocksEqListedGaugeConj k₁ i, ref.regroupedBlocksEq k₁]
     simp only [smul_mul_assoc, mul_smul_comm]
-  have hNil : IsNilpotent (physTraceTransfer (data.blocks k₁)) := by
+  have hGauge' := (MPSTensor.gaugePhaseEquiv_reindexPhysical_equiv e _ _).2 hGauge
+  rw [reindexPhysical_cast e (ref.copyDimEq k₁)] at hGauge'
+  have hNil : IsNilpotent (physTraceTransfer (Kraus.reindexPhysical e (data.blocks k₁))) := by
     rw [physTraceTransfer_blockedCanonicalFormData_blocks_one]
     exact IsNilpotent.zero
   exact (isNilpotent_physTraceTransfer_cast_iff (ref.copyDimEq k₁) _).mp
-    ((isNilpotent_physTraceTransfer_iff_of_gaugePhaseEquiv hGauge).mpr hNil)
+    ((isNilpotent_physTraceTransfer_iff_of_gaugePhaseEquiv hGauge').mpr hNil)
 
 end TwistedDimer
 

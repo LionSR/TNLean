@@ -161,11 +161,7 @@ theorem changePhysicalBasis_apply_ne_eq_zero_of_mpo_two_eq_smul
     F.changePhysicalBasis_physicalCoordinateMatrix_isInjective hK
   change M (F.sectorFinEquiv.symm ⟨k, x⟩, F.sectorFinEquiv.symm ⟨h, y⟩) = 0
   apply Kraus.IsInjective.eq_zero_of_forall_trace_mul_eq_zero hM
-  intro p
-  set u := p.divNat
-  set v := p.modNat
-  change Matrix.trace
-    (M (F.sectorFinEquiv.symm ⟨k, x⟩, F.sectorFinEquiv.symm ⟨h, y⟩) * M (u, v)) = 0
+  rintro ⟨u, v⟩
   have h2 := congrFun (congrFun hmpo
     (Fin.cons (F.sectorFinEquiv.symm ⟨k, x⟩)
       (fun _ : Fin 1 ↦ u)))
@@ -201,11 +197,7 @@ theorem changePhysicalBasis_apply_eq_zero_of_not_isCyclicActiveSector
     F.changePhysicalBasis_physicalCoordinateMatrix_isInjective hK
   change M (F.sectorFinEquiv.symm ⟨k, x⟩, F.sectorFinEquiv.symm ⟨k, y⟩) = 0
   apply Kraus.IsInjective.eq_zero_of_forall_trace_mul_eq_zero hM
-  intro p
-  set u := p.divNat
-  set v := p.modNat
-  change Matrix.trace
-    (M (F.sectorFinEquiv.symm ⟨k, x⟩, F.sectorFinEquiv.symm ⟨k, y⟩) * M (u, v)) = 0
+  rintro ⟨u, v⟩
   have h2 := congrFun (congrFun hmpo
     (Fin.cons (F.sectorFinEquiv.symm ⟨k, x⟩)
       (fun _ : Fin 1 ↦ u)))
@@ -244,9 +236,7 @@ theorem changePhysicalBasis_mul_eq_zero_of_neighboringOperator_eq_zero
   have hM : Kraus.IsInjective M :=
     F.changePhysicalBasis_physicalCoordinateMatrix_isInjective hK
   apply Kraus.IsInjective.eq_zero_of_forall_trace_mul_eq_zero hM
-  intro p
-  set u := p.divNat
-  set v := p.modNat
+  rintro ⟨u, v⟩
   change Matrix.trace
     ((M (F.sectorFinEquiv.symm ⟨k, x⟩, F.sectorFinEquiv.symm ⟨k, y⟩) *
         M (F.sectorFinEquiv.symm ⟨h, a⟩, F.sectorFinEquiv.symm ⟨h, b⟩)) * M (u, v)) = 0

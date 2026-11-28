@@ -68,23 +68,23 @@ theorem eventually_hamiltonian_parentChainInteraction_gap
     (hN : ∀ x, Kraus.IsNBlkInjective (A x) N) {x₀ : X}
     {δ δ' : ℝ} (hδ' : δ' < δ)
     (hgap : ManyBody.groundSpace (parentChainInteraction (A x₀) R N).hamiltonian 0 =
-        groundSpaceES (A x₀) N ∧
+        ((groundSpace (A x₀) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ∧
       ∀ μ : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin (parentChainInteraction (A x₀) R N).hamiltonian) μ →
           μ = 0 ∨ (δ : ℂ) ≤ μ) :
     ∀ᶠ x in 𝓝 x₀,
       ManyBody.groundSpace (parentChainInteraction (A x) R N).hamiltonian 0 =
-          groundSpaceES (A x) N ∧
+          ((groundSpace (A x) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ∧
         ∀ μ : ℂ, Module.End.HasEigenvalue
           (Matrix.toEuclideanLin (parentChainInteraction (A x) R N).hamiltonian) μ →
             μ = 0 ∨ (δ' : ℂ) ≤ μ :=
   ManyBody.eventually_groundSpace_zero_eq_and_forall_hasEigenvalue
     (continuous_hamiltonian_parentChainInteraction_family A hA hR).continuousAt
     (Filter.Eventually.of_forall fun x ↦ posSemidef_hamiltonian_parentChainInteraction (A x) R N)
-    (continuous_groundSpaceES_starProjection_family A hA N hN).continuousAt
+    (continuous_map_groundSpace_starProjection_family A hA N hN).continuousAt
     (Filter.Eventually.of_forall fun x ↦ by
       rw [ManyBody.groundSpace_zero]
-      exact groundSpaceES_le_ker_hamiltonian_parentChainInteraction (A x) R N)
+      exact map_groundSpace_le_ker_hamiltonian_parentChainInteraction (A x) R N)
     hgap hδ'
 
 end MPSTensor
@@ -124,12 +124,12 @@ theorem eventually_hamiltonian_parentRingInteraction_gap_of_strict_openGap
     (Filter.Eventually.of_forall fun x ↦
       posSemidef_hamiltonian_parentChainInteraction (A x) 2 (m + 1))
     (by
-      refine (continuous_groundSpaceES_starProjection_family A hA (m + 1) fun x ↦
+      refine (continuous_map_groundSpace_starProjection_family A hA (m + 1) fun x ↦
         Kraus.isNBlkInjective_of_le one_pos (Kraus.isNBlkInjective_one_of_isInjective (hInj x))
           (by omega)).continuousAt.congr (Filter.Eventually.of_forall fun x ↦ ?_)
       dsimp only
       rw [ManyBody.groundSpace_zero,
-        ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_isNBlkInjective
+        ker_hamiltonian_parentChainInteraction_eq_map_groundSpace_of_isNBlkInjective
           (Kraus.isNBlkInjective_one_of_isInjective (hInj x)) (by omega) (by omega)])
     hgap hγ'upper
   have hnum' : ((2 : ℝ) - 1) ^ 2 < (m : ℝ) * γ' := by

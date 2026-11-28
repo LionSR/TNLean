@@ -61,6 +61,12 @@ resulting simultaneous span transfers back at the same length.
 This is the common-blocking step in Garre-Rubio, Lootens and Molnár,
 arXiv:2203.12563v3, Appendix A, using the block-injectivity theorem of
 arXiv:1606.00608, lines 317--345.
+
+**Bridge (T.2b):** The proof of `exists_positive_wordTupleSpanTop_of_isInjective` and
+`toMPSTensor_blockTensor_apply` still reads an operator tensor through `MPOTensor.toMPSTensor`,
+because the Fin-encoded blocking `Kraus.blockTensor` (with `MPOTensor.toMPSTensor_blockTensor`,
+`MPOTensor.toMPSTensor_blockTwo`) is stated on the alphabet `Fin (d * d)`. The bridge is removed
+when the blocking moves to `Kraus.block` (step T.2b of `docs/tensor_type_unification.md`).
 -/
 
 open MPTensor
@@ -74,16 +80,16 @@ open Matrix
 
 namespace MPSTensor.MultiBlockCompression
 
-variable {ι : Type*} [DecidableEq ι] {d d' DB : ℕ} {D : ι → ℕ} {S : Finset ι}
+variable {ι : Type*} [DecidableEq ι] {α α' : Type*} {DB : ℕ} {D : ι → ℕ} {S : Finset ι}
 
 /-- The evaluation of a nonempty word in the zero family vanishes. -/
 private theorem evalWord_zero_of_ne_nil {n : Type*} [Fintype n] [DecidableEq n]
-    {w : List (Fin d)} (hw : w ≠ []) :
+    {w : List α} (hw : w ≠ []) :
     Kraus.evalWord (fun _ => (0 : Matrix n n ℂ)) w = 0 := by
   obtain ⟨i, w, rfl⟩ := List.exists_cons_of_ne_nil hw
   simp [Kraus.evalWord]
 
-variable {B : MPSTensor d DB} {C : ∀ s, MPSTensor d (D s)}
+variable {B : MPTensor α (Fin DB)} {C : ∀ s, MPTensor α (Fin (D s))}
 
 /-- **Transport of a compression along words.** If every letter of `B'` is the evaluation of a
 fixed nonempty word `u j` in the letters of `B`, and every letter of `C' s` is the evaluation of
@@ -91,9 +97,9 @@ the same word in the letters of `C s`, then a multi-block compression of `B` ont
 `C s` gives one of `B'` onto the tensors `C' s`, with the same change of coordinates.
 
 Blocking is the case where `u j` runs over the words of a fixed positive length. -/
-noncomputable def ofWords (P : MultiBlockCompression B S C) (u : Fin d' → List (Fin d))
-    (hu : ∀ j, u j ≠ []) {B' : MPSTensor d' DB} (hB' : ∀ j, B' j = Kraus.evalWord B (u j))
-    {C' : ∀ s, MPSTensor d' (D s)} (hC' : ∀ s j, C' s j = Kraus.evalWord (C s) (u j)) :
+noncomputable def ofWords (P : MultiBlockCompression B S C) (u : α' → List α)
+    (hu : ∀ j, u j ≠ []) {B' : MPTensor α' (Fin DB)} (hB' : ∀ j, B' j = Kraus.evalWord B (u j))
+    {C' : ∀ s, MPTensor α' (Fin (D s))} (hC' : ∀ s j, C' s j = Kraus.evalWord (C s) (u j)) :
     MultiBlockCompression B' S C' where
   z := P.z
   ord := P.ord
@@ -112,7 +118,7 @@ noncomputable def ofWords (P : MultiBlockCompression B S C) (u : Fin d' → List
 
 /-- A vanishing remainder means that every letter is block diagonal in the block coordinates. -/
 theorem conjMatrix_eq_blockDiagonal'_of_remainder_eq_zero (P : MultiBlockCompression B S C)
-    (hP : P.remainder = 0) (i : Fin d) :
+    (hP : P.remainder = 0) (i : α) :
     conjMatrix P.gauge (B i) =
       Matrix.blockDiagonal' (conjMatrix P.gauge (B i)).blockDiag' := by
   have h := P.conjMatrix_remainder i
@@ -122,8 +128,8 @@ theorem conjMatrix_eq_blockDiagonal'_of_remainder_eq_zero (P : MultiBlockCompres
 /-- **A split compression stays split along words.** The remainder of `ofWords` vanishes when
 the remainder of the original compression does. -/
 theorem remainder_ofWords_eq_zero (P : MultiBlockCompression B S C) (hP : P.remainder = 0)
-    (u : Fin d' → List (Fin d)) (hu : ∀ j, u j ≠ []) {B' : MPSTensor d' DB}
-    (hB' : ∀ j, B' j = Kraus.evalWord B (u j)) {C' : ∀ s, MPSTensor d' (D s)}
+    (u : α' → List α) (hu : ∀ j, u j ≠ []) {B' : MPTensor α' (Fin DB)}
+    (hB' : ∀ j, B' j = Kraus.evalWord B (u j)) {C' : ∀ s, MPTensor α' (Fin (D s))}
     (hC' : ∀ s j, C' s j = Kraus.evalWord (C s) (u j)) :
     (P.ofWords u hu hB' hC').remainder = 0 := by
   funext j
@@ -243,12 +249,12 @@ fusion tensors, which are independent of the blocking) and lines 427--431 (commo
 noncomputable def PairCompression.blockTensor {a b : Fin g} (P : PairCompression T N a b)
     {L : ℕ} (hL : 0 < L) :
     PairCompression (fun c => MPOTensor.blockTensor (T c) L) N a b :=
-  P.ofWords (fun I => List.ofFn (blockedDoubledIndexEquiv p L I))
+  P.ofWords (fun I => List.ofFn (blockedPairIndexEquiv p L I))
     (fun _ => mt List.ofFn_eq_nil_iff.1 hL.ne')
     (fun I => by
-      rw [← blockTensor_mulTensor, toMPSTensor_blockTensor]
+      rw [← blockTensor_mulTensor]
       rfl)
-    (fun s I => by rw [toMPSTensor_blockTensor]; rfl)
+    (fun _ _ => rfl)
 
 theorem PairCompression.remainder_blockTensor_eq_zero {a b : Fin g}
     (P : PairCompression T N a b) (hP : P.remainder = 0) {L : ℕ} (hL : 0 < L) :
@@ -344,16 +350,8 @@ noncomputable def ofStarBlocked (hT : ∀ c, Kraus.IsNormal (T c))
   let hsplit : ∀ a b, ∃ P : PairCompression T N a b, P.remainder = 0 := fun a b =>
     MPSTensor.exists_multiBlockCompression_remainder_eq_zero_of_star
       (D := fun s : (c : Fin g) × Fin (N a b c) => D s.1) Finset.univ
-      (fun s : (c : Fin g) × Fin (N a b c) => (T s.1).toMPSTensor)
-      (fun s _ => (isNormal_toMPSTensor_iff _).2 (hT s.1)) (fun s _ => hD s.1) _
-      (fun w hw => by
-        simpa only [evalWord_toMPSTensor] using
-          htr a b (w.map finProdFinEquiv.symm) (by simpa using hw))
-      (fun i => by
-        rw [show Set.range (mulTensor (T a) (T b)).toMPSTensor =
-            Set.range (mulTensor (T a) (T b)) from
-          finProdFinEquiv.symm.surjective.range_comp _]
-        exact hstar a b (finProdFinEquiv.symm i))
+      (fun s : (c : Fin g) × Fin (N a b c) => T s.1) (fun s _ => hT s.1) (fun s _ => hD s.1) _
+      (htr a b) (hstar a b)
   ofCompressionBlocked hT hD hne (fun a b => (hsplit a b).choose)
     (fun a b => (hsplit a b).choose_spec)
 
@@ -392,11 +390,12 @@ private theorem exists_positive_wordTupleSpanTop_of_isInjective_fin
 alphabet have a common positive simultaneous spanning length, without a spectral-radius-one
 assumption on any original block. -/
 theorem exists_positive_wordTupleSpanTop_of_isInjective
-    {α : Type*} [Fintype α] {g : ℕ} {dim : Fin g → ℕ}
+    {α : Type*} [Finite α] {g : ℕ} {dim : Fin g → ℕ}
     {B : (j : Fin g) → MPTensor α (Fin (dim j))}
     (hInj : ∀ j, Kraus.IsInjective (B j)) (hdimPos : ∀ j, 0 < dim j)
     (hDistinct : BlocksNotGaugePhaseEquiv B) :
     ∃ L : ℕ, 0 < L ∧ WordTupleSpanTop B L := by
+  have := Fintype.ofFinite α
   let e := (Fintype.equivFin α).symm
   obtain ⟨L, hL, hSpan⟩ := exists_positive_wordTupleSpanTop_of_isInjective_fin
     (B := fun j ↦ Kraus.reindexPhysical e (B j))

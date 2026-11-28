@@ -123,9 +123,9 @@ theorem majumdarGhoshTerm_shift_eq_parentInteraction :
       parentInteraction majumdarGhoshTensor 3 := by
   set Q := 𝐐 with hQ
   set e := WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin 2) 3)
-  set G := groundSpaceES majumdarGhoshTensor 3
+  set G := ((groundSpace majumdarGhoshTensor 3).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)
   have hker : ∀ u, u ∈ G ↔ Q (e u) = 0 := fun u => by
-    rw [mem_groundSpaceES_iff, mem_groundSpace_three_iff]
+    rw [mem_map_groundSpace_iff, mem_groundSpace_three_iff]
   have hperp : ∀ v, e.symm (Q v) ∈ Gᗮ := by
     intro v
     rw [Submodule.mem_orthogonal]

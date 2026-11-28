@@ -193,7 +193,8 @@ noncomputable def twoSiteBondSupportProjection
     NSiteSpace (Fin d) 2 →ₗ[ℂ] NSiteSpace (Fin d) 2 :=
   let e := WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)
   e.toLinearMap.comp
-    (((groundSpaceES (directSumTensor B) 2).starProjection.toLinearMap).comp
+    ((((groundSpace (directSumTensor B) 2).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap).starProjection.toLinearMap).comp
       e.symm.toLinearMap)
 
 /-- The physical equal-sector bond projector has exactly the combined
@@ -210,19 +211,21 @@ theorem twoSiteBondSupportProjection_range
   constructor
   · rintro ⟨v, rfl⟩
     change (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2))
-      ((groundSpaceES (directSumTensor B) 2).starProjection
+      (((groundSpace (directSumTensor B) 2).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection
         ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm v)) ∈
           groundSpace (directSumTensor B) 2
-    apply (mem_groundSpaceES_iff (directSumTensor B) 2 _).1
+    apply (mem_map_groundSpace_iff (directSumTensor B) 2 _).1
     exact Submodule.starProjection_apply_mem _ _
   · intro hψ
     refine ⟨ψ, ?_⟩
     change (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2))
-      ((groundSpaceES (directSumTensor B) 2).starProjection
+      (((groundSpace (directSumTensor B) 2).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection
         ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm ψ)) = ψ
     have hψES : (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm ψ ∈
-        groundSpaceES (directSumTensor B) 2 := by
-      apply (mem_groundSpaceES_iff (directSumTensor B) 2 _).2
+        ((groundSpace (directSumTensor B) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+      apply (mem_map_groundSpace_iff (directSumTensor B) 2 _).2
       simpa using hψ
     rw [Submodule.starProjection_eq_self_iff.mpr hψES,
       LinearEquiv.apply_symm_apply]
@@ -239,10 +242,12 @@ theorem twoSiteBondSupportProjection_eq_complement
   apply LinearMap.ext
   intro v
   change (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2))
-      ((groundSpaceES (directSumTensor B) 2).starProjection
+      (((groundSpace (directSumTensor B) 2).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection
         ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm v)) =
     v - (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2))
-      ((groundSpaceES (directSumTensor B) 2)ᗮ.starProjection
+      (((groundSpace (directSumTensor B) 2).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap)ᗮ.starProjection
         ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) 2)).symm v))
   rw [Submodule.starProjection_orthogonal_val]
   simp

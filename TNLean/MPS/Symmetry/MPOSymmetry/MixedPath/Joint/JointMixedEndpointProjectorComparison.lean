@@ -27,14 +27,14 @@ variable {d₀ d₁ r : ℕ} {D₀ D₁ : Fin r → ℕ}
 /-- The full joint canonical support is contained in the actual extended
 support at the first endpoint. Source: arXiv:2203.12563, Section 5,
 lines 1695–1777. -/
-theorem groundSpaceES_jointMixedEndpointLeftTensor_le_extendedSupport
+theorem map_groundSpace_jointMixedEndpointLeftTensor_le_extendedSupport
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) :
-    groundSpaceES (toTensorFromBlocks (μ := fun _ => 1)
-      (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2 ≤
+    ((groundSpace (toTensorFromBlocks (μ := fun _ => 1)
+      (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤
         (blockInsertedBoundaryMap (jointMixedEndpointBase A₀ A₁)
           (fun x => bondInterpolationMatrix (D₀ x) (D₁ x) 0) 2).range := by
-  rw [← jointMixedEndpoint_extendedSupport_outerCorner_eq_groundSpaceES A₀ A₁]
+  rw [← jointMixedEndpoint_extendedSupport_outerCorner_eq_map_groundSpace A₀ A₁]
   rintro _ ⟨v, hv, rfl⟩
   apply range_blockInsertedBoundaryMap_jointMixed_invariant_rowSector A₀ A₁ _
   refine ⟨_, ?_, rfl⟩
@@ -51,14 +51,15 @@ theorem jointMixedEndpointParentInteraction_zero_le_parentInteraction
       Matrix.toEuclideanLin
         (LinearMap.toMatrix' (parentInteraction (toTensorFromBlocks (μ := fun _ => 1)
         (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2)) := by
-  have hle : (groundSpaceES (toTensorFromBlocks (μ := fun _ => 1)
-      (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2).starProjection.toLinearMap ≤
+  have hle : (((groundSpace (toTensorFromBlocks (μ := fun _ => 1)
+      (jointMixedEndpointLeftTensor A₀ d₁
+          D₁)) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).starProjection.toLinearMap ≤
       (blockInsertedBoundaryMap (jointMixedEndpointBase A₀ A₁)
         (fun x => bondInterpolationMatrix (D₀ x) (D₁ x) 0) 2).range.starProjection.toLinearMap := by
     apply (Submodule.isSymmetricProjection_starProjection _).le_iff_range_le_range
       (Submodule.isSymmetricProjection_starProjection _) |>.mpr
     simpa only [Submodule.range_starProjection] using
-      groundSpaceES_jointMixedEndpointLeftTensor_le_extendedSupport A₀ A₁
+      map_groundSpace_jointMixedEndpointLeftTensor_le_extendedSupport A₀ A₁
   simpa only [toEuclideanLin_jointMixedEndpointParentInteraction,
     toEuclideanLin_toMatrix'_parentInteraction,
     Submodule.starProjection_orthogonal', ContinuousLinearMap.toLinearMap_sub,

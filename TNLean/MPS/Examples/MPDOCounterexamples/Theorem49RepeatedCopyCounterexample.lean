@@ -43,10 +43,10 @@ noncomputable def scalarBNT : MPOTensor 1 1 := fun (_, _) ↦ 1
 The copy weights are exactly $\mu_{0,0}=1$ and $\mu_{0,1}=1/2$, allowed by
 the global normalization of arXiv:1606.00608, line 246. -/
 @[reducible] noncomputable def repeatedCopyDecomposition :
-    MPSTensor.SectorDecomposition 1 where
+    MPSTensor.SectorDecomposition (Fin 1 × Fin 1) where
   basisCount := 1
   basisDim := fun _ ↦ 1
-  basis := fun _ ↦ scalarBNT.toMPSTensor
+  basis := fun _ ↦ scalarBNT
   sectors :=
     { copies := fun _ ↦ 2
       copies_pos := fun _ ↦ by omega
@@ -59,31 +59,32 @@ the global normalization of arXiv:1606.00608, line 246. -/
 
 /-- The scalar repeated-copy MPO with raw BNT weights $1$ and $1/2$.
 
-Its doubled-index MPS tensor is literally the canonical assembly
+It is literally the canonical assembly
 `repeatedCopyDecomposition` from the line-246 normalization convention of
 arXiv:1606.00608 (lines 237--246 and 271--301). -/
 noncomputable def repeatedCopyTensor :
     MPOTensor 1 repeatedCopyDecomposition.totalDim :=
-  fun (_, _) ↦ repeatedCopyDecomposition.toTensor 0
+  fun _ ↦ repeatedCopyDecomposition.toTensor (0, 0)
 
 /-- The concrete repeated-copy MPO is exactly the raw-weight BNT assembly,
 not merely an MPO with the same periodic contractions.
 
 Source: arXiv:1606.00608, canonical form at lines 237--246 and equation
 `eq:II_ABasicTensors` at lines 271--301. -/
-theorem repeatedCopyTensor_toMPSTensor :
-    repeatedCopyTensor.toMPSTensor = repeatedCopyDecomposition.toTensor := by
-  funext i
+theorem repeatedCopyTensor_eq_toTensor :
+    repeatedCopyTensor = repeatedCopyDecomposition.toTensor := by
+  funext ⟨i, j⟩
   fin_cases i
+  fin_cases j
   rfl
 
-private lemma scalarBNT_evalWord (w : List (Fin 1)) :
-    Kraus.evalWord (ι := Fin 1) scalarBNT.toMPSTensor w = 1 := by
+private lemma scalarBNT_evalWord (w : List (Fin 1 × Fin 1)) :
+    Kraus.evalWord scalarBNT w = 1 := by
   induction w with
   | nil => rfl
   | cons i w ih =>
       rw [Kraus.evalWord_cons, ih]
-      simp [scalarBNT, toMPSTensor]
+      simp [scalarBNT]
 
 /-- The raw repeated-copy presentation is a presentation by a basis of normal
 tensors in left-canonical gauge, with no equal-modulus condition on repeated
@@ -96,10 +97,10 @@ theorem repeatedCopyDecomposition_isLeftCanonicalBNTPresentation :
     MPSTensor.IsLeftCanonicalBNTPresentation repeatedCopyDecomposition := by
   refine MPSTensor.IsLeftCanonicalBNTPresentation.of_irreducible_selfOverlap
     (by simp) (by simp [repeatedCopyDecomposition])
-    (fun _ ↦ MPSTensor.isIrreducibleFamily_of_bondDim_one scalarBNT.toMPSTensor) ?_ ?_ ?_
+    (fun _ ↦ MPSTensor.isIrreducibleFamily_of_bondDim_one scalarBNT) ?_ ?_ ?_
   · intro j
     simp [MPTensor.IsLeftCanonical, Kraus.IsTP, repeatedCopyDecomposition,
-      scalarBNT, toMPSTensor]
+      scalarBNT]
   · intro j
     simp [MPTensor.mpvOverlap, MPTensor.mpv, MPTensor.coeff, scalarBNT_evalWord,
       Matrix.trace]
@@ -107,13 +108,11 @@ theorem repeatedCopyDecomposition_isLeftCanonicalBNTPresentation :
     intro N hN
     apply LinearIndependent.of_subsingleton (i := (0 : Fin 1))
     intro hzero
-    have h := congrArg
-      (fun v : MPSTensor.MPVSpace (Fin 1) N ↦ v (fun _ ↦ (0 : Fin 1))) hzero
-    simp [MPSTensor.mpvState_apply, MPTensor.mpv, MPTensor.coeff, scalarBNT_evalWord,
-      Matrix.trace] at h
+    have h := congrArg (fun v ↦ v (fun _ ↦ ((0 : Fin 1), (0 : Fin 1)))) hzero
+    simp [MPTensor.mpv, MPTensor.coeff, scalarBNT_evalWord, Matrix.trace] at h
 
-private lemma scalarBNT_mpv {N : ℕ} (σ : Fin N → Fin 1) :
-    MPTensor.mpv scalarBNT.toMPSTensor σ = 1 := by
+private lemma scalarBNT_mpv {N : ℕ} (σ : Fin N → Fin 1 × Fin 1) :
+    MPTensor.mpv scalarBNT σ = 1 := by
   simp [MPTensor.mpv, MPTensor.coeff, scalarBNT_evalWord, Matrix.trace]
 
 /-- Every periodic contraction of the repeated-copy MPO is
@@ -124,8 +123,7 @@ arXiv:1606.00608, equations `eq:II_ABasicTensors` and `Eq19`, lines
 271--308. -/
 theorem repeatedCopyTensor_mpo (N : ℕ) (σ τ : Fin N → Fin 1) :
     mpo repeatedCopyTensor N σ τ = 1 + (1 / 2 : ℂ) ^ N := by
-  rw [← MPSTensor.mpv_toMPSTensor_pairConfig]
-  rw [repeatedCopyTensor_toMPSTensor]
+  rw [← MPOTensor.mpv_pair, repeatedCopyTensor_eq_toTensor]
   rw [repeatedCopyDecomposition.mpv_toTensor_eq_sum_sectors]
   rw [Fin.sum_univ_one, Fin.sum_univ_two]
   rw [scalarBNT_mpv]
@@ -161,8 +159,7 @@ theorem scalarBNT_isMPDO : IsMPDO scalarBNT := by
     ext σ τ
     have hστ : σ = τ := Subsingleton.elim _ _
     subst τ
-    rw [← MPSTensor.mpv_toMPSTensor_pairConfig]
-    rw [scalarBNT_mpv]
+    rw [← MPOTensor.mpv_pair, scalarBNT_mpv]
     simp
   rw [hMpo]
   exact Matrix.PosSemidef.one
@@ -186,24 +183,24 @@ theorem scalarBNT_physTraceTransfer_not_nilpotent :
 span. This is the biCF condition used in Appendix C.2 of
 arXiv:1606.00608, lines 1628--1633, specialized to one BNT element. -/
 theorem scalarBNT_wordTupleSpanTop :
-    MPSTensor.WordTupleSpanTop (fun _ : Fin 1 ↦ scalarBNT.toMPSTensor) 1 := by
+    MPSTensor.WordTupleSpanTop (fun _ : Fin 1 ↦ scalarBNT) 1 := by
   unfold MPSTensor.WordTupleSpanTop
   apply top_unique
   intro X hX
-  let w : Fin 1 → Fin 1 := fun _ ↦ 0
+  let w : Fin 1 → Fin 1 × Fin 1 := fun _ ↦ (0, 0)
   have hGenerator :
-      MPSTensor.wordTuple (fun _ : Fin 1 ↦ scalarBNT.toMPSTensor) 1 w ∈
+      MPSTensor.wordTuple (fun _ : Fin 1 ↦ scalarBNT) 1 w ∈
         Submodule.span ℂ (Set.range
-          (MPSTensor.wordTuple (fun _ : Fin 1 ↦ scalarBNT.toMPSTensor) 1)) :=
+          (MPSTensor.wordTuple (fun _ : Fin 1 ↦ scalarBNT) 1)) :=
     Submodule.subset_span (Set.mem_range_self w)
   have hEq : X = X 0 0 0 •
-      MPSTensor.wordTuple (fun _ : Fin 1 ↦ scalarBNT.toMPSTensor) 1 w := by
+      MPSTensor.wordTuple (fun _ : Fin 1 ↦ scalarBNT) 1 w := by
     funext k
     ext a b
     fin_cases k
     fin_cases a
     fin_cases b
-    simp [MPSTensor.wordTuple, w, scalarBNT, toMPSTensor]
+    simp [MPSTensor.wordTuple, w, scalarBNT]
   rw [hEq]
   exact Submodule.smul_mem _ _ hGenerator
 
@@ -349,12 +346,12 @@ normalization at lines 237--246; Appendix C.2 at lines 1381--1403 and
 theorem printed_theorem49_iv_to_v_is_false :
     repeatedCopyDecomposition.weight 0 0 = 1 ∧
       repeatedCopyDecomposition.weight 0 1 = (1 / 2 : ℂ) ∧
-      repeatedCopyTensor.toMPSTensor = repeatedCopyDecomposition.toTensor ∧
+      repeatedCopyTensor = repeatedCopyDecomposition.toTensor ∧
       MPSTensor.IsLeftCanonicalBNTPresentation repeatedCopyDecomposition ∧
       IsMPDO repeatedCopyTensor ∧
       ¬ IsNilpotent (physTraceTransfer scalarBNT) ∧
       MPSTensor.WordTupleSpanTop
-        (fun _ : Fin 1 ↦ scalarBNT.toMPSTensor) 1 ∧
+        (fun _ : Fin 1 ↦ scalarBNT) 1 ∧
       IsMPDO scalarBNT ∧
       (∀ x y : Fin 1, x ≠ y →
         layerMul ((fun _ : Fin 1 ↦ scalarBNT) y)
@@ -363,7 +360,7 @@ theorem printed_theorem49_iv_to_v_is_false :
         scalarFactorization) ∧
       IsMPDO (blockTwo repeatedCopyTensor) ∧
       ¬ IsRFPViaTS (blockTwo repeatedCopyTensor) := by
-  exact ⟨rfl, rfl, repeatedCopyTensor_toMPSTensor,
+  exact ⟨rfl, rfl, repeatedCopyTensor_eq_toTensor,
     repeatedCopyDecomposition_isLeftCanonicalBNTPresentation, repeatedCopyTensor_isMPDO,
     scalarBNT_physTraceTransfer_not_nilpotent, scalarBNT_wordTupleSpanTop,
     scalarBNT_isMPDO, scalarBNT_layer_orthogonal,

@@ -124,8 +124,7 @@ theorem verticalTensor_blockTwo_squared_coisometry_reconstruction
       verticalBNTMPO_verticalTensor_blockTwo]
     obtain ⟨⟨i, k⟩, rfl⟩ := finProdFinEquiv.surjective ab
     unfold verticalCoisometrySquare
-    simp only [Kraus.reindexPhysical, Equiv.symm_apply_apply, mulTensor_apply, verticalBNTMPO_apply,
-      MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
+    simp only [Kraus.reindexPhysical, Equiv.symm_apply_apply, mulTensor_apply, verticalBNTMPO_apply]
     rw [Matrix.conjTranspose_submatrix,
       Matrix.submatrix_mul_equiv _ _ _ finProdFinEquiv.symm _,
       Matrix.submatrix_mul_equiv _ _ _ finProdFinEquiv.symm _]
@@ -244,8 +243,7 @@ theorem mulTensor_verticalAssembledTensor_reindex
   rcases y with ⟨⟨⟨α', q'⟩, ⟨β', r'⟩⟩, ⟨i', j'⟩⟩
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply]
   simp only [retainedVerticalProductTensor, Kraus.reindexPhysical, Equiv.symm_apply_apply,
-    MPSTensor.finProdFinEquiv_divNat,
-    MPSTensor.finProdFinEquiv_modNat, productRetainedEquiv, verticalProductSectorEquiv,
+    productRetainedEquiv, verticalProductSectorEquiv,
     Equiv.symm_trans, Equiv.symm_mk, Equiv.prodCongr_symm, Equiv.symm_symm,
     Equiv.trans_apply, Equiv.coe_fn_mk, Equiv.prodCongr_apply, Prod.map_apply,
     mulTensor_apply, verticalBNTMPO_apply, Matrix.submatrix_apply,

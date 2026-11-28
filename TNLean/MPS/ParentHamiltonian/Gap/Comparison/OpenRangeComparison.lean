@@ -177,9 +177,9 @@ theorem toEuclideanLin_hamiltonian_chainTranslates_gap_of_long_gap_at_length
     (hLocal : (κ : ℂ) • LinearMap.toMatrix' (parentInteraction A W) ≤
       (chainTranslates R W h).hamiltonian)
     (hShortKer : LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-      groundSpaceES A N)
+      ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
     (hLongKer : LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A W N).hamiltonian) =
-      groundSpaceES A N)
+      ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
     (hLong : ∀ μ : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin (parentChainInteraction A W N).hamiltonian) μ →
         μ = 0 ∨ (γ : ℂ) ≤ μ) :
@@ -221,8 +221,8 @@ theorem exists_hamiltonian_parentChainInteraction_two_uniform_gap_of_isInjective
     Kraus.isNBlkInjective_one_of_isInjective hA
   have hShortKer (N : ℕ) (hN : 2 ≤ N) :
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A 2 N).hamiltonian) =
-        groundSpaceES A N :=
-    ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_isNBlkInjective
+        ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) :=
+    ker_hamiltonian_parentChainInteraction_eq_map_groundSpace_of_isNBlkInjective
       hInjOne (by norm_num : 0 < 1) hN
   obtain ⟨κ, C, hκ, _hC, hLocal, _hUpper⟩ :=
     exists_pos_toMatrix'_parentInteraction_hamiltonian_parentChainInteraction_comparison A
@@ -238,7 +238,7 @@ theorem exists_hamiltonian_parentChainInteraction_two_uniform_gap_of_isInjective
   refine toEuclideanLin_hamiltonian_chainTranslates_gap_of_long_gap_at_length A
     (LinearMap.toMatrix' (parentInteraction A 2)) (posSemidef_toMatrix'_parentInteraction A 2)
     (by omega) hκ hLocal (hShortKer N (by omega))
-    (ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_isNBlkInjective
+    (ker_hamiltonian_parentChainInteraction_eq_map_groundSpace_of_isNBlkInjective
       (Kraus.isNBlkInjective_of_le (by norm_num : 0 < 1) hInjOne (by omega)) (by omega) hN) ?_
   rw [parentChainInteraction_eq_of_groundSpace_eq (hGS (l + 1)) N]
   exact hOpenB N hN

@@ -599,18 +599,13 @@ theorem nonempty_bondGauge_timeReversal (hF : F.IsNormalRepresentation)
         ∀ i l, MPOTensor.timeReversal v (F.tensor g) (i, l) * Q = Q * F.tensor g (i, l) := by
     intro g
     obtain ⟨P, Q, hred, -⟩ := MPSTensor.exists_isReduction_and_nilpotent_of_isNormal
-      (F.tensor g).toMPSTensor ((isNormal_toMPSTensor_iff _).2 (hF.isNormal g))
-      (F.bondDim_pos g) (MPOTensor.timeReversal v (F.tensor g)).toMPSTensor
-      ((sameMPV₂Pos_toMPSTensor_iff _ _).2 (sameMPV₂Pos_iff_mpo_eq.2 (hsame g)))
+      (F.tensor g) (hF.isNormal g) (F.bondDim_pos g) (MPOTensor.timeReversal v (F.tensor g))
+      (sameMPV₂Pos_iff_mpo_eq.2 (hsame g))
     have hPQ := hred.mul_eq_one
     have hQP : Q * P = 1 := mul_eq_one_comm.mp hPQ
     refine ⟨P, Q, hPQ, hQP, fun i l ↦ ?_⟩
-    have h1 := hred.evalWord [finProdFinEquiv (i, l)]
-    simp only [Kraus.evalWord_cons, Kraus.evalWord_nil, Matrix.mul_one, toMPSTensor] at h1
-    have e : ((finProdFinEquiv (i, l)).divNat, (finProdFinEquiv (i, l)).modNat) = (i, l) :=
-      finProdFinEquiv.symm_apply_apply (i, l)
-    rw [Prod.mk.injEq] at e
-    rw [e.1, e.2] at h1
+    have h1 := hred.evalWord [(i, l)]
+    simp only [Kraus.evalWord_cons, Kraus.evalWord_nil, Matrix.mul_one] at h1
     calc MPOTensor.timeReversal v (F.tensor g) (i, l) * Q =
         Q * (P * MPOTensor.timeReversal v (F.tensor g) (i, l) * Q) := by
           rw [← Matrix.mul_assoc, ← Matrix.mul_assoc, hQP, Matrix.one_mul]

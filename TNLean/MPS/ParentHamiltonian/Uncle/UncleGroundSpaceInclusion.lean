@@ -115,20 +115,25 @@ private theorem uncleInteraction_apply_eq_zero_of_blocked_groundSpace
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     {c : ℕ} (C : MPSTensor d c)
     (hC : groundSpace (blockTensor C 2) 1 ≤ groundSpace (uncleTensor A B R L) 1)
-    (v : EuclideanSpace ℂ (Cfg d 2)) (hv : v ∈ groundSpaceES C 2) :
+    (v : EuclideanSpace ℂ (Cfg d 2)) (hv : v ∈ ((groundSpace C 2).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap)) :
     Matrix.toEuclideanLin (uncleInteraction A B R L) v = 0 := by
-  have hv' : v ∈ (groundSpaceES (blockTensor C 2) 1).map
+  have hv' : v ∈ ((groundSpace (blockTensor C 2) 1).map (WithLp.linearEquiv 2 ℂ
+      _).symm.toLinearMap).map
       (blockedConfigLinearIsometryEquiv d 1 2).toLinearEquiv.toLinearMap := by
-    simpa only [groundSpaceES_blockTensor_map, one_mul] using hv
+    simpa only [map_groundSpace_blockTensor_map, one_mul] using hv
   obtain ⟨w, hw, rfl⟩ := hv'
-  have hwU : w ∈ groundSpaceES (uncleTensor A B R L) 1 := by
-    apply (mem_groundSpaceES_iff _ _ w).mpr
-    exact hC ((mem_groundSpaceES_iff _ _ w).mp hw)
-  have hkill : (groundSpaceES (uncleTensor A B R L) 1)ᗮ.starProjection w = 0 := by
+  have hwU : w ∈ ((groundSpace (uncleTensor A B R L) 1).map (WithLp.linearEquiv 2 ℂ
+      _).symm.toLinearMap) := by
+    apply (mem_map_groundSpace_iff _ _ w).mpr
+    exact hC ((mem_map_groundSpace_iff _ _ w).mp hw)
+  have hkill : ((groundSpace (uncleTensor A B R L) 1).map (WithLp.linearEquiv 2 ℂ
+      _).symm.toLinearMap)ᗮ.starProjection w = 0 := by
     rwa [Submodule.starProjection_apply_eq_zero_iff, Submodule.orthogonal_orthogonal]
   rw [toEuclideanLin_uncleInteraction_apply]
   change blockedConfigLinearIsometryEquiv d 1 2
-      ((groundSpaceES (uncleTensor A B R L) 1)ᗮ.starProjection
+      (((groundSpace (uncleTensor A B R L) 1).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap)ᗮ.starProjection
         ((blockedConfigLinearIsometryEquiv d 1 2).symm
           (blockedConfigLinearIsometryEquiv d 1 2 w))) = 0
   rw [LinearIsometryEquiv.symm_apply_apply, hkill, map_zero]
@@ -140,7 +145,8 @@ theorem uncleInteraction_apply_eq_zero_left
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
-    (v : EuclideanSpace ℂ (Cfg d 2)) (hv : v ∈ groundSpaceES A 2) :
+    (v : EuclideanSpace ℂ (Cfg d 2)) (hv : v ∈ ((groundSpace A 2).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap)) :
     Matrix.toEuclideanLin (uncleInteraction A B R L) v = 0 :=
   uncleInteraction_apply_eq_zero_of_blocked_groundSpace A B R L A
     (groundSpace_blockTensor_le_uncleTensor_left A B R L) v hv
@@ -152,7 +158,8 @@ theorem uncleInteraction_apply_eq_zero_right
     (A : MPSTensor d a) (B : MPSTensor d b)
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
-    (v : EuclideanSpace ℂ (Cfg d 2)) (hv : v ∈ groundSpaceES B 2) :
+    (v : EuclideanSpace ℂ (Cfg d 2)) (hv : v ∈ ((groundSpace B 2).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap)) :
     Matrix.toEuclideanLin (uncleInteraction A B R L) v = 0 :=
   uncleInteraction_apply_eq_zero_of_blocked_groundSpace A B R L B
     (groundSpace_blockTensor_le_uncleTensor_right A B R L) v hv
@@ -162,7 +169,8 @@ private theorem hamiltonian_uncleInteraction_apply_eq_zero_of_parent_windows
     (R : Fin d → Matrix (Fin a) (Fin b) ℂ)
     (L : Fin d → Matrix (Fin b) (Fin a) ℂ)
     {c : ℕ} (C : MPSTensor d c)
-    (hC : ∀ v ∈ groundSpaceES C 2, Matrix.toEuclideanLin (uncleInteraction A B R L) v = 0)
+    (hC : ∀ v ∈ ((groundSpace C 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap),
+        Matrix.toEuclideanLin (uncleInteraction A B R L) v = 0)
     {N : ℕ} (hN : 2 ≤ N)
     (ψ : NSiteSpace (Fin d) N) (hψ : ψ ∈ chainGroundSpace C 2 N) :
     haveI : NeZero N := ⟨by omega⟩;
@@ -174,11 +182,11 @@ private theorem hamiltonian_uncleInteraction_apply_eq_zero_of_parent_windows
   simp only [Submodule.mem_iInf, Submodule.mem_comap] at hψ
   have hlocal (i : Fin N) (τ : Cfg d N) :
       Matrix.toEuclideanLin (uncleInteraction A B R L)
-        (cyclicRestrictES (d := d) (Fin.pos i) 2 i τ
+        (LinearMap.withLpMap 2 (cyclicRestrictₗ (α := Fin d) (Fin.pos i) 2 i τ)
           ((WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) N)).symm ψ)) = 0 := by
     apply hC
-    apply (mem_groundSpaceES_iff C 2 _).mpr
-    simpa [cyclicRestrictES, LinearMap.withLpMap] using hψ i τ
+    apply (mem_map_groundSpace_iff C 2 _).mpr
+    simpa [LinearMap.withLpMap] using hψ i τ
   rw [ManyBody.Interaction.hamiltonian, map_sum, LinearMap.sum_apply]
   exact Finset.sum_eq_zero fun i _ ↦
     (toEuclideanLin_translationInvariant_term_eq_zero_iff_sections hN _ i _).mpr (hlocal i)

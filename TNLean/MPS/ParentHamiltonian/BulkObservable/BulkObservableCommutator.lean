@@ -172,10 +172,12 @@ theorem toEuclideanCLM_hamiltonian_chainTranslates_parentInteraction {D : ℕ}
     (A : MPSTensor d D) (R N : ℕ) :
     (Matrix.toEuclideanCLM (n := Cfg d N) (𝕜 := ℂ)
       ((chainTranslates R N ((Matrix.toEuclideanCLM (n := Cfg d R) (𝕜 := ℂ)).symm
-          (groundSpaceES A R)ᗮ.starProjection)).hamiltonian)).toLinearMap =
+          ((groundSpace A R).map (WithLp.linearEquiv 2 ℂ
+              _).symm.toLinearMap)ᗮ.starProjection)).hamiltonian)).toLinearMap =
       Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian := by
   have hlocal : (Matrix.toEuclideanCLM (n := Cfg d R) (𝕜 := ℂ)).symm
-      (groundSpaceES A R)ᗮ.starProjection = LinearMap.toMatrix' (parentInteraction A R) := by
+      ((groundSpace A R).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap)ᗮ.starProjection = LinearMap.toMatrix' (parentInteraction A R) := by
     rw [StarAlgEquiv.symm_apply_eq]
     exact ContinuousLinearMap.coe_injective (toEuclideanLin_toMatrix'_parentInteraction A R).symm
   rw [hlocal]

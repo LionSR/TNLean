@@ -450,10 +450,10 @@ compressing the positive full-chain operator and dividing by the positive
 integer $n_s$. ZCL follows by restricting the full transfer equation to the
 $s$-th canonical block and using nonnilpotence to exclude the zero transfer.
 \footnote{The relevant declarations are
-\leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isMPDO_of_projectorSelection},
-\leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isMPDO_of_sameMPV₂Pos_isSAL},
+\leanid{MPOTensor.commonWeightAbsorbedBasis_isMPDO_of_projectorSelection},
+\leanid{MPOTensor.commonWeightAbsorbedBasis_isMPDO_of_sameMPV₂Pos_isSAL},
 and
-\leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isSourceZCL}.}
+\leanid{MPOTensor.commonWeightAbsorbedBasis_isSourceZCL}.}
 
 The strict normalization required in the sector entropy identity is also
 formalized. An MPDO tensor with source ZCL has positive trace at every
@@ -467,7 +467,7 @@ nonzero idempotent. For the absorbed BNT sectors this proves
 rather than merely $p_j\geq 0$.\footnote{The general declarations are
 \leanid{MPOTensor.trace_mpo_ne_zero_of_isSourceZCL} and
 \leanid{MPOTensor.trace_mpo_pos_of_isMPDO_isSourceZCL}; their specialization is
-\leanid{MPOTensor.trace_mpo_commonWeightAbsorbedBasisMPOTensor_pos}.}
+\leanid{MPOTensor.trace_mpo_commonWeightAbsorbedBasis_pos}.}
 
 The weighted orthogonal-direct-sum entropy formula used at lines 1760--1770 of
 Appendix C.2 of Ref.~\cite{Cirac2016MPDO_arXiv} is formalized as
@@ -481,7 +481,7 @@ under the biCF hypothesis imposed at the beginning of Case II in the source.
 \footnote{The principal declarations are
 \leanid{MPOTensor.blockEntropy_eq_sum_bntSectorProbability},
 \leanid{MPOTensor.blockEntropy_add_blockEntropy_eq_bntSector}, and
-\leanid{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isSAL_of_sameMPV₂Pos}.}
+\leanid{MPOTensor.commonWeightAbsorbedBasis_isSAL_of_sameMPV₂Pos}.}
 This completes the entropy argument at lines 1748--1781 of Appendix C.2 of
 Ref.~\cite{Cirac2016MPDO_arXiv} under its stated biCF hypothesis.
 

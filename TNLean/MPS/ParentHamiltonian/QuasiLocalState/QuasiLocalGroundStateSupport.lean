@@ -59,7 +59,8 @@ theorem quasiLocalState_groundSpaceProjection_eq_one_of_interval_eq_zero
     (A : MPSTensor d D) (φ : QuasiLocalAlgebra d →L[ℂ] ℂ)
     (hφ : φ ∈ quasiLocalStateSpace d) (a : ℤ) {N : ℕ}
     (H : Matrix (Cfg d N) (Cfg d N) ℂ) (hH : H.PosSemidef)
-    (hker : LinearMap.ker (Matrix.toEuclideanLin H) = groundSpaceES A N)
+    (hker : LinearMap.ker (Matrix.toEuclideanLin H) = ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap))
     (hzero : φ (quasiLocalIntervalObservable d a N H) = 0) :
     φ (quasiLocalIntervalObservable d a N (groundSpaceProjectionMatrix A N)) = 1 := by
   obtain ⟨κ, hκ, hLower⟩ :=
@@ -133,7 +134,7 @@ theorem eventually_quasiLocalState_symmetric_groundSpaceProjection_eq_one_of_eve
     (A : MPSTensor d D) {R : ℕ} (h : Matrix (Cfg d R) (Cfg d R) ℂ) (hh : h.PosSemidef)
     (hker : ∀ᶠ N : ℕ in Filter.atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-        groundSpaceES A N)
+        ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
     (φ : QuasiLocalAlgebra d →L[ℂ] ℂ) (hφ : φ ∈ quasiLocalStateSpace d)
     (hzero : ∀ a : ℤ, φ (quasiLocalIntervalObservable d a R h) = 0) :
     ∀ᶠ n : ℕ in Filter.atTop,
@@ -218,7 +219,7 @@ theorem mem_parentGroundStateFace_iff_groundSpace_support_of_eventual_kernel
     (hR : 0 < R) (hh : h.PosSemidef)
     (hker : ∀ᶠ N : ℕ in atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-        groundSpaceES A N)
+        ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
     (φ : QuasiLocalAlgebra d →L[ℂ] ℂ) :
     φ ∈ parentGroundStateFace h ↔
       φ ∈ quasiLocalStateSpace d ∧ ∀ (a : ℤ) (N : ℕ), 0 < N →
@@ -237,9 +238,10 @@ theorem mem_parentGroundStateFace_iff_groundSpace_support_of_eventual_kernel
       simp only [map_mul, map_zero, groundSpaceProjectionMatrix, StarAlgEquiv.apply_symm_apply]
       refine ContinuousLinearMap.ext fun v => ?_
       change Matrix.toEuclideanLin ((chainTranslates R N h).hamiltonian)
-        ((groundSpaceES A N).starProjection v) = 0
+        (((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection v) = 0
       exact LinearMap.mem_ker.mp
-        (hkerN.symm ▸ (groundSpaceES A N).starProjection_apply_mem v)
+        (hkerN.symm ▸ ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection_apply_mem v)
     let f := intervalStateFunctional φ hφ.2.2 a N
     have hf : f (groundSpaceProjectionMatrix A N) = f 1 := by
       simpa only [f, intervalStateFunctional_apply, map_one, hφ.2.1] using

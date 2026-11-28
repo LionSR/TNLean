@@ -33,10 +33,11 @@ a zero length-\(k\) prefix. If \(k>L_0\), use the span equality
 \]
 with the identity matrix to show that every product of length \(k-L_0\) is zero,
 then recurse. -/
-private theorem allZero_contradiction {α : Type*} [Fintype α] [NeZero D]
+private theorem allZero_contradiction {α : Type*} [Finite α] [NeZero D]
     {A : MPTensor α (Fin D)} {L₀ : ℕ} (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {k : ℕ} (hk : 0 < k)
     (hzero : ∀ w : List α, w.length = k → Kraus.evalWord A w = 0) : False := by
+  have := Fintype.ofFinite α
   have hws : Kraus.wordSpan A L₀ = ⊤ := hInj
   -- Strong induction on k.
   suffices ∀ k, 0 < k → (∀ w : List α, w.length = k → Kraus.evalWord A w = 0) → False from
@@ -99,11 +100,12 @@ block-injectivity span identity
 \]
 forces every suffix product of length \(N-L_0\) to vanish. Strong induction on
 the word length then gives a contradiction. -/
-theorem mpv_ne_zero_of_isNBlkInjective {α : Type*} [Fintype α] {A : MPTensor α (Fin D)}
+theorem mpv_ne_zero_of_isNBlkInjective {α : Type*} [Finite α] {A : MPTensor α (Fin D)}
     [NeZero D]
     {L₀ : ℕ} (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀)
     {N : ℕ} (hN : L₀ + 1 ≤ N) :
     (mpv A : (Fin N → α) → ℂ) ≠ 0 := by
+  have := Fintype.ofFinite α
   have hws : Kraus.wordSpan A L₀ = ⊤ := hInj
   intro hzero
   -- mpv = 0 means tr(Kraus.evalWord A (List.ofFn σ)) = 0 for all σ : Fin N → α.

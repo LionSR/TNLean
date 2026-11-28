@@ -10,6 +10,7 @@ import TNLean.MPS.Tensor.Reduction.Reduction
 import TNLean.MPS.FundamentalTheorem.WordModule.Flag
 import TNLean.MPS.Tensor.Words.TracePairing
 import TNLean.MPS.Tensor.Words.ScaledNormality
+import TNLean.MPS.Transfer.Irreducible.PhysicalReindexTransport
 
 /-!
 # The multi-block asymmetric compression data
@@ -296,6 +297,27 @@ theorem evalWord_remainder_eq_zero (w : List α) (hw : S.card + P.z ≤ w.length
   rw [evalWord_conjMatrix] at hzero
   refine conjMatrix_injective P.gauge ?_
   rw [hzero, conjMatrix_zero]
+
+/-- A compression datum of the relabelled tensors `i ↦ B (e.symm i)`, `i ↦ C s (e.symm i)` is a
+compression datum of `B` onto `C`, with the same ordering and change of coordinates. -/
+def ofReindexPhysical {β : Type*} (e : α ≃ β)
+    (Q : MultiBlockCompression (Kraus.reindexPhysical e.symm B) S
+      fun s => Kraus.reindexPhysical e.symm (C s)) :
+    MultiBlockCompression B S C where
+  z := Q.z
+  ord := Q.ord
+  gauge := Q.gauge
+  triangular i := by simpa [Kraus.reindexPhysical] using Q.triangular (e i)
+  matched i s := by simpa [Kraus.reindexPhysical] using Q.matched (e i) s
+  unmatched i t := by simpa [Kraus.reindexPhysical] using Q.unmatched (e i) t
+
+/-- The remainder of a relabelled compression datum is the relabelled remainder. -/
+theorem remainder_ofReindexPhysical {β : Type*} (e : α ≃ β)
+    (Q : MultiBlockCompression (Kraus.reindexPhysical e.symm B) S
+      fun s => Kraus.reindexPhysical e.symm (C s)) (i : α) :
+    (ofReindexPhysical e Q).remainder i = Q.remainder (e i) := by
+  simp only [remainder, Kraus.reindexPhysical, Equiv.symm_apply_apply]
+  rfl
 
 end MultiBlockCompression
 
@@ -604,11 +626,9 @@ noncomputable def FlagData.toMultiBlockCompression (F : FlagData B.WordModule S 
 end FromFlagGauge
 
 open WordAlgebra in
-/-- **The multi-block asymmetric compression theorem** (P5 note, Theorem 7.7,
-`thm:p5-asymmetric-compression`, clauses (i)–(iii)). A tensor whose positive-length word traces
-are the sums of the word traces of a finite family of normal blocks of positive bond dimension
-admits a multi-block compression onto that family. -/
-theorem exists_multiBlockCompression_of_isNormal (S : Finset ι) (C : ∀ s, MPSTensor d (D s))
+/-- The compression theorem on the alphabet `Fin d`, where the word algebra lives. -/
+private theorem exists_multiBlockCompression_of_isNormal_fin (S : Finset ι)
+    (C : ∀ s, MPSTensor d (D s))
     (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s) (B : MPSTensor d DB)
     (htr : ∀ w : List (Fin d), w ≠ [] →
       Matrix.trace (Kraus.evalWord B w) = ∑ s ∈ S, Matrix.trace (Kraus.evalWord (C s) w)) :
@@ -617,6 +637,29 @@ theorem exists_multiBlockCompression_of_isNormal (S : Finset ι) (C : ∀ s, MPS
   obtain ⟨F⟩ := exists_flagData C hC hD B.WordModule
     fun w hw => by rw [traceWord_wordModule]; exact htr w hw
   exact ⟨F.toMultiBlockCompression⟩
+
+/-- **The multi-block asymmetric compression theorem** (P5 note, Theorem 7.7,
+`thm:p5-asymmetric-compression`, clauses (i)–(iii)). A tensor whose positive-length word traces
+are the sums of the word traces of a finite family of normal blocks of positive bond dimension
+admits a multi-block compression onto that family. The physical alphabet is any finite type:
+the proof relabels it along `Fintype.equivFin` and carries the compression back, since a
+compression datum only reads the one-site matrices letter by letter. -/
+theorem exists_multiBlockCompression_of_isNormal {α : Type*} [Finite α] (S : Finset ι)
+    (C : ∀ s, MPTensor α (Fin (D s)))
+    (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s) (B : MPTensor α (Fin DB))
+    (htr : ∀ w : List α, w ≠ [] →
+      Matrix.trace (Kraus.evalWord B w) = ∑ s ∈ S, Matrix.trace (Kraus.evalWord (C s) w)) :
+    Nonempty (MultiBlockCompression B S C) := by
+  classical
+  have := Fintype.ofFinite α
+  let e := Fintype.equivFin α
+  obtain ⟨P⟩ := exists_multiBlockCompression_of_isNormal_fin S
+    (fun s => Kraus.reindexPhysical e.symm (C s))
+    (fun s hs => (isNormal_reindexPhysical_equiv e.symm (C s)).2 (hC s hs)) hD
+    (Kraus.reindexPhysical e.symm B) fun w hw => by
+      simpa only [Kraus.evalWord_reindexPhysical] using
+        htr (w.map e.symm) (by simpa using hw)
+  exact ⟨P.ofReindexPhysical e⟩
 
 end MPSTensor
 
@@ -633,12 +676,14 @@ Proposition 20, with the nilpotency length of Proposition 21 sharpened to `D_B -
 A tensor `B` with the same positive-length periodic vectors as a normal tensor `A` of positive
 bond dimension is a rectangular reduction onto `A`, and the residual of the reduction is
 nilpotent: every product of `D_B - D_A + 1` of its matrices vanishes. -/
-theorem exists_isReduction_and_nilpotent_of_isNormal (A : MPSTensor d DA)
-    (hA : Kraus.IsNormal A) (hDA : 0 < DA) (B : MPSTensor d DB) (hSame : SameMPV₂Pos B A) :
+theorem exists_isReduction_and_nilpotent_of_isNormal {α : Type*} [Finite α]
+    (A : MPTensor α (Fin DA))
+    (hA : Kraus.IsNormal A) (hDA : 0 < DA) (B : MPTensor α (Fin DB)) (hSame : SameMPV₂Pos B A) :
     ∃ (V : Matrix (Fin DA) (Fin DB) ℂ) (W : Matrix (Fin DB) (Fin DA) ℂ),
       IsReduction B A V W ∧
-        ∀ w : List (Fin d), DB - DA + 1 ≤ w.length →
+        ∀ w : List α, DB - DA + 1 ≤ w.length →
           Kraus.evalWord (fun i => B i - W * A i * V) w = 0 := by
+  have := Fintype.ofFinite α
   obtain ⟨P⟩ := exists_multiBlockCompression_of_isNormal (ι := Unit) (D := fun _ => DA)
     {()} (fun _ => A) (fun _ _ => hA) (fun _ _ => hDA) B
     fun w hw => by simpa using hSame.trace_evalWord w hw
@@ -648,7 +693,7 @@ theorem exists_isReduction_and_nilpotent_of_isNormal (A : MPSTensor d DA)
   have hcard : ({()} : Finset Unit).card = 1 := rfl
   have hsingle : ∀ s : {s // s ∈ ({()} : Finset Unit)}, s = s₀ :=
     fun s => Subtype.ext (Subsingleton.elim _ _)
-  have hsum : ∀ i : Fin d, (∑ s : {s // s ∈ ({()} : Finset Unit)},
+  have hsum : ∀ i : α, (∑ s : {s // s ∈ ({()} : Finset Unit)},
       P.right s * A i * P.left s) = P.right s₀ * A i * P.left s₀ :=
     fun i => Finset.sum_eq_single_of_mem s₀ (Finset.mem_univ s₀)
       fun b _ hb => absurd (hsingle b) hb
@@ -722,12 +767,13 @@ gives `W_s V_s = 1` together with the intertwining of every word,
 mutual biorthogonality of distinct slots, `MultiBlockCompression.evalWord_remainder_eq_zero`
 gives the nilpotency of the remainder, and `MultiBlockCompression.dim_eq` gives the dimension
 count. -/
-theorem exists_weightedMultiBlockCompression_of_isNormal (S : Finset ι) (μ : ι → ℂ)
-    (A : ∀ s, MPSTensor d (D s)) (hμ : ∀ s ∈ S, μ s ≠ 0)
-    (hA : ∀ s ∈ S, Kraus.IsNormal (A s)) (hD : ∀ s ∈ S, 0 < D s) (B : MPSTensor d DB)
-    (hmpv : ∀ N : ℕ, 0 < N → ∀ σ : Fin N → Fin d,
+theorem exists_weightedMultiBlockCompression_of_isNormal {α : Type*} [Finite α] (S : Finset ι)
+    (μ : ι → ℂ) (A : ∀ s, MPTensor α (Fin (D s))) (hμ : ∀ s ∈ S, μ s ≠ 0)
+    (hA : ∀ s ∈ S, Kraus.IsNormal (A s)) (hD : ∀ s ∈ S, 0 < D s) (B : MPTensor α (Fin DB))
+    (hmpv : ∀ N : ℕ, 0 < N → ∀ σ : Fin N → α,
       mpv B σ = ∑ s ∈ S, μ s ^ N * mpv (A s) σ) :
     Nonempty (MultiBlockCompression B S fun s => μ s • A s) := by
+  have := Fintype.ofFinite α
   refine exists_multiBlockCompression_of_isNormal S (fun s => μ s • A s)
     (fun s hs => (isNormal_smul_iff (hμ s hs) (A s)).2 (hA s hs)) hD B ?_
   intro w hw

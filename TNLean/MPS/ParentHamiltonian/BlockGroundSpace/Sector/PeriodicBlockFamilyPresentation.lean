@@ -45,16 +45,18 @@ configuration isometry. Nonzero weights do not affect these spaces, and no
 periodicity or positivity is needed. Source: Nachtergaele,
 arXiv:cond-mat/9410110, Section 3, lines 1504--1538; DCCSP17,
 arXiv:1708.00029, Lemma lem:blocking-arbitrary, lines 434--451. -/
-theorem groundSpaceES_blockTensor_toTensorFromBlocks_eq_iSup
+theorem map_groundSpace_blockTensor_toTensorFromBlocks_eq_iSup
     (μ : Fin r → ℂ) (A : ∀ j, MPSTensor d (dim j)) (hμ : ∀ j, μ j ≠ 0)
     (L N : ℕ) :
-    groundSpaceES (blockTensor (toTensorFromBlocks μ A) L) N =
-      ⨆ j, groundSpaceES (blockTensor (A j) L) N := by
+    ((groundSpace (blockTensor (toTensorFromBlocks μ A) L) N).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap) =
+      ⨆ j, ((groundSpace (blockTensor (A j) L) N).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap) := by
   apply Submodule.map_injective_of_injective
     (blockedConfigLinearIsometryEquiv d N L).injective
-  rw [groundSpaceES_blockTensor_map, Submodule.map_iSup]
-  simp only [groundSpaceES_blockTensor_map,
-    groundSpaceES_toTensorFromBlocks_eq_iSup μ A hμ]
+  rw [map_groundSpace_blockTensor_map, Submodule.map_iSup]
+  simp only [map_groundSpace_blockTensor_map,
+    map_groundSpace_toTensorFromBlocks_eq_iSup μ A hμ]
 
 /-- A finite collection of finite primitive faithful families has one
 inequivalent primitive presentation of the sum of all its boundary spaces.
@@ -74,8 +76,9 @@ theorem exists_primitive_nestedFamilyPresentation
         (σ : ∀ a, Matrix (Fin (bdim a)) (Fin (bdim a)) ℂ),
       (∀ a, Kraus.HasComplementaryFixedPointGap (C a) (σ a)) ∧ (∀ a, (σ a).PosDef) ∧
       BlocksNotGaugePhaseEquiv C ∧
-      ∀ N, (⨆ j, ⨆ a, groundSpaceES (B j a) N) =
-        groundSpaceES (toTensorFromBlocks (fun _ => 1) C) N := by
+      ∀ N, (⨆ j, ⨆ a, ((groundSpace (B j a) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) =
+        ((groundSpace (toTensorFromBlocks (fun _ => 1) C) N).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap) := by
   classical
   obtain ⟨e⟩ : Nonempty (Fin (Fintype.card (Σ j : Fin r, Fin (c j))) ≃
       (Σ j : Fin r, Fin (c j))) := ⟨(Fintype.equivFin _).symm⟩
@@ -89,12 +92,13 @@ theorem exists_primitive_nestedFamilyPresentation
   refine ⟨g, (fun a => fdim (sel a)), hpos, (fun a => C (sel a)),
     (fun a => σ (sel a)), hprim, hfaithful, hsep, ?_⟩
   intro N
-  rw [← hselected N, groundSpaceES_toTensorFromBlocks_eq_iSup (fun _ => 1) C
+  rw [← hselected N, map_groundSpace_toTensorFromBlocks_eq_iSup (fun _ => 1) C
     (fun _ => one_ne_zero)]
   exact (iSup_sigma' (β := Fin r) (κ := fun j => Fin (c j))
-    (fun (j : Fin r) (q : Fin (c j)) => groundSpaceES (B j q) N)).trans
+    (fun (j : Fin r) (q : Fin (c j)) => ((groundSpace (B j q) N).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap))).trans
       (e.iSup_comp (g := fun a : Σ j : Fin r, Fin (c j) =>
-        groundSpaceES (B a.1 a.2) N)).symm
+        ((groundSpace (B a.1 a.2) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))).symm
 
 /-- A positive common multiple of the periods produces a primitive faithful
 family with pairwise inequivalent sectors and exactly the original blocked
@@ -112,8 +116,10 @@ theorem exists_primitive_blockFamilyPresentation_of_period_dvd
         (ρ : ∀ a, Matrix (Fin (bdim a)) (Fin (bdim a)) ℂ),
       (∀ a, Kraus.HasComplementaryFixedPointGap (B a) (ρ a)) ∧ (∀ a, (ρ a).PosDef) ∧
       BlocksNotGaugePhaseEquiv B ∧
-      ∀ N, groundSpaceES (blockTensor (toTensorFromBlocks μ A) L) N =
-        groundSpaceES (toTensorFromBlocks (fun _ => 1) B) N := by
+      ∀ N, ((groundSpace (blockTensor (toTensorFromBlocks μ A) L) N).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap) =
+        ((groundSpace (toTensorFromBlocks (fun _ => 1) B) N).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap) := by
   classical
   choose dims hdims rest using fun j =>
     (hPeriodic j).exists_hasComplementaryFixedPointGap_groundSpaceDecomposition_of_dvd L hL (hdiv j)
@@ -123,8 +129,8 @@ theorem exists_primitive_blockFamilyPresentation_of_period_dvd
     exists_primitive_nestedFamilyPresentation (fun j => (m j).gcd L) dims B ρ hP hρ
   refine ⟨g, bdim, hdim, C, σ, hprim, hfaithful, hsep, ?_⟩
   intro N
-  rw [← hflat N, groundSpaceES_blockTensor_toTensorFromBlocks_eq_iSup μ A hμ]
-  simp only [hGS, groundSpaceES_toTensorFromBlocks_eq_iSup (fun _ => 1) _
+  rw [← hflat N, map_groundSpace_blockTensor_toTensorFromBlocks_eq_iSup μ A hμ]
+  simp only [hGS, map_groundSpace_toTensorFromBlocks_eq_iSup (fun _ => 1) _
     (fun _ => one_ne_zero)]
 
 /-- Every finite periodic family admits a positive blocking length and an
@@ -143,8 +149,10 @@ theorem exists_primitive_blockFamilyPresentation_of_isPeriodic
           (ρ : ∀ a, Matrix (Fin (bdim a)) (Fin (bdim a)) ℂ),
         (∀ a, Kraus.HasComplementaryFixedPointGap (B a) (ρ a)) ∧ (∀ a, (ρ a).PosDef) ∧
         BlocksNotGaugePhaseEquiv B ∧
-        ∀ N, groundSpaceES (blockTensor (toTensorFromBlocks μ A) L) N =
-          groundSpaceES (toTensorFromBlocks (fun _ => 1) B) N := by
+        ∀ N, ((groundSpace (blockTensor (toTensorFromBlocks μ A) L) N).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap) =
+          ((groundSpace (toTensorFromBlocks (fun _ => 1) B) N).map (WithLp.linearEquiv 2 ℂ
+              _).symm.toLinearMap) := by
   have hL : 0 < ∏ j, m j := Finset.prod_pos fun j _ => (hPeriodic j).period_pos
   exact ⟨∏ j, m j, hL,
     exists_primitive_blockFamilyPresentation_of_period_dvd μ A hμ m hPeriodic _ hL

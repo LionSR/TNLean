@@ -209,6 +209,7 @@ theorem IsPeriodic.one_iff_primitive (A : MPTensor α (Fin D)) :
         ext μ
         simp
 
+omit [Fintype α] in
 /-- Every equivalent block pair is a repeated block pair. -/
 theorem EquivalentBlocks.to_repeatedBlocks {A B : MPTensor α (Fin D)}
     (h : EquivalentBlocks A B) :
@@ -218,6 +219,7 @@ theorem EquivalentBlocks.to_repeatedBlocks {A B : MPTensor α (Fin D)}
   intro i
   simp [hY i]
 
+omit [Fintype α] in
 /-- `EquivalentBlocks` is equivalent to ordinary `GaugeEquiv`. -/
 theorem equivalentBlocks_iff_gaugeEquiv {A B : MPTensor α (Fin D)} :
     EquivalentBlocks A B ↔ GaugeEquiv A B := by
@@ -241,6 +243,7 @@ theorem equivalentBlocks_iff_gaugeEquiv {A B : MPTensor α (Fin D)} :
         (X : Matrix (Fin D) (Fin D) ℂ))) at hXi
     simpa [Matrix.mul_assoc] using hXi.symm
 
+omit [Fintype α] in
 /-- Symmetry of repeated blocks. -/
 theorem RepeatedBlocks.symm {A B : MPTensor α (Fin D)}
     (h : RepeatedBlocks A B) : RepeatedBlocks B A := by
@@ -255,6 +258,7 @@ theorem RepeatedBlocks.symm {A B : MPTensor α (Fin D)}
   simp [Matrix.mul_assoc, hξ_ne] at hYi
   simpa [Matrix.mul_assoc] using hYi.symm
 
+omit [Fintype α] in
 /-- Transitivity of repeated blocks. -/
 theorem RepeatedBlocks.trans {A B C : MPTensor α (Fin D)}
     (hAB : RepeatedBlocks A B) (hBC : RepeatedBlocks B C) :
@@ -423,6 +427,7 @@ theorem isPeriodic_reindexPhysical_iff {m : ℕ} (e : α' ≃ α) (A : MPTensor 
     simp [Kraus.reindexPhysical]
   simpa only [hback] using h.reindexPhysical e.symm
 
+omit [Fintype α] [Fintype α'] in
 /-- Relabelling both tensors by the same bijection of the physical alphabet preserves repeated
 blocks. -/
 theorem RepeatedBlocks.reindexPhysical {A B : MPTensor α (Fin D)} (h : RepeatedBlocks A B)
@@ -430,11 +435,15 @@ theorem RepeatedBlocks.reindexPhysical {A B : MPTensor α (Fin D)} (h : Repeated
   obtain ⟨ξ, Y, hξ, hY⟩ := h
   exact ⟨ξ, Y, hξ, fun i ↦ hY (e i)⟩
 
+omit [Fintype α] [Fintype α'] in
 /-- Repeated blocks are invariant under relabelling both tensors by the same bijection of the
 physical alphabet. -/
-theorem repeatedBlocks_reindexPhysical_iff (e : α' ≃ α) (A B : MPTensor α (Fin D)) :
+theorem repeatedBlocks_reindexPhysical_iff [Finite α] [Finite α'] (e : α' ≃ α)
+    (A B : MPTensor α (Fin D)) :
     RepeatedBlocks (Kraus.reindexPhysical e A) (Kraus.reindexPhysical e B) ↔
       RepeatedBlocks A B := by
+  have := Fintype.ofFinite α
+  have := Fintype.ofFinite α'
   refine ⟨fun ⟨ξ, Y, hξ, hY⟩ ↦ ⟨ξ, Y, hξ, fun i ↦ ?_⟩, fun h ↦ h.reindexPhysical e⟩
   simpa [Kraus.reindexPhysical] using hY (e.symm i)
 

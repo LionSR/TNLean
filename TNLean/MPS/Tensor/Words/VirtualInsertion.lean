@@ -83,6 +83,7 @@ def virtualInsertCoeff (A₁ A₂ A₃ : MPTensor α (Fin D))
     (σ : Fin 3 → α) (X : Matrix (Fin D) (Fin D) ℂ) : ℂ :=
   Matrix.trace (A₁ (σ 0) * X * A₂ (σ 1) * A₃ (σ 2))
 
+omit [Fintype α] in
 @[simp] lemma virtualInsertCoeff_eq (A₁ A₂ A₃ : MPTensor α (Fin D))
     (σ : Fin 3 → α) (X : Matrix (Fin D) (Fin D) ℂ) :
     virtualInsertCoeff A₁ A₂ A₃ σ X =

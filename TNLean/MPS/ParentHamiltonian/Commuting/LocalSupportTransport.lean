@@ -63,9 +63,9 @@ theorem adjacent_parentRingInteraction_term_eq_zero_iff_mem_groundSpace_succ
     Matrix.toLin' ((parentRingInteraction A L (L + 1)).term (0 : Fin (L + 1))) v = 0 ∧
         Matrix.toLin' ((parentRingInteraction A L (L + 1)).term (1 : Fin (L + 1))) v = 0 ↔
       v ∈ groundSpace A (L + 1) := by
-  have h := parentRingInteraction_term_zero_one_eq_zero_iff_mem_groundSpaceES_succ
+  have h := parentRingInteraction_term_zero_one_eq_zero_iff_mem_map_groundSpace_succ
     hA hL (v := WithLp.toLp 2 v)
-  rw [mem_groundSpaceES_iff, Matrix.toLpLin_apply, Matrix.toLpLin_apply, WithLp.toLp_eq_zero,
+  rw [mem_map_groundSpace_iff, Matrix.toLpLin_apply, Matrix.toLpLin_apply, WithLp.toLp_eq_zero,
     WithLp.toLp_eq_zero] at h
   rw [Matrix.toLin'_apply, Matrix.toLin'_apply]
   exact h
@@ -390,7 +390,7 @@ theorem parentRingInteraction_term_adjacent_twoSite_commute_of_threeSite_zero_on
 
 /-! ### The parent interaction on the ring -/
 
-private theorem cyclicRestrictES_three_parentRingInteraction_term_left
+private theorem withLpMap_cyclicRestrictₗ_three_parentRingInteraction_term_left
     {A : MPSTensor d D} {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (τ : Cfg d N)
     (v : EuclideanSpace ℂ (Cfg d N)) :
     haveI : NeZero N := ⟨by omega⟩;
@@ -404,7 +404,7 @@ private theorem cyclicRestrictES_three_parentRingInteraction_term_left
   rw [Matrix.toLin'_apply, Matrix.toLin'_apply] at h
   simpa [LinearMap.withLpMap, Matrix.toLpLin_apply] using congrArg (WithLp.toLp 2) h
 
-private theorem cyclicRestrictES_three_parentRingInteraction_term_right
+private theorem withLpMap_cyclicRestrictₗ_three_parentRingInteraction_term_right
     {A : MPSTensor d D} {N : ℕ} (hN : 3 ≤ N) (i : Fin N) (τ : Cfg d N)
     (v : EuclideanSpace ℂ (Cfg d N)) :
     haveI : NeZero N := ⟨by omega⟩;
@@ -461,8 +461,8 @@ theorem re_inner_parentRingInteraction_term_adjacent_twoSite_forward_ge_of_three
   apply Finset.sum_le_sum
   intro τ _
   let outside := cyclicWindowCfgEquiv hN i ((fun _ ↦ 0), τ)
-  rw [cyclicRestrictES_three_parentRingInteraction_term_left hN i outside v,
-    cyclicRestrictES_three_parentRingInteraction_term_right hN i outside v]
+  rw [withLpMap_cyclicRestrictₗ_three_parentRingInteraction_term_left hN i outside v,
+    withLpMap_cyclicRestrictₗ_three_parentRingInteraction_term_right hN i outside v]
   exact h₃ _
 
 /-- The same three-site anticommutator estimate transports to every backward adjacent pair of

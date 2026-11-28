@@ -162,7 +162,7 @@ theorem groundSpace_repeatedBlockTensor_eq_ghzTensor (L : ℕ) :
 multiplicities. In particular the two-site parent interactions coincide. -/
 theorem parentInteraction_repeatedBlockTensor_eq_ghzTensor (L : ℕ) :
     parentInteraction repeatedBlockTensor L = parentInteraction ghzTensor L := by
-  simp [parentInteraction, groundSpaceES, groundSpace_repeatedBlockTensor_eq_ghzTensor]
+  simp [parentInteraction, groundSpace_repeatedBlockTensor_eq_ghzTensor]
 
 /-- The periodic chains impose identical parent constraints at every interaction
 range and system size, including the common degenerate-size conventions. -/

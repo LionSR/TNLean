@@ -66,7 +66,8 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.openInteraction_commutator_en
     (X : Matrix (Cfg d k) (Cfg d k) ℂ) (hR : 0 < R)
     (ψ : (n : ℕ) → EuclideanSpace ℂ (Cfg d ((n + (R - 1) + k) + (R - 1 + n))))
     (hGround : ∀ᶠ n in atTop,
-      ψ n ∈ groundSpaceES A ((n + (R - 1) + k) + (R - 1 + n)))
+      ψ n ∈ ((groundSpace A ((n + (R - 1) + k) + (R - 1 + n))).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap))
     (hUnit : ∀ᶠ n in atTop, ‖ψ n‖ = 1) :
     let N (n : ℕ) := (n + (R - 1) + k) + (R - 1 + n)
     let H (n : ℕ) := Matrix.toEuclideanLin (chainTranslates R (N n) h).hamiltonian
@@ -104,13 +105,15 @@ theorem _root_.Kraus.HasComplementaryFixedPointGap.localCommutator_gap_of_openIn
     (hKernel : ∀ᶠ n in atTop,
       LinearMap.ker (Matrix.toEuclideanLin
         (chainTranslates R ((n + (R - 1) + k) + (R - 1 + n)) h).hamiltonian) =
-          groundSpaceES A ((n + (R - 1) + k) + (R - 1 + n)))
+          ((groundSpace A ((n + (R - 1) + k) + (R - 1 + n))).map (WithLp.linearEquiv 2 ℂ
+              _).symm.toLinearMap))
     (hGap : ∀ᶠ n in atTop, ∀ μ : ℂ, Module.End.HasEigenvalue
       (Matrix.toEuclideanLin
         (chainTranslates R ((n + (R - 1) + k) + (R - 1 + n)) h).hamiltonian) μ →
         μ = 0 ∨ (γ : ℂ) ≤ μ)
     (hGround : ∀ᶠ n in atTop,
-      ψ n ∈ groundSpaceES A ((n + (R - 1) + k) + (R - 1 + n)))
+      ψ n ∈ ((groundSpace A ((n + (R - 1) + k) + (R - 1 + n))).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap))
     (hUnit : ∀ᶠ n in atTop, ‖ψ n‖ = 1) :
     γ * (observableInsertionExpectation A ρ (Xᴴ * X)).re ≤
       (observableInsertionExpectation A ρ (localCommutatorObservable h X)).re := by
@@ -160,7 +163,7 @@ theorem exists_pos_localCommutator_gap_of_isParentInteraction
   let N (n : ℕ) := (n + (R - 1) + k) + (R - 1 + n)
   have hN : Tendsto N atTop atTop :=
     tendsto_atTop_mono (fun n => by dsimp [N]; omega) tendsto_id
-  obtain ⟨ψ, hg, hu⟩ := hP.exists_eventually_unit_groundSpaceES hρ N hN
+  obtain ⟨ψ, hg, hu⟩ := hP.exists_eventually_unit_map_groundSpace hρ N hN
   have hInj : Kraus.IsNBlkInjective A (R - 1) :=
     Kraus.isNBlkInjective_of_le hD (isNBlkInjective_pow_four_of_isNormal A hNormal) (by omega)
   have hRange : R - 1 + 1 = R := by omega
@@ -169,7 +172,7 @@ theorem exists_pos_localCommutator_gap_of_isParentInteraction
     hcenter ψ hγ.le
   · exact Eventually.of_forall fun n => by
       rw [hh.ker_hamiltonian_chainTranslates_eq_ker_parentChainInteraction]
-      have h := ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_isNBlkInjective
+      have h := ker_hamiltonian_parentChainInteraction_eq_map_groundSpace_of_isNBlkInjective
         hInj (by omega : 0 < R - 1) (by dsimp [N]; omega : R - 1 + 1 ≤ N n)
       rwa [hRange] at h
   · exact Eventually.of_forall fun n => hgap (N n) (by dsimp [N]; omega)

@@ -19,6 +19,11 @@ original virtual gauge.
 This is the blocking fact used when Proposition 4.13 is applied both to an MPO
 tensor and to its two-site blocked tensor in Appendix C.4 of
 arXiv:1606.00608, lines 1951--1956.
+
+**Bridge (T.2b):** This module still reads an operator tensor through `MPOTensor.toMPSTensor`,
+because the Fin-encoded blocking `Kraus.blockTensor` (with `MPOTensor.toMPSTensor_blockTensor`,
+`MPOTensor.toMPSTensor_blockTwo`) is stated on the alphabet `Fin (d * d)`. The bridge is removed
+when the blocking moves to `Kraus.block` (step T.2b of `docs/tensor_type_unification.md`).
 -/
 
 open scoped Matrix BigOperators

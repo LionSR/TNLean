@@ -118,10 +118,10 @@ Hamiltonian of `parentChainInteraction`, and its kernel is taken for its operato
 theorem ker_hamiltonian_parentChainInteraction_pvbs (q : ℂ) {N : ℕ} (hN : 2 ≤ N) :
     LinearMap.ker
         (Matrix.toEuclideanLin (parentChainInteraction (pvbsTensor q) 2 N).hamiltonian) =
-      groundSpaceES (pvbsTensor q) N := by
-  refine le_antisymm ?_ (groundSpaceES_le_ker_hamiltonian_parentChainInteraction _ 2 N)
+      ((groundSpace (pvbsTensor q) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+  refine le_antisymm ?_ (map_groundSpace_le_ker_hamiltonian_parentChainInteraction _ 2 N)
   intro v hv
-  rw [mem_groundSpaceES_iff]
+  rw [mem_map_groundSpace_iff]
   exact contiguous_mem_groundSpace_pvbs q hN fun s hs τ ↦
     contiguousRestrictₗ_mem_groundSpace_of_mem_ker_hamiltonian_parentChainInteraction
       (pvbsTensor q) hv s hs τ
@@ -132,8 +132,7 @@ theorem finrank_ker_hamiltonian_parentChainInteraction_pvbs (q : ℂ) {N : ℕ} 
     Module.finrank ℂ (LinearMap.ker
       (Matrix.toEuclideanLin (parentChainInteraction (pvbsTensor q) 2 N).hamiltonian)) = 2 := by
   obtain ⟨n, rfl⟩ : ∃ n, N = n + 1 := ⟨N - 1, by omega⟩
-  rw [ker_hamiltonian_parentChainInteraction_pvbs q hN, groundSpaceES,
-    LinearEquiv.finrank_map_eq]
+  rw [ker_hamiltonian_parentChainInteraction_pvbs q hN, LinearEquiv.finrank_map_eq]
   exact finrank_groundSpace_pvbsTensor q n
 
 end MPSTensor

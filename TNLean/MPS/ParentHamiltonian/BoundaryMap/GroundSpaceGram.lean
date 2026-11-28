@@ -30,9 +30,12 @@ section FrobeniusRealization
 
 open scoped Matrix.Norms.Frobenius
 
-/-- The boundary map \(\Gamma_L\), with the virtual matrix space carrying the
-Hilbert--Schmidt inner product and the physical configuration space carrying
-the standard \(\ell^2\) inner product. -/
+/-- The operator form of the boundary map `groundSpaceMap A L`, used for the Hilbert-space
+statements: \(\Gamma_L\) transported along the Frobenius identification of the virtual matrix
+space with \(\ell^2(D \times D)\) and the identification of the physical configuration space
+with \(\ell^2\). Its facts that are not about the Hilbert structure (adjoint, Gram operator,
+range, inverse-Gram projection) are those of `groundSpaceMap A L`, read through
+`groundSpaceMapES_frobeniusEquivEuclidean_apply`. -/
 noncomputable def groundSpaceMapES (A : MPSTensor d D) (L : ℕ) :
     EuclideanSpace ℂ (Fin D × Fin D) →L[ℂ] EuclideanSpace ℂ (Cfg d L) :=
   LinearMap.toContinuousLinearMap <|
@@ -40,6 +43,17 @@ noncomputable def groundSpaceMapES (A : MPSTensor d D) (L : ℕ) :
       ((groundSpaceMap A L).comp
         (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).symm.toLinearEquiv.toLinearMap)
 
+/-- The Frobenius identification sends the matrix unit `Matrix.single a b 1` to the basis vector
+at `(b, a)`. -/
+theorem _root_.Matrix.frobeniusEquivEuclidean_single (a b : Fin D) :
+    Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) (Matrix.single a b 1) =
+      EuclideanSpace.single (b, a) (1 : ℂ) := by
+  apply PiLp.ext
+  rintro ⟨j, i⟩
+  simp [Matrix.frobeniusEquivEuclidean_apply, EuclideanSpace.single]
+
+/-- **The unfolding of `groundSpaceMapES`**: on the Frobenius image of a matrix it is the
+boundary map `groundSpaceMap`. -/
 @[simp]
 theorem groundSpaceMapES_frobeniusEquivEuclidean_apply
     (A : MPSTensor d D) (L : ℕ) (X : Matrix (Fin D) (Fin D) ℂ) :
@@ -54,41 +68,18 @@ theorem groundSpaceMapES_frobeniusEquivEuclidean_apply
 /-- The Hilbert-space realization has exactly the physical local ground space
 as its range. -/
 theorem range_groundSpaceMapES (A : MPSTensor d D) (L : ℕ) :
-    (groundSpaceMapES A L).range = groundSpaceES A L := by
+    (groundSpaceMapES A L).range = ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap) := by
   ext v
   constructor
   · rintro ⟨x, rfl⟩
     obtain ⟨X, rfl⟩ := (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).surjective x
     change (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm
-      (groundSpaceMap A L X) ∈ groundSpaceES A L
+      (groundSpaceMap A L X) ∈ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)
     exact ⟨groundSpaceMap A L X, ⟨X, rfl⟩, rfl⟩
   · rintro ⟨ψ, ⟨X, rfl⟩, rfl⟩
     exact ⟨Matrix.frobeniusEquivEuclidean (Fin D) (Fin D) X,
       groundSpaceMapES_frobeniusEquivEuclidean_apply A L X⟩
-
-/-- Block injectivity at length \(L\) makes the Hilbert-space boundary map
-\(\Gamma_L^{\mathrm{ES}}\) injective. -/
-theorem groundSpaceMapES_injective_of_isNBlkInjective {A : MPSTensor d D} {L : ℕ}
-    (hInj : Kraus.IsNBlkInjective A L) :
-    Function.Injective (groundSpaceMapES A L) := by
-  intro x y hxy
-  obtain ⟨X, rfl⟩ := (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).surjective x
-  obtain ⟨Y, rfl⟩ := (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).surjective y
-  apply congrArg (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D))
-  apply groundSpaceMap_injective_of_isNBlkInjective hInj
-  apply (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm.injective
-  rw [groundSpaceMapES_frobeniusEquivEuclidean_apply,
-    groundSpaceMapES_frobeniusEquivEuclidean_apply] at hxy
-  exact hxy
-
-/-- If \(A\) is block-injective at a positive length \(L₀\), then its
-Hilbert-space boundary map is injective at every length \(L \ge L₀\). -/
-theorem groundSpaceMapES_injective_of_isNBlkInjective_of_le
-    {A : MPSTensor d D} {L₀ L : ℕ} (hL₀ : 0 < L₀)
-    (hInj : Kraus.IsNBlkInjective A L₀) (hL : L₀ ≤ L) :
-    Function.Injective (groundSpaceMapES A L) :=
-  groundSpaceMapES_injective_of_isNBlkInjective
-    (Kraus.isNBlkInjective_of_le hL₀ hInj hL)
 
 /-- If \(A\) is block-injective at length \(L\), the inverse-Gram range
 projector of \(\Gamma_L^{\mathrm{ES}}\) is the orthogonal projector onto the
@@ -98,8 +89,11 @@ overlapping-window estimate. -/
 theorem injectiveRangeProjector_groundSpaceMapES_eq_starProjection
     (A : MPSTensor d D) (L : ℕ) (hInj : Kraus.IsNBlkInjective A L) :
     ContinuousLinearMap.injectiveRangeProjector (groundSpaceMapES A L)
-      (groundSpaceMapES_injective_of_isNBlkInjective hInj) =
-        (groundSpaceES A L).starProjection := by
+      (show Function.Injective (groundSpaceMapES A L) from
+        (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm.injective.comp
+          ((groundSpaceMap_injective_of_isNBlkInjective hInj).comp
+            (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).symm.injective)) =
+        ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection := by
   rw [ContinuousLinearMap.injectiveRangeProjector_eq_starProjection]
   exact congrArg (fun K : Submodule ℂ (EuclideanSpace ℂ (Cfg d L)) => K.starProjection)
     (range_groundSpaceMapES A L)
@@ -113,27 +107,20 @@ theorem injectiveRangeProjector_groundSpaceMapES_eq_starProjection
 Here the inverse is `ContinuousLinearMap.inverseGram`. This is the physical
 range projector, not the virtual `fixedPointProj`; it does not assert an
 overlapping-window estimate. -/
-theorem groundSpaceES_starProjection_eq_groundSpaceMapES_comp_inverseGram_comp_adjoint
+theorem map_groundSpace_starProjection_eq_groundSpaceMapES_comp_inverseGram_comp_adjoint
     (A : MPSTensor d D) {L₀ L : ℕ} (hL₀ : 0 < L₀)
     (hInj : Kraus.IsNBlkInjective A L₀) (hL : L₀ ≤ L) :
-    (groundSpaceES A L).starProjection =
+    ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection =
       (groundSpaceMapES A L).comp
         ((ContinuousLinearMap.inverseGram (groundSpaceMapES A L)
-          (groundSpaceMapES_injective_of_isNBlkInjective_of_le hL₀ hInj hL)).comp
+          (show Function.Injective (groundSpaceMapES A L) from
+            (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm.injective.comp
+              ((groundSpaceMap_injective_of_isNBlkInjective
+                (Kraus.isNBlkInjective_of_le hL₀ hInj hL)).comp
+                  (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).symm.injective))).comp
             (groundSpaceMapES A L).adjoint) := by
   exact (injectiveRangeProjector_groundSpaceMapES_eq_starProjection A L
     (Kraus.isNBlkInjective_of_le hL₀ hInj hL)).symm
-
-@[simp]
-theorem groundSpaceMapES_single (A : MPSTensor d D) (L : ℕ) (a b : Fin D) :
-    groundSpaceMapES A L (EuclideanSpace.single (b, a) 1) =
-      (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin d) L)).symm
-        (groundSpaceMap A L (Matrix.single a b 1)) := by
-  rw [← groundSpaceMapES_frobeniusEquivEuclidean_apply A L (Matrix.single a b 1)]
-  apply congrArg (groundSpaceMapES A L)
-  apply PiLp.ext
-  rintro ⟨j, i⟩
-  simp [Matrix.frobeniusEquivEuclidean_apply, EuclideanSpace.single]
 
 end FrobeniusRealization
 
@@ -153,7 +140,8 @@ theorem inner_single_groundSpaceGram_single_eq_rectangularChoi
         (c, e) (a, b) := by
   classical
   rw [groundSpaceGram, ContinuousLinearMap.comp_apply, ContinuousLinearMap.adjoint_inner_right]
-  rw [groundSpaceMapES_single, groundSpaceMapES_single]
+  rw [← Matrix.frobeniusEquivEuclidean_single, ← Matrix.frobeniusEquivEuclidean_single,
+    groundSpaceMapES_frobeniusEquivEuclidean_apply, groundSpaceMapES_frobeniusEquivEuclidean_apply]
   change inner ℂ
     (WithLp.toLp 2 (groundSpaceMap A L (Matrix.single a b 1)))
     (WithLp.toLp 2 (groundSpaceMap A L (Matrix.single c e 1))) = _

@@ -71,15 +71,16 @@ supplied explicitly where required. -/
 theorem toMatrix'_parentInteraction_commute_onSiteTensorPow_of_invariant
     (A : MPSTensor d D) (U : Matrix (Fin d) (Fin d) ℂ)
     (hU : U ∈ Matrix.unitaryGroup (Fin d) ℂ) (L : ℕ)
-    (hInv : (groundSpaceES A L).map (Matrix.toEuclideanLin (onSiteTensorPow L U)) =
-      groundSpaceES A L) :
+    (hInv : ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map
+        (Matrix.toEuclideanLin (onSiteTensorPow L U)) =
+      ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     Commute (LinearMap.toMatrix' (parentInteraction A L)) (onSiteTensorPow L U) := by
   refine Commute.of_map (Matrix.toLpLinAlgEquiv 2).injective ?_
   change Commute (Matrix.toEuclideanLin (LinearMap.toMatrix' (parentInteraction A L)))
     (Matrix.toEuclideanLin (onSiteTensorPow L U))
   rw [toEuclideanLin_toMatrix'_parentInteraction]
   let T := Matrix.toEuclideanLin (onSiteTensorPow L U)
-  let G := groundSpaceES A L
+  let G := ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)
   have hadj : T.adjoint ∘ₗ T = 1 := by
     apply LinearMap.ext
     intro v
@@ -94,7 +95,7 @@ theorem toMatrix'_parentInteraction_commute_onSiteTensorPow_of_invariant
   let I := T.isometryOfInner hinner
   have hG : G.map I.toLinearMap = G := by
     simpa only [I, LinearMap.isometryOfInner_toLinearMap] using hInv
-  let : G.HasOrthogonalProjection := groundSpaceES_hasOrthogonalProjection A L
+  let : G.HasOrthogonalProjection := inferInstance
   let : (G.map I.toLinearMap).HasOrthogonalProjection := by rw [hG]; infer_instance
   have hproj (v : EuclideanSpace ℂ (Cfg d L)) :
       T (G.starProjection v) = G.starProjection (T v) := by
@@ -112,14 +113,15 @@ theorem toMatrix'_parentInteraction_commute_onSiteTensorPow_of_invariant
 /-- A commuting physical rotation transports invariance of the local MPS space.
 Source: arXiv:1010.3732, lines 672--676; invariance of the local space is
 supplied explicitly where required. -/
-theorem groundSpaceES_invariant_rotatePhysical_of_commute
+theorem map_groundSpace_invariant_rotatePhysical_of_commute
     (A : MPSTensor d D) (U Q : Matrix (Fin d) (Fin d) ℂ) (hComm : Commute U Q)
-    (L : ℕ) (hInv : (groundSpaceES A L).map (Matrix.toEuclideanLin (onSiteTensorPow L U)) =
-      groundSpaceES A L) :
-    (groundSpaceES (rotatePhysical Q A) L).map
+    (L : ℕ) (hInv : ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map
+        (Matrix.toEuclideanLin (onSiteTensorPow L U)) =
+      ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
+    ((groundSpace (rotatePhysical Q A) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map
       (Matrix.toEuclideanLin (onSiteTensorPow L U)) =
-        groundSpaceES (rotatePhysical Q A) L := by
-  rw [groundSpaceES_rotatePhysical, ← Submodule.map_comp]
+        ((groundSpace (rotatePhysical Q A) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+  rw [map_groundSpace_rotatePhysical, ← Submodule.map_comp]
   rw [← Module.End.mul_eq_comp, (onSiteTensorPow_commute hComm L).eq,
     Module.End.mul_eq_comp, Submodule.map_comp, hInv]
 
@@ -133,22 +135,23 @@ private theorem commute_matrix_inv_of_isUnit {U Q : Matrix (Fin d) (Fin d) ℂ}
 space.
 Source: arXiv:1010.3732, lines 672--676; invariance of the local space is
 supplied explicitly where required. -/
-theorem groundSpaceES_invariant_rotatePhysical_iff_of_commute
+theorem map_groundSpace_invariant_rotatePhysical_iff_of_commute
     (A : MPSTensor d D) (U Q : Matrix (Fin d) (Fin d) ℂ) (hQ : IsUnit Q)
     (hComm : Commute U Q) (L : ℕ) :
-    ((groundSpaceES (rotatePhysical Q A) L).map
+    (((groundSpace (rotatePhysical Q A) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map
       (Matrix.toEuclideanLin (onSiteTensorPow L U)) =
-        groundSpaceES (rotatePhysical Q A) L) ↔
-      ((groundSpaceES A L).map (Matrix.toEuclideanLin (onSiteTensorPow L U)) =
-        groundSpaceES A L) := by
+        ((groundSpace (rotatePhysical Q A) L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) ↔
+      (((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map
+          (Matrix.toEuclideanLin (onSiteTensorPow L U)) =
+        ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) := by
   constructor
   · intro hInv
     simpa only [rotatePhysical_rotatePhysical,
       Matrix.nonsing_inv_mul Q ((Matrix.isUnit_iff_isUnit_det Q).1 hQ),
       rotatePhysical_one] using
-        groundSpaceES_invariant_rotatePhysical_of_commute (rotatePhysical Q A) U Q⁻¹
+        map_groundSpace_invariant_rotatePhysical_of_commute (rotatePhysical Q A) U Q⁻¹
           (commute_matrix_inv_of_isUnit hQ hComm) L hInv
-  · exact groundSpaceES_invariant_rotatePhysical_of_commute A U Q hComm L
+  · exact map_groundSpace_invariant_rotatePhysical_of_commute A U Q hComm L
 
 private theorem placeAlong_chainWindow_commute_onSiteTensorPow {R N : ℕ}
     (U : Matrix (Fin d) (Fin d) ℂ) (a : ℕ) (ha : a + R ≤ N)
@@ -206,16 +209,20 @@ variable {r : ℕ} {dim : Fin r → ℕ}
 the positive factor commutes with the physical action.
 Source: arXiv:1010.3732, lines 672--676; invariance of the local space is
 supplied explicitly where required. -/
-theorem groundSpaceES_invariant_leftPolarBlocks
+theorem map_groundSpace_invariant_leftPolarBlocks
     (A : (j : Fin r) → MPSTensor d (dim j)) (U : Matrix (Fin d) (Fin d) ℂ)
     (hComm : Commute U (leftPolarPhysicalFactor A)) (L : ℕ)
-    (hInv : (groundSpaceES (toTensorFromBlocks (fun _ => 1) A) L).map
+    (hInv : ((groundSpace (toTensorFromBlocks (fun _ => 1) A) L).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap).map
       (Matrix.toEuclideanLin (onSiteTensorPow L U)) =
-        groundSpaceES (toTensorFromBlocks (fun _ => 1) A) L) :
-    (groundSpaceES (toTensorFromBlocks (fun _ => 1) (leftPolarBlocks A)) L).map
+        ((groundSpace (toTensorFromBlocks (fun _ => 1) A) L).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap)) :
+    (((groundSpace (toTensorFromBlocks (fun _ => 1) (leftPolarBlocks A)) L).map (WithLp.linearEquiv
+        2 ℂ _).symm.toLinearMap)).map
       (Matrix.toEuclideanLin (onSiteTensorPow L U)) =
-        groundSpaceES (toTensorFromBlocks (fun _ => 1) (leftPolarBlocks A)) L := by
-  apply (groundSpaceES_invariant_rotatePhysical_iff_of_commute
+        ((groundSpace (toTensorFromBlocks (fun _ => 1) (leftPolarBlocks A)) L).map
+            (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+  apply (map_groundSpace_invariant_rotatePhysical_iff_of_commute
     (toTensorFromBlocks (fun _ => 1) (leftPolarBlocks A)) U (leftPolarPhysicalFactor A)
       (leftPolarPhysicalFactor_posDef A).isUnit hComm L).mp
   simpa only [rotatePhysical_toTensorFromBlocks,
@@ -225,22 +232,26 @@ theorem groundSpaceES_invariant_leftPolarBlocks
 isometric deformation when its positive factor commutes with the physical action.
 Source: arXiv:1010.3732, lines 672--676; invariance of the local space is
 supplied explicitly where required. -/
-theorem groundSpaceES_invariant_isometricDeformationBlocks
+theorem map_groundSpace_invariant_isometricDeformationBlocks
     (A : (j : Fin r) → MPSTensor d (dim j)) (U : Matrix (Fin d) (Fin d) ℂ)
     (hComm : Commute U (leftPolarPhysicalFactor A)) (L : ℕ)
-    (hInv : (groundSpaceES (toTensorFromBlocks (fun _ => 1) A) L).map
+    (hInv : ((groundSpace (toTensorFromBlocks (fun _ => 1) A) L).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap).map
       (Matrix.toEuclideanLin (onSiteTensorPow L U)) =
-        groundSpaceES (toTensorFromBlocks (fun _ => 1) A) L) (γ : unitInterval) :
-    (groundSpaceES (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) L).map
+        ((groundSpace (toTensorFromBlocks (fun _ => 1) A) L).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap)) (γ : unitInterval) :
+    (((groundSpace (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) L).map
+        (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).map
       (Matrix.toEuclideanLin (onSiteTensorPow L U)) =
-        groundSpaceES (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) L := by
+        ((groundSpace (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) L).map
+            (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   unfold isometricDeformationBlocks
   simpa only [rotatePhysical_toTensorFromBlocks] using
-    groundSpaceES_invariant_rotatePhysical_of_commute
+    map_groundSpace_invariant_rotatePhysical_of_commute
       (toTensorFromBlocks (fun _ => 1) (leftPolarBlocks A)) U
       (positivePhysicalDeformation (leftPolarPhysicalFactor A) γ)
       (commute_positivePhysicalDeformation U _ hComm γ) L
-      (groundSpaceES_invariant_leftPolarBlocks A U hComm L hInv)
+      (map_groundSpace_invariant_leftPolarBlocks A U hComm L hInv)
 
 /-- The source inverse-conjugated positive interactions along the constructed deformation retain
 a supplied symmetry of the original two-site space.
@@ -250,16 +261,18 @@ theorem isometricDeformationInteraction_commute
     (A : (j : Fin r) → MPSTensor d (dim j)) (U : Matrix (Fin d) (Fin d) ℂ)
     (hU : U ∈ Matrix.unitaryGroup (Fin d) ℂ)
     (hComm : Commute U (leftPolarPhysicalFactor A))
-    (hInv : (groundSpaceES (toTensorFromBlocks (fun _ => 1) A) 2).map
+    (hInv : ((groundSpace (toTensorFromBlocks (fun _ => 1) A) 2).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap).map
       (Matrix.toEuclideanLin (onSiteTensorPow 2 U)) =
-        groundSpaceES (toTensorFromBlocks (fun _ => 1) A) 2) (γ : unitInterval) :
+        ((groundSpace (toTensorFromBlocks (fun _ => 1) A) 2).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap)) (γ : unitInterval) :
     Commute (isometricDeformationInteraction A γ) (onSiteTensorPow 2 U) := by
   exact deformedInteraction_commute_onSiteTensorPow _ U
     (positivePhysicalDeformation_posDef _ (leftPolarPhysicalFactor_posDef A) γ).isHermitian
     (positivePhysicalDeformation_isUnit _ (leftPolarPhysicalFactor_posDef A) γ)
     (commute_positivePhysicalDeformation U _ hComm γ) 2 _
     (toMatrix'_parentInteraction_commute_onSiteTensorPow_of_invariant _ U hU 2
-      (groundSpaceES_invariant_leftPolarBlocks A U hComm 2 hInv))
+      (map_groundSpace_invariant_leftPolarBlocks A U hComm 2 hInv))
 
 /-- The periodic sums of the source positive interactions along the constructed deformation
 retain a supplied symmetry on every ring of length at least two.
@@ -269,9 +282,11 @@ theorem isometricDeformation_hamiltonian_translationInvariant_commute
     (A : (j : Fin r) → MPSTensor d (dim j)) (U : Matrix (Fin d) (Fin d) ℂ)
     (hU : U ∈ Matrix.unitaryGroup (Fin d) ℂ)
     (hComm : Commute U (leftPolarPhysicalFactor A))
-    (hInv : (groundSpaceES (toTensorFromBlocks (fun _ => 1) A) 2).map
+    (hInv : ((groundSpace (toTensorFromBlocks (fun _ => 1) A) 2).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap).map
       (Matrix.toEuclideanLin (onSiteTensorPow 2 U)) =
-        groundSpaceES (toTensorFromBlocks (fun _ => 1) A) 2)
+        ((groundSpace (toTensorFromBlocks (fun _ => 1) A) 2).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap))
     (γ : unitInterval) {N : ℕ} (hN : 2 ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;
     Commute (ManyBody.Interaction.translationInvariant N
@@ -289,9 +304,11 @@ theorem isometricDeformation_hamiltonian_chainTranslates_commute
     (A : (j : Fin r) → MPSTensor d (dim j)) (U : Matrix (Fin d) (Fin d) ℂ)
     (hU : U ∈ Matrix.unitaryGroup (Fin d) ℂ)
     (hComm : Commute U (leftPolarPhysicalFactor A))
-    (hInv : (groundSpaceES (toTensorFromBlocks (fun _ => 1) A) 2).map
+    (hInv : ((groundSpace (toTensorFromBlocks (fun _ => 1) A) 2).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap).map
       (Matrix.toEuclideanLin (onSiteTensorPow 2 U)) =
-        groundSpaceES (toTensorFromBlocks (fun _ => 1) A) 2)
+        ((groundSpace (toTensorFromBlocks (fun _ => 1) A) 2).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap))
     (γ : unitInterval) (N : ℕ) :
     Commute (ManyBody.Interaction.chainTranslates 2 N
         (isometricDeformationInteraction A γ)).hamiltonian
@@ -305,18 +322,20 @@ variable {G : Type*} [Monoid G]
 block assembly.
 Source: arXiv:1010.3732, lines 645--676, in the already-blocked
 single injective case in the unital canonical orientation. -/
-theorem groundSpaceES_singletonBlocks_invariant_of_isOnSiteSymmetric
+theorem map_groundSpace_singletonBlocks_invariant_of_isOnSiteSymmetric
     (A : MPSTensor d D) (hA : Kraus.IsInjective A)
     (U : G →* Matrix (Fin d) (Fin d) ℂ) (hSymm : IsOnSiteSymmetric A U)
     (g : G) (L : ℕ) :
-    (groundSpaceES (toTensorFromBlocks (fun _ : Fin 1 => 1) (fun _ : Fin 1 => A)) L).map
+    (((groundSpace (toTensorFromBlocks (fun _ : Fin 1 => 1) (fun _ : Fin 1 => A)) L).map
+        (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)).map
       (Matrix.toEuclideanLin (onSiteTensorPow L (U g))) =
-        groundSpaceES (toTensorFromBlocks (fun _ : Fin 1 => 1) (fun _ : Fin 1 => A)) L := by
+        ((groundSpace (toTensorFromBlocks (fun _ : Fin 1 => 1) (fun _ : Fin 1 => A)) L).map
+            (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   have hCov : GaugeEquiv A (rotatePhysical (U g) A) :=
     gaugeEquiv_twistedTensor_of_injective A hA U hSymm g
-  simpa only [groundSpaceES_toTensorFromBlocks_eq_iSup _ _
+  simpa only [map_groundSpace_toTensorFromBlocks_eq_iSup _ _
     (fun _ : Fin 1 => one_ne_zero) L, iSup_const] using
-      groundSpaceES_invariant_of_gauge_covariance A (U g) hCov L
+      map_groundSpace_invariant_of_gauge_covariance A (U g) hCov L
 
 variable [NeZero D]
 
@@ -332,7 +351,7 @@ theorem isometricDeformationInteraction_commute_of_isOnSiteSymmetric
     Commute (isometricDeformationInteraction (fun _ : Fin 1 => A) γ) (onSiteTensorPow 2 (U g)) := by
   exact isometricDeformationInteraction_commute _ (U g) (hU g)
     (commute_leftPolarPhysicalFactor_of_isOnSiteSymmetric A hA hNorm U hU hSymm g)
-    (groundSpaceES_singletonBlocks_invariant_of_isOnSiteSymmetric A hA U hSymm g 2) γ
+    (map_groundSpace_singletonBlocks_invariant_of_isOnSiteSymmetric A hA U hSymm g 2) γ
 
 /-- Exact state symmetry of a normalized injective tensor persists in the periodic sum of
 inverse-conjugated positive interactions along its constructed polar deformation.
@@ -380,7 +399,7 @@ theorem isometricDeformationInteraction_commute_of_isOnSiteSymmetric_of_isTP
     Commute (isometricDeformationInteraction (fun _ : Fin 1 => A) γ) (onSiteTensorPow 2 (U g)) := by
   exact isometricDeformationInteraction_commute _ (U g) (hU g)
     (commute_leftPolarPhysicalFactor_of_isOnSiteSymmetric_of_isTP A hA hTP U hU hSymm g)
-    (groundSpaceES_singletonBlocks_invariant_of_isOnSiteSymmetric A hA U hSymm g 2) γ
+    (map_groundSpace_singletonBlocks_invariant_of_isOnSiteSymmetric A hA U hSymm g 2) γ
 
 /-- Exact state symmetry of an injective trace-preserving tensor persists in the periodic sum of
 inverse-conjugated positive interactions along its constructed polar deformation.
@@ -443,14 +462,16 @@ theorem toMatrix'_parentInteraction_isometricDeformation_commute
     (A : (j : Fin r) → MPSTensor d (dim j)) (U : Matrix (Fin d) (Fin d) ℂ)
     (hU : U ∈ Matrix.unitaryGroup (Fin d) ℂ)
     (hComm : Commute U (leftPolarPhysicalFactor A))
-    (hInv : (groundSpaceES (toTensorFromBlocks (fun _ => 1) A) 2).map
+    (hInv : ((groundSpace (toTensorFromBlocks (fun _ => 1) A) 2).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap).map
       (Matrix.toEuclideanLin (onSiteTensorPow 2 U)) =
-        groundSpaceES (toTensorFromBlocks (fun _ => 1) A) 2) (γ : unitInterval) :
+        ((groundSpace (toTensorFromBlocks (fun _ => 1) A) 2).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap)) (γ : unitInterval) :
     Commute (LinearMap.toMatrix' (parentInteraction
       (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) 2))
       (onSiteTensorPow 2 U) :=
   toMatrix'_parentInteraction_commute_onSiteTensorPow_of_invariant _ U hU 2
-    (groundSpaceES_invariant_isometricDeformationBlocks A U hComm 2 hInv γ)
+    (map_groundSpace_invariant_isometricDeformationBlocks A U hComm 2 hInv γ)
 
 /-- The canonical periodic parents along the constructed deformation retain a supplied symmetry
 of the original two-site space on every ring of length at least two.
@@ -460,9 +481,11 @@ theorem hamiltonian_parentRingInteraction_isometricDeformation_commute
     (A : (j : Fin r) → MPSTensor d (dim j)) (U : Matrix (Fin d) (Fin d) ℂ)
     (hU : U ∈ Matrix.unitaryGroup (Fin d) ℂ)
     (hComm : Commute U (leftPolarPhysicalFactor A))
-    (hInv : (groundSpaceES (toTensorFromBlocks (fun _ => 1) A) 2).map
+    (hInv : ((groundSpace (toTensorFromBlocks (fun _ => 1) A) 2).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap).map
       (Matrix.toEuclideanLin (onSiteTensorPow 2 U)) =
-        groundSpaceES (toTensorFromBlocks (fun _ => 1) A) 2)
+        ((groundSpace (toTensorFromBlocks (fun _ => 1) A) 2).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap))
     (γ : unitInterval) {N : ℕ} (hN : 2 ≤ N) :
     haveI : NeZero N := ⟨by omega⟩;
     Commute (parentRingInteraction
@@ -481,9 +504,11 @@ theorem hamiltonian_parentChainInteraction_isometricDeformation_commute
     (A : (j : Fin r) → MPSTensor d (dim j)) (U : Matrix (Fin d) (Fin d) ℂ)
     (hU : U ∈ Matrix.unitaryGroup (Fin d) ℂ)
     (hComm : Commute U (leftPolarPhysicalFactor A))
-    (hInv : (groundSpaceES (toTensorFromBlocks (fun _ => 1) A) 2).map
+    (hInv : ((groundSpace (toTensorFromBlocks (fun _ => 1) A) 2).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap).map
       (Matrix.toEuclideanLin (onSiteTensorPow 2 U)) =
-        groundSpaceES (toTensorFromBlocks (fun _ => 1) A) 2)
+        ((groundSpace (toTensorFromBlocks (fun _ => 1) A) 2).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap))
     (γ : unitInterval) (N : ℕ) :
     Commute (parentChainInteraction
       (toTensorFromBlocks (fun _ => 1) (isometricDeformationBlocks A γ)) 2 N).hamiltonian
@@ -508,7 +533,7 @@ theorem toMatrix'_parentInteraction_isometricDeformation_commute_of_isOnSiteSymm
       (onSiteTensorPow 2 (U g)) :=
   toMatrix'_parentInteraction_isometricDeformation_commute _ (U g) (hU g)
     (commute_leftPolarPhysicalFactor_of_isOnSiteSymmetric A hA hNorm U hU hSymm g)
-    (groundSpaceES_singletonBlocks_invariant_of_isOnSiteSymmetric A hA U hSymm g 2) γ
+    (map_groundSpace_singletonBlocks_invariant_of_isOnSiteSymmetric A hA U hSymm g 2) γ
 
 /-- Exact state symmetry of a normalized injective tensor persists in the periodic canonical
 parent Hamiltonian along its constructed polar deformation.
@@ -564,7 +589,7 @@ theorem toMatrix'_parentInteraction_isometricDeformation_commute_of_isOnSiteSymm
       (onSiteTensorPow 2 (U g)) :=
   toMatrix'_parentInteraction_isometricDeformation_commute _ (U g) (hU g)
     (commute_leftPolarPhysicalFactor_of_isOnSiteSymmetric_of_isTP A hA hTP U hU hSymm g)
-    (groundSpaceES_singletonBlocks_invariant_of_isOnSiteSymmetric A hA U hSymm g 2) γ
+    (map_groundSpace_singletonBlocks_invariant_of_isOnSiteSymmetric A hA U hSymm g 2) γ
 
 /-- Exact state symmetry of an injective trace-preserving tensor persists in the periodic
 canonical parent Hamiltonian along its constructed polar deformation.

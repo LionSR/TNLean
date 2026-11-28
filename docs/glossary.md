@@ -2962,11 +2962,11 @@ involve no boundary.
   eigenvalue-one strong form $U\rho=\rho$ and the weak form $[U,\rho]=0$ are
   arXiv:2603.28349, line 362.
 - **Sanctioned bridges:**
-  `MPOTensor.isWeakOnSiteSymmetry_iff_mpvWithBoundary_toMPSTensor` and
-  `MPOTensor.isStrongOnSiteSymmetry_iff_mpvWithBoundary_toMPSTensor`
+  `MPOTensor.isWeakOnSiteSymmetry_iff_mpvWithBoundary` and
+  `MPOTensor.isStrongOnSiteSymmetry_iff_mpvWithBoundary`
   characterize the boundary-weighted vectorized state. At identity boundary,
-  `MPOTensor.isWeakOnSiteSymmetry_iff_isOnSiteSymmetric_toMPSTensor` and
-  `MPOTensor.isStrongOnSiteSymmetry_iff_mpv_toMPSTensor` give ordinary periodic
+  `MPOTensor.isWeakOnSiteSymmetry_iff_isOnSiteSymmetric` and
+  `MPOTensor.isStrongOnSiteSymmetry_iff_mpv` give ordinary periodic
   vector identities; `MPOTensor.exists_isStrongOnSiteSymmetry_iff_of_isNormalTensor`
   characterizes normal periodic local purifications, also at identity boundary.
 - **Caveat:** the eigenvalues `c g L` are arbitrary complex numbers in the

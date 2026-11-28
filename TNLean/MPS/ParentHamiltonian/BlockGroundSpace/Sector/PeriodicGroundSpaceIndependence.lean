@@ -48,7 +48,7 @@ asserted here.
 
 It also contains the following results.
 
-* `MPSTensor.groundSpaceES_le_of_isometric_cointertwiner`,
+* `MPSTensor.map_groundSpace_le_of_isometric_cointertwiner`,
   `MPSTensor.IsPeriodic.not_gaugePhaseEquiv_of_primitive_corners`: separation of corners belonging
   to distinct periodic tensors.
 -/
@@ -79,19 +79,20 @@ independent boundary spaces at every sufficiently large length.
 Source: Nachtergaele, arXiv:cond-mat/9410110, Lemma disjoint,
 lines 1744--1820, combined with Lemma overlapestimate, lines 2109--2175.
 The primitive faithful generating data and their inequivalence are supplied. -/
-theorem eventually_groundSpaceES_iSupIndep_of_primitive
+theorem eventually_map_groundSpace_iSupIndep_of_primitive
     {d : ℕ} {ι : Type*} [Finite ι] {dim : ι → ℕ} [∀ j, NeZero (dim j)]
     (B : ∀ j, MPSTensor d (dim j))
     (ρ : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ)
     (hP : ∀ j, Kraus.HasComplementaryFixedPointGap (B j) (ρ j)) (hρ : ∀ j, (ρ j).PosDef)
     (hDistinct : ∀ i j, i ≠ j → ∀ e : dim j = dim i,
       ¬ GaugePhaseEquiv (e ▸ B j) (B i)) :
-    ∀ᶠ N in atTop, iSupIndep (fun j => groundSpaceES (B j) N) := by
+    ∀ᶠ N in atTop, iSupIndep (fun j => ((groundSpace (B j) N).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap)) := by
   apply Submodule.eventually_iSupIndep_of_pairwise_overlap
   intro ε hε
   filter_upwards [Filter.eventually_all.2 fun i =>
     Filter.eventually_all.2 fun j => Filter.eventually_all.2 fun hij =>
-      (hP i).eventually_norm_inner_groundSpaceES_le_of_inequivalent
+      (hP i).eventually_norm_inner_map_groundSpace_le_of_inequivalent
         (hP j) (hρ i) (hρ j) (hDistinct i j hij) hε] with N hN
   exact fun i j hij => hN i j hij
 
@@ -203,7 +204,7 @@ private theorem exists_eventually_boundary_lift_of_residual_resolution
     (hGram : ∀ j r, ∑ τ : Cfg d r, (Kraus.evalWord A (List.ofFn τ))ᴴ *
       (V j * (V j)ᴴ) * Kraus.evalWord A (List.ofFn τ) = Q j r) :
     ∃ C : ℝ, 0 < C ∧ ∀ᶠ N in atTop, ∀ r,
-      ∀ x ∈ groundSpaceES A (N * L + r), ∃ u,
+      ∀ x ∈ ((groundSpace A (N * L + r)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap), ∃ u,
         groundSpaceMapES A (N * L + r) u = x ∧ ‖u‖ ≤ C * ‖x‖ := by
   classical
   let c (j : ι) := ‖residualBoundaryEmbeddingES (V j)‖ *
@@ -257,7 +258,7 @@ private theorem exists_eventually_boundary_lift_of_residual_resolution
       (hI j r).2.2.2.2.2 (norm_nonneg _) (mul_nonneg (norm_nonneg _) (by positivity))
   have hx' : x ∈ ⨆ j, (S j).range := by
     simpa only [S,
-      ← groundSpaceES_eq_iSup_range_blockedResidualBoundaryMapES A B V hSum hInt N r] using hx
+      ← map_groundSpace_eq_iSup_range_blockedResidualBoundaryMapES A B V hSum hInt N r] using hx
   obtain ⟨u, hu, hnorm⟩ := exists_boundary_lift_of_sector_lower_bound
     (groundSpaceMapES A (N * L + r)) S (fun j => residualBoundaryEmbeddingES (V j)) H c hc
     (fun j => (blockedResidualBoundaryMapES_eq_groundSpaceMapES_comp
@@ -274,7 +275,8 @@ combined with arXiv:1708.00029, Lemma bdcf. -/
 theorem IsPeriodic.exists_eventually_groundSpaceMapES_preimage_norm_le
     {m : ℕ} {A : MPSTensor d D} (hA : IsPeriodic m A) :
     ∃ C : ℝ, 0 < C ∧ ∀ᶠ n in atTop,
-      ∀ x ∈ groundSpaceES A n, ∃ u, groundSpaceMapES A n u = x ∧ ‖u‖ ≤ C * ‖x‖ := by
+      ∀ x ∈ ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap), ∃ u, groundSpaceMapES A n u = x ∧ ‖u‖ ≤ C * ‖x‖ := by
   classical
   let _ : NeZero m := ⟨Nat.ne_of_gt hA.period_pos⟩
   let _ : NeZero D := ⟨hA.bondDim_ne_zero⟩
@@ -308,12 +310,14 @@ Source: the mixed-transfer and boundary normalization argument in
 Nachtergaele, arXiv:cond-mat/9410110, proof of Lemma disjoint,
 equations C1C2 and limP12. This is a statement about periodic generating
 tensors and does not assert purity of their associated states. -/
-theorem IsPeriodic.eventually_norm_inner_groundSpaceES_le_of_inequivalent
+theorem IsPeriodic.eventually_norm_inner_map_groundSpace_le_of_inequivalent
     {D₂ m m₂ : ℕ} {A : MPSTensor d D} {B : MPSTensor d D₂}
     (hA : IsPeriodic m A) (hB : IsPeriodic m₂ B)
     (hDistinct : ∀ e : D₂ = D, ¬ GaugePhaseEquiv (e ▸ B) A)
     {ε : ℝ} (hε : 0 < ε) :
-    ∀ᶠ n in atTop, ∀ x ∈ groundSpaceES A n, ∀ y ∈ groundSpaceES B n,
+    ∀ᶠ n in atTop, ∀ x ∈ ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap), ∀ y ∈ ((groundSpace B n).map
+            (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap),
       ‖⟪x, y⟫_ℂ‖ ≤ ε * ‖x‖ * ‖y‖ := by
   let _ : NeZero D := ⟨hA.bondDim_ne_zero⟩
   let _ : NeZero D₂ := ⟨hB.bondDim_ne_zero⟩
@@ -368,18 +372,19 @@ large length. No common period or additional dimension hypothesis is needed.
 Source: the mixed-transfer argument of Nachtergaele,
 arXiv:cond-mat/9410110, Lemma disjoint, followed by the lower Gram estimate
 of Lemma overlapestimate, lines 2109--2175. -/
-theorem eventually_groundSpaceES_iSupIndep_of_isPeriodic
+theorem eventually_map_groundSpace_iSupIndep_of_isPeriodic
     {ι : Type*} [Finite ι] {dim : ι → ℕ}
     (A : ∀ j, MPSTensor d (dim j)) (m : ι → ℕ)
     (hA : ∀ j, IsPeriodic (m j) (A j))
     (hDistinct : ∀ i j, i ≠ j → ∀ e : dim j = dim i,
       ¬ GaugePhaseEquiv (e ▸ A j) (A i)) :
-    ∀ᶠ n in atTop, iSupIndep (fun j => groundSpaceES (A j) n) := by
+    ∀ᶠ n in atTop, iSupIndep (fun j => ((groundSpace (A j) n).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap)) := by
   apply Submodule.eventually_iSupIndep_of_pairwise_overlap
   intro ε hε
   filter_upwards [Filter.eventually_all.2 fun i =>
     Filter.eventually_all.2 fun j => Filter.eventually_all.2 fun hij =>
-      (hA i).eventually_norm_inner_groundSpaceES_le_of_inequivalent
+      (hA i).eventually_norm_inner_map_groundSpace_le_of_inequivalent
         (hA j) (hDistinct i j hij) hε] with n hn
   exact fun i j hij => hn i j hij
 
@@ -420,10 +425,11 @@ variable {d D E D₂ F L : ℕ}
 /-- An isometric virtual embedding with the adjoint letter intertwiner
 places every sector boundary vector in the original boundary space.
 Source: arXiv:1708.00029, Lemma bdcf and equation Aoffdiag. -/
-theorem groundSpaceES_le_of_isometric_cointertwiner
+theorem map_groundSpace_le_of_isometric_cointertwiner
     (A : MPSTensor d D) (B : MPSTensor d E) (V : Matrix (Fin D) (Fin E) ℂ)
     (hV : Vᴴ * V = 1) (hInt : ∀ i, Vᴴ * A i = B i * Vᴴ) (N : ℕ) :
-    groundSpaceES B N ≤ groundSpaceES A N := by
+    ((groundSpace B N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ ((groundSpace A N).map
+        (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   have hEmbed (Y : Matrix (Fin E) (Fin E) ℂ) :
       groundSpaceMap A N (V * Y * Vᴴ) = groundSpaceMap B N Y := by
     ext σ
@@ -471,7 +477,7 @@ theorem IsPeriodic.not_gaugePhaseEquiv_of_primitive_corners
   have hCLength : Tendsto (fun n : ℕ => n * L) atTop atTop :=
     tendsto_id.atTop_mul_one_le (fun _ => hL)
   have hAngle := hCLength.eventually
-    (hA.eventually_norm_inner_groundSpaceES_le_of_inequivalent hA' hDistinct
+    (hA.eventually_norm_inner_map_groundSpace_le_of_inequivalent hA' hDistinct
       (show (0 : ℝ) < 1 / 2 by norm_num))
   have hInject := hB.eventually_groundSpaceMapES_injective_and_inverseGram_bound hρ
     (a := 1 / 2) (by norm_num) (by norm_num)
@@ -479,7 +485,7 @@ theorem IsPeriodic.not_gaugePhaseEquiv_of_primitive_corners
   let u : EuclideanSpace ℂ (Fin E × Fin E) :=
     Matrix.frobeniusEquivEuclidean (Fin E) (Fin E) 1
   let x := groundSpaceMapES B N u
-  have hx : x ∈ groundSpaceES B N := by
+  have hx : x ∈ ((groundSpace B N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
     rw [← range_groundSpaceMapES]
     exact ⟨u, rfl⟩
   have hxne : x ≠ 0 := by
@@ -489,18 +495,18 @@ theorem IsPeriodic.not_gaugePhaseEquiv_of_primitive_corners
       (Matrix.frobeniusEquivEuclidean (Fin E) (Fin E)).injective (by
         simpa only [map_zero, u] using hu)
     exact one_ne_zero h1
-  have hxC : x ∈ groundSpaceES C N := by
+  have hxC : x ∈ ((groundSpace C N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
     have hGauge' : GaugePhaseEquiv C B := by simpa using hGauge
-    rw [hGauge'.groundSpaceES_eq N]
+    rw [hGauge'.map_groundSpace_eq N]
     exact hx
   let U := blockedConfigLinearIsometryEquiv d N L
-  have hxA : U x ∈ groundSpaceES A (N * L) := by
-    rw [← groundSpaceES_blockTensor_map A L N]
-    exact ⟨x, groundSpaceES_le_of_isometric_cointertwiner
+  have hxA : U x ∈ ((groundSpace A (N * L)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+    rw [← map_groundSpace_blockTensor_map A L N]
+    exact ⟨x, map_groundSpace_le_of_isometric_cointertwiner
       (blockTensor A L) B V hV hInt N hx, rfl⟩
-  have hxA' : U x ∈ groundSpaceES A' (N * L) := by
-    rw [← groundSpaceES_blockTensor_map A' L N]
-    exact ⟨x, groundSpaceES_le_of_isometric_cointertwiner
+  have hxA' : U x ∈ ((groundSpace A' (N * L)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+    rw [← map_groundSpace_blockTensor_map A' L N]
+    exact ⟨x, map_groundSpace_le_of_isometric_cointertwiner
       (blockTensor A' L) C W hW hInt' N hxC, rfl⟩
   have h := hN (U x) hxA (U x) hxA'
   rw [U.inner_map_map, U.norm_map] at h

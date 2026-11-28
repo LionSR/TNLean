@@ -103,6 +103,7 @@ Source: arXiv:1706.07329v2, `cornerproblem.tex` lines 3824--3838. -/
   simp only [reductionCrossMatrix, Matrix.sum_apply,
     Matrix.kroneckerMap_apply, Matrix.transpose_apply]
 
+omit [Fintype α] in
 private theorem listProd_kronecker_transpose
     (B : MPTensor α (Fin D_B)) (C : MPTensor α (Fin D_A)) (w : List α) :
     (w.map fun i => B i ⊗ₖ (C i)ᵀ).prod =

@@ -79,10 +79,10 @@ theorem ker_toEuclideanLin_term_two_three_zero (B : MPSTensor d D) :
   constructor
   · intro hv j
     have h := hv (fun _ => j)
-    rw [mem_groundSpaceES_iff] at h
-    rwa [restrictLast_eq_cyclicRestrictES_zero v (fun _ => j)]
+    rw [mem_map_groundSpace_iff] at h
+    rwa [restrictLast_eq_withLpMap_cyclicRestrictₗ_zero v (fun _ => j)]
   · intro hv τ
-    rw [mem_groundSpaceES_iff, ← restrictLast_eq_cyclicRestrictES_zero v τ]
+    rw [mem_map_groundSpace_iff, ← restrictLast_eq_withLpMap_cyclicRestrictₗ_zero v τ]
     exact hv (τ (Fin.last 2))
 
 /-- On the explicit three-site chain, the kernel of the operator of the range-two term at site
@@ -100,10 +100,10 @@ theorem ker_toEuclideanLin_term_two_three_one (B : MPSTensor d D) :
   · intro hv u
     rw [tailRestrictₗ_one_eq_restrictFirst]
     have h := hv (fun _ => u 0)
-    rw [mem_groundSpaceES_iff] at h
-    rwa [restrictFirst_eq_cyclicRestrictES_one (by omega) v (fun _ => u 0)]
+    rw [mem_map_groundSpace_iff] at h
+    rwa [restrictFirst_eq_withLpMap_cyclicRestrictₗ_one (by omega) v (fun _ => u 0)]
   · intro hv τ
-    rw [mem_groundSpaceES_iff, ← restrictFirst_eq_cyclicRestrictES_one (by omega) v τ,
+    rw [mem_map_groundSpace_iff, ← restrictFirst_eq_withLpMap_cyclicRestrictₗ_one (by omega) v τ,
       ← tailRestrictₗ_one_eq_restrictFirst (fun _ => τ 0)]
     exact hv (fun _ => τ 0)
 

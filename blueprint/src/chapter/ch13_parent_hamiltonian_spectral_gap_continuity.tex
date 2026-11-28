@@ -92,7 +92,7 @@ is recorded in
 \begin{lemma}[Continuity of finite-window parent Hamiltonians]
     \label{thm:continuous_finite_window_parent_hamiltonian}
     \lean{MPSTensor.continuous_groundSpaceMapES_family,
-        MPSTensor.continuous_groundSpaceES_starProjection_family,
+        MPSTensor.continuous_map_groundSpace_starProjection_family,
         MPSTensor.continuous_hamiltonian_parentChainInteraction_family,
         MPSTensor.continuous_hamiltonian_parentRingInteraction_family}
     \leanok
@@ -414,9 +414,9 @@ is recorded in
         MPSTensor.continuous_blockGroundSpaceMapES_family,
         MPSTensor.blockGroundSpaceMapES_injective_of_wordTupleSpanTop,
         MPSTensor.range_blockGroundSpaceMapES,
-        MPSTensor.continuous_iSup_groundSpaceES_starProjection_family,
-        MPSTensor.continuous_groundSpaceES_toTensorFromBlocks_starProjection_family,
-        MPSTensor.continuous_norm_groundSpaceES_overlap_family,
+        MPSTensor.continuous_iSup_map_groundSpace_starProjection_family,
+        MPSTensor.continuous_map_groundSpace_toTensorFromBlocks_starProjection_family,
+        MPSTensor.continuous_norm_map_groundSpace_overlap_family,
         MPSTensor.blockPeriodicMpvMapES,
         MPSTensor.blockPeriodicMpvMapES_apply,
         MPSTensor.blockPeriodicMpvMapES_eq_blockGroundSpaceMapES,
@@ -763,8 +763,8 @@ is recorded in
     \label{thm:parent_invariant_space_physical_deformation}
     \lean{MPSTensor.onSiteTensorPow_commute,
         MPSTensor.toMatrix'_parentInteraction_commute_onSiteTensorPow_of_invariant,
-        MPSTensor.groundSpaceES_invariant_rotatePhysical_of_commute,
-        MPSTensor.groundSpaceES_invariant_rotatePhysical_iff_of_commute,
+        MPSTensor.map_groundSpace_invariant_rotatePhysical_of_commute,
+        MPSTensor.map_groundSpace_invariant_rotatePhysical_iff_of_commute,
         MPSTensor.deformedInteraction_commute_onSiteTensorPow}
     \leanok
     \uses{def:deformed_interaction}
@@ -813,8 +813,8 @@ is recorded in
 
 \begin{lemma}[Parent symmetry from assumed invariance along the polar deformation]
     \label{thm:isometric_deformation_supplied_parent_symmetry}
-    \lean{MPSTensor.groundSpaceES_invariant_leftPolarBlocks,
-        MPSTensor.groundSpaceES_invariant_isometricDeformationBlocks,
+    \lean{MPSTensor.map_groundSpace_invariant_leftPolarBlocks,
+        MPSTensor.map_groundSpace_invariant_isometricDeformationBlocks,
         MPSTensor.toMatrix'_parentInteraction_isometricDeformation_commute,
         MPSTensor.isometricDeformationInteraction_commute,
         MPSTensor.hamiltonian_parentRingInteraction_isometricDeformation_commute,
@@ -954,7 +954,7 @@ is recorded in
 
 \begin{lemma}[Derived parent symmetry for one injective canonical block]
     \label{thm:injective_isometric_deformation_parent_symmetry}
-    \lean{MPSTensor.groundSpaceES_singletonBlocks_invariant_of_isOnSiteSymmetric,
+    \lean{MPSTensor.map_groundSpace_singletonBlocks_invariant_of_isOnSiteSymmetric,
         MPSTensor.toMatrix'_parentInteraction_isometricDeformation_commute_of_isOnSiteSymmetric,
         MPSTensor.isometricDeformationInteraction_commute_of_isOnSiteSymmetric,
         MPSTensor.hamiltonian_parentRingInteraction_isometricDeformation_commute_of_isOnSiteSymmetric,
@@ -1221,7 +1221,7 @@ is recorded in
 
 \begin{lemma}[Derived parent symmetry for several normal blocks]
     \label{thm:block_isometric_deformation_parent_symmetry}
-    \lean{MPSTensor.groundSpaceES_toTensorFromBlocks_invariant_of_isOnSiteSymmetricUpToPhase,
+    \lean{MPSTensor.map_groundSpace_toTensorFromBlocks_invariant_of_isOnSiteSymmetricUpToPhase,
         MPSTensor.toMatrix'_parentInteraction_isometricDeformation_commute_of_isOnSiteSymmetricUpToPhase,
         MPSTensor.isometricDeformationInteraction_commute_of_isOnSiteSymmetricUpToPhase,
         MPSTensor.hamiltonian_parentRingInteraction_isometricDeformation_commute_of_isOnSiteSymmetricUpToPhase,
@@ -1416,8 +1416,8 @@ is recorded in
 
 \begin{lemma}[Continuity of finite-window parents with several blocks]
     \label{thm:continuous_block_finite_window_parent_hamiltonian}
-    \lean{MPSTensor.continuous_iSup_groundSpaceES_starProjection_of_injective_family,
-        MPSTensor.continuous_groundSpaceES_toTensorFromBlocks_starProjection_of_injective_family,
+    \lean{MPSTensor.continuous_iSup_map_groundSpace_starProjection_of_injective_family,
+        MPSTensor.continuous_map_groundSpace_toTensorFromBlocks_starProjection_of_injective_family,
         MPSTensor.continuous_toMatrix'_parentInteraction_toTensorFromBlocks_family,
         MPSTensor.continuous_hamiltonian_parentChainInteraction_toTensorFromBlocks_family,
         MPSTensor.continuous_hamiltonian_parentRingInteraction_toTensorFromBlocks_family}

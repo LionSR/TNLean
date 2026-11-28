@@ -48,6 +48,7 @@ namespace MPSTensor.SectorDecomposition
 
 variable {α : Type*} [Fintype α] {e : ℕ}
 
+omit [Fintype α] in
 /-- At one separating tail length, a nonzero grouped coefficient identifies
 an arbitrary marked letter on the chosen representative.
 
@@ -102,6 +103,7 @@ theorem markedTensor_basis_eq_of_trace_agree_of_coeff_ne_zero
     (smul_eq_zero.mp hj).resolve_left hcoeff
   exact sub_eq_zero.mp hdiff
 
+omit [Fintype α] in
 /-- Equality of closed marked chains at every positive tail length identifies the marked tensor on
 every representative under eventual representative word-tuple separation.
 
@@ -113,7 +115,7 @@ This is the algebraic extension of arXiv:1606.00608, Appendix C.3,
 lines 1835--1858.  The source states the physical-insertion case; the
 unrestricted marked matrices here are an auxiliary consequence of its
 trace-separation proof. -/
-theorem markedTensor_basis_eq_of_trace_agree
+theorem markedTensor_basis_eq_of_trace_agree [Finite α]
     (P : SectorDecomposition α)
     (C E : (j : Fin P.basisCount) → MPSTensor e (P.basisDim j))
     (hSpan : P.EventuallyRepresentativeWordTupleSpan)
@@ -122,6 +124,7 @@ theorem markedTensor_basis_eq_of_trace_agree
         Matrix.trace (P.markedTensor E s * Kraus.evalWord P.toTensor (List.ofFn w))) :
     ∀ j, C j = E j := by
   classical
+  have := Fintype.ofFinite α
   obtain ⟨L₀, hSpan⟩ := hSpan
   intro j
   let M := L₀ + 2

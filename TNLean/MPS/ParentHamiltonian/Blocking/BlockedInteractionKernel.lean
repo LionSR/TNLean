@@ -270,11 +270,11 @@ theorem eventually_ker_blockedInteractionMatrix_reindex_eq_groundSpace
     (hh : h.PosSemidef) (hcover : R + L ≤ K * L + 1)
     (hker : ∀ᶠ n in Filter.atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R n h).hamiltonian) =
-        groundSpaceES A n) :
+        ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     ∀ᶠ N in Filter.atTop, LinearMap.ker (Matrix.toEuclideanLin
       (Matrix.reindex (Kraus.blockedConfigEquiv d N L) (Kraus.blockedConfigEquiv d N L)
         ((chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian))) =
-      (groundSpaceES (blockTensor A L) N).map
+      ((groundSpace (blockTensor A L) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map
         (blockedConfigLinearIsometryEquiv d N L).toLinearEquiv.toLinearMap := by
   obtain ⟨M, hM⟩ := Filter.eventually_atTop.1 hker
   filter_upwards [Filter.eventually_ge_atTop (max K M)] with N hN
@@ -282,7 +282,7 @@ theorem eventually_ker_blockedInteractionMatrix_reindex_eq_groundSpace
   rw [ker_toEuclideanLin_hamiltonian_chainTranslates_blockedInteractionMatrix_reindex
     h hh hKN hcover,
     hM (N * L) ((le_max_right K M).trans (hN.trans (Nat.le_mul_of_pos_right N (NeZero.pos L))))]
-  exact (groundSpaceES_blockTensor_map A L N).symm
+  exact (map_groundSpace_blockTensor_map A L N).symm
 
 /-- The configuration isometry maps the complete coarse open kernel onto
 the original open kernel. Source: the regrouping and positive comparison
@@ -303,16 +303,16 @@ theorem ker_toEuclideanLin_hamiltonian_chainTranslates_blockedInteractionMatrix_
 exact blocked-tensor kernel for the coarse interaction at all sufficiently
 large blocked volumes. Source: Nachtergaele, arXiv:cond-mat/9410110,
 Theorem 1.2 and Section 3, equations (3.12)--(3.14). -/
-theorem eventually_ker_hamiltonian_chainTranslates_blockedInteractionMatrix_eq_groundSpaceES
+theorem eventually_ker_hamiltonian_chainTranslates_blockedInteractionMatrix_eq_map_groundSpace
     {D : ℕ} (A : MPSTensor d D) (h : Matrix (Cfg d R) (Cfg d R) ℂ)
     (hh : h.PosSemidef) (hcover : R + L ≤ K * L + 1)
     (hker : ∀ᶠ n in Filter.atTop,
       LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R n h).hamiltonian) =
-        groundSpaceES A n) :
+        ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     ∀ᶠ N in Filter.atTop,
       LinearMap.ker (Matrix.toEuclideanLin
         (chainTranslates K N (blockedInteractionMatrix h L K)).hamiltonian) =
-          groundSpaceES (blockTensor A L) N := by
+          ((groundSpace (blockTensor A L) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   filter_upwards [eventually_ker_blockedInteractionMatrix_reindex_eq_groundSpace
     A h hh hcover hker] with N hN
   apply Submodule.map_injective_of_injective

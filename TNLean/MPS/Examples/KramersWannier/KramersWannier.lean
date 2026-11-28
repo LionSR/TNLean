@@ -294,7 +294,8 @@ private theorem kwSquare_offDiag_int (a : Fin 2 × Fin 2)
   revert a x y
   decide
 
-private theorem kwSquare_matched_int (a : Fin 2 × Fin 2) (s : Fin 2) (p q : Fin (kwSquareBlockDim s)) :
+private theorem kwSquare_matched_int (a : Fin 2 × Fin 2) (s : Fin 2)
+    (p q : Fin (kwSquareBlockDim s)) :
     kwSquareConjInt a (kwSquareTau ⟨Sum.inl ⟨s, Finset.mem_univ s⟩, p⟩)
         (kwSquareTau ⟨Sum.inl ⟨s, Finset.mem_univ s⟩, q⟩) = kwSquareTargetsInt s a p q := by
   revert a

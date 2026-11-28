@@ -109,17 +109,17 @@ open ManyBody.Interaction (chainTranslates)
 on the open chain is exactly the original boundary-condition space, including the single-window
 volume. Source: Nachtergaele, arXiv:cond-mat/9410110, Lemma existenceinteraction and
 equations (3.10)--(3.16). -/
-theorem IsPeriodic.exists_ker_hamiltonian_parentChainInteraction_eq_groundSpaceES
+theorem IsPeriodic.exists_ker_hamiltonian_parentChainInteraction_eq_map_groundSpace
     {A : MPSTensor d D} (hA : IsPeriodic m A) :
     ∃ R₀, 0 < R₀ ∧ ∀ R N, R₀ ≤ R → R ≤ N →
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) =
-        groundSpaceES A N := by
+        ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   let : NeZero d := ⟨hA.physDim_ne_zero⟩
   obtain ⟨n₀, hstep⟩ := hA.exists_eventually_groundSpace_restriction_intersection
   refine ⟨n₀ + 1, by omega, fun R N hR hRN => ?_⟩
-  apply le_antisymm ?_ (groundSpaceES_le_ker_hamiltonian_parentChainInteraction A R N)
+  apply le_antisymm ?_ (map_groundSpace_le_ker_hamiltonian_parentChainInteraction A R N)
   intro v hv
-  apply (mem_groundSpaceES_iff A N v).mpr
+  apply (mem_map_groundSpace_iff A N v).mpr
   have hstep' : ∀ M, R ≤ M →
       ((⨅ b, (groundSpace A M).comap (restrictLastₗ b)) ⊓
         ⨅ a, (groundSpace A M).comap (restrictFirstₗ a)) = groundSpace A (M + 1) := by
@@ -135,13 +135,13 @@ theorem IsPeriodic.exists_ker_hamiltonian_parentChainInteraction_eq_groundSpaceE
 canonical parent interaction, whose open-chain translates have the boundary spaces as kernels
 at every volume at least its range. Source: Nachtergaele, arXiv:cond-mat/9410110, Lemma
 existenceinteraction and Theorem 1.1, in the explicit periodic tensor setting. -/
-theorem IsPeriodic.exists_posSemidef_ker_hamiltonian_chainTranslates_eq_groundSpaceES
+theorem IsPeriodic.exists_posSemidef_ker_hamiltonian_chainTranslates_eq_map_groundSpace
     {A : MPSTensor d D} (hA : IsPeriodic m A) :
     ∃ R : ℕ, 0 < R ∧ ∃ h : Matrix (Cfg d R) (Cfg d R) ℂ,
       h.PosSemidef ∧ ∀ N : ℕ, R ≤ N →
         LinearMap.ker (Matrix.toEuclideanLin (chainTranslates R N h).hamiltonian) =
-          groundSpaceES A N := by
-  obtain ⟨R, hR, hKernel⟩ := hA.exists_ker_hamiltonian_parentChainInteraction_eq_groundSpaceES
+          ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+  obtain ⟨R, hR, hKernel⟩ := hA.exists_ker_hamiltonian_parentChainInteraction_eq_map_groundSpace
   exact ⟨R, hR, LinearMap.toMatrix' (parentInteraction A R),
     posSemidef_toMatrix'_parentInteraction A R, fun N hN => hKernel R N le_rfl hN⟩
 

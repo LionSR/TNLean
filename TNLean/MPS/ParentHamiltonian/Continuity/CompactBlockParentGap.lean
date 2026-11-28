@@ -76,9 +76,9 @@ theorem eventually_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_of_s
     (div_lt_iff₀ hmpos).2 (by simpa only [mul_comm] using hnum)
   obtain ⟨γ', hγ'lower, hγ'upper⟩ := exists_between hthreshold
   let B := fun x => toTensorFromBlocks (α := Fin d) (μ := μ x) (A x)
-  have hProjR := continuous_groundSpaceES_toTensorFromBlocks_starProjection_family
+  have hProjR := continuous_map_groundSpace_toTensorFromBlocks_starProjection_family
     μ A hμ hA R (fun x => wordTupleSpanTop_of_ge (A x) hS (hSpan x) (by omega))
-  have hProjW := continuous_groundSpaceES_toTensorFromBlocks_starProjection_family
+  have hProjW := continuous_map_groundSpace_toTensorFromBlocks_starProjection_family
     μ A hμ hA (m + R - 1)
     (fun x => wordTupleSpanTop_of_ge (A x) hS (hSpan x) (by omega))
   have hnear := ManyBody.eventually_forall_hasEigenvalue

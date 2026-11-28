@@ -50,16 +50,17 @@ theorem groundSpaceProjectionMatrix_blockTensor_reindex
   ext σ τ
   have hcol {d' D' : ℕ} (B : MPSTensor d' D') (n : ℕ) (x y : Cfg d' n) :
       groundSpaceProjectionMatrix B n x y =
-        ((groundSpaceES B n).starProjection (toLp 2 (Pi.single y 1))) x := by
+        (((groundSpace B n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection (toLp 2
+            (Pi.single y 1))) x := by
     have h := congrArg (fun T => T (toLp 2 (Pi.single y 1)) x)
       ((Matrix.toEuclideanCLM (n := Cfg d' n) (𝕜 := ℂ)).apply_symm_apply
-        (groundSpaceES B n).starProjection)
+        ((groundSpace B n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection)
     simpa only [groundSpaceProjectionMatrix, Matrix.toEuclideanCLM_toLp,
       Matrix.mulVec_single_one, Matrix.col_apply] using h
   change groundSpaceProjectionMatrix (blockTensor A L) N
     ((Kraus.blockedConfigEquiv d N L).symm σ) ((Kraus.blockedConfigEquiv d N L).symm τ) =
       groundSpaceProjectionMatrix A (N * L) σ τ
-  rw [hcol, hcol, starProjection_groundSpaceES_blockTensor_map_apply]
+  rw [hcol, hcol, starProjection_map_groundSpace_blockTensor_map_apply]
   have hsingle : (blockedConfigLinearIsometryEquiv d N L).symm
       (toLp 2 (Pi.single τ 1)) =
       toLp 2 (Pi.single ((Kraus.blockedConfigEquiv d N L).symm τ) 1) := by

@@ -139,7 +139,7 @@ theorem twoSiteBondInteraction_bondPenalty_isSymmetricProjection
       simpa only [Matrix.star_eq_conjTranspose] using hM.2
     rw [hMH]
 
-private theorem twoSiteBondInteraction_kills_groundSpaceES_of_groundSpaceMap
+private theorem twoSiteBondInteraction_kills_map_groundSpace_of_groundSpaceMap
     {D E : ℕ} (A : MPSTensor (D * D) E)
     (η : Fin (D * D) → ℂ)
     (hkill : ∀ X : Matrix (Fin E) (Fin E) ℂ,
@@ -147,12 +147,12 @@ private theorem twoSiteBondInteraction_kills_groundSpaceES_of_groundSpaceMap
         (Matrix.reindex finProdFinEquiv.symm finProdFinEquiv.symm
           (bondPenalty η))).mulVec (groundSpaceMap A 2 X) = 0)
     (g : EuclideanSpace ℂ (Cfg (D * D) 2))
-    (hg : g ∈ groundSpaceES A 2) :
+    (hg : g ∈ ((groundSpace A 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     Matrix.toEuclideanLin
       (twoSiteBondInteraction
         (Matrix.reindex finProdFinEquiv.symm finProdFinEquiv.symm
           (bondPenalty η))) g = 0 := by
-  rw [mem_groundSpaceES_iff, groundSpace, LinearMap.mem_range] at hg
+  rw [mem_map_groundSpace_iff, groundSpace, LinearMap.mem_range] at hg
   obtain ⟨X, hX⟩ := hg
   have hgX : g = WithLp.toLp 2 (groundSpaceMap A 2 X) := by
     apply (WithLp.linearEquiv 2 ℂ (NSiteSpace (Fin (D * D)) 2)).injective
@@ -178,7 +178,7 @@ theorem twoSiteBondInteraction_le_parentInteraction_of_groundSpaceMap
     (twoSiteBondInteraction
       (Matrix.reindex finProdFinEquiv.symm finProdFinEquiv.symm
         (bondPenalty η)))
-  let G := groundSpaceES A 2
+  let G := ((groundSpace A 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)
   have hB : B.IsSymmetricProjection :=
     twoSiteBondInteraction_bondPenalty_isSymmetricProjection η hη
   have hP := isSymmetricProjection_toEuclideanLin_toMatrix'_parentInteraction A 2
@@ -198,7 +198,7 @@ theorem twoSiteBondInteraction_le_parentInteraction_of_groundSpaceMap
       have hBA : B.adjoint = B :=
         (LinearMap.isSymmetric_iff_isSelfAdjoint B).mp hB.isSymmetric
       rw [hBA,
-        twoSiteBondInteraction_kills_groundSpaceES_of_groundSpaceMap A η hkill g hg]
+        twoSiteBondInteraction_kills_map_groundSpace_of_groundSpaceMap A η hkill g hg]
       simp
 
 /-- The independent-bond penalty is bounded above by the canonical two-site

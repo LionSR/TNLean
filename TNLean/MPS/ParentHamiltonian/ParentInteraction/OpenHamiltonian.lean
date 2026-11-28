@@ -23,7 +23,8 @@ no local term crosses the cut between the last and first sites.
 When the tensor has virtual dimension \(D \ge 1\) and is block-injective at
 length \(L₀\), with \(0 < L₀\) and \(L₀ + 1 \le N\), the kernel of the
 length-\(L₀ + 1\) open Hamiltonian is the open MPS boundary-condition space
-`groundSpaceES A N`. This is the finite-volume ground-space input for
+`((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)`. This is the finite-volume
+ground-space input for
 Nachtergaele's C1--C3 martingale theorem.
 
 It also contains the following results.
@@ -70,10 +71,11 @@ abbrev NonwrappingStart (L N : ℕ) :=
 
 /-- The canonical \(\ell^2\) realization of the local ground space has dimension
 \(D^2\) under block injectivity at length \(L\). -/
-theorem groundSpaceES_finrank_eq_of_isNBlkInjective {A : MPSTensor d D} {L : ℕ}
+theorem map_groundSpace_finrank_eq_of_isNBlkInjective {A : MPSTensor d D} {L : ℕ}
     (hInj : Kraus.IsNBlkInjective A L) :
-    Module.finrank ℂ (groundSpaceES A L) = D ^ 2 := by
-  rw [groundSpaceES, LinearEquiv.finrank_map_eq]
+    Module.finrank ℂ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap) = D ^ 2 := by
+  rw [LinearEquiv.finrank_map_eq]
   exact groundSpace_finrank_eq_of_isNBlkInjective hInj
 
 /-! ### The open-chain parent Hamiltonian as the Hamiltonian of `parentChainInteraction`
@@ -122,8 +124,9 @@ theorem placeAlong_chainWindow_mulVec_apply {L N a : ℕ} (h : a + L ≤ N)
 private theorem toMatrix'_parentInteraction_mulVec_eq_zero_iff (A : MPSTensor d D) {L : ℕ}
     (f : Cfg d L → ℂ) :
     LinearMap.toMatrix' (parentInteraction A L) *ᵥ f = 0 ↔ f ∈ groundSpace A L := by
-  have hf : f ∈ groundSpace A L ↔ WithLp.toLp 2 f ∈ groundSpaceES A L :=
-    (mem_groundSpaceES_iff A L _).symm
+  have hf : f ∈ groundSpace A L ↔ WithLp.toLp 2 f ∈ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
+      _).symm.toLinearMap) :=
+    (mem_map_groundSpace_iff A L _).symm
   rw [hf, ← toEuclideanLin_toMatrix'_parentInteraction_apply_eq_zero_iff, Matrix.toLpLin_apply,
     WithLp.ofLp_toLp, WithLp.toLp_eq_zero]
 
@@ -227,12 +230,12 @@ theorem cyclicRestrictₗ_mem_groundSpace_of_mem_ker_hamiltonian_parentChainInte
 /-- The open MPS boundary-condition space lies in the kernel of the Hamiltonian of the parent
 interaction on the open chain: every window restriction of an open-boundary MPS vector is an
 open-boundary MPS vector. Nachtergaele, arXiv:cond-mat/9410110, equation (3.12). -/
-theorem groundSpaceES_le_ker_hamiltonian_parentChainInteraction (A : MPSTensor d D)
+theorem map_groundSpace_le_ker_hamiltonian_parentChainInteraction (A : MPSTensor d D)
     (L N : ℕ) :
-    groundSpaceES A N ≤
+    ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A L N).hamiltonian) := by
   intro v hv
-  rw [mem_groundSpaceES_iff, groundSpace, LinearMap.mem_range] at hv
+  rw [mem_map_groundSpace_iff, groundSpace, LinearMap.mem_range] at hv
   obtain ⟨X, hX⟩ := hv
   rw [LinearMap.mem_ker, Matrix.toLpLin_apply, WithLp.toLp_eq_zero,
     ManyBody.Interaction.hamiltonian, Matrix.sum_mulVec]
@@ -245,26 +248,26 @@ theorem groundSpaceES_le_ker_hamiltonian_parentChainInteraction (A : MPSTensor d
 /-- Under block injectivity at length \(L_0 > 0\), the kernel of the Hamiltonian of the
 length-\((L_0+1)\) parent interaction on the open chain lies in the open MPS boundary-condition
 space. Nachtergaele, arXiv:cond-mat/9410110, equations (3.12)--(3.16). -/
-theorem ker_hamiltonian_parentChainInteraction_le_groundSpaceES_of_isNBlkInjective
+theorem ker_hamiltonian_parentChainInteraction_le_map_groundSpace_of_isNBlkInjective
     {A : MPSTensor d D} [NeZero D] {L₀ N : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hL₀N : L₀ + 1 ≤ N) :
     LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A (L₀ + 1) N).hamiltonian) ≤
-      groundSpaceES A N := by
+      ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   intro v hv
-  rw [mem_groundSpaceES_iff]
+  rw [mem_map_groundSpace_iff]
   exact contiguous_mem_groundSpace_of_isNBlkInjective hInj hL₀ hL₀N fun s hs τ ↦
     contiguousRestrictₗ_mem_groundSpace_of_mem_ker_hamiltonian_parentChainInteraction A hv s hs τ
 
 /-- For a block-injective tensor, the kernel of the Hamiltonian of the parent interaction on the
 open chain is exactly the open MPS boundary-condition space. Nachtergaele,
 arXiv:cond-mat/9410110, equations (3.12)--(3.16). -/
-theorem ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_isNBlkInjective
+theorem ker_hamiltonian_parentChainInteraction_eq_map_groundSpace_of_isNBlkInjective
     {A : MPSTensor d D} [NeZero D] {L₀ N : ℕ}
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hL₀N : L₀ + 1 ≤ N) :
     LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A (L₀ + 1) N).hamiltonian) =
-      groundSpaceES A N :=
-  le_antisymm (ker_hamiltonian_parentChainInteraction_le_groundSpaceES_of_isNBlkInjective
-    hInj hL₀ hL₀N) (groundSpaceES_le_ker_hamiltonian_parentChainInteraction A (L₀ + 1) N)
+      ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) :=
+  le_antisymm (ker_hamiltonian_parentChainInteraction_le_map_groundSpace_of_isNBlkInjective
+    hInj hL₀ hL₀N) (map_groundSpace_le_ker_hamiltonian_parentChainInteraction A (L₀ + 1) N)
 
 /-- Project result: **boundary degeneracy of the open-chain parent Hamiltonian.** For a tensor
 block-injective at length \(L_0 > 0\), the kernel of the Hamiltonian of the length-\((L_0+1)\)
@@ -277,8 +280,8 @@ theorem finrank_ker_hamiltonian_parentChainInteraction_of_isNBlkInjective
     (hInj : Kraus.IsNBlkInjective A L₀) (hL₀ : 0 < L₀) (hL₀N : L₀ + 1 ≤ N) :
     Module.finrank ℂ (LinearMap.ker
       (Matrix.toEuclideanLin (parentChainInteraction A (L₀ + 1) N).hamiltonian)) = D ^ 2 := by
-  rw [ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_isNBlkInjective hInj hL₀ hL₀N]
-  exact groundSpaceES_finrank_eq_of_isNBlkInjective
+  rw [ker_hamiltonian_parentChainInteraction_eq_map_groundSpace_of_isNBlkInjective hInj hL₀ hL₀N]
+  exact map_groundSpace_finrank_eq_of_isNBlkInjective
     (Kraus.isNBlkInjective_of_le hL₀ hInj (by omega))
 
 /-- At volume \(N = L\) the Hamiltonian of the parent interaction on the open chain is the local
@@ -299,10 +302,12 @@ theorem norm_toEuclideanLin_hamiltonian_parentChainInteraction_self_of_mem_ortho
       (Matrix.toEuclideanLin (parentChainInteraction A L L).hamiltonian))ᗮ) :
     ‖Matrix.toEuclideanLin (parentChainInteraction A L L).hamiltonian v‖ = ‖v‖ := by
   rw [hamiltonian_parentChainInteraction_self, toEuclideanLin_toMatrix'_parentInteraction] at hv ⊢
-  change ‖(groundSpaceES A L)ᗮ.starProjection v‖ = ‖v‖
+  change ‖((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
+      _).symm.toLinearMap)ᗮ.starProjection v‖ = ‖v‖
   apply Submodule.norm_starProjection_apply
-  have hker : LinearMap.ker ((groundSpaceES A L)ᗮ.starProjection.toLinearMap) =
-      groundSpaceES A L := by
+  have hker : LinearMap.ker (((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
+      _).symm.toLinearMap)ᗮ.starProjection.toLinearMap) =
+      ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
     ext w
     rw [LinearMap.mem_ker, ← toEuclideanLin_toMatrix'_parentInteraction,
       toEuclideanLin_toMatrix'_parentInteraction_apply_eq_zero_iff]
@@ -363,16 +368,16 @@ interaction on the open chain at every volume at least the interaction range. Th
 assumption is explicit; no injectivity is assumed. Source: Nachtergaele, arXiv:cond-mat/9410110,
 equations (3.10)--(3.13), Lemma existenceinteraction; PGVWC07, arXiv:quant-ph/0608197,
 Theorem 12. -/
-theorem ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_restriction_intersection
+theorem ker_hamiltonian_parentChainInteraction_eq_map_groundSpace_of_restriction_intersection
     [NeZero d] (A : MPSTensor d D) {R N : ℕ} (hR : 0 < R) (hRN : R ≤ N)
     (hStep : ∀ M, R ≤ M →
       ((⨅ b, (groundSpace A M).comap (restrictLastₗ b)) ⊓
         ⨅ a, (groundSpace A M).comap (restrictFirstₗ a)) = groundSpace A (M + 1)) :
     LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) =
-      groundSpaceES A N := by
-  apply le_antisymm ?_ (groundSpaceES_le_ker_hamiltonian_parentChainInteraction A R N)
+      ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+  apply le_antisymm ?_ (map_groundSpace_le_ker_hamiltonian_parentChainInteraction A R N)
   intro v hv
-  exact (mem_groundSpaceES_iff A N v).mpr
+  exact (mem_map_groundSpace_iff A N v).mpr
     (contiguous_mem_of_restriction_intersection_submodules (fun M => groundSpace A M) hR hRN
       hStep fun s hs τ ↦
         contiguousRestrictₗ_mem_groundSpace_of_mem_ker_hamiltonian_parentChainInteraction A hv
@@ -382,17 +387,17 @@ theorem ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_restriction_i
 Hamiltonian of the parent interaction on the open chain has, for every range, the open MPS
 boundary-condition space as its kernel. Source: Nachtergaele, arXiv:cond-mat/9410110, Lemma
 existenceinteraction and equations (3.10)--(3.13). -/
-theorem exists_ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_eventually_intersection
+theorem exists_ker_hamiltonian_parentChainInteraction_eq_map_groundSpace_of_eventually_intersection
     [NeZero d] (A : MPSTensor d D)
     (hStep : ∀ᶠ n in atTop,
       ((⨅ b, (groundSpace A (n + 1)).comap (restrictLastₗ b)) ⊓
         ⨅ a, (groundSpace A (n + 1)).comap (restrictFirstₗ a)) = groundSpace A (n + 2)) :
     ∃ R₀, 0 < R₀ ∧ ∀ R N, R₀ ≤ R → R ≤ N →
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R N).hamiltonian) =
-        groundSpaceES A N := by
+        ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   obtain ⟨n₀, hn₀⟩ := Filter.eventually_atTop.mp hStep
   refine ⟨n₀ + 1, Nat.succ_pos _, fun R N hR hRN => ?_⟩
-  apply ker_hamiltonian_parentChainInteraction_eq_groundSpaceES_of_restriction_intersection
+  apply ker_hamiltonian_parentChainInteraction_eq_map_groundSpace_of_restriction_intersection
     A (by omega) hRN
   rintro (_ | n) hn
   · omega
@@ -448,7 +453,7 @@ the Loewner order, by positive constants. -/
 theorem exists_pos_toMatrix'_parentInteraction_hamiltonian_parentChainInteraction_comparison
     {d D R W : ℕ} (A : MPSTensor d D)
     (hker : LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A R W).hamiltonian) =
-      groundSpaceES A W) :
+      ((groundSpace A W).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)) :
     ∃ κ C : ℝ, 0 < κ ∧ 0 < C ∧
       (κ : ℂ) • LinearMap.toMatrix' (parentInteraction A W) ≤
         (parentChainInteraction A R W).hamiltonian ∧

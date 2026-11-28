@@ -106,11 +106,13 @@ namespace MPTensor.IsDressedProportional
 variable {α : Type*} [Fintype α] {D m : ℕ} {B : MPTensor α (Fin D)}
   {X Y : Matrix (Fin m) (Fin D) ℂ} {z : ℂ}
 
+omit [Fintype α] in
 /-- Entrywise complex conjugation of the tensor and both boundaries conjugates
 the scalar of a dressed proportionality. -/
-theorem mapStar (h : IsDressedProportional B X Y z) :
+theorem mapStar [Finite α] (h : IsDressedProportional B X Y z) :
     IsDressedProportional (MPSTensor.mapStar B) (X.map (starRingEnd ℂ))
       (Y.map (starRingEnd ℂ)) (starRingEnd ℂ z) := by
+  have := Fintype.ofFinite α
   obtain ⟨N, h⟩ := h
   refine ⟨N, fun w hw ↦ ?_⟩
   rw [MPSTensor.evalWord_mapStar, ← Matrix.map_mul, h w hw]
@@ -118,6 +120,7 @@ theorem mapStar (h : IsDressedProportional B X Y z) :
   ext i j
   simp only [Matrix.map_apply, Matrix.smul_apply, smul_eq_mul, map_mul]
 
+omit [Fintype α] in
 /-- Relabelling the physical alphabet preserves a dressed proportionality. -/
 theorem reindexPhysical {α' : Type*} (h : IsDressedProportional B X Y z) (f : α' → α) :
     IsDressedProportional (Kraus.reindexPhysical f B) X Y z := by

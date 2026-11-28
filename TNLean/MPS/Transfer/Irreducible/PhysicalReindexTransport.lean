@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Transfer.Irreducible.BlockingInfrastructure
-import QICLean.Channel.Irreducible.InvariantProjection
+import QICLean.Kraus.BlockingTransfer
 
 /-!
 # Physical reindexing along alphabet equivalences
@@ -20,7 +20,8 @@ basic tensor properties used by blocking and canonical-form arguments.
   preservation is `Kraus.isTP_reindexPhysical_iff`).
 * `isInjective_reindexPhysical_equiv` and `isNormal_reindexPhysical_equiv` — one-site injectivity
   and normality are preserved (invariant projections and irreducibility:
-  `Kraus.hasInvariantProj_reindexPhysical_equiv`, `Kraus.isIrreducibleFamily_reindexPhysical_equiv`).
+  `Kraus.hasInvariantProj_reindexPhysical_equiv`,
+  `Kraus.isIrreducibleFamily_reindexPhysical_equiv`).
 * `gaugePhaseEquiv_reindexPhysical_equiv` — gauge-phase equivalence is preserved
   when both tensors are reindexed by the same physical alphabet bijection.
 * `linearIndependent_mpvState_of_configEquiv` transports linear independence of MPV state
@@ -136,7 +137,7 @@ the configurations; on the alphabet `Fin d` these are the states `mpvState (A j)
 Source context: arXiv:1606.00608, the blocking and physical-basis
 identifications used at lines 317--345 and in Appendix C.4, lines 1951--1956. -/
 theorem linearIndependent_mpvState_of_configEquiv
-    {α₁ α₂ : Type*} [Fintype α₁] [Fintype α₂] {N₁ N₂ : ℕ} {ι : Type*} {dim : ι → ℕ}
+    {α₁ α₂ : Type*} [Finite α₁] [Finite α₂] {N₁ N₂ : ℕ} {ι : Type*} {dim : ι → ℕ}
     (e : (Fin N₁ → α₁) ≃ (Fin N₂ → α₂))
     (A : (j : ι) → MPTensor α₁ (Fin (dim j)))
     (B : (j : ι) → MPTensor α₂ (Fin (dim j)))
@@ -146,6 +147,8 @@ theorem linearIndependent_mpvState_of_configEquiv
       (EuclideanSpace.equiv (ι := Fin N₂ → α₂) (𝕜 := ℂ)).symm fun σ ↦ mpv (B j) σ)) :
     LinearIndependent ℂ (fun j ↦
       (EuclideanSpace.equiv (ι := Fin N₁ → α₁) (𝕜 := ℂ)).symm fun σ ↦ mpv (A j) σ) := by
+  have := Fintype.ofFinite α₁
+  have := Fintype.ofFinite α₂
   let F : EuclideanSpace ℂ (Fin N₁ → α₁) ≃ₗ[ℂ] EuclideanSpace ℂ (Fin N₂ → α₂) :=
     (EuclideanSpace.equiv (Fin N₁ → α₁) ℂ).toLinearEquiv |>.trans
       (LinearEquiv.piCongrLeft' ℂ (fun _ : Fin N₁ → α₁ ↦ ℂ) e) |>.trans
@@ -168,13 +171,15 @@ of MPV states at a fixed chain length.
 Source context: arXiv:1606.00608, the physical-basis identifications used in
 canonical-form blocking at lines 317--345. -/
 theorem linearIndependent_mpvState_reindexPhysical_equiv
-    {α₁ α₂ : Type*} [Fintype α₁] [Fintype α₂] {r N : ℕ} {dim : Fin r → ℕ}
+    {α₁ α₂ : Type*} [Finite α₁] [Finite α₂] {r N : ℕ} {dim : Fin r → ℕ}
     (e : α₁ ≃ α₂) (A : (j : Fin r) → MPTensor α₂ (Fin (dim j)))
     (hLI : LinearIndependent ℂ (fun j ↦
       (EuclideanSpace.equiv (ι := Fin N → α₂) (𝕜 := ℂ)).symm fun σ ↦ mpv (A j) σ)) :
     LinearIndependent ℂ (fun j ↦
       (EuclideanSpace.equiv (ι := Fin N → α₁) (𝕜 := ℂ)).symm
         fun σ ↦ mpv (Kraus.reindexPhysical e (A j)) σ) := by
+  have := Fintype.ofFinite α₁
+  have := Fintype.ofFinite α₂
   let E : (Fin N → α₁) ≃ (Fin N → α₂) :=
     Equiv.arrowCongr (Equiv.refl (Fin N)) e
   apply linearIndependent_mpvState_of_configEquiv E

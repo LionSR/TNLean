@@ -18,8 +18,8 @@ ket-against-bra contraction.
 
 ## Main results
 
-* `toMPSTensor_blockTensor_R_one`: one-site blocking is the canonical physical
-  relabeling of the doubled tensor.
+* `blockTensor_R_one`: one-site blocking is the canonical physical relabeling of the
+  dimer tensor.
 * `R_isSimple`: the dimer satisfies Definition 4.7.
 
 ## References
@@ -34,35 +34,20 @@ noncomputable section
 
 namespace MPOTensor.RescalingStableLengthDependentRFP
 
-/-- The canonical relabeling from the doubled physical alphabet after one-site
-blocking to the original doubled physical alphabet. -/
-def oneSiteDoubledEquiv :
-    Fin (Kraus.blockPhysDim 4 1 * Kraus.blockPhysDim 4 1) ≃ Fin (4 * 4) :=
-  finProdFinEquiv.symm |>.trans
-    (Equiv.prodCongr (Kraus.singleBlockEquiv 4) (Kraus.singleBlockEquiv 4)) |>.trans
-      finProdFinEquiv
+/-- The canonical relabeling from the ket-bra alphabet after one-site blocking to the
+original ket-bra alphabet. -/
+def oneSitePairEquiv :
+    Fin (Kraus.blockPhysDim 4 1) × Fin (Kraus.blockPhysDim 4 1) ≃ Fin 4 × Fin 4 :=
+  Equiv.prodCongr (Kraus.singleBlockEquiv 4) (Kraus.singleBlockEquiv 4)
 
-@[deprecated "Simplify directly with `oneSiteDoubledEquiv`." (since := "2026-08-15"), simp]
-lemma oneSiteDoubledEquiv_diagonal (i : Fin (Kraus.blockPhysDim 4 1)) :
-    oneSiteDoubledEquiv (finProdFinEquiv (i, i)) =
-      finProdFinEquiv
-        (Kraus.singleBlockEquiv 4 i, Kraus.singleBlockEquiv 4 i) := by
-  simp [oneSiteDoubledEquiv]
-
-/-- One-site physical blocking of the dimer gives the canonical physical
-relabeling of its doubled-index tensor. -/
-theorem toMPSTensor_blockTensor_R_one :
-    (MPOTensor.blockTensor R 1).toMPSTensor =
-      Kraus.reindexPhysical oneSiteDoubledEquiv R.toMPSTensor := by
-  funext ij
-  change
-    R (Kraus.singleBlockEquiv 4 ij.divNat, Kraus.singleBlockEquiv 4 ij.modNat) * 1 =
-      R ((finProdFinEquiv
-          (Kraus.singleBlockEquiv 4 ij.divNat,
-            Kraus.singleBlockEquiv 4 ij.modNat)).divNat, (finProdFinEquiv
-          (Kraus.singleBlockEquiv 4 ij.divNat,
-            Kraus.singleBlockEquiv 4 ij.modNat)).modNat)
-  rw [mul_one, MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
+/-- One-site physical blocking of the dimer is the canonical physical relabeling of the
+dimer tensor. -/
+theorem blockTensor_R_one :
+    MPOTensor.blockTensor R 1 = Kraus.reindexPhysical oneSitePairEquiv R := by
+  funext ⟨a, b⟩
+  change R (Kraus.singleBlockEquiv 4 a, Kraus.singleBlockEquiv 4 b) * 1 =
+    R (Kraus.singleBlockEquiv 4 a, Kraus.singleBlockEquiv 4 b)
+  rw [Matrix.mul_one]
 
 /-- The rescaling-stable dimer tensor is simple in the sense of Definition 4.7.
 
@@ -75,19 +60,28 @@ This theorem does not assert simplicity for every positive blocking.
 
 Source: arXiv:1606.00608, Definition 4.7, lines 815--822. -/
 theorem R_isSimple : MPOTensor.IsSimple R := by
-  let data := canonicalFormData.reindexPhysical (oneSiteDoubledEquiv.trans finProdFinEquiv.symm)
+  -- T.2c: the BNT refinement is stated on a `Fin` alphabet.
+  let e : Fin (Kraus.blockPhysDim 4 1 * Kraus.blockPhysDim 4 1) ≃ Fin 4 × Fin 4 :=
+    finProdFinEquiv.symm.trans oneSitePairEquiv
+  let data := canonicalFormData.reindexPhysical e
   let ref := data.bntRefinement
-  refine ⟨R_isMPDO, 1, by norm_num, ref.representativeSectorDecomposition, ?_, ?_⟩
-  · rw [toMPSTensor_blockTensor_R_one]
-    exact ref.isBNTSectorPresentation Nat.one_pos
+  have hBlock : MPOTensor.blockTensor R 1 =
+      Kraus.reindexPhysical finProdFinEquiv (Kraus.reindexPhysical e R) := by
+    rw [blockTensor_R_one]
+    funext x
+    simp [Kraus.reindexPhysical, e]
+  refine ⟨R_isMPDO, 1, by norm_num, ref.representativeSectorDecomposition.reindexPhysical
+    finProdFinEquiv, ?_, ?_⟩
+  · rw [hBlock]
+    exact (ref.isBNTSectorPresentation Nat.one_pos).reindexPhysical finProdFinEquiv
   · intro j
-    change ¬ IsNilpotent (MPOTensor.doubledPhysTraceTransfer 4
-      (Kraus.reindexPhysical (oneSiteDoubledEquiv.trans finProdFinEquiv.symm) retainedBlock))
-    have hTransfer : MPOTensor.doubledPhysTraceTransfer 4
-        (Kraus.reindexPhysical (oneSiteDoubledEquiv.trans finProdFinEquiv.symm) retainedBlock) =
+    change ¬ IsNilpotent (MPOTensor.physTraceTransfer
+      (Kraus.reindexPhysical finProdFinEquiv (Kraus.reindexPhysical e retainedBlock)))
+    have hTransfer : MPOTensor.physTraceTransfer
+        (Kraus.reindexPhysical finProdFinEquiv (Kraus.reindexPhysical e retainedBlock)) =
         MPOTensor.physTraceTransfer retainedBlock := by
-      rw [MPOTensor.doubledPhysTraceTransfer, MPOTensor.physTraceTransfer]
-      simp only [Kraus.reindexPhysical, oneSiteDoubledEquiv]
+      simp only [MPOTensor.physTraceTransfer, Kraus.reindexPhysical, e, oneSitePairEquiv,
+        Equiv.trans_apply, Equiv.symm_apply_apply, Equiv.prodCongr_apply, Prod.map]
       exact (Kraus.singleBlockEquiv 4).sum_comp (fun i : Fin 4 => retainedBlock (i, i))
     rw [hTransfer]
     exact physTraceTransfer_retainedBlock_not_isNilpotent

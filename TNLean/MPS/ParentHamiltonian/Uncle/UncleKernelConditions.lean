@@ -62,7 +62,8 @@ theorem uncleInteraction_apply_eq_zero_iff
     (v : EuclideanSpace ℂ (Cfg d 2)) :
     Matrix.toEuclideanLin (uncleInteraction A B R L) v = 0 ↔
       (blockedConfigLinearIsometryEquiv d 1 2).symm v ∈
-        groundSpaceES (uncleTensor A B R L) 1 := by
+        ((groundSpace (uncleTensor A B R L) 1).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap) := by
   rw [toEuclideanLin_uncleInteraction_apply, LinearIsometryEquiv.map_eq_zero_iff]
   rw [Submodule.starProjection_apply_eq_zero_iff, Submodule.orthogonal_orthogonal]
 
@@ -81,7 +82,7 @@ theorem hamiltonian_uncleInteraction_apply_eq_zero_iff
         (translationInvariant N (uncleInteraction A B R L)).hamiltonian v = 0 ↔
       ∀ (i : Fin N) (τ : Cfg d N),
         Matrix.toEuclideanLin (uncleInteraction A B R L)
-          (cyclicRestrictES (Fin.pos i) 2 i τ v) = 0 :=
+          (LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos i) 2 i τ) v) = 0 :=
   haveI : NeZero N := ⟨by omega⟩
   toEuclideanLin_hamiltonian_translationInvariant_eq_zero_iff_sections hN _
     (posSemidef_uncleInteraction A B R L) v

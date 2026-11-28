@@ -80,7 +80,7 @@ theorem exists_isRFPViaTS_not_lengthIndependent_bntCoefficients :
   refine ⟨baseMPO, baseMPOBNTAlgebraTensorClause,
     baseMPO_isCPSVCanonicalForm, baseMPO_isMPDO, ?_, ?_⟩
   · exact baseMPOBNTAlgebraTensorClause.isRFPViaTS
-      (baseMPO_isCPSVCanonicalForm.reindexPhysical finProdFinEquiv.symm) baseMPO_isMPDO
+      baseMPO_isCPSVCanonicalForm baseMPO_isMPDO
   · exact normalizedSingletonCoeffs_not_lengthIndependent
 
 end MPOTensor.BondTwoSingletonBaseModel

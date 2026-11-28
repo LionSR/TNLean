@@ -190,7 +190,7 @@ theorem exists_uniform_hamiltonian_parentRingInteraction_toTensorFromBlocks_gap_
   have : NeZero N := ⟨by omega⟩
   have hSpanR (x : X) : WordTupleSpanTop (A x) R :=
     wordTupleSpanTop_of_ge (A x) hS (hSpan x) (by omega : S ≤ R)
-  have hGround := continuous_groundSpaceES_toTensorFromBlocks_starProjection_family
+  have hGround := continuous_map_groundSpace_toTensorFromBlocks_starProjection_family
     μ A hμ hA R hSpanR
   have hKernel :=
     continuous_hamiltonian_parentRingInteraction_toTensorFromBlocks_kernelProjection_family

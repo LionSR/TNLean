@@ -34,8 +34,8 @@ docs/paper-gaps/nachtergaele96_infinite_volume_ground_projection.tex.
 
 It also contains the following results.
 
-* `MPSTensor.exists_local_density_range_eq_groundSpaceES`,
-  `MPSTensor.exists_quasiLocalExpectation_density_range_eq_groundSpaceES`: finite local densities
+* `MPSTensor.exists_local_density_range_eq_map_groundSpace`,
+  `MPSTensor.exists_quasiLocalExpectation_density_range_eq_map_groundSpace`: finite local densities
   and their MPS support.
 -/
 
@@ -92,11 +92,12 @@ private theorem contracted_words_eq_zero_of_faithful_square_expectation
 
 open scoped Matrix.Norms.Frobenius
 
-private theorem groundSpaceES_le_ker_of_contracted_words_eq_zero
+private theorem map_groundSpace_le_ker_of_contracted_words_eq_zero
     (A : MPSTensor d D) (X : Matrix (Cfg d k) (Cfg d k) ℂ)
     (hC : ∀ b : Cfg d k,
       (∑ σ : Cfg d k, X b σ • Kraus.evalWord A (List.ofFn σ)) = 0) :
-    groundSpaceES A k ≤ LinearMap.ker (Matrix.toEuclideanLin X) := by
+    ((groundSpace A k).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap) ≤ LinearMap.ker (Matrix.toEuclideanLin X) := by
   rw [← range_groundSpaceMapES]
   rintro ψ ⟨v, rfl⟩
   obtain ⟨Y, rfl⟩ := (Matrix.frobeniusEquivEuclidean (Fin D) (Fin D)).surjective v
@@ -112,9 +113,10 @@ private theorem groundSpaceES_le_ker_of_contracted_words_eq_zero
   simpa only [Finset.sum_mul, smul_mul_assoc, Matrix.trace_sum, Matrix.trace_smul,
     smul_eq_mul, zero_mul, Matrix.trace_zero] using h
 
-private theorem contracted_words_eq_zero_of_groundSpaceES_le_ker
+private theorem contracted_words_eq_zero_of_map_groundSpace_le_ker
     (A : MPSTensor d D) (X : Matrix (Cfg d k) (Cfg d k) ℂ)
-    (hX : groundSpaceES A k ≤ LinearMap.ker (Matrix.toEuclideanLin X)) :
+    (hX : ((groundSpace A k).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ LinearMap.ker
+        (Matrix.toEuclideanLin X)) :
     ∀ b : Cfg d k, (∑ σ : Cfg d k, X b σ • Kraus.evalWord A (List.ofFn σ)) = 0 := by
   classical
   intro b
@@ -142,13 +144,14 @@ theorem observableInsertionExpectation_conjTranspose_mul_self_eq_zero_iff
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosDef)
     (X : Matrix (Cfg d k) (Cfg d k) ℂ) :
     observableInsertionExpectation A ρ (Xᴴ * X) = 0 ↔
-      groundSpaceES A k ≤ LinearMap.ker (Matrix.toEuclideanLin X) := by
+      ((groundSpace A k).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap) ≤ LinearMap.ker (Matrix.toEuclideanLin X) := by
   constructor
   · intro hzero
-    exact groundSpaceES_le_ker_of_contracted_words_eq_zero A X
+    exact map_groundSpace_le_ker_of_contracted_words_eq_zero A X
       (contracted_words_eq_zero_of_faithful_square_expectation A hρ X hzero)
   · intro hX
-    have hC := contracted_words_eq_zero_of_groundSpaceES_le_ker A X hX
+    have hC := contracted_words_eq_zero_of_map_groundSpace_le_ker A X hX
     simp only [observableInsertionExpectation, physicalObservableTransfer_square,
       hC, zero_mul, Finset.sum_const_zero, Matrix.trace_zero, zero_div]
 
@@ -222,14 +225,16 @@ private theorem density_square_zero_iff_range_le_ker
         LinearMap.range_le_ker_iff.mp hle)
     rw [← Matrix.mul_assoc, Matrix.trace_mul_cycle, hprod, Matrix.zero_mul, Matrix.trace_zero]
 
-private theorem density_range_eq_groundSpaceES [NeZero D]
+private theorem density_range_eq_map_groundSpace [NeZero D]
     (A : MPSTensor d D) {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosDef)
     {σ : Matrix (Cfg d k) (Cfg d k) ℂ} (hσ : σ.PosSemidef)
     (hrep : ∀ X, observableInsertionExpectation A ρ X = Matrix.trace (σ * X)) :
-    LinearMap.range (Matrix.toEuclideanLin σ) = groundSpaceES A k := by
+    LinearMap.range (Matrix.toEuclideanLin σ) = ((groundSpace A k).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap) := by
   have hiff (X : Matrix (Cfg d k) (Cfg d k) ℂ) :
       LinearMap.range (Matrix.toEuclideanLin σ) ≤ LinearMap.ker (Matrix.toEuclideanLin X) ↔
-        groundSpaceES A k ≤ LinearMap.ker (Matrix.toEuclideanLin X) := by
+        ((groundSpace A k).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap) ≤ LinearMap.ker (Matrix.toEuclideanLin X) := by
     rw [← density_square_zero_iff_range_le_ker hσ X, ← hrep,
       observableInsertionExpectation_conjTranspose_mul_self_eq_zero_iff A hρ X]
   have htest (S : Submodule ℂ (EuclideanSpace ℂ (Cfg d k))) :
@@ -237,7 +242,7 @@ private theorem density_range_eq_groundSpaceES [NeZero D]
     refine ⟨(Matrix.toEuclideanCLM (n := Cfg d k) (𝕜 := ℂ)).symm Sᗮ.starProjection, ?_⟩
     simp only [← Matrix.coe_toEuclideanCLM_eq_toEuclideanLin, StarAlgEquiv.apply_symm_apply,
       Submodule.ker_starProjection, Submodule.orthogonal_orthogonal]
-  obtain ⟨X, hX⟩ := htest (groundSpaceES A k)
+  obtain ⟨X, hX⟩ := htest ((groundSpace A k).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)
   obtain ⟨Y, hY⟩ := htest (LinearMap.range (Matrix.toEuclideanLin σ))
   exact le_antisymm
     (by simpa only [hX] using (hiff X).mpr hX.ge)
@@ -248,12 +253,13 @@ finite densities whose ranges are precisely the MPS boundary spaces.
 No transfer fixed-point condition, injectivity, or primitivity is required.
 Source: Nachtergaele, arXiv:cond-mat/9410110, equations (3.1)--(3.2b) and
 lines 1724--1738, the identification of local support from faithful generators. -/
-theorem exists_local_density_range_eq_groundSpaceES [NeZero D]
+theorem exists_local_density_range_eq_map_groundSpace [NeZero D]
     (A : MPSTensor d D) (hTP : ∑ i, (A i)ᴴ * A i = 1)
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosDef) (k : ℕ) :
     ∃ σ : Matrix (Cfg d k) (Cfg d k) ℂ, σ.PosSemidef ∧ Matrix.trace σ = 1 ∧
       (∀ X, observableInsertionExpectation A ρ X = Matrix.trace (σ * X)) ∧
-      LinearMap.range (Matrix.toEuclideanLin σ) = groundSpaceES A k := by
+      LinearMap.range (Matrix.toEuclideanLin σ) = ((groundSpace A k).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap) := by
   let : NeZero d := ⟨IsLeftCanonical.physDim_ne_zero (A := A) hTP⟩
   have hone : observableInsertionExpectationₗ A ρ k 1 = 1 := by
     change Matrix.trace (physicalObservableTransfer A k 1 ρ) / Matrix.trace ρ = 1
@@ -263,7 +269,7 @@ theorem exists_local_density_range_eq_groundSpaceES [NeZero D]
   obtain ⟨σ, hσ, htr, hrep⟩ := Matrix.exists_density_of_positive_functional
     (observableInsertionExpectationₗ A ρ k)
     (fun X hX => observableInsertionExpectation_nonneg A hρ.posSemidef hX) hone
-  exact ⟨σ, hσ, htr, hrep, density_range_eq_groundSpaceES A hρ hσ hrep⟩
+  exact ⟨σ, hσ, htr, hrep, density_range_eq_map_groundSpace A hρ hσ hrep⟩
 
 end MPSTensor
 
@@ -281,7 +287,7 @@ generators has a density whose range is exactly the tensor boundary space.
 The same density represents every translation of the interval.
 Source: Nachtergaele, arXiv:cond-mat/9410110, equations (3.1)--(3.2b),
 and lines 1724--1738. -/
-theorem exists_quasiLocalExpectation_density_range_eq_groundSpaceES [NeZero D]
+theorem exists_quasiLocalExpectation_density_range_eq_map_groundSpace [NeZero D]
     (A : MPSTensor d D) (hA : IsLeftCanonical A)
     {ρ : Matrix (Fin D) (Fin D) ℂ} (hρ : ρ.PosDef)
     (hFix : Kraus.transferMap A ρ = ρ) (k : ℕ) :
@@ -290,11 +296,12 @@ theorem exists_quasiLocalExpectation_density_range_eq_groundSpaceES [NeZero D]
       (∀ (a : ℤ) (X : Matrix (Cfg d k) (Cfg d k) ℂ),
         quasiLocalExpectation A hA hρ.posSemidef hFix (ne_of_gt hρ.trace_pos)
           (quasiLocalIntervalObservable d a k X) = Matrix.trace (σ * X)) ∧
-      LinearMap.range (Matrix.toEuclideanLin σ) = groundSpaceES A k := by
+      LinearMap.range (Matrix.toEuclideanLin σ) = ((groundSpace A k).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap) := by
   let _ : NeZero d := ⟨hA.physDim_ne_zero⟩
   change (∑ i, (A i)ᴴ * A i) = 1 at hA
   obtain ⟨σ, hσ, htr, hrep, hRange⟩ :=
-    exists_local_density_range_eq_groundSpaceES A hA hρ k
+    exists_local_density_range_eq_map_groundSpace A hA hρ k
   refine ⟨σ, hσ, htr, ?_, hRange⟩
   intro a X
   rw [quasiLocalExpectation_quasiLocalIntervalObservable]

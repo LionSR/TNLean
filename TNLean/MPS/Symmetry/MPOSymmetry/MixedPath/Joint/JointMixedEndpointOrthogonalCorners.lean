@@ -217,10 +217,11 @@ theorem jointMixedEndpointCornerSupport_false_false
     (A₀ : (x : Fin r) → MPSTensor d₀ (D₀ x))
     (A₁ : (x : Fin r) → MPSTensor d₁ (D₁ x)) :
     jointMixedEndpointCornerSupport A₀ A₁ (false, false) =
-      groundSpaceES (toTensorFromBlocks (μ := fun _ => 1)
-        (jointMixedEndpointLeftTensor A₀ d₁ D₁)) 2 := by
+      ((groundSpace (toTensorFromBlocks (μ := fun _ => 1)
+        (jointMixedEndpointLeftTensor A₀ d₁
+            D₁)) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   simpa only [jointMixedEndpointCornerSupport, jointMixedOuterCornerProjection,
     Bool.false_eq_true, ite_false, Module.End.mul_eq_comp] using
-      jointMixedEndpoint_extendedSupport_outerCorner_eq_groundSpaceES A₀ A₁
+      jointMixedEndpoint_extendedSupport_outerCorner_eq_map_groundSpace A₀ A₁
 
 end MPSTensor.MPOSymmetry

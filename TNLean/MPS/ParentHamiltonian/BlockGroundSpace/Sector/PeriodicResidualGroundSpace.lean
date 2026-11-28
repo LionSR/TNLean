@@ -164,15 +164,14 @@ Euclidean space, at every prefix and tail length.
 Source: DCCSP17, arXiv:1708.00029, Lemma lem:blocking-arbitrary,
 lines 434--451; Nachtergaele, arXiv:cond-mat/9410110, Section 3,
 lines 1504--1538. -/
-theorem groundSpaceES_eq_iSup_range_blockedResidualBoundaryMapES
+theorem map_groundSpace_eq_iSup_range_blockedResidualBoundaryMapES
     (A : MPSTensor d D) (B : (j : ι) → MPSTensor (blockPhysDim d L) (dim j))
     (V : (j : ι) → Matrix (Fin D) (Fin (dim j)) ℂ)
     (hSum : ∑ j, V j * (V j)ᴴ = 1)
     (hInt : ∀ j i, (V j)ᴴ * blockTensor A L i = B j i * (V j)ᴴ) (N r : ℕ) :
-    groundSpaceES A (N * L + r) =
+    ((groundSpace A (N * L + r)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
       ⨆ j, (blockedResidualBoundaryMapES A L (B j) (V j) N r).range := by
-  simp only [groundSpaceES,
-    groundSpace_eq_iSup_range_blockedResidualBoundaryMap A B V hSum hInt N r,
+  simp only [groundSpace_eq_iSup_range_blockedResidualBoundaryMap A B V hSum hInt N r,
     Submodule.map_iSup, blockedResidualBoundaryMapES, LinearMap.coe_toContinuousLinearMap,
     LinearMap.range_comp, LinearEquiv.range, Submodule.map_top]
 
@@ -196,7 +195,7 @@ theorem IsPeriodic.exists_stepOrbit_residualGroundSpaceDecomposition {m : ℕ}
       (∀ a i, blockTensor A L i * V a = V a * B a i) ∧
       (∀ a i, (V a)ᴴ * blockTensor A L i = B a i * (V a)ᴴ) ∧
       (∀ a, IsPeriodic (m / m.gcd L) (B a)) ∧
-      (∀ N r, groundSpaceES A (N * L + r) =
+      (∀ N r, ((groundSpace A (N * L + r)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
         ⨆ a, (blockedResidualBoundaryMapES A L (B a) (V a) N r).range) := by
   let : NeZero m := ⟨Nat.ne_of_gt hA.period_pos⟩
   obtain ⟨P, dim, B, V, _hproj, hsum, _hne, hshift, hdim, htotal, hcan,
@@ -210,6 +209,6 @@ theorem IsPeriodic.exists_stepOrbit_residualGroundSpaceDecomposition {m : ℕ}
     simp only [hV, sum_stepOrbitProjection, hsum]
   refine ⟨dim, B, V, hdim, htotal, hcan, hiso, hResolution, hInt, hCoInt, hPeriod, ?_⟩
   intro N r
-  exact groundSpaceES_eq_iSup_range_blockedResidualBoundaryMapES A B V hResolution hCoInt N r
+  exact map_groundSpace_eq_iSup_range_blockedResidualBoundaryMapES A B V hResolution hCoInt N r
 
 end MPSTensor

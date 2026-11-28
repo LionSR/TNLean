@@ -45,11 +45,11 @@ split.
 * `MPOTensor.GroupCocycle.mpo_tensor_klein_apply` (group-cocycle operators): the two-qubit
   operators are the construction for `(−1)^{a₁ b₂ c₂}` up to an on-site dressing;
   arXiv:2203.12563, lines 2204–2222.
-* `MPOTensor.mpo_mulDiagonal` and `MPOTensor.isNormal_toMPSTensor_mulDiagonal_iff` (diagonal
+* `MPOTensor.mpo_mulDiagonal` and `MPOTensor.isNormal_mulDiagonal_iff` (diagonal
   dressing): the dressed tensors are an exact representation by normal tensors.
 * `Kraus.IsNormal.block` (blocking preserves normality): the original tensors blocked
   twice form a normal representation.
-* `MPOTensor.mpo_eq_of_trace_evalWord_toMPSTensor` (periodic operators from word traces): the
+* `MPOTensor.mpo_eq_of_forall_trace_evalWord` (periodic operators from word traces): the
   sixteen fusion rules `U_g U_h = λ(g,h)^L U_{gh}` from the pair-block compression data.
 * `MPSTensor.exists_multiBlockCompression_of_isNormal` (multi-block compression theorem): the
   stacked defect tensor compresses onto the sixteen targets `λ(g,h) M_{gh}` with twelve zero

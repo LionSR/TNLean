@@ -83,37 +83,37 @@ variable {d D₁ D₂ L : ℕ} {T : MPOTensor d D₁} {A : MPSTensor d D₂}
 /-- Arbitrary-boundary compatibility preserves the Euclidean realization of
 the local MPS ground space. Source: GLM23, arXiv:2203.12563v3,
 `eq:compatible`, lines 431--469. -/
-theorem IsBoundaryCompatible.groundSpaceES_mem_invtSubmodule
+theorem IsBoundaryCompatible.map_groundSpace_mem_invtSubmodule
     (h : IsBoundaryCompatible T A) (X : Matrix (Fin D₁) (Fin D₁) ℂ)
     (hL : 0 < L) :
-    MPSTensor.groundSpaceES A L ∈
+    ((MPSTensor.groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ∈
       Module.End.invtSubmodule (Matrix.toEuclideanLin (mpoWithBoundary T X L)) := by
   intro x hx
-  apply (MPSTensor.mem_groundSpaceES_iff A L _).mpr
+  apply (MPSTensor.mem_map_groundSpace_iff A L _).mpr
   change mpoWithBoundary T X L *ᵥ
     ((WithLp.linearEquiv 2 ℂ (MPSTensor.NSiteSpace (Fin d) L)) x) ∈
       MPSTensor.groundSpace A L
   exact h.mulVec_mem_groundSpace X hL
-    ((MPSTensor.mem_groundSpaceES_iff A L x).mp hx)
+    ((MPSTensor.mem_map_groundSpace_iff A L x).mp hx)
 
 /-- Under adjoint closure at the local length, boundary compatibility makes
 the MPS ground space invariant under the generated unital star algebra.
 The adjoined ambient identity causes no restriction on a weak-Hopf support
 projection. Source: GLM23, `eq:compatible` and Appendix B; adjoint closure is
 stated explicitly instead of assumed through an unformalized WHA interface. -/
-theorem IsBoundaryCompatible.groundSpaceES_invariant_boundaryStarAlgebra
+theorem IsBoundaryCompatible.map_groundSpace_invariant_boundaryStarAlgebra
     (h : IsBoundaryCompatible T A) (hL : 0 < L)
     (hstar : ∀ X : Matrix (Fin D₁) (Fin D₁) ℂ,
       ∃ Y : Matrix (Fin D₁) (Fin D₁) ℂ,
         (mpoWithBoundary T X L)ᴴ = mpoWithBoundary T Y L) :
     (StarAlgebra.adjoin ℂ (Set.range (fun X ↦ mpoWithBoundary T X L))).IsInvariantSubspace
-      (MPSTensor.groundSpaceES A L) := by
+      ((MPSTensor.groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   apply invariant_adjoin_of_conjTranspose_mem
   · rintro B ⟨X, rfl⟩
     obtain ⟨Y, hY⟩ := hstar X
     exact ⟨Y, hY.symm⟩
   · rintro B ⟨X, rfl⟩
-    exact h.groundSpaceES_mem_invtSubmodule X hL
+    exact h.map_groundSpace_mem_invtSubmodule X hL
 
 end MPOTensor
 
@@ -128,7 +128,8 @@ formula. -/
 theorem commute_toMatrix'_parentInteraction_of_starAlgebra_invariant
     {d D L : ℕ} (A : MPSTensor d D)
     (S : StarSubalgebra ℂ (Matrix (Cfg d L) (Cfg d L) ℂ))
-    (hS : S.IsInvariantSubspace (groundSpaceES A L))
+    (hS : S.IsInvariantSubspace ((MPSTensor.groundSpace A L).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap))
     {B : Matrix (Cfg d L) (Cfg d L) ℂ} (hB : B ∈ S) :
     Commute (LinearMap.toMatrix' (parentInteraction A L)) B := by
   refine (commute_iff_eq _ _).2 (Matrix.toEuclideanLin.injective (LinearMap.ext fun x ↦ ?_))
@@ -146,7 +147,8 @@ arXiv:2203.12563v3, lines 1276--1320. -/
 theorem commute_toMatrix'_parentInteraction_of_conjTranspose_mem
     {d D L : ℕ} (A : MPSTensor d D) (s : Set (Matrix (Cfg d L) (Cfg d L) ℂ))
     (hs : ∀ B ∈ s, Bᴴ ∈ s)
-    (hq : ∀ B ∈ s, groundSpaceES A L ∈ Module.End.invtSubmodule (Matrix.toEuclideanLin B))
+    (hq : ∀ B ∈ s, ((MPSTensor.groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ∈
+        Module.End.invtSubmodule (Matrix.toEuclideanLin B))
     {B : Matrix (Cfg d L) (Cfg d L) ℂ} (hB : B ∈ s) :
     Commute (LinearMap.toMatrix' (parentInteraction A L)) B :=
   commute_toMatrix'_parentInteraction_of_starAlgebra_invariant A (StarAlgebra.adjoin ℂ s)
@@ -171,7 +173,7 @@ theorem IsBoundaryCompatible.parentInteraction_mpoWithBoundary_mulVec
       mpoWithBoundary T X L *ᵥ MPSTensor.parentInteraction A L x := by
   have hc := MPSTensor.commute_toMatrix'_parentInteraction_of_starAlgebra_invariant A
     (StarAlgebra.adjoin ℂ (Set.range (fun Y ↦ mpoWithBoundary T Y L)))
-    (h.groundSpaceES_invariant_boundaryStarAlgebra hL hstar)
+    (h.map_groundSpace_invariant_boundaryStarAlgebra hL hstar)
     (StarAlgebra.subset_adjoin ℂ _ ⟨X, rfl⟩)
   have hh := congrArg (· *ᵥ x) hc.eq
   simpa only [← Matrix.mulVec_mulVec, LinearMap.toMatrix'_mulVec] using hh

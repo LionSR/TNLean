@@ -84,7 +84,8 @@ theorem eq_zero_of_pvbsPureWindow_adjacent_terms_eq_zero
   have hleft (c : Fin 2) : ∃ f : ℂ, ∀ σ : Cfg 2 (N + 2),
       ψ (Fin.snoc σ c) = f * pvbsEdge q (N + 2) σ := by
     obtain ⟨f, hf⟩ := (toEuclideanLin_pvbsPureWindowInteraction_apply_eq_zero_iff q
-      (N + 2) (cyclicRestrictES (by omega) (N + 2) ⟨0, by omega⟩ (Fin.snoc 0 c) ψ)).mp
+      (N + 2) (LinearMap.withLpMap 2 (cyclicRestrictₗ (by omega) (N + 2) ⟨0, by omega⟩ (Fin.snoc 0
+          c)) ψ)).mp
         (hsections₀ (Fin.snoc 0 c))
     refine ⟨f, fun σ ↦ ?_⟩
     have hcfg : cyclicCfg (by omega) (N + 2) (⟨0, by omega⟩ : Fin (N + 3))
@@ -100,7 +101,8 @@ theorem eq_zero_of_pvbsPureWindow_adjacent_terms_eq_zero
   have hright (a : Fin 2) : ∃ g : ℂ, ∀ σ : Cfg 2 (N + 2),
       ψ (Fin.cons a σ) = g * pvbsEdge q (N + 2) σ := by
     obtain ⟨g, hg⟩ := (toEuclideanLin_pvbsPureWindowInteraction_apply_eq_zero_iff q
-      (N + 2) (cyclicRestrictES (by omega) (N + 2) ⟨1, by omega⟩ (Fin.cons a 0) ψ)).mp
+      (N + 2) (LinearMap.withLpMap 2 (cyclicRestrictₗ (by omega) (N + 2) ⟨1, by omega⟩ (Fin.cons a
+          0)) ψ)).mp
         (hsections₁ (Fin.cons a 0))
     refine ⟨g, fun σ ↦ ?_⟩
     have hcfg : cyclicCfg (by omega) (N + 2) (⟨1, by omega⟩ : Fin (N + 3))

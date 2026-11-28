@@ -217,14 +217,15 @@ theorem norm_pathVector_eq_one (t z : Matrix (Fin k) (Fin k) ℝ) (a f : Fin k)
 
 /-- A vanishing scalar contraction makes a marked path perpendicular to the
 full-interval ground space. -/
-theorem pathVector_mem_groundSpaceES_orthogonal
+theorem pathVector_mem_map_groundSpace_orthogonal
     (t z : Matrix (Fin k) (Fin k) ℝ) (a f : Fin k)
     (h : (∑ b, ∑ c, ∑ e, z b e *
       (t a b * t b c * t c e * t e f) ^ 2 : ℝ) = 0) :
-    pathVector t z a f ∈ (groundSpaceES (matrixUnitTensor t) 4)ᗮ := by
+    pathVector t z a f ∈ ((groundSpace (matrixUnitTensor t) 4).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap)ᗮ := by
   rw [Submodule.mem_orthogonal']
   intro u hu
-  obtain ⟨X, hX⟩ := (mem_groundSpaceES_iff (matrixUnitTensor t) 4 u).mp hu
+  obtain ⟨X, hX⟩ := (mem_map_groundSpace_iff (matrixUnitTensor t) 4 u).mp hu
   have huX : WithLp.toLp 2 (groundSpaceMap (matrixUnitTensor t) 4 X) = u :=
     congrArg (WithLp.toLp 2) hX
   simpa only [huX, h, Complex.ofReal_zero, zero_mul] using

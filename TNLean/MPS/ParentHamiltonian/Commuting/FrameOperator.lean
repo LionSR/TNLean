@@ -167,8 +167,9 @@ theorem parentInteraction_eq_one_sub_smul_groundSpaceFrame {A : MPSTensor d D} {
     simp only [Module.End.mul_apply] at this
     have := congrArg e.symm this
     simpa [PES, hP] using this
-  have hrange : LinearMap.range PES = groundSpaceES A n := by
-    rw [groundSpaceES, ← range_groundSpaceFrame hc' h]
+  have hrange : LinearMap.range PES = ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+      _).symm.toLinearMap) := by
+    rw [← range_groundSpaceFrame hc' h]
     simp only [PES, LinearMap.range_comp, LinearEquiv.range, Submodule.map_top]
     rw [hP, LinearMap.range_smul _ _ (inv_ne_zero hc')]
   obtain ⟨_, hPES'⟩ :=
@@ -176,7 +177,8 @@ theorem parentInteraction_eq_one_sub_smul_groundSpaceFrame {A : MPSTensor d D} {
   refine LinearMap.ext fun ψ => ?_
   have hψ := LinearMap.congr_fun hPES' (e.symm ψ)
   simp only [hrange] at hψ
-  have hψ' : P ψ = e ((groundSpaceES A n).starProjection (e.symm ψ)) := by
+  have hψ' : P ψ = e (((groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+      _).symm.toLinearMap).starProjection (e.symm ψ)) := by
     have := congrArg e hψ
     simpa [PES] using this
   rw [LinearMap.sub_apply, Module.End.one_apply, hψ']

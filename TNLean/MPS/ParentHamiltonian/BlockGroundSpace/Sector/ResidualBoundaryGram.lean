@@ -370,8 +370,9 @@ theorem IsPeriodic.exists_cyclic_residualBoundaryGram_bound
         (∀ a, V a * (V a)ᴴ = P (Fin.cast (Nat.gcd_self m) a)) ∧
         (∀ a i, B a i = (V a)ᴴ * blockTensor A m i * V a) ∧
         (∀ a i, blockTensor A m i * V a = V a * B a i) ∧
-        (∀ N, groundSpaceES (blockTensor A m) N =
-          groundSpaceES (toTensorFromBlocks (μ := fun _ => 1) B) N) ∧
+        (∀ N, ((groundSpace (blockTensor A m) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
+          ((groundSpace (toTensorFromBlocks (μ := fun _ => 1) B) N).map (WithLp.linearEquiv 2 ℂ
+              _).symm.toLinearMap)) ∧
         ∀ a,
           let htr : Matrix.trace (ρ a) ≠ 0 := by
             intro h
