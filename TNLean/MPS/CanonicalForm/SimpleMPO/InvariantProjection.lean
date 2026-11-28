@@ -62,7 +62,7 @@ multiplied by `P` on the left.  This identifies the one-site action
 `ketLeftMul` with left multiplication on the vertically viewed tensor of
 arXiv:1606.00608, line 943. -/
 theorem verticalTensor_ketLeftMul (M : MPOTensor d D)
-    (P : Matrix (Fin d) (Fin d) ℂ) (v : Fin (D * D)) :
+    (P : Matrix (Fin d) (Fin d) ℂ) (v : Fin D × Fin D) :
     verticalTensor (M.ketLeftMul P) v = P * verticalTensor M v := by
   ext i j
   simp [verticalTensor, ketLeftMul, Matrix.mul_apply, Matrix.sum_apply]
@@ -72,7 +72,7 @@ multiplied by `P` on the right.  This identifies the one-site action
 `braRightMul` with right multiplication on the vertically viewed tensor of
 arXiv:1606.00608, line 943. -/
 theorem verticalTensor_braRightMul (M : MPOTensor d D)
-    (P : Matrix (Fin d) (Fin d) ℂ) (v : Fin (D * D)) :
+    (P : Matrix (Fin d) (Fin d) ℂ) (v : Fin D × Fin D) :
     verticalTensor (M.braRightMul P) v = verticalTensor M v * P := by
   ext i j
   simp [verticalTensor, braRightMul, Matrix.mul_apply, Matrix.sum_apply,

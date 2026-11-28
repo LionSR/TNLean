@@ -29,7 +29,7 @@ namespace RetainedProductSpectralFamily
 
 variable {g D : ℕ} {dim mult : Fin g → ℕ}
   {weight : (α : Fin g) → Fin (mult α) → ℂ}
-  {B : (α : Fin g) → MPSTensor (D * D) (dim α)}
+  {B : (α : Fin g) → MPOTensor D (dim α)}
 
 /-- The scalar multiplying the blocked BNT representative in every active
 product corner is positive whenever nonzero blocked corners can be separated
@@ -39,7 +39,7 @@ Source: CPSV16, Appendix C.4, lines 2025--2029, using the sector-weight
 positivity argument from Proposition 4.13, lines 1898--1902. -/
 theorem FlatBlockedBNTComparison.activeCoefficient_mul_phase_pos_of_sectorCompression_separation
     {g₂ d : ℕ} {dim₂ : Fin g₂ → ℕ}
-    {A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ)}
+    {A₂ : (γ : Fin g₂) → MPOTensor D (dim₂ γ)}
     {S : RetainedProductSpectralFamily dim mult weight B}
     (C : FlatBlockedBNTComparison S dim₂ A₂)
     (M : MPOTensor d D) (hM : IsMPDO M)
@@ -66,7 +66,7 @@ theorem FlatBlockedBNTComparison.activeCoefficient_mul_phase_pos_of_sectorCompre
     (j : Fin (Fintype.card S.ActiveLabel)) :
     (0 : ℂ) < S.flatCoefficient j * C.phase j := by
   let x := S.activeLabelEquiv j
-  let A := cast (congrArg (MPSTensor (D * D)) (C.dim_eq j))
+  let A := cast (congrArg (MPOTensor D) (C.dim_eq j))
     (A₂ (C.label j))
   let Vact := S.ambientInclusion U₁ x
   let Vref := C.referenceInclusion mult₂ hMult₂ U₂ j
@@ -128,7 +128,7 @@ Source: CPSV16, Appendix C.4, lines 2025--2029, using the sector-weight
 positivity argument from Proposition 4.13, lines 1898--1902. -/
 theorem FlatBlockedBNTComparison.activeCoefficient_mul_phase_pos
     {g₂ d : ℕ} {dim₂ : Fin g₂ → ℕ}
-    {A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ)}
+    {A₂ : (γ : Fin g₂) → MPOTensor D (dim₂ γ)}
     {S : RetainedProductSpectralFamily dim mult weight B}
     (C : FlatBlockedBNTComparison S dim₂ A₂)
     (M : MPOTensor d D) (hInputs : HasVerticalBNTProductInputs M) (hM : IsMPDO M)
@@ -164,7 +164,7 @@ Source: CPSV16, Appendix C.4, lines 2025--2029, using the Figure 8 Gram
 comparison and unitary normalization from Proposition 4.13, lines 1903--1921. -/
 theorem FlatBlockedBNTComparison.exists_unitaryNormalization
     {g₂ d : ℕ} {dim₂ : Fin g₂ → ℕ}
-    {A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ)}
+    {A₂ : (γ : Fin g₂) → MPOTensor D (dim₂ γ)}
     {S : RetainedProductSpectralFamily dim mult weight B}
     (C : FlatBlockedBNTComparison S dim₂ A₂)
     (M : MPOTensor d D) (hInputs : HasVerticalBNTProductInputs M) (hM : IsMPDO M)
@@ -189,12 +189,12 @@ theorem FlatBlockedBNTComparison.exists_unitaryNormalization
     ∃ ω : ℝ, 0 < ω ∧
       (C.gauge j : Matrix (Fin (S.flatDim j)) (Fin (S.flatDim j)) ℂ)ᴴ *
           C.gauge j = (ω : ℂ) • 1 ∧
-      ((Real.sqrt ω : ℂ))⁻¹ •
+      (Real.sqrt ω : ℂ)⁻¹ •
           (C.gauge j : Matrix (Fin (S.flatDim j))
             (Fin (S.flatDim j)) ℂ) ∈
         Matrix.unitaryGroup (Fin (S.flatDim j)) ℂ := by
   let x := S.activeLabelEquiv j
-  let A := cast (congrArg (MPSTensor (D * D)) (C.dim_eq j))
+  let A := cast (congrArg (MPOTensor D) (C.dim_eq j))
     (A₂ (C.label j))
   let Vact := S.ambientInclusion U₁ x
   let Vref := C.referenceInclusion mult₂ hMult₂ U₂ j

@@ -339,7 +339,7 @@ similarity equations; it does not construct the representative group or its corn
 Source: arXiv:1606.00608, proof of Proposition 4.13, Figures 7--8 and lines 1909--1919. -/
 theorem gramDressing_eq_of_two_grouped_corners
     (M : MPOTensor d D) (hCanonical : IsCPSVCanonicalForm M) (hM : IsMPDO M)
-    (A : MPSTensor (D * D) n)
+    (A : MPOTensor D n)
     (VX VY : Matrix (Fin d) (Fin n) ℂ) (X Y : GL (Fin n) ℂ)
     (cX cY : ℂ) (hcX : (0 : ℂ) < cX) (hcY : (0 : ℂ) < cY)
     (hcornerX : ∀ v,
@@ -372,8 +372,7 @@ theorem gramDressing_eq_of_two_grouped_corners
         u.divNat u.modNat (fun k ↦ (w k).1) (fun k ↦ (w k).2)
   have hMarks : linearMarkedTensor fX M = linearMarkedTensor fY M :=
     hCanonical.linearMarkedTensor_eq_of_trace_agree M fX fY hTrace
-  funext v
-  obtain ⟨⟨a, b⟩, rfl⟩ := finProdFinEquiv.surjective v
+  funext ⟨a, b⟩
   ext r s
   have hSlice := congrFun hMarks (finProdFinEquiv (r, s))
   rw [linearMarkedTensor_cornerGramCoefficients
@@ -396,7 +395,7 @@ Source: arXiv:1606.00608, proof of Proposition 4.13, equation `eq3:proof.IV.12` 
 1909--1921. -/
 theorem gram_eq_pos_smul_gram_of_two_grouped_corners
     (M : MPOTensor d D) (hCanonical : IsCPSVCanonicalForm M) (hM : IsMPDO M)
-    (A : MPSTensor (D * D) n) (hA : Kraus.IsNormal A)
+    (A : MPOTensor D n) (hA : Kraus.IsNormal A)
     (VX VY : Matrix (Fin d) (Fin n) ℂ) (X Y : GL (Fin n) ℂ)
     (cX cY : ℂ) (hcX : (0 : ℂ) < cX) (hcY : (0 : ℂ) < cY)
     (hcornerX : ∀ v,

@@ -115,15 +115,15 @@ noncomputable def verticalLoopWith (M : MPOTensor d D)
 
 This is the matrix $E_\alpha$ in the proof of Proposition 4.13 of
 arXiv:1606.00608, lines 1898--1901. -/
-noncomputable def representativeLoop (A : MPSTensor (D * D) n) :
+noncomputable def representativeLoop (A : MPOTensor D n) :
     Matrix (Fin D) (Fin D) ℂ :=
-  fun a b => Matrix.trace (A (finProdFinEquiv (a, b)))
+  fun a b => Matrix.trace (A (a, b))
 
 /-- Identifying equal representative bond dimensions does not change the
 closed representative loop. -/
 @[simp] theorem representativeLoop_cast {n m : ℕ} (hdim : n = m)
-    (A : MPSTensor (D * D) n) :
-    representativeLoop (cast (congr_arg (MPSTensor (D * D)) hdim) A) =
+    (A : MPOTensor D n) :
+    representativeLoop (cast (congr_arg (MPOTensor D) hdim) A) =
       representativeLoop A := by
   subst m
   rfl
@@ -134,10 +134,9 @@ This is the marked single-site contraction in arXiv:1606.00608, line 1898. -/
 theorem verticalLoopWith_apply_eq_trace_mul_verticalTensor
     (M : MPOTensor d D) (P : Matrix (Fin d) (Fin d) ℂ) (a b : Fin D) :
     verticalLoopWith M P a b =
-      Matrix.trace (P * verticalTensor M (finProdFinEquiv (a, b))) := by
+      Matrix.trace (P * verticalTensor M (a, b)) := by
   simp only [verticalLoopWith, Matrix.sum_apply, Matrix.smul_apply,
-    Matrix.trace, Matrix.diag, Matrix.mul_apply, verticalTensor_finProdFinEquiv,
-    smul_eq_mul]
+    Matrix.trace, Matrix.diag, Matrix.mul_apply, verticalTensor_apply, smul_eq_mul]
 
 /-- Inserting the identity recovers the plain vertical loop. -/
 @[simp] theorem verticalLoopWith_one (M : MPOTensor d D) :
@@ -398,7 +397,7 @@ For $P=VV^\dagger$, cyclicity of trace gives
 where the internal similarity cancels.  This is the sector-loop computation
 in the proof of Proposition 4.13 of arXiv:1606.00608, line 1898. -/
 theorem sectorProjectorData_of_gauge_corner
-    (M : MPOTensor d D) (A : MPSTensor (D * D) n)
+    (M : MPOTensor d D) (A : MPOTensor D n)
     (V : Matrix (Fin d) (Fin n) ℂ) (hV : Vᴴ * V = 1)
     (X : GL (Fin n) ℂ) (ω : ℂ)
     (hcorner : ∀ v,
@@ -416,15 +415,15 @@ theorem sectorProjectorData_of_gauge_corner
   · ext a b
     rw [verticalLoopWith_apply_eq_trace_mul_verticalTensor]
     calc
-      Matrix.trace ((V * Vᴴ) * verticalTensor M (finProdFinEquiv (a, b))) =
+      Matrix.trace ((V * Vᴴ) * verticalTensor M (a, b)) =
           Matrix.trace
-            ((Vᴴ * verticalTensor M (finProdFinEquiv (a, b))) * V) := by
+            ((Vᴴ * verticalTensor M (a, b)) * V) := by
         rw [Matrix.mul_assoc]
         exact Matrix.trace_mul_comm V
-          (Vᴴ * verticalTensor M (finProdFinEquiv (a, b)))
+          (Vᴴ * verticalTensor M (a, b))
       _ = Matrix.trace
           (ω • ((X : Matrix (Fin n) (Fin n) ℂ) *
-            A (finProdFinEquiv (a, b)) *
+            A (a, b) *
               (↑(X⁻¹) : Matrix (Fin n) (Fin n) ℂ))) :=
         congrArg Matrix.trace (hcorner _).symm
       _ = (ω • representativeLoop A) a b := by

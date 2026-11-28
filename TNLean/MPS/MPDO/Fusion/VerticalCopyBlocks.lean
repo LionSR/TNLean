@@ -28,9 +28,9 @@ block diagonal of its weighted simple blocks.
 
 Source: CPSV16, Appendix C.4, lines 1955--1971. -/
 theorem verticalAssembledTensor_reindex_copyCoordinates
-    {g d : ℕ} (dim mult : Fin g → ℕ)
+    {κ : Type*} {g : ℕ} (dim mult : Fin g → ℕ)
     (weight : (α : Fin g) → Fin (mult α) → ℂ)
-    (A : (α : Fin g) → MPSTensor d (dim α)) (v : Fin d) :
+    (A : (α : Fin g) → MPTensor κ (Fin (dim α))) (v : κ) :
     verticalAssembledTensor dim mult weight A v =
       Matrix.reindex (verticalCopyCoordinateEquiv dim mult).symm
         (verticalCopyCoordinateEquiv dim mult).symm
@@ -87,10 +87,10 @@ assembled vertical tensor.
 
 Source: CPSV16, Appendix C.4, lines 1955--1971. -/
 theorem verticalAssembledTensor_mul_verticalCopyBlockInclusion
-    {g d : ℕ} (dim mult : Fin g → ℕ)
+    {κ : Type*} {g : ℕ} (dim mult : Fin g → ℕ)
     (weight : (α : Fin g) → Fin (mult α) → ℂ)
-    (A : (α : Fin g) → MPSTensor d (dim α))
-    (p : (α : Fin g) × Fin (mult α)) (v : Fin d) :
+    (A : (α : Fin g) → MPTensor κ (Fin (dim α)))
+    (p : (α : Fin g) × Fin (mult α)) (v : κ) :
     verticalAssembledTensor dim mult weight A v *
         verticalCopyBlockInclusion dim mult p =
       verticalCopyBlockInclusion dim mult p *
@@ -140,10 +140,10 @@ identity.
 
 Source: CPSV16, Appendix C.4, lines 1955--1971. -/
 theorem verticalCopyBlockInclusion_conjTranspose_mul_verticalAssembledTensor
-    {g d : ℕ} (dim mult : Fin g → ℕ)
+    {κ : Type*} {g : ℕ} (dim mult : Fin g → ℕ)
     (weight : (α : Fin g) → Fin (mult α) → ℂ)
-    (A : (α : Fin g) → MPSTensor d (dim α))
-    (p : (α : Fin g) × Fin (mult α)) (v : Fin d) :
+    (A : (α : Fin g) → MPTensor κ (Fin (dim α)))
+    (p : (α : Fin g) × Fin (mult α)) (v : κ) :
     (verticalCopyBlockInclusion dim mult p)ᴴ *
         verticalAssembledTensor dim mult weight A v =
       (weight p.1 p.2 • A p.1 v) *
@@ -194,10 +194,10 @@ block.
 
 Source: CPSV16, Appendix C.4, lines 1955--1971. -/
 theorem verticalCopyBlockInclusion_compression
-    {g d : ℕ} (dim mult : Fin g → ℕ)
+    {κ : Type*} {g : ℕ} (dim mult : Fin g → ℕ)
     (weight : (α : Fin g) → Fin (mult α) → ℂ)
-    (A : (α : Fin g) → MPSTensor d (dim α))
-    (p : (α : Fin g) × Fin (mult α)) (v : Fin d) :
+    (A : (α : Fin g) → MPTensor κ (Fin (dim α)))
+    (p : (α : Fin g) × Fin (mult α)) (v : κ) :
     weight p.1 p.2 • A p.1 v =
       (verticalCopyBlockInclusion dim mult p)ᴴ *
         verticalAssembledTensor dim mult weight A v *
@@ -248,14 +248,14 @@ theorem blockedReference_intertwine
     {g d D : ℕ} (M : MPOTensor d D)
     (dim mult : Fin g → ℕ) (hMult : ∀ γ, 0 < mult γ)
     (weight : (γ : Fin g) → Fin (mult γ) → ℂ)
-    (A : (γ : Fin g) → MPSTensor (D * D) (dim γ))
+    (A : (γ : Fin g) → MPOTensor D (dim γ))
     (U : Matrix
       (Fin (∑ q : Fin (∑ γ : Fin g, mult γ), verticalCopyDim dim mult q))
       (Fin (d * d)) ℂ)
     (hU : U * Uᴴ = 1)
     (hReconstruct : ∀ ab, verticalTensor (blockTwo M) ab =
       Uᴴ * verticalAssembledTensor dim mult weight A ab * U)
-    (γ : Fin g) (ab : Fin (D * D)) :
+    (γ : Fin g) (ab : Fin D × Fin D) :
     verticalTensor (blockTwo M) ab *
         blockedReferenceInclusion dim mult hMult U γ =
       blockedReferenceInclusion dim mult hMult U γ *
@@ -285,14 +285,14 @@ theorem blockedReference_intertwine_adjoint
     {g d D : ℕ} (M : MPOTensor d D)
     (dim mult : Fin g → ℕ) (hMult : ∀ γ, 0 < mult γ)
     (weight : (γ : Fin g) → Fin (mult γ) → ℂ)
-    (A : (γ : Fin g) → MPSTensor (D * D) (dim γ))
+    (A : (γ : Fin g) → MPOTensor D (dim γ))
     (U : Matrix
       (Fin (∑ q : Fin (∑ γ : Fin g, mult γ), verticalCopyDim dim mult q))
       (Fin (d * d)) ℂ)
     (hU : U * Uᴴ = 1)
     (hReconstruct : ∀ ab, verticalTensor (blockTwo M) ab =
       Uᴴ * verticalAssembledTensor dim mult weight A ab * U)
-    (γ : Fin g) (ab : Fin (D * D)) :
+    (γ : Fin g) (ab : Fin D × Fin D) :
     (blockedReferenceInclusion dim mult hMult U γ)ᴴ *
         verticalTensor (blockTwo M) ab =
       (weight γ ⟨0, hMult γ⟩ • A γ ab) *
@@ -326,14 +326,14 @@ theorem blockedReference_compression
     {g d D : ℕ} (M : MPOTensor d D)
     (dim mult : Fin g → ℕ) (hMult : ∀ γ, 0 < mult γ)
     (weight : (γ : Fin g) → Fin (mult γ) → ℂ)
-    (A : (γ : Fin g) → MPSTensor (D * D) (dim γ))
+    (A : (γ : Fin g) → MPOTensor D (dim γ))
     (U : Matrix
       (Fin (∑ q : Fin (∑ γ : Fin g, mult γ), verticalCopyDim dim mult q))
       (Fin (d * d)) ℂ)
     (hU : U * Uᴴ = 1)
     (hReconstruct : ∀ ab, verticalTensor (blockTwo M) ab =
       Uᴴ * verticalAssembledTensor dim mult weight A ab * U)
-    (γ : Fin g) (ab : Fin (D * D)) :
+    (γ : Fin g) (ab : Fin D × Fin D) :
     weight γ ⟨0, hMult γ⟩ • A γ ab =
       (blockedReferenceInclusion dim mult hMult U γ)ᴴ *
         verticalTensor (blockTwo M) ab *

@@ -51,7 +51,7 @@ the corresponding closed-chain MPO operators.
 Source: CPSV16, lines 271--275, used in Appendix C.4, lines 2030--2042. -/
 theorem eventuallyLinearIndependent_verticalBNTOperatorFamily
     {g D d : ℕ} {dim : Fin g → ℕ}
-    {M : MPOTensor d D} {A : (γ : Fin g) → MPSTensor (D * D) (dim γ)}
+    {M : MPOTensor d D} {A : (γ : Fin g) → MPOTensor D (dim γ)}
     (hBNT : MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor M)
       (fun γ ↦ ⟨dim γ, A γ⟩)) :
     (verticalBNTOperatorFamily A).EventuallyLinearIndependent := by
@@ -61,22 +61,18 @@ theorem eventuallyLinearIndependent_verticalBNTOperatorFamily
   apply Fintype.linearIndependent_iff.mpr
   intro c hc γ
   have hzero : ∑ j : Fin g, c j •
-      MPSTensor.mpvState (α := Fin (D * D)) (A j) L = 0 := by
+      MPSTensor.mpvState (α := Fin D × Fin D) (A j) L = 0 := by
     apply PiLp.ext
     intro σ
-    let ket : Fin L → Fin D := fun l ↦ (finProdFinEquiv.symm (σ l)).1
-    let bra : Fin L → Fin D := fun l ↦ (finProdFinEquiv.symm (σ l)).2
+    let ket : Fin L → Fin D := fun l ↦ (σ l).1
+    let bra : Fin L → Fin D := fun l ↦ (σ l).2
     have hentry := congrArg (fun X ↦ X ket bra) hc
-    change (∑ j, c j • mpo (verticalBNTMPO (A j)) L) ket bra =
+    change (∑ j, c j • mpo (A j) L) ket bra =
       (0 : Matrix (Fin L → Fin D) (Fin L → Fin D) ℂ) ket bra at hentry
     simp only [Matrix.sum_apply, Matrix.smul_apply, Matrix.zero_apply] at hentry
-    simp_rw [← mpv_pair, mpv_verticalBNTMPO] at hentry
-    have hcfg : (fun n ↦ finProdFinEquiv (ket n, bra n)) = σ := by
-      funext n
-      exact Equiv.apply_symm_apply finProdFinEquiv (σ n)
-    rw [hcfg] at hentry
+    simp_rw [← mpv_pair] at hentry
     simpa [PiLp.smul_apply, PiLp.zero_apply, MPSTensor.mpvState_apply,
-      smul_eq_mul, ket, bra, Equiv.apply_symm_apply] using hentry
+      smul_eq_mul, ket, bra] using hentry
   exact Fintype.linearIndependent_iff.mp (hli L hL) c hzero γ
 
 /-- The simultaneous blocked-operator representations and the active-support
@@ -103,36 +99,36 @@ theorem hasIdempotentCoefficientForm_of_blockedRepresentations
     (hCoisometry : ∀ α β, U α β * (U α β)ᴴ = 1)
     (hFusion : ∀ (α β : Fin D₁.labelCount) (i j : Fin D),
       U α β *
-          (mulTensor (verticalBNTMPO (D₁.tensor α))
-            (verticalBNTMPO (D₁.tensor β))) (i, j) *
+          (mulTensor (D₁.tensor α)
+            (D₁.tensor β)) (i, j) *
           (U α β)ᴴ =
         Matrix.blockDiagonal' fun γ ↦
-          chi.matrix α β γ ⊗ₖ (verticalBNTMPO (D₁.tensor γ)) (i, j))
+          chi.matrix α β γ ⊗ₖ (D₁.tensor γ) (i, j))
     (hReconstruction : ∀ (α β : Fin D₁.labelCount) (i j : Fin D),
-      (mulTensor (verticalBNTMPO (D₁.tensor α))
-        (verticalBNTMPO (D₁.tensor β))) (i, j) =
+      (mulTensor (D₁.tensor α)
+        (D₁.tensor β)) (i, j) =
         (U α β)ᴴ *
           (Matrix.blockDiagonal' fun γ ↦
-            chi.matrix α β γ ⊗ₖ (verticalBNTMPO (D₁.tensor γ)) (i, j)) *
+            chi.matrix α β γ ⊗ₖ (D₁.tensor γ) (i, j)) *
           U α β)
     (hRepresentations : ∀ (L : ℕ), 0 < L →
-      mpo (verticalBNTMPO (verticalTensor (blockTwo M))) L =
+      mpo (verticalTensor (blockTwo M)) L =
           ∑ γ,
             (((verticalMultiplicityTrace D₁.weight γ /
                 verticalMultiplicityTrace D₂.weight (sigma γ)) ^ L) *
               (∑ r, D₂.weight (sigma γ) r ^ L)) •
-              mpo (verticalBNTMPO (D₁.tensor γ)) L ∧
-      mpo (verticalBNTMPO (verticalTensor (blockTwo M))) L =
+              mpo (D₁.tensor γ) L ∧
+      mpo (verticalTensor (blockTwo M)) L =
         ∑ α, ∑ β,
           ((∑ q, D₁.weight α q ^ L) * (∑ r, D₁.weight β r ^ L)) •
-            (mpo (verticalBNTMPO (D₁.tensor α)) L *
-              mpo (verticalBNTMPO (D₁.tensor β)) L)) :
+            (mpo (D₁.tensor α) L *
+              mpo (D₁.tensor β) L)) :
     (verticalBNTTraceScalarFamily D₁.weight).HasIdempotentCoefficientForm
       (BNTLabelCoefficientFamily.ofChi chi) := by
   classical
   let Fam : BNTFusionCoisometryFamily (Fin D₁.labelCount) D := {
     bondDim := D₁.bondDim
-    tensor := fun γ ↦ verticalBNTMPO (D₁.tensor γ)
+    tensor := fun γ ↦ (D₁.tensor γ)
     chi := chi
     posEntries := hChiPos
     fusionCoisometry := U
@@ -157,18 +153,18 @@ theorem hasIdempotentCoefficientForm_of_blockedRepresentations
     have hLpos : 0 < L := lt_of_le_of_lt (Nat.zero_le N₀) hL
     obtain ⟨hFirst, hSecond⟩ := hRepresentations L hLpos
     have hProduct (α β : Fin D₁.labelCount) :
-        mpo (verticalBNTMPO (D₁.tensor α)) L *
-            mpo (verticalBNTMPO (D₁.tensor β)) L =
+        mpo (D₁.tensor α) L *
+            mpo (D₁.tensor β) L =
           ∑ γ, chi.tracePowerCoeff α β γ L •
-            mpo (verticalBNTMPO (D₁.tensor γ)) L := by
+            mpo (D₁.tensor γ) L := by
       simpa only [Fam] using Fam.mpo_mul_mpo_eq_sum L hLpos α β
     have hExpanded :
-        mpo (verticalBNTMPO (verticalTensor (blockTwo M))) L =
+        mpo (verticalTensor (blockTwo M)) L =
           ∑ γ, (∑ α, ∑ β,
             ((∑ q, D₁.weight α q ^ L) *
               (∑ r, D₁.weight β r ^ L)) *
               Fam.chi.tracePowerCoeff α β γ L) •
-                mpo (verticalBNTMPO (D₁.tensor γ)) L := by
+                mpo (D₁.tensor γ) L := by
       rw [hSecond]
       simp_rw [hProduct, Finset.smul_sum, smul_smul]
       calc
@@ -176,12 +172,12 @@ theorem hasIdempotentCoefficientForm_of_blockedRepresentations
             (((∑ q, D₁.weight α q ^ L) *
               (∑ r, D₁.weight β r ^ L)) *
               chi.tracePowerCoeff α β γ L) •
-                mpo (verticalBNTMPO (D₁.tensor γ)) L) =
+                mpo (D₁.tensor γ) L) =
             ∑ α, ∑ γ, ∑ β,
               (((∑ q, D₁.weight α q ^ L) *
                 (∑ r, D₁.weight β r ^ L)) *
                 chi.tracePowerCoeff α β γ L) •
-                  mpo (verticalBNTMPO (D₁.tensor γ)) L := by
+                  mpo (D₁.tensor γ) L := by
           apply Finset.sum_congr rfl
           intro α _
           rw [Finset.sum_comm]
@@ -189,13 +185,13 @@ theorem hasIdempotentCoefficientForm_of_blockedRepresentations
               (((∑ q, D₁.weight α q ^ L) *
                 (∑ r, D₁.weight β r ^ L)) *
                 chi.tracePowerCoeff α β γ L) •
-                  mpo (verticalBNTMPO (D₁.tensor γ)) L := by
+                  mpo (D₁.tensor γ) L := by
           rw [Finset.sum_comm]
         _ = ∑ γ, (∑ α, ∑ β,
               ((∑ q, D₁.weight α q ^ L) *
                 (∑ r, D₁.weight β r ^ L)) *
                 chi.tracePowerCoeff α β γ L) •
-                  mpo (verticalBNTMPO (D₁.tensor γ)) L := by
+                  mpo (D₁.tensor γ) L := by
           apply Finset.sum_congr rfl
           intro γ _
           symm
@@ -204,16 +200,16 @@ theorem hasIdempotentCoefficientForm_of_blockedRepresentations
                 ((∑ q, D₁.weight α q ^ L) *
                   (∑ r, D₁.weight β r ^ L)) *
                   chi.tracePowerCoeff α β γ L) •
-                mpo (verticalBNTMPO (D₁.tensor γ)) L =
+                mpo (D₁.tensor γ) L =
               ∑ α, (∑ β,
                 ((∑ q, D₁.weight α q ^ L) *
                   (∑ r, D₁.weight β r ^ L)) *
                   chi.tracePowerCoeff α β γ L) •
-                mpo (verticalBNTMPO (D₁.tensor γ)) L := by
+                mpo (D₁.tensor γ) L := by
                   exact map_sum
                     ((smulAddHom ℂ
                       (Matrix (Fin L → Fin D) (Fin L → Fin D) ℂ)).flip
-                        (mpo (verticalBNTMPO (D₁.tensor γ)) L))
+                        (mpo (D₁.tensor γ) L))
                     (fun α ↦ ∑ β,
                       ((∑ q, D₁.weight α q ^ L) *
                         (∑ r, D₁.weight β r ^ L)) *
@@ -223,13 +219,13 @@ theorem hasIdempotentCoefficientForm_of_blockedRepresentations
                 (((∑ q, D₁.weight α q ^ L) *
                   (∑ r, D₁.weight β r ^ L)) *
                   chi.tracePowerCoeff α β γ L) •
-                mpo (verticalBNTMPO (D₁.tensor γ)) L := by
+                mpo (D₁.tensor γ) L := by
                   apply Finset.sum_congr rfl
                   intro α _
                   exact map_sum
                     ((smulAddHom ℂ
                       (Matrix (Fin L → Fin D) (Fin L → Fin D) ℂ)).flip
-                        (mpo (verticalBNTMPO (D₁.tensor γ)) L))
+                        (mpo (D₁.tensor γ) L))
                     (fun β ↦ ((∑ q, D₁.weight α q ^ L) *
                       (∑ r, D₁.weight β r ^ L)) *
                       chi.tracePowerCoeff α β γ L)
@@ -322,7 +318,7 @@ theorem of_verticalDecompositions_of_unitaryBlockEquiv
     (sigma : Fin D₁.labelCount ≃ Fin D₂.labelCount)
     (hDim : ∀ i, D₁.bondDim i = D₂.bondDim (sigma i))
     (V : ∀ i, Matrix.unitaryGroup (Fin (D₂.bondDim (sigma i))) ℂ)
-    (hLetter : ∀ (i : Fin D₁.labelCount) (ab : Fin (D * D)),
+    (hLetter : ∀ (i : Fin D₁.labelCount) (ab : Fin D × Fin D),
       D₂.tensor (sigma i) ab =
         (verticalMultiplicityTrace D₁.weight i /
           verticalMultiplicityTrace D₂.weight (sigma i)) •
@@ -340,31 +336,31 @@ theorem of_verticalDecompositions_of_unitaryBlockEquiv
     (hCoisometry : ∀ α β, U α β * (U α β)ᴴ = 1)
     (hFusion : ∀ (α β : Fin D₁.labelCount) (i j : Fin D),
       U α β *
-          (mulTensor (verticalBNTMPO (D₁.tensor α))
-            (verticalBNTMPO (D₁.tensor β))) (i, j) *
+          (mulTensor (D₁.tensor α)
+            (D₁.tensor β)) (i, j) *
           (U α β)ᴴ =
         Matrix.blockDiagonal' fun γ ↦
-          chi.matrix α β γ ⊗ₖ (verticalBNTMPO (D₁.tensor γ)) (i, j))
+          chi.matrix α β γ ⊗ₖ (D₁.tensor γ) (i, j))
     (hReconstruction : ∀ (α β : Fin D₁.labelCount) (i j : Fin D),
-      (mulTensor (verticalBNTMPO (D₁.tensor α))
-        (verticalBNTMPO (D₁.tensor β))) (i, j) =
+      (mulTensor (D₁.tensor α)
+        (D₁.tensor β)) (i, j) =
         (U α β)ᴴ *
           (Matrix.blockDiagonal' fun γ ↦
-            chi.matrix α β γ ⊗ₖ (verticalBNTMPO (D₁.tensor γ)) (i, j)) *
+            chi.matrix α β γ ⊗ₖ (D₁.tensor γ) (i, j)) *
           U α β) :
     HasBNTFusionTensorClause M := by
   have hRepresentations : ∀ (L : ℕ), 0 < L →
-      mpo (verticalBNTMPO (verticalTensor (blockTwo M))) L =
+      mpo (verticalTensor (blockTwo M)) L =
           ∑ γ,
             (((verticalMultiplicityTrace D₁.weight γ /
                 verticalMultiplicityTrace D₂.weight (sigma γ)) ^ L) *
               (∑ r, D₂.weight (sigma γ) r ^ L)) •
-              mpo (verticalBNTMPO (D₁.tensor γ)) L ∧
-      mpo (verticalBNTMPO (verticalTensor (blockTwo M))) L =
+              mpo (D₁.tensor γ) L ∧
+      mpo (verticalTensor (blockTwo M)) L =
         ∑ α, ∑ β,
           ((∑ q, D₁.weight α q ^ L) * (∑ r, D₁.weight β r ^ L)) •
-            (mpo (verticalBNTMPO (D₁.tensor α)) L *
-              mpo (verticalBNTMPO (D₁.tensor β)) L) := by
+            (mpo (D₁.tensor α) L *
+              mpo (D₁.tensor β) L) := by
     intro L hL
     exact blockedVerticalOperatorRepresentations_of_unitaryBlockEquiv
       D₁.bondDim D₁.multiplicity D₁.weight

@@ -41,7 +41,7 @@ namespace RetainedProductSpectralFamily
 
 variable {g D : ℕ} {dim mult : Fin g → ℕ}
   {weight : (α : Fin g) → Fin (mult α) → ℂ}
-  {B : (α : Fin g) → MPSTensor (D * D) (dim α)}
+  {B : (α : Fin g) → MPOTensor D (dim α)}
 
 namespace OriginalCornerFamily
 
@@ -96,22 +96,25 @@ private theorem groupedFusionCoisometry_coisometry
     Matrix.reindexLinearEquiv_one]
 
 private theorem groupedFusionCoisometry_fusion
-    (hMult : ∀ α, 0 < mult α) (α β : Fin g) (ab : Fin (D * D)) :
+    (hMult : ∀ α, 0 < mult α) (α β : Fin g) (ab : Fin D × Fin D) :
     groupedFusionCoisometry O hMult α β *
-        (Kraus.reindexPhysical finProdFinEquiv.symm (mulTensor (verticalBNTMPO (B α))
-          (verticalBNTMPO (B β)))) ab *
+        (mulTensor (B α)
+          (B β)) ab *
         (groupedFusionCoisometry O hMult α β)ᴴ =
       Matrix.blockDiagonal' fun γ =>
         (chi O hMult).matrix α β γ ⊗ₖ B γ ab := by
-  let T := (Kraus.reindexPhysical finProdFinEquiv.symm (mulTensor (verticalBNTMPO (B α))
-    (verticalBNTMPO (B β))))
-  have hsigma := Matrix.sigmaBlockRow_conjugation T
-    (fun k v ↦ O.coefficient (distinguishedPair hMult α β) k •
-      B (O.label (distinguishedPair hMult α β) k) v)
+  let T := (mulTensor (B α)
+    (B β))
+  -- The block-row lemmas index letters by `Fin s`; apply them along `Fintype.equivFin`.
+  let e : Fin (Fintype.card (Fin D × Fin D)) ≃ Fin D × Fin D := (Fintype.equivFin _).symm
+  have hsigma := Matrix.sigmaBlockRow_conjugation (fun i ↦ T (e i))
+    (fun k i ↦ O.coefficient (distinguishedPair hMult α β) k •
+      B (O.label (distinguishedPair hMult α β) k) (e i))
     (O.inclusion (distinguishedPair hMult α β))
     (O.inclusion_isometry (distinguishedPair hMult α β))
     (O.inclusion_orthogonal (distinguishedPair hMult α β))
-    (O.intertwine (distinguishedPair hMult α β)) ab
+    (fun k i ↦ O.intertwine (distinguishedPair hMult α β) k (e i)) (e.symm ab)
+  simp only [e.apply_symm_apply] at hsigma
   have hgroup := Matrix.reindex_blockDiagonal'_sigmaFiberBlockEquiv
     (O.label (distinguishedPair hMult α β)) dim
     (O.coefficient (distinguishedPair hMult α β)) (fun γ ↦ B γ ab)
@@ -160,20 +163,22 @@ private theorem groupedFusionCoisometry_fusion
   exact hgroup
 
 private theorem groupedFusionCoisometry_reconstruction
-    (hMult : ∀ α, 0 < mult α) (α β : Fin g) (ab : Fin (D * D)) :
-    (Kraus.reindexPhysical finProdFinEquiv.symm (mulTensor (verticalBNTMPO (B α))
-        (verticalBNTMPO (B β)))) ab =
+    (hMult : ∀ α, 0 < mult α) (α β : Fin g) (ab : Fin D × Fin D) :
+    (mulTensor (B α)
+        (B β)) ab =
       (groupedFusionCoisometry O hMult α β)ᴴ *
         (Matrix.blockDiagonal' fun γ =>
           (chi O hMult).matrix α β γ ⊗ₖ B γ ab) *
         groupedFusionCoisometry O hMult α β := by
-  let T := (Kraus.reindexPhysical finProdFinEquiv.symm (mulTensor (verticalBNTMPO (B α))
-    (verticalBNTMPO (B β))))
-  have hsigma := Matrix.sigmaBlockRow_reconstruction T
-    (fun k v ↦ O.coefficient (distinguishedPair hMult α β) k •
-      B (O.label (distinguishedPair hMult α β) k) v)
+  let T := (mulTensor (B α)
+    (B β))
+  let e : Fin (Fintype.card (Fin D × Fin D)) ≃ Fin D × Fin D := (Fintype.equivFin _).symm
+  have hsigma := Matrix.sigmaBlockRow_reconstruction (fun i ↦ T (e i))
+    (fun k i ↦ O.coefficient (distinguishedPair hMult α β) k •
+      B (O.label (distinguishedPair hMult α β) k) (e i))
     (O.inclusion (distinguishedPair hMult α β))
-    (O.reconstruction (distinguishedPair hMult α β)) ab
+    (fun i ↦ O.reconstruction (distinguishedPair hMult α β) (e i)) (e.symm ab)
+  simp only [e.apply_symm_apply] at hsigma
   have hgroup := Matrix.reindex_blockDiagonal'_sigmaFiberBlockEquiv
     (O.label (distinguishedPair hMult α β)) dim
     (O.coefficient (distinguishedPair hMult α β)) (fun γ ↦ B γ ab)
@@ -234,24 +239,15 @@ Source: CPSV16, Appendix C.4, lines 2020--2029. -/
 noncomputable def toBNTFusionCoisometryFamily
     (hMult : ∀ α, 0 < mult α) : BNTFusionCoisometryFamily (Fin g) D where
   bondDim := dim
-  tensor := fun γ ↦ verticalBNTMPO (B γ)
+  tensor := fun γ ↦ (B γ)
   chi := chi O hMult
   posEntries := by
     intro α β γ t
     exact O.coefficient_pos _ _
   fusionCoisometry := groupedFusionCoisometry O hMult
   coisometry := groupedFusionCoisometry_coisometry O hMult
-  fusion := by
-    intro α β i j
-    simpa only [Kraus.reindexPhysical, Equiv.symm_apply_apply, verticalBNTMPO_apply,
-      MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat] using
-      groupedFusionCoisometry_fusion O hMult α β (finProdFinEquiv (i, j))
-  reconstruction := by
-    intro α β i j
-    simpa only [Kraus.reindexPhysical, Equiv.symm_apply_apply, verticalBNTMPO_apply,
-      MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat] using
-      groupedFusionCoisometry_reconstruction O hMult α β
-        (finProdFinEquiv (i, j))
+  fusion := fun α β i j ↦ groupedFusionCoisometry_fusion O hMult α β (i, j)
+  reconstruction := fun α β i j ↦ groupedFusionCoisometry_reconstruction O hMult α β (i, j)
 
 end OriginalCornerFamily
 
@@ -261,7 +257,7 @@ coisometries for the original one-site BNT labels.
 Source: CPSV16, Appendix C.4, lines 2020--2029. -/
 theorem exists_bntFusionCoisometryFamily
     {g₂ : ℕ} {dim₂ : Fin g₂ → ℕ}
-    {A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ)}
+    {A₂ : (γ : Fin g₂) → MPOTensor D (dim₂ γ)}
     (S : RetainedProductSpectralFamily dim mult weight B)
     (C : FlatBlockedBNTComparison S dim₂ A₂)
     (hMult : ∀ α, 0 < mult α)
@@ -271,7 +267,7 @@ theorem exists_bntFusionCoisometryFamily
     (hWeight₂ : ∀ γ q, (0 : ℂ) < weight₂ γ q)
     (sigma : Fin g ≃ Fin g₂) (hDim : ∀ i, dim i = dim₂ (sigma i))
     (V : ∀ i, Matrix.unitaryGroup (Fin (dim₂ (sigma i))) ℂ)
-    (hLetter : ∀ (i : Fin g) (ab : Fin (D * D)),
+    (hLetter : ∀ (i : Fin g) (ab : Fin D × Fin D),
       A₂ (sigma i) ab =
         (verticalMultiplicityTrace weight i /
           verticalMultiplicityTrace weight₂ (sigma i)) •
@@ -295,17 +291,17 @@ theorem exists_bntFusionCoisometryFamily
       (∀ α β, U α β * (U α β)ᴴ = 1) ∧
       (∀ (α β : Fin g) (i j : Fin D),
         U α β *
-            (mulTensor (verticalBNTMPO (B α))
-              (verticalBNTMPO (B β))) (i, j) *
+            (mulTensor (B α)
+              (B β)) (i, j) *
             (U α β)ᴴ =
           Matrix.blockDiagonal' fun γ =>
-            chi.matrix α β γ ⊗ₖ verticalBNTMPO (B γ) (i, j)) ∧
+            chi.matrix α β γ ⊗ₖ (B γ) (i, j)) ∧
       ∀ (α β : Fin g) (i j : Fin D),
-        (mulTensor (verticalBNTMPO (B α))
-          (verticalBNTMPO (B β))) (i, j) =
+        (mulTensor (B α)
+          (B β)) (i, j) =
           (U α β)ᴴ *
             (Matrix.blockDiagonal' fun γ =>
-              chi.matrix α β γ ⊗ₖ verticalBNTMPO (B γ) (i, j)) *
+              chi.matrix α β γ ⊗ₖ (B γ) (i, j)) *
             U α β := by
   obtain ⟨O⟩ := S.exists_originalCornerFamily C hMult hWeight
     mult₂ hMult₂ weight₂ hWeight₂ sigma hDim V hLetter
@@ -335,8 +331,8 @@ theorem HasVerticalBNTProductInputs.exists_positiveFusionDecomposition_of_unitar
     (hMult₂ : ∀ β, 0 < mult₂ β)
     (hWeight₂ : ∀ β q, (0 : ℂ) < weight₂ β q)
     (M : MPOTensor d D)
-    (A₁ : (α : Fin g₁) → MPSTensor (D * D) (dim₁ α))
-    (A₂ : (β : Fin g₂) → MPSTensor (D * D) (dim₂ β))
+    (A₁ : (α : Fin g₁) → MPOTensor D (dim₁ α))
+    (A₂ : (β : Fin g₂) → MPOTensor D (dim₂ β))
     (hBNT₂ : MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor (blockTwo M))
       (fun β ↦ ⟨dim₂ β, A₂ β⟩))
     (U₁ : Matrix
@@ -354,7 +350,7 @@ theorem HasVerticalBNTProductInputs.exists_positiveFusionDecomposition_of_unitar
     (sigma : Fin g₁ ≃ Fin g₂)
     (hDim : ∀ i, dim₁ i = dim₂ (sigma i))
     (V : ∀ i, Matrix.unitaryGroup (Fin (dim₂ (sigma i))) ℂ)
-    (hLetter : ∀ (i : Fin g₁) (ab : Fin (D * D)),
+    (hLetter : ∀ (i : Fin g₁) (ab : Fin D × Fin D),
       A₂ (sigma i) ab =
         (verticalMultiplicityTrace weight₁ i /
           verticalMultiplicityTrace weight₂ (sigma i)) •
@@ -371,17 +367,17 @@ theorem HasVerticalBNTProductInputs.exists_positiveFusionDecomposition_of_unitar
       (∀ α β, U α β * (U α β)ᴴ = 1) ∧
       (∀ (α β : Fin g₁) (i j : Fin D),
         U α β *
-            (mulTensor (verticalBNTMPO (A₁ α))
-              (verticalBNTMPO (A₁ β))) (i, j) *
+            (mulTensor (A₁ α)
+              (A₁ β)) (i, j) *
             (U α β)ᴴ =
           Matrix.blockDiagonal' fun γ =>
-            chi.matrix α β γ ⊗ₖ verticalBNTMPO (A₁ γ) (i, j)) ∧
+            chi.matrix α β γ ⊗ₖ (A₁ γ) (i, j)) ∧
       ∀ (α β : Fin g₁) (i j : Fin D),
-        (mulTensor (verticalBNTMPO (A₁ α))
-          (verticalBNTMPO (A₁ β))) (i, j) =
+        (mulTensor (A₁ α)
+          (A₁ β)) (i, j) =
           (U α β)ᴴ *
             (Matrix.blockDiagonal' fun γ =>
-              chi.matrix α β γ ⊗ₖ verticalBNTMPO (A₁ γ) (i, j)) *
+              chi.matrix α β γ ⊗ₖ (A₁ γ) (i, j)) *
             U α β := by
   classical
   obtain ⟨R⟩ := hInputs.exists_retainedProductSpectralFamily
@@ -424,17 +420,17 @@ theorem transportedVerticalSector_exists_positiveFusionDecomposition
       (∀ α β, U α β * (U α β)ᴴ = 1) ∧
       (∀ (α β : Fin g₁) (i j : Fin D),
         U α β *
-            (mulTensor (verticalBNTMPO (h.A₁ α))
-              (verticalBNTMPO (h.A₁ β))) (i, j) *
+            (mulTensor (h.A₁ α)
+              (h.A₁ β)) (i, j) *
             (U α β)ᴴ =
           Matrix.blockDiagonal' fun γ =>
-            chi.matrix α β γ ⊗ₖ verticalBNTMPO (h.A₁ γ) (i, j)) ∧
+            chi.matrix α β γ ⊗ₖ (h.A₁ γ) (i, j)) ∧
       ∀ (α β : Fin g₁) (i j : Fin D),
-        (mulTensor (verticalBNTMPO (h.A₁ α))
-          (verticalBNTMPO (h.A₁ β))) (i, j) =
+        (mulTensor (h.A₁ α)
+          (h.A₁ β)) (i, j) =
           (U α β)ᴴ *
             (Matrix.blockDiagonal' fun γ =>
-              chi.matrix α β γ ⊗ₖ verticalBNTMPO (h.A₁ γ) (i, j)) *
+              chi.matrix α β γ ⊗ₖ (h.A₁ γ) (i, j)) *
             U α β := by
   classical
   obtain ⟨sigma, hDim, V, _hContract, hLetter⟩ :=

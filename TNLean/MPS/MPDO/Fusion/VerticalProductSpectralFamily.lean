@@ -42,7 +42,7 @@ Source: CPSV16, Appendix C.4, lines 2020--2029. -/
 structure RetainedProductSpectralFamily
     {g D : ℕ} (dim mult : Fin g → ℕ)
     (weight : (α : Fin g) → Fin (mult α) → ℂ)
-    (B : (α : Fin g) → MPSTensor (D * D) (dim α)) where
+    (B : (α : Fin g) → MPOTensor D (dim α)) where
   /-- Number of nonzero spectral corners in a copy-pair tensor. -/
   count : VerticalCopyPair mult → ℕ
   /-- Bond dimension of a local spectral corner. -/
@@ -51,7 +51,7 @@ structure RetainedProductSpectralFamily
   coefficient : (p : VerticalCopyPair mult) → Fin (count p) → ℂ
   /-- Normal tensor of a local corner. -/
   block : (p : VerticalCopyPair mult) → (k : Fin (count p)) →
-    MPSTensor (D * D) (localDim p k)
+    MPOTensor D (localDim p k)
   /-- Inclusion of a local corner into its copy-pair bond space. -/
   localInclusion : (p : VerticalCopyPair mult) → (k : Fin (count p)) →
     Matrix (Fin (dim p.1.1 * dim p.2.1)) (Fin (localDim p k)) ℂ
@@ -92,7 +92,7 @@ lines 2020--2029. -/
 theorem exists_retainedProductSpectralFamily_of_blockTwo
     {g d D : ℕ} (dim mult : Fin g → ℕ)
     (weight : (α : Fin g) → Fin (mult α) → ℂ)
-    (B : (α : Fin g) → MPSTensor (D * D) (dim α))
+    (B : (α : Fin g) → MPOTensor D (dim α))
     (M : MPOTensor d D)
     (U : Matrix
       (Fin (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q))
@@ -135,7 +135,7 @@ lines 2020--2029. -/
 theorem HasVerticalBNTProductInputs.exists_retainedProductSpectralFamily
     {g d D : ℕ} (dim mult : Fin g → ℕ)
     (weight : (α : Fin g) → Fin (mult α) → ℂ)
-    (B : (α : Fin g) → MPSTensor (D * D) (dim α))
+    (B : (α : Fin g) → MPOTensor D (dim α))
     (M : MPOTensor d D)
     (U : Matrix
       (Fin (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q))
@@ -153,7 +153,7 @@ namespace RetainedProductSpectralFamily
 
 variable {g D : ℕ} {dim mult : Fin g → ℕ}
   {weight : (α : Fin g) → Fin (mult α) → ℂ}
-  {B : (α : Fin g) → MPSTensor (D * D) (dim α)}
+  {B : (α : Fin g) → MPOTensor D (dim α)}
 
 /-- The dependent type of all active local corners over all retained copy
 pairs. -/
@@ -227,7 +227,7 @@ theorem retainedInclusion_orthogonal_of_ne
 with the full retained product tensor. -/
 theorem retained_intertwine
     (S : RetainedProductSpectralFamily dim mult weight B)
-    (x : S.ActiveLabel) (ab : Fin (D * D)) :
+    (x : S.ActiveLabel) (ab : Fin D × Fin D) :
     retainedVerticalProductTensor dim mult weight B ab * S.retainedInclusion x =
       S.retainedInclusion x * (S.coefficient x.1 x.2 • S.block x.1 x.2 ab) := by
   rw [retainedInclusion, ← Matrix.mul_assoc,
@@ -239,7 +239,7 @@ theorem retained_intertwine
 intertwining identity. -/
 theorem retained_intertwine_adjoint
     (S : RetainedProductSpectralFamily dim mult weight B)
-    (x : S.ActiveLabel) (ab : Fin (D * D)) :
+    (x : S.ActiveLabel) (ab : Fin D × Fin D) :
     (S.retainedInclusion x)ᴴ * retainedVerticalProductTensor dim mult weight B ab =
       (S.coefficient x.1 x.2 • S.block x.1 x.2 ab) *
         (S.retainedInclusion x)ᴴ := by
@@ -252,7 +252,7 @@ theorem retained_intertwine_adjoint
 its weighted normal corner. -/
 theorem retained_compression
     (S : RetainedProductSpectralFamily dim mult weight B)
-    (x : S.ActiveLabel) (ab : Fin (D * D)) :
+    (x : S.ActiveLabel) (ab : Fin D × Fin D) :
     S.coefficient x.1 x.2 • S.block x.1 x.2 ab =
       (S.retainedInclusion x)ᴴ *
         retainedVerticalProductTensor dim mult weight B ab *
@@ -264,7 +264,7 @@ theorem retained_compression
 corners, before enumerating their dependent label type. -/
 theorem retained_reconstruction_active
     (S : RetainedProductSpectralFamily dim mult weight B)
-    (ab : Fin (D * D)) :
+    (ab : Fin D × Fin D) :
     retainedVerticalProductTensor dim mult weight B ab =
       ∑ x : S.ActiveLabel,
         S.retainedInclusion x *
@@ -318,7 +318,7 @@ noncomputable def flatCoefficient
 noncomputable def flatBlock
     (S : RetainedProductSpectralFamily dim mult weight B)
     (j : Fin (Fintype.card S.ActiveLabel)) :
-    MPSTensor (D * D) (S.flatDim j) :=
+    MPOTensor D (S.flatDim j) :=
   S.block (S.activeLabelEquiv j).1 (S.activeLabelEquiv j).2
 
 /-- Retained inclusion of an enumerated active corner. -/
@@ -376,7 +376,7 @@ theorem flatInclusion_orthogonal_of_ne
 identity. -/
 theorem flat_intertwine
     (S : RetainedProductSpectralFamily dim mult weight B)
-    (j : Fin (Fintype.card S.ActiveLabel)) (ab : Fin (D * D)) :
+    (j : Fin (Fintype.card S.ActiveLabel)) (ab : Fin D × Fin D) :
     retainedVerticalProductTensor dim mult weight B ab * S.flatInclusion j =
       S.flatInclusion j * (S.flatCoefficient j • S.flatBlock j ab) :=
   S.retained_intertwine (S.activeLabelEquiv j) ab
@@ -385,7 +385,7 @@ theorem flat_intertwine
 identity. -/
 theorem flat_intertwine_adjoint
     (S : RetainedProductSpectralFamily dim mult weight B)
-    (j : Fin (Fintype.card S.ActiveLabel)) (ab : Fin (D * D)) :
+    (j : Fin (Fintype.card S.ActiveLabel)) (ab : Fin D × Fin D) :
     (S.flatInclusion j)ᴴ * retainedVerticalProductTensor dim mult weight B ab =
       (S.flatCoefficient j • S.flatBlock j ab) * (S.flatInclusion j)ᴴ := by
   exact S.retained_intertwine_adjoint (S.activeLabelEquiv j) ab
@@ -394,7 +394,7 @@ theorem flat_intertwine_adjoint
 corner. -/
 theorem flat_compression
     (S : RetainedProductSpectralFamily dim mult weight B)
-    (j : Fin (Fintype.card S.ActiveLabel)) (ab : Fin (D * D)) :
+    (j : Fin (Fintype.card S.ActiveLabel)) (ab : Fin D × Fin D) :
     S.flatCoefficient j • S.flatBlock j ab =
       (S.flatInclusion j)ᴴ *
         retainedVerticalProductTensor dim mult weight B ab *
@@ -405,7 +405,7 @@ theorem flat_compression
 active corners. -/
 theorem flat_reconstruction
     (S : RetainedProductSpectralFamily dim mult weight B)
-    (ab : Fin (D * D)) :
+    (ab : Fin D × Fin D) :
     retainedVerticalProductTensor dim mult weight B ab =
       ∑ j, S.flatInclusion j * (S.flatCoefficient j • S.flatBlock j ab) *
         (S.flatInclusion j)ᴴ := by
@@ -420,7 +420,7 @@ active normal corners have the same positive-length closed chains. -/
 theorem flat_sameMPV₂Pos
     (S : RetainedProductSpectralFamily dim mult weight B) :
     MPTensor.SameMPV₂Pos (retainedVerticalProductTensor dim mult weight B)
-      (MPTensor.toTensorFromBlocks (α := Fin (D * D))
+      (MPTensor.toTensorFromBlocks (α := Fin D × Fin D)
         (μ := S.flatCoefficient) S.flatBlock) :=
   MPSTensor.sameMPV₂Pos_toTensorFromBlocks_of_reconstruction
     (retainedVerticalProductTensor dim mult weight B)
@@ -448,7 +448,7 @@ theorem exists_blockedBNT_gaugePhase_of_flatBlock
     (hReconstruct : ∀ ab, verticalTensor M ab =
       Uᴴ * verticalAssembledTensor dim mult weight B ab * U)
     (dim₂ : Fin g₂ → ℕ)
-    (A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ))
+    (A₂ : (γ : Fin g₂) → MPOTensor D (dim₂ γ))
     [∀ γ, NeZero (dim₂ γ)]
     (hBNT₂ : MPSTensor.IsCPSVBasisOfNormalTensors
       (verticalTensor (blockTwo M)) (fun γ ↦ ⟨dim₂ γ, A₂ γ⟩)) :
@@ -457,7 +457,7 @@ theorem exists_blockedBNT_gaugePhase_of_flatBlock
       ∃ X : GL (Fin (S.flatDim j)) ℂ, ∃ ζ : ℂ, ‖ζ‖ = 1 ∧
         ∀ ab, S.flatBlock j ab = ζ •
           ((X : Matrix (Fin (S.flatDim j)) (Fin (S.flatDim j)) ℂ) *
-            (cast (congr_arg (MPSTensor (D * D)) hdim) (A₂ γ)) ab *
+            (cast (congr_arg (MPOTensor D) hdim) (A₂ γ)) ab *
               (↑(X⁻¹) : Matrix (Fin (S.flatDim j))
                 (Fin (S.flatDim j)) ℂ)) := by
   let : ∀ j, NeZero (S.flatDim j) := fun j ↦
@@ -474,13 +474,34 @@ theorem exists_blockedBNT_gaugePhase_of_flatBlock
       (retainedVerticalProductTensor dim mult weight B)
       (fun γ ↦ ⟨dim₂ γ, A₂ γ⟩) :=
     hBNT₂.of_sameMPV₂Pos hSame
+  -- The characterization of bases of normal tensors is stated on an alphabet `Fin d`; apply it
+  -- to the bond-pair letters relabelled along `Fintype.equivFin`.
+  let e : Fin (Fintype.card (Fin D × Fin D)) ≃ Fin D × Fin D := (Fintype.equivFin _).symm
   have hCharacterization :=
     (MPSTensor.isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal
-      (retainedVerticalProductTensor dim mult weight B)
-      S.flatCoefficient S.flatBlock A₂ S.flatBlock_normal S.flatCoefficient_ne
-      S.flat_sameMPV₂Pos).mp hBNTProduct
+      (Kraus.reindexPhysical e (retainedVerticalProductTensor dim mult weight B))
+      S.flatCoefficient (fun j ↦ Kraus.reindexPhysical e (S.flatBlock j))
+      (fun γ ↦ Kraus.reindexPhysical e (A₂ γ))
+      (fun j ↦ (S.flatBlock_normal j).reindexPhysical e) S.flatCoefficient_ne
+      (fun N hN σ ↦ by
+        change MPTensor.mpv (Kraus.reindexPhysical e _) σ =
+          MPTensor.mpv (Kraus.reindexPhysical e
+            (MPTensor.toTensorFromBlocks S.flatCoefficient S.flatBlock)) σ
+        rw [MPTensor.mpv_reindexPhysical, MPTensor.mpv_reindexPhysical]
+        exact S.flat_sameMPV₂Pos N hN _)).mp
+      (hBNTProduct.reindexPhysical e)
+  have hcast : ∀ {n m : ℕ} (h : n = m) (A : MPOTensor D n) (ab : Fin D × Fin D),
+      (cast (congr_arg (MPSTensor (Fintype.card (Fin D × Fin D))) h)
+        (Kraus.reindexPhysical e A)) (e.symm ab) = (cast (congr_arg (MPOTensor D) h) A) ab := by
+    intro n m h A ab
+    subst h
+    simp [Kraus.reindexPhysical]
   intro j
-  exact hCharacterization.2.1 j
+  obtain ⟨γ, hdim, X, ζ, hζ, hrel⟩ := hCharacterization.2.1 j
+  refine ⟨γ, hdim, X, ζ, hζ, fun ab ↦ ?_⟩
+  have h := hrel (e.symm ab)
+  rw [hcast hdim] at h
+  simpa [Kraus.reindexPhysical] using h
 
 /-- A simultaneous choice of the blocked BNT label, dimension equality,
 gauge, and phase for every enumerated active product corner.
@@ -491,7 +512,7 @@ Source: CPSV16, Appendix C.4, lines 2025--2029. -/
 structure FlatBlockedBNTComparison {g₂ : ℕ}
     (S : RetainedProductSpectralFamily dim mult weight B)
     (dim₂ : Fin g₂ → ℕ)
-    (A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ)) where
+    (A₂ : (γ : Fin g₂) → MPOTensor D (dim₂ γ)) where
   /-- Blocked BNT label covering an active product corner. -/
   label : Fin (Fintype.card S.ActiveLabel) → Fin g₂
   /-- Equality of the blocked and active corner bond dimensions. -/
@@ -505,7 +526,7 @@ structure FlatBlockedBNTComparison {g₂ : ℕ}
   /-- Exact gauge-phase relation for every tensor letter. -/
   block_eq : ∀ j ab, S.flatBlock j ab = phase j •
     ((gauge j : Matrix (Fin (S.flatDim j)) (Fin (S.flatDim j)) ℂ) *
-      (cast (congr_arg (MPSTensor (D * D)) (dim_eq j))
+      (cast (congr_arg (MPOTensor D) (dim_eq j))
         (A₂ (label j))) ab *
       (↑((gauge j)⁻¹) : Matrix (Fin (S.flatDim j))
         (Fin (S.flatDim j)) ℂ))
@@ -548,16 +569,16 @@ structure OriginalCornerFamily
 
   Source: CPSV16, Appendix C.4, lines 2025--2029. -/
   intertwine : ∀ p k ab,
-    (Kraus.reindexPhysical finProdFinEquiv.symm (mulTensor (verticalBNTMPO (B p.1.1))
-        (verticalBNTMPO (B p.2.1)))) ab * inclusion p k =
+    (mulTensor (B p.1.1)
+        (B p.2.1)) ab * inclusion p k =
       inclusion p k * (coefficient p k • B (label p k) ab)
   /-- The original-label corners reconstruct every letter of the raw product
   tensor.
 
   Source: CPSV16, Appendix C.4, lines 2025--2029. -/
   reconstruction : ∀ p ab,
-    (Kraus.reindexPhysical finProdFinEquiv.symm (mulTensor (verticalBNTMPO (B p.1.1))
-        (verticalBNTMPO (B p.2.1)))) ab =
+    (mulTensor (B p.1.1)
+        (B p.2.1)) ab =
       ∑ k, inclusion p k * (coefficient p k • B (label p k) ab) *
         (inclusion p k)ᴴ
 

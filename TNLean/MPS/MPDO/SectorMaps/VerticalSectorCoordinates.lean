@@ -73,10 +73,10 @@ that copy's weighted simple-block entry.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 1955--1971. -/
 theorem verticalAssembledTensor_apply_copy_same
-    {g d : ℕ} (dim mult : Fin g → ℕ)
+    {κ : Type*} {g : ℕ} (dim mult : Fin g → ℕ)
     (weight : (α : Fin g) → Fin (mult α) → ℂ)
-    (B : (α : Fin g) → MPSTensor d (dim α))
-    (α : Fin g) (q : Fin (mult α)) (v : Fin d) (i j : Fin (dim α)) :
+    (B : (α : Fin g) → MPTensor κ (Fin (dim α)))
+    (α : Fin g) (q : Fin (mult α)) (v : κ) (i j : Fin (dim α)) :
     verticalAssembledTensor dim mult weight B v
         (verticalSectorFinEquiv dim mult ⟨α, (q, i)⟩)
         (verticalSectorFinEquiv dim mult ⟨α, (q, j)⟩) =
@@ -109,12 +109,12 @@ vanishes.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 1955--1971. -/
 theorem verticalAssembledTensor_apply_copy_ne
-    {g d : ℕ} (dim mult : Fin g → ℕ)
+    {κ : Type*} {g : ℕ} (dim mult : Fin g → ℕ)
     (weight : (α : Fin g) → Fin (mult α) → ℂ)
-    (B : (α : Fin g) → MPSTensor d (dim α))
+    (B : (α : Fin g) → MPTensor κ (Fin (dim α)))
     {α β : Fin g} {q : Fin (mult α)} {r : Fin (mult β)}
     (h : (⟨α, q⟩ : (α : Fin g) × Fin (mult α)) ≠ ⟨β, r⟩)
-    (v : Fin d) (i : Fin (dim α)) (j : Fin (dim β)) :
+    (v : κ) (i : Fin (dim α)) (j : Fin (dim β)) :
     verticalAssembledTensor dim mult weight B v
         (verticalSectorFinEquiv dim mult ⟨α, (q, i)⟩)
         (verticalSectorFinEquiv dim mult ⟨β, (r, j)⟩) = 0 := by
@@ -353,7 +353,7 @@ Source: arXiv:1606.00608, Appendix C.4, lines 1955--1979. -/
 theorem contractBondMatrix_verticalAssembledTensor_eq_sectorBlockDiagonal
     {g D : ℕ} (dim mult : Fin g → ℕ)
     (weight : (α : Fin g) → Fin (mult α) → ℂ)
-    (A : (α : Fin g) → MPSTensor (D * D) (dim α))
+    (A : (α : Fin g) → MPOTensor D (dim α))
     (X : Matrix (Fin D) (Fin D) ℂ) :
     MPSTensor.contractBondMatrix (verticalAssembledTensor dim mult weight A) X =
       verticalSectorBlockDiagonal dim mult (fun α =>
@@ -528,11 +528,11 @@ structure VerticalSectorFixedGeneratorHypotheses {g₁ g₂ d D : ℕ} where
   /-- The one-site vertical normal tensors.
 
   Source: arXiv:1606.00608, Appendix C.4, lines 1955--1971. -/
-  A₁ : (α : Fin g₁) → MPSTensor (D * D) (dim₁ α)
+  A₁ : (α : Fin g₁) → MPOTensor D (dim₁ α)
   /-- The two-site vertical normal tensors.
 
   Source: arXiv:1606.00608, Appendix C.4, lines 1955--1971. -/
-  A₂ : (β : Fin g₂) → MPSTensor (D * D) (dim₂ β)
+  A₂ : (β : Fin g₂) → MPOTensor D (dim₂ β)
   /-- The retained one-site vertical coordinate map.
 
   Source: arXiv:1606.00608, Appendix C.4, lines 1955--1971. -/
@@ -714,8 +714,8 @@ theorem transportedVerticalSectorT_contractBondMatrix_trace_smul
     (hMult₁ : ∀ α, 0 < mult₁ α)
     (hWeight₁ : ∀ α q, (0 : ℂ) < weight₁ α q)
     (M : MPOTensor d D)
-    (A₁ : (α : Fin g₁) → MPSTensor (D * D) (dim₁ α))
-    (A₂ : (β : Fin g₂) → MPSTensor (D * D) (dim₂ β))
+    (A₁ : (α : Fin g₁) → MPOTensor D (dim₁ α))
+    (A₂ : (β : Fin g₂) → MPOTensor D (dim₂ β))
     (U₁ : Matrix
       (Fin (∑ q : Fin (∑ α : Fin g₁, mult₁ α), verticalCopyDim dim₁ mult₁ q))
       (Fin d) ℂ)
@@ -758,8 +758,8 @@ theorem transportedVerticalSectorS_contractBondMatrix_trace_smul
     (hMult₂ : ∀ β, 0 < mult₂ β)
     (hWeight₂ : ∀ β q, (0 : ℂ) < weight₂ β q)
     (M : MPOTensor d D)
-    (A₁ : (α : Fin g₁) → MPSTensor (D * D) (dim₁ α))
-    (A₂ : (β : Fin g₂) → MPSTensor (D * D) (dim₂ β))
+    (A₁ : (α : Fin g₁) → MPOTensor D (dim₁ α))
+    (A₂ : (β : Fin g₂) → MPOTensor D (dim₂ β))
     (U₁ : Matrix
       (Fin (∑ q : Fin (∑ α : Fin g₁, mult₁ α), verticalCopyDim dim₁ mult₁ q))
       (Fin d) ℂ)

@@ -36,7 +36,7 @@ namespace RetainedProductSpectralFamily
 
 variable {g D : ℕ} {dim mult : Fin g → ℕ}
   {weight : (α : Fin g) → Fin (mult α) → ℂ}
-  {B : (α : Fin g) → MPSTensor (D * D) (dim α)}
+  {B : (α : Fin g) → MPOTensor D (dim α)}
 
 private noncomputable def unitaryTransportMap
     {r m n : ℕ} (h : m = n) (W : Matrix (Fin r) (Fin n) ℂ)
@@ -47,7 +47,7 @@ private noncomputable def unitaryTransportMap
 
 private noncomputable def originalCornerLabel
     {g₂ : ℕ} {dim₂ : Fin g₂ → ℕ}
-    {A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ)}
+    {A₂ : (γ : Fin g₂) → MPOTensor D (dim₂ γ)}
     (S : RetainedProductSpectralFamily dim mult weight B)
     (C : FlatBlockedBNTComparison S dim₂ A₂) (sigma : Fin g ≃ Fin g₂)
     (p : VerticalCopyPair mult) (k : Fin (S.count p)) : Fin g :=
@@ -65,7 +65,7 @@ private theorem localDim_eq_flatDim
 
 private noncomputable def originalCornerCoefficient
     {g₂ : ℕ} {dim₂ : Fin g₂ → ℕ}
-    {A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ)}
+    {A₂ : (γ : Fin g₂) → MPOTensor D (dim₂ γ)}
     (S : RetainedProductSpectralFamily dim mult weight B)
     (C : FlatBlockedBNTComparison S dim₂ A₂) (sigma : Fin g ≃ Fin g₂)
     (mult₂ : Fin g₂ → ℕ)
@@ -80,7 +80,7 @@ private noncomputable def originalCornerCoefficient
 
 private noncomputable def originalCornerInclusion
     {g₂ : ℕ} {dim₂ : Fin g₂ → ℕ}
-    {A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ)}
+    {A₂ : (γ : Fin g₂) → MPOTensor D (dim₂ γ)}
     (S : RetainedProductSpectralFamily dim mult weight B)
     (C : FlatBlockedBNTComparison S dim₂ A₂) (sigma : Fin g ≃ Fin g₂)
     (hDim : ∀ i, dim i = dim₂ (sigma i))
@@ -115,11 +115,11 @@ private theorem castBondColumns_isometry
   simpa using hV
 
 private theorem castBondColumns_compression
-    {r m n e : ℕ} (T : MPSTensor e r) (A : MPSTensor e m)
+    {κ : Type*} {r m n : ℕ} (T : MPTensor κ (Fin r)) (A : MPTensor κ (Fin m))
     (V : Matrix (Fin r) (Fin m) ℂ) (c : ℂ)
     (hcorner : ∀ v, c • A v = Vᴴ * T v * V) (h : m = n)
-    (v : Fin e) :
-    let A' := cast (congrArg (MPSTensor e) h) A
+    (v : κ) :
+    let A' := cast (congrArg (fun k ↦ MPTensor κ (Fin k)) h) A
     let V' := cast (congrArg (fun k ↦ Matrix (Fin r) (Fin k) ℂ) h) V
     c • A' v = V'ᴴ * T v * V' := by
   cases h
@@ -140,11 +140,11 @@ private theorem castBondColumns_orthogonal
   simpa using hV
 
 private theorem castBondColumns_intertwining
-    {r m n e : ℕ} (T : MPSTensor e r) (A : MPSTensor e m)
+    {κ : Type*} {r m n : ℕ} (T : MPTensor κ (Fin r)) (A : MPTensor κ (Fin m))
     (V : Matrix (Fin r) (Fin m) ℂ) (c : ℂ)
     (hinter : ∀ v, T v * V = V * (c • A v)) (h : m = n)
-    (v : Fin e) :
-    let A' := cast (congrArg (MPSTensor e) h) A
+    (v : κ) :
+    let A' := cast (congrArg (fun k ↦ MPTensor κ (Fin k)) h) A
     let V' := cast (congrArg (fun k ↦ Matrix (Fin r) (Fin k) ℂ) h) V
     T v * V' = V' * (c • A' v) := by
   cases h
@@ -162,10 +162,10 @@ private theorem castBondColumns_corner
   rfl
 
 private theorem castDependentTensor_eq
-    {ι : Type*} {e : ℕ} (bondDim : ι → ℕ)
-    (A : (i : ι) → MPSTensor e (bondDim i))
+    {ι : Type*} {κ : Type*} (bondDim : ι → ℕ)
+    (A : (i : ι) → MPTensor κ (Fin (bondDim i)))
     {i j : ι} (h : i = j) :
-    cast (congrArg (MPSTensor e) (congrArg bondDim h)) (A i) = A j := by
+    cast (congrArg (fun k ↦ MPTensor κ (Fin k)) (congrArg bondDim h)) (A i) = A j := by
   cases h
   rfl
 
@@ -193,15 +193,15 @@ private theorem unitaryTransportMap_orthogonal
     Matrix.zero_mul, Matrix.mul_zero]
 
 private theorem unitaryTransportMap_intertwining
-    {r m n e : ℕ} (h : m = n) (T : MPSTensor e r)
-    (A₁ : MPSTensor e m) (A₂ : MPSTensor e n)
+    {κ : Type*} {r m n : ℕ} (h : m = n) (T : MPTensor κ (Fin r))
+    (A₁ : MPTensor κ (Fin m)) (A₂ : MPTensor κ (Fin n))
     (W : Matrix (Fin r) (Fin n) ℂ)
     (U : Matrix.unitaryGroup (Fin n) ℂ) (c t : ℂ)
     (hinter : ∀ v, T v * W = W * (c • A₂ v))
     (hA : ∀ v, A₂ v = t •
       ((U : Matrix (Fin n) (Fin n) ℂ) *
         Matrix.reindexAlgEquiv ℂ ℂ (finCongr h) (A₁ v) *
-        (U : Matrix (Fin n) (Fin n) ℂ)ᴴ)) (v : Fin e) :
+        (U : Matrix (Fin n) (Fin n) ℂ)ᴴ)) (v : κ) :
     T v * unitaryTransportMap h W U =
       unitaryTransportMap h W U * ((c * t) • A₁ v) := by
   cases h
@@ -235,13 +235,13 @@ private theorem unitaryTransportMap_corner
 
 private theorem originalCornerInclusion_isometry
     {g₂ : ℕ} {dim₂ : Fin g₂ → ℕ}
-    {A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ)}
+    {A₂ : (γ : Fin g₂) → MPOTensor D (dim₂ γ)}
     (S : RetainedProductSpectralFamily dim mult weight B)
     (C : FlatBlockedBNTComparison S dim₂ A₂) (sigma : Fin g ≃ Fin g₂)
     (hDim : ∀ i, dim i = dim₂ (sigma i))
     (V : ∀ i, Matrix.unitaryGroup (Fin (dim₂ (sigma i))) ℂ)
     (omega : Fin (Fintype.card S.ActiveLabel) → ℝ)
-    (hQ : ∀ j, ((Real.sqrt (omega j) : ℂ))⁻¹ •
+    (hQ : ∀ j, (Real.sqrt (omega j) : ℂ)⁻¹ •
       (C.gauge j : Matrix (Fin (S.flatDim j)) (Fin (S.flatDim j)) ℂ) ∈
         Matrix.unitaryGroup (Fin (S.flatDim j)) ℂ)
     (p : VerticalCopyPair mult) (k : Fin (S.count p)) :
@@ -276,7 +276,7 @@ private theorem originalCornerInclusion_isometry
 
 private theorem originalCornerInclusion_orthogonal
     {g₂ : ℕ} {dim₂ : Fin g₂ → ℕ}
-    {A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ)}
+    {A₂ : (γ : Fin g₂) → MPOTensor D (dim₂ γ)}
     (S : RetainedProductSpectralFamily dim mult weight B)
     (C : FlatBlockedBNTComparison S dim₂ A₂) (sigma : Fin g ≃ Fin g₂)
     (hDim : ∀ i, dim i = dim₂ (sigma i))
@@ -333,14 +333,14 @@ private theorem originalCornerInclusion_orthogonal
 
 private theorem originalCornerInclusion_weighted_intertwining
     {g₂ : ℕ} {dim₂ : Fin g₂ → ℕ}
-    {A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ)}
+    {A₂ : (γ : Fin g₂) → MPOTensor D (dim₂ γ)}
     (S : RetainedProductSpectralFamily dim mult weight B)
     (C : FlatBlockedBNTComparison S dim₂ A₂) (sigma : Fin g ≃ Fin g₂)
     (mult₂ : Fin g₂ → ℕ)
     (weight₂ : (γ : Fin g₂) → Fin (mult₂ γ) → ℂ)
     (hDim : ∀ i, dim i = dim₂ (sigma i))
     (V : ∀ i, Matrix.unitaryGroup (Fin (dim₂ (sigma i))) ℂ)
-    (hLetter : ∀ (i : Fin g) (ab : Fin (D * D)),
+    (hLetter : ∀ (i : Fin g) (ab : Fin D × Fin D),
       A₂ (sigma i) ab =
         (verticalMultiplicityTrace weight i /
           verticalMultiplicityTrace weight₂ (sigma i)) •
@@ -351,7 +351,7 @@ private theorem originalCornerInclusion_weighted_intertwining
             (Fin (dim₂ (sigma i))) ℂ)ᴴ))
     (omega : Fin (Fintype.card S.ActiveLabel) → ℝ)
     (p : VerticalCopyPair mult) (k : Fin (S.count p))
-    (ab : Fin (D * D)) :
+    (ab : Fin D × Fin D) :
     weightedVerticalProductBlock dim mult weight B p ab *
         originalCornerInclusion S C sigma hDim V omega p k =
       originalCornerInclusion S C sigma hDim V omega p k *
@@ -375,7 +375,7 @@ private theorem originalCornerInclusion_weighted_intertwining
   have hx : S.activeLabelEquiv j = ⟨p, k⟩ :=
     S.activeLabelEquiv.apply_symm_apply _
   have hblock : cast
-      (congrArg (MPSTensor (D * D)) (localDim_eq_flatDim S p k))
+      (congrArg (MPOTensor D) (localDim_eq_flatDim S p k))
         (S.block p k) = S.flatBlock j := by
     simpa only [flatDim, flatBlock] using
       castDependentTensor_eq
@@ -440,7 +440,7 @@ private theorem originalCornerInclusion_weighted_intertwining
 
 private theorem originalCornerInclusion_intertwining
     {g₂ : ℕ} {dim₂ : Fin g₂ → ℕ}
-    {A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ)}
+    {A₂ : (γ : Fin g₂) → MPOTensor D (dim₂ γ)}
     (S : RetainedProductSpectralFamily dim mult weight B)
     (C : FlatBlockedBNTComparison S dim₂ A₂) (sigma : Fin g ≃ Fin g₂)
     (mult₂ : Fin g₂ → ℕ)
@@ -448,7 +448,7 @@ private theorem originalCornerInclusion_intertwining
     (hWeight : ∀ α q, (0 : ℂ) < weight α q)
     (hDim : ∀ i, dim i = dim₂ (sigma i))
     (V : ∀ i, Matrix.unitaryGroup (Fin (dim₂ (sigma i))) ℂ)
-    (hLetter : ∀ (i : Fin g) (ab : Fin (D * D)),
+    (hLetter : ∀ (i : Fin g) (ab : Fin D × Fin D),
       A₂ (sigma i) ab =
         (verticalMultiplicityTrace weight i /
           verticalMultiplicityTrace weight₂ (sigma i)) •
@@ -459,9 +459,9 @@ private theorem originalCornerInclusion_intertwining
             (Fin (dim₂ (sigma i))) ℂ)ᴴ))
     (omega : Fin (Fintype.card S.ActiveLabel) → ℝ)
     (p : VerticalCopyPair mult) (k : Fin (S.count p))
-    (ab : Fin (D * D)) :
-    (Kraus.reindexPhysical finProdFinEquiv.symm (mulTensor (verticalBNTMPO (B p.1.1))
-        (verticalBNTMPO (B p.2.1)))) ab *
+    (ab : Fin D × Fin D) :
+    (mulTensor (B p.1.1)
+        (B p.2.1)) ab *
           originalCornerInclusion S C sigma hDim V omega p k =
       originalCornerInclusion S C sigma hDim V omega p k *
         (originalCornerCoefficient S C sigma mult₂ weight₂ p k •
@@ -473,8 +473,8 @@ private theorem originalCornerInclusion_intertwining
     (Matrix (Fin (dim p.1.1 * dim p.2.1))
       (Fin (dim (originalCornerLabel S C sigma p k))) ℂ) ha
   calc
-    a • ((Kraus.reindexPhysical finProdFinEquiv.symm (mulTensor (verticalBNTMPO (B p.1.1))
-          (verticalBNTMPO (B p.2.1)))) ab *
+    a • ((mulTensor (B p.1.1)
+          (B p.2.1)) ab *
         originalCornerInclusion S C sigma hDim V omega p k) =
       weightedVerticalProductBlock dim mult weight B p ab *
         originalCornerInclusion S C sigma hDim V omega p k := by
@@ -497,7 +497,7 @@ private theorem originalCornerInclusion_intertwining
 
 private theorem originalCornerTerm_weighted_eq
     {g₂ : ℕ} {dim₂ : Fin g₂ → ℕ}
-    {A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ)}
+    {A₂ : (γ : Fin g₂) → MPOTensor D (dim₂ γ)}
     (S : RetainedProductSpectralFamily dim mult weight B)
     (C : FlatBlockedBNTComparison S dim₂ A₂) (sigma : Fin g ≃ Fin g₂)
     (mult₂ : Fin g₂ → ℕ)
@@ -505,7 +505,7 @@ private theorem originalCornerTerm_weighted_eq
     (hWeight : ∀ α q, (0 : ℂ) < weight α q)
     (hDim : ∀ i, dim i = dim₂ (sigma i))
     (V : ∀ i, Matrix.unitaryGroup (Fin (dim₂ (sigma i))) ℂ)
-    (hLetter : ∀ (i : Fin g) (ab : Fin (D * D)),
+    (hLetter : ∀ (i : Fin g) (ab : Fin D × Fin D),
       A₂ (sigma i) ab =
         (verticalMultiplicityTrace weight i /
           verticalMultiplicityTrace weight₂ (sigma i)) •
@@ -520,7 +520,7 @@ private theorem originalCornerTerm_weighted_eq
       (C.gauge j : Matrix (Fin (S.flatDim j)) (Fin (S.flatDim j)) ℂ)ᴴ *
         C.gauge j = (omega j : ℂ) • 1)
     (p : VerticalCopyPair mult) (k : Fin (S.count p))
-    (ab : Fin (D * D)) :
+    (ab : Fin D × Fin D) :
     (weight p.1.1 p.1.2 * weight p.2.1 p.2.2) •
         (originalCornerInclusion S C sigma hDim V omega p k *
           (originalCornerCoefficient S C sigma mult₂ weight₂ p k •
@@ -574,7 +574,7 @@ private theorem originalCornerTerm_weighted_eq
   have hx : S.activeLabelEquiv j = ⟨p, k⟩ :=
     S.activeLabelEquiv.apply_symm_apply _
   have hblock : cast
-      (congrArg (MPSTensor (D * D)) (localDim_eq_flatDim S p k))
+      (congrArg (MPOTensor D) (localDim_eq_flatDim S p k))
         (S.block p k) = S.flatBlock j := by
     simpa only [flatDim, flatBlock] using
       castDependentTensor_eq
@@ -633,7 +633,7 @@ dimension of an active product corner.
 Source: CPSV16, Appendix C.4, lines 2025--2029. -/
 noncomputable def FlatBlockedBNTComparison.referenceInclusion
     {g₂ d : ℕ} {dim₂ : Fin g₂ → ℕ}
-    {A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ)}
+    {A₂ : (γ : Fin g₂) → MPOTensor D (dim₂ γ)}
     {S : RetainedProductSpectralFamily dim mult weight B}
     (C : FlatBlockedBNTComparison S dim₂ A₂)
     (mult₂ : Fin g₂ → ℕ) (hMult₂ : ∀ γ, 0 < mult₂ γ)
@@ -651,7 +651,7 @@ noncomputable def FlatBlockedBNTComparison.referenceInclusion
 Source: CPSV16, Appendix C.4, lines 2025--2029. -/
 theorem FlatBlockedBNTComparison.referenceInclusion_isometry
     {g₂ d : ℕ} {dim₂ : Fin g₂ → ℕ}
-    {A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ)}
+    {A₂ : (γ : Fin g₂) → MPOTensor D (dim₂ γ)}
     {S : RetainedProductSpectralFamily dim mult weight B}
     (C : FlatBlockedBNTComparison S dim₂ A₂)
     (mult₂ : Fin g₂ → ℕ) (hMult₂ : ∀ γ, 0 < mult₂ γ)
@@ -674,7 +674,7 @@ weighted blocked BNT copy, transported to the active bond dimension.
 Source: CPSV16, Appendix C.4, lines 2025--2029. -/
 theorem FlatBlockedBNTComparison.reference_compression
     {g₂ d : ℕ} {dim₂ : Fin g₂ → ℕ}
-    {A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ)}
+    {A₂ : (γ : Fin g₂) → MPOTensor D (dim₂ γ)}
     {S : RetainedProductSpectralFamily dim mult weight B}
     (C : FlatBlockedBNTComparison S dim₂ A₂)
     (M : MPOTensor d D)
@@ -687,9 +687,9 @@ theorem FlatBlockedBNTComparison.reference_compression
     (hU₂ : U₂ * U₂ᴴ = 1)
     (hReconstruct₂ : ∀ ab, verticalTensor (blockTwo M) ab =
       U₂ᴴ * verticalAssembledTensor dim₂ mult₂ weight₂ A₂ ab * U₂)
-    (j : Fin (Fintype.card S.ActiveLabel)) (ab : Fin (D * D)) :
+    (j : Fin (Fintype.card S.ActiveLabel)) (ab : Fin D × Fin D) :
     weight₂ (C.label j) ⟨0, hMult₂ (C.label j)⟩ •
-        (cast (congrArg (MPSTensor (D * D)) (C.dim_eq j))
+        (cast (congrArg (MPOTensor D) (C.dim_eq j))
           (A₂ (C.label j))) ab =
       (C.referenceInclusion mult₂ hMult₂ U₂ j)ᴴ *
         verticalTensor (blockTwo M) ab *
@@ -716,7 +716,7 @@ theorem exists_flatBlockedBNTComparison
     (hReconstruct : ∀ ab, verticalTensor M ab =
       Uᴴ * verticalAssembledTensor dim mult weight B ab * U)
     (dim₂ : Fin g₂ → ℕ)
-    (A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ))
+    (A₂ : (γ : Fin g₂) → MPOTensor D (dim₂ γ))
     [∀ γ, NeZero (dim₂ γ)]
     (hBNT₂ : MPSTensor.IsCPSVBasisOfNormalTensors
       (verticalTensor (blockTwo M)) (fun γ ↦ ⟨dim₂ γ, A₂ γ⟩)) :
@@ -769,7 +769,7 @@ theorem ambient_intertwine {d : ℕ}
     (hU : U * Uᴴ = 1)
     (hReconstruct : ∀ ab, verticalTensor M ab =
       Uᴴ * verticalAssembledTensor dim mult weight B ab * U)
-    (x : S.ActiveLabel) (ab : Fin (D * D)) :
+    (x : S.ActiveLabel) (ab : Fin D × Fin D) :
     verticalTensor (blockTwo M) ab * S.ambientInclusion U x =
       S.ambientInclusion U x *
         (S.coefficient x.1 x.2 • S.block x.1 x.2 ab) := by
@@ -807,7 +807,7 @@ theorem ambient_intertwine_adjoint {d : ℕ}
     (hU : U * Uᴴ = 1)
     (hReconstruct : ∀ ab, verticalTensor M ab =
       Uᴴ * verticalAssembledTensor dim mult weight B ab * U)
-    (x : S.ActiveLabel) (ab : Fin (D * D)) :
+    (x : S.ActiveLabel) (ab : Fin D × Fin D) :
     (S.ambientInclusion U x)ᴴ * verticalTensor (blockTwo M) ab =
       (S.coefficient x.1 x.2 • S.block x.1 x.2 ab) *
         (S.ambientInclusion U x)ᴴ := by
@@ -848,7 +848,7 @@ theorem ambient_compression {d : ℕ}
     (hU : U * Uᴴ = 1)
     (hReconstruct : ∀ ab, verticalTensor M ab =
       Uᴴ * verticalAssembledTensor dim mult weight B ab * U)
-    (x : S.ActiveLabel) (ab : Fin (D * D)) :
+    (x : S.ActiveLabel) (ab : Fin D × Fin D) :
     S.coefficient x.1 x.2 • S.block x.1 x.2 ab =
       (S.ambientInclusion U x)ᴴ * verticalTensor (blockTwo M) ab *
         S.ambientInclusion U x := by
@@ -862,7 +862,7 @@ original one-site BNT labels.
 Source: CPSV16, Appendix C.4, lines 2020--2029. -/
 theorem exists_originalCornerFamily
     {g₂ : ℕ} {dim₂ : Fin g₂ → ℕ}
-    {A₂ : (γ : Fin g₂) → MPSTensor (D * D) (dim₂ γ)}
+    {A₂ : (γ : Fin g₂) → MPOTensor D (dim₂ γ)}
     (S : RetainedProductSpectralFamily dim mult weight B)
     (C : FlatBlockedBNTComparison S dim₂ A₂)
     (hMult : ∀ α, 0 < mult α)
@@ -872,7 +872,7 @@ theorem exists_originalCornerFamily
     (hWeight₂ : ∀ γ q, (0 : ℂ) < weight₂ γ q)
     (sigma : Fin g ≃ Fin g₂) (hDim : ∀ i, dim i = dim₂ (sigma i))
     (V : ∀ i, Matrix.unitaryGroup (Fin (dim₂ (sigma i))) ℂ)
-    (hLetter : ∀ (i : Fin g) (ab : Fin (D * D)),
+    (hLetter : ∀ (i : Fin g) (ab : Fin D × Fin D),
       A₂ (sigma i) ab =
         (verticalMultiplicityTrace weight i /
           verticalMultiplicityTrace weight₂ (sigma i)) •
@@ -889,7 +889,7 @@ theorem exists_originalCornerFamily
         C.gauge j = (omega j : ℂ) • 1) :
     Nonempty (OriginalCornerFamily S) := by
   classical
-  have hQ : ∀ j, ((Real.sqrt (omega j) : ℂ))⁻¹ •
+  have hQ : ∀ j, (Real.sqrt (omega j) : ℂ)⁻¹ •
       (C.gauge j : Matrix (Fin (S.flatDim j)) (Fin (S.flatDim j)) ℂ) ∈
         Matrix.unitaryGroup (Fin (S.flatDim j)) ℂ := fun j ↦
     Matrix.smul_mem_unitaryGroup_of_conjTranspose_mul_self_eq_smul_one
@@ -937,8 +937,8 @@ theorem exists_originalCornerFamily
       (Matrix (Fin (dim p.1.1 * dim p.2.1))
         (Fin (dim p.1.1 * dim p.2.1)) ℂ) ha
     calc
-      a • (Kraus.reindexPhysical finProdFinEquiv.symm (mulTensor (verticalBNTMPO (B p.1.1))
-          (verticalBNTMPO (B p.2.1)))) ab =
+      a • (mulTensor (B p.1.1)
+          (B p.2.1)) ab =
         weightedVerticalProductBlock dim mult weight B p ab := by
           rfl
       _ = ∑ k, S.localInclusion p k *

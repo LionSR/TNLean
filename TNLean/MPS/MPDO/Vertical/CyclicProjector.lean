@@ -228,18 +228,18 @@ giving the word invariance; a single layer moves it to the neighboring
 orthogonal sector, forbidding single-letter invariance. -/
 theorem exists_displaced_invariant_projector_of_periodic_vector
     {d D : ℕ} (M : MPOTensor d D) {n : ℕ}
-    (V : Matrix (Fin d) (Fin n) ℂ) (B : MPSTensor (D * D) n)
+    (V : Matrix (Fin d) (Fin n) ℂ) (B : MPOTensor D n)
     (ρ : Matrix (Fin n) (Fin n) ℂ) (rad : ℝ)
     (hV : Vᴴ * V = 1)
-    (hint : ∀ v : Fin (D * D), verticalTensor M v * V = V * B v)
+    (hint : ∀ v : Fin D × Fin D, verticalTensor M v * V = V * B v)
     (hirr : Kraus.IsIrreducibleFamily B) (hρ : ρ.PosDef) (hrad : 0 < rad)
-    (hfix : Kraus.transferMap (ι := Fin (D * D)) (n := Fin n) B ρ = (rad : ℂ) • ρ)
+    (hfix : Kraus.transferMap (ι := Fin D × Fin D) (n := Fin n) B ρ = (rad : ℂ) • ρ)
     (μ : ℂ)
-    (hμ : Module.End.HasEigenvalue (Kraus.transferMap (ι := Fin (D * D)) (n := Fin n) B) μ)
+    (hμ : Module.End.HasEigenvalue (Kraus.transferMap (ι := Fin D × Fin D) (n := Fin n) B) μ)
     (hnorm : ‖μ‖ = rad) (hne : μ ≠ (rad : ℂ)) :
     ∃ (p : ℕ) (Q : Matrix (Fin d) (Fin d) ℂ),
       p ≠ 0 ∧ Q.IsHermitian ∧ IsIdempotentElem Q ∧
-      (∀ w : List (Fin (D * D)), w.length = p →
+      (∀ w : List (Fin D × Fin D), w.length = p →
         Q * Kraus.evalWord (verticalTensor M) w =
           Q * Kraus.evalWord (verticalTensor M) w * Q) ∧
       M.ketLeftMul Q ≠ (M.ketLeftMul Q).braRightMul Q := by
@@ -251,21 +251,37 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
     have hXne : X ≠ 0 := (Module.End.hasEigenvector_iff.mp hX).2
     exact hXne (Matrix.ext fun i _ => i.elim0)
   have : NeZero n := ⟨hn⟩
-  -- The unital gauge of the corner and its Wolf Theorem 6.6 data.
-  set K : MPSTensor (D * D) n := Kraus.spectralUnitalGauge B rad ρ with hK
-  obtain ⟨hUnital, hIrrK, hIrrMap, σ, hσ, hσfix⟩ :=
-    spectralUnitalGauge_schwarz_setup B hirr ρ rad hρ hrad hfix
-  have hIrrMapLM : IsIrreducibleMap (Kraus.mapLM K) := by
-    exact hIrrMap
+  -- The unital gauge of the corner and its Wolf Theorem 6.6 data.  The Schwarz-map and
+  -- cyclic-decomposition results are stated for Kraus families indexed by `Fin r`, so they are
+  -- applied to the corner relabelled along `Fintype.equivFin`.
+  set K : MPOTensor D n := Kraus.spectralUnitalGauge B rad ρ with hK
+  let e : Fin (Fintype.card (Fin D × Fin D)) ≃ Fin D × Fin D := (Fintype.equivFin _).symm
+  let B' : MPSTensor (Fintype.card (Fin D × Fin D)) n := Kraus.reindexPhysical e B
+  let K' : MPSTensor (Fintype.card (Fin D × Fin D)) n := Kraus.spectralUnitalGauge B' rad ρ
+  have hK'K : ∀ v, K' (e.symm v) = K v := fun v ↦ by
+    simp only [K', B', K, Kraus.spectralUnitalGauge, Kraus.unitalGauge, Kraus.reindexPhysical,
+      Equiv.apply_symm_apply]
+  have hmapK' : Kraus.mapLM K' = Kraus.mapLM K := Kraus.transferMap_reindexPhysical_equiv e K
+  have hfix' : Kraus.transferMap B' ρ = (rad : ℂ) • ρ := by
+    rw [Kraus.transferMap_reindexPhysical_equiv]; exact hfix
+  obtain ⟨hUnital', -, hIrrMap', σ, hσ, hσfix'⟩ :=
+    spectralUnitalGauge_schwarz_setup B' ((Kraus.isIrreducibleFamily_reindexPhysical_equiv e B).2
+      hirr) ρ rad hρ hrad hfix'
+  have hIrrMapLM' : IsIrreducibleMap (Kraus.mapLM K') := hIrrMap'
   obtain ⟨m, γ, hm_pos, hγprim, hset⟩ :=
-    PeripheralSpectrum.peripheral_eigenvalues_cyclic_structure K hUnital σ hσ hσfix hIrrMapLM
+    PeripheralSpectrum.peripheral_eigenvalues_cyclic_structure K' hUnital' σ hσ hσfix'
+      hIrrMapLM'
+  rw [hmapK'] at hset
   have : NeZero m := ⟨hm_pos.ne'⟩
   -- `μ / r` is a peripheral eigenvalue of the gauged transfer map, and it is
   -- not `1`, so the peripheral cyclic group has order at least two.
   have hradC : (rad : ℂ) ≠ 0 := by exact_mod_cast hrad.ne'
   have hμ'val : Module.End.HasEigenvalue
-      (Kraus.transferMap (ι := Fin (D * D)) (n := Fin n) K) (μ / rad) :=
-    MPSTensor.hasEigenvalue_transferMap_spectralUnitalGauge B ρ rad hρ hrad hμ
+      (Kraus.transferMap (ι := Fin D × Fin D) (n := Fin n) K) (μ / rad) :=
+    by
+      have h := MPSTensor.hasEigenvalue_transferMap_spectralUnitalGauge B' ρ rad hρ hrad
+        (by rw [Kraus.transferMap_reindexPhysical_equiv]; exact hμ)
+      rwa [show Kraus.transferMap K' = Kraus.transferMap K from hmapK'] at h
   have hμ'norm : ‖μ / (rad : ℂ)‖ = 1 := by
     rw [norm_div, hnorm, Complex.norm_real, Real.norm_eq_abs, abs_of_pos hrad,
       div_self hrad.ne']
@@ -275,7 +291,7 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
     by_contra hm1'
     have hm1 : m = 1 := le_antisymm (not_lt.mp hm1') hm_pos
     have hμ'mem : μ / (rad : ℂ) ∈
-        peripheralEigenvalues (Kraus.transferMap (ι := Fin (D * D)) (n := Fin n) K) :=
+        peripheralEigenvalues (Kraus.transferMap (ι := Fin D × Fin D) (n := Fin n) K) :=
       ⟨hμ'val, hμ'norm⟩
     rw [hset] at hμ'mem
     obtain ⟨k, hk⟩ := hμ'mem
@@ -285,7 +301,7 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
     rw [Fin.eq_zero k]
     simp
   -- The cyclic family of Wolf Theorem 6.6 for the gauged corner map.
-  have hperiph : peripheralEigenvalues (Kraus.transferMap (ι := Fin (D * D)) (n := Fin n) K) =
+  have hperiph : peripheralEigenvalues (Kraus.transferMap (ι := Fin D × Fin D) (n := Fin n) K) =
       Set.range (fun j : Fin m => γ ^ (j : ℕ)) := by
     rw [hset]
     ext z
@@ -295,9 +311,11 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
     exact hperiph
   obtain ⟨U, P, _, _, _, hPproj, hPsum, _, hcyclicLM⟩ :=
     Kraus.exists_cyclic_decomposition_of_irreducible_schwarz
-      (K := K) hUnital σ hσ hσfix hIrrMapLM hγprim hperiphLM
+      (K := K') hUnital' σ hσ hσfix' hIrrMapLM' hγprim (hmapK' ▸ hperiphLM)
+  have hcyclicLM' := hcyclicLM
+  simp only [hmapK'] at hcyclicLM
   have hcyclic : ∀ k : Fin m,
-      Kraus.transferMap (ι := Fin (D * D)) (n := Fin n) K (P (k + 1)) = P k :=
+      Kraus.transferMap (ι := Fin D × Fin D) (n := Fin n) K (P (k + 1)) = P k :=
     fun k => by exact hcyclicLM k
   -- Notation for the square root of the eigenvector and the scaling factor.
   set S : Matrix (Fin n) (Fin n) ℂ := CFC.sqrt ρ with hS
@@ -309,7 +327,7 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
     exact_mod_cast inv_ne_zero hs
   -- Words of the vertically viewed tensor act on `V * S` through words of the
   -- gauged corner letters.
-  have hword_int : ∀ w : List (Fin (D * D)),
+  have hword_int : ∀ w : List (Fin D × Fin D),
       Kraus.evalWord (verticalTensor M) w * V = V * Kraus.evalWord B w := by
     intro w
     induction w with
@@ -317,13 +335,13 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
     | cons v w ih =>
       rw [Kraus.evalWord_cons, Kraus.evalWord_cons, Matrix.mul_assoc, ih,
         ← Matrix.mul_assoc, hint v, Matrix.mul_assoc]
-  have hletterB : ∀ v : Fin (D * D), B v * S = c⁻¹ • (S * K v) := by
+  have hletterB : ∀ v : Fin D × Fin D, B v * S = c⁻¹ • (S * K v) := by
     intro v
     have hKv : K v = c • (S⁻¹ * B v * S) := rfl
     rw [hKv, Matrix.mul_smul, smul_smul, inv_mul_cancel₀ hcne, one_smul,
       show S * (S⁻¹ * B v * S) = B v * S from by
         rw [Matrix.mul_assoc S⁻¹, Matrix.mul_nonsing_inv_cancel_left _ _ hSdet]]
-  have hkeyB : ∀ w : List (Fin (D * D)),
+  have hkeyB : ∀ w : List (Fin D × Fin D),
       Kraus.evalWord B w * S = (c⁻¹ ^ w.length) • (S * Kraus.evalWord K w) := by
     intro w
     induction w with
@@ -340,7 +358,7 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
         _ = (c⁻¹ ^ (v :: w).length) • (S * (K v * Kraus.evalWord K w)) := by
             rw [Matrix.smul_mul, smul_smul, List.length_cons, pow_succ,
               mul_comm (c⁻¹ ^ w.length) c⁻¹, Matrix.mul_assoc]
-  have hkey : ∀ w : List (Fin (D * D)),
+  have hkey : ∀ w : List (Fin D × Fin D),
       Kraus.evalWord (verticalTensor M) w * (V * S) =
         (c⁻¹ ^ w.length) • (V * S * Kraus.evalWord K w) := by
     intro w
@@ -386,7 +404,10 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
   · -- Word invariance for full-period words: the sector returns to itself.
     intro w hw
     have hKw : Kraus.evalWord K w * P 0 = P 0 * Kraus.evalWord K w := by
-      have := MPSTensor.evalWord_mul_cyclicProj K P hPproj hPsum hcyclic w 0
+      have := MPSTensor.evalWord_mul_cyclicProj K' P hPproj hPsum hcyclicLM' (w.map e.symm) 0
+      rw [show K' = Kraus.reindexPhysical e K from funext fun i ↦ by
+          simpa [Kraus.reindexPhysical] using hK'K (e i), Kraus.evalWord_reindexPhysical, List.map_map,
+        Equiv.self_comp_symm, List.map_id, List.length_map] at this
       rwa [hw, Fin.natCast_self, sub_zero] at this
     have hAY : Kraus.evalWord (verticalTensor M) w * Y =
         Y * ((c⁻¹ ^ w.length) • Kraus.evalWord K w) := by
@@ -416,7 +437,7 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
     -- neighboring orthogonal sector.
     intro hEq
     -- Letter-level invariance from the tensor equation.
-    have hletter : ∀ v : Fin (D * D),
+    have hletter : ∀ v : Fin D × Fin D,
         (1 - π) * verticalTensor M v * π = 0 := by
       intro v
       have h1 : verticalTensor (M.ketLeftMul (1 - π)) v =
@@ -431,12 +452,12 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
             rw [Matrix.mul_sub, Matrix.mul_one]
         _ = 0 := by rw [← h1, sub_self]
     -- The displaced sector kills every gauged letter.
-    have hPK : ∀ v : Fin (D * D), P (0 - 1) * K v = 0 := by
+    have hPK : ∀ v : Fin D × Fin D, P (0 - 1) * K v = 0 := by
       intro v
       -- Single-letter action on `Y`.
       have hKv0 : K v * P 0 = P (0 - 1) * K v := by
-        have := Kraus.kraus_mul_cyclicProj K P hPproj hPsum hcyclicLM v (0 - 1)
-        rwa [sub_add_cancel] at this
+        have := Kraus.kraus_mul_cyclicProj K' P hPproj hPsum hcyclicLM' (e.symm v) (0 - 1)
+        rwa [sub_add_cancel, hK'K] at this
       have hsingle : verticalTensor M v * Y =
           c⁻¹ • (V * S * (P (0 - 1) * K v)) := by
         have hkey1 := hkey [v]
@@ -492,17 +513,17 @@ theorem exists_displaced_invariant_projector_of_periodic_vector
         _ = 0 := by rw [← Matrix.mul_assoc, horth, Matrix.zero_mul]
     -- The cyclic action then annihilates the displaced sector, which is
     -- impossible: no cyclic projection vanishes.
-    have hmap0 : Kraus.transferMap (ι := Fin (D * D)) (n := Fin n) K (P 0) = 0 := by
+    have hmap0 : Kraus.transferMap (ι := Fin D × Fin D) (n := Fin n) K (P 0) = 0 := by
       rw [Kraus.transferMap_apply]
       refine Finset.sum_eq_zero fun v _ => ?_
       have hKv0 : K v * P 0 = P (0 - 1) * K v := by
-        have := Kraus.kraus_mul_cyclicProj K P hPproj hPsum hcyclicLM v (0 - 1)
-        rwa [sub_add_cancel] at this
+        have := Kraus.kraus_mul_cyclicProj K' P hPproj hPsum hcyclicLM' (e.symm v) (0 - 1)
+        rwa [sub_add_cancel, hK'K] at this
       rw [hKv0, hPK v, Matrix.zero_mul]
     have hP1 : P (0 - 1) = 0 := by
       have := hcyclic (0 - 1)
       rwa [sub_add_cancel, hmap0, eq_comm] at this
-    exact Kraus.cyclicProj_ne_zero K P hPsum hcyclicLM (0 - 1) hP1
+    exact Kraus.cyclicProj_ne_zero K' P hPsum hcyclicLM' (0 - 1) hP1
 
 
 /-- **The periodic-sector step for a single-letter injective matrix product

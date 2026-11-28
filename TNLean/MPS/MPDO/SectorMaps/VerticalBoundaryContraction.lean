@@ -41,15 +41,15 @@ namespace MPSTensor
 variable {d D R : ℕ}
 
 /-- Contract a matrix $X$ into the paired bond index of a tensor whose
-letters are indexed by $\operatorname{Fin}(D^2)$.  The order
+letters are indexed by the bond pairs $(a, b)$.  The order
 $X_{ba} A_{ab}$ agrees with the trace convention
 $\operatorname{tr}(A_{ab}X)$.
 
 For a vertical BNT block $M_\alpha$, this is the operator denoted
 $M_\alpha(X)$ in arXiv:1606.00608, Appendix C.4, lines 1955--1979. -/
-def contractBondMatrix (A : MPSTensor (D * D) d) :
+def contractBondMatrix (A : MPOTensor D d) :
     Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin d) (Fin d) ℂ where
-  toFun X := ∑ ab : Fin (D * D), X ab.modNat ab.divNat • A ab
+  toFun X := ∑ ab : Fin D × Fin D, X ab.2 ab.1 • A ab
   map_add' X Y := by
     ext i j
     simp [Matrix.sum_apply, Matrix.smul_apply, add_mul, Finset.sum_add_distrib]
@@ -58,10 +58,10 @@ def contractBondMatrix (A : MPSTensor (D * D) d) :
     simp [Matrix.sum_apply, Matrix.smul_apply, Finset.mul_sum, mul_assoc]
 
 @[simp]
-theorem contractBondMatrix_apply (A : MPSTensor (D * D) d)
+theorem contractBondMatrix_apply (A : MPOTensor D d)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     contractBondMatrix A X =
-      ∑ ab : Fin (D * D), X ab.modNat ab.divNat • A ab :=
+      ∑ ab : Fin D × Fin D, X ab.2 ab.1 • A ab :=
   rfl
 
 /-- Contraction commutes with multiplying every tensor letter on the left and
@@ -69,7 +69,7 @@ right by fixed matrices.
 
 Equivalently, if $B_{ab}=L A_{ab}K$, then $B(X)=L A(X)K$. -/
 theorem contractBondMatrix_mul_mul
-    (A : MPSTensor (D * D) d) (L : Matrix (Fin R) (Fin d) ℂ)
+    (A : MPOTensor D d) (L : Matrix (Fin R) (Fin d) ℂ)
     (K : Matrix (Fin d) (Fin R) ℂ) (X : Matrix (Fin D) (Fin D) ℂ) :
     contractBondMatrix (fun ab ↦ L * A ab * K) X =
       L * contractBondMatrix A X * K := by
@@ -84,7 +84,7 @@ $\bigoplus_\alpha \mu_\alpha\otimes M_\alpha(X)$ in
 arXiv:1606.00608, Appendix C.4, lines 1955--1979, with the diagonal entries of
 each $\mu_\alpha$ written as repeated blocks. -/
 theorem contractBondMatrix_toTensorFromBlocks {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor (D * D) (dim k))
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPOTensor D (dim k))
     (X : Matrix (Fin D) (Fin D) ℂ) :
     contractBondMatrix (toTensorFromBlocks μ A) X =
       Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv
@@ -121,8 +121,7 @@ theorem contractBondMatrix_verticalTensor_eq_physClose1 (M : MPOTensor d D) :
   apply LinearMap.ext
   intro X
   ext i j
-  rw [MPSTensor.contractBondMatrix_apply, Matrix.sum_apply]
-  rw [← finProdFinEquiv.sum_comp, Fintype.sum_prod_type]
+  rw [MPSTensor.contractBondMatrix_apply, Matrix.sum_apply, Fintype.sum_prod_type]
   simp [Matrix.trace, Matrix.mul_apply, mul_comm]
 
 /-- The bond-matrix contraction of an assembled vertical tensor is the
@@ -131,7 +130,7 @@ weighted block diagonal of the contractions into its repeated BNT blocks.
 Source: arXiv:1606.00608, Appendix C.4, lines 1955--1979. -/
 theorem contractBondMatrix_verticalAssembledTensor {g : ℕ}
     (dim mult : Fin g → ℕ) (weight : (α : Fin g) → Fin (mult α) → ℂ)
-    (A : (α : Fin g) → MPSTensor (D * D) (dim α))
+    (A : (α : Fin g) → MPOTensor D (dim α))
     (X : Matrix (Fin D) (Fin D) ℂ) :
     MPSTensor.contractBondMatrix (verticalAssembledTensor dim mult weight A) X =
       Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv
@@ -148,14 +147,14 @@ closure $M(X)$; the contraction on the right is $B(X)$.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 1955--1979. -/
 theorem mul_physClose1_mul_conjTranspose_of_vertical_forward
-    (M : MPOTensor d D) (B : MPSTensor (D * D) R)
+    (M : MPOTensor d D) (B : MPOTensor D R)
     (U : Matrix (Fin R) (Fin d) ℂ)
     (hForward : ∀ ab, U * verticalTensor M ab * Uᴴ = B ab)
     (X : Matrix (Fin D) (Fin D) ℂ) :
     U * physClose1 M X * Uᴴ = MPSTensor.contractBondMatrix B X := by
   rw [← contractBondMatrix_verticalTensor_eq_physClose1]
   rw [← MPSTensor.contractBondMatrix_mul_mul]
-  apply congrArg (fun C : MPSTensor (D * D) R ↦
+  apply congrArg (fun C : MPOTensor D R ↦
     MPSTensor.contractBondMatrix C X)
   funext ab
   exact hForward ab
@@ -168,7 +167,7 @@ Source: arXiv:1606.00608, Appendix C.4, lines 1955--1979. -/
 theorem mul_physClose1_mul_conjTranspose_of_verticalAssembledTensor
     (M : MPOTensor d D) {g : ℕ} (dim mult : Fin g → ℕ)
     (weight : (α : Fin g) → Fin (mult α) → ℂ)
-    (A : (α : Fin g) → MPSTensor (D * D) (dim α))
+    (A : (α : Fin g) → MPOTensor D (dim α))
     (U : Matrix
       (Fin (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q))
       (Fin d) ℂ)
@@ -189,7 +188,7 @@ as $U^\dagger B(X)U$ after bond-matrix contraction.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 1955--1979. -/
 theorem physClose1_eq_of_vertical_reconstruction
-    (M : MPOTensor d D) (B : MPSTensor (D * D) R)
+    (M : MPOTensor d D) (B : MPOTensor D R)
     (U : Matrix (Fin R) (Fin d) ℂ)
     (hReconstruct : ∀ ab, verticalTensor M ab = Uᴴ * B ab * U)
     (X : Matrix (Fin D) (Fin D) ℂ) :
@@ -198,7 +197,7 @@ theorem physClose1_eq_of_vertical_reconstruction
   calc
     MPSTensor.contractBondMatrix (verticalTensor M) X =
         MPSTensor.contractBondMatrix (fun ab ↦ Uᴴ * B ab * U) X := by
-      apply congrArg (fun C : MPSTensor (D * D) d ↦
+      apply congrArg (fun C : MPOTensor D d ↦
         MPSTensor.contractBondMatrix C X)
       funext ab
       exact hReconstruct ab
@@ -212,7 +211,7 @@ Source: arXiv:1606.00608, Appendix C.4, lines 1955--1979. -/
 theorem physClose1_eq_of_verticalAssembledTensor_reconstruction
     (M : MPOTensor d D) {g : ℕ} (dim mult : Fin g → ℕ)
     (weight : (α : Fin g) → Fin (mult α) → ℂ)
-    (A : (α : Fin g) → MPSTensor (D * D) (dim α))
+    (A : (α : Fin g) → MPOTensor D (dim α))
     (U : Matrix
       (Fin (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q))
       (Fin d) ℂ)

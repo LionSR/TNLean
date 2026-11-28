@@ -190,24 +190,22 @@ protected theorem IsMPDO.stackedTensor {M : MPOTensor d D} (hM : IsMPDO M)
 
 /-- Two MPO tensors with equal vertically viewed letters are equal. -/
 theorem ext_of_verticalTensor {D₀ : ℕ} {X Y : MPOTensor d D₀}
-    (h : ∀ v : Fin (D₀ * D₀), verticalTensor X v = verticalTensor Y v) :
+    (h : ∀ v : Fin D₀ × Fin D₀, verticalTensor X v = verticalTensor Y v) :
     X = Y := by
   funext ⟨i, j⟩
   ext a b
-  have h' : verticalTensor X (finProdFinEquiv (a, b)) i j =
-      verticalTensor Y (finProdFinEquiv (a, b)) i j := by rw [h]
-  simpa only [verticalTensor_apply, MPSTensor.finProdFinEquiv_divNat,
-    MPSTensor.finProdFinEquiv_modNat] using h'
+  have h' : verticalTensor X (a, b) i j = verticalTensor Y (a, b) i j := by rw [h]
+  simpa only [verticalTensor_apply] using h'
 
 /-- The vertically viewed letters of the identity tensor are the identity
 operator on the physical space. -/
-theorem verticalTensor_idTensor (v : Fin (1 * 1)) :
+theorem verticalTensor_idTensor (v : Fin 1 × Fin 1) :
     verticalTensor (idTensor d) v = 1 := by
   ext i j
   simp only [verticalTensor_apply, idTensor]
   by_cases h : i = j
   · subst h
-    rw [ite_eq_left rfl, Subsingleton.elim v.modNat v.divNat, Matrix.one_apply_eq,
+    rw [ite_eq_left rfl, Subsingleton.elim v.2 v.1, Matrix.one_apply_eq,
       Matrix.one_apply_eq]
   · rw [ite_eq_right h, Matrix.zero_apply, Matrix.one_apply_ne h]
 
@@ -215,21 +213,19 @@ theorem verticalTensor_idTensor (v : Fin (1 * 1)) :
 layers' vertically viewed letters: stacking layers concatenates the vertical
 words (arXiv:1606.00608, line 943, for the vertical view). -/
 theorem verticalTensor_layerMul (M : MPOTensor d D) (M' : MPOTensor d D')
-    (v : Fin ((D * D') * (D * D'))) :
+    (v : Fin (D * D') × Fin (D * D')) :
     verticalTensor (layerMul M M') v =
-      verticalTensor M (finProdFinEquiv (v.divNat.divNat, v.modNat.divNat)) *
-        verticalTensor M' (finProdFinEquiv (v.divNat.modNat, v.modNat.modNat)) := by
+      verticalTensor M (v.1.divNat, v.2.divNat) * verticalTensor M' (v.1.modNat, v.2.modNat) := by
   ext i j
   rw [Matrix.mul_apply]
-  simp only [verticalTensor_apply, layerMul_apply,
-    MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
+  simp only [verticalTensor_apply, layerMul_apply]
 
 /-- Every vertically viewed letter of the $p$-fold stack is the evaluation
 of a length-$p$ word of the vertically viewed tensor: stacking $p$ layers
 concatenates $p$ vertical letters. -/
 theorem exists_word_verticalTensor_stackedTensor (M : MPOTensor d D) :
-    ∀ (p : ℕ) (v : Fin (D ^ p * D ^ p)),
-      ∃ w : List (Fin (D * D)), w.length = p ∧
+    ∀ (p : ℕ) (v : Fin (D ^ p) × Fin (D ^ p)),
+      ∃ w : List (Fin D × Fin D), w.length = p ∧
         verticalTensor (stackedTensor M p) v =
           Kraus.evalWord (verticalTensor M) w := by
   intro p
@@ -240,10 +236,8 @@ theorem exists_word_verticalTensor_stackedTensor (M : MPOTensor d D) :
   | succ p ih =>
     intro v
     obtain ⟨w, hlen, hw⟩ :=
-      ih (finProdFinEquiv ((v.divNat.divNat : Fin (D ^ p)),
-        (v.modNat.divNat : Fin (D ^ p))))
-    refine ⟨w ++ [finProdFinEquiv ((v.divNat.modNat : Fin D),
-      (v.modNat.modNat : Fin D))], by simp [hlen], ?_⟩
+      ih ((v.1.divNat : Fin (D ^ p)), (v.2.divNat : Fin (D ^ p)))
+    refine ⟨w ++ [((v.1.modNat : Fin D), (v.2.modNat : Fin D))], by simp [hlen], ?_⟩
     rw [Kraus.evalWord_append]
     simp only [Kraus.evalWord_cons, Kraus.evalWord_nil, Matrix.mul_one]
     rw [← hw]
@@ -257,7 +251,7 @@ invariance of a cyclic sector under $p$ vertical layers to the hypothesis at
 arXiv:1606.00608, lines 1874--1887, applied to the stacked tensor. -/
 theorem stackedTensor_ketLeftMul_invariant (M : MPOTensor d D) {p : ℕ}
     {Q : Matrix (Fin d) (Fin d) ℂ}
-    (hQ : ∀ w : List (Fin (D * D)), w.length = p →
+    (hQ : ∀ w : List (Fin D × Fin D), w.length = p →
       Q * Kraus.evalWord (verticalTensor M) w =
         Q * Kraus.evalWord (verticalTensor M) w * Q) :
     (stackedTensor M p).ketLeftMul Q =
@@ -279,7 +273,7 @@ gives the commutation family at lines 1890--1891. -/
 noncomputable def periodicSectorProjectorOfCyclicData (M : MPOTensor d D)
     (hM : IsMPDO M) {p : ℕ} (hp : p ≠ 0) {Q : Matrix (Fin d) (Fin d) ℂ}
     (hQherm : Q.IsHermitian) (hQidem : IsIdempotentElem Q)
-    (hQword : ∀ w : List (Fin (D * D)), w.length = p →
+    (hQword : ∀ w : List (Fin D × Fin D), w.length = p →
       Q * Kraus.evalWord (verticalTensor M) w =
         Q * Kraus.evalWord (verticalTensor M) w * Q)
     (hQnc : ∀ N : ℕ, ¬ Commute (firstSiteMatrix Q N) (mpo M (N + 1))) :
@@ -329,17 +323,17 @@ requires the supplied projector to fail to commute with the density operator at
 every length. The direct BNT-refined theorem needs only one noncommuting length;
 see `docs/paper-gaps/cpgsv17_periodic_sector_projector.tex`. -/
 def PeriodicVectorYieldsCyclicProjector (M : MPOTensor d D) : Prop :=
-  ∀ ⦃n : ℕ⦄ (V : Matrix (Fin d) (Fin n) ℂ) (B : MPSTensor (D * D) n)
+  ∀ ⦃n : ℕ⦄ (V : Matrix (Fin d) (Fin n) ℂ) (B : MPOTensor D n)
     (ρ : Matrix (Fin n) (Fin n) ℂ) (r : ℝ),
-    Vᴴ * V = 1 → (∀ v : Fin (D * D), verticalTensor M v * V = V * B v) →
+    Vᴴ * V = 1 → (∀ v : Fin D × Fin D, verticalTensor M v * V = V * B v) →
     Kraus.IsIrreducibleFamily B → ρ.PosDef → 0 < r →
-    Kraus.transferMap (ι := Fin (D * D)) (n := Fin n) B ρ = (r : ℂ) • ρ →
+    Kraus.transferMap (ι := Fin D × Fin D) (n := Fin n) B ρ = (r : ℂ) • ρ →
     ∀ μ : ℂ,
-      Module.End.HasEigenvalue (Kraus.transferMap (ι := Fin (D * D)) (n := Fin n) B) μ →
+      Module.End.HasEigenvalue (Kraus.transferMap (ι := Fin D × Fin D) (n := Fin n) B) μ →
       ‖μ‖ = r → μ ≠ (r : ℂ) →
       ∃ (p : ℕ) (Q : Matrix (Fin d) (Fin d) ℂ),
         p ≠ 0 ∧ Q.IsHermitian ∧ IsIdempotentElem Q ∧
-        (∀ w : List (Fin (D * D)), w.length = p →
+        (∀ w : List (Fin D × Fin D), w.length = p →
           Q * Kraus.evalWord (verticalTensor M) w =
             Q * Kraus.evalWord (verticalTensor M) w * Q) ∧
         ∀ N : ℕ, ¬ Commute (firstSiteMatrix Q N) (mpo M (N + 1))

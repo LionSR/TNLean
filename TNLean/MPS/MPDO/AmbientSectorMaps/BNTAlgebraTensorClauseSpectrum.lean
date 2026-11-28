@@ -117,11 +117,11 @@ structure TwoSiteExactSectorGauge {M : MPOTensor d D}
   /-- The paired two-site tensor is the exact conjugate of the one-site tensor,
   with no residual scalar phase, as in arXiv:1606.00608, Appendix C.4,
   lines 2053--2057. -/
-  tensor_eq : ∀ (γ : Fin H.labelCount) (i : Fin (D * D)),
+  tensor_eq : ∀ (γ : Fin H.labelCount) (i : Fin D × Fin D),
     decomposition.tensor (relabel γ) i =
       (gauge γ : Matrix (Fin (decomposition.bondDim (relabel γ)))
         (Fin (decomposition.bondDim (relabel γ))) ℂ) *
-      (cast (congrArg (MPSTensor (D * D)) (bondDim_eq γ)) (H.tensor γ)) i *
+      (cast (congrArg (MPOTensor D) (bondDim_eq γ)) (H.tensor γ)) i *
       (↑((gauge γ)⁻¹) : Matrix (Fin (decomposition.bondDim (relabel γ)))
         (Fin (decomposition.bondDim (relabel γ))) ℂ)
 
@@ -214,7 +214,7 @@ noncomputable def toTwoSiteExactSectorGauge
       change (0 : ℂ) < verticalMultiplicityTrace H.weight γ
       exact verticalMultiplicityTrace_pos H.multiplicity_pos H.weight_pos γ
     exact hTracePos.ne' ((hProductSum γ).symm.trans hsumZero)
-  let P : MPSTensor.SectorDecomposition (Fin (D * D)) := {
+  let P : MPSTensor.SectorDecomposition (Fin D × Fin D) := {
     basisCount := H.labelCount
     basisDim := H.bondDim
     basis := H.tensor
@@ -225,19 +225,19 @@ noncomputable def toTwoSiteExactSectorGauge
       weight_ne_zero := fun γ r ↦ (hProductPos γ r).ne' }
   }
   have hBlockedExpansion : ∀ (L : ℕ), 0 < L →
-      mpo (verticalBNTMPO (verticalTensor (blockTwo M))) L =
-        ∑ γ, P.coeff L γ • mpo (verticalBNTMPO (H.tensor γ)) L := by
+      mpo (verticalTensor (blockTwo M)) L =
+        ∑ γ, P.coeff L γ • mpo (H.tensor γ) L := by
     intro L hL
-    have hOne := mpo_verticalBNTMPO_eq_sum_of_coisometry_reconstruction
+    have hOne := mpo_eq_sum_of_coisometry_reconstruction
       H.weight H.tensor (verticalTensor M) H.verticalCoisometry
       H.coisometry H.reconstruction hL
     have hSecond :
-        mpo (verticalBNTMPO (verticalTensor (blockTwo M))) L =
+        mpo (verticalTensor (blockTwo M)) L =
           ∑ α, ∑ β,
             ((∑ q, H.weight α q ^ L) * (∑ r, H.weight β r ^ L)) •
-              (mpo (verticalBNTMPO (H.tensor α)) L *
-                mpo (verticalBNTMPO (H.tensor β)) L) := by
-      rw [verticalBNTMPO_verticalTensor_blockTwo, mpo_mulTensor, hOne]
+              (mpo (H.tensor α) L *
+                mpo (H.tensor β) L) := by
+      rw [verticalTensor_blockTwo, mpo_mulTensor, hOne]
       rw [Finset.sum_mul]
       apply Finset.sum_congr rfl
       intro α _
@@ -246,10 +246,10 @@ noncomputable def toTwoSiteExactSectorGauge
       intro β _
       rw [Matrix.smul_mul, Matrix.mul_smul, smul_smul]
     have hProduct (α β : Fin H.labelCount) :
-        mpo (verticalBNTMPO (H.tensor α)) L *
-            mpo (verticalBNTMPO (H.tensor β)) L =
+        mpo (H.tensor α) L *
+            mpo (H.tensor β) L =
           ∑ γ, chi.tracePowerCoeff α β γ L •
-            mpo (verticalBNTMPO (H.tensor γ)) L := by
+            mpo (H.tensor γ) L := by
       change H.operators.operator L α * H.operators.operator L β =
         ∑ γ, chi.tracePowerCoeff α β γ L • H.operators.operator L γ
       simpa only [chi, BNTLabelCoefficientFamily.ofChi_coeff,
@@ -263,12 +263,12 @@ noncomputable def toTwoSiteExactSectorGauge
           (((∑ q, H.weight α q ^ L) *
             (∑ r, H.weight β r ^ L)) *
             chi.tracePowerCoeff α β γ L) •
-              mpo (verticalBNTMPO (H.tensor γ)) L) =
+              mpo (H.tensor γ) L) =
           ∑ α, ∑ γ, ∑ β,
             (((∑ q, H.weight α q ^ L) *
               (∑ r, H.weight β r ^ L)) *
               chi.tracePowerCoeff α β γ L) •
-                mpo (verticalBNTMPO (H.tensor γ)) L := by
+                mpo (H.tensor γ) L := by
         apply Finset.sum_congr rfl
         intro α _
         rw [Finset.sum_comm]
@@ -276,13 +276,13 @@ noncomputable def toTwoSiteExactSectorGauge
             (((∑ q, H.weight α q ^ L) *
               (∑ r, H.weight β r ^ L)) *
               chi.tracePowerCoeff α β γ L) •
-                mpo (verticalBNTMPO (H.tensor γ)) L := by
+                mpo (H.tensor γ) L := by
         rw [Finset.sum_comm]
       _ = ∑ γ, (∑ α, ∑ β,
             ((∑ q, H.weight α q ^ L) *
               (∑ r, H.weight β r ^ L)) *
               chi.tracePowerCoeff α β γ L) •
-                mpo (verticalBNTMPO (H.tensor γ)) L := by
+                mpo (H.tensor γ) L := by
         apply Finset.sum_congr rfl
         intro γ _
         symm
@@ -291,16 +291,16 @@ noncomputable def toTwoSiteExactSectorGauge
               ((∑ q, H.weight α q ^ L) *
                 (∑ r, H.weight β r ^ L)) *
                 chi.tracePowerCoeff α β γ L) •
-              mpo (verticalBNTMPO (H.tensor γ)) L =
+              mpo (H.tensor γ) L =
             ∑ α, (∑ β,
               ((∑ q, H.weight α q ^ L) *
                 (∑ r, H.weight β r ^ L)) *
                 chi.tracePowerCoeff α β γ L) •
-              mpo (verticalBNTMPO (H.tensor γ)) L := by
+              mpo (H.tensor γ) L := by
                 exact map_sum
                   ((smulAddHom ℂ
                     (Matrix (Fin L → Fin D) (Fin L → Fin D) ℂ)).flip
-                      (mpo (verticalBNTMPO (H.tensor γ)) L))
+                      (mpo (H.tensor γ) L))
                   (fun α ↦ ∑ β,
                     ((∑ q, H.weight α q ^ L) *
                       (∑ r, H.weight β r ^ L)) *
@@ -310,19 +310,19 @@ noncomputable def toTwoSiteExactSectorGauge
               (((∑ q, H.weight α q ^ L) *
                 (∑ r, H.weight β r ^ L)) *
                 chi.tracePowerCoeff α β γ L) •
-              mpo (verticalBNTMPO (H.tensor γ)) L := by
+              mpo (H.tensor γ) L := by
                 apply Finset.sum_congr rfl
                 intro α _
                 exact map_sum
                   ((smulAddHom ℂ
                     (Matrix (Fin L → Fin D) (Fin L → Fin D) ℂ)).flip
-                      (mpo (verticalBNTMPO (H.tensor γ)) L))
+                      (mpo (H.tensor γ) L))
                   (fun β ↦ ((∑ q, H.weight α q ^ L) *
                     (∑ r, H.weight β r ^ L)) *
                     chi.tracePowerCoeff α β γ L)
                   Finset.univ
       _ = ∑ γ, P.coeff L γ •
-            mpo (verticalBNTMPO (H.tensor γ)) L := by
+            mpo (H.tensor γ) L := by
         apply Finset.sum_congr rfl
         intro γ _
         congr 1
@@ -350,22 +350,16 @@ noncomputable def toTwoSiteExactSectorGauge
   have hPBlocked : MPTensor.SameMPV₂Pos
       (verticalTensor (blockTwo M)) P.toTensor := by
     intro L hL σ
-    let ket : Fin L → Fin D := fun l ↦ (finProdFinEquiv.symm (σ l)).1
-    let bra : Fin L → Fin D := fun l ↦ (finProdFinEquiv.symm (σ l)).2
+    let ket : Fin L → Fin D := fun l ↦ (σ l).1
+    let bra : Fin L → Fin D := fun l ↦ (σ l).2
     have hEntry := congrFun (congrFun (hBlockedExpansion L hL) ket) bra
-    rw [← mpv_pair (verticalBNTMPO (verticalTensor (blockTwo M))) ket bra,
-      mpv_verticalBNTMPO] at hEntry
-    simp only [Matrix.sum_apply, Matrix.smul_apply, ← mpv_pair, mpv_verticalBNTMPO,
-      smul_eq_mul] at hEntry
-    have hPair : (fun l ↦ finProdFinEquiv (ket l, bra l)) = σ := by
-      funext l
-      exact finProdFinEquiv.apply_symm_apply (σ l)
-    rw [hPair] at hEntry
+    rw [← mpv_pair (verticalTensor (blockTwo M)) ket bra] at hEntry
+    simp only [Matrix.sum_apply, Matrix.smul_apply, ← mpv_pair, smul_eq_mul] at hEntry
     exact hEntry.trans (P.mpv_toTensor_eq_sum_coeff σ).symm
   let D₂ : CPSVVerticalDecomposition (blockTwo M) := Classical.choice
     ((isCPSVCanonicalForm_blockTwo hCanonical).hasVerticalBNTGroupingInputs
       (blockTwo M) hM.blockTwo).exists_cpsvVerticalDecomposition
-  let Q : MPSTensor.SectorDecomposition (Fin (D * D)) := {
+  let Q : MPSTensor.SectorDecomposition (Fin D × Fin D) := {
     basisCount := D₂.labelCount
     basisDim := D₂.bondDim
     basis := D₂.tensor
@@ -463,7 +457,7 @@ noncomputable def toTwoSiteExactSectorGauge
   have hGaugeExists : ∀ γ : Fin H.labelCount,
       ∃ hdim : H.bondDim γ = D₂.bondDim (sigma γ),
         MPTensor.GaugePhaseEquiv
-          (cast (congrArg (MPSTensor (D * D)) hdim) (H.tensor γ))
+          (cast (congrArg (MPOTensor D) hdim) (H.tensor γ))
           (D₂.tensor (sigma γ)) := by
     intro γ
     exact (hfPhase γ).dim_eq_and_gaugePhaseEquiv_of_isNormalTensor
@@ -472,22 +466,22 @@ noncomputable def toTwoSiteExactSectorGauge
   choose hdim hGaugePhase using hGaugeExists
   choose gauge zeta hzetaNe hTensor using hGaugePhase
   have hzetaMPV : ∀ (γ : Fin H.labelCount) (N : ℕ), 0 < N →
-      ∀ σ : Fin N → Fin (D * D),
+      ∀ σ : Fin N → Fin D × Fin D,
         MPTensor.mpv (D₂.tensor (sigma γ)) σ =
           zeta γ ^ N * MPTensor.mpv (H.tensor γ) σ := by
     intro γ N _hN σ
     rw [MPSTensor.mpv_eq_pow_mul_of_gaugePhase
-      (A := cast (congrArg (MPSTensor (D * D)) (hdim γ)) (H.tensor γ))
+      (A := cast (congrArg (MPOTensor D) (hdim γ)) (H.tensor γ))
       (B := D₂.tensor (sigma γ)) (gauge γ) (zeta γ) (hTensor γ) N σ,
       MPSTensor.mpv_cast_dim (hdim γ) (H.tensor γ) N σ]
   have hzetaNorm : ∀ γ, ‖zeta γ‖ = 1 := by
     intro γ
     have hHH : Tendsto
-        (fun N ↦ ‖MPTensor.mpvOverlap (α := Fin (D * D))
+        (fun N ↦ ‖MPTensor.mpvOverlap (α := Fin D × Fin D)
           (H.tensor γ) (H.tensor γ) N‖) atTop (nhds (1 : ℝ)) := by
       simpa using (H.isCPSVBNT.blocks_normal γ).selfOverlap_tendsto_one.norm
     have hDD : Tendsto
-        (fun N ↦ ‖MPTensor.mpvOverlap (α := Fin (D * D))
+        (fun N ↦ ‖MPTensor.mpvOverlap (α := Fin D × Fin D)
           (D₂.tensor (f γ)) (D₂.tensor (f γ)) N‖)
         atTop (nhds (1 : ℝ)) := by
       simpa using
@@ -501,57 +495,57 @@ noncomputable def toTwoSiteExactSectorGauge
   have hLI : ∀ᶠ L in atTop,
       LinearIndependent ℂ
         (fun γ : Fin H.labelCount ↦
-          MPSTensor.mpvState (α := Fin (D * D)) (H.tensor γ) L) := by
+          MPSTensor.mpvState (α := Fin D × Fin D) (H.tensor γ) L) := by
     obtain ⟨L₀, hL₀⟩ := H.isCPSVBNT.eventually_li
     exact Filter.eventually_atTop.mpr
       ⟨L₀ + 1, fun L hL ↦ hL₀ L (by omega)⟩
   have hStateExpansionEq : ∀ᶠ L in atTop,
       ∑ γ : Fin H.labelCount,
-          a L γ • MPSTensor.mpvState (α := Fin (D * D)) (H.tensor γ) L =
+          a L γ • MPSTensor.mpvState (α := Fin D × Fin D) (H.tensor γ) L =
         ∑ γ : Fin H.labelCount,
-          b L γ • MPSTensor.mpvState (α := Fin (D * D)) (H.tensor γ) L := by
+          b L γ • MPSTensor.mpvState (α := Fin D × Fin D) (H.tensor γ) L := by
     refine Filter.eventually_atTop.mpr ⟨1, ?_⟩
     intro L hL
     have hLPos : 0 < L := Nat.zero_lt_of_lt hL
-    have hPState : MPSTensor.mpvState (α := Fin (D * D)) P.toTensor L =
+    have hPState : MPSTensor.mpvState (α := Fin D × Fin D) P.toTensor L =
         ∑ γ : Fin H.labelCount, P.coeff L γ •
-          MPSTensor.mpvState (α := Fin (D * D)) (H.tensor γ) L := by
-      refine MPSTensor.mpvState_eq_sum_of_decomp (α := Fin (D * D))
+          MPSTensor.mpvState (α := Fin D × Fin D) (H.tensor γ) L := by
+      refine MPSTensor.mpvState_eq_sum_of_decomp (α := Fin D × Fin D)
         P.toTensor H.tensor (N := L) (P.coeff L) ?_
       intro σ
       simpa [smul_eq_mul] using P.mpv_toTensor_eq_sum_coeff σ
-    have hQState : MPSTensor.mpvState (α := Fin (D * D)) Q.toTensor L =
+    have hQState : MPSTensor.mpvState (α := Fin D × Fin D) Q.toTensor L =
         ∑ δ : Fin D₂.labelCount, Q.coeff L δ •
-          MPSTensor.mpvState (α := Fin (D * D)) (D₂.tensor δ) L := by
-      refine MPSTensor.mpvState_eq_sum_of_decomp (α := Fin (D * D))
+          MPSTensor.mpvState (α := Fin D × Fin D) (D₂.tensor δ) L := by
+      refine MPSTensor.mpvState_eq_sum_of_decomp (α := Fin D × Fin D)
         Q.toTensor D₂.tensor (N := L) (Q.coeff L) ?_
       intro σ
       simpa [smul_eq_mul] using Q.mpv_toTensor_eq_sum_coeff σ
-    have hPQState : MPSTensor.mpvState (α := Fin (D * D)) P.toTensor L =
-        MPSTensor.mpvState (α := Fin (D * D)) Q.toTensor L := by
+    have hPQState : MPSTensor.mpvState (α := Fin D × Fin D) P.toTensor L =
+        MPSTensor.mpvState (α := Fin D × Fin D) Q.toTensor L := by
       apply PiLp.ext
       intro σ
       simpa [MPSTensor.mpvState_apply] using
         (hPBlocked.symm.trans hQBlocked) L hLPos σ
     have hQSubst :
         (∑ δ : Fin D₂.labelCount, Q.coeff L δ •
-            MPSTensor.mpvState (α := Fin (D * D)) (D₂.tensor δ) L) =
+            MPSTensor.mpvState (α := Fin D × Fin D) (D₂.tensor δ) L) =
           ∑ γ : Fin H.labelCount,
             (zeta γ ^ L * Q.coeff L (sigma γ)) •
-              MPSTensor.mpvState (α := Fin (D * D)) (H.tensor γ) L := by
+              MPSTensor.mpvState (α := Fin D × Fin D) (H.tensor γ) L := by
       calc
         (∑ δ : Fin D₂.labelCount, Q.coeff L δ •
-            MPSTensor.mpvState (α := Fin (D * D)) (D₂.tensor δ) L) =
+            MPSTensor.mpvState (α := Fin D × Fin D) (D₂.tensor δ) L) =
           ∑ δ : Fin D₂.labelCount,
             (zeta (sigma.symm δ) ^ L * Q.coeff L δ) •
-              MPSTensor.mpvState (α := Fin (D * D))
+              MPSTensor.mpvState (α := Fin D × Fin D)
                 (H.tensor (sigma.symm δ)) L := by
             apply Finset.sum_congr rfl
             intro δ _
-            have hMpvState : MPSTensor.mpvState (α := Fin (D * D))
+            have hMpvState : MPSTensor.mpvState (α := Fin D × Fin D)
                 (D₂.tensor δ) L =
               zeta (sigma.symm δ) ^ L •
-                MPSTensor.mpvState (α := Fin (D * D))
+                MPSTensor.mpvState (α := Fin D × Fin D)
                   (H.tensor (sigma.symm δ)) L := by
               apply PiLp.ext
               intro σ
@@ -564,26 +558,26 @@ noncomputable def toTwoSiteExactSectorGauge
             ring
         _ = ∑ γ : Fin H.labelCount,
             (zeta γ ^ L * Q.coeff L (sigma γ)) •
-              MPSTensor.mpvState (α := Fin (D * D)) (H.tensor γ) L := by
+              MPSTensor.mpvState (α := Fin D × Fin D) (H.tensor γ) L := by
             simpa only [Equiv.apply_symm_apply] using
               (Equiv.sum_comp sigma.symm
                 (fun γ : Fin H.labelCount ↦
                   (zeta γ ^ L * Q.coeff L (sigma γ)) •
-                    MPSTensor.mpvState (α := Fin (D * D)) (H.tensor γ) L))
+                    MPSTensor.mpvState (α := Fin D × Fin D) (H.tensor γ) L))
     calc
-      ∑ γ, a L γ • MPSTensor.mpvState (α := Fin (D * D)) (H.tensor γ) L =
-          MPSTensor.mpvState (α := Fin (D * D)) P.toTensor L := by
+      ∑ γ, a L γ • MPSTensor.mpvState (α := Fin D × Fin D) (H.tensor γ) L =
+          MPSTensor.mpvState (α := Fin D × Fin D) P.toTensor L := by
         simpa [a] using hPState.symm
-      _ = MPSTensor.mpvState (α := Fin (D * D)) Q.toTensor L := hPQState
+      _ = MPSTensor.mpvState (α := Fin D × Fin D) Q.toTensor L := hPQState
       _ = ∑ δ, Q.coeff L δ •
-          MPSTensor.mpvState (α := Fin (D * D)) (D₂.tensor δ) L := hQState
+          MPSTensor.mpvState (α := Fin D × Fin D) (D₂.tensor δ) L := hQState
       _ = ∑ γ, b L γ •
-          MPSTensor.mpvState (α := Fin (D * D)) (H.tensor γ) L := by
+          MPSTensor.mpvState (α := Fin D × Fin D) (H.tensor γ) L := by
         simpa [b] using hQSubst
   have hCoeff : ∀ᶠ L in atTop, ∀ γ : Fin H.labelCount,
       a L γ = b L γ := by
     exact MPSTensor.coefficient_eventually_eq_of_eventually_linearIndependent
-      (v := fun L γ ↦ MPSTensor.mpvState (α := Fin (D * D)) (H.tensor γ) L)
+      (v := fun L γ ↦ MPSTensor.mpvState (α := Fin D × Fin D) (H.tensor γ) L)
       (a := a) (b := b) hLI hStateExpansionEq
   let hCoeffWitness := Filter.eventually_atTop.mp hCoeff
   let L₀ := Classical.choose hCoeffWitness
@@ -736,17 +730,17 @@ theorem exists_unitary_sector_conjugacy_of_gauge_gram_eq_pos_smul_one
         (ω : ℂ) • 1) :
     ∃ U : Matrix.unitaryGroup
         (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ,
-      ∀ i : Fin (D * D),
+      ∀ i : Fin D × Fin D,
         S.decomposition.tensor (S.relabel γ) i =
           (U : Matrix (Fin (S.decomposition.bondDim (S.relabel γ)))
             (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ) *
-          (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
+          (cast (congrArg (MPOTensor D) (S.bondDim_eq γ))
             (H.tensor γ)) i *
           (U : Matrix (Fin (S.decomposition.bondDim (S.relabel γ)))
             (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ)ᴴ := by
   let U : Matrix.unitaryGroup
       (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ :=
-    ⟨((Real.sqrt ω : ℂ))⁻¹ •
+    ⟨(Real.sqrt ω : ℂ)⁻¹ •
         (S.gauge γ : Matrix (Fin (S.decomposition.bondDim (S.relabel γ)))
           (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ),
       Matrix.smul_mem_unitaryGroup_of_conjTranspose_mul_self_eq_smul_one
@@ -755,7 +749,7 @@ theorem exists_unitary_sector_conjugacy_of_gauge_gram_eq_pos_smul_one
   rw [S.tensor_eq γ i]
   simpa [U] using
     (Matrix.normalized_conj_eq_conj_inv_of_gram_eq_smul_one
-      ((cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
+      ((cast (congrArg (MPOTensor D) (S.bondDim_eq γ))
         (H.tensor γ)) i) (S.gauge γ) hω hGram).symm
 
 end BNTAlgebraTensorClause.TwoSiteExactSectorGauge

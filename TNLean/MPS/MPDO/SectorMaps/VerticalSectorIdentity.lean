@@ -80,7 +80,7 @@ Source application: arXiv:1606.00608, Appendix C.4, lines 1980--1995. -/
 theorem eq_id_of_weightedVerticalBondContractions_fixed_of_traceAdjointSchwarz
     {g D L : ℕ} {dim : Fin g → ℕ}
     (m : Fin g → ℂ)
-    (A : (α : Fin g) → MPSTensor (D * D) (dim α))
+    (A : (α : Fin g) → MPOTensor D (dim α))
     (F : VerticalSectorAlgebra dim →ₗ[ℂ] VerticalSectorAlgebra dim)
     (hL : 0 < L)
     (hF : Matrix.IsPositiveDirectSumMap F)
@@ -363,7 +363,7 @@ theorem transportedVerticalSector_exists_unitaryBlockEquiv_coefficient_eq
               Matrix.reindexAlgEquiv ℂ ℂ (finCongr (hDim i))
                 (MPSTensor.contractBondMatrix (h.A₁ i) X) *
               (V i : Matrix (Fin (h.dim₂ (sigma i))) (Fin (h.dim₂ (sigma i))) ℂ)ᴴ)) ∧
-        ∀ (i : Fin g₁) (ab : Fin (D * D)),
+        ∀ (i : Fin g₁) (ab : Fin D × Fin D),
           h.A₂ (sigma i) ab =
             (verticalMultiplicityTrace h.weight₁ i /
               verticalMultiplicityTrace h.weight₂ (sigma i)) •
@@ -397,8 +397,8 @@ theorem transportedVerticalSector_exists_unitaryBlockEquiv_coefficient_eq
       sigma hDim V hVT X₁ X₂ hScaled i
   refine ⟨sigma, hDim, V, hCoefficient, ?_⟩
   intro i ab
-  simpa only [MPSTensor.contractBondMatrix_single_mod_div] using
-    hCoefficient i (Matrix.single ab.modNat ab.divNat 1)
+  simpa only [MPSTensor.contractBondMatrix_single_transpose, Prod.mk.eta] using
+    hCoefficient i (Matrix.single ab.2 ab.1 1)
 
 end MPOTensor
 

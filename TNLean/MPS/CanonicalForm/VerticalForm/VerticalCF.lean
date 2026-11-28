@@ -375,18 +375,12 @@ physical space with matrix elements $(\widetilde M_{ab})_{ij} = M^{ij}_{ab}$.
 Concatenating this tensor vertically generates the matrix product vectors of
 the vertical direction, and the vertical canonical form of
 arXiv:1606.00608, Proposition 4.13, is a statement about this tensor. -/
-def verticalTensor (M : MPOTensor d D) : MPSTensor (D * D) d :=
-  fun ab i j => M (i, j) ab.divNat ab.modNat
+def verticalTensor (M : MPOTensor d D) : MPOTensor D d :=
+  fun ab i j => M (i, j) ab.1 ab.2
 
-@[simp] lemma verticalTensor_apply (M : MPOTensor d D) (ab : Fin (D * D))
-    (i j : Fin d) : verticalTensor M ab i j = M (i, j) ab.divNat ab.modNat :=
+@[simp] lemma verticalTensor_apply (M : MPOTensor d D) (ab : Fin D × Fin D)
+    (i j : Fin d) : verticalTensor M ab i j = M (i, j) ab.1 ab.2 :=
   rfl
-
-/-- The vertical letter at an explicitly paired bond index $(a, b)$. -/
-lemma verticalTensor_finProdFinEquiv (M : MPOTensor d D) (a b : Fin D)
-    (i j : Fin d) :
-    verticalTensor M (finProdFinEquiv (a, b)) i j = M (i, j) a b := by
-  simp
 
 /-- The vertical view of the MPO adjoint exchanges the oriented horizontal
 bond indices and conjugate-transposes the resulting vertical letter:
@@ -395,11 +389,11 @@ $\widetilde{M^\dagger}_{a,b}=(\widetilde M_{b,a})^\dagger$.
 This is the indexed adjoint convention in the first displayed diagram of the
 proof of Proposition 4.13 of arXiv:1606.00608, lines 1909--1913. -/
 @[simp] theorem verticalTensor_adjointTensor (M : MPOTensor d D)
-    (ab : Fin (D * D)) :
+    (ab : Fin D × Fin D) :
     verticalTensor (adjointTensor M) ab =
-      (verticalTensor M (bondPairSwap ab))ᴴ := by
+      (verticalTensor M ab.swap)ᴴ := by
   ext i j
-  simp [verticalTensor_apply, bondPairSwap, Matrix.conjTranspose_apply]
+  simp [verticalTensor_apply, Matrix.conjTranspose_apply]
 
 /-- The diagonal MPS tensor extracted from an MPO by restricting to equal ket
 and bra indices.  Its matrix product vectors are the diagonal entries
@@ -517,10 +511,11 @@ def verticalCopyDim {g : ℕ} (dim : Fin g → ℕ) (mult : Fin g → ℕ) :
   fun q => dim ((finSigmaFinEquiv.symm q).1)
 
 /-- The multiplicity-expanded block family obtained by repeating the same BNT
-block across all diagonal entries of its positive weight matrix. -/
-def verticalCopyBlocks {g : ℕ} (dim : Fin g → ℕ) (mult : Fin g → ℕ)
-    (A : (α : Fin g) → MPSTensor d (dim α)) :
-    (q : Fin (∑ α : Fin g, mult α)) → MPSTensor d (verticalCopyDim dim mult q) :=
+block across all diagonal entries of its positive weight matrix. The letters are indexed by
+any type `κ`. -/
+def verticalCopyBlocks {κ : Type*} {g : ℕ} (dim : Fin g → ℕ) (mult : Fin g → ℕ)
+    (A : (α : Fin g) → MPTensor κ (Fin (dim α))) :
+    (q : Fin (∑ α : Fin g, mult α)) → MPTensor κ (Fin (verticalCopyDim dim mult q)) :=
   fun q => A ((finSigmaFinEquiv.symm q).1)
 
 /-- The multiplicity-expanded scalar weights obtained by flattening the
@@ -538,11 +533,11 @@ diagonal, the summand $\mu_\alpha \otimes M_\alpha$ is the further direct sum
 $\bigoplus_k \omega_{\alpha,k} M_\alpha$ of its diagonal
 entries; this constructor lists those blocks in exactly that order, so the
 multiplicities `mult α` and the diagonal entries `ω α k` stay explicit. -/
-noncomputable def verticalAssembledTensor {g : ℕ}
+noncomputable def verticalAssembledTensor {κ : Type*} {g : ℕ}
     (dim : Fin g → ℕ) (mult : Fin g → ℕ)
     (ω : (α : Fin g) → Fin (mult α) → ℂ)
-    (A : (α : Fin g) → MPSTensor d (dim α)) :
-    MPSTensor d (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q) :=
+    (A : (α : Fin g) → MPTensor κ (Fin (dim α))) :
+    MPTensor κ (Fin (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q)) :=
   MPTensor.toTensorFromBlocks
     (μ := verticalCopyWeights mult ω)
     (A := verticalCopyBlocks dim mult A)
@@ -586,24 +581,24 @@ are recorded in
 def IsVerticalCF (M : MPOTensor d D) : Prop :=
   ∃ (g : ℕ) (dim : Fin g → ℕ) (mult : Fin g → ℕ)
     (ω : (α : Fin g) → Fin (mult α) → ℂ)
-    (A : (α : Fin g) → MPSTensor (D * D) (dim α))
+    (A : (α : Fin g) → MPOTensor D (dim α))
     (U : Matrix (Fin (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q))
       (Fin d) ℂ),
     (∀ α, 0 < mult α) ∧
       (∀ α k, (0 : ℂ) < ω α k) ∧
       U * Uᴴ = 1 ∧
       MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor M) (fun α ↦ ⟨dim α, A α⟩) ∧
-      (∀ v : Fin (D * D),
+      (∀ v : Fin D × Fin D,
         U * verticalTensor M v * Uᴴ = verticalAssembledTensor dim mult ω A v) ∧
-      ∀ v : Fin (D * D),
+      ∀ v : Fin D × Fin D,
         verticalTensor M v = Uᴴ * verticalAssembledTensor dim mult ω A v * U
 
 /-- The matrix product vector of the vertical-assembled tensor, as a sum over the
 flattened `(block, multiplicity)` index `(α, j)`:
 `∑_{α} ∑_{j} (ω_{α j})^N · V^{(N)}(A_α)(σ)`. -/
-theorem mpv_verticalAssembledTensor_eq_sum {g : ℕ} (dim : Fin g → ℕ) (mult : Fin g → ℕ)
-    (ω : (α : Fin g) → Fin (mult α) → ℂ) (A : (α : Fin g) → MPSTensor d (dim α))
-    {N : ℕ} (σ : Fin N → Fin d) :
+theorem mpv_verticalAssembledTensor_eq_sum {κ : Type*} {g : ℕ} (dim : Fin g → ℕ)
+    (mult : Fin g → ℕ) (ω : (α : Fin g) → Fin (mult α) → ℂ)
+    (A : (α : Fin g) → MPTensor κ (Fin (dim α))) {N : ℕ} (σ : Fin N → κ) :
     MPTensor.mpv (verticalAssembledTensor dim mult ω A) σ
       = ∑ p : (α : Fin g) × Fin (mult α), (ω p.1 p.2) ^ N • MPTensor.mpv (A p.1) σ := by
   rw [verticalAssembledTensor, MPSTensor.mpv_toTensorFromBlocks_eq_sum]
@@ -621,15 +616,15 @@ decomposition in arXiv:1606.00608, Proposition 4.13, lines 1895--1921. Those
 lines first produce the vertical sectors and only then group gauge-equivalent
 sectors into the repeated copies of each basis tensor. -/
 theorem sameMPV₂Pos_toTensorFromBlocks_verticalAssembledTensor_of_equiv
-    {r g : ℕ} {dim₀ : Fin r → ℕ} {dim : Fin g → ℕ}
-    (μ : Fin r → ℂ) (B : (k : Fin r) → MPSTensor d (dim₀ k))
+    {κ : Type*} {r g : ℕ} {dim₀ : Fin r → ℕ} {dim : Fin g → ℕ}
+    (μ : Fin r → ℂ) (B : (k : Fin r) → MPTensor κ (Fin (dim₀ k)))
     (mult : Fin g → ℕ) (ω : (α : Fin g) → Fin (mult α) → ℂ)
-    (A : (α : Fin g) → MPSTensor d (dim α))
+    (A : (α : Fin g) → MPTensor κ (Fin (dim α)))
     (e : Fin r ≃ (α : Fin g) × Fin (mult α))
     (hWeight : ∀ k, μ k = ω (e k).1 (e k).2)
     (hBlock : ∀ k, MPTensor.SameMPV₂Pos (B k) (A (e k).1)) :
     MPTensor.SameMPV₂Pos
-      (MPTensor.toTensorFromBlocks (α := Fin d) (μ := μ) B)
+      (MPTensor.toTensorFromBlocks (α := κ) (μ := μ) B)
       (verticalAssembledTensor dim mult ω A) := by
   intro N hN σ
   rw [MPSTensor.mpv_toTensorFromBlocks_eq_sum, mpv_verticalAssembledTensor_eq_sum]

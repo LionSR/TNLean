@@ -50,7 +50,7 @@ one of the ambient tensor.
 
 Source: CPSV16, canonical nonzero-sector decomposition at lines 214--230. -/
 theorem projectorClosure_and_noPeriodicVectors_of_coisometry_reconstruction
-    {d D n : ℕ} (A : MPSTensor d D) (C : MPSTensor d n)
+    {α : Type*} [Fintype α] {D n : ℕ} (A : MPTensor α (Fin D)) (C : MPTensor α (Fin n))
     (U : Matrix (Fin n) (Fin D) ℂ) (hU : U * Uᴴ = 1)
     (hreconstruct : ∀ i, A i = Uᴴ * C i * U)
     (hClosure : HasInvariantProjectorClosure A)

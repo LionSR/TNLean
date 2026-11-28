@@ -66,15 +66,15 @@ theorem gramDressing_gauge_eq_one
     (hCanonical : MPTensor.IsCPSVCanonicalForm M)
     (hM : IsMPDO M) (γ : Fin H.labelCount) :
     gramDressing (S.gauge γ)
-        (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ)) (H.tensor γ)) =
+        (cast (congrArg (MPOTensor D) (S.bondDim_eq γ)) (H.tensor γ)) =
       gramDressing
         (1 : GL (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ)
-        (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
+        (cast (congrArg (MPOTensor D) (S.bondDim_eq γ))
           (H.tensor γ)) := by
   classical
-  let A : MPSTensor (D * D)
+  let A : MPOTensor D
       (S.decomposition.bondDim (S.relabel γ)) :=
-    cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ)) (H.tensor γ)
+    cast (congrArg (MPOTensor D) (S.bondDim_eq γ)) (H.tensor γ)
   obtain ⟨W, c, _hW, hc, hCornerOne⟩ :=
     S.exists_oneSite_raw_sector_corner γ
   obtain ⟨V, k, _hV, hk, hCornerTwo⟩ :=
@@ -91,7 +91,7 @@ theorem gramDressing_gauge_eq_one
   let fGauge := twoSidedCompressionCoefficients
     (W * Gᴴ) (W * G⁻¹) c
   let fOne := twoSidedCompressionCoefficients W W c
-  have hGaugeCompression : ∀ v : Fin (D * D),
+  have hGaugeCompression : ∀ v : Fin D × Fin D,
       (W * Gᴴ)ᴴ * verticalTensor M v * (W * G⁻¹) =
         c • gramDressing (S.gauge γ) A v := by
     intro v
@@ -143,8 +143,7 @@ theorem gramDressing_gauge_eq_one
       MPSTensor.linearMarkedTensor fGauge M = MPSTensor.linearMarkedTensor fOne M :=
     hCanonical.linearMarkedTensor_eq_of_trace_agree M fGauge fOne hTrace
   have hRaw : gramDressing (S.gauge γ) A = A := by
-    funext v
-    obtain ⟨⟨a, b⟩, rfl⟩ := finProdFinEquiv.surjective v
+    funext ⟨a, b⟩
     ext r s
     have hSlice := congrFun hMarks (finProdFinEquiv (r, s))
     rw [hPhysicalGauge, hPhysicalOne] at hSlice
@@ -181,7 +180,7 @@ theorem gauge_gram_eq_pos_smul_one
         (ω : ℂ) • 1 := by
   have hDress := S.gramDressing_gauge_eq_one hCanonical hM γ
   have hNormalTensor : MPTensor.IsNormalTensor
-      (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ)) (H.tensor γ)) :=
+      (cast (congrArg (MPOTensor D) (S.bondDim_eq γ)) (H.tensor γ)) :=
     (MPSTensor.isNormalTensor_cast_iff (S.bondDim_eq γ) (H.tensor γ)).2
       (H.isCPSVBNT.blocks_normal γ)
   apply hNormalTensor.isNormal.gram_eq_pos_smul_one_of_gram_conj_eq
@@ -205,11 +204,11 @@ theorem exists_unitary_sector_conjugacy
     (hM : IsMPDO M) (γ : Fin H.labelCount) :
     ∃ U : Matrix.unitaryGroup
         (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ,
-      ∀ i : Fin (D * D),
+      ∀ i : Fin D × Fin D,
         S.decomposition.tensor (S.relabel γ) i =
           (U : Matrix (Fin (S.decomposition.bondDim (S.relabel γ)))
             (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ) *
-          (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
+          (cast (congrArg (MPOTensor D) (S.bondDim_eq γ))
             (H.tensor γ)) i *
           (U : Matrix (Fin (S.decomposition.bondDim (S.relabel γ)))
             (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ)ᴴ := by

@@ -97,7 +97,7 @@ theorem cpsvVerticalDecomposition_of_grouped_orthogonal_sectors
     (hMult : ∀ α, 0 < mult α)
     (weight : (α : Fin g) → Fin (mult α) → ℂ)
     (hWeight : ∀ α q, (0 : ℂ) < weight α q)
-    (A : (α : Fin g) → MPSTensor (D * D) (dim α))
+    (A : (α : Fin g) → MPOTensor D (dim α))
     (hBNT : MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor M)
       (fun α ↦ ⟨dim α, A α⟩))
     (W : (p : (α : Fin g) × Fin (mult α)) →
@@ -118,7 +118,7 @@ theorem cpsvVerticalDecomposition_of_grouped_orthogonal_sectors
       Matrix (Fin d) (Fin (verticalCopyDim dim mult q)) ℂ :=
     flattenGroupedSectorMap dim mult W
   let B : (q : Fin (∑ α, mult α)) →
-      MPSTensor (D * D) (verticalCopyDim dim mult q) :=
+      MPOTensor D (verticalCopyDim dim mult q) :=
     fun q ab ↦ verticalCopyWeights mult weight q •
       verticalCopyBlocks dim mult A q ab
   let rowEquiv : ((q : Fin (∑ α, mult α)) ×
@@ -161,8 +161,11 @@ theorem cpsvVerticalDecomposition_of_grouped_orthogonal_sectors
   have hForward : ∀ ab, U * verticalTensor M ab * Uᴴ =
       verticalAssembledTensor dim mult weight A ab := by
     intro ab
-    have hSigma := Matrix.sigmaBlockRow_conjugation
-      (verticalTensor M) B Wflat hIsoFlat hOrthFlat hInterFlat ab
+    -- The block-row lemmas index letters by `Fin s`; apply them along `Fintype.equivFin`.
+    let e : Fin (Fintype.card (Fin D × Fin D)) ≃ Fin D × Fin D := (Fintype.equivFin _).symm
+    have hSigma := Matrix.sigmaBlockRow_conjugation (fun i ↦ verticalTensor M (e i))
+      (fun q i ↦ B q (e i)) Wflat hIsoFlat hOrthFlat (fun q i ↦ hInterFlat q (e i)) (e.symm ab)
+    simp only [e.apply_symm_apply] at hSigma
     dsimp only [U]
     rw [Matrix.conjTranspose_reindex,
       show Matrix.reindex rowEquiv (Equiv.refl (Fin d))
@@ -183,8 +186,10 @@ theorem cpsvVerticalDecomposition_of_grouped_orthogonal_sectors
   have hReconstruction : ∀ ab, verticalTensor M ab = Uᴴ *
       verticalAssembledTensor dim mult weight A ab * U := by
     intro ab
-    have hSigma := Matrix.sigmaBlockRow_reconstruction
-      (verticalTensor M) B Wflat hReconstructFlat ab
+    let e : Fin (Fintype.card (Fin D × Fin D)) ≃ Fin D × Fin D := (Fintype.equivFin _).symm
+    have hSigma := Matrix.sigmaBlockRow_reconstruction (fun i ↦ verticalTensor M (e i))
+      (fun q i ↦ B q (e i)) Wflat (fun i ↦ hReconstructFlat (e i)) (e.symm ab)
+    simp only [e.apply_symm_apply] at hSigma
     rw [hSigma]
     dsimp only [U]
     rw [Matrix.conjTranspose_reindex]
@@ -232,7 +237,7 @@ theorem HasVerticalBNTGroupingInputs.exists_cpsvVerticalDecomposition
       h.grouping
   let C := MPSTensor.mpvPhaseClassData blocks
   have hSame : MPTensor.SameMPV₂Pos (verticalTensor M)
-      (MPTensor.toTensorFromBlocks (α := Fin (D * D)) (μ := mu) blocks) :=
+      (MPTensor.toTensorFromBlocks (α := Fin D × Fin D) (μ := mu) blocks) :=
     MPSTensor.sameMPV₂Pos_toTensorFromBlocks_of_reconstruction
       (verticalTensor M) mu blocks V hIso hInterStar hReconstruct
   have hBNT : MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor M)
@@ -290,7 +295,7 @@ theorem exists_positiveFusionDecomposition_of_isRFPViaTS
     (M : MPOTensor d D) (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M)
     (hRFP : IsRFPViaTS M) :
     ∃ (g : ℕ) (dim : Fin g → ℕ)
-      (A : (α : Fin g) → MPSTensor (D * D) (dim α)),
+      (A : (α : Fin g) → MPOTensor D (dim α)),
       MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor M)
           (fun α ↦ ⟨dim α, A α⟩) ∧
       ∃ (chi : DiagonalChiFamily (Fin g))
@@ -301,17 +306,17 @@ theorem exists_positiveFusionDecomposition_of_isRFPViaTS
         (∀ α β, U α β * (U α β)ᴴ = 1) ∧
         (∀ (α β : Fin g) (i j : Fin D),
           U α β *
-              (mulTensor (verticalBNTMPO (A α))
-                (verticalBNTMPO (A β))) (i, j) *
+              (mulTensor (A α)
+                (A β)) (i, j) *
               (U α β)ᴴ =
             Matrix.blockDiagonal' fun γ ↦
-              chi.matrix α β γ ⊗ₖ verticalBNTMPO (A γ) (i, j)) ∧
+              chi.matrix α β γ ⊗ₖ (A γ) (i, j)) ∧
         ∀ (α β : Fin g) (i j : Fin D),
-          (mulTensor (verticalBNTMPO (A α))
-            (verticalBNTMPO (A β))) (i, j) =
+          (mulTensor (A α)
+            (A β)) (i, j) =
             (U α β)ᴴ *
               (Matrix.blockDiagonal' fun γ ↦
-                chi.matrix α β γ ⊗ₖ verticalBNTMPO (A γ) (i, j)) *
+                chi.matrix α β γ ⊗ₖ (A γ) (i, j)) *
               U α β := by
   classical
   obtain ⟨D₁⟩ := (hHorizontal.hasVerticalBNTGroupingInputs M hM).exists_cpsvVerticalDecomposition

@@ -108,24 +108,21 @@ of any fixed pair of BNT labels from the closed-chain sum.
 
 Source: CPSV16, Appendix C.4, lines 2015--2025. -/
 theorem verticalTensor_blockTwo_squared_coisometry_reconstruction
-    {d D n : ℕ} (M : MPOTensor d D) (A : MPSTensor (D * D) n)
+    {d D n : ℕ} (M : MPOTensor d D) (A : MPOTensor D n)
     (U : Matrix (Fin n) (Fin d) ℂ) (hU : U * Uᴴ = 1)
     (hReconstruct : ∀ ab, verticalTensor M ab = Uᴴ * A ab * U) :
     verticalCoisometrySquare U * (verticalCoisometrySquare U)ᴴ = 1 ∧
       ∀ ab, verticalTensor (blockTwo M) ab =
         (verticalCoisometrySquare U)ᴴ *
-          (Kraus.reindexPhysical finProdFinEquiv.symm
-            (mulTensor (verticalBNTMPO A) (verticalBNTMPO A))) ab *
+          (mulTensor A A) ab *
             verticalCoisometrySquare U := by
   constructor
   · exact verticalCoisometrySquare_isCoisometry U hU
   · intro ab
-    rw [← reindexPhysical_verticalBNTMPO (verticalTensor (blockTwo M)),
-      verticalBNTMPO_verticalTensor_blockTwo]
-    obtain ⟨⟨i, k⟩, rfl⟩ := finProdFinEquiv.surjective ab
+    rw [verticalTensor_blockTwo]
+    obtain ⟨i, k⟩ := ab
     unfold verticalCoisometrySquare
-    simp only [Kraus.reindexPhysical, Equiv.symm_apply_apply, mulTensor_apply, verticalBNTMPO_apply,
-      MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
+    simp only [mulTensor_apply]
     rw [Matrix.conjTranspose_submatrix,
       Matrix.submatrix_mul_equiv _ _ _ finProdFinEquiv.symm _,
       Matrix.submatrix_mul_equiv _ _ _ finProdFinEquiv.symm _]
@@ -146,13 +143,13 @@ product bond space.
 Source: CPSV16, Proposition 4.13, lines 1873--1893, and Appendix C.4,
 lines 2015--2025. -/
 theorem retainedVerticalProduct_projectorClosure_and_noPeriodicVectors_of_blockTwo
-    {d D n : ℕ} (M : MPOTensor d D) (A : MPSTensor (D * D) n)
+    {d D n : ℕ} (M : MPOTensor d D) (A : MPOTensor D n)
     (U : Matrix (Fin n) (Fin d) ℂ) (hU : U * Uᴴ = 1)
     (hReconstruct : ∀ ab, verticalTensor M ab = Uᴴ * A ab * U)
     (hClosure : MPSTensor.HasInvariantProjectorClosure (verticalTensor (blockTwo M)))
     (hPer : MPSTensor.HasNoPeriodicVectors (verticalTensor (blockTwo M))) :
     let C :=
-      (Kraus.reindexPhysical finProdFinEquiv.symm (mulTensor (verticalBNTMPO A) (verticalBNTMPO A)))
+      (mulTensor A A)
     MPSTensor.HasInvariantProjectorClosure C ∧
       MPSTensor.HasNoPeriodicVectors C := by
   dsimp only
@@ -160,7 +157,7 @@ theorem retainedVerticalProduct_projectorClosure_and_noPeriodicVectors_of_blockT
     M A U hU hReconstruct
   exact MPSTensor.projectorClosure_and_noPeriodicVectors_of_coisometry_reconstruction
     (verticalTensor (blockTwo M))
-    (Kraus.reindexPhysical finProdFinEquiv.symm (mulTensor (verticalBNTMPO A) (verticalBNTMPO A)))
+    (mulTensor A A)
     (verticalCoisometrySquare U) hsquare.1 hsquare.2
     hClosure hPer
 
@@ -170,12 +167,12 @@ horizontal form has projector closure and no periodic vectors.
 Source: CPSV16, Proposition 4.13, lines 1873--1893, and Appendix C.4,
 lines 2015--2025. -/
 theorem retainedVerticalProduct_projectorClosure_and_noPeriodicVectors
-    {d D n : ℕ} (M : MPOTensor d D) (A : MPSTensor (D * D) n)
+    {d D n : ℕ} (M : MPOTensor d D) (A : MPOTensor D n)
     (U : Matrix (Fin n) (Fin d) ℂ) (hU : U * Uᴴ = 1)
     (hReconstruct : ∀ ab, verticalTensor M ab = Uᴴ * A ab * U)
     (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M) :
     let C :=
-      (Kraus.reindexPhysical finProdFinEquiv.symm (mulTensor (verticalBNTMPO A) (verticalBNTMPO A)))
+      (mulTensor A A)
     MPSTensor.HasInvariantProjectorClosure C ∧
       MPSTensor.HasNoPeriodicVectors C := by
   have hHorizontalTwo := hHorizontal.blockTwo
@@ -196,26 +193,25 @@ Source: CPSV16, Appendix C.4, lines 2020--2025. -/
 noncomputable def weightedVerticalProductBlock
     {g D : ℕ} (dim mult : Fin g → ℕ)
     (weight : (α : Fin g) → Fin (mult α) → ℂ)
-    (B : (α : Fin g) → MPSTensor (D * D) (dim α))
+    (B : (α : Fin g) → MPOTensor D (dim α))
     (p : ((α : Fin g) × Fin (mult α)) ×
       ((α : Fin g) × Fin (mult α))) :
-    MPSTensor (D * D) (dim p.1.1 * dim p.2.1) :=
+    MPOTensor D (dim p.1.1 * dim p.2.1) :=
   fun ab ↦ (weight p.1.1 p.1.2 * weight p.2.1 p.2.2) •
-    (Kraus.reindexPhysical finProdFinEquiv.symm (mulTensor (verticalBNTMPO (B p.1.1))
-      (verticalBNTMPO (B p.2.1)))) ab
+    (mulTensor (B p.1.1)
+      (B p.2.1)) ab
 
 /-- The square of the retained assembled vertical tensor, before separating
 its ordered copy-pair blocks. -/
 noncomputable def retainedVerticalProductTensor
     {g D : ℕ} (dim mult : Fin g → ℕ)
     (weight : (α : Fin g) → Fin (mult α) → ℂ)
-    (B : (α : Fin g) → MPSTensor (D * D) (dim α)) :
-    MPSTensor (D * D)
+    (B : (α : Fin g) → MPOTensor D (dim α)) :
+    MPOTensor D
       ((∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q) *
         (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q)) :=
-  (Kraus.reindexPhysical finProdFinEquiv.symm
-    (mulTensor (verticalBNTMPO (verticalAssembledTensor dim mult weight B))
-    (verticalBNTMPO (verticalAssembledTensor dim mult weight B))))
+  (mulTensor (verticalAssembledTensor dim mult weight B)
+    (verticalAssembledTensor dim mult weight B))
 
 /-- The product of two assembled vertical tensors is block diagonal over
 pairs of active BNT copies. The block for copies `(α, q)` and `(β, r)` is the
@@ -229,7 +225,7 @@ Source: CPSV16, Appendix C.4, lines 2020--2025. -/
 theorem mulTensor_verticalAssembledTensor_reindex
     {g D : ℕ} (dim mult : Fin g → ℕ)
     (weight : (α : Fin g) → Fin (mult α) → ℂ)
-    (B : (α : Fin g) → MPSTensor (D * D) (dim α)) (ab : Fin (D * D)) :
+    (B : (α : Fin g) → MPOTensor D (dim α)) (ab : Fin D × Fin D) :
     Matrix.reindex (productRetainedEquiv dim mult)
         (productRetainedEquiv dim mult)
         (retainedVerticalProductTensor dim mult weight B ab) =
@@ -238,17 +234,15 @@ theorem mulTensor_verticalAssembledTensor_reindex
         Matrix.reindex finProdFinEquiv.symm finProdFinEquiv.symm
           (weightedVerticalProductBlock dim mult weight B p ab) := by
   classical
-  obtain ⟨⟨a, b⟩, rfl⟩ := finProdFinEquiv.surjective ab
+  obtain ⟨a, b⟩ := ab
   ext x y
   rcases x with ⟨⟨⟨α, q⟩, ⟨β, r⟩⟩, ⟨i, j⟩⟩
   rcases y with ⟨⟨⟨α', q'⟩, ⟨β', r'⟩⟩, ⟨i', j'⟩⟩
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply]
-  simp only [retainedVerticalProductTensor, Kraus.reindexPhysical, Equiv.symm_apply_apply,
-    MPSTensor.finProdFinEquiv_divNat,
-    MPSTensor.finProdFinEquiv_modNat, productRetainedEquiv, verticalProductSectorEquiv,
+  simp only [retainedVerticalProductTensor, productRetainedEquiv, verticalProductSectorEquiv,
     Equiv.symm_trans, Equiv.symm_mk, Equiv.prodCongr_symm, Equiv.symm_symm,
     Equiv.trans_apply, Equiv.coe_fn_mk, Equiv.prodCongr_apply, Prod.map_apply,
-    mulTensor_apply, verticalBNTMPO_apply, Matrix.submatrix_apply,
+    mulTensor_apply, Matrix.submatrix_apply,
     Equiv.symm_apply_apply, weightedVerticalProductBlock]
   by_cases hp :
       ((⟨α, q⟩ : (α : Fin g) × Fin (mult α)),
@@ -264,8 +258,8 @@ theorem mulTensor_verticalAssembledTensor_reindex
       Matrix.kroneckerMap_apply]
     simpa only [mul_comm, mul_left_comm, mul_assoc] using
       Fintype.sum_mul_mul_eq_mul_sum_mul (weight α q * weight β r)
-        (fun x => B α (finProdFinEquiv (a, x)) i i')
-        (fun x => B β (finProdFinEquiv (x, b)) j j')
+        (fun x => B α (a, x) i i')
+        (fun x => B β (x, b) j j')
   · rw [Matrix.blockDiagonal'_apply_ne _ _ _ hp]
     simp only [Matrix.sum_apply, Matrix.kroneckerMap_apply]
     apply Finset.sum_eq_zero
@@ -286,8 +280,8 @@ conjugated by their canonical inclusions. -/
 theorem retainedVerticalProductTensor_eq_sum_pairBlocks
     {g D : ℕ} (dim mult : Fin g → ℕ)
     (weight : (α : Fin g) → Fin (mult α) → ℂ)
-    (B : (α : Fin g) → MPSTensor (D * D) (dim α))
-    (ab : Fin (D * D)) :
+    (B : (α : Fin g) → MPOTensor D (dim α))
+    (ab : Fin D × Fin D) :
     retainedVerticalProductTensor dim mult weight B ab =
       ∑ p : VerticalCopyPair mult,
         retainedProductBlockInclusion dim mult p *
@@ -341,8 +335,8 @@ full retained product tensor. -/
 theorem retainedVerticalProductTensor_mul_retainedProductBlockInclusion
     {g D : ℕ} (dim mult : Fin g → ℕ)
     (weight : (α : Fin g) → Fin (mult α) → ℂ)
-    (B : (α : Fin g) → MPSTensor (D * D) (dim α))
-    (p : VerticalCopyPair mult) (ab : Fin (D * D)) :
+    (B : (α : Fin g) → MPOTensor D (dim α))
+    (p : VerticalCopyPair mult) (ab : Fin D × Fin D) :
     retainedVerticalProductTensor dim mult weight B ab *
         retainedProductBlockInclusion dim mult p =
       retainedProductBlockInclusion dim mult p *
@@ -390,8 +384,8 @@ intertwining identity. -/
 theorem retainedProductBlockInclusion_conjTranspose_mul_retainedVerticalProductTensor
     {g D : ℕ} (dim mult : Fin g → ℕ)
     (weight : (α : Fin g) → Fin (mult α) → ℂ)
-    (B : (α : Fin g) → MPSTensor (D * D) (dim α))
-    (p : VerticalCopyPair mult) (ab : Fin (D * D)) :
+    (B : (α : Fin g) → MPOTensor D (dim α))
+    (p : VerticalCopyPair mult) (ab : Fin D × Fin D) :
     (retainedProductBlockInclusion dim mult p)ᴴ *
         retainedVerticalProductTensor dim mult weight B ab =
       weightedVerticalProductBlock dim mult weight B p ab *
@@ -451,7 +445,7 @@ Source: CPSV16, Appendix C.4, lines 2020--2029. -/
 theorem weightedVerticalProductBlock_projectorClosure_and_noPeriodicVectors_of_blockTwo
     {g d D : ℕ} (dim mult : Fin g → ℕ)
     (weight : (α : Fin g) → Fin (mult α) → ℂ)
-    (B : (α : Fin g) → MPSTensor (D * D) (dim α))
+    (B : (α : Fin g) → MPOTensor D (dim α))
     (M : MPOTensor d D)
     (U : Matrix
       (Fin (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q))
@@ -467,9 +461,9 @@ theorem weightedVerticalProductBlock_projectorClosure_and_noPeriodicVectors_of_b
         (weightedVerticalProductBlock dim mult weight B p) ∧
       MPSTensor.HasNoPeriodicVectors
         (weightedVerticalProductBlock dim mult weight B p) := by
-  let C := (Kraus.reindexPhysical finProdFinEquiv.symm (mulTensor
-    (verticalBNTMPO (verticalAssembledTensor dim mult weight B))
-    (verticalBNTMPO (verticalAssembledTensor dim mult weight B))))
+  let C := (mulTensor
+    (verticalAssembledTensor dim mult weight B)
+    (verticalAssembledTensor dim mult weight B))
   have hCanonical : MPSTensor.HasInvariantProjectorClosure C ∧
       MPSTensor.HasNoPeriodicVectors C := by
     simpa only [C] using
@@ -496,7 +490,7 @@ Source: CPSV16, Appendix C.4, lines 2020--2029. -/
 theorem weightedVerticalProductBlock_projectorClosure_and_noPeriodicVectors
     {g d D : ℕ} (dim mult : Fin g → ℕ)
     (weight : (α : Fin g) → Fin (mult α) → ℂ)
-    (B : (α : Fin g) → MPSTensor (D * D) (dim α))
+    (B : (α : Fin g) → MPOTensor D (dim α))
     (M : MPOTensor d D)
     (U : Matrix
       (Fin (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q))
@@ -530,7 +524,7 @@ Source: CPSV16, Appendix C.4, lines 2020--2029. -/
 theorem exists_weightedVerticalProductBlock_normalDecomposition_of_blockTwo
     {g d D : ℕ} (dim mult : Fin g → ℕ)
     (weight : (α : Fin g) → Fin (mult α) → ℂ)
-    (B : (α : Fin g) → MPSTensor (D * D) (dim α))
+    (B : (α : Fin g) → MPOTensor D (dim α))
     (M : MPOTensor d D)
     (U : Matrix
       (Fin (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q))
@@ -543,7 +537,7 @@ theorem exists_weightedVerticalProductBlock_normalDecomposition_of_blockTwo
     (p : ((α : Fin g) × Fin (mult α)) ×
       ((α : Fin g) × Fin (mult α))) :
     ∃ (r : ℕ) (localDim : Fin r → ℕ) (coefficient : Fin r → ℂ)
-      (blocks : (k : Fin r) → MPSTensor (D * D) (localDim k))
+      (blocks : (k : Fin r) → MPOTensor D (localDim k))
       (V : (k : Fin r) →
         Matrix (Fin (dim p.1.1 * dim p.2.1)) (Fin (localDim k)) ℂ),
       (∀ k, 0 < localDim k) ∧
@@ -551,21 +545,21 @@ theorem exists_weightedVerticalProductBlock_normalDecomposition_of_blockTwo
       (∀ k, MPTensor.IsNormalTensor (blocks k)) ∧
       (∀ k, (V k)ᴴ * V k = 1) ∧
       (∀ k l, k ≠ l → (V k)ᴴ * V l = 0) ∧
-      (∀ (k : Fin r) (ab : Fin (D * D)),
+      (∀ (k : Fin r) (ab : Fin D × Fin D),
         weightedVerticalProductBlock dim mult weight B p ab * V k =
           V k * (coefficient k • blocks k ab)) ∧
-      (∀ (k : Fin r) (ab : Fin (D * D)),
+      (∀ (k : Fin r) (ab : Fin D × Fin D),
         (V k)ᴴ * weightedVerticalProductBlock dim mult weight B p ab =
           (coefficient k • blocks k ab) * (V k)ᴴ) ∧
-      (∀ (k : Fin r) (ab : Fin (D * D)),
+      (∀ (k : Fin r) (ab : Fin D × Fin D),
         coefficient k • blocks k ab =
           (V k)ᴴ * weightedVerticalProductBlock dim mult weight B p ab * V k) ∧
-      (∀ ab : Fin (D * D),
+      (∀ ab : Fin D × Fin D,
         weightedVerticalProductBlock dim mult weight B p ab =
           ∑ k, V k * (coefficient k • blocks k ab) * (V k)ᴴ) ∧
       MPTensor.SameMPV₂Pos
         (weightedVerticalProductBlock dim mult weight B p)
-        (MPTensor.toTensorFromBlocks (α := Fin (D * D))
+        (MPTensor.toTensorFromBlocks (α := Fin D × Fin D)
           (μ := coefficient) blocks) ∧
       (∑ k, localDim k) ≤ dim p.1.1 * dim p.2.1 := by
   have hCanonical :=
@@ -583,7 +577,7 @@ Source: CPSV16, Appendix C.4, lines 2020--2029. -/
 theorem exists_weightedVerticalProductBlock_normalDecomposition
     {g d D : ℕ} (dim mult : Fin g → ℕ)
     (weight : (α : Fin g) → Fin (mult α) → ℂ)
-    (B : (α : Fin g) → MPSTensor (D * D) (dim α))
+    (B : (α : Fin g) → MPOTensor D (dim α))
     (M : MPOTensor d D)
     (U : Matrix
       (Fin (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q))
@@ -595,7 +589,7 @@ theorem exists_weightedVerticalProductBlock_normalDecomposition
     (p : ((α : Fin g) × Fin (mult α)) ×
       ((α : Fin g) × Fin (mult α))) :
     ∃ (r : ℕ) (localDim : Fin r → ℕ) (coefficient : Fin r → ℂ)
-      (blocks : (k : Fin r) → MPSTensor (D * D) (localDim k))
+      (blocks : (k : Fin r) → MPOTensor D (localDim k))
       (V : (k : Fin r) →
         Matrix (Fin (dim p.1.1 * dim p.2.1)) (Fin (localDim k)) ℂ),
       (∀ k, 0 < localDim k) ∧
@@ -603,21 +597,21 @@ theorem exists_weightedVerticalProductBlock_normalDecomposition
       (∀ k, MPTensor.IsNormalTensor (blocks k)) ∧
       (∀ k, (V k)ᴴ * V k = 1) ∧
       (∀ k l, k ≠ l → (V k)ᴴ * V l = 0) ∧
-      (∀ (k : Fin r) (ab : Fin (D * D)),
+      (∀ (k : Fin r) (ab : Fin D × Fin D),
         weightedVerticalProductBlock dim mult weight B p ab * V k =
           V k * (coefficient k • blocks k ab)) ∧
-      (∀ (k : Fin r) (ab : Fin (D * D)),
+      (∀ (k : Fin r) (ab : Fin D × Fin D),
         (V k)ᴴ * weightedVerticalProductBlock dim mult weight B p ab =
           (coefficient k • blocks k ab) * (V k)ᴴ) ∧
-      (∀ (k : Fin r) (ab : Fin (D * D)),
+      (∀ (k : Fin r) (ab : Fin D × Fin D),
         coefficient k • blocks k ab =
           (V k)ᴴ * weightedVerticalProductBlock dim mult weight B p ab * V k) ∧
-      (∀ ab : Fin (D * D),
+      (∀ ab : Fin D × Fin D,
         weightedVerticalProductBlock dim mult weight B p ab =
           ∑ k, V k * (coefficient k • blocks k ab) * (V k)ᴴ) ∧
       MPTensor.SameMPV₂Pos
         (weightedVerticalProductBlock dim mult weight B p)
-        (MPTensor.toTensorFromBlocks (α := Fin (D * D))
+        (MPTensor.toTensorFromBlocks (α := Fin D × Fin D)
           (μ := coefficient) blocks) ∧
       (∑ k, localDim k) ≤ dim p.1.1 * dim p.2.1 := by
   have hHorizontalTwo := hHorizontal.blockTwo

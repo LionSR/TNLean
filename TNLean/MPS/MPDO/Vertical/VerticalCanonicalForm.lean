@@ -188,7 +188,7 @@ theorem isVerticalCF_of_grouped_orthogonal_sectors
     (hMult : ∀ α, 0 < mult α)
     (ω : (α : Fin g) → Fin (mult α) → ℂ)
     (hω : ∀ α q, (0 : ℂ) < ω α q)
-    (A : (α : Fin g) → MPSTensor (D * D) (dim α))
+    (A : (α : Fin g) → MPOTensor D (dim α))
     (hBNT : MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor M) (fun α ↦ ⟨dim α, A α⟩))
     (W : (p : (α : Fin g) × Fin (mult α)) →
       Matrix (Fin d) (Fin (dim p.1)) ℂ)
@@ -207,7 +207,7 @@ theorem isVerticalCF_of_grouped_orthogonal_sectors
       Matrix (Fin d) (Fin (verticalCopyDim dim mult q)) ℂ :=
     flattenGroupedSectorMap dim mult W
   let B : (q : Fin (∑ α, mult α)) →
-      MPSTensor (D * D) (verticalCopyDim dim mult q) :=
+      MPOTensor D (verticalCopyDim dim mult q) :=
     fun q v ↦ verticalCopyWeights mult ω q • verticalCopyBlocks dim mult A q v
   let rowEquiv : ((q : Fin (∑ α, mult α)) ×
       Fin (verticalCopyDim dim mult q)) ≃
@@ -245,8 +245,11 @@ theorem isVerticalCF_of_grouped_orthogonal_sectors
       Matrix.sigmaBlockRow_isCoisometry Wflat hisoFlat horthFlat,
       Matrix.reindexLinearEquiv_one]
   · intro v
-    have hsigma := Matrix.sigmaBlockRow_conjugation
-      (verticalTensor M) B Wflat hisoFlat horthFlat hinterFlat v
+    -- The block-row lemmas index letters by `Fin s`; apply them along `Fintype.equivFin`.
+    let e : Fin (Fintype.card (Fin D × Fin D)) ≃ Fin D × Fin D := (Fintype.equivFin _).symm
+    have hsigma := Matrix.sigmaBlockRow_conjugation (fun i ↦ verticalTensor M (e i))
+      (fun q i ↦ B q (e i)) Wflat hisoFlat horthFlat (fun q i ↦ hinterFlat q (e i)) (e.symm v)
+    simp only [e.apply_symm_apply] at hsigma
     dsimp only [U]
     rw [Matrix.conjTranspose_reindex,
       show Matrix.reindex rowEquiv (Equiv.refl (Fin d))
@@ -265,8 +268,10 @@ theorem isVerticalCF_of_grouped_orthogonal_sectors
       hsigma]
     rfl
   · intro v
-    have hsigma := Matrix.sigmaBlockRow_reconstruction
-      (verticalTensor M) B Wflat hreconstructFlat v
+    let e : Fin (Fintype.card (Fin D × Fin D)) ≃ Fin D × Fin D := (Fintype.equivFin _).symm
+    have hsigma := Matrix.sigmaBlockRow_reconstruction (fun i ↦ verticalTensor M (e i))
+      (fun q i ↦ B q (e i)) Wflat (fun i ↦ hreconstructFlat (e i)) (e.symm v)
+    simp only [e.apply_symm_apply] at hsigma
     rw [hsigma]
     dsimp only [U]
     rw [Matrix.conjTranspose_reindex]

@@ -48,8 +48,8 @@ namespace MPOTensor
 variable {d D n : ℕ}
 
 /-- Multiply every vertical letter on its two virtual sides. -/
-def bondMul (P : Matrix (Fin n) (Fin n) ℂ) (A : MPSTensor (D * D) n)
-    (Q : Matrix (Fin n) (Fin n) ℂ) : MPSTensor (D * D) n :=
+def bondMul (P : Matrix (Fin n) (Fin n) ℂ) (A : MPOTensor D n)
+    (Q : Matrix (Fin n) (Fin n) ℂ) : MPOTensor D n :=
   fun v ↦ P * A v * Q
 
 /-- Conjugation of a vertical tensor by the Gram matrix of an invertible
@@ -57,8 +57,8 @@ gauge.
 
 This is the tensor appearing in the second diagram of arXiv:1606.00608,
 Proposition 4.13, lines 1914--1919. -/
-noncomputable def gramDressing (X : GL (Fin n) ℂ) (A : MPSTensor (D * D) n) :
-    MPSTensor (D * D) n :=
+noncomputable def gramDressing (X : GL (Fin n) ℂ) (A : MPOTensor D n) :
+    MPOTensor D n :=
   fun v ↦
     ((X : Matrix (Fin n) (Fin n) ℂ)ᴴ *
         (X : Matrix (Fin n) (Fin n) ℂ)) * A v *
@@ -68,7 +68,7 @@ noncomputable def gramDressing (X : GL (Fin n) ℂ) (A : MPSTensor (D * D) n) :
 /-- Multiplication on the open virtual indices is a finite linear
 combination of marked horizontal slices. -/
 theorem horizontalSlice_bondMul
-    (P Q : Matrix (Fin n) (Fin n) ℂ) (A : MPSTensor (D * D) n)
+    (P Q : Matrix (Fin n) (Fin n) ℂ) (A : MPOTensor D n)
     (r s : Fin n) :
     horizontalSlice (bondMul P A Q) r s =
       ∑ p : Fin n, ∑ q : Fin n,
@@ -87,7 +87,7 @@ theorem horizontalSlice_bondMul
 /-- Multiplication on the open virtual indices gives the corresponding
 finite linear combination of marked-chain coefficients. -/
 theorem markedChainCoefficient_bondMul
-    (P Q : Matrix (Fin n) (Fin n) ℂ) (A : MPSTensor (D * D) n)
+    (P Q : Matrix (Fin n) (Fin n) ℂ) (A : MPOTensor D n)
     (M : MPOTensor d D) (r s : Fin n) (σs τs : List (Fin d)) :
     markedChainCoefficient (bondMul P A Q) M r s σs τs =
       ∑ p : Fin n, ∑ q : Fin n,
@@ -104,7 +104,7 @@ theorem markedChainCoefficient_bondMul
 multiplication on their open virtual indices. -/
 theorem markedChainCoefficient_bondMul_eq_of_eq
     (P Q : Matrix (Fin n) (Fin n) ℂ)
-    (A B : MPSTensor (D * D) n) (M N : MPOTensor d D)
+    (A B : MPOTensor D n) (M N : MPOTensor d D)
     (r s : Fin n) (σs τs σs' τs' : List (Fin d))
     (h : ∀ p q : Fin n,
       markedChainCoefficient A M p q σs τs =
@@ -123,7 +123,7 @@ if the conjugated tensor \(X A X^{-1}\) satisfies the reflected identity at
 every pair of open indices, then `gramDressing X A` has the reflected chain of
 `A` itself. Source: arXiv:1606.00608, Proposition 4.13, lines 1914--1919. -/
 theorem markedChainCoefficient_gramDressing_eq_of_bondMul_reflected
-    (A : MPSTensor (D * D) n) (M : MPOTensor d D) (X : GL (Fin n) ℂ)
+    (A : MPOTensor D n) (M : MPOTensor d D) (X : GL (Fin n) ℂ)
     (N : ℕ) (r s : Fin n) (σ τ : Fin N → Fin d)
     (hFigure : ∀ p q : Fin n,
       markedChainCoefficient
@@ -142,7 +142,7 @@ theorem markedChainCoefficient_gramDressing_eq_of_bondMul_reflected
   let Xm : Matrix (Fin n) (Fin n) ℂ := X
   let Xi : Matrix (Fin n) (Fin n) ℂ :=
     (((X)⁻¹ : GL (Fin n) ℂ) : Matrix (Fin n) (Fin n) ℂ)
-  let B : MPSTensor (D * D) n := bondMul Xm A Xi
+  let B : MPOTensor D n := bondMul Xm A Xi
   have hCov := markedChainCoefficient_bondMul_eq_of_eq Xmᴴ Xiᴴ
     B (reflectedAdjoint B) M (MPOTensor.adjointTensor M) r s
     (List.ofFn σ) (List.ofFn τ)
@@ -177,7 +177,7 @@ factors cancel.  This is the common right side used in Figure 8 of
 arXiv:1606.00608, Proposition 4.13, lines 1909--1919. -/
 theorem IsMPDO.markedChainCoefficient_gramDressing_eq_reflectedAdjoint
     {M : MPOTensor d D} (hM : IsMPDO M)
-    (A : MPSTensor (D * D) n) (V : Matrix (Fin d) (Fin n) ℂ)
+    (A : MPOTensor D n) (V : Matrix (Fin d) (Fin n) ℂ)
     (X : GL (Fin n) ℂ) (c : ℂ) (hc : (0 : ℂ) < c)
     (hcorner : ∀ v,
       Vᴴ * verticalTensor M v * V =
@@ -202,7 +202,7 @@ representative.  This is the pairwise use of Figures 7--8 in
 arXiv:1606.00608, Proposition 4.13, lines 1909--1919. -/
 theorem IsMPDO.markedChainCoefficient_gramDressing_eq_of_two_corners
     {M : MPOTensor d D} (hM : IsMPDO M)
-    (A : MPSTensor (D * D) n)
+    (A : MPOTensor D n)
     (VX VY : Matrix (Fin d) (Fin n) ℂ) (X Y : GL (Fin n) ℂ)
     (cX cY : ℂ) (hcX : (0 : ℂ) < cX) (hcY : (0 : ℂ) < cY)
     (hcornerX : ∀ v,
@@ -240,7 +240,7 @@ horizontal slices in the span of the physical letters with coefficients
 Source comparison: arXiv:1606.00608, Proposition 4.13, Figures 7--8 and
 lines 1909--1919. -/
 theorem linearMarkedTensor_twoSidedCompressionCoefficients
-    {M : MPOTensor d D} (A : MPSTensor (D * D) n)
+    {M : MPOTensor d D} (A : MPOTensor D n)
     (L R : Matrix (Fin d) (Fin n) ℂ) (c : ℂ) (hc : c ≠ 0)
     (hcompression : ∀ v, Lᴴ * verticalTensor M v * R = c • A v)
     (u : Fin (n * n)) :
@@ -271,12 +271,12 @@ noncomputable def cornerGramCoefficients
     Fin (n * n) → Fin d × Fin d → ℂ :=
   twoSidedCompressionCoefficients
     (V * (X : Matrix (Fin n) (Fin n) ℂ))
-    (V * ((↑(X⁻¹) : Matrix (Fin n) (Fin n) ℂ))ᴴ) c
+    (V * (↑(X⁻¹) : Matrix (Fin n) (Fin n) ℂ)ᴴ) c
 
 /-- The coefficients of a grouped corner recover the horizontal slices of
 its Gram-dressed representative. -/
 theorem linearMarkedTensor_cornerGramCoefficients
-    {M : MPOTensor d D} (A : MPSTensor (D * D) n)
+    {M : MPOTensor d D} (A : MPOTensor D n)
     (V : Matrix (Fin d) (Fin n) ℂ) (X : GL (Fin n) ℂ)
     (c : ℂ) (hc : (0 : ℂ) < c)
     (hcorner : ∀ v,
@@ -339,7 +339,7 @@ Source: arXiv:1606.00608, proof of Proposition 4.13, Figures 7--8 and lines
 1909--1919. -/
 theorem gramDressing_eq_of_two_grouped_corners
     (M : MPOTensor d D) (hHorizontal : M.IsHorizontalCF) (hM : IsMPDO M)
-    (A : MPSTensor (D * D) n)
+    (A : MPOTensor D n)
     (VX VY : Matrix (Fin d) (Fin n) ℂ) (X Y : GL (Fin n) ℂ)
     (cX cY : ℂ) (hcX : (0 : ℂ) < cX) (hcY : (0 : ℂ) < cY)
     (hcornerX : ∀ v,
@@ -375,8 +375,7 @@ theorem gramDressing_eq_of_two_grouped_corners
   have hMarks : MPSTensor.linearMarkedTensor fX M =
       MPSTensor.linearMarkedTensor fY M :=
     hHorizontal.linearMarkedTensor_eq_of_trace_agree M fX fY hTrace
-  funext v
-  obtain ⟨⟨a, b⟩, rfl⟩ := finProdFinEquiv.surjective v
+  funext ⟨a, b⟩
   ext r s
   have hSlice := congrFun hMarks (finProdFinEquiv (r, s))
   rw [linearMarkedTensor_cornerGramCoefficients
@@ -465,7 +464,7 @@ Source: arXiv:1606.00608, Proposition 4.13, Figure 7 and lines 1909--1913,
 together with Appendix C.4, lines 1951--1956. -/
 private theorem IsMPDO.markedChainCoefficient_blockTwoPrefix_eq_reflectedAdjoint
     {M : MPOTensor d D} (hM : IsMPDO M)
-    (A : MPSTensor (D * D) n)
+    (A : MPOTensor D n)
     (V : Matrix (Fin (d * d)) (Fin n) ℂ)
     (c : ℂ) (hc : (0 : ℂ) < c)
     (hcorner : ∀ v,
@@ -509,7 +508,7 @@ Source: arXiv:1606.00608, Proposition 4.13, Figures 7--8 and lines
 1909--1919, together with Appendix C.4, lines 1951--1956 and 2048--2057. -/
 theorem IsMPDO.markedChainCoefficient_blockTwoPrefix_gramDressing_eq_reflectedAdjoint
     {M : MPOTensor d D} (hM : IsMPDO M)
-    (A : MPSTensor (D * D) n)
+    (A : MPOTensor D n)
     (V : Matrix (Fin (d * d)) (Fin n) ℂ)
     (X : GL (Fin n) ℂ) (c : ℂ) (hc : (0 : ℂ) < c)
     (hcorner : ∀ v,

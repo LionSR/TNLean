@@ -76,14 +76,14 @@ theorem IsHorizontalCF.hasInvariantProjectorClosure_verticalTensor
   have hLeft : M.ketLeftMul P = (M.ketLeftMul P).braRightMul P := by
     funext ⟨i, j⟩
     ext a b
-    let w := finProdFinEquiv (a, b)
+    let w : Fin D × Fin D := (a, b)
     have hw : verticalTensor (M.ketLeftMul P) w =
         verticalTensor ((M.ketLeftMul P).braRightMul P) w := by
       rw [verticalTensor_ketLeftMul, verticalTensor_braRightMul,
         verticalTensor_ketLeftMul]
       exact hInv w
     have hij := congrFun (congrFun hw i) j
-    simpa [w, verticalTensor_finProdFinEquiv] using hij
+    simpa [w] using hij
   have hRight :=
     hHorizontal.braRight_eq_ketLeftBraRight_of_invariant M hM hP.1 hLeft
   rw [← verticalTensor_braRightMul, hRight, verticalTensor_braRightMul,
@@ -115,14 +115,14 @@ theorem hasInvariantProjectorClosure_verticalTensor
   have hLeft : M.ketLeftMul P = (M.ketLeftMul P).braRightMul P := by
     funext ⟨i, j⟩
     ext a b
-    let w := finProdFinEquiv (a, b)
+    let w : Fin D × Fin D := (a, b)
     have hw : verticalTensor (M.ketLeftMul P) w =
         verticalTensor ((M.ketLeftMul P).braRightMul P) w := by
       rw [verticalTensor_ketLeftMul, verticalTensor_braRightMul,
         verticalTensor_ketLeftMul]
       exact hInv w
     have hij := congrFun (congrFun hw i) j
-    simpa [w, verticalTensor_finProdFinEquiv] using hij
+    simpa [w] using hij
   have hAct := firstSiteActionAgree_braRight_ketLeftBraRight_of_invariant
     M hM hP.1 hLeft
   have hRight : M.braRightMul P = (M.ketLeftMul P).braRightMul P := by
@@ -154,7 +154,7 @@ Proposition 4.13, lines 1873--1887. -/
 theorem IsHorizontalCF.exists_irreducible_verticalBlockDecomp_with_isometry
     (M : MPOTensor d D) (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M) :
     ∃ (r : ℕ) (dim : Fin r → ℕ)
-      (blocks : (k : Fin r) → MPSTensor (D * D) (dim k))
+      (blocks : (k : Fin r) → MPOTensor D (dim k))
       (V : (k : Fin r) → Matrix (Fin d) (Fin (dim k)) ℂ),
       (∀ k, 0 < dim k) ∧
       (∀ k, (V k)ᴴ * V k = 1) ∧
@@ -166,7 +166,7 @@ theorem IsHorizontalCF.exists_irreducible_verticalBlockDecomp_with_isometry
       (∀ k, Kraus.IsIrreducibleFamily (blocks k)) ∧
       MPTensor.SameMPV₂Pos (verticalTensor M)
         (MPTensor.toTensorFromBlocks
-          (α := Fin (D * D)) (μ := fun _ : Fin r => (1 : ℂ)) blocks) := by
+          (α := Fin D × Fin D) (μ := fun _ : Fin r => (1 : ℂ)) blocks) := by
   obtain ⟨r, dim, blocks, V, hdim, hIso, hSum, hOrth, hIntertwine,
       hIntertwineStar, hCompress, hIrred, hSame⟩ :=
     MPSTensor.exists_irreducible_blockDecomp_with_isometry_of_hasInvariantProjectorClosure
@@ -258,7 +258,7 @@ used at lines 1895--1898 of Proposition 4.13. -/
 theorem IsHorizontalCF.exists_normal_verticalBlockDecomp_with_isometry
     (M : MPOTensor d D) (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M) :
     ∃ (r : ℕ) (dim : Fin r → ℕ) (μ : Fin r → ℂ)
-      (blocks : (k : Fin r) → MPSTensor (D * D) (dim k))
+      (blocks : (k : Fin r) → MPOTensor D (dim k))
       (V : (k : Fin r) → Matrix (Fin d) (Fin (dim k)) ℂ),
       (∀ k, 0 < dim k) ∧
       (∀ k, (0 : ℂ) < μ k) ∧
@@ -277,7 +277,7 @@ theorem IsHorizontalCF.exists_normal_verticalBlockDecomp_with_isometry
   have hPF : ∀ k : Fin r₀, (∃ v, blocks₀ k v ≠ 0) →
       ∃ (ρ : Matrix (Fin (dim₀ k)) (Fin (dim₀ k)) ℂ) (t : ℝ),
         ρ.PosDef ∧ 0 < t ∧
-        Kraus.transferMap (ι := Fin (D * D)) (n := Fin (dim₀ k)) (blocks₀ k) ρ =
+        Kraus.transferMap (ι := Fin D × Fin D) (n := Fin (dim₀ k)) (blocks₀ k) ρ =
           (t : ℂ) • ρ := by
     intro k hk
     have : NeZero (dim₀ k) := ⟨(hpos k).ne'⟩
@@ -287,14 +287,14 @@ theorem IsHorizontalCF.exists_normal_verticalBlockDecomp_with_isometry
   let κ := {k : Fin r₀ // ∃ v, blocks₀ k v ≠ 0}
   let e : Fin (Fintype.card κ) ≃ κ := (Fintype.equivFin κ).symm
   let μf : κ → ℂ := fun x => ((Real.sqrt (tf x.1 x.2) : ℝ) : ℂ)
-  let normalized : (x : κ) → MPSTensor (D * D) (dim₀ x.1) := fun x v =>
+  let normalized : (x : κ) → MPOTensor D (dim₀ x.1) := fun x v =>
     (μf x)⁻¹ • blocks₀ x.1 v
   have hμpos : ∀ x : κ, (0 : ℂ) < μf x := by
     intro x
     change (0 : ℂ) < ((Real.sqrt (tf x.1 x.2) : ℝ) : ℂ)
     exact Complex.zero_lt_real.mpr (Real.sqrt_pos.mpr (htf x.1 x.2))
   have hμne : ∀ x : κ, μf x ≠ 0 := fun x => (hμpos x).ne'
-  have hrecover : ∀ (x : κ) (v : Fin (D * D)),
+  have hrecover : ∀ (x : κ) (v : Fin D × Fin D),
       μf x • normalized x v = blocks₀ x.1 v := by
     intro x v
     simp only [normalized, smul_smul, mul_inv_cancel₀ (hμne x), one_smul]

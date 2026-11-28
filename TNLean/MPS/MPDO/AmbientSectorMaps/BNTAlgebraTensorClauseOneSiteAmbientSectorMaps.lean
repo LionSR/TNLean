@@ -58,15 +58,15 @@ sector blocks are \(\mu_\alpha \otimes M_\alpha\).
 
 Source: arXiv:1606.00608, Appendix C.4, lines 2048--2051. -/
 theorem verticalAssembledTensor_eq_verticalSectorBlockDiagonal
-    (H : BNTAlgebraTensorClause M) (v : Fin (D * D)) :
+    (H : BNTAlgebraTensorClause M) (v : Fin D × Fin D) :
     verticalAssembledTensor H.bondDim H.multiplicity H.weight H.tensor v =
       verticalSectorBlockDiagonal H.bondDim H.multiplicity (fun α ↦
         Matrix.kroneckerMap (· * ·) (Matrix.diagonal (H.weight α))
           (H.tensor α v)) := by
-  simpa only [MPSTensor.contractBondMatrix_single_mod_div] using
+  simpa only [MPSTensor.contractBondMatrix_single_transpose, Prod.mk.eta] using
     contractBondMatrix_verticalAssembledTensor_eq_sectorBlockDiagonal
       H.bondDim H.multiplicity H.weight H.tensor
-        (Matrix.single v.modNat v.divNat 1)
+        (Matrix.single v.2 v.1 1)
 
 /-- The one-site raw sector retraction \(R_1\) compresses to the retained
 vertical sectors and traces out their multiplicity coordinates.
@@ -220,7 +220,7 @@ sector multiplied by its multiplicity trace \(m_\alpha\).
 
 Source: arXiv:1606.00608, Appendix C.4, lines 2048--2051 and 2067--2068. -/
 theorem oneSiteAmbientSectorRetraction_verticalTensor
-    (H : BNTAlgebraTensorClause M) (v : Fin (D * D)) :
+    (H : BNTAlgebraTensorClause M) (v : Fin D × Fin D) :
     H.oneSiteAmbientSectorRetraction (verticalTensor M v) =
       fun α ↦ verticalMultiplicityTrace H.weight α • H.tensor α v := by
   rw [oneSiteAmbientSectorRetraction_apply,
@@ -234,7 +234,7 @@ sectors back to the corresponding vertical tensor letter.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 2048--2051 and 2081--2083. -/
 theorem oneSiteNormalizedAmbientSectorRestoration_trace_smul_verticalTensor
-    (H : BNTAlgebraTensorClause M) (v : Fin (D * D)) :
+    (H : BNTAlgebraTensorClause M) (v : Fin D × Fin D) :
     H.oneSiteNormalizedAmbientSectorRestoration
         (fun α ↦ verticalMultiplicityTrace H.weight α • H.tensor α v) =
       verticalTensor M v := by

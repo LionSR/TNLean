@@ -139,7 +139,7 @@ theorem exists_normal_verticalBlockDecomp_with_isometry
     (hCanonical : IsCPSVCanonicalForm M)
     (hM : M.IsMPDO) :
     ∃ (r : ℕ) (dim : Fin r → ℕ) (μ : Fin r → ℂ)
-      (blocks : (k : Fin r) → MPSTensor (D * D) (dim k))
+      (blocks : (k : Fin r) → MPOTensor D (dim k))
       (V : (k : Fin r) → Matrix (Fin d) (Fin (dim k)) ℂ),
       (∀ k, 0 < dim k) ∧
       (∀ k, (0 : ℂ) < μ k) ∧

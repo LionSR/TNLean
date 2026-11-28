@@ -39,8 +39,8 @@ lemma precompressionVerticalSectorT_image_preservation
     (hMult₁ : ∀ α, 0 < mult₁ α)
     (hWeight₁ : ∀ α q, (0 : ℂ) < weight₁ α q)
     (M : MPOTensor d D)
-    (A₁ : (α : Fin g₁) → MPSTensor (D * D) (dim₁ α))
-    (A₂ : (β : Fin g₂) → MPSTensor (D * D) (dim₂ β))
+    (A₁ : (α : Fin g₁) → MPOTensor D (dim₁ α))
+    (A₂ : (β : Fin g₂) → MPOTensor D (dim₂ β))
     (U₁ : Matrix
       (Fin (∑ q : Fin (∑ α : Fin g₁, mult₁ α), verticalCopyDim dim₁ mult₁ q))
       (Fin d) ℂ)
@@ -91,8 +91,8 @@ lemma precompressionVerticalSectorS_image_preservation
     (hMult₂ : ∀ β, 0 < mult₂ β)
     (hWeight₂ : ∀ β q, (0 : ℂ) < weight₂ β q)
     (M : MPOTensor d D)
-    (A₁ : (α : Fin g₁) → MPSTensor (D * D) (dim₁ α))
-    (A₂ : (β : Fin g₂) → MPSTensor (D * D) (dim₂ β))
+    (A₁ : (α : Fin g₁) → MPOTensor D (dim₁ α))
+    (A₂ : (β : Fin g₂) → MPOTensor D (dim₂ β))
     (U₁ : Matrix
       (Fin (∑ q : Fin (∑ α : Fin g₁, mult₁ α), verticalCopyDim dim₁ mult₁ q))
       (Fin d) ℂ)
@@ -143,8 +143,8 @@ lemma transportedVerticalSectorT_trace_of_source_generated
     (hMult₁ : ∀ α, 0 < mult₁ α)
     (hWeight₁ : ∀ α q, (0 : ℂ) < weight₁ α q)
     (M : MPOTensor d D)
-    (A₁ : (α : Fin g₁) → MPSTensor (D * D) (dim₁ α))
-    (A₂ : (β : Fin g₂) → MPSTensor (D * D) (dim₂ β))
+    (A₁ : (α : Fin g₁) → MPOTensor D (dim₁ α))
+    (A₂ : (β : Fin g₂) → MPOTensor D (dim₂ β))
     (U₁ : Matrix
       (Fin (∑ q : Fin (∑ α : Fin g₁, mult₁ α), verticalCopyDim dim₁ mult₁ q))
       (Fin d) ℂ)
@@ -190,8 +190,8 @@ lemma transportedVerticalSectorS_trace_of_source_generated
     (hMult₂ : ∀ β, 0 < mult₂ β)
     (hWeight₂ : ∀ β q, (0 : ℂ) < weight₂ β q)
     (M : MPOTensor d D)
-    (A₁ : (α : Fin g₁) → MPSTensor (D * D) (dim₁ α))
-    (A₂ : (β : Fin g₂) → MPSTensor (D * D) (dim₂ β))
+    (A₁ : (α : Fin g₁) → MPOTensor D (dim₁ α))
+    (A₂ : (β : Fin g₂) → MPOTensor D (dim₂ β))
     (U₁ : Matrix
       (Fin (∑ q : Fin (∑ α : Fin g₁, mult₁ α), verticalCopyDim dim₁ mult₁ q))
       (Fin d) ℂ)

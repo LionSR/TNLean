@@ -50,7 +50,7 @@ of one BNT tensor.
 Source: arXiv:1606.00608, lines 1003--1012. -/
 def terminalMatrix (H : BNTFusionTensorClause M) (γ : Fin H.labelCount) :
     Matrix (Fin (H.bondDim γ)) (Fin (H.bondDim γ)) ℂ :=
-  physTraceTransfer (verticalBNTMPO (H.tensor γ))
+  physTraceTransfer (H.tensor γ)
 
 /-- A BNT label together with one eigenvector index of its terminal bond
 matrix.
@@ -64,7 +64,7 @@ abbrev TerminalSpectralIndex (H : BNTFusionTensorClause M) : Type :=
 Source: arXiv:1606.00608, lines 1009--1012. -/
 def terminalEigenvalue (H : BNTFusionTensorClause M) (hM : IsMPDO M)
     (s : H.TerminalSpectralIndex) : ℝ :=
-  (H.physTraceTransfer_verticalBNTMPO_posSemidef hM s.1).isHermitian.eigenvalues s.2
+  (H.physTraceTransfer_tensor_posSemidef hM s.1).isHermitian.eigenvalues s.2
 
 /-- The rank-one spectral projection attached to a terminal spectral index.
 
@@ -72,7 +72,7 @@ Source: arXiv:1606.00608, lines 1009--1012. -/
 def terminalEigenProjection (H : BNTFusionTensorClause M) (hM : IsMPDO M)
     (s : H.TerminalSpectralIndex) :
     Matrix (Fin (H.bondDim s.1)) (Fin (H.bondDim s.1)) ℂ :=
-  (H.physTraceTransfer_verticalBNTMPO_posSemidef hM s.1).isHermitian.eigenvectorProjection s.2
+  (H.physTraceTransfer_tensor_posSemidef hM s.1).isHermitian.eigenvectorProjection s.2
 
 /-- Terminal eigenvalues are nonnegative.
 
@@ -80,7 +80,7 @@ Source: arXiv:1606.00608, lines 1009--1012. -/
 theorem terminalEigenvalue_nonneg (H : BNTFusionTensorClause M) (hM : IsMPDO M)
     (s : H.TerminalSpectralIndex) :
     0 ≤ H.terminalEigenvalue hM s :=
-  (H.physTraceTransfer_verticalBNTMPO_posSemidef hM s.1).eigenvalues_nonneg s.2
+  (H.physTraceTransfer_tensor_posSemidef hM s.1).eigenvalues_nonneg s.2
 
 /-- Every terminal spectral component is an orthogonal projection.
 
@@ -90,7 +90,7 @@ theorem terminalEigenProjection_isOrthogonalProjection
     (s : H.TerminalSpectralIndex) :
     IsOrthogonalProjection (H.terminalEigenProjection hM s) :=
   Matrix.IsHermitian.isOrthogonalProjection_eigenvectorProjection
-    (H.physTraceTransfer_verticalBNTMPO_posSemidef hM s.1).isHermitian s.2
+    (H.physTraceTransfer_tensor_posSemidef hM s.1).isHermitian s.2
 
 /-- Distinct spectral components of one terminal matrix are orthogonal.
 
@@ -101,7 +101,7 @@ theorem terminalEigenProjection_mul_eq_zero (H : BNTFusionTensorClause M)
     H.terminalEigenProjection hM ⟨γ, i⟩ *
         H.terminalEigenProjection hM ⟨γ, j⟩ = 0 :=
   Matrix.IsHermitian.eigenvectorProjection_mul_eq_zero_of_ne
-    (H.physTraceTransfer_verticalBNTMPO_posSemidef hM γ).isHermitian hij
+    (H.physTraceTransfer_tensor_posSemidef hM γ).isHermitian hij
 
 /-- Each terminal bond matrix is the nonnegative weighted sum of its rank-one
 spectral projections.
@@ -116,7 +116,7 @@ theorem terminalMatrix_eq_sum_eigenvalue_smul_projection
           H.terminalEigenProjection hM ⟨γ, k⟩ := by
   simpa [terminalMatrix, terminalEigenvalue, terminalEigenProjection] using
     (Matrix.IsHermitian.eq_sum_eigenvalues_smul_eigenvectorProjection
-      (H.physTraceTransfer_verticalBNTMPO_posSemidef hM γ).isHermitian)
+      (H.physTraceTransfer_tensor_posSemidef hM γ).isHermitian)
 
 /-- The terminal family supported at one label and one spectral index.
 
@@ -456,7 +456,7 @@ theorem sum_terminalEigenvalue_smul_recursiveTerminalEigenProjectorQ
   let Ptot : (γ : Fin H.labelCount) →
       Matrix (Fin (H.toBNTFusionCoisometryFamily.bondDim γ))
         (Fin (H.toBNTFusionCoisometryFamily.bondDim γ)) ℂ :=
-    fun γ ↦ (verticalBNTMPO (H.tensor γ)).physTraceTransfer
+    fun γ ↦ (H.tensor γ).physTraceTransfer
   change (∑ s : H.TerminalSpectralIndex, (H.terminalEigenvalue hM s : ℂ) •
       H.toBNTFusionCoisometryFamily.recursiveProjectorQ (P s) (p 0).1
         (H.reverseAppendedLabels p)) =

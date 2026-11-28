@@ -288,7 +288,7 @@ multiplication on the matched tensor family.
 Source: arXiv:1606.00608, Appendix C.4, lines 2053--2069. -/
 private theorem UnitarySectorConjugacy.directSumUnitaryT_smul_tensor
     (C : UnitarySectorConjugacy S) (a : Fin H.labelCount → ℂ)
-    (v : Fin (D * D)) :
+    (v : Fin D × Fin D) :
     C.directSumUnitaryT (fun γ ↦ a γ • H.tensor γ v) =
       fun γ ↦ a γ • S.decomposition.tensor (S.relabel γ) v := by
   funext γ
@@ -306,7 +306,7 @@ multiplication on the matched tensor family.
 Source: arXiv:1606.00608, Appendix C.4, lines 2053--2080. -/
 private theorem UnitarySectorConjugacy.directSumUnitaryS_smul_tensor
     (C : UnitarySectorConjugacy S) (a : Fin H.labelCount → ℂ)
-    (v : Fin (D * D)) :
+    (v : Fin D × Fin D) :
     C.directSumUnitaryS
         (fun γ ↦ a γ • S.decomposition.tensor (S.relabel γ) v) =
       fun γ ↦ a γ • H.tensor γ v := by
@@ -326,7 +326,7 @@ corresponding decoded two-site vertical tensor letter.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 2065--2071. -/
 theorem UnitarySectorConjugacy.rawPhysicalT_verticalTensor
-    (C : UnitarySectorConjugacy S) (v : Fin (D * D)) :
+    (C : UnitarySectorConjugacy S) (v : Fin D × Fin D) :
     C.rawPhysicalT (verticalTensor M v) =
       Matrix.equivReindexMap (blockedIndexEquiv d)
         (verticalTensor (blockTwo M) v) := by
@@ -353,7 +353,7 @@ gives the corresponding one-site vertical tensor letter.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 2078--2083. -/
 theorem UnitarySectorConjugacy.rawPhysicalS_verticalTensor
-    (C : UnitarySectorConjugacy S) (v : Fin (D * D)) :
+    (C : UnitarySectorConjugacy S) (v : Fin D × Fin D) :
     C.rawPhysicalS
         (Matrix.equivReindexMap (blockedIndexEquiv d)
           (verticalTensor (blockTwo M) v)) =
@@ -388,7 +388,7 @@ theorem UnitarySectorConjugacy.rawPhysicalT_physClose1
   rw [← contractBondMatrix_verticalTensor_eq_physClose1]
   calc
     C.rawPhysicalT (MPSTensor.contractBondMatrix (verticalTensor M) X) =
-        ∑ v : Fin (D * D), X v.modNat v.divNat •
+        ∑ v : Fin D × Fin D, X v.2 v.1 •
           Matrix.equivReindexMap (blockedIndexEquiv d)
             (verticalTensor (blockTwo M) v) := by
       simp only [MPSTensor.contractBondMatrix_apply, map_sum, map_smul,
@@ -415,7 +415,7 @@ theorem UnitarySectorConjugacy.rawPhysicalS_physClose2
     C.rawPhysicalS
         (Matrix.equivReindexMap (blockedIndexEquiv d)
           (MPSTensor.contractBondMatrix (verticalTensor (blockTwo M)) X)) =
-        ∑ v : Fin (D * D), X v.modNat v.divNat • verticalTensor M v := by
+        ∑ v : Fin D × Fin D, X v.2 v.1 • verticalTensor M v := by
       simp only [MPSTensor.contractBondMatrix_apply, map_sum, map_smul,
         C.rawPhysicalS_verticalTensor]
     _ = MPSTensor.contractBondMatrix (verticalTensor M) X := by

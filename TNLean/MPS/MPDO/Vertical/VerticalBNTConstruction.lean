@@ -37,7 +37,7 @@ variable {d D : ℕ}
 /-- Word evaluation respects a left intertwining by the adjoint of a sector
 isometry. -/
 private lemma conjTranspose_mul_evalWord_of_intertwining
-    {s n : ℕ} (T : MPSTensor s d) (B : MPSTensor s n)
+    {κ : Type*} {n : ℕ} (T : MPTensor κ (Fin d)) (B : MPTensor κ (Fin n))
     (V : Matrix (Fin d) (Fin n) ℂ)
     (hinter : ∀ v, Vᴴ * T v = B v * Vᴴ) :
     ∀ w, Vᴴ * Kraus.evalWord T w = Kraus.evalWord B w * Vᴴ := by
@@ -58,15 +58,15 @@ into each corner, and the isometry removes the two adjacent inclusion maps.
 
 Source: arXiv:1606.00608, eq:II_CF1 and lines 237--242. -/
 lemma sameMPV₂Pos_toTensorFromBlocks_of_reconstruction
-    {s r : ℕ} {dim : Fin r → ℕ}
-    (T : MPSTensor s d) (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor s (dim k))
+    {κ : Type*} {r : ℕ} {dim : Fin r → ℕ}
+    (T : MPTensor κ (Fin d)) (μ : Fin r → ℂ)
+    (blocks : (k : Fin r) → MPTensor κ (Fin (dim k)))
     (V : (k : Fin r) → Matrix (Fin d) (Fin (dim k)) ℂ)
     (hiso : ∀ k, (V k)ᴴ * V k = 1)
     (hinter : ∀ k v, (V k)ᴴ * T v = (μ k • blocks k v) * (V k)ᴴ)
     (hreconstruct : ∀ v, T v = ∑ k, V k * (μ k • blocks k v) * (V k)ᴴ) :
     MPTensor.SameMPV₂Pos T
-      (MPTensor.toTensorFromBlocks (α := Fin s) (μ := μ) blocks) := by
+      (MPTensor.toTensorFromBlocks (α := κ) (μ := μ) blocks) := by
   intro N hN σ
   rw [MPSTensor.mpv_toTensorFromBlocks_eq_sum]
   simp only [MPTensor.mpv, MPTensor.coeff]
@@ -127,7 +127,7 @@ Source: arXiv:1606.00608, Proposition 4.13, lines 1863--1921. -/
 theorem isCPSVBasisOfNormalTensors_verticalTensor_of_grouping
     (M : MPOTensor d D)
     {r : ℕ} {dim : Fin r → ℕ} (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor (D * D) (dim k))
+    (blocks : (k : Fin r) → MPOTensor D (dim k))
     (V : (k : Fin r) → Matrix (Fin d) (Fin (dim k)) ℂ)
     (hiso : ∀ k, (V k)ᴴ * V k = 1)
     (hinter : ∀ k v,
@@ -136,7 +136,7 @@ theorem isCPSVBasisOfNormalTensors_verticalTensor_of_grouping
       verticalTensor M v = ∑ k, V k * (μ k • blocks k v) * (V k)ᴴ)
     (hBNT : let C := MPSTensor.mpvPhaseClassData blocks
       MPSTensor.IsCPSVBasisOfNormalTensors
-        (MPTensor.toTensorFromBlocks (α := Fin (D * D)) (μ := μ) blocks)
+        (MPTensor.toTensorFromBlocks (α := Fin D × Fin D) (μ := μ) blocks)
         (fun j => ⟨dim (C.repr j), blocks (C.repr j)⟩)) :
     let C := MPSTensor.mpvPhaseClassData blocks
     MPSTensor.IsCPSVBasisOfNormalTensors (verticalTensor M)
@@ -144,7 +144,7 @@ theorem isCPSVBasisOfNormalTensors_verticalTensor_of_grouping
   classical
   let C := MPSTensor.mpvPhaseClassData blocks
   have hPositive : MPTensor.SameMPV₂Pos (verticalTensor M)
-      (MPTensor.toTensorFromBlocks (α := Fin (D * D)) (μ := μ) blocks) :=
+      (MPTensor.toTensorFromBlocks (α := Fin D × Fin D) (μ := μ) blocks) :=
     MPSTensor.sameMPV₂Pos_toTensorFromBlocks_of_reconstruction
       (verticalTensor M) μ blocks V hiso hinter hreconstruct
   exact hBNT.of_sameMPV₂Pos hPositive.symm

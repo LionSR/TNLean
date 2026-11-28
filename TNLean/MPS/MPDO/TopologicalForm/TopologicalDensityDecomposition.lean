@@ -180,7 +180,7 @@ def verticalCopyChainProjectorQ (H : BNTFusionTensorClause M) {N : ℕ}
       (H.toBNTFusionCoisometryFamily.FusionHistoryIndex
         (p 0).1 (H.reverseAppendedLabels p)) ℂ :=
   H.toBNTFusionCoisometryFamily.recursiveProjectorQ
-    (fun γ ↦ physTraceTransfer (verticalBNTMPO (H.tensor γ)))
+    (fun γ ↦ physTraceTransfer (H.tensor γ))
     (p 0).1 (H.reverseAppendedLabels p)
 
 /-- The line-999 density block in a fixed BNT-copy configuration.
@@ -284,7 +284,7 @@ BNT tensor.
 Source: arXiv:1606.00608, Proposition 4.13, lines 943--951. -/
 def verticalCopyChainLetter (H : BNTFusionTensorClause M) (p : H.VerticalCopy)
     (x y : Fin (H.bondDim p.1)) : Matrix (Fin D) (Fin D) ℂ :=
-  fun a b ↦ H.tensor p.1 (finProdFinEquiv (a, b)) x y
+  fun a b ↦ H.tensor p.1 (a, b) x y
 
 /-- A product-tensor letter in canonical chain coordinates is the ordered product of the
 horizontal matrices selected at the individual sites.
@@ -305,8 +305,7 @@ theorem fusionChainTensor_apply_verticalCopyChainBondEquiv
         H.verticalCopyChainBondEquiv_zero_apply p y]
       simp [BNTFusionCoisometryFamily.fusionChainTensor,
         reverseAppendedLabels,
-        verticalCopyChainLetter, BNTFusionTensorClause.toBNTFusionCoisometryFamily,
-        verticalBNTMPO]
+        verticalCopyChainLetter, BNTFusionTensorClause.toBNTFusionCoisometryFamily]
   | N + 1, p, x, y, a, b => by
       let xInit : H.VerticalCopyChainFiber (Fin.init p) :=
         Fin.init x
@@ -315,7 +314,7 @@ theorem fusionChainTensor_apply_verticalCopyChainBondEquiv
       change mulTensor
           (H.toBNTFusionCoisometryFamily.fusionChainTensor
             ((Fin.init p) 0).1 (H.reverseAppendedLabels (Fin.init p)))
-          (verticalBNTMPO (H.tensor (p (Fin.last (N + 1))).1)) (a, b)
+          (H.tensor (p (Fin.last (N + 1))).1) (a, b)
           (finProdFinEquiv
             (H.verticalCopyChainBondEquiv (Fin.init p) xInit,
               x (Fin.last (N + 1))))
@@ -366,7 +365,7 @@ separate exact reconstruction requires the discarded complement to be a zero sec
 def retainedVerticalAssembledMPO (H : BNTFusionTensorClause M) :
     MPOTensor H.verticalRetainedDim D :=
   fun (i, j) a b ↦ verticalAssembledTensor H.bondDim H.multiplicity H.weight H.tensor
-    (finProdFinEquiv (a, b)) i j
+    (a, b) i j
 
 /-- Conjugating the local physical coordinates by the retained-row vertical coisometry gives
 the weighted BNT direct sum.
@@ -378,7 +377,7 @@ theorem changePhysicalBasis_verticalCoisometry_eq_retainedVerticalAssembledMPO
       H.retainedVerticalAssembledMPO := by
   ext ⟨i, j⟩ a b
   unfold changePhysicalBasis retainedVerticalAssembledMPO
-  have hs : physicalSlice M a b = verticalTensor M (finProdFinEquiv (a, b)) := by
+  have hs : physicalSlice M a b = verticalTensor M (a, b) := by
     ext s t
     simp [physicalSlice]
   rw [hs, H.forward]
@@ -397,7 +396,7 @@ theorem changePhysicalBasis_verticalCoisometry_copy_same
   ext a b
   have hAssembled := congrFun (congrFun
     (verticalAssembledTensor_reindex_copyCoordinates H.bondDim H.multiplicity
-      H.weight H.tensor (finProdFinEquiv (a, b)))
+      H.weight H.tensor (a, b))
     ((verticalCopyCoordinateEquiv H.bondDim H.multiplicity).symm ⟨p, x⟩))
     ((verticalCopyCoordinateEquiv H.bondDim H.multiplicity).symm ⟨p, y⟩)
   simpa only [retainedVerticalAssembledMPO, Matrix.reindex_apply, Matrix.submatrix_apply,
@@ -417,7 +416,7 @@ theorem changePhysicalBasis_verticalCoisometry_copy_ne
   ext a b
   have hAssembled := congrFun (congrFun
     (verticalAssembledTensor_reindex_copyCoordinates H.bondDim H.multiplicity
-      H.weight H.tensor (finProdFinEquiv (a, b)))
+      H.weight H.tensor (a, b))
     ((verticalCopyCoordinateEquiv H.bondDim H.multiplicity).symm ⟨p, x⟩))
     ((verticalCopyCoordinateEquiv H.bondDim H.multiplicity).symm ⟨q, y⟩)
   simpa only [retainedVerticalAssembledMPO, Matrix.reindex_apply, Matrix.submatrix_apply,
@@ -437,10 +436,10 @@ independence nor any spectral or projection property.
 **Local fix (terminal trace orientation):** The physical trace closes the horizontal operator
 leg of the vertical basis tensor and leaves its bond pair open.  This is documented in
 `docs/paper-gaps/cpsv16_topological_projector_recursion.tex`. -/
-theorem physTraceTransfer_verticalBNTMPO_posSemidef
+theorem physTraceTransfer_tensor_posSemidef
     (H : BNTFusionTensorClause M) (hM : IsMPDO M) (γ : Fin H.labelCount) :
-    (physTraceTransfer (verticalBNTMPO (H.tensor γ))).PosSemidef := by
-  exact H.toBNTAlgebraTensorClause.physTraceTransfer_verticalBNTMPO_posSemidef hM γ
+    (physTraceTransfer (H.tensor γ)).PosSemidef := by
+  exact H.toBNTAlgebraTensorClause.physTraceTransfer_tensor_posSemidef hM γ
 
 /-- The recursive line-999 block has the fixed-copy closed-chain matrix entries.
 
@@ -550,8 +549,8 @@ theorem changePhysicalBasis_conjTranspose_verticalCoisometry_reconstruction
   unfold changePhysicalBasis retainedVerticalAssembledMPO physicalSlice
   rw [Matrix.conjTranspose_conjTranspose]
   have hReconstruction := congrFun (congrFun
-    (H.reconstruction (finProdFinEquiv (a, b))) i) j
-  simpa only [verticalTensor_finProdFinEquiv] using hReconstruction.symm
+    (H.reconstruction (a, b)) i) j
+  simpa only [verticalTensor_apply] using hReconstruction.symm
 
 /-- The sitewise retained-row congruence sends the original positive-length density operator
 to the all-label recursive density operator.

@@ -334,7 +334,7 @@ its native weighted sectors.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 2048--2064. -/
 theorem twoSiteVerticalAssembledTensor_eq_verticalSectorBlockDiagonal
-    (S : TwoSiteMultiplicitySpectrum H) (v : Fin (D * D)) :
+    (S : TwoSiteMultiplicitySpectrum H) (v : Fin D × Fin D) :
     verticalAssembledTensor S.decomposition.bondDim
         S.decomposition.multiplicity S.decomposition.weight
         S.decomposition.tensor v =
@@ -343,18 +343,18 @@ theorem twoSiteVerticalAssembledTensor_eq_verticalSectorBlockDiagonal
           Matrix.kroneckerMap (· * ·)
             (Matrix.diagonal (S.decomposition.weight β))
             (S.decomposition.tensor β v)) := by
-  simpa only [MPSTensor.contractBondMatrix_single_mod_div] using
+  simpa only [MPSTensor.contractBondMatrix_single_transpose, Prod.mk.eta] using
     contractBondMatrix_verticalAssembledTensor_eq_sectorBlockDiagonal
       S.decomposition.bondDim S.decomposition.multiplicity
         S.decomposition.weight S.decomposition.tensor
-        (Matrix.single v.modNat v.divNat 1)
+        (Matrix.single v.2 v.1 1)
 
 /-- Compressing a two-site vertical tensor letter by the relabelled
 coisometry gives the matched weighted sector blocks.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 2048--2064 and 2078--2079. -/
 theorem relabeledTwoSiteCoisometry_forward_verticalTensor
-    (S : TwoSiteMultiplicitySpectrum H) (v : Fin (D * D)) :
+    (S : TwoSiteMultiplicitySpectrum H) (v : Fin D × Fin D) :
     S.relabeledTwoSiteCoisometry * verticalTensor (blockTwo M) v *
         S.relabeledTwoSiteCoisometryᴴ =
       verticalSectorBlockDiagonal S.relabeledTwoSiteBondDim
@@ -375,7 +375,7 @@ vertical tensor letter.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 2048--2064 and 2070--2071. -/
 theorem relabeledTwoSiteCoisometry_reconstruction_verticalTensor
-    (S : TwoSiteMultiplicitySpectrum H) (v : Fin (D * D)) :
+    (S : TwoSiteMultiplicitySpectrum H) (v : Fin D × Fin D) :
     verticalTensor (blockTwo M) v = S.relabeledTwoSiteCoisometryᴴ *
       verticalSectorBlockDiagonal S.relabeledTwoSiteBondDim
         S.relabeledTwoSiteMultiplicity (fun γ ↦
@@ -397,7 +397,7 @@ matched BNT sector multiplied by the one-site multiplicity trace
 
 Source: arXiv:1606.00608, Appendix C.4, lines 2048--2064 and 2078--2079. -/
 theorem twoSiteAmbientSectorRetraction_verticalTensor
-    (S : TwoSiteMultiplicitySpectrum H) (v : Fin (D * D)) :
+    (S : TwoSiteMultiplicitySpectrum H) (v : Fin D × Fin D) :
     S.twoSiteAmbientSectorRetraction
         (Matrix.equivReindexMap (blockedIndexEquiv d)
           (verticalTensor (blockTwo M) v)) =
@@ -421,7 +421,7 @@ BNT sectors back to the decoded two-site vertical tensor letter.
 
 Source: arXiv:1606.00608, Appendix C.4, lines 2048--2064 and 2070--2071. -/
 theorem twoSiteNormalizedAmbientSectorRestoration_trace_smul_verticalTensor
-    (S : TwoSiteMultiplicitySpectrum H) (v : Fin (D * D)) :
+    (S : TwoSiteMultiplicitySpectrum H) (v : Fin D × Fin D) :
     S.twoSiteNormalizedAmbientSectorRestoration
         (fun γ ↦ verticalMultiplicityTrace H.weight γ •
           S.decomposition.tensor (S.relabel γ) v) =

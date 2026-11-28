@@ -92,20 +92,20 @@ structure BNTFusionTensorClause (M : MPOTensor d D)
   lines 986--993. -/
   fusion : ∀ (α β : Fin labelCount) (i j : Fin D),
     fusionCoisometry α β *
-        (mulTensor (verticalBNTMPO (tensor α)) (verticalBNTMPO (tensor β))) (i, j) *
+        (mulTensor (tensor α) (tensor β)) (i, j) *
           (fusionCoisometry α β)ᴴ =
       Matrix.blockDiagonal' fun γ =>
-        chi.matrix α β γ ⊗ₖ (verticalBNTMPO (tensor γ)) (i, j)
+        chi.matrix α β γ ⊗ₖ (tensor γ) (i, j)
   /-- The active direct sum reconstructs each product letter, so any omitted
   common corner is zero.
 
   Source: CPSV16, Appendix C.4, lines 2020--2029. -/
   fusionReconstruction : ∀ (α β : Fin labelCount) (i j : Fin D),
-    (mulTensor (verticalBNTMPO (tensor α))
-      (verticalBNTMPO (tensor β))) (i, j) =
+    (mulTensor (tensor α)
+      (tensor β)) (i, j) =
         (fusionCoisometry α β)ᴴ *
           (Matrix.blockDiagonal' fun γ ↦
-            chi.matrix α β γ ⊗ₖ (verticalBNTMPO (tensor γ)) (i, j)) *
+            chi.matrix α β γ ⊗ₖ (tensor γ) (i, j)) *
           fusionCoisometry α β
   /-- The length-one idempotent identity for
   \(m_\alpha=\operatorname{tr}(\mu_\alpha)\).
@@ -124,7 +124,7 @@ variable {M : MPOTensor d D}
 def toBNTFusionCoisometryFamily (H : BNTFusionTensorClause M) :
     BNTFusionCoisometryFamily (Fin H.labelCount) D where
   bondDim := H.bondDim
-  tensor := fun γ => verticalBNTMPO (H.tensor γ)
+  tensor := fun γ => (H.tensor γ)
   chi := H.chi
   posEntries := H.chi_pos
   fusionCoisometry := H.fusionCoisometry

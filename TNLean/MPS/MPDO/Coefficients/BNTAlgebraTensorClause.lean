@@ -43,51 +43,20 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- Regard a tensor with doubled physical index as an MPO tensor by separating
-the two factors of that index.
-
-For a vertical BNT tensor \(M_\alpha\), this is the MPO whose closed length-
-\(L\) operator is \(O_L(M_\alpha)\).
-
-Source: arXiv:1606.00608, lines 962--967 and Theorem 4.14(ii), lines 972--985. -/
-def verticalBNTMPO {D n : ℕ} (A : MPSTensor (D * D) n) : MPOTensor D n :=
-  fun ab => A (finProdFinEquiv ab)
-
-@[simp]
-theorem verticalBNTMPO_apply {D n : ℕ} (A : MPSTensor (D * D) n)
-    (a b : Fin D) :
-    verticalBNTMPO A (a, b) = A (finProdFinEquiv (a, b)) :=
-  rfl
-
-/-- The coefficients of the separated tensor on the pair alphabet are the coefficients of the
-original tensor on the recombined letters. -/
-theorem mpv_verticalBNTMPO {D n : ℕ} (A : MPSTensor (D * D) n) {N : ℕ}
-    (w : Fin N → Fin D × Fin D) :
-    MPTensor.mpv (verticalBNTMPO A) w = MPTensor.mpv A fun k ↦ finProdFinEquiv (w k) :=
-  MPTensor.mpv_reindexPhysical finProdFinEquiv A w
-
-/-- Separating and then recombining the doubled physical index recovers the
-original tensor. -/
-@[simp]
-theorem reindexPhysical_verticalBNTMPO {D n : ℕ} (A : MPSTensor (D * D) n) :
-    Kraus.reindexPhysical finProdFinEquiv.symm (verticalBNTMPO A) = A := by
-  funext ab
-  exact congrArg A (finProdFinEquiv.apply_symm_apply ab)
-
 /-- The concrete operator family \(O_L(M_\alpha)\) of a chosen vertical BNT
 family.
 
 Source: arXiv:1606.00608, lines 962--978 and Appendix C.4, lines 2048--2058. -/
 def verticalBNTOperatorFamily {g D : ℕ} {dim : Fin g → ℕ}
-    (A : (α : Fin g) → MPSTensor (D * D) (dim α)) :
+    (A : (α : Fin g) → MPOTensor D (dim α)) :
     BNTLabelOperatorFamily (Fin g)
       (fun L => Matrix (Fin L → Fin D) (Fin L → Fin D) ℂ) :=
-  ⟨fun L α => mpo (verticalBNTMPO (A α)) L⟩
+  ⟨fun L α => mpo (A α) L⟩
 
 @[simp]
 theorem verticalBNTOperatorFamily_operator {g D : ℕ} {dim : Fin g → ℕ}
-    (A : (α : Fin g) → MPSTensor (D * D) (dim α)) (L : ℕ) (α : Fin g) :
-    (verticalBNTOperatorFamily A).operator L α = mpo (verticalBNTMPO (A α)) L :=
+    (A : (α : Fin g) → MPOTensor D (dim α)) (L : ℕ) (α : Fin g) :
+    (verticalBNTOperatorFamily A).operator L α = mpo (A α) L :=
   rfl
 
 /-- The scalars \(m_\alpha=\operatorname{tr}(\mu_\alpha)\) of a chosen
@@ -127,7 +96,7 @@ structure CPSVVerticalDecomposition (M : MPOTensor d D) where
   /-- Positive diagonal entries of \(\mu_\alpha\). -/
   weight : (α : Fin labelCount) → Fin (multiplicity α) → ℂ
   /-- The chosen vertical basis of normal tensors \(M_\alpha\). -/
-  tensor : (α : Fin labelCount) → MPSTensor (D * D) (bondDim α)
+  tensor : (α : Fin labelCount) → MPOTensor D (bondDim α)
   /-- The coisometry from the original physical space onto the retained
   vertical sectors. -/
   verticalCoisometry : Matrix

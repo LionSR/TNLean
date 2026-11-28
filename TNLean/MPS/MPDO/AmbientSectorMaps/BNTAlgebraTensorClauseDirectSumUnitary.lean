@@ -86,11 +86,11 @@ structure UnitarySectorConjugacy (S : TwoSiteExactSectorGauge H) where
   BNT tensor.
 
   Source: arXiv:1606.00608, Appendix C.4, lines 2053--2057. -/
-  tensor_eq : ∀ (γ : Fin H.labelCount) (i : Fin (D * D)),
+  tensor_eq : ∀ (γ : Fin H.labelCount) (i : Fin D × Fin D),
     S.decomposition.tensor (S.relabel γ) i =
       (unitary γ : Matrix (Fin (S.decomposition.bondDim (S.relabel γ)))
         (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ) *
-      (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
+      (cast (congrArg (MPOTensor D) (S.bondDim_eq γ))
         (H.tensor γ)) i *
       (unitary γ : Matrix (Fin (S.decomposition.bondDim (S.relabel γ)))
         (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ)ᴴ
@@ -263,7 +263,7 @@ to the paired family of two-site BNT tensor letters.
 Source: arXiv:1606.00608, Appendix C.4, lines 2053--2069. -/
 theorem UnitarySectorConjugacy.directSumUnitaryT_tensor
     {S : TwoSiteExactSectorGauge H} (C : UnitarySectorConjugacy S)
-    (i : Fin (D * D)) :
+    (i : Fin D × Fin D) :
     C.directSumUnitaryT (fun γ ↦ H.tensor γ i) =
       fun γ ↦ S.decomposition.tensor (S.relabel γ) i := by
   funext γ
@@ -276,7 +276,7 @@ letters back to the one-site BNT tensor letters.
 Source: arXiv:1606.00608, Appendix C.4, lines 2053--2080. -/
 theorem UnitarySectorConjugacy.directSumUnitaryS_tensor
     {S : TwoSiteExactSectorGauge H} (C : UnitarySectorConjugacy S)
-    (i : Fin (D * D)) :
+    (i : Fin D × Fin D) :
     C.directSumUnitaryS
         (fun γ ↦ S.decomposition.tensor (S.relabel γ) i) =
       fun γ ↦ H.tensor γ i := by

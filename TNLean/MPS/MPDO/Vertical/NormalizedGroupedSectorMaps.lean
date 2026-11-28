@@ -59,9 +59,9 @@ section LinearAlgebra
 variable {m n : ℕ}
 
 @[simp]
-private theorem cast_MPSTensor_apply {s : ℕ} (h : m = n)
-    (A : MPSTensor s m) (v : Fin s) :
-    (cast (congrArg (MPSTensor s) h) A) v =
+private theorem cast_MPTensor_apply {β : Type*} (h : m = n)
+    (A : MPTensor β (Fin m)) (v : β) :
+    (cast (congrArg (fun k ↦ MPTensor β (Fin k)) h) A) v =
       cast (congrArg (fun k ↦ Matrix (Fin k) (Fin k) ℂ) h) (A v) := by
   cases h
   rfl
@@ -74,7 +74,7 @@ noncomputable def normalizedGroupedSectorMap (h : m = n)
     (V : Matrix (Fin d) (Fin n) ℂ) (X : Matrix (Fin n) (Fin n) ℂ)
     (omega : ℝ) : Matrix (Fin d) (Fin m) ℂ :=
   cast (congrArg (fun k ↦ Matrix (Fin d) (Fin k) ℂ) h.symm)
-    (V * (((Real.sqrt omega : ℂ))⁻¹ • X))
+    (V * ((Real.sqrt omega : ℂ)⁻¹ • X))
 
 /-- Absorbing a normalized unitary gauge into an isometry preserves its
 isometry relation.
@@ -83,20 +83,20 @@ Source: arXiv:1606.00608, proof of Proposition 4.13, lines 1903--1921. -/
 theorem normalizedGroupedSectorMap_isometry (h : m = n)
     (V : Matrix (Fin d) (Fin n) ℂ) (X : Matrix (Fin n) (Fin n) ℂ)
     (omega : ℝ) (hV : Vᴴ * V = 1)
-    (hQ : (((Real.sqrt omega : ℂ))⁻¹ • X) ∈
+    (hQ : ((Real.sqrt omega : ℂ)⁻¹ • X) ∈
       Matrix.unitaryGroup (Fin n) ℂ) :
     (normalizedGroupedSectorMap h V X omega)ᴴ *
         normalizedGroupedSectorMap h V X omega = 1 := by
   cases h
   simp only [normalizedGroupedSectorMap, cast_eq, Matrix.conjTranspose_mul]
   calc
-    ((((Real.sqrt omega : ℂ))⁻¹ • X)ᴴ * Vᴴ) *
-        (V * (((Real.sqrt omega : ℂ))⁻¹ • X)) =
-      (((Real.sqrt omega : ℂ))⁻¹ • X)ᴴ *
-        (Vᴴ * V) * (((Real.sqrt omega : ℂ))⁻¹ • X) := by
+    (((Real.sqrt omega : ℂ)⁻¹ • X)ᴴ * Vᴴ) *
+        (V * ((Real.sqrt omega : ℂ)⁻¹ • X)) =
+      ((Real.sqrt omega : ℂ)⁻¹ • X)ᴴ *
+        (Vᴴ * V) * ((Real.sqrt omega : ℂ)⁻¹ • X) := by
           simp only [Matrix.mul_assoc]
-    _ = (((Real.sqrt omega : ℂ))⁻¹ • X)ᴴ *
-        (((Real.sqrt omega : ℂ))⁻¹ • X) := by rw [hV, Matrix.mul_one]
+    _ = ((Real.sqrt omega : ℂ)⁻¹ • X)ᴴ *
+        ((Real.sqrt omega : ℂ)⁻¹ • X) := by rw [hV, Matrix.mul_one]
     _ = 1 := by
       rw [← Matrix.star_eq_conjTranspose]
       exact Matrix.mem_unitaryGroup_iff'.mp hQ
@@ -117,10 +117,10 @@ theorem normalizedGroupedSectorMap_orthogonal
   cases h₂
   simp only [normalizedGroupedSectorMap, cast_eq, Matrix.conjTranspose_mul]
   calc
-    ((((Real.sqrt omega₁ : ℂ))⁻¹ • X₁)ᴴ * V₁ᴴ) *
-        (V₂ * (((Real.sqrt omega₂ : ℂ))⁻¹ • X₂)) =
-      (((Real.sqrt omega₁ : ℂ))⁻¹ • X₁)ᴴ *
-        (V₁ᴴ * V₂) * (((Real.sqrt omega₂ : ℂ))⁻¹ • X₂) := by
+    (((Real.sqrt omega₁ : ℂ)⁻¹ • X₁)ᴴ * V₁ᴴ) *
+        (V₂ * ((Real.sqrt omega₂ : ℂ)⁻¹ • X₂)) =
+      ((Real.sqrt omega₁ : ℂ)⁻¹ • X₁)ᴴ *
+        (V₁ᴴ * V₂) * ((Real.sqrt omega₂ : ℂ)⁻¹ • X₂) := by
           simp only [Matrix.mul_assoc]
     _ = 0 := by rw [hV, Matrix.mul_zero, Matrix.zero_mul]
 
@@ -131,16 +131,16 @@ private theorem normalized_gauge_intertwining
     (hinter : T * V = V *
       (c • ((X : Matrix (Fin n) (Fin n) ℂ) * A *
         (↑(X⁻¹) : Matrix (Fin n) (Fin n) ℂ)))) :
-    T * (V * (((Real.sqrt omega : ℂ))⁻¹ •
+    T * (V * ((Real.sqrt omega : ℂ)⁻¹ •
         (X : Matrix (Fin n) (Fin n) ℂ))) =
-      (V * (((Real.sqrt omega : ℂ))⁻¹ •
+      (V * ((Real.sqrt omega : ℂ)⁻¹ •
         (X : Matrix (Fin n) (Fin n) ℂ))) * (c • A) := by
   rw [← Matrix.mul_assoc, hinter]
   simp only [Matrix.mul_assoc, Matrix.smul_mul, Matrix.mul_smul]
   rw [show (↑(X⁻¹) : Matrix (Fin n) (Fin n) ℂ) *
       (X : Matrix (Fin n) (Fin n) ℂ) = 1 by exact X.inv_val]
   simp only [Matrix.mul_one, smul_smul]
-  rw [mul_comm (((Real.sqrt omega : ℂ))⁻¹) c]
+  rw [mul_comm ((Real.sqrt omega : ℂ)⁻¹) c]
 
 /-- The normalized sector map intertwines with the ungauged representative
 tensor.
@@ -175,13 +175,13 @@ theorem normalizedGroupedSectorMap_corner (h : m = n)
   cases h
   simp only [normalizedGroupedSectorMap, cast_eq, Matrix.conjTranspose_mul]
   calc
-    (V * (((Real.sqrt omega : ℂ))⁻¹ •
+    (V * ((Real.sqrt omega : ℂ)⁻¹ •
           (X : Matrix (Fin m) (Fin m) ℂ))) * (c • A) *
-        ((((Real.sqrt omega : ℂ))⁻¹ •
+        (((Real.sqrt omega : ℂ)⁻¹ •
           (X : Matrix (Fin m) (Fin m) ℂ))ᴴ * Vᴴ) =
-      V * ((((Real.sqrt omega : ℂ))⁻¹ •
+      V * (((Real.sqrt omega : ℂ)⁻¹ •
           (X : Matrix (Fin m) (Fin m) ℂ)) * (c • A) *
-        (((Real.sqrt omega : ℂ))⁻¹ •
+        ((Real.sqrt omega : ℂ)⁻¹ •
           (X : Matrix (Fin m) (Fin m) ℂ))ᴴ) * Vᴴ := by
             simp only [Matrix.mul_assoc]
     _ = V * (c • ((X : Matrix (Fin m) (Fin m) ℂ) * A *
@@ -195,7 +195,7 @@ end LinearAlgebra
 section GroupedSectors
 
 variable {r : ℕ} {dim : Fin r → ℕ}
-variable (blocks : (k : Fin r) → MPSTensor (D * D) (dim k))
+variable (blocks : (k : Fin r) → MPOTensor D (dim k))
 
 local notation "C" => MPSTensor.mpvPhaseClassData blocks
 
@@ -230,7 +230,7 @@ theorem exists_normalized_grouped_sector_maps_of_gram
         ((mu ((C).enum j q) * zeta j q) •
           ((X j q : Matrix (Fin (dim ((C).enum j q)))
               (Fin (dim ((C).enum j q))) ℂ) *
-            (cast (congrArg (MPSTensor (D * D)) (hdim j q))
+            (cast (congrArg (MPOTensor D) (hdim j q))
               (blocks ((C).repr j))) v *
             (↑((X j q)⁻¹) : Matrix (Fin (dim ((C).enum j q)))
               (Fin (dim ((C).enum j q))) ℂ))))
@@ -240,7 +240,7 @@ theorem exists_normalized_grouped_sector_maps_of_gram
           ((mu ((C).enum j q) * zeta j q) •
             ((X j q : Matrix (Fin (dim ((C).enum j q)))
                 (Fin (dim ((C).enum j q))) ℂ) *
-              (cast (congrArg (MPSTensor (D * D)) (hdim j q))
+              (cast (congrArg (MPOTensor D) (hdim j q))
                 (blocks ((C).repr j))) v *
               (↑((X j q)⁻¹) : Matrix (Fin (dim ((C).enum j q)))
                 (Fin (dim ((C).enum j q))) ℂ))) *
@@ -265,7 +265,7 @@ theorem exists_normalized_grouped_sector_maps_of_gram
       Matrix (Fin d) (Fin (dim ((C).repr p.1))) ℂ := fun p ↦
     normalizedGroupedSectorMap (hdim p.1 p.2) (V ((C).enum p.1 p.2))
       (X p.1 p.2) (omega p.1 p.2)
-  have hQ : ∀ j q, (((Real.sqrt (omega j q) : ℂ))⁻¹ •
+  have hQ : ∀ j q, ((Real.sqrt (omega j q) : ℂ)⁻¹ •
       (X j q : Matrix (Fin (dim ((C).enum j q)))
         (Fin (dim ((C).enum j q))) ℂ)) ∈
       Matrix.unitaryGroup (Fin (dim ((C).enum j q))) ℂ := by
@@ -291,7 +291,7 @@ theorem exists_normalized_grouped_sector_maps_of_gram
       (hOrth p.1 p.2 q.1 q.2 hEnum)
   · intro p v
     have h := hInter p.1 p.2 v
-    rw [cast_MPSTensor_apply (hdim p.1 p.2)] at h
+    rw [cast_MPTensor_apply (hdim p.1 p.2)] at h
     exact normalizedGroupedSectorMap_intertwining (hdim p.1 p.2)
       (verticalTensor M v) (blocks ((C).repr p.1) v)
       (V ((C).enum p.1 p.2)) (X p.1 p.2)
@@ -303,7 +303,7 @@ theorem exists_normalized_grouped_sector_maps_of_gram
       (blocks ((C).repr j) v) (V ((C).enum j q)) (X j q)
       (mu ((C).enum j q) * zeta j q) (omega j q)
       (homega j q) (hGramEq j q)
-    rw [← cast_MPSTensor_apply (hdim j q)] at h
+    rw [← cast_MPTensor_apply (hdim j q)] at h
     exact h.symm
 
 end GroupedSectors
@@ -323,7 +323,7 @@ variable {d D : ℕ}
 section GroupedSectors
 
 variable {r : ℕ} {dim : Fin r → ℕ}
-variable (blocks : (k : Fin r) → MPSTensor (D * D) (dim k))
+variable (blocks : (k : Fin r) → MPOTensor D (dim k))
 
 local notation "C" => MPSTensor.mpvPhaseClassData blocks
 
@@ -359,7 +359,7 @@ theorem exists_normalized_grouped_sector_maps_of_dressing
         ((mu ((C).enum j q) * zeta j q) •
           ((X j q : Matrix (Fin (dim ((C).enum j q)))
               (Fin (dim ((C).enum j q))) ℂ) *
-            (cast (congrArg (MPSTensor (D * D)) (hdim j q))
+            (cast (congrArg (MPOTensor D) (hdim j q))
               (blocks ((C).repr j))) v *
             (↑((X j q)⁻¹) : Matrix (Fin (dim ((C).enum j q)))
               (Fin (dim ((C).enum j q))) ℂ))))
@@ -367,7 +367,7 @@ theorem exists_normalized_grouped_sector_maps_of_dressing
       (mu ((C).enum j q) * zeta j q) •
           ((X j q : Matrix (Fin (dim ((C).enum j q)))
               (Fin (dim ((C).enum j q))) ℂ) *
-            (cast (congrArg (MPSTensor (D * D)) (hdim j q))
+            (cast (congrArg (MPOTensor D) (hdim j q))
               (blocks ((C).repr j))) v *
             (↑((X j q)⁻¹) : Matrix (Fin (dim ((C).enum j q)))
               (Fin (dim ((C).enum j q))) ℂ)) =
@@ -378,7 +378,7 @@ theorem exists_normalized_grouped_sector_maps_of_dressing
           ((mu ((C).enum j q) * zeta j q) •
             ((X j q : Matrix (Fin (dim ((C).enum j q)))
                 (Fin (dim ((C).enum j q))) ℂ) *
-              (cast (congrArg (MPSTensor (D * D)) (hdim j q))
+              (cast (congrArg (MPOTensor D) (hdim j q))
                 (blocks ((C).repr j))) v *
               (↑((X j q)⁻¹) : Matrix (Fin (dim ((C).enum j q)))
                 (Fin (dim ((C).enum j q))) ℂ))) *

@@ -155,7 +155,7 @@ $P_{\alpha,k}$ selects a nonzero normal sector of the vertical direct sum.
 The present lemma isolates the algebraic nonvanishing implication from the
 exact gauge-corner identity. -/
 theorem exists_rangeProjection_corner_ne_zero
-    {n : ℕ} (M : MPOTensor d D) (A : MPSTensor (D * D) n)
+    {n : ℕ} (M : MPOTensor d D) (A : MPOTensor D n)
     (hA : A.IsNormalTensor) (V : Matrix (Fin d) (Fin n) ℂ)
     (hV : Vᴴ * V = 1) (X : GL (Fin n) ℂ) (ω : ℂ) (hω : ω ≠ 0)
     (hcorner : ∀ v,
@@ -215,7 +215,7 @@ The proposition records the conclusion shared by the literal CPSV and
 BNT-refined horizontal surfaces. -/
 def HasVerticalBNTGroupingWithIsometry (M : MPOTensor d D) : Prop :=
     ∃ (r : ℕ) (dim : Fin r → ℕ) (μ : Fin r → ℂ)
-      (blocks : (k : Fin r) → MPSTensor (D * D) (dim k))
+      (blocks : (k : Fin r) → MPOTensor D (dim k))
       (V : (k : Fin r) → Matrix (Fin d) (Fin (dim k)) ℂ),
       (∀ k, 0 < dim k) ∧
       (∀ k, (0 : ℂ) < μ k) ∧
@@ -241,15 +241,15 @@ def HasVerticalBNTGroupingWithIsometry (M : MPOTensor d D) : Prop :=
             ζ j q •
               ((X j q : Matrix (Fin (dim (classes.enum j q)))
                   (Fin (dim (classes.enum j q))) ℂ) *
-                (cast (congr_arg (MPSTensor (D * D)) (hdim j q))
+                (cast (congr_arg (MPOTensor D) (hdim j q))
                   (blocks (classes.repr j))) v *
                 (↑((X j q)⁻¹) : Matrix (Fin (dim (classes.enum j q)))
                   (Fin (dim (classes.enum j q))) ℂ))) ∧
         MPSTensor.IsCPSVBasisOfNormalTensors
-          (MPTensor.toTensorFromBlocks (α := Fin (D * D)) (μ := μ) blocks)
+          (MPTensor.toTensorFromBlocks (α := Fin D × Fin D) (μ := μ) blocks)
           (fun j => ⟨dim (classes.repr j), blocks (classes.repr j)⟩) ∧
         MPSTensor.BlocksNotGaugePhaseEquiv
-          (α := Fin (D * D)) (fun j => blocks (classes.repr j)) ∧
+          (α := Fin D × Fin D) (fun j => blocks (classes.repr j)) ∧
         (∀ j q, μ (classes.enum j q) * ζ j q ≠ 0) ∧
         (∀ j q, SectorProjectorData M
           (V (classes.enum j q) * (V (classes.enum j q))ᴴ)
@@ -267,7 +267,7 @@ def HasVerticalBNTGroupingWithIsometry (M : MPOTensor d D) : Prop :=
               ((μ (classes.enum j q) * ζ j q) •
                 ((X j q : Matrix (Fin (dim (classes.enum j q)))
                     (Fin (dim (classes.enum j q))) ℂ) *
-                  (cast (congr_arg (MPSTensor (D * D)) (hdim j q))
+                  (cast (congr_arg (MPOTensor D) (hdim j q))
                     (blocks (classes.repr j))) v *
                   (↑((X j q)⁻¹) : Matrix (Fin (dim (classes.enum j q)))
                     (Fin (dim (classes.enum j q))) ℂ)))) ∧
@@ -276,7 +276,7 @@ def HasVerticalBNTGroupingWithIsometry (M : MPOTensor d D) : Prop :=
             ((μ (classes.enum j q) * ζ j q) •
                 ((X j q : Matrix (Fin (dim (classes.enum j q)))
                     (Fin (dim (classes.enum j q))) ℂ) *
-                  (cast (congr_arg (MPSTensor (D * D)) (hdim j q))
+                  (cast (congr_arg (MPOTensor D) (hdim j q))
                     (blocks (classes.repr j))) v *
                   (↑((X j q)⁻¹) : Matrix (Fin (dim (classes.enum j q)))
                     (Fin (dim (classes.enum j q))) ℂ))) *
@@ -285,7 +285,7 @@ def HasVerticalBNTGroupingWithIsometry (M : MPOTensor d D) : Prop :=
           (μ (classes.enum j q) * ζ j q) •
               ((X j q : Matrix (Fin (dim (classes.enum j q)))
                   (Fin (dim (classes.enum j q))) ℂ) *
-                (cast (congr_arg (MPSTensor (D * D)) (hdim j q))
+                (cast (congr_arg (MPOTensor D) (hdim j q))
                   (blocks (classes.repr j))) v *
                 (↑((X j q)⁻¹) : Matrix (Fin (dim (classes.enum j q)))
                   (Fin (dim (classes.enum j q))) ℂ)) =
@@ -296,7 +296,7 @@ def HasVerticalBNTGroupingWithIsometry (M : MPOTensor d D) : Prop :=
               ((μ (classes.enum j q) * ζ j q) •
                 ((X j q : Matrix (Fin (dim (classes.enum j q)))
                     (Fin (dim (classes.enum j q))) ℂ) *
-                  (cast (congr_arg (MPSTensor (D * D)) (hdim j q))
+                  (cast (congr_arg (MPOTensor D) (hdim j q))
                     (blocks (classes.repr j))) v *
                   (↑((X j q)⁻¹) : Matrix (Fin (dim (classes.enum j q)))
                     (Fin (dim (classes.enum j q))) ℂ))) *
@@ -314,7 +314,7 @@ theorem exists_verticalBNTGrouping_with_isometry_of_decomposition
     (M : MPOTensor d D) (hM : IsMPDO M)
     (hDecomp :
       ∃ (r : ℕ) (dim : Fin r → ℕ) (μ : Fin r → ℂ)
-        (blocks : (k : Fin r) → MPSTensor (D * D) (dim k))
+        (blocks : (k : Fin r) → MPOTensor D (dim k))
         (V : (k : Fin r) → Matrix (Fin d) (Fin (dim k)) ℂ),
         (∀ k, 0 < dim k) ∧
         (∀ k, (0 : ℂ) < μ k) ∧
@@ -346,7 +346,7 @@ theorem exists_verticalBNTGrouping_with_isometry_of_decomposition
         (∀ v, blocks (classes.enum j q) v =
           ζ • ((X : Matrix (Fin (dim (classes.enum j q)))
               (Fin (dim (classes.enum j q))) ℂ) *
-            (cast (congr_arg (MPSTensor (D * D)) hdim)
+            (cast (congr_arg (MPOTensor D) hdim)
               (blocks (classes.repr j))) v *
             (↑(X⁻¹) : Matrix (Fin (dim (classes.enum j q)))
               (Fin (dim (classes.enum j q))) ℂ))) ∧
@@ -359,19 +359,19 @@ theorem exists_verticalBNTGrouping_with_isometry_of_decomposition
       have hdim : dim (classes.repr j) = dim (classes.enum j q) :=
         congrArg dim hEnum.symm
       refine ⟨hdim, 1, 1, norm_one, one_ne_zero, ?_, fun _ => ⟨rfl, rfl⟩⟩
-      have hcast : cast (congr_arg (MPSTensor (D * D)) hdim)
+      have hcast : cast (congr_arg (MPOTensor D) hdim)
           (blocks (classes.repr j)) = blocks (classes.enum j q) := by
         rw [cast_eq_iff_heq]
         exact hEnum.symm.rec HEq.rfl
       intro v
       calc
         blocks (classes.enum j q) v =
-            (cast (congr_arg (MPSTensor (D * D)) hdim)
+            (cast (congr_arg (MPOTensor D) hdim)
               (blocks (classes.repr j))) v := congrFun hcast.symm v
         _ = (1 : ℂ) •
             ((1 : Matrix (Fin (dim (classes.enum j q)))
                 (Fin (dim (classes.enum j q))) ℂ) *
-              (cast (congr_arg (MPSTensor (D * D)) hdim)
+              (cast (congr_arg (MPOTensor D) hdim)
                 (blocks (classes.repr j))) v *
               (1 : Matrix (Fin (dim (classes.enum j q)))
                 (Fin (dim (classes.enum j q))) ℂ)) := by
@@ -395,7 +395,7 @@ theorem exists_verticalBNTGrouping_with_isometry_of_decomposition
       μ (classes.enum j q) • blocks (classes.enum j q) v =
         (μ (classes.enum j q) * ζ j q) •
           ((X j q : Matrix _ _ ℂ) *
-            (cast (congr_arg (MPSTensor (D * D)) (hdim j q))
+            (cast (congr_arg (MPOTensor D) (hdim j q))
               (blocks (classes.repr j))) v *
             (((X j q)⁻¹ : GL (Fin (dim (classes.enum j q))) ℂ) :
               Matrix _ _ ℂ)) := by
@@ -405,7 +405,7 @@ theorem exists_verticalBNTGrouping_with_isometry_of_decomposition
       (μ (classes.enum j q) * ζ j q) •
           ((X j q : Matrix (Fin (dim (classes.enum j q)))
               (Fin (dim (classes.enum j q))) ℂ) *
-            (cast (congr_arg (MPSTensor (D * D)) (hdim j q))
+            (cast (congr_arg (MPOTensor D) (hdim j q))
               (blocks (classes.repr j))) v *
             (↑((X j q)⁻¹) : Matrix (Fin (dim (classes.enum j q)))
               (Fin (dim (classes.enum j q))) ℂ)) =
@@ -419,7 +419,7 @@ theorem exists_verticalBNTGrouping_with_isometry_of_decomposition
       (representativeLoop (blocks (classes.repr j))) := by
     intro j q
     have hs := sectorProjectorData_of_gauge_corner M
-      (cast (congr_arg (MPSTensor (D * D)) (hdim j q))
+      (cast (congr_arg (MPOTensor D) (hdim j q))
         (blocks (classes.repr j)))
       (V (classes.enum j q)) (hIso (classes.enum j q)) (X j q)
       (μ (classes.enum j q) * ζ j q) (hGroupedCorner j q)
@@ -429,12 +429,12 @@ theorem exists_verticalBNTGrouping_with_isometry_of_decomposition
       (V (classes.enum j q) * (V (classes.enum j q))ᴴ) N ≠ 0 := by
     intro j q
     have hNormalCast : MPTensor.IsNormalTensor
-        (cast (congr_arg (MPSTensor (D * D)) (hdim j q))
+        (cast (congr_arg (MPOTensor D) (hdim j q))
           (blocks (classes.repr j))) :=
       (MPSTensor.isNormalTensor_cast_iff (hdim j q)
         (blocks (classes.repr j))).2 (hNormal (classes.repr j))
     have hRange := exists_rangeProjection_corner_ne_zero M
-      (cast (congr_arg (MPSTensor (D * D)) (hdim j q))
+      (cast (congr_arg (MPOTensor D) (hdim j q))
         (blocks (classes.repr j))) hNormalCast
       (V (classes.enum j q)) (hIso (classes.enum j q)) (X j q)
       (μ (classes.enum j q) * ζ j q)
@@ -451,7 +451,7 @@ theorem exists_verticalBNTGrouping_with_isometry_of_decomposition
     obtain ⟨N, hne⟩ := hCompression j q
     exact sector_weight_pos hM (hSector j q₀) hRefPos (hSector j q) N hne
   have hBNT : MPSTensor.IsCPSVBasisOfNormalTensors
-      (MPTensor.toTensorFromBlocks (α := Fin (D * D)) (μ := μ) blocks)
+      (MPTensor.toTensorFromBlocks (α := Fin D × Fin D) (μ := μ) blocks)
       (fun j => ⟨dim (classes.repr j), blocks (classes.repr j)⟩) := by
     refine ⟨fun j => hNormal (classes.repr j), ?_, ?_⟩
     · intro N _hN
@@ -462,11 +462,11 @@ theorem exists_verticalBNTGrouping_with_isometry_of_decomposition
       intro w
       calc
         MPTensor.mpv
-            (MPTensor.toTensorFromBlocks (α := Fin (D * D)) (μ := μ) blocks) w =
+            (MPTensor.toTensorFromBlocks (α := Fin D × Fin D) (μ := μ) blocks) w =
             ∑ k : Fin r, (μ k) ^ N * MPTensor.mpv (blocks k) w := by
               simpa [smul_eq_mul] using
                 (MPSTensor.mpv_toTensorFromBlocks_eq_sum
-                  (α := Fin (D * D)) μ blocks w)
+                  (α := Fin D × Fin D) μ blocks w)
         _ = ∑ j : Fin classes.g, ∑ q : Fin (classes.copies j),
             (μ (classes.enum j q)) ^ N *
               MPTensor.mpv (blocks (classes.enum j q)) w :=
@@ -521,7 +521,7 @@ theorem exists_verticalBNTGrouping_with_isometry_of_decomposition
           V (classes.enum j q) *
             ((μ (classes.enum j q) * ζ j q) •
               ((X j q : Matrix _ _ ℂ) *
-                (cast (congr_arg (MPSTensor (D * D)) (hdim j q))
+                (cast (congr_arg (MPOTensor D) (hdim j q))
                   (blocks (classes.repr j))) v *
                 (((X j q)⁻¹ : GL (Fin (dim (classes.enum j q))) ℂ) :
                   Matrix _ _ ℂ))) *
@@ -641,10 +641,8 @@ theorem IsHorizontalCF.verticalTensor_ne_zero
     funext ij
     apply Matrix.ext
     intro a b
-    have hz := congrFun (congrFun (congrFun hVertical
-      (finProdFinEquiv (a, b))) ij.1) ij.2
-    simpa [verticalTensor, MPSTensor.finProdFinEquiv_divNat,
-      MPSTensor.finProdFinEquiv_modNat] using hz
+    have hz := congrFun (congrFun (congrFun hVertical (a, b)) ij.1) ij.2
+    simpa [verticalTensor] using hz
   let G := MPSTensor.globalGaugeOfBlocks X
   have hConj : ∀ i, (G : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) *
       S.toTensor i * (↑(G⁻¹) : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) = 0 := by
@@ -671,7 +669,7 @@ Source: arXiv:1606.00608, Proposition `prop:vertical`, lines 1895--1902. -/
 theorem IsHorizontalCF.exists_nonempty_verticalBNTGrouping
     (M : MPOTensor d D) (hHorizontal : IsHorizontalCF M) (hM : IsMPDO M) :
     ∃ (r : ℕ) (dim : Fin r → ℕ) (μ : Fin r → ℂ)
-      (blocks : (k : Fin r) → MPSTensor (D * D) (dim k))
+      (blocks : (k : Fin r) → MPOTensor D (dim k))
       (V : (k : Fin r) → Matrix (Fin d) (Fin (dim k)) ℂ),
       (∀ k, 0 < dim k) ∧
       (∀ k, (0 : ℂ) < μ k) ∧

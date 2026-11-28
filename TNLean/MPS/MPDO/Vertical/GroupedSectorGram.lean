@@ -83,10 +83,10 @@ variable {d D m n : ℕ}
 /-- Transporting a vertical corner along an equality of its bond dimensions
 preserves its corner identity. -/
 private theorem vertical_corner_cast (M : MPOTensor d D)
-    (A : MPSTensor (D * D) m) (V : Matrix (Fin d) (Fin m) ℂ)
+    (A : MPOTensor D m) (V : Matrix (Fin d) (Fin m) ℂ)
     (c : ℂ) (hcorner : ∀ v, Vᴴ * verticalTensor M v * V = c • A v)
-    (h : m = n) (v : Fin (D * D)) :
-    let A' := cast (congrArg (MPSTensor (D * D)) h) A
+    (h : m = n) (v : Fin D × Fin D) :
+    let A' := cast (congrArg (MPOTensor D) h) A
     let V' := cast (congrArg (fun k ↦ Matrix (Fin d) (Fin k) ℂ) h) V
     V'ᴴ * verticalTensor M v * V' = c • A' v := by
   cases h
@@ -95,7 +95,7 @@ private theorem vertical_corner_cast (M : MPOTensor d D)
 section GroupedSectors
 
 variable {r : ℕ} {dim : Fin r → ℕ}
-variable (blocks : (k : Fin r) → MPSTensor (D * D) (dim k))
+variable (blocks : (k : Fin r) → MPOTensor D (dim k))
 
 local notation "C" => MPSTensor.mpvPhaseClassData blocks
 
@@ -122,21 +122,21 @@ theorem exists_distinguished_grouped_reference_corner
       (μ ((C).enum j q) * ζ j q) •
           ((X j q : Matrix (Fin (dim ((C).enum j q)))
               (Fin (dim ((C).enum j q))) ℂ) *
-            (cast (congrArg (MPSTensor (D * D)) (hdim j q))
+            (cast (congrArg (MPOTensor D) (hdim j q))
               (blocks ((C).repr j))) v *
             (↑((X j q)⁻¹) : Matrix (Fin (dim ((C).enum j q)))
               (Fin (dim ((C).enum j q))) ℂ)) =
         (V ((C).enum j q))ᴴ * verticalTensor M v * V ((C).enum j q))
     (j : Fin (C).g) (q : Fin ((C).copies j)) :
-    let A := cast (congrArg (MPSTensor (D * D)) (hdim j q))
+    let A := cast (congrArg (MPOTensor D) (hdim j q))
       (blocks ((C).repr j))
     ∃ (W : Matrix (Fin d) (Fin (dim ((C).enum j q))) ℂ) (c0 : ℂ),
       (0 : ℂ) < c0 ∧ ∀ w, Wᴴ * verticalTensor M w * W = c0 • A w := by
   classical
   let q0 : Fin ((C).copies j) := ⟨0, (C).copies_pos j⟩
-  let A := cast (congrArg (MPSTensor (D * D)) (hdim j q))
+  let A := cast (congrArg (MPOTensor D) (hdim j q))
     (blocks ((C).repr j))
-  let A0 := cast (congrArg (MPSTensor (D * D)) (hdim j q0))
+  let A0 := cast (congrArg (MPOTensor D) (hdim j q0))
     (blocks ((C).repr j))
   let h0q := (hdim j q0).symm.trans (hdim j q)
   let W := cast
@@ -161,7 +161,7 @@ theorem exists_distinguished_grouped_reference_corner
     rw [hcoeff0] at h
     simpa [A0, q0] using h
   have hAtransport :
-      cast (congrArg (MPSTensor (D * D)) h0q) A0 = A :=
+      cast (congrArg (MPOTensor D) h0q) A0 = A :=
     cast_cast _ _ _
   refine ⟨W, c0, hc0, ?_⟩
   intro w
@@ -193,7 +193,7 @@ horizontal form provide this statement independently.
 Source: arXiv:1606.00608, proof of Proposition 4.13, Figures 7--8 and lines
 1909--1919. -/
 def HasGroupedCornerGramDressing (M : MPOTensor d D) : Prop :=
-  ∀ {n : ℕ} (A : MPSTensor (D * D) n)
+  ∀ {n : ℕ} (A : MPOTensor D n)
     (VX VY : Matrix (Fin d) (Fin n) ℂ) (X Y : GL (Fin n) ℂ)
     (cX cY : ℂ), (0 : ℂ) < cX → (0 : ℂ) < cY →
     (∀ v, VXᴴ * verticalTensor M v * VX =
@@ -207,7 +207,7 @@ def HasGroupedCornerGramDressing (M : MPOTensor d D) : Prop :=
 section GroupedSectors
 
 variable {r : ℕ} {dim : Fin r → ℕ}
-variable (blocks : (k : Fin r) → MPSTensor (D * D) (dim k))
+variable (blocks : (k : Fin r) → MPOTensor D (dim k))
 
 local notation "C" => MPSTensor.mpvPhaseClassData blocks
 
@@ -232,20 +232,20 @@ theorem grouped_sector_gram_conj_eq_of_dressing
       (μ ((C).enum j q) * ζ j q) •
           ((X j q : Matrix (Fin (dim ((C).enum j q)))
               (Fin (dim ((C).enum j q))) ℂ) *
-            (cast (congrArg (MPSTensor (D * D)) (hdim j q))
+            (cast (congrArg (MPOTensor D) (hdim j q))
               (blocks ((C).repr j))) v *
             (↑((X j q)⁻¹) : Matrix (Fin (dim ((C).enum j q)))
               (Fin (dim ((C).enum j q))) ℂ)) =
         (V ((C).enum j q))ᴴ * verticalTensor M v * V ((C).enum j q))
     (j : Fin (C).g) (q : Fin ((C).copies j))
-    (v : Fin (D * D)) :
-    let A := cast (congrArg (MPSTensor (D * D)) (hdim j q))
+    (v : Fin D × Fin D) :
+    let A := cast (congrArg (MPOTensor D) (hdim j q))
       (blocks ((C).repr j))
     let G := (X j q : Matrix (Fin (dim ((C).enum j q)))
       (Fin (dim ((C).enum j q))) ℂ)ᴴ * X j q
     G * A v * G⁻¹ = A v := by
   classical
-  let A := cast (congrArg (MPSTensor (D * D)) (hdim j q))
+  let A := cast (congrArg (MPOTensor D) (hdim j q))
     (blocks ((C).repr j))
   let cq := μ ((C).enum j q) * ζ j q
   obtain ⟨W, c0, hc0, hCorner0⟩ :=
@@ -273,7 +273,7 @@ theorem grouped_sector_gram_eq_pos_smul_one_of_dressing
     (_hDimPos : ∀ k, 0 < dim k)
     (hdim : ∀ j q, dim ((C).repr j) = dim ((C).enum j q))
     (hNormal : ∀ j q, Kraus.IsNormal
-      (cast (congrArg (MPSTensor (D * D)) (hdim j q))
+      (cast (congrArg (MPOTensor D) (hdim j q))
         (blocks ((C).repr j))))
     (X : (j : Fin (C).g) → (q : Fin ((C).copies j)) →
       GL (Fin (dim ((C).enum j q))) ℂ)
@@ -284,7 +284,7 @@ theorem grouped_sector_gram_eq_pos_smul_one_of_dressing
       (μ ((C).enum j q) * ζ j q) •
           ((X j q : Matrix (Fin (dim ((C).enum j q)))
               (Fin (dim ((C).enum j q))) ℂ) *
-            (cast (congrArg (MPSTensor (D * D)) (hdim j q))
+            (cast (congrArg (MPOTensor D) (hdim j q))
               (blocks ((C).repr j))) v *
             (↑((X j q)⁻¹) : Matrix (Fin (dim ((C).enum j q)))
               (Fin (dim ((C).enum j q))) ℂ)) =
@@ -295,7 +295,7 @@ theorem grouped_sector_gram_eq_pos_smul_one_of_dressing
         (Fin (dim ((C).enum j q))) ℂ)ᴴ * X j q = (ω : ℂ) • 1 := by
   let : NeZero (dim ((C).enum j q)) :=
     ⟨(_hDimPos ((C).enum j q)).ne'⟩
-  let A := cast (congrArg (MPSTensor (D * D)) (hdim j q))
+  let A := cast (congrArg (MPOTensor D) (hdim j q))
     (blocks ((C).repr j))
   have hNormalA : Kraus.IsNormal A := hNormal j q
   have hGramConj : ∀ v,
@@ -326,7 +326,7 @@ variable {d D : ℕ}
 section GroupedSectors
 
 variable {r : ℕ} {dim : Fin r → ℕ}
-variable (blocks : (k : Fin r) → MPSTensor (D * D) (dim k))
+variable (blocks : (k : Fin r) → MPOTensor D (dim k))
 
 local notation "C" => MPSTensor.mpvPhaseClassData blocks
 
@@ -344,7 +344,7 @@ theorem grouped_sector_exists_unitary_normalization_of_dressing
     (hDimPos : ∀ k, 0 < dim k)
     (hdim : ∀ j q, dim ((C).repr j) = dim ((C).enum j q))
     (hNormal : ∀ j q, Kraus.IsNormal
-      (cast (congrArg (MPSTensor (D * D)) (hdim j q))
+      (cast (congrArg (MPOTensor D) (hdim j q))
         (blocks ((C).repr j))))
     (X : (j : Fin (C).g) → (q : Fin ((C).copies j)) →
       GL (Fin (dim ((C).enum j q))) ℂ)
@@ -355,14 +355,14 @@ theorem grouped_sector_exists_unitary_normalization_of_dressing
       (μ ((C).enum j q) * ζ j q) •
           ((X j q : Matrix (Fin (dim ((C).enum j q)))
               (Fin (dim ((C).enum j q))) ℂ) *
-            (cast (congrArg (MPSTensor (D * D)) (hdim j q))
+            (cast (congrArg (MPOTensor D) (hdim j q))
               (blocks ((C).repr j))) v *
             (↑((X j q)⁻¹) : Matrix (Fin (dim ((C).enum j q)))
               (Fin (dim ((C).enum j q))) ℂ)) =
         (V ((C).enum j q))ᴴ * verticalTensor M v * V ((C).enum j q))
     (j : Fin (C).g) (q : Fin ((C).copies j)) :
     ∃ ω : ℝ, 0 < ω ∧
-      ((Real.sqrt ω : ℂ))⁻¹ •
+      (Real.sqrt ω : ℂ)⁻¹ •
           (X j q : Matrix (Fin (dim ((C).enum j q)))
             (Fin (dim ((C).enum j q))) ℂ) ∈
         Matrix.unitaryGroup (Fin (dim ((C).enum j q))) ℂ := by

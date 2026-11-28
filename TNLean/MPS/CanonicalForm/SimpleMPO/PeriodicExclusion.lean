@@ -139,13 +139,13 @@ which proves the conclusion from BNT-refined horizontal form by
 using one noncommuting length.  The definition below retains the stronger
 all-length formulation. -/
 def PeriodicVectorYieldsProjector (M : MPOTensor d D) : Prop :=
-  ∀ ⦃n : ℕ⦄ (V : Matrix (Fin d) (Fin n) ℂ) (B : MPSTensor (D * D) n)
+  ∀ ⦃n : ℕ⦄ (V : Matrix (Fin d) (Fin n) ℂ) (B : MPOTensor D n)
     (ρ : Matrix (Fin n) (Fin n) ℂ) (r : ℝ),
-    Vᴴ * V = 1 → (∀ v : Fin (D * D), verticalTensor M v * V = V * B v) →
+    Vᴴ * V = 1 → (∀ v : Fin D × Fin D, verticalTensor M v * V = V * B v) →
     Kraus.IsIrreducibleFamily B → ρ.PosDef → 0 < r →
-    Kraus.transferMap (ι := Fin (D * D)) (n := Fin n) B ρ = (r : ℂ) • ρ →
+    Kraus.transferMap (ι := Fin D × Fin D) (n := Fin n) B ρ = (r : ℂ) • ρ →
     ∀ μ : ℂ,
-      Module.End.HasEigenvalue (Kraus.transferMap (ι := Fin (D * D)) (n := Fin n) B) μ →
+      Module.End.HasEigenvalue (Kraus.transferMap (ι := Fin D × Fin D) (n := Fin n) B) μ →
       ‖μ‖ = r → μ ≠ (r : ℂ) →
       ∃ p : ℕ, Nonempty (PeriodicSectorProjector M p)
 

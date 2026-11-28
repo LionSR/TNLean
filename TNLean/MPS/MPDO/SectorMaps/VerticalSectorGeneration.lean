@@ -41,10 +41,9 @@ letter of a vertically viewed tensor under bond contraction.
 Source: arXiv:1606.00608, Appendix C.4, lines 1975--1984. -/
 @[simp]
 theorem contractBondMatrix_single_transpose
-    {D n : ℕ} (A : MPSTensor (D * D) n) (a b : Fin D) :
-    contractBondMatrix A (Matrix.single b a 1) =
-      A (finProdFinEquiv (a, b)) := by
-  rw [contractBondMatrix_apply, ← finProdFinEquiv.sum_comp]
+    {D n : ℕ} (A : MPOTensor D n) (a b : Fin D) :
+    contractBondMatrix A (Matrix.single b a 1) = A (a, b) := by
+  rw [contractBondMatrix_apply]
   classical
   rw [Fintype.sum_eq_single (a, b)]
   · simp
@@ -53,21 +52,7 @@ theorem contractBondMatrix_single_transpose
     rw [ite_eq_right]
     intro h
     apply hx
-    calc
-      x = ((finProdFinEquiv x).divNat, (finProdFinEquiv x).modNat) := by
-        apply finProdFinEquiv.injective
-        exact (finProdFinEquiv.apply_symm_apply (finProdFinEquiv x)).symm
-      _ = (a, b) := Prod.ext h.2.symm h.1.symm
-
-/-- The preceding matrix-unit identity expressed directly in the encoded
-product coordinate. -/
-@[simp]
-theorem contractBondMatrix_single_mod_div
-    {D n : ℕ} (A : MPSTensor (D * D) n) (ab : Fin (D * D)) :
-    contractBondMatrix A (Matrix.single ab.modNat ab.divNat 1) = A ab := by
-  rw [contractBondMatrix_single_transpose]
-  congr 1
-  exact finProdFinEquiv.apply_symm_apply ab
+    exact Prod.ext h.2.symm h.1.symm
 
 end MPSTensor
 
@@ -119,7 +104,7 @@ Source: arXiv:1606.00608, Appendix C.4, lines 1975--1984. -/
 def weightedVerticalBondContraction
     {g D : ℕ} {dim : Fin g → ℕ}
     (m : Fin g → ℂ)
-    (A : (α : Fin g) → MPSTensor (D * D) (dim α))
+    (A : (α : Fin g) → MPOTensor D (dim α))
     (X : Matrix (Fin D) (Fin D) ℂ) : VerticalSectorAlgebra dim :=
   fun α => m α • MPSTensor.contractBondMatrix (A α) X
 
@@ -130,7 +115,7 @@ Source: arXiv:1606.00608, Appendix C.4, lines 1980--1990. -/
 def weightedVerticalBondContractionProduct
     {g D L : ℕ} {dim : Fin g → ℕ}
     (m : Fin g → ℂ)
-    (A : (α : Fin g) → MPSTensor (D * D) (dim α))
+    (A : (α : Fin g) → MPOTensor D (dim α))
     (X : Fin L → Matrix (Fin D) (Fin D) ℂ) : VerticalSectorAlgebra dim :=
   fun α => (List.ofFn fun t => weightedVerticalBondContraction m A (X t) α).prod
 
@@ -144,7 +129,7 @@ Source: arXiv:1606.00608, Appendix C.4, lines 1980--1990. -/
 def WeightedVerticalBondContractionProductSpanTop
     {g D : ℕ} {dim : Fin g → ℕ}
     (m : Fin g → ℂ)
-    (A : (α : Fin g) → MPSTensor (D * D) (dim α))
+    (A : (α : Fin g) → MPOTensor D (dim α))
     (L : ℕ) : Prop :=
   Submodule.span ℂ
     (Set.range (weightedVerticalBondContractionProduct (L := L) m A)) = ⊤
@@ -157,7 +142,7 @@ lines 1980--1990. -/
 theorem one_mem_product_span_of_weightedVerticalBondContractions
     {g D L : ℕ} {dim : Fin g → ℕ}
     (m : Fin g → ℂ)
-    (A : (α : Fin g) → MPSTensor (D * D) (dim α))
+    (A : (α : Fin g) → MPOTensor D (dim α))
     (hSpan : WeightedVerticalBondContractionProductSpanTop m A L) :
     (1 : VerticalSectorAlgebra dim) ∈
       Submodule.span ℂ (Set.range fun x : Fin L → Matrix (Fin D) (Fin D) ℂ ↦
@@ -221,10 +206,10 @@ Source: arXiv:1606.00608, Appendix C.4, lines 1980--1990. -/
 theorem weightedVerticalBondContractionProduct_single
     {g D L : ℕ} {dim : Fin g → ℕ}
     (m : Fin g → ℂ)
-    (A : (α : Fin g) → MPSTensor (D * D) (dim α))
-    (w : Fin L → Fin (D * D)) :
+    (A : (α : Fin g) → MPOTensor D (dim α))
+    (w : Fin L → Fin D × Fin D) :
     weightedVerticalBondContractionProduct m A
-        (fun t => Matrix.single (w t).modNat (w t).divNat 1) =
+        (fun t => Matrix.single (w t).2 (w t).1 1) =
       fun α => (m α) ^ L • MPSTensor.wordTuple A L w α := by
   induction L with
   | zero =>
@@ -238,7 +223,7 @@ theorem weightedVerticalBondContractionProduct_single
       List.prod_cons]
     rw [hih]
     simp only [weightedVerticalBondContraction,
-      MPSTensor.contractBondMatrix_single_mod_div, MPSTensor.wordTuple]
+      MPSTensor.contractBondMatrix_single_transpose, Prod.mk.eta, MPSTensor.wordTuple]
     rw [List.ofFn_succ, Kraus.evalWord_cons]
     rw [Matrix.smul_mul, Matrix.mul_smul, smul_smul]
     simp only [pow_succ]
@@ -253,7 +238,7 @@ Source: arXiv:1606.00608, Appendix C.4, lines 1980--1990. -/
 theorem weightedVerticalBondContractionProductSpanTop_of_wordTupleSpanTop
     {g D L : ℕ} {dim : Fin g → ℕ}
     (m : Fin g → ℂ)
-    (A : (α : Fin g) → MPSTensor (D * D) (dim α))
+    (A : (α : Fin g) → MPOTensor D (dim α))
     (hm : ∀ α, m α ≠ 0)
     (hSpan : MPSTensor.WordTupleSpanTop A L) :
     WeightedVerticalBondContractionProductSpanTop m A L := by
@@ -278,7 +263,7 @@ theorem weightedVerticalBondContractionProductSpanTop_of_wordTupleSpanTop
   rw [← hScaledSpan]
   apply Submodule.span_mono
   rintro _ ⟨w, rfl⟩
-  refine ⟨fun t => Matrix.single (w t).modNat (w t).divNat 1, ?_⟩
+  refine ⟨fun t => Matrix.single (w t).2 (w t).1 1, ?_⟩
   exact weightedVerticalBondContractionProduct_single m A w
 
 /-- If the length-`L` products of weighted vertical bond contractions span the
@@ -298,7 +283,7 @@ Source: arXiv:1606.00608, Appendix C.4, lines 1980--1993. -/
 theorem eq_id_of_weightedVerticalBondContractionProducts_fixed
     {g D L : ℕ} {dim : Fin g → ℕ}
     (m : Fin g → ℂ)
-    (A : (α : Fin g) → MPSTensor (D * D) (dim α))
+    (A : (α : Fin g) → MPOTensor D (dim α))
     (F : VerticalSectorAlgebra dim →ₗ[ℂ] VerticalSectorAlgebra dim)
     (hSpan : WeightedVerticalBondContractionProductSpanTop m A L)
     (hFixed : ∀ X : Fin L → Matrix (Fin D) (Fin D) ℂ,
@@ -331,7 +316,7 @@ Source: arXiv:1606.00608, Appendix C.4, lines 1980--1993. -/
 theorem eq_id_of_weightedVerticalBondContractions_fixed_of_productSpan_finrank_le
     {g D L : ℕ} {dim : Fin g → ℕ}
     (m : Fin g → ℂ)
-    (A : (α : Fin g) → MPSTensor (D * D) (dim α))
+    (A : (α : Fin g) → MPOTensor D (dim α))
     (F : VerticalSectorAlgebra dim →ₗ[ℂ] VerticalSectorAlgebra dim)
     (hSpan : WeightedVerticalBondContractionProductSpanTop m A L)
     (hFixed : ∀ X : Matrix (Fin D) (Fin D) ℂ,
@@ -370,8 +355,8 @@ Source: arXiv:1606.00608, BNT definition at lines 271--274 and Appendix C.4,
 lines 1980--1990. -/
 theorem exists_positive_weightedVerticalBondContractionProductSpanTop_of_bnt
     {g D E : ℕ} {dim : Fin g → ℕ}
-    {A₀ : MPSTensor (D * D) E}
-    {A : (α : Fin g) → MPSTensor (D * D) (dim α)}
+    {A₀ : MPOTensor D E}
+    {A : (α : Fin g) → MPOTensor D (dim α)}
     (hBNT : MPSTensor.IsCPSVBasisOfNormalTensors A₀
       (fun α => ⟨dim α, A α⟩))
     (m : Fin g → ℂ) (hm : ∀ α, m α ≠ 0) :
@@ -393,8 +378,8 @@ general MPDO renormalization fixed-point theorem.
 Source: arXiv:1606.00608, Appendix C.4, lines 1955--1971 and 1980--1990. -/
 theorem exists_positive_verticalMultiplicityTraceBondContractionProductSpanTop_of_bnt
     {g D E : ℕ} {dim mult : Fin g → ℕ}
-    {A₀ : MPSTensor (D * D) E}
-    {A : (α : Fin g) → MPSTensor (D * D) (dim α)}
+    {A₀ : MPOTensor D E}
+    {A : (α : Fin g) → MPOTensor D (dim α)}
     (hBNT : MPSTensor.IsCPSVBasisOfNormalTensors A₀
       (fun α => ⟨dim α, A α⟩))
     (weight : (α : Fin g) → Fin (mult α) → ℂ)

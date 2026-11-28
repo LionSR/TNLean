@@ -54,9 +54,9 @@ matrix on the horizontal bond space.
 For a tensor $A^v$ with $v=(a,b)$, this matrix has entries
 $(\mathcal R(A)^{rs})_{ab}=(A^{(a,b)})_{rs}$.  It is the marked horizontal
 matrix in Figure 7 of arXiv:1606.00608, lines 1909--1913. -/
-def horizontalSlice (A : MPSTensor (D * D) n) (r s : Fin n) :
+def horizontalSlice (A : MPOTensor D n) (r s : Fin n) :
     Matrix (Fin D) (Fin D) ℂ :=
-  fun a b => A (finProdFinEquiv (a, b)) r s
+  fun a b => A (a, b) r s
 
 /-- Reflect a vertical tensor by exchanging its oriented horizontal bond
 indices and taking the conjugate transpose of each vertical matrix:
@@ -64,20 +64,20 @@ $(A^\sharp)^v=(A^{v^{\mathrm{op}}})^\dagger$.
 
 This is the marked tensor on the right side of Figure 7 in
 arXiv:1606.00608, lines 1909--1913. -/
-def reflectedAdjoint (A : MPSTensor (D * D) n) : MPSTensor (D * D) n :=
-  fun v => (A (bondPairSwap v))ᴴ
+def reflectedAdjoint (A : MPOTensor D n) : MPOTensor D n :=
+  fun v => (A v.swap)ᴴ
 
 /-- Horizontal slicing converts the reflected vertical tensor into the
 conjugate transpose of the oppositely ordered slice. -/
 @[simp] theorem horizontalSlice_reflectedAdjoint
-    (A : MPSTensor (D * D) n) (r s : Fin n) :
+    (A : MPOTensor D n) (r s : Fin n) :
     horizontalSlice (reflectedAdjoint A) r s = (horizontalSlice A s r)ᴴ := by
   ext a b
   simp [horizontalSlice, reflectedAdjoint, Matrix.conjTranspose_apply]
 
 /-- Horizontal slicing commutes with scalar multiplication of every vertical
 letter. -/
-@[simp] theorem horizontalSlice_smul (c : ℂ) (A : MPSTensor (D * D) n)
+@[simp] theorem horizontalSlice_smul (c : ℂ) (A : MPOTensor D n)
     (r s : Fin n) :
     horizontalSlice (fun v => c • A v) r s = c • horizontalSlice A r s := by
   ext a b
@@ -85,7 +85,7 @@ letter. -/
 
 /-- The coefficient of a closed horizontal chain with one vertical tensor
 marked and an unmarked MPO tail. -/
-noncomputable def markedChainCoefficient (A : MPSTensor (D * D) n)
+noncomputable def markedChainCoefficient (A : MPOTensor D n)
     (M : MPOTensor d D) (r s : Fin n) (σs τs : List (Fin d)) : ℂ :=
   Matrix.trace (horizontalSlice A r s * evalWord M σs τs)
 
@@ -96,7 +96,7 @@ The right tail is evaluated in the adjoint tensor on the reversed ket and bra
 words.  Thus neither the reversal nor the change from `M` to
 `adjointTensor M` is hidden in a same-tail equality.  This is the algebraic
 form of the right side of Figure 7 in arXiv:1606.00608, lines 1909--1913. -/
-theorem markedChainCoefficient_reflectedAdjoint (A : MPSTensor (D * D) n)
+theorem markedChainCoefficient_reflectedAdjoint (A : MPOTensor D n)
     (M : MPOTensor d D) (r s : Fin n) (σs τs : List (Fin d))
     (hlen : σs.length = τs.length) :
     markedChainCoefficient (reflectedAdjoint A) (adjointTensor M) r s
@@ -118,7 +118,7 @@ theorem horizontalSlice_twoSidedCompression
         (star (L i r) * R j s) • M (i, j) := by
   ext a b
   simp only [horizontalSlice, Matrix.mul_apply, Matrix.conjTranspose_apply,
-    verticalTensor_finProdFinEquiv, Matrix.sum_apply, Matrix.smul_apply,
+    verticalTensor_apply, Matrix.sum_apply, Matrix.smul_apply,
     smul_eq_mul]
   rw [Finset.sum_comm]
   apply Finset.sum_congr rfl
@@ -159,7 +159,7 @@ This is the scalar cancellation shared by every reflected marked-chain
 identity: the positive scalar is self-conjugate, so it cancels from both sides
 of the conjugate identity. -/
 theorem markedChainCoefficient_eq_reflectedAdjoint_of_mul_eq_star
-    (A : MPSTensor (D * D) n) (M : MPOTensor d D) {c : ℂ} (hc : (0 : ℂ) < c)
+    (A : MPOTensor D n) (M : MPOTensor d D) {c : ℂ} (hc : (0 : ℂ) < c)
     (N : ℕ) (r s : Fin n) (σ τ : Fin N → Fin d)
     (h : c * markedChainCoefficient A M r s (List.ofFn σ) (List.ofFn τ) =
       star (c * markedChainCoefficient A M s r (List.ofFn τ) (List.ofFn σ))) :
@@ -201,7 +201,7 @@ Source: arXiv:1606.00608, proof of Proposition 4.13, Figure 7 and lines
 1909--1913. -/
 theorem IsMPDO.markedChainCoefficient_eq_reflectedAdjoint
     {M : MPOTensor d D} (hM : IsMPDO M)
-    (A : MPSTensor (D * D) n) (V : Matrix (Fin d) (Fin n) ℂ)
+    (A : MPOTensor D n) (V : Matrix (Fin d) (Fin n) ℂ)
     (c : ℂ) (hc : (0 : ℂ) < c)
     (hcorner : ∀ v, Vᴴ * verticalTensor M v * V = c • A v)
     (N : ℕ) (r s : Fin n) (σ τ : Fin N → Fin d) :

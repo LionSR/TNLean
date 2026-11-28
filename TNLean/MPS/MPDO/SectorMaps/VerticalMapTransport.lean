@@ -77,7 +77,7 @@ with the transported physical map here.
 Source: arXiv:1606.00608, Appendix C.4, lines 1955--1979. -/
 theorem transportTToVerticalCoordinates_contractBondMatrix
     (M : MPOTensor d D)
-    (B₁ : MPSTensor (D * D) R₁) (B₂ : MPSTensor (D * D) R₂)
+    (B₁ : MPOTensor D R₁) (B₂ : MPOTensor D R₂)
     (U₁ : Matrix (Fin R₁) (Fin d) ℂ)
     (U₂ : Matrix (Fin R₂) (Fin (d * d)) ℂ)
     (T : Matrix (Fin d) (Fin d) ℂ →ₗ[ℂ]
@@ -109,7 +109,7 @@ with the transported physical map here.
 Source: arXiv:1606.00608, Appendix C.4, lines 1955--1979. -/
 theorem transportSToVerticalCoordinates_contractBondMatrix
     (M : MPOTensor d D)
-    (B₁ : MPSTensor (D * D) R₁) (B₂ : MPSTensor (D * D) R₂)
+    (B₁ : MPOTensor D R₁) (B₂ : MPOTensor D R₂)
     (U₁ : Matrix (Fin R₁) (Fin d) ℂ)
     (U₂ : Matrix (Fin R₂) (Fin (d * d)) ℂ)
     (S : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ →ₗ[ℂ]

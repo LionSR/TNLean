@@ -86,9 +86,9 @@ theorem exists_oneSite_raw_sector_corner
     ∃ (W : Matrix (Fin d)
         (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ) (c : ℂ),
       Wᴴ * W = 1 ∧ (0 : ℂ) < c ∧
-        ∀ v : Fin (D * D),
+        ∀ v : Fin D × Fin D,
           Wᴴ * verticalTensor M v * W =
-            c • (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
+            c • (cast (congrArg (MPOTensor D) (S.bondDim_eq γ))
               (H.tensor γ)) v := by
   classical
   let p : (α : Fin H.labelCount) × Fin (H.multiplicity α) :=
@@ -106,7 +106,7 @@ theorem exists_oneSite_raw_sector_corner
         simp only [Matrix.mul_assoc]
       _ = Eᴴ * E := by rw [H.coisometry, Matrix.mul_one]
       _ = 1 := verticalCopyBlockInclusion_isometry H.bondDim H.multiplicity p
-  have hCorner₀ : ∀ v : Fin (D * D),
+  have hCorner₀ : ∀ v : Fin D × Fin D,
       W₀ᴴ * verticalTensor M v * W₀ = c • H.tensor γ v := by
     intro v
     calc
@@ -133,11 +133,11 @@ theorem exists_oneSite_raw_sector_corner
     exact cast_isometry W₀ hW₀ (S.bondDim_eq γ)
   · exact H.weight_pos γ ⟨0, H.multiplicity_pos γ⟩
   · intro v
-    have cast_compression {m n : ℕ} (A : MPSTensor (D * D) m)
+    have cast_compression {m n : ℕ} (A : MPOTensor D m)
         (V : Matrix (Fin d) (Fin m) ℂ)
         (hCorner : ∀ u, Vᴴ * verticalTensor M u * V = c • A u)
-        (h : m = n) (u : Fin (D * D)) :
-        let A' := cast (congrArg (MPSTensor (D * D)) h) A
+        (h : m = n) (u : Fin D × Fin D) :
+        let A' := cast (congrArg (MPOTensor D) h) A
         let V' := cast (congrArg (fun k ↦ Matrix (Fin d) (Fin k) ℂ) h) V
         V'ᴴ * verticalTensor M u * V' = c • A' u := by
       cases h
@@ -164,12 +164,12 @@ theorem exists_blockTwo_gauge_sector_corner
     ∃ (V : Matrix (Fin (d * d))
         (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ) (c : ℂ),
       Vᴴ * V = 1 ∧ (0 : ℂ) < c ∧
-        ∀ v : Fin (D * D),
+        ∀ v : Fin D × Fin D,
           Vᴴ * verticalTensor (blockTwo M) v * V =
             c • ((S.gauge γ : Matrix
                 (Fin (S.decomposition.bondDim (S.relabel γ)))
                 (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ) *
-              (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
+              (cast (congrArg (MPOTensor D) (S.bondDim_eq γ))
                 (H.tensor γ)) v *
               (↑((S.gauge γ)⁻¹) : Matrix
                 (Fin (S.decomposition.bondDim (S.relabel γ)))
@@ -217,18 +217,18 @@ theorem markedChainCoefficient_gauge_eq_reflectedAdjoint
     (σ τ : Fin N → Fin (d * d)) :
     markedChainCoefficient
         (gramDressing (S.gauge γ)
-          (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
+          (cast (congrArg (MPOTensor D) (S.bondDim_eq γ))
             (H.tensor γ)))
         (blockTwo M) r s (List.ofFn σ) (List.ofFn τ) =
       markedChainCoefficient
         (reflectedAdjoint
-          (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
+          (cast (congrArg (MPOTensor D) (S.bondDim_eq γ))
             (H.tensor γ)))
         (adjointTensor (blockTwo M)) r s
         (List.ofFn σ).reverse (List.ofFn τ).reverse := by
   obtain ⟨V, c, _, hc, hcorner⟩ := S.exists_blockTwo_gauge_sector_corner γ
   exact hM.blockTwo.markedChainCoefficient_gramDressing_eq_reflectedAdjoint
-    (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ)) (H.tensor γ))
+    (cast (congrArg (MPOTensor D) (S.bondDim_eq γ)) (H.tensor γ))
     V (S.gauge γ) c hc hcorner N r s σ τ
 
 end BNTAlgebraTensorClause.TwoSiteExactSectorGauge
@@ -275,26 +275,26 @@ theorem exists_blockTwo_identity_oblique_compression
         (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ),
       Vᴴ * V = 1 ∧ (0 : ℂ) < c ∧
         L = V *
-          ((↑((S.gauge γ)⁻¹) : Matrix
+          (↑((S.gauge γ)⁻¹) : Matrix
             (Fin (S.decomposition.bondDim (S.relabel γ)))
-            (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ))ᴴ ∧
+            (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ)ᴴ ∧
         R = V * (S.gauge γ : Matrix
           (Fin (S.decomposition.bondDim (S.relabel γ)))
           (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ) ∧
-        (∀ v : Fin (D * D),
+        (∀ v : Fin D × Fin D,
           Lᴴ * verticalTensor (blockTwo M) v * R =
-            c • (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
+            c • (cast (congrArg (MPOTensor D) (S.bondDim_eq γ))
               (H.tensor γ)) v) ∧
-        (∀ v : Fin (D * D),
+        (∀ v : Fin D × Fin D,
           Rᴴ * verticalTensor (blockTwo M) v * L =
             c • gramDressing (S.gauge γ)
-              (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
+              (cast (congrArg (MPOTensor D) (S.bondDim_eq γ))
                 (H.tensor γ)) v) := by
   obtain ⟨V, c, hV, hc, hcorner⟩ := S.exists_blockTwo_gauge_sector_corner γ
   let L := V *
-    ((↑((S.gauge γ)⁻¹) : Matrix
+    (↑((S.gauge γ)⁻¹) : Matrix
       (Fin (S.decomposition.bondDim (S.relabel γ)))
-      (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ))ᴴ
+      (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ)ᴴ
   let R := V * (S.gauge γ : Matrix
     (Fin (S.decomposition.bondDim (S.relabel γ)))
     (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ)
@@ -325,7 +325,7 @@ theorem exists_blockTwo_identity_oblique_compression
           (c • ((S.gauge γ : Matrix
               (Fin (S.decomposition.bondDim (S.relabel γ)))
               (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ) *
-            (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
+            (cast (congrArg (MPOTensor D) (S.bondDim_eq γ))
               (H.tensor γ)) v *
             (↑((S.gauge γ)⁻¹) : Matrix
               (Fin (S.decomposition.bondDim (S.relabel γ)))
@@ -334,7 +334,7 @@ theorem exists_blockTwo_identity_oblique_compression
             (Fin (S.decomposition.bondDim (S.relabel γ)))
             (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ) := by
         rw [hcorner v]
-      _ = c • (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
+      _ = c • (cast (congrArg (MPOTensor D) (S.bondDim_eq γ))
           (H.tensor γ)) v := by
         simp only [Matrix.mul_smul, Matrix.smul_mul, ← Matrix.mul_assoc]
         rw [← Units.val_mul]
@@ -365,7 +365,7 @@ theorem exists_blockTwo_identity_oblique_compression
           (c • ((S.gauge γ : Matrix
               (Fin (S.decomposition.bondDim (S.relabel γ)))
               (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ) *
-            (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
+            (cast (congrArg (MPOTensor D) (S.bondDim_eq γ))
               (H.tensor γ)) v *
             (↑((S.gauge γ)⁻¹) : Matrix
               (Fin (S.decomposition.bondDim (S.relabel γ)))
@@ -375,7 +375,7 @@ theorem exists_blockTwo_identity_oblique_compression
             (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ)ᴴ := by
         rw [hcorner v]
       _ = c • gramDressing (S.gauge γ)
-          (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
+          (cast (congrArg (MPOTensor D) (S.bondDim_eq γ))
             (H.tensor γ)) v := by
         symm
         dsimp only [gramDressing]
@@ -403,20 +403,20 @@ theorem exists_identity_physical_letter_coefficients
           horizontalSlice
             (gramDressing
               (1 : GL (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ)
-              (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
+              (cast (congrArg (MPOTensor D) (S.bondDim_eq γ))
                 (H.tensor γ))) u.divNat u.modNat := by
   obtain ⟨V, c, L, R, _hV, hc, _hL, _hR, hcompression, _hreverse⟩ :=
     S.exists_blockTwo_identity_oblique_compression γ
   refine ⟨twoSidedCompressionCoefficients L R c, ?_⟩
   intro u
   have hPhysical := linearMarkedTensor_twoSidedCompressionCoefficients
-    (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ)) (H.tensor γ))
+    (cast (congrArg (MPOTensor D) (S.bondDim_eq γ)) (H.tensor γ))
     L R c (ne_of_gt hc) hcompression u
   have hOne : gramDressing
       (1 : GL (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ)
-      (cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
+      (cast (congrArg (MPOTensor D) (S.bondDim_eq γ))
         (H.tensor γ)) =
-      cast (congrArg (MPSTensor (D * D)) (S.bondDim_eq γ))
+      cast (congrArg (MPOTensor D) (S.bondDim_eq γ))
         (H.tensor γ) := by
     funext v
     simp only [gramDressing, Units.val_one, Matrix.conjTranspose_one,

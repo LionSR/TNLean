@@ -37,12 +37,12 @@ of two copies of the one-site vertical reading.
 This is the local tensor identity underlying the second representation of
 the blocked closed-chain operator in CPSV16, Appendix C.4, lines 2011--2018.
 -/
-theorem verticalBNTMPO_verticalTensor_blockTwo (M : MPOTensor d D) :
-    verticalBNTMPO (verticalTensor (blockTwo M)) =
-      mulTensor (verticalBNTMPO (verticalTensor M))
-        (verticalBNTMPO (verticalTensor M)) := by
+theorem verticalTensor_blockTwo (M : MPOTensor d D) :
+    (verticalTensor (blockTwo M)) =
+      mulTensor (verticalTensor M)
+        (verticalTensor M) := by
   ext ⟨a, b⟩ x y
-  simp [verticalBNTMPO, verticalTensor, blockTwo_apply, mulTensor,
+  simp [verticalTensor, blockTwo_apply, mulTensor,
     Matrix.mul_apply, Matrix.sum_apply, Matrix.submatrix_apply,
     Matrix.kroneckerMap_apply]
 
@@ -54,26 +54,24 @@ closed chains.
 
 This is the block-diagonal expansion used in CPSV16, Appendix C.4, lines
 2011--2018. -/
-theorem mpo_verticalBNTMPO_verticalAssembledTensor_eq_sum
+theorem mpo_verticalAssembledTensor_eq_sum
     (weight : (α : Fin g) → Fin (mult α) → ℂ)
-    (A : (α : Fin g) → MPSTensor (D * D) (dim α)) (L : ℕ) :
-    mpo (verticalBNTMPO (verticalAssembledTensor dim mult weight A)) L =
-      ∑ α, (∑ q, weight α q ^ L) • mpo (verticalBNTMPO (A α)) L := by
+    (A : (α : Fin g) → MPOTensor D (dim α)) (L : ℕ) :
+    mpo (verticalAssembledTensor dim mult weight A) L =
+      ∑ α, (∑ q, weight α q ^ L) • mpo (A α) L := by
   ext σ τ
-  rw [← mpv_pair (verticalBNTMPO (verticalAssembledTensor dim mult weight A)) σ τ,
-    mpv_verticalBNTMPO]
+  rw [← mpv_pair (verticalAssembledTensor dim mult weight A) σ τ]
   rw [mpv_verticalAssembledTensor_eq_sum, Fintype.sum_sigma]
-  simp only [Matrix.sum_apply, Matrix.smul_apply, ← mpv_pair, mpv_verticalBNTMPO,
-    smul_eq_mul, Finset.sum_mul]
+  simp only [Matrix.sum_apply, Matrix.smul_apply, ← mpv_pair, smul_eq_mul, Finset.sum_mul]
 
 /-- A coisometric vertical canonical-form reconstruction gives the weighted
 sector expansion of every positive-length closed chain.
 
 Source: CPSV16, Appendix C.4, lines 2011--2018. -/
-theorem mpo_verticalBNTMPO_eq_sum_of_coisometry_reconstruction
+theorem mpo_eq_sum_of_coisometry_reconstruction
     (weight : (α : Fin g) → Fin (mult α) → ℂ)
-    (A : (α : Fin g) → MPSTensor (D * D) (dim α))
-    (T : MPSTensor (D * D) d)
+    (A : (α : Fin g) → MPOTensor D (dim α))
+    (T : MPOTensor D d)
     (U : Matrix
       (Fin (∑ q : Fin (∑ α : Fin g, mult α), verticalCopyDim dim mult q))
       (Fin d) ℂ)
@@ -81,34 +79,34 @@ theorem mpo_verticalBNTMPO_eq_sum_of_coisometry_reconstruction
     (hReconstruct : ∀ v,
       T v = Uᴴ * verticalAssembledTensor dim mult weight A v * U)
     {L : ℕ} (hL : 0 < L) :
-    mpo (verticalBNTMPO T) L =
-      ∑ α, (∑ q, weight α q ^ L) • mpo (verticalBNTMPO (A α)) L := by
+    mpo (T) L =
+      ∑ α, (∑ q, weight α q ^ L) • mpo (A α) L := by
   calc
-    mpo (verticalBNTMPO T) L =
-        mpo (verticalBNTMPO (verticalAssembledTensor dim mult weight A)) L := by
+    mpo (T) L =
+        mpo (verticalAssembledTensor dim mult weight A) L := by
       ext σ τ
-      rw [← mpv_pair, ← mpv_pair, mpv_verticalBNTMPO, mpv_verticalBNTMPO]
+      rw [← mpv_pair, ← mpv_pair]
       exact MPSTensor.sameMPV₂Pos_of_coisometry_reconstruction
         T (verticalAssembledTensor dim mult weight A) U hU hReconstruct L hL _
-    _ = _ := mpo_verticalBNTMPO_verticalAssembledTensor_eq_sum weight A L
+    _ = _ := mpo_verticalAssembledTensor_eq_sum weight A L
 
 /-- Unitary conjugacy after reindexing, with a common scalar on every tensor
 letter, multiplies the length-`L` closed-chain operator by the `L`-th power of
 that scalar.
 
 This is the gauge-invariance step in CPSV16, Appendix C.4, lines 2011--2018. -/
-theorem mpo_verticalBNTMPO_eq_pow_smul_of_unitary_reindex
-    {n₁ n₂ : ℕ} (A₁ : MPSTensor (D * D) n₁)
-    (A₂ : MPSTensor (D * D) n₂) (c : ℂ) (hDim : n₁ = n₂)
+theorem mpo_eq_pow_smul_of_unitary_reindex
+    {n₁ n₂ : ℕ} (A₁ : MPOTensor D n₁)
+    (A₂ : MPOTensor D n₂) (c : ℂ) (hDim : n₁ = n₂)
     (V : Matrix.unitaryGroup (Fin n₂) ℂ)
     (hLetter : ∀ ab,
       A₂ ab = c • ((V : Matrix (Fin n₂) (Fin n₂) ℂ) *
         Matrix.reindexAlgEquiv ℂ ℂ (finCongr hDim) (A₁ ab) *
           (V : Matrix (Fin n₂) (Fin n₂) ℂ)ᴴ))
     (L : ℕ) :
-    mpo (verticalBNTMPO A₂) L = c ^ L • mpo (verticalBNTMPO A₁) L := by
+    mpo (A₂) L = c ^ L • mpo (A₁) L := by
   classical
-  let A₁' : MPSTensor (D * D) n₂ := fun ab =>
+  let A₁' : MPOTensor D n₂ := fun ab =>
     Matrix.reindexAlgEquiv ℂ ℂ (finCongr hDim) (A₁ ab)
   have hReindex : MPTensor.SameMPV₂ A₁ A₁' := by
     mpv_ext
@@ -128,7 +126,7 @@ theorem mpo_verticalBNTMPO_eq_pow_smul_of_unitary_reindex
       _ = Matrix.trace (Kraus.evalWord
           (fun ab => Matrix.reindex (finCongr hDim) (finCongr hDim) (A₁ ab))
           (List.ofFn σ)) := congrArg Matrix.trace hEval.symm
-  have hScaled (N : ℕ) (σ : Fin N → Fin (D * D)) :
+  have hScaled (N : ℕ) (σ : Fin N → Fin D × Fin D) :
       MPTensor.mpv A₂ σ = c ^ N * MPTensor.mpv A₁' σ := by
     have hA₂ : A₂ = fun ab => c • ((V : Matrix (Fin n₂) (Fin n₂) ℂ) *
         A₁' ab * (V : Matrix (Fin n₂) (Fin n₂) ℂ)ᴴ) := by
@@ -141,14 +139,14 @@ theorem mpo_verticalBNTMPO_eq_pow_smul_of_unitary_reindex
       Matrix.conjTranspose_conjTranspose] using (hGauge N σ).symm
   ext σ τ
   simp only [Matrix.smul_apply]
-  let pair : Fin L → Fin (D * D) := fun n => finProdFinEquiv (σ n, τ n)
+  let pair : Fin L → Fin D × Fin D := fun n => (σ n, τ n)
   calc
-    mpo (verticalBNTMPO A₂) L σ τ = MPTensor.mpv A₂ pair := by
-      rw [← mpv_pair, mpv_verticalBNTMPO]
+    mpo (A₂) L σ τ = MPTensor.mpv A₂ pair := by
+      rw [← mpv_pair]
     _ = c ^ L * MPTensor.mpv A₁' pair := hScaled L pair
     _ = c ^ L * MPTensor.mpv A₁ pair := by rw [hReindex L pair]
-    _ = c ^ L * mpo (verticalBNTMPO A₁) L σ τ := by
-      rw [← mpv_pair, mpv_verticalBNTMPO]
+    _ = c ^ L * mpo (A₁) L σ τ := by
+      rw [← mpv_pair]
 
 /-- The two closed-chain representations, given the sector correspondence
 and its coefficient comparison.
@@ -161,8 +159,8 @@ theorem blockedVerticalOperatorRepresentations_of_unitaryBlockEquiv
     (dim₂ mult₂ : Fin g₂ → ℕ)
     (weight₂ : (β : Fin g₂) → Fin (mult₂ β) → ℂ)
     (M : MPOTensor d D)
-    (A₁ : (α : Fin g₁) → MPSTensor (D * D) (dim₁ α))
-    (A₂ : (β : Fin g₂) → MPSTensor (D * D) (dim₂ β))
+    (A₁ : (α : Fin g₁) → MPOTensor D (dim₁ α))
+    (A₂ : (β : Fin g₂) → MPOTensor D (dim₂ β))
     (U₁ : Matrix
       (Fin (∑ q : Fin (∑ α : Fin g₁, mult₁ α), verticalCopyDim dim₁ mult₁ q))
       (Fin d) ℂ)
@@ -178,7 +176,7 @@ theorem blockedVerticalOperatorRepresentations_of_unitaryBlockEquiv
     (sigma : Fin g₁ ≃ Fin g₂)
     (hDim : ∀ i, dim₁ i = dim₂ (sigma i))
     (V : ∀ i, Matrix.unitaryGroup (Fin (dim₂ (sigma i))) ℂ)
-    (hLetter : ∀ (i : Fin g₁) (ab : Fin (D * D)),
+    (hLetter : ∀ (i : Fin g₁) (ab : Fin D × Fin D),
       A₂ (sigma i) ab =
         (verticalMultiplicityTrace weight₁ i /
           verticalMultiplicityTrace weight₂ (sigma i)) •
@@ -186,33 +184,33 @@ theorem blockedVerticalOperatorRepresentations_of_unitaryBlockEquiv
           Matrix.reindexAlgEquiv ℂ ℂ (finCongr (hDim i)) (A₁ i ab) *
           (V i : Matrix (Fin (dim₂ (sigma i))) (Fin (dim₂ (sigma i))) ℂ)ᴴ))
     {L : ℕ} (hL : 0 < L) :
-    mpo (verticalBNTMPO (verticalTensor (blockTwo M))) L =
+    mpo (verticalTensor (blockTwo M)) L =
         ∑ i,
           (((verticalMultiplicityTrace weight₁ i /
               verticalMultiplicityTrace weight₂ (sigma i)) ^ L) *
             (∑ q, weight₂ (sigma i) q ^ L)) •
-            mpo (verticalBNTMPO (A₁ i)) L ∧
-      mpo (verticalBNTMPO (verticalTensor (blockTwo M))) L =
+            mpo (A₁ i) L ∧
+      mpo (verticalTensor (blockTwo M)) L =
         ∑ i, ∑ j,
           ((∑ q, weight₁ i q ^ L) * (∑ r, weight₁ j r ^ L)) •
-            (mpo (verticalBNTMPO (A₁ i)) L *
-              mpo (verticalBNTMPO (A₁ j)) L) := by
-  have hOne := mpo_verticalBNTMPO_eq_sum_of_coisometry_reconstruction
+            (mpo (A₁ i) L *
+              mpo (A₁ j) L) := by
+  have hOne := mpo_eq_sum_of_coisometry_reconstruction
     weight₁ A₁ (verticalTensor M) U₁ hU₁ hReconstruct₁ hL
-  have hTwo := mpo_verticalBNTMPO_eq_sum_of_coisometry_reconstruction
+  have hTwo := mpo_eq_sum_of_coisometry_reconstruction
     weight₂ A₂ (verticalTensor (blockTwo M)) U₂ hU₂ hReconstruct₂ hL
   constructor
   · rw [hTwo]
     rw [← sigma.sum_comp]
     apply Finset.sum_congr rfl
     intro i _
-    rw [mpo_verticalBNTMPO_eq_pow_smul_of_unitary_reindex
+    rw [mpo_eq_pow_smul_of_unitary_reindex
       (A₁ i) (A₂ (sigma i))
       (verticalMultiplicityTrace weight₁ i /
         verticalMultiplicityTrace weight₂ (sigma i))
       (hDim i) (V i) (hLetter i) L]
     rw [smul_smul, mul_comm]
-  · rw [verticalBNTMPO_verticalTensor_blockTwo, mpo_mulTensor, hOne]
+  · rw [verticalTensor_blockTwo, mpo_mulTensor, hOne]
     rw [Finset.sum_mul]
     apply Finset.sum_congr rfl
     intro i _
@@ -242,7 +240,7 @@ theorem transportedVerticalSector_exists_blockedOperatorRepresentations
     ∃ sigma : Fin g₁ ≃ Fin g₂,
       ∃ hDim : ∀ i, h.dim₁ i = h.dim₂ (sigma i),
         ∃ V : ∀ i, Matrix.unitaryGroup (Fin (h.dim₂ (sigma i))) ℂ,
-          (∀ (i : Fin g₁) (ab : Fin (D * D)),
+          (∀ (i : Fin g₁) (ab : Fin D × Fin D),
             h.A₂ (sigma i) ab =
               (verticalMultiplicityTrace h.weight₁ i /
                 verticalMultiplicityTrace h.weight₂ (sigma i)) •
@@ -251,17 +249,17 @@ theorem transportedVerticalSector_exists_blockedOperatorRepresentations
                 Matrix.reindexAlgEquiv ℂ ℂ (finCongr (hDim i)) (h.A₁ i ab) *
                 (V i : Matrix (Fin (h.dim₂ (sigma i)))
                   (Fin (h.dim₂ (sigma i))) ℂ)ᴴ)) ∧
-          mpo (verticalBNTMPO (verticalTensor (blockTwo h.M))) L =
+          mpo (verticalTensor (blockTwo h.M)) L =
               ∑ i,
                 (((verticalMultiplicityTrace h.weight₁ i /
                     verticalMultiplicityTrace h.weight₂ (sigma i)) ^ L) *
                   (∑ q, h.weight₂ (sigma i) q ^ L)) •
-                  mpo (verticalBNTMPO (h.A₁ i)) L ∧
-          mpo (verticalBNTMPO (verticalTensor (blockTwo h.M))) L =
+                  mpo (h.A₁ i) L ∧
+          mpo (verticalTensor (blockTwo h.M)) L =
             ∑ i, ∑ j,
               ((∑ q, h.weight₁ i q ^ L) * (∑ r, h.weight₁ j r ^ L)) •
-                (mpo (verticalBNTMPO (h.A₁ i)) L *
-                  mpo (verticalBNTMPO (h.A₁ j)) L) := by
+                (mpo (h.A₁ i) L *
+                  mpo (h.A₁ j) L) := by
   obtain ⟨sigma, hDim, V, _, hLetter⟩ :=
     transportedVerticalSector_exists_unitaryBlockEquiv_coefficient_eq h
   obtain ⟨hFirst, hSecond⟩ :=

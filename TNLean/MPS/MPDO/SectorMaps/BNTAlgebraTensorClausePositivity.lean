@@ -35,14 +35,14 @@ private abbrev retainedDim (H : BNTAlgebraTensorClause M) : ℕ :=
 private def retainedAssembledMPO (H : BNTAlgebraTensorClause M) :
     MPOTensor H.retainedDim D :=
   fun (i, j) a b ↦ verticalAssembledTensor H.bondDim H.multiplicity H.weight H.tensor
-    (finProdFinEquiv (a, b)) i j
+    (a, b) i j
 
 private theorem changePhysicalBasis_verticalCoisometry_eq_retainedAssembledMPO
     (H : BNTAlgebraTensorClause M) :
     changePhysicalBasis H.verticalCoisometry M = H.retainedAssembledMPO := by
   ext ⟨i, j⟩ a b
   unfold changePhysicalBasis retainedAssembledMPO
-  have hs : physicalSlice M a b = verticalTensor M (finProdFinEquiv (a, b)) := by
+  have hs : physicalSlice M a b = verticalTensor M (a, b) := by
     ext s t
     simp [physicalSlice]
   rw [hs, H.forward]
@@ -50,7 +50,7 @@ private theorem changePhysicalBasis_verticalCoisometry_eq_retainedAssembledMPO
 private def verticalCopyLetter (H : BNTAlgebraTensorClause M)
     (p : (α : Fin H.labelCount) × Fin (H.multiplicity α))
     (x y : Fin (H.bondDim p.1)) : Matrix (Fin D) (Fin D) ℂ :=
-  fun a b ↦ H.tensor p.1 (finProdFinEquiv (a, b)) x y
+  fun a b ↦ H.tensor p.1 (a, b) x y
 
 private theorem changePhysicalBasis_verticalCoisometry_copy_same
     (H : BNTAlgebraTensorClause M) (γ : Fin H.labelCount)
@@ -62,7 +62,7 @@ private theorem changePhysicalBasis_verticalCoisometry_copy_same
   rw [H.changePhysicalBasis_verticalCoisometry_eq_retainedAssembledMPO]
   ext a b
   exact verticalAssembledTensor_apply_copy_same H.bondDim H.multiplicity H.weight
-    H.tensor γ q (finProdFinEquiv (a, b)) x y
+    H.tensor γ q (a, b) x y
 
 /-- Every retained vertical BNT tensor in a tensor-attached algebra clause has
 positive-semidefinite terminal physical-trace transfer.
@@ -74,9 +74,9 @@ sectors.
 
 Derived from arXiv:1606.00608, Proposition 4.13, and one-site MPDO
 positivity; compare the terminal matrices at lines 1010--1012. -/
-theorem physTraceTransfer_verticalBNTMPO_posSemidef
+theorem physTraceTransfer_tensor_posSemidef
     (H : BNTAlgebraTensorClause M) (hM : IsMPDO M) (γ : Fin H.labelCount) :
-    (physTraceTransfer (verticalBNTMPO (H.tensor γ))).PosSemidef := by
+    (physTraceTransfer (H.tensor γ)).PosSemidef := by
   classical
   let q : Fin (H.multiplicity γ) := ⟨0, H.multiplicity_pos γ⟩
   let e : Fin (H.bondDim γ) → (Fin 1 → Fin H.retainedDim) :=
@@ -87,22 +87,21 @@ theorem physTraceTransfer_verticalBNTMPO_posSemidef
     exact (singleKrausMap_isKrausCP _).map_posSemidef (hM 1 zero_lt_one)
   have hPrincipalEq :
       (mpo (changePhysicalBasis H.verticalCoisometry M) 1).submatrix e e =
-        H.weight γ q • physTraceTransfer (verticalBNTMPO (H.tensor γ)) := by
+        H.weight γ q • physTraceTransfer (H.tensor γ) := by
     ext x y
     simp only [Matrix.submatrix_apply, mpo_apply, mpoMatrixEntry, List.ofFn_succ,
       List.ofFn_zero, evalWord_cons, evalWord_nil, Matrix.mul_one, e]
     rw [H.changePhysicalBasis_verticalCoisometry_copy_same γ q]
     rw [Matrix.trace_smul, Matrix.smul_apply]
     congr 1
-    simp [Matrix.trace, physTraceTransfer, Matrix.sum_apply, verticalCopyLetter,
-      verticalBNTMPO]
+    simp [Matrix.trace, physTraceTransfer, Matrix.sum_apply, verticalCopyLetter]
   have hScaled :
-      (H.weight γ q • physTraceTransfer (verticalBNTMPO (H.tensor γ))).PosSemidef := by
+      (H.weight γ q • physTraceTransfer (H.tensor γ)).PosSemidef := by
     rw [← hPrincipalEq]
     exact hRetained.submatrix e
   have hUnscaled :
       ((H.weight γ q)⁻¹ •
-        (H.weight γ q • physTraceTransfer (verticalBNTMPO (H.tensor γ)))).PosSemidef :=
+        (H.weight γ q • physTraceTransfer (H.tensor γ))).PosSemidef :=
     hScaled.smul (inv_nonneg_of_nonneg (H.weight_pos γ q).le)
   simpa only [inv_smul_smul₀ (H.weight_pos γ q).ne'] using hUnscaled
 
