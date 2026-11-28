@@ -234,9 +234,9 @@ theorem IsLeftCanonicalBNTPresentation.block [Fintype α]
   have hData : HasBNTSectorData (P.block p) := by
     obtain ⟨N₀, hLI⟩ := hCF.eventually_li
     refine ⟨N₀, fun N hN ↦ ?_⟩
-    exact linearIndependent_mpvState_of_configEquiv (Kraus.blockConfigEquiv α N p).symm
+    exact linearIndependent_mpvState_of_configEquiv (Kraus.blockConfigEquiv α N p)
       (fun j ↦ Kraus.block (P.basis j) p) P.basis
-      (fun j σ ↦ by rw [Equiv.symm_symm, mpv_block_eq_mpv_blockConfig]; rfl)
+      (fun j σ ↦ by rw [mpv_block_eq_mpv_blockConfig, Equiv.apply_symm_apply])
       (hLI (N * p) (lt_of_lt_of_le hN (Nat.le_mul_of_pos_right N hp)))
   refine IsLeftCanonicalBNTPresentation.of_irreducible_selfOverlap
     hCF.basisCount_pos hCF.basis_dim_pos ?_ ?_ ?_ hData

@@ -37,16 +37,15 @@ period-window hypothesis is used.
 open MPTensor
 
 open scoped Matrix BigOperators
-open Kraus (blockTensor isNBlkInjective_iff_blockTensor_isInjective)
 
 namespace MPSTensor
 
-variable {d g : ℕ} {dim : Fin g → ℕ}
+variable {g : ℕ} {dim : Fin g → ℕ}
 
 /-- Fixed block selectors and block injectivity at one positive length give simultaneous
 word-tuple span at every sufficiently large length. -/
 theorem eventually_wordTupleSpanTop_of_blockSelectorWords_of_isNBlkInjective
-    (A : (k : Fin g) → MPSTensor d (dim k))
+    {α : Type*} [Fintype α] (A : (k : Fin g) → MPTensor α (Fin (dim k)))
     {s p : ℕ} (hSel : HasBlockSelectorWords A s) (hp : 0 < p)
     (hAtP : ∀ k, Kraus.IsNBlkInjective (A k) p) :
     ∃ L₀ : ℕ, ∀ L ≥ L₀, WordTupleSpanTop A L := by
@@ -184,42 +183,42 @@ word-tuple span at every sufficiently large blocked length.
 This is the representative-level form of the blocking and block-injectivity
 argument in arXiv:1606.00608, lines 318--344, used in Appendix C.3, Lemma L,
 lines 1835--1858. -/
-theorem eventuallyRepresentativeWordTupleSpan_blockTensor
+theorem eventuallyRepresentativeWordTupleSpan_block
     (hCF : IsLeftCanonicalBNTPresentation P) (p : ℕ) (hp : 0 < p)
-    (hInj : ∀ j, Kraus.IsInjective (Kraus.blockTensor (P.basis j) p)) :
-    (P.blockTensor p).EventuallyRepresentativeWordTupleSpan := by
+    (hInj : ∀ j, Kraus.IsInjective (Kraus.block (P.basis j) p)) :
+    (P.block p).EventuallyRepresentativeWordTupleSpan := by
   classical
   let : ∀ j : Fin P.basisCount, NeZero (P.basisDim j) :=
     fun j ↦ ⟨(hCF.basis_dim_pos j).ne'⟩
   have hAtP : ∀ j : Fin P.basisCount, Kraus.IsNBlkInjective (P.basis j) p := by
     intro j
-    exact (isNBlkInjective_iff_blockTensor_isInjective (P.basis j) p).2 (hInj j)
+    exact (Kraus.isNBlkInjective_iff_isInjective_block (P.basis j) p).2 (hInj j)
   have hSepOriginal :=
     pairTraceSeparatingAt_six_mul_of_common_isNBlkInjective hCF hp hAtP
   have hSepBlocked : ∀ k j : Fin P.basisCount, j ≠ k →
       PairTraceSeparatingAt
-        (Kraus.blockTensor (P.basis k) p)
-        (Kraus.blockTensor (P.basis j) p) 6 := by
+        (Kraus.block (P.basis k) p)
+        (Kraus.block (P.basis j) p) 6 := by
     intro k j hjk
-    exact pairTraceSeparatingAt_blockTensor
+    exact pairTraceSeparatingAt_block
       (P.basis k) (P.basis j) p 6 (hSepOriginal k j hjk)
-  have hPair : HasPairBlockSeparatingWords (P.blockTensor p).basis 6 := by
+  have hPair : HasPairBlockSeparatingWords (P.block p).basis 6 := by
     change HasPairBlockSeparatingWords
-      (fun j ↦ Kraus.blockTensor (P.basis j) p) 6
+      (fun j ↦ Kraus.block (P.basis j) p) 6
     exact hasPairBlockSeparatingWords_of_forall_pairTraceSeparatingAt
-      (fun j ↦ Kraus.blockTensor (P.basis j) p) hSepBlocked
+      (fun j ↦ Kraus.block (P.basis j) p) hSepBlocked
   let selectorLength := (P.basisCount - 1) * 6
-  have hSelectors : HasBlockSelectorWords (P.blockTensor p).basis selectorLength := by
-    change HasBlockSelectorWords (P.blockTensor p).basis ((P.basisCount - 1) * 6)
-    exact hasBlockSelectorWords_of_pairBlockSeparatingWords (P.blockTensor p).basis hPair
+  have hSelectors : HasBlockSelectorWords (P.block p).basis selectorLength := by
+    change HasBlockSelectorWords (P.block p).basis ((P.basisCount - 1) * 6)
+    exact hasBlockSelectorWords_of_pairBlockSeparatingWords (P.block p).basis hPair
   have hBlkPos : ∀ (j : Fin P.basisCount) (n : ℕ), 0 < n →
-      Kraus.IsNBlkInjective ((P.blockTensor p).basis j) n := by
+      Kraus.IsNBlkInjective ((P.block p).basis j) n := by
     intro j n hn
-    change Kraus.IsNBlkInjective (Kraus.blockTensor (P.basis j) p) n
+    change Kraus.IsNBlkInjective (Kraus.block (P.basis j) p) n
     exact wordSpan_eq_top_of_isInjective (hInj j) hn
-  change ∃ L₁ : ℕ, ∀ L ≥ L₁, WordTupleSpanTop (P.blockTensor p).basis L
+  change ∃ L₁ : ℕ, ∀ L ≥ L₁, WordTupleSpanTop (P.block p).basis L
   exact eventually_wordTupleSpanTop_of_blockSelectorWords_of_isNBlkInjective
-    (P.blockTensor p).basis (p := 1) hSelectors (by omega)
+    (P.block p).basis (p := 1) hSelectors (by omega)
       (fun j => hBlkPos j 1 (by omega))
 
 /-- The eventual simultaneous word-tuple span on the alphabet `Fin d`;
@@ -280,24 +279,19 @@ theorem insertedTensor_basis_eq_of_firstSiteActionAgree_of_common_blockInjective
     {Y Z : Matrix (Fin d) (Fin d) ℂ}
     (hAct : FirstSiteActionAgree P.toTensor Y Z) :
     ∀ j, insertedTensor Y (P.basis j) = insertedTensor Z (P.basis j) := by
-  have hInjSucc : ∀ j, Kraus.IsInjective (blockTensor (P.basis j) (L + 1)) := by
+  have hInjSucc : ∀ j, Kraus.IsInjective (Kraus.block (P.basis j) (L + 1)) := by
     intro j
-    exact (isNBlkInjective_iff_blockTensor_isInjective (P.basis j) (L + 1)).1
+    exact (Kraus.isNBlkInjective_iff_isInjective_block (P.basis j) (L + 1)).1
       (Kraus.isNBlkInjective_succ_of_isNBlkInjective (P.basis j) hL (hInj j))
-  have hSpan := hCF.eventuallyRepresentativeWordTupleSpan_blockTensor
+  have hSpan := hCF.eventuallyRepresentativeWordTupleSpan_block
     (L + 1) (by omega) hInjSucc
-  have hActBlocked : FirstSiteActionAgree (P.blockTensor (L + 1)).toTensor
+  have hActBlocked : FirstSiteActionAgree (P.block (L + 1)).toTensor
       (firstSiteActionOnBlock L Y) (firstSiteActionOnBlock L Z) :=
-    (hAct.blockTensor L).of_sameMPV (P.sameMPV₂_block_toTensor (L + 1))
-  have hEq := (P.blockTensor (L + 1)).insertedTensor_basis_eq_of_firstSiteActionAgree
+    (hAct.block L).of_sameMPV (P.sameMPV₂_block_toTensor (L + 1))
+  have hEq := (P.block (L + 1)).insertedTensor_basis_eq_of_firstSiteActionAgree
     hSpan hActBlocked
   intro j
-  apply insertedTensor_eq_of_firstSiteActionOnBlock_blockTensor_eq
-    (P.basis j) L (hInj j)
-  have hEqj := hEq j
-  change insertedTensor (firstSiteActionOnBlock L Y) (blockTensor (P.basis j) (L + 1)) =
-    insertedTensor (firstSiteActionOnBlock L Z) (blockTensor (P.basis j) (L + 1)) at hEqj
-  exact hEqj
+  exact insertedTensor_eq_of_firstSiteActionOnBlock_block_eq (P.basis j) L (hInj j) (hEq j)
 
 /-- Representative-grouped Lemma L for an unblocked BNT canonical form on the alphabet
 `Fin d`; `insertedTensor_basis_eq_of_firstSiteActionAgree` below transports it to an

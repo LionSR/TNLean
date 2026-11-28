@@ -29,43 +29,30 @@ and consistency under tracing out either boundary site.
 open MPTensor
 
 open scoped Matrix BigOperators Kronecker ComplexOrder MatrixOrder
-open Kraus (blockPhysDim wordOfBlock length_wordOfBlock decodeBlockEquiv
-  decodeBlock_decodeBlockEquiv_symm blockTensor)
 
 namespace MPSTensor
 
 variable {d D : ℕ}
 
 /-- The N-site physical density of the stationary finitely correlated family.
-Its entries are tr(Λ A_s A_t†), with words in the existing block alphabet.
+Its entries are tr(Λ A_s A_t†), indexed by the words of length N.
 Source: arXiv:0802.0447, Theorem 2, lines 297–323. -/
 noncomputable def stationaryBlockDensity (A : MPSTensor d D)
     (Λ : Matrix (Fin D) (Fin D) ℂ) (N : ℕ) :
-    Matrix (Fin (blockPhysDim d N)) (Fin (blockPhysDim d N)) ℂ :=
-  physicalMatrix (blockTensor A N) * (Λᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) *
-    (physicalMatrix (blockTensor A N))ᴴ
+    Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ :=
+  physicalMatrix (Kraus.block A N) * (Λᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) *
+    (physicalMatrix (Kraus.block A N))ᴴ
 
 /-- The stationary physical density has the source trace coefficients.
 Source: arXiv:0802.0447, Theorem 2, lines 297–323. -/
 theorem stationaryBlockDensity_apply (A : MPSTensor d D)
-    (Λ : Matrix (Fin D) (Fin D) ℂ) (N : ℕ)
-    (s t : Fin (blockPhysDim d N)) :
-    stationaryBlockDensity A Λ N s t =
-      Matrix.trace (Λ * blockTensor A N s * (blockTensor A N t)ᴴ) := by
-  rw [stationaryBlockDensity, ← physicalMatrix_mul_left_right,
-    physicalMatrix_mul_conjTranspose_apply]
-  simp only [Matrix.mul_one]
-
-/-- The physical density in word coordinates, before the blocked alphabet
-is encoded as a finite index. Source: arXiv:0802.0447, Theorem 2. -/
-theorem stationaryBlockDensity_word (A : MPSTensor d D)
     (Λ : Matrix (Fin D) (Fin D) ℂ) (N : ℕ) (s t : Fin N → Fin d) :
-    stationaryBlockDensity A Λ N
-        ((decodeBlockEquiv d N).symm s) ((decodeBlockEquiv d N).symm t) =
+    stationaryBlockDensity A Λ N s t =
       Matrix.trace (Λ * Kraus.evalWord A (List.ofFn s) *
         (Kraus.evalWord A (List.ofFn t))ᴴ) := by
-  simp only [stationaryBlockDensity_apply, Kraus.blockTensor, Kraus.reindexPhysical,
-    Equiv.apply_symm_apply, Kraus.block_apply]
+  rw [stationaryBlockDensity, ← physicalMatrix_mul_left_right,
+    physicalMatrix_mul_conjTranspose_apply]
+  simp only [Matrix.mul_one, Kraus.block_apply]
 
 /-- The stationary physical density represents the existing observable-transfer
 functional on arbitrary block observables. The physical coefficients have the
@@ -74,12 +61,10 @@ Source: arXiv:0802.0447, displays EU and SOPMP and Theorem 2, lines 166–181 an
 theorem trace_stationaryBlockDensity_mul_observable
     (A : MPSTensor d D) (Λ : Matrix (Fin D) (Fin D) ℂ) (N : ℕ)
     (O : Matrix (Fin N → Fin d) (Fin N → Fin d) ℂ) :
-    Matrix.trace (Matrix.reindex (decodeBlockEquiv d N) (decodeBlockEquiv d N)
-      (stationaryBlockDensity A Λ N) * O) =
+    Matrix.trace (stationaryBlockDensity A Λ N * O) =
       Matrix.trace (Λ * physicalObservableTransfer A N O 1) := by
-  change (∑ s, ∑ t, Matrix.reindex (decodeBlockEquiv d N) (decodeBlockEquiv d N)
-    (stationaryBlockDensity A Λ N) s t * O t s) = _
-  simp only [Matrix.reindex_apply, Matrix.submatrix_apply, stationaryBlockDensity_word,
+  change (∑ s, ∑ t, stationaryBlockDensity A Λ N s t * O t s) = _
+  simp only [stationaryBlockDensity_apply,
     physicalObservableTransfer_apply, Matrix.mul_one, Matrix.mul_sum, Matrix.mul_smul,
     Matrix.trace_sum, Matrix.trace_smul, smul_eq_mul, Matrix.mul_assoc, mul_comm]
 
@@ -88,12 +73,9 @@ transfer map. Source: arXiv:0802.0447, stationary reduced density family. -/
 theorem stationaryBlockDensity_right_marginal
     (A : MPSTensor d D) (Λ : Matrix (Fin D) (Fin D) ℂ)
     (hNorm : Kraus.transferMap A 1 = 1) (N : ℕ) (s t : Fin N → Fin d) :
-    (∑ i : Fin d, stationaryBlockDensity A Λ (N + 1)
-        ((decodeBlockEquiv d (N + 1)).symm (Fin.snoc s i))
-        ((decodeBlockEquiv d (N + 1)).symm (Fin.snoc t i))) =
-      stationaryBlockDensity A Λ N
-        ((decodeBlockEquiv d N).symm s) ((decodeBlockEquiv d N).symm t) := by
-  simp only [stationaryBlockDensity_word, List.ofFn_succ', Fin.snoc_castSucc,
+    (∑ i : Fin d, stationaryBlockDensity A Λ (N + 1) (Fin.snoc s i) (Fin.snoc t i)) =
+      stationaryBlockDensity A Λ N s t := by
+  simp only [stationaryBlockDensity_apply, List.ofFn_succ', Fin.snoc_castSucc,
     Fin.snoc_last, List.concat_eq_append, Kraus.evalWord_append,
     Kraus.evalWord_cons, Kraus.evalWord_nil, Matrix.mul_one, Matrix.conjTranspose_mul]
   rw [← Matrix.trace_sum]
@@ -112,12 +94,9 @@ theorem stationaryBlockDensity_left_marginal
     (A : MPSTensor d D) (Λ : Matrix (Fin D) (Fin D) ℂ)
     (hΛfix : Kraus.transferMap (fun i => (A i)ᴴ) Λ = Λ)
     (N : ℕ) (s t : Fin N → Fin d) :
-    (∑ i : Fin d, stationaryBlockDensity A Λ (N + 1)
-        ((decodeBlockEquiv d (N + 1)).symm (Fin.cons i s))
-        ((decodeBlockEquiv d (N + 1)).symm (Fin.cons i t))) =
-      stationaryBlockDensity A Λ N
-        ((decodeBlockEquiv d N).symm s) ((decodeBlockEquiv d N).symm t) := by
-  simp only [stationaryBlockDensity_word, List.ofFn_succ, Fin.cons_zero,
+    (∑ i : Fin d, stationaryBlockDensity A Λ (N + 1) (Fin.cons i s) (Fin.cons i t)) =
+      stationaryBlockDensity A Λ N s t := by
+  simp only [stationaryBlockDensity_apply, List.ofFn_succ, Fin.cons_zero,
     Fin.cons_succ, Kraus.evalWord_cons, Matrix.conjTranspose_mul]
   calc
     _ = ∑ i, Matrix.trace (((A i)ᴴ * Λ * A i) *
@@ -150,7 +129,7 @@ theorem rank_stationaryBlockDensity_le (A : MPSTensor d D)
     (stationaryBlockDensity A Λ N).rank ≤ D ^ 2 := by
   apply (Matrix.rank_mul_le_left _ _).trans
   apply (Matrix.rank_mul_le_left _ _).trans
-  simpa [pow_two] using (physicalMatrix (blockTensor A N)).rank_le_card_width
+  simpa [pow_two] using (physicalMatrix (Kraus.block A N)).rank_le_card_width
 
 /-- The physical trace is the stationary boundary applied to the N-fold
 ordinary transfer map. Source: arXiv:0802.0447, canonical normalization. -/
@@ -158,9 +137,9 @@ theorem trace_stationaryBlockDensity (A : MPSTensor d D)
     (Λ : Matrix (Fin D) (Fin D) ℂ) (N : ℕ) :
     Matrix.trace (stationaryBlockDensity A Λ N) =
       Matrix.trace (Λ * (Kraus.transferMap A ^ N) 1) := by
-  rw [← Kraus.transferMap_blockTensor_apply]
+  rw [← Kraus.transferMap_block]
   change (∑ s, stationaryBlockDensity A Λ N s s) = _
-  simp only [stationaryBlockDensity_apply, Kraus.transferMap_apply,
+  simp only [stationaryBlockDensity_apply, Kraus.transferMap_apply, Kraus.block_apply,
     Matrix.mul_one, Matrix.mul_sum, Matrix.trace_sum, Matrix.mul_assoc]
 
 /-- Unitality and a trace-one boundary normalize every physical block density.
@@ -169,8 +148,8 @@ theorem trace_stationaryBlockDensity_eq_one (A : MPSTensor d D)
     (Λ : Matrix (Fin D) (Fin D) ℂ) (hΛtr : Matrix.trace Λ = 1)
     (hNorm : Kraus.transferMap A 1 = 1) (N : ℕ) :
     Matrix.trace (stationaryBlockDensity A Λ N) = 1 := by
-  rw [trace_stationaryBlockDensity, ← Kraus.transferMap_blockTensor_apply,
-    Kraus.transferMap_blockTensor_fixedPoint A N 1 hNorm, Matrix.mul_one, hΛtr]
+  rw [trace_stationaryBlockDensity, Module.End.pow_apply, Function.iterate_fixed hNorm,
+    Matrix.mul_one, hΛtr]
 
 /-- Physical rotation conjugates each physical density by the corresponding
 Kronecker power. Source: arXiv:0802.0447, local symmetry, lines 297–304. -/
@@ -179,7 +158,7 @@ theorem stationaryBlockDensity_rotatePhysical
     (u : Matrix (Fin d) (Fin d) ℂ) (N : ℕ) :
     stationaryBlockDensity (rotatePhysical u A) Λ N =
       blockKron N u * stationaryBlockDensity A Λ N * (blockKron N u)ᴴ := by
-  simp only [stationaryBlockDensity, blockTensor_rotatePhysical,
+  simp only [stationaryBlockDensity, block_rotatePhysical,
     physicalMatrix_rotatePhysical, Matrix.conjTranspose_mul, Matrix.mul_assoc]
 
 
@@ -204,18 +183,16 @@ theorem stationaryBlockDensity_eq_of_unitary_gaugePhase
     simp only [Complex.star_def, Complex.conj_mul', norm_pow, hμ, one_pow, Complex.ofReal_one]
   ext s t
   simp only [stationaryBlockDensity_apply]
-  change Matrix.trace (Λ * Kraus.evalWord B (wordOfBlock d N s) *
-    (Kraus.evalWord B (wordOfBlock d N t))ᴴ) = _
-  rw [hw, hw, length_wordOfBlock, length_wordOfBlock]
+  rw [hw, hw, List.length_ofFn]
   simp only [Matrix.conjTranspose_smul, Matrix.conjTranspose_mul,
     Matrix.conjTranspose_conjTranspose, Matrix.mul_smul, Matrix.smul_mul,
     smul_smul, hphase, one_smul]
   simp only [Matrix.mul_assoc, ← Matrix.mul_assoc Vᴴ V, hV', Matrix.one_mul]
   calc
-    _ = Matrix.trace ((Vᴴ * Λ * V) * blockTensor A N s * (blockTensor A N t)ᴴ) := by
-      simpa only [Matrix.mul_assoc, Kraus.blockTensor, Kraus.reindexPhysical, Kraus.block_apply,
-        Kraus.decodeBlockEquiv_apply, wordOfBlock] using Matrix.trace_mul_comm
-        (Λ * V * blockTensor A N s * (blockTensor A N t)ᴴ) Vᴴ
+    _ = Matrix.trace ((Vᴴ * Λ * V) * Kraus.evalWord A (List.ofFn s) *
+          (Kraus.evalWord A (List.ofFn t))ᴴ) := by
+      simpa only [Matrix.mul_assoc] using Matrix.trace_mul_comm
+        (Λ * V * Kraus.evalWord A (List.ofFn s) * (Kraus.evalWord A (List.ofFn t))ᴴ) Vᴴ
     _ = _ := by simp only [hΛ, Matrix.mul_assoc]
 
 end MPSTensor

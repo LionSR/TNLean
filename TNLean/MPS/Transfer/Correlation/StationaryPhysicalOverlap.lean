@@ -23,7 +23,6 @@ transfer iterates therefore forces the physical density overlaps to zero.
 
 open scoped Matrix BigOperators Kronecker ComplexOrder MatrixOrder Topology
 open Filter
-open Kraus (blockTensor)
 
 namespace MPSTensor
 
@@ -35,7 +34,7 @@ theorem stationaryBlockDensity_eq_mul_conjTranspose
     (A : MPSTensor d D) {Λ : Matrix (Fin D) (Fin D) ℂ}
     (hΛ : Λ.PosSemidef) (N : ℕ) :
     let S := CFC.sqrt (Λᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ))
-    let F := physicalMatrix (blockTensor A N) * S
+    let F := physicalMatrix (Kraus.block A N) * S
     stationaryBlockDensity A Λ N = F * Fᴴ := by
   dsimp only
   have hK := hΛ.transpose.kronecker (Matrix.PosSemidef.one (R := ℂ) (n := Fin D))
@@ -56,7 +55,7 @@ theorem inv_sq_le_purity_stationaryBlockDensity
     (D : ℝ)⁻¹ ^ 2 ≤ (Matrix.trace (stationaryBlockDensity A Λ N ^ 2)).re := by
   have : NeZero D := ⟨by rintro rfl; simp at hΛtr⟩
   let S := CFC.sqrt (Λᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ))
-  let F := physicalMatrix (blockTensor A N) * S
+  let F := physicalMatrix (Kraus.block A N) * S
   have hρ : stationaryBlockDensity A Λ N = F * Fᴴ :=
     stationaryBlockDensity_eq_mul_conjTranspose A hΛ N
   let G := Matrix.reindex finProdFinEquiv finProdFinEquiv (Fᴴ * F)
@@ -87,18 +86,18 @@ Source: arXiv:0802.0447, proof of Theorem 2, lines 316–320. -/
 theorem trace_stationaryBlockDensity_mul_eq (A B : MPSTensor d D)
     (Λ : Matrix (Fin D) (Fin D) ℂ) (N : ℕ) :
     let K := Λᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)
-    let G := (physicalMatrix (blockTensor A N))ᴴ * physicalMatrix (blockTensor B N)
+    let G := (physicalMatrix (Kraus.block A N))ᴴ * physicalMatrix (Kraus.block B N)
     Matrix.trace (stationaryBlockDensity A Λ N * stationaryBlockDensity B Λ N) =
       Matrix.trace (K * G * K * Gᴴ) := by
   dsimp only
   simp only [stationaryBlockDensity, Matrix.conjTranspose_mul,
     Matrix.conjTranspose_conjTranspose]
   simpa only [Matrix.mul_assoc] using Matrix.trace_mul_comm
-    (physicalMatrix (blockTensor A N))
+    (physicalMatrix (Kraus.block A N))
     ((Λᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) *
-      (physicalMatrix (blockTensor A N))ᴴ * physicalMatrix (blockTensor B N) *
+      (physicalMatrix (Kraus.block A N))ᴴ * physicalMatrix (Kraus.block B N) *
       (Λᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) *
-      (physicalMatrix (blockTensor B N))ᴴ)
+      (physicalMatrix (Kraus.block B N))ᴴ)
 
 /-- Decay of the mixed transfer map gives decay of the physical block density
 overlap. Source: arXiv:0802.0447, proof of Theorem 2, lines 316–320. -/
@@ -110,11 +109,11 @@ theorem stationaryBlockDensity_overlap_tendsto_zero
       (stationaryBlockDensity A Λ N * stationaryBlockDensity B Λ N)) atTop (𝓝 0) := by
   let K := Λᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)
   have hG : Tendsto (fun N =>
-      (physicalMatrix (blockTensor A N))ᴴ * physicalMatrix (blockTensor B N))
+      (physicalMatrix (Kraus.block A N))ᴴ * physicalMatrix (Kraus.block B N))
       atTop (𝓝 (0 : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ)) := by
     refine tendsto_pi_nhds.mpr fun a => tendsto_pi_nhds.mpr fun b => ?_
     simpa only [conjTranspose_physicalMatrix_mul_physicalMatrix_apply,
-      mixedMapLM_blockTensor_apply, Matrix.zero_apply] using
+      mixedMapLM_block_apply, Matrix.zero_apply] using
       tendsto_pi_nhds.mp (tendsto_pi_nhds.mp (hdecay (Matrix.single b.2 a.2 1)) b.1) a.1
   have hcontinuous : Continuous (fun G : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ =>
       Matrix.trace (K * G * K * Gᴴ)) := by

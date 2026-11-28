@@ -32,7 +32,7 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor.SectorDecomposition
 
-variable {d : ℕ}
+variable {α : Type*} [Fintype α]
 
 /-- The length-`L` simultaneous word tuples of the basis representatives span
 their full product matrix algebra.
@@ -63,7 +63,7 @@ copies are grouped before the word-tuple separation is applied.
 
 Source: arXiv:1606.00608, Appendix C.3, Lemma L, lines 1848--1858. -/
 theorem insertedTensor_basis_eq_of_firstSiteActionAgree_of_coeff_ne_zero
-    (P : SectorDecomposition (Fin d)) {Y Z : Matrix (Fin d) (Fin d) ℂ}
+    (P : SectorDecomposition (α)) {Y Z : Matrix (α) (α) ℂ}
     (hAct : FirstSiteActionAgree P.toTensor Y Z)
     {L : ℕ} (hSpan : P.RepresentativeWordTupleSpanAt L)
     (j₀ : Fin P.basisCount) (hcoeff : P.coeff (L + 1) j₀ ≠ 0) :
@@ -78,26 +78,26 @@ theorem insertedTensor_basis_eq_of_firstSiteActionAgree_of_coeff_ne_zero
     apply block_matrices_eq_zero_of_wordTupleSpanTop_trace P.basis hSpan Δ
     intro w
     have hA := hAct L (Fin.cons s w)
-    have hsimp : ∀ i : Fin d,
-        (Fin.cons i ((Fin.cons s w : Fin (L + 1) → Fin d) ∘ Fin.succ) :
-            Fin (L + 1) → Fin d) = Fin.cons i w :=
+    have hsimp : ∀ i : α,
+        (Fin.cons i ((Fin.cons s w : Fin (L + 1) → α) ∘ Fin.succ) :
+            Fin (L + 1) → α) = Fin.cons i w :=
       fun i ↦ by simp [Function.comp_def, Fin.cons_succ]
     simp only [Fin.cons_zero, hsimp] at hA
-    have htrans : ∀ W : Matrix (Fin d) (Fin d) ℂ,
-        ∑ i : Fin d, W s i * P.toTensor.mpv
-            (Fin.cons i w : Fin (L + 1) → Fin d) =
+    have htrans : ∀ W : Matrix (α) (α) ℂ,
+        ∑ i : α, W s i * P.toTensor.mpv
+            (Fin.cons i w : Fin (L + 1) → α) =
           ∑ j : Fin P.basisCount, Matrix.trace
             (P.coeff (L + 1) j • insertedTensor W (P.basis j) s *
               Kraus.evalWord (P.basis j) (List.ofFn w)) := by
       intro W
-      have hExp : ∀ i : Fin d,
-          P.toTensor.mpv (Fin.cons i w : Fin (L + 1) → Fin d) =
+      have hExp : ∀ i : α,
+          P.toTensor.mpv (Fin.cons i w : Fin (L + 1) → α) =
             ∑ j : Fin P.basisCount, P.coeff (L + 1) j *
               Matrix.trace (P.basis j i * Kraus.evalWord (P.basis j) (List.ofFn w)) := by
         intro i
         rw [P.mpv_toTensor_eq_sum_coeff]
         refine Finset.sum_congr rfl fun j _ ↦ ?_
-        have hof : List.ofFn (Fin.cons i w : Fin (L + 1) → Fin d) =
+        have hof : List.ofFn (Fin.cons i w : Fin (L + 1) → α) =
             i :: List.ofFn w := by
           simp [List.ofFn_succ, Fin.cons_zero, Fin.cons_succ]
         simp only [MPTensor.mpv, MPTensor.coeff, hof, Kraus.evalWord_cons]
@@ -105,26 +105,26 @@ theorem insertedTensor_basis_eq_of_firstSiteActionAgree_of_coeff_ne_zero
       rw [Finset.sum_comm]
       refine Finset.sum_congr rfl fun j _ ↦ ?_
       calc
-        ∑ i : Fin d, W s i *
+        ∑ i : α, W s i *
               (P.coeff (L + 1) j *
                 Matrix.trace (P.basis j i * Kraus.evalWord (P.basis j) (List.ofFn w))) =
-            P.coeff (L + 1) j * ∑ i : Fin d, W s i *
+            P.coeff (L + 1) j * ∑ i : α, W s i *
               Matrix.trace (P.basis j i * Kraus.evalWord (P.basis j) (List.ofFn w)) := by
                 simpa only [mul_comm, mul_left_comm, mul_assoc] using
                   Fintype.sum_mul_mul_eq_mul_sum_mul (P.coeff (L + 1) j) (W s)
                     (fun i => Matrix.trace
                       (P.basis j i * Kraus.evalWord (P.basis j) (List.ofFn w)))
-        _ = P.coeff (L + 1) j * ∑ i : Fin d, Matrix.trace
+        _ = P.coeff (L + 1) j * ∑ i : α, Matrix.trace
               ((W s i • P.basis j i) * Kraus.evalWord (P.basis j) (List.ofFn w)) := by
                 congr 1
                 refine Finset.sum_congr rfl fun i _ ↦ ?_
                 rw [Matrix.smul_mul, Matrix.trace_smul, smul_eq_mul]
         _ = P.coeff (L + 1) j * Matrix.trace
-              (∑ i : Fin d, (W s i • P.basis j i) *
+              (∑ i : α, (W s i • P.basis j i) *
                 Kraus.evalWord (P.basis j) (List.ofFn w)) := by
                 rw [Matrix.trace_sum]
         _ = P.coeff (L + 1) j * Matrix.trace
-              ((∑ i : Fin d, W s i • P.basis j i) *
+              ((∑ i : α, W s i • P.basis j i) *
                 Kraus.evalWord (P.basis j) (List.ofFn w)) := by
                 rw [Finset.sum_mul]
         _ = P.coeff (L + 1) j * Matrix.trace
@@ -176,7 +176,7 @@ open.  See `docs/paper-gaps/cpgsv17_bicf_block_separation.tex`.
 
 Source: arXiv:1606.00608, Appendix C.3, Lemma L, lines 1835--1858. -/
 theorem insertedTensor_basis_eq_of_firstSiteActionAgree
-    (P : SectorDecomposition (Fin d)) {Y Z : Matrix (Fin d) (Fin d) ℂ}
+    (P : SectorDecomposition (α)) {Y Z : Matrix (α) (α) ℂ}
     (hSpan : P.EventuallyRepresentativeWordTupleSpan)
     (hAct : FirstSiteActionAgree P.toTensor Y Z) :
     ∀ j, insertedTensor Y (P.basis j) = insertedTensor Z (P.basis j) := by
@@ -212,8 +212,8 @@ needed.
 
 Source: arXiv:1606.00608, Appendix C.3, Lemma L, lines 1835--1858. -/
 theorem insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree
-    {D : ℕ} (A : MPSTensor d D) (P : SectorDecomposition (Fin d))
-    {Y Z : Matrix (Fin d) (Fin d) ℂ}
+    {D : ℕ} (A : MPTensor α (Fin D)) (P : SectorDecomposition (α))
+    {Y Z : Matrix (α) (α) ℂ}
     (hAP : SameMPV₂Pos A P.toTensor)
     (hSpan : P.EventuallyRepresentativeWordTupleSpan)
     (hAct : FirstSiteActionAgree A Y Z) :

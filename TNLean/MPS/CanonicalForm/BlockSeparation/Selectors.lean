@@ -21,12 +21,12 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d : ℕ} {r : ℕ} {dim : Fin r → ℕ}
+variable {α : Type*} [Fintype α] {r : ℕ} {dim : Fin r → ℕ}
 
 /-- Full pair product-span realizes an arbitrary matrix on the first block and
 zero on the second, without prescribing the values on the remaining blocks. -/
 theorem exists_mem_span_wordTuple_eq_and_eq_zero_of_pairWordTupleSpanTop
-    (A : (k : Fin r) → MPSTensor d (dim k)) {S : ℕ}
+    (A : (k : Fin r) → MPTensor α (Fin (dim k))) {S : ℕ}
     {k j : Fin r} (hSpan : PairWordTupleSpanTop (A k) (A j) S)
     (X : Matrix (Fin (dim k)) (Fin (dim k)) ℂ) :
     ∃ M : (l : Fin r) → Matrix (Fin (dim l)) (Fin (dim l)) ℂ,
@@ -38,7 +38,7 @@ theorem exists_mem_span_wordTuple_eq_and_eq_zero_of_pairWordTupleSpanTop
     exact Submodule.mem_top
   rcases (Submodule.mem_span_range_iff_exists_fun ℂ).mp htarget with ⟨c, hc⟩
   let M : (l : Fin r) → Matrix (Fin (dim l)) (Fin (dim l)) ℂ :=
-    fun l => ∑ w : Fin S → Fin d, c w • Kraus.evalWord (A l) (List.ofFn w)
+    fun l => ∑ w : Fin S → α, c w • Kraus.evalWord (A l) (List.ofFn w)
   refine ⟨M, ?_, ?_, ?_⟩
   · refine (Submodule.mem_span_range_iff_exists_fun ℂ).mpr ⟨c, ?_⟩
     ext l
@@ -55,7 +55,7 @@ theorem exists_mem_span_wordTuple_eq_and_eq_zero_of_pairWordTupleSpanTop
 /-- Pair product-span at length $S$ gives a length-$S$ selector for the first
 block of the pair. -/
 theorem hasBlockSelectorOn_of_pairWordTupleSpanTop
-    (A : (k : Fin r) → MPSTensor d (dim k)) {S : ℕ}
+    (A : (k : Fin r) → MPTensor α (Fin (dim k))) {S : ℕ}
     {k j : Fin r} (hSpan : PairWordTupleSpanTop (A k) (A j) S) :
     HasBlockSelectorOn A k S {j} := by
   obtain ⟨M, hM, hMk, hMj⟩ :=
@@ -70,7 +70,7 @@ theorem hasBlockSelectorOn_of_pairWordTupleSpanTop
 /-- Pair trace-separation at length `S` gives a length-`S` selector for the
 first block of the pair. -/
 theorem hasBlockSelectorOn_of_pairTraceSeparatingAt
-    (A : (k : Fin r) → MPSTensor d (dim k)) {S : ℕ}
+    (A : (k : Fin r) → MPTensor α (Fin (dim k))) {S : ℕ}
     {k j : Fin r} (hSep : PairTraceSeparatingAt (A k) (A j) S) :
     HasBlockSelectorOn A k S {j} :=
   hasBlockSelectorOn_of_pairWordTupleSpanTop A
@@ -79,7 +79,7 @@ theorem hasBlockSelectorOn_of_pairTraceSeparatingAt
 /-- A common pair product-span length for all ordered distinct pairs gives
 pairwise block separators. -/
 theorem hasPairBlockSeparatingWords_of_forall_pairWordTupleSpanTop
-    (A : (k : Fin r) → MPSTensor d (dim k)) {S : ℕ}
+    (A : (k : Fin r) → MPTensor α (Fin (dim k))) {S : ℕ}
     (hSpan : ∀ k j : Fin r, j ≠ k → PairWordTupleSpanTop (A k) (A j) S) :
     HasPairBlockSeparatingWords A S := by
   intro k j hjk
@@ -88,7 +88,7 @@ theorem hasPairBlockSeparatingWords_of_forall_pairWordTupleSpanTop
 /-- A common pair trace-separation length for all ordered distinct pairs gives
 pairwise block separators. -/
 theorem hasPairBlockSeparatingWords_of_forall_pairTraceSeparatingAt
-    (A : (k : Fin r) → MPSTensor d (dim k)) {S : ℕ}
+    (A : (k : Fin r) → MPTensor α (Fin (dim k))) {S : ℕ}
     (hSep : ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) S) :
     HasPairBlockSeparatingWords A S := by
   intro k j hjk
@@ -97,7 +97,7 @@ theorem hasPairBlockSeparatingWords_of_forall_pairTraceSeparatingAt
 /-- Existential form of the pair trace-separation criterion for pairwise block
 separators. -/
 theorem exists_hasPairBlockSeparatingWords_of_exists_forall_pairTraceSeparatingAt
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hSep : ∃ S : ℕ,
       ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) S) :
     ∃ S : ℕ, HasPairBlockSeparatingWords A S := by
@@ -118,32 +118,32 @@ then recovers the arbitrary target tuple $M$ at length $L+1$.
 This is the simultaneous-tuple form of the unital propagation in
 arXiv:quant-ph/0608197, lines 893--898. -/
 theorem wordTupleSpanTop_succ_of_unital
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     {L : ℕ} (hSpan : WordTupleSpanTop A L)
-    (hUnital : ∀ k : Fin r, ∑ a : Fin d, A k a * (A k a)ᴴ = 1) :
+    (hUnital : ∀ k : Fin r, ∑ a : α, A k a * (A k a)ᴴ = 1) :
     WordTupleSpanTop A (L + 1) := by
   classical
   unfold WordTupleSpanTop at hSpan ⊢
   apply top_unique
   intro M _
-  have hN : ∀ a : Fin d,
+  have hN : ∀ a : α,
       (fun k : Fin r ↦ (A k a)ᴴ * M k) ∈
         Submodule.span ℂ (Set.range (wordTuple A L)) := by
     simp [hSpan]
-  have hLetter : ∀ a : Fin d,
+  have hLetter : ∀ a : α,
       wordTuple A 1 (fun _ ↦ a) ∈
         Submodule.span ℂ (Set.range (wordTuple A 1)) :=
     fun a ↦ Submodule.subset_span ⟨fun _ ↦ a, rfl⟩
-  have hProduct : ∀ a : Fin d,
+  have hProduct : ∀ a : α,
       (fun k : Fin r ↦
         wordTuple A 1 (fun _ ↦ a) k * ((A k a)ᴴ * M k)) ∈
           Submodule.span ℂ (Set.range (wordTuple A (1 + L))) :=
     fun a ↦ pointwise_mul_mem_span_wordTuple_add A (hLetter a) (hN a)
-  have hSum : (∑ a : Fin d, fun k : Fin r ↦
+  have hSum : (∑ a : α, fun k : Fin r ↦
       wordTuple A 1 (fun _ ↦ a) k * ((A k a)ᴴ * M k)) ∈
         Submodule.span ℂ (Set.range (wordTuple A (1 + L))) :=
     Submodule.sum_mem _ fun a _ ↦ hProduct a
-  have hSumEq : (∑ a : Fin d, fun k : Fin r ↦
+  have hSumEq : (∑ a : α, fun k : Fin r ↦
       wordTuple A 1 (fun _ ↦ a) k * ((A k a)ᴴ * M k)) = M := by
     funext k
     rw [Finset.sum_apply]
@@ -159,9 +159,9 @@ theorem wordTupleSpanTop_succ_of_unital
 span to every larger length. This is the induction-based extension of the one-step
 propagation in arXiv:quant-ph/0608197, lines 893--898. -/
 theorem wordTupleSpanTop_of_ge_of_unital
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     {L n : ℕ} (hSpan : WordTupleSpanTop A L)
-    (hUnital : ∀ k : Fin r, ∑ a : Fin d, A k a * (A k a)ᴴ = 1)
+    (hUnital : ∀ k : Fin r, ∑ a : α, A k a * (A k a)ᴴ = 1)
     (hLn : L ≤ n) :
     WordTupleSpanTop A n := by
   exact Nat.le_induction hSpan
@@ -170,7 +170,7 @@ theorem wordTupleSpanTop_of_ge_of_unital
 /-- Multiplying two partial selectors for the same block produces a selector
 that vanishes on the union of their target sets. -/
 theorem HasBlockSelectorOn.mul
-    {A : (k : Fin r) → MPSTensor d (dim k)} {k : Fin r}
+    {A : (k : Fin r) → MPTensor α (Fin (dim k))} {k : Fin r}
     {L S : ℕ} {targets₁ targets₂ : Finset (Fin r)}
     (h₁ : HasBlockSelectorOn A k L targets₁)
     (h₂ : HasBlockSelectorOn A k S targets₂) :
@@ -189,7 +189,7 @@ theorem HasBlockSelectorOn.mul
 /-- Pairwise block-separating word polynomials multiply to a selector on any
 finite target set. -/
 theorem hasBlockSelectorOn_finset_of_pairBlockSeparatingWords
-    (A : (k : Fin r) → MPSTensor d (dim k)) {S : ℕ}
+    (A : (k : Fin r) → MPTensor α (Fin (dim k))) {S : ℕ}
     (hPair : HasPairBlockSeparatingWords A S)
     (k : Fin r) (targets : Finset (Fin r))
     (htargets : ∀ j : Fin r, j ∈ targets → j ≠ k) :
@@ -226,7 +226,7 @@ theorem hasBlockSelectorOn_finset_of_pairBlockSeparatingWords
 /-- If a finite block family has exactly one block, block injectivity of that
 block gives the simultaneous word-tuple spanning property. -/
 theorem wordTupleSpanTop_of_card_eq_one_of_isNBlkInjective
-    (A : (k : Fin r) → MPSTensor d (dim k)) {L : ℕ}
+    (A : (k : Fin r) → MPTensor α (Fin (dim k))) {L : ℕ}
     (hr : r = 1) (hInj : ∀ k : Fin r, Kraus.IsNBlkInjective (A k) L) :
     WordTupleSpanTop A L := by
   classical
@@ -235,9 +235,9 @@ theorem wordTupleSpanTop_of_card_eq_one_of_isNBlkInjective
   apply top_unique
   intro X _
   have hX : X k₀ ∈ Submodule.span ℂ
-      (Set.range fun w : Fin L → Fin d ↦ Kraus.evalWord (A k₀) (List.ofFn w)) := by
+      (Set.range fun w : Fin L → α ↦ Kraus.evalWord (A k₀) (List.ofFn w)) := by
     rw [show Submodule.span ℂ
-      (Set.range fun w : Fin L → Fin d ↦ Kraus.evalWord (A k₀) (List.ofFn w)) = ⊤ by
+      (Set.range fun w : Fin L → α ↦ Kraus.evalWord (A k₀) (List.ofFn w)) = ⊤ by
         exact (hInj k₀).span_eq_top]
     exact Submodule.mem_top
   obtain ⟨c, hc⟩ := (Submodule.mem_span_range_iff_exists_fun ℂ).mp hX
@@ -259,7 +259,7 @@ selectors for the remaining $r-2$ blocks kills every other component without
 adding a separate injective prefix. This is the finite-dimensional direct-sum
 step in arXiv:quant-ph/0608197, lines 1346--1408. -/
 theorem wordTupleSpanTop_mul_pred_of_forall_pairWordTupleSpanTop
-    (A : (k : Fin r) → MPSTensor d (dim k)) {S : ℕ}
+    (A : (k : Fin r) → MPTensor α (Fin (dim k))) {S : ℕ}
     (hr : 2 ≤ r)
     (hPair : ∀ k j : Fin r, j ≠ k → PairWordTupleSpanTop (A k) (A j) S) :
     WordTupleSpanTop A ((r - 1) * S) := by
@@ -328,7 +328,7 @@ theorem wordTupleSpanTop_mul_pred_of_forall_pairWordTupleSpanTop
 /-- Pair trace separation at a common length gives the same sharp
 simultaneous word-tuple span for a family of at least two blocks. -/
 theorem wordTupleSpanTop_mul_pred_of_forall_pairTraceSeparatingAt
-    (A : (k : Fin r) → MPSTensor d (dim k)) {S : ℕ}
+    (A : (k : Fin r) → MPTensor α (Fin (dim k))) {S : ℕ}
     (hr : 2 ≤ r)
     (hPair : ∀ k j : Fin r, j ≠ k → PairTraceSeparatingAt (A k) (A j) S) :
     WordTupleSpanTop A ((r - 1) * S) :=
@@ -338,7 +338,7 @@ theorem wordTupleSpanTop_mul_pred_of_forall_pairTraceSeparatingAt
 /-- Tuple-span selectors on `Finset.univ.erase k` recover coefficient-based
 block-selector words. -/
 theorem hasBlockSelectorWords_of_forall_hasBlockSelectorOn_univ_erase
-    (A : (k : Fin r) → MPSTensor d (dim k)) {S : ℕ}
+    (A : (k : Fin r) → MPTensor α (Fin (dim k))) {S : ℕ}
     (h : ∀ k : Fin r, HasBlockSelectorOn A k S (Finset.univ.erase k)) :
     HasBlockSelectorWords A S := by
   classical
@@ -358,7 +358,7 @@ theorem hasBlockSelectorWords_of_forall_hasBlockSelectorOn_univ_erase
 words by multiplying the pairwise selectors for the chosen block against all
 other blocks. -/
 theorem hasBlockSelectorWords_of_pairBlockSeparatingWords
-    (A : (k : Fin r) → MPSTensor d (dim k)) {S : ℕ}
+    (A : (k : Fin r) → MPTensor α (Fin (dim k))) {S : ℕ}
     (hPair : HasPairBlockSeparatingWords A S) :
     HasBlockSelectorWords A ((r - 1) * S) := by
   classical
@@ -395,11 +395,11 @@ theorem hasBlockSelectorWords_of_wordTupleSpanTop {α : Type*} [Fintype α]
       congrArg (fun M => M j) hc
 
 private theorem exists_dualCoeffs_of_wordEntryFamily_linearIndependent
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     {L : ℕ} (hLI : LinearIndependent ℂ (wordEntryFamily A L)) :
-    ∃ coeff : BlockEntryIndex dim → (Fin L → Fin d) → ℂ,
+    ∃ coeff : BlockEntryIndex dim → (Fin L → α) → ℂ,
       ∀ x y : BlockEntryIndex dim,
-        ∑ w : Fin L → Fin d, coeff x w * wordEntryFamily A L y w =
+        ∑ w : Fin L → α, coeff x w * wordEntryFamily A L y w =
           if x = y then 1 else 0 := by
   classical
   let lc := Fintype.linearCombination ℂ (wordEntryFamily A L)
@@ -409,25 +409,25 @@ private theorem exists_dualCoeffs_of_wordEntryFamily_linearIndependent
     exact funext (Fintype.linearIndependent_iff.mp hLI c
       (by simpa [lc, Fintype.linearCombination_apply] using hc))
   obtain ⟨Ψ, hΨ⟩ := lc.exists_leftInverse_of_injective hlcKer
-  let coeff : BlockEntryIndex dim → (Fin L → Fin d) → ℂ :=
-    fun x w => Ψ ((Pi.single w (1 : ℂ) : (Fin L → Fin d) → ℂ)) x
+  let coeff : BlockEntryIndex dim → (Fin L → α) → ℂ :=
+    fun x w => Ψ ((Pi.single w (1 : ℂ) : (Fin L → α) → ℂ)) x
   have hΨ_apply :
-      ∀ (f : (Fin L → Fin d) → ℂ) (x : BlockEntryIndex dim),
-        Ψ f x = ∑ w : Fin L → Fin d, f w * coeff x w := by
+      ∀ (f : (Fin L → α) → ℂ) (x : BlockEntryIndex dim),
+        Ψ f x = ∑ w : Fin L → α, f w * coeff x w := by
     intro f x
     calc
-      Ψ f x = Ψ (∑ w : Fin L → Fin d, (Pi.single w (f w) : (Fin L → Fin d) → ℂ)) x := by
+      Ψ f x = Ψ (∑ w : Fin L → α, (Pi.single w (f w) : (Fin L → α) → ℂ)) x := by
         simpa using
-          congrArg (fun g : ((Fin L → Fin d) → ℂ) => Ψ g x) (Finset.univ_sum_single f).symm
-      _ = ∑ w : Fin L → Fin d, Ψ ((Pi.single w (f w) : (Fin L → Fin d) → ℂ)) x := by
+          congrArg (fun g : ((Fin L → α) → ℂ) => Ψ g x) (Finset.univ_sum_single f).symm
+      _ = ∑ w : Fin L → α, Ψ ((Pi.single w (f w) : (Fin L → α) → ℂ)) x := by
         rw [map_sum]
         simp
-      _ = ∑ w : Fin L → Fin d, f w * coeff x w := by
+      _ = ∑ w : Fin L → α, f w * coeff x w := by
         refine Finset.sum_congr rfl ?_
         intro w _
         have hsingle_smul :
-            ((Pi.single w (f w) : (Fin L → Fin d) → ℂ)) =
-              f w • ((Pi.single w (1 : ℂ) : (Fin L → Fin d) → ℂ)) := by
+            ((Pi.single w (f w) : (Fin L → α) → ℂ)) =
+              f w • ((Pi.single w (1 : ℂ) : (Fin L → α) → ℂ)) := by
           ext z
           by_cases hzw : z = w
           · subst hzw
@@ -457,7 +457,7 @@ private theorem exists_dualCoeffs_of_wordEntryFamily_linearIndependent
 /-- Linear independence of the scalar word-entry family forces the tuple-valued
 length-`L` word evaluations to span the full product algebra. -/
 theorem wordTupleSpanTop_of_wordEntryFamily_linearIndependent
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     {L : ℕ} (hLI : LinearIndependent ℂ (wordEntryFamily A L)) :
     WordTupleSpanTop A L := by
   classical
@@ -465,18 +465,18 @@ theorem wordTupleSpanTop_of_wordEntryFamily_linearIndependent
     ⟨coeff, hcoeff⟩
   rw [WordTupleSpanTop, span_range_eq_top_iff_surjective_fintypeLinearCombination]
   intro M
-  let c : (Fin L → Fin d) → ℂ :=
+  let c : (Fin L → α) → ℂ :=
     fun w => ∑ x : BlockEntryIndex dim, blockEntryValue M x * coeff x w
   refine ⟨c, ?_⟩
   ext j a b
   calc
     (Fintype.linearCombination ℂ (wordTuple A L) c) j a b
-        = (∑ w : Fin L → Fin d, c w • Kraus.evalWord (A j) (List.ofFn w)) a b := by
+        = (∑ w : Fin L → α, c w • Kraus.evalWord (A j) (List.ofFn w)) a b := by
             simp [Fintype.linearCombination_apply, wordTuple, Pi.smul_apply]
-    _ = ∑ w : Fin L → Fin d, c w * wordEntryFamily A L ⟨j, (a, b)⟩ w := by
+    _ = ∑ w : Fin L → α, c w * wordEntryFamily A L ⟨j, (a, b)⟩ w := by
           simp_rw [Matrix.sum_apply, Matrix.smul_apply]
           simp [wordEntryFamily, blockEntryValue, wordTuple]
-    _ = ∑ w : Fin L → Fin d,
+    _ = ∑ w : Fin L → α,
           ∑ x : BlockEntryIndex dim,
             blockEntryValue M x * (coeff x w * wordEntryFamily A L ⟨j, (a, b)⟩ w) := by
           unfold c
@@ -488,7 +488,7 @@ theorem wordTupleSpanTop_of_wordEntryFamily_linearIndependent
           ring
     _ = ∑ x : BlockEntryIndex dim,
           blockEntryValue M x *
-            (∑ w : Fin L → Fin d, coeff x w * wordEntryFamily A L ⟨j, (a, b)⟩ w) := by
+            (∑ w : Fin L → α, coeff x w * wordEntryFamily A L ⟨j, (a, b)⟩ w) := by
           rw [Finset.sum_comm]
           refine Finset.sum_congr rfl ?_
           intro x _
@@ -510,7 +510,7 @@ theorem wordTupleSpanTop_of_wordEntryFamily_linearIndependent
 /-- The linear-independence criterion above gives the abstract selector data
 modeled on arXiv:1606.00608, lines 340--345. -/
 theorem hasBlockSelectorWords_of_wordEntryFamily_linearIndependent
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     {L : ℕ} (hLI : LinearIndependent ℂ (wordEntryFamily A L)) :
     HasBlockSelectorWords A L :=
   hasBlockSelectorWords_of_wordTupleSpanTop A
@@ -519,7 +519,7 @@ theorem hasBlockSelectorWords_of_wordEntryFamily_linearIndependent
 /-- The linear-independence criterion above also yields the `HasFiniteWordTraceSeparation` witness
 used by `HorizontalCFData`. -/
 theorem hasFiniteWordTraceSeparation_of_wordEntryFamily_linearIndependent
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     {L : ℕ} (hLI : LinearIndependent ℂ (wordEntryFamily A L)) :
     HasFiniteWordTraceSeparation A :=
   hasFiniteWordTraceSeparation_of_wordTupleSpanTop A
@@ -533,13 +533,13 @@ all blocks injective, together with a second finite family of words selecting
 individual blocks. Concatenating an injective prefix with a selector suffix then
 spans the full product algebra. -/
 def PropBlockInjective
-    (A : (k : Fin r) → MPSTensor d (dim k)) : Prop :=
+    (A : (k : Fin r) → MPTensor α (Fin (dim k))) : Prop :=
   ∃ L S : ℕ, (∀ k, Kraus.IsNBlkInjective (A k) L) ∧ HasBlockSelectorWords A S
 
 /-- Common block injectivity plus pairwise block-separating word polynomials
 produce the abstract block-injectivity selector data. -/
 theorem propBlockInjective_of_common_blockInjective_of_pairBlockSeparatingWords
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     {L S : ℕ}
     (hInj : ∀ k, Kraus.IsNBlkInjective (A k) L)
     (hPair : HasPairBlockSeparatingWords A S) :
@@ -549,7 +549,7 @@ theorem propBlockInjective_of_common_blockInjective_of_pairBlockSeparatingWords
 /-- Common block injectivity plus finite-length block selectors yield the full
 word-tuple span condition. -/
 theorem wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     {L S : ℕ}
     (hInj : ∀ k, Kraus.IsNBlkInjective (A k) L)
     (hSel : HasBlockSelectorWords A S) :
@@ -561,10 +561,10 @@ theorem wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords
   have hMk_mem :
       ∀ k : Fin r,
         M k ∈ Submodule.span ℂ
-          (Set.range fun u : Fin L → Fin d => Kraus.evalWord (A k) (List.ofFn u)) := by
+          (Set.range fun u : Fin L → α => Kraus.evalWord (A k) (List.ofFn u)) := by
     intro k
     rw [show Submodule.span ℂ
-      (Set.range fun u : Fin L → Fin d => Kraus.evalWord (A k) (List.ofFn u)) = ⊤ by
+      (Set.range fun u : Fin L → α => Kraus.evalWord (A k) (List.ofFn u)) = ⊤ by
         exact (hInj k).span_eq_top]
     exact Submodule.mem_top
   choose prefixCoeffs hprefix using
@@ -572,7 +572,7 @@ theorem wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords
       (Submodule.mem_span_range_iff_exists_fun ℂ).mp (hMk_mem k)
   choose selectorCoeffs hselector_self hselector_off using hSel
   let assembled : (k : Fin r) → Matrix (Fin (dim k)) (Fin (dim k)) ℂ :=
-    ∑ k : Fin r, ∑ u : Fin L → Fin d, ∑ v : Fin S → Fin d,
+    ∑ k : Fin r, ∑ u : Fin L → α, ∑ v : Fin S → α,
       (prefixCoeffs k u * selectorCoeffs k v) •
         wordTuple A (L + S) (Fin.append u v)
   have hassembled_mem :
@@ -590,29 +590,29 @@ theorem wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords
     funext j
     unfold assembled
     calc
-      (∑ k : Fin r, ∑ u : Fin L → Fin d, ∑ v : Fin S → Fin d,
+      (∑ k : Fin r, ∑ u : Fin L → α, ∑ v : Fin S → α,
             (prefixCoeffs k u * selectorCoeffs k v) •
               wordTuple A (L + S) (Fin.append u v)) j
-          = ∑ k : Fin r, ∑ u : Fin L → Fin d, ∑ v : Fin S → Fin d,
+          = ∑ k : Fin r, ∑ u : Fin L → α, ∑ v : Fin S → α,
               (prefixCoeffs k u * selectorCoeffs k v) •
                 (Kraus.evalWord (A j) (List.ofFn u) *
                   Kraus.evalWord (A j) (List.ofFn v)) := by
               simp [wordTuple, List.ofFn_fin_append, Kraus.evalWord_append]
-      _ = ∑ k : Fin r, ∑ u : Fin L → Fin d,
+      _ = ∑ k : Fin r, ∑ u : Fin L → α,
             prefixCoeffs k u •
               (Kraus.evalWord (A j) (List.ofFn u) *
-                ∑ v : Fin S → Fin d,
+                ∑ v : Fin S → α,
                   selectorCoeffs k v • Kraus.evalWord (A j) (List.ofFn v)) := by
             refine Finset.sum_congr rfl ?_
             intro k _
             refine Finset.sum_congr rfl ?_
             intro u _
             calc
-              ∑ v : Fin S → Fin d,
+              ∑ v : Fin S → α,
                   (prefixCoeffs k u * selectorCoeffs k v) •
                     (Kraus.evalWord (A j) (List.ofFn u) *
                       Kraus.evalWord (A j) (List.ofFn v))
-                = ∑ v : Fin S → Fin d,
+                = ∑ v : Fin S → α,
                     prefixCoeffs k u •
                       (Kraus.evalWord (A j) (List.ofFn u) *
                         (selectorCoeffs k v • Kraus.evalWord (A j) (List.ofFn v))) := by
@@ -622,10 +622,10 @@ theorem wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords
                     simp [smul_smul]
               _ = prefixCoeffs k u •
                     (Kraus.evalWord (A j) (List.ofFn u) *
-                      ∑ v : Fin S → Fin d,
+                      ∑ v : Fin S → α,
                         selectorCoeffs k v • Kraus.evalWord (A j) (List.ofFn v)) := by
                     rw [Matrix.mul_sum, Finset.smul_sum]
-      _ = ∑ k : Fin r, ∑ u : Fin L → Fin d,
+      _ = ∑ k : Fin r, ∑ u : Fin L → α,
             if h : k = j then
               prefixCoeffs k u • Kraus.evalWord (A j) (List.ofFn u)
             else 0 := by
@@ -640,11 +640,11 @@ theorem wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords
                 intro hjk
                 exact hkj hjk.symm
               have hzero :
-                  ∑ v : Fin S → Fin d,
+                  ∑ v : Fin S → α,
                     selectorCoeffs k v • Kraus.evalWord (A j) (List.ofFn v) = 0 :=
                 hselector_off k j hjk
               simp [hkj, hzero]
-      _ = ∑ u : Fin L → Fin d,
+      _ = ∑ u : Fin L → α,
             prefixCoeffs j u • Kraus.evalWord (A j) (List.ofFn u) := by
             simp
       _ = M j := hprefix j
@@ -654,7 +654,7 @@ theorem wordTupleSpanTop_of_common_blockInjective_of_blockSelectorWords
 /-- Common block injectivity plus pairwise block-separating word polynomials
 yield the full word-tuple span condition. -/
 theorem wordTupleSpanTop_of_common_blockInjective_of_pairBlockSeparatingWords
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     {L S : ℕ}
     (hInj : ∀ k, Kraus.IsNBlkInjective (A k) L)
     (hPair : HasPairBlockSeparatingWords A S) :
@@ -665,7 +665,7 @@ theorem wordTupleSpanTop_of_common_blockInjective_of_pairBlockSeparatingWords
 /-- Common block injectivity plus pairwise block-separating word polynomials
 imply `HasFiniteWordTraceSeparation`. -/
 theorem hasFiniteWordTraceSeparation_of_common_blockInjective_of_pairBlockSeparatingWords
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     {L S : ℕ}
     (hInj : ∀ k, Kraus.IsNBlkInjective (A k) L)
     (hPair : HasPairBlockSeparatingWords A S) :
@@ -676,7 +676,7 @@ theorem hasFiniteWordTraceSeparation_of_common_blockInjective_of_pairBlockSepara
 /-- The abstract block-injectivity selector data imply the finite-length word-tuple
 span condition. -/
 theorem wordTupleSpanTop_of_propBlockInjective
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hProp : PropBlockInjective A) :
     ∃ N : ℕ, WordTupleSpanTop A N := by
   rcases hProp with ⟨L, S, hInj, hSel⟩
@@ -685,7 +685,7 @@ theorem wordTupleSpanTop_of_propBlockInjective
 
 /-- The abstract block-injectivity selector data imply `HasFiniteWordTraceSeparation`. -/
 theorem hasFiniteWordTraceSeparation_of_propBlockInjective
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hProp : PropBlockInjective A) :
     HasFiniteWordTraceSeparation A := by
   rcases wordTupleSpanTop_of_propBlockInjective A hProp with ⟨N, hN⟩
@@ -695,13 +695,13 @@ end MPSTensor
 
 namespace MPOTensor
 
-variable {d : ℕ} {r : ℕ} {dim : Fin r → ℕ} {μ : Fin r → ℂ}
+variable {α : Type*} [Fintype α] {r : ℕ} {dim : Fin r → ℕ} {μ : Fin r → ℂ}
 
 /-- A finite-length block-separation hypothesis yields `HorizontalCFData`. -/
 theorem horizontalCFData_of_wordTupleSpanTop
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hInj : ∀ k, Kraus.IsInjective (A k))
-    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * A k i = 1)
+    (hLeft : ∀ k, ∑ i : α, (A k i)ᴴ * A k i = 1)
     (hμne : ∀ k, μ k ≠ 0)
     (hSpan : ∃ L : ℕ, MPSTensor.WordTupleSpanTop A L) :
     HorizontalCFData μ A := by
@@ -718,9 +718,9 @@ theorem horizontalCFData_of_wordTupleSpanTop
 route into `HorizontalCFData`: it already implies the finite-length product
 algebra span condition. -/
 theorem horizontalCFData_of_wordEntryFamily_linearIndependent
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hInj : ∀ k, Kraus.IsInjective (A k))
-    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * A k i = 1)
+    (hLeft : ∀ k, ∑ i : α, (A k i)ᴴ * A k i = 1)
     (hμne : ∀ k, μ k ≠ 0)
     {L : ℕ}
     (hLI : LinearIndependent ℂ (MPSTensor.wordEntryFamily A L)) :
@@ -731,9 +731,9 @@ theorem horizontalCFData_of_wordEntryFamily_linearIndependent
 /-- The abstract block-injectivity selector data yield `HorizontalCFData` through
 the finite-length span criterion. -/
 theorem horizontalCFData_of_propBlockInjective
-    (A : (k : Fin r) → MPSTensor d (dim k))
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hInj : ∀ k, Kraus.IsInjective (A k))
-    (hLeft : ∀ k, ∑ i : Fin d, (A k i)ᴴ * A k i = 1)
+    (hLeft : ∀ k, ∑ i : α, (A k i)ᴴ * A k i = 1)
     (hμne : ∀ k, μ k ≠ 0)
     (hProp : MPSTensor.PropBlockInjective A) :
     HorizontalCFData μ A := by
