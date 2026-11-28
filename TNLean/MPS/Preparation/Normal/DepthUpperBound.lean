@@ -36,7 +36,7 @@ theorem approximatingMPVState_eq_blockIsometryState (A : MPSTensor d D) {q : ℕ
   rw [(inner_approximatingMPVState_mpvState A hB hσ htr M).1]
   ext s
   rw [approximatingMPVStateRaw_apply, blockIsometryState_apply, mpv_approximatingTensor,
-    blockedConfigEquiv_symm_eq_blockIndexEquiv q hN]
+    blockConfigEquiv_symm_eq_blockCfgEquiv q hN]
 
 /-- **The approximating state is prepared in depth `O(q)`.** There is `C`, depending only on
 `d` and `D`, such that for every tensor `A`, every `σ ≥ 0` with `Tr σ = 1`, every block length

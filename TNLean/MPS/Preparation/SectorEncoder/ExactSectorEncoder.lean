@@ -141,7 +141,7 @@ theorem injective_sectorColumnMatrix_of_isInjectiveOn
         rw [Matrix.mulVec_mulVec, cfgPhysicalMatrix_mul_sectorTraceSelector A ι hι hdisj hN]
         exact hv
       funext t
-      have ht := congrFun hc (decodeBlockEquiv d N t)
+      have ht := congrFun hc t
       simpa only [cfgPhysicalMatrix, Matrix.mulVec, dotProduct, Matrix.submatrix_apply,
         Equiv.symm_apply_apply, id_eq, Pi.zero_apply] using ht
   funext j
@@ -218,7 +218,7 @@ theorem polarIso_sectorCoefficientMatrix_eq_zero_of_notMem
     · intro x hx hzero
       apply hinj.eq_zero_of_mulVec_eq_zero hx
       funext t
-      have ht := congrFun hzero (decodeBlockEquiv d N t)
+      have ht := congrFun hzero t
       simpa only [C, cfgPhysicalMatrix, Matrix.mulVec, dotProduct, Matrix.submatrix_apply,
         Equiv.symm_apply_apply, id_eq, Pi.zero_apply] using ht
   have hfix : Matrix.polarSupport C * R = R := by

@@ -66,7 +66,7 @@ variable {d D b : ℕ}
 
 /-- A word of diagonal matrices evaluates to the diagonal matrix of the products of the
 entries. -/
-theorem evalWord_diagonal (a : Fin d → Fin D → ℂ) (l : List (Fin d)) :
+theorem evalWord_diagonal {α : Type*} (a : α → Fin D → ℂ) (l : List α) :
     Kraus.evalWord (fun i => diagonal (a i)) l =
       diagonal (fun e => (l.map fun i => a i e).prod) := by
   induction l with
@@ -343,7 +343,7 @@ theorem sum_star_nonNormalApproxVector_basisPair_mul_mpv (a : Fin d → Fin D �
   set B := physicalMatrix (Kraus.block (fun i => diagonal (a i)) q)
   set V := polarIso B
   have hcol : ∀ w e, blockDiagEntry a q w e = B w (e, e) := fun w e => by
-    simp [B, physicalMatrix, block_diagonal]
+    simp only [B, physicalMatrix, block_diagonal, diagonal_apply_eq]
   simp only [nonNormalApproxVector_basisPair, mpv_blockConfigEquiv_diagonal, hcol]
   rw [sum_star_sum_mul_sum
     (fun j (τ : Fin M → (Fin q → Fin d)) => α j * ∏ k, V (τ k) (c j, c j))

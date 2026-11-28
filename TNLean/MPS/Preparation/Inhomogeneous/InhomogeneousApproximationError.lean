@@ -108,7 +108,7 @@ This is the ordered-transfer version of the Gram rearrangement and square-root e
 in arXiv:2103.13367, Supplemental Material, equations (19), (21), and (26). -/
 theorem exists_norm_polarPos_sub_le_transferMatrix
     {D : ℕ} {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosDef) :
-    ∃ K : ℝ, 0 ≤ K ∧ ∀ {d : ℕ} (A : MPSTensor d D),
+    ∃ K : ℝ, 0 ≤ K ∧ ∀ {α : Type} [Fintype α] (A : MPTensor α (Fin D)),
       ‖Matrix.polarPos (physicalMatrix A) -
           (CFC.sqrt σ)ᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)‖ ≤
         K * ‖transferMatrix (Kraus.transferMap A) -
@@ -133,8 +133,8 @@ the faithful trace-one state and its bond dimension. This is the telescoping arg
 arXiv:2103.13367, Supplemental Material, equations (29)--(34), for ordered factors. -/
 theorem exists_norm_trace_prod_polarPos_sub_one_le
     {D : ℕ} {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosDef) (htr : σ.trace = 1) :
-    ∃ C : ℝ, 0 < C ∧ ∀ {M : ℕ} [NeZero M] (d : Fin M → ℕ)
-      (A : ∀ j, MPSTensor (d j) D) {δ : ℝ}, 0 ≤ δ →
+    ∃ C : ℝ, 0 < C ∧ ∀ {M : ℕ} [NeZero M] (α : Fin M → Type) [∀ j, Fintype (α j)]
+      (A : ∀ j, MPTensor (α j) (Fin D)) {δ : ℝ}, 0 ≤ δ →
       (∀ j, ‖transferMatrix (Kraus.transferMap (A j)) -
         transferMatrix (Kraus.transferMap (fixedPointTensor σ))‖ ≤ δ) →
       ‖Matrix.trace (List.ofFn fun j => transferMatrix
@@ -230,7 +230,7 @@ theorem ofReal_norm_chainState_sq {d D N : ℕ} [NeZero D] (A : MPSChainTensor d
   rw [← pow_one (transferMatrix _), trace_transferMatrix_transferMap_pow_eq_mpvOverlap]
   rw [EuclideanSpace.norm_sq_eq, mpvOverlap]
   push_cast
-  let e := (Equiv.funUnique (Fin 1) (Fin N → Fin d)).trans (decodeBlockEquiv d N)
+  let e := Equiv.funUnique (Fin 1) (Fin N → Fin d)
   refine (Fintype.sum_equiv e _ _ fun t => ?_).symm
   simp only [chainState_apply, ← Complex.mul_conj']
   have ht : mpv (MPSChainTensor.eval A) t = MPSChainTensor.coeff A (e t) := by
@@ -309,7 +309,7 @@ theorem exists_one_sub_norm_inner_chainPosState_le
     rw [fixedPointPair_norm_sq hσ.posSemidef, htr]
   have ho : ‖⟪Ω, v⟫_ℂ - 1‖ ≤ Co * (M * δ) * Real.exp (Co * (M * δ)) := by
     rw [inner_pairFamilyVector_chainPosState]
-    exact hover (fun j => blockPhysDim d (ℓ j)) (chainBlockTensor A hN) hδ hA
+    exact hover (fun j => Fin (ℓ j) → Fin d) (chainBlockTensor A hN) hδ hA
   have hn : |‖v‖ ^ 2 - 1| ≤ Kn * δ := by
     rw [← norm_chainState_eq A hN]
     exact (hnorm A).trans (mul_le_mul_of_nonneg_left hwhole hKn)

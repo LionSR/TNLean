@@ -26,7 +26,7 @@ open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators InnerProductS
 
 namespace MPSTensor
 
-variable {n D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 /-- The compression coefficient of a tensor `X` read from a `D² × D²` matrix `H`, against the
 fixed-point tensor of `σ`, is a trace: `Tr(∑ᵢ Xⁱ σ (P_∞ⁱ)†) = Tr(H ((√σ)ᵀ ⊗ σ))`. -/
@@ -69,7 +69,7 @@ is nonnegative: it is `Tr(P ((√σ)ᵀ ⊗ σ))`, a trace product of positive m
 
 Project refinement of the polar-factor overlap comparison in arXiv:2307.01696,
 eqs. `eq:B_TM` and `eq:app_error`. -/
-theorem mixedMapLM_polarPosTensor_fixedPointTensor_trace_nonneg (B : MPSTensor n D)
+theorem mixedMapLM_polarPosTensor_fixedPointTensor_trace_nonneg (B : MPTensor α (Fin D))
     {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosSemidef) :
     0 ≤ (Kraus.mixedMapLM (polarPosTensor B) (fixedPointTensor σ) σ).trace := by
   change 0 ≤ (Kraus.mixedMapLM (ofPhysicalMatrixLM (Matrix.polarPos (physicalMatrix B)))
@@ -83,7 +83,7 @@ coefficient is at most one, and its deficit is exactly half their squared distan
 
 Project second-order identity for the polar factors in arXiv:2307.01696,
 eqs. `eq:B_TM` and `eq:app_error`. -/
-theorem mixedMapLM_polarPosTensor_fixedPointTensor_trace_geometry (B : MPSTensor n D)
+theorem mixedMapLM_polarPosTensor_fixedPointTensor_trace_geometry (B : MPTensor α (Fin D))
     {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosSemidef) (htr : σ.trace = 1)
     (hB : (Kraus.transferMap B σ).trace = 1) :
     (Kraus.mixedMapLM (polarPosTensor B) (fixedPointTensor σ) σ).trace.re ≤ 1 ∧

@@ -55,7 +55,7 @@ through its own period agrees with the directly $p$-blocked block.
 
 \begin{lemma}[Quasi-idempotence under physical blocking]%
     \label{thm:transfer_map_block_tensor_quasi_idempotent}
-    \lean{MPSTensor.transferMap_blockTensor_quasi_idempotent}
+    \lean{MPSTensor.transferMap_block_quasi_idempotent}
     \leanok
     \uses{def:blocked_tensor,def:transfer_map}
     Let $A$ be an MPS tensor and let $c\in\C$. If
@@ -367,7 +367,7 @@ through its own period agrees with the directly $p$-blocked block.
 
 \begin{lemma}[Iterated blocking at the transfer-map level]%
     \label{thm:iterated_blocking_transfer}
-    \lean{MPSTensor.transferMap_blockTensor_mul}\leanok
+    \lean{MPSTensor.transferMap_block_mul}\leanok
     \uses{def:blocked_tensor,def:transfer_map}
     For any MPS tensor $A$ and $m,n\ge0$,
     \begin{align}

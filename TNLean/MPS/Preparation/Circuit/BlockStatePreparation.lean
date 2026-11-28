@@ -587,15 +587,15 @@ theorem blockSite_const (q : ℕ) (hN : ∑ _ : Fin M, q = M * q) (k : Fin M) (j
   Fin.ext (by simp [blockOffset_const q k.isLt.le]; ring)
 
 /-- For blocks of equal length, reading a configuration in blocks is the regrouping
-`Kraus.blockedConfigEquiv` of the uniform blocking. -/
-theorem blockedConfigEquiv_symm_eq_blockIndexEquiv (q : ℕ) (hN : ∑ _ : Fin M, q = M * q)
+`Kraus.blockConfigEquiv` of the uniform blocking. -/
+theorem blockConfigEquiv_symm_eq_blockCfgEquiv (q : ℕ) (hN : ∑ _ : Fin M, q = M * q)
     (s : Cfg d (M * q)) : (Kraus.blockConfigEquiv (Fin d) M q).symm s = blockCfgEquiv d hN s := by
   funext k
   rw [blockCfgEquiv_apply, Equiv.eq_symm_apply]
   funext j
   conv_rhs => rw [← (Kraus.blockConfigEquiv (Fin d) M q).apply_symm_apply s]
   rw [Function.comp_apply, blockSite_const]
-  simp [Kraus.blockedConfigEquiv, Equiv.arrowCongr, Kraus.blockConfigEquiv_apply]
+  simp [Kraus.blockConfigEquiv_apply]
 
 end MPSPreparation
 

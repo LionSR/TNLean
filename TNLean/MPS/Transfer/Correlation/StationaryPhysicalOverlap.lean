@@ -114,7 +114,7 @@ theorem stationaryBlockDensity_overlap_tendsto_zero
       atTop (𝓝 (0 : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ)) := by
     refine tendsto_pi_nhds.mpr fun a => tendsto_pi_nhds.mpr fun b => ?_
     simpa only [conjTranspose_physicalMatrix_mul_physicalMatrix_apply,
-      mixedMapLM_blockTensor_apply, Matrix.zero_apply] using
+      mixedMapLM_block_apply, Matrix.zero_apply] using
       tendsto_pi_nhds.mp (tendsto_pi_nhds.mp (hdecay (Matrix.single b.2 a.2 1)) b.1) a.1
   have hcontinuous : Continuous (fun G : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ =>
       Matrix.trace (K * G * K * Gᴴ)) := by

@@ -34,7 +34,7 @@ finite correlation alone~\cite{gap:mswc24_inhomogeneous_scope}.
 
 \begin{lemma}[Residual product relative to a propagated density]
     \label{thm:ldp_transported_choi_residual}
-    \lean{MPSPreparation.norm_gram_blockTensor_sub_transport_le_of_choi_domination}
+    \lean{MPSPreparation.norm_gram_block_sub_transport_le_of_choi_domination}
     \leanok
     Partition a chain into blocks with trace-preserving transfer
     maps $F_j$. Let $\tau_j$ have trace one, let $\delta_j\in\mathbb R$,
@@ -116,7 +116,7 @@ not identified with either window's Choi minorizer.
 
 \begin{lemma}[Mixing from fixed-width local minorization]
     \label{thm:ldp_window_mixing_rate}
-    \lean{MPSPreparation.norm_gram_blockTensor_sub_transport_le_of_window_domination,
+    \lean{MPSPreparation.norm_gram_block_sub_transport_le_of_window_domination,
         MPSPreparation.exists_norm_transferMatrix_interval_sub_le_of_window_domination}
     \leanok
     \uses{def:ldp_actual_interval}

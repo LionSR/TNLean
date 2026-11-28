@@ -24,9 +24,9 @@ open scoped Matrix BigOperators Kronecker ComplexOrder MatrixOrder
 
 namespace MPSTensor
 
-variable {n D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
-private theorem physicalGram_eq_fixedPoint (B : MPSTensor n D)
+private theorem physicalGram_eq_fixedPoint (B : MPTensor α (Fin D))
     (σ : Matrix (Fin D) (Fin D) ℂ)
     (hB : ∀ X : Matrix (Fin D) (Fin D) ℂ, Kraus.transferMap B X = X.trace • σ) :
     (physicalMatrix B)ᴴ * physicalMatrix B =
@@ -38,7 +38,7 @@ private theorem physicalGram_eq_fixedPoint (B : MPSTensor n D)
 map is `X ↦ Tr(X) σ` and `σ` is positive semidefinite. This is the exact endpoint
 of the polar-factor comparison in arXiv:2307.01696, equation `eq:B_TM`. -/
 theorem polarPosTensor_eq_fixedPointTensor_of_transferMap_eq_trace_smul
-    (B : MPSTensor n D) {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosSemidef)
+    (B : MPTensor α (Fin D)) {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosSemidef)
     (hB : ∀ X : Matrix (Fin D) (Fin D) ℂ, Kraus.transferMap B X = X.trace • σ) :
     polarPosTensor B = fixedPointTensor σ := by
   have hP : Matrix.polarPos (physicalMatrix B) =
@@ -54,7 +54,7 @@ theorem polarPosTensor_eq_fixedPointTensor_of_transferMap_eq_trace_smul
 definite: its physical Gram matrix `σᵀ ⊗ 1` is invertible. This is the exact
 fixed-point case of arXiv:2307.01696, equation `eq:B_TM`. -/
 theorem isInjective_of_transferMap_eq_trace_smul
-    (B : MPSTensor n D) {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosDef)
+    (B : MPTensor α (Fin D)) {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosDef)
     (hB : ∀ X : Matrix (Fin D) (Fin D) ℂ, Kraus.transferMap B X = X.trace • σ) :
     Kraus.IsInjective B := by
   classical
@@ -69,7 +69,7 @@ theorem isInjective_of_transferMap_eq_trace_smul
       (fun p : Fin D × Fin D => X p.1 p.2) := by
     rw [Matrix.vecMul_vecMul]
     exact hv
-  have hX : (∑ i : Fin n, (v ᵥ* (physicalMatrix B)ᴴ) i • B i) = X := by
+  have hX : (∑ i : α, (v ᵥ* (physicalMatrix B)ᴴ) i • B i) = X := by
     ext a b
     simpa [Matrix.vecMul, dotProduct, physicalMatrix, Matrix.sum_apply,
       Matrix.smul_apply, smul_eq_mul] using congrFun hc (a, b)

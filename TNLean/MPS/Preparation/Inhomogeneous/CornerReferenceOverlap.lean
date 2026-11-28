@@ -213,8 +213,8 @@ theorem trace_transferMatrix_cornerReferenceMap {D : ℕ} [NeZero D]
 endpoint bonds. The full fixed-point tensors remain in the mixed product, while transfer
 errors are measured against the corner reset maps. -/
 theorem exists_norm_trace_prod_polarPos_sub_one_le_corner_reference (D : ℕ) :
-    ∃ C : ℝ, 0 < C ∧ ∀ {M : ℕ} [NeZero M] (d : Fin M → ℕ)
-      (A : ∀ j, MPSTensor (d j) D) (σ : Fin M → Matrix (Fin D) (Fin D) ℂ)
+    ∃ C : ℝ, 0 < C ∧ ∀ {M : ℕ} [NeZero M] (α : Fin M → Type) [∀ j, Fintype (α j)]
+      (A : ∀ j, MPTensor (α j) (Fin D)) (σ : Fin M → Matrix (Fin D) (Fin D) ℂ)
       (b : Fin M → ℕ),
       (∀ j, (σ j).PosSemidef) → (∀ j, (σ j).trace = 1) →
       (∀ j, cornerProjection D (b j) * σ j = σ j) → ∀ {δ : ℝ}, 0 ≤ δ →

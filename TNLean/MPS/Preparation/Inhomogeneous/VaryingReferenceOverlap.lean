@@ -265,8 +265,8 @@ theorem exists_norm_trace_prod_sub_one_le_of_reference_bounds (D : ℕ) (c L : �
 /-- Uniform overlap control for singular, site-dependent density references. The square-root
 loss comes from the global Hölder estimate; no minimum eigenvalue is assumed. -/
 theorem exists_norm_trace_prod_polarPos_sub_one_le_varying_reference (D : ℕ) :
-    ∃ C : ℝ, 0 < C ∧ ∀ {M : ℕ} [NeZero M] (d : Fin M → ℕ)
-      (A : ∀ j, MPSTensor (d j) D) (σ : Fin M → Matrix (Fin D) (Fin D) ℂ),
+    ∃ C : ℝ, 0 < C ∧ ∀ {M : ℕ} [NeZero M] (α : Fin M → Type) [∀ j, Fintype (α j)]
+      (A : ∀ j, MPTensor (α j) (Fin D)) (σ : Fin M → Matrix (Fin D) (Fin D) ℂ),
       (∀ j, (σ j).PosSemidef) → (∀ j, (σ j).trace = 1) → ∀ {δ : ℝ}, 0 ≤ δ →
       (∀ j, ‖transferMatrix (Kraus.transferMap (A j)) -
         transferMatrix (Kraus.transferMap (fixedPointTensor (σ j)))‖ ≤ δ) →

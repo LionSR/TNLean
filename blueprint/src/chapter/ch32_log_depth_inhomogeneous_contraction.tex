@@ -13,7 +13,7 @@ control ordered products of different maps.
     \label{thm:ldp_chain_transfer_product}
     \lean{MPSChainTensor.prod_transferMap_apply,
         MPSChainTensor.transferMap_eval,
-        MPSChainTensor.trace_transferMap_blockTensor}
+        MPSChainTensor.trace_transferMap_eval}
     \leanok
     \uses{def:ldp_chain_block_tensor}
     For a chain $A_0,\dots,A_{n-1}$ with common bond dimension $D$, let $B$
@@ -39,7 +39,7 @@ control ordered products of different maps.
 
 \begin{lemma}[Uniform Doeblin contraction along a chain]
     \label{thm:ldp_chain_doeblin}
-    \lean{MPSChainTensor.traceNorm_transferMap_blockTensor_sub_le_of_choi_domination}
+    \lean{MPSChainTensor.traceNorm_transferMap_eval_sub_le_of_choi_domination}
     \leanok
     \uses{thm:ldp_chain_transfer_product}
     Let $\sigma$ be a density matrix and $0\le\eta\le1$. Suppose every

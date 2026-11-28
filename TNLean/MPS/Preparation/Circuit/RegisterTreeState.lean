@@ -232,36 +232,33 @@ variable {d D : ℕ}
 /-- Blocking a blocked tensor reads the polar isometry of the directly blocked tensor through the
 grouping of its sites. -/
 theorem polarIsoMatrix_block_block (A : MPSTensor d D) (m n : ℕ)
-    (I : (Fin n → (Fin m → Fin d))) (x : Fin (D * D)) :
+    (I : Fin n → Fin m → Fin d) (x : Fin (D * D)) :
     polarIsoMatrix (Kraus.block (Kraus.block A m) n) I x =
-      polarIsoMatrix (Kraus.block A (m * n)) (iteratedBlockIndex d m n I) x := by
-  have h : Kraus.block (Kraus.block A m) n =
-      fun I => Kraus.block A (m * n) ((directIteratedBlockEquiv d m n).symm I) := by
-    funext I
-    rw [directIteratedBlockEquiv_symm_apply, block_block_apply]
-  rw [h, polarIsoMatrix_comp_equiv]
-  rfl
+      polarIsoMatrix (Kraus.block A (m * n)) ((nestedBlockEquiv (Fin d) rfl).symm I) x := by
+  rw [← reindexPhysical_nestedBlockEquiv_block_block A (rfl : m * n = m * n)]
+  change _ = polarIsoMatrix (fun i => Kraus.block (Kraus.block A m) n
+    (nestedBlockEquiv (Fin d) (rfl : m * n = m * n) i)) _ x
+  rw [polarIsoMatrix_comp_equiv, Matrix.submatrix_apply, Equiv.apply_symm_apply, id]
 
-/-- The blocked index of `n` blocks of `m` sites, each carrying the word `σ u`, is the blocked
-index of the concatenated word `τ`. -/
-theorem iteratedBlockIndex_decodeBlockEquiv_symm {m n : ℕ} (σ : Fin n → (Fin m → Fin d))
+/-- The configuration of `m * n` sites read off `n` blocks of `m` sites, each carrying the word
+`σ u`, is the concatenated word `τ`. -/
+theorem nestedBlockEquiv_symm_eq_of_blocks {m n : ℕ} (σ : Fin n → Fin m → Fin d)
     (τ : Fin (m * n) → Fin d)
     (h : ∀ (u : Fin n) (r : Fin m), τ ⟨m * u.val + r.val, by
       have := u.isLt; have := r.isLt
       calc m * u.val + r.val < m * (u.val + 1) := by rw [Nat.mul_succ]; omega
-        _ ≤ m * n := Nat.mul_le_mul_left m (by omega)⟩ = (σ u) r) :
-    iteratedBlockIndex d m n (σ) =
-      τ := by
-  apply wordOfBlock_injective
-  rw [wordOfBlock_iteratedBlockIndex]
-  change ((List.ofFn (σ)).map
-    (Kraus.wordOfBlock d m)).flatten = List.ofFn (_)
-  rw [List.map_ofFn,
-    List.ofFn_mul']
+        _ ≤ m * n := Nat.mul_le_mul_left m (by omega)⟩ = σ u r) :
+    (nestedBlockEquiv (Fin d) rfl).symm σ = τ := by
+  rw [Equiv.symm_apply_eq, nestedBlockEquiv, Equiv.trans_apply, Equiv.eq_symm_apply]
+  funext x
+  obtain ⟨⟨u, r⟩, rfl⟩ := finProdFinEquiv.surjective x
+  rw [Kraus.blockConfigEquiv_apply, Equiv.symm_apply_apply, ← h u r]
+  simp only [Equiv.arrowCongr_apply, Equiv.refl_apply, Function.comp_apply, finCongr_symm,
+    finCongr_apply]
   congr 1
-  refine congrArg List.ofFn (funext fun u => ?_)
-  simp only [Function.comp_apply, Kraus.wordOfBlock]
-  exact congrArg List.ofFn (funext fun r => (h u r).symm)
+  ext
+  simp only [Fin.val_cast, finProdFinEquiv_apply_val]
+  ring
 
 end Blocked
 
@@ -284,11 +281,11 @@ def regInput (j p : ℕ) (x : Fin (D * D)) : Cfg d (s + s) :=
 
 /-- The two registers written by an isometry `ℂ^χ → ℂ^χ ⊗ ℂ^χ`. -/
 noncomputable def coarseOutput {χ : ℕ} (enc : Fin χ → Cfg d s)
-    (e : (Fin 2 → Fin χ)) : Cfg d (s + s) :=
+    (e : Fin 2 → Fin χ) : Cfg d (s + s) :=
   Fin.append (enc (e 0)) (enc (e 1))
 
 /-- The two registers of the finest layer, read as `2s` sites. -/
-noncomputable def fineOutput (e : (Fin 2 → (Fin s → Fin d))) : Cfg d (s + s) :=
+noncomputable def fineOutput (e : Fin 2 → Fin s → Fin d) : Cfg d (s + s) :=
   Fin.append (e 0) (e 1)
 
 variable {dig enc}
@@ -304,10 +301,8 @@ theorem regInput_injective (hdig : Function.Injective dig) (henc : Function.Inje
   · exact henc (append_injective h).2
 
 omit [NeZero d] in
-private theorem decodeBlock_two_injective {β : ℕ} {e e' : (Fin 2 → Fin β)}
-    (h0 : e 0 = e' 0)
+private theorem fin_two_injective {β : Type*} {e e' : Fin 2 → β} (h0 : e 0 = e' 0)
     (h1 : e 1 = e' 1) : e = e' := by
-  apply (decodeBlockEquiv β 2).injective
   funext i
   fin_cases i
   · exact h0
@@ -317,15 +312,13 @@ omit [NeZero d] in
 theorem coarseOutput_injective {χ : ℕ} {enc : Fin χ → Cfg d s}
     (henc : Function.Injective enc) :
     Function.Injective (coarseOutput (s := s) enc) := fun _ _ h =>
-  decodeBlock_two_injective (henc (append_injective h).1) (henc (append_injective h).2)
+  fin_two_injective (henc (append_injective h).1) (henc (append_injective h).2)
 
 omit [NeZero d] in
 theorem fineOutput_bijective : Function.Bijective (fineOutput (d := d) (s := s)) := by
-  refine ⟨fun e e' h => decodeBlock_two_injective ((decodeBlockEquiv d s).injective
-    (append_injective h).1) ((decodeBlockEquiv d s).injective (append_injective h).2),
+  refine ⟨fun e e' h => fin_two_injective (append_injective h).1 (append_injective h).2,
     fun z => ?_⟩
-  refine ⟨(decodeBlockEquiv _ 2).symm ![fun i => z (Fin.castAdd s i),
-    fun i => z (Fin.natAdd s i)], ?_⟩
+  refine ⟨![fun i => z (Fin.castAdd s i), fun i => z (Fin.natAdd s i)], ?_⟩
   funext t
   refine Fin.addCases (fun i => ?_) (fun i => ?_) t
   · simp only [fineOutput, Fin.append_left, Matrix.cons_val_zero]
@@ -387,13 +380,13 @@ variable {d s D : ℕ} [NeZero d] [NeZero s] {dig : Fin D → Cfg d s} {enc : Fi
 variable (dig enc k) in
 /-- The configuration of a block after the depths `0, …, j` of the tree: the registers of the
 sub-blocks of depth `j` carry the outputs `e` of their unitaries, the other sites `|0⟩`. -/
-noncomputable def regRegisterCfg (j : ℕ) (e : Fin (2 ^ j) → (Fin 2 → Fin (D * D))) :
+noncomputable def regRegisterCfg (j : ℕ) (e : Fin (2 ^ j) → Fin 2 → Fin (D * D)) :
     Cfg d (s * 2 ^ (k + 1)) :=
   placeCfg (fun p : Fin (2 ^ j) => regWindow k j p) fun p => coarseOutput enc (e p)
 
 variable (k) in
 /-- The configuration of a block written by the finest depth from the outputs `e`. -/
-noncomputable def regLeafCfg (e : Fin (2 ^ k) → (Fin 2 → (Fin s → Fin d))) :
+noncomputable def regLeafCfg (e : Fin (2 ^ k) → Fin 2 → Fin s → Fin d) :
     Cfg d (s * 2 ^ (k + 1)) :=
   placeCfg (fun p : Fin (2 ^ k) => regWindow k k p) fun p => fineOutput (e p)
 
@@ -414,7 +407,7 @@ theorem regLeafCfg_bijective : Function.Bijective (regLeafCfg (d := d) (s := s) 
 
 /-- The configuration written by the finest depth carries at the site `s u + r` the letter `r`
 of the register `u`. -/
-theorem regLeafCfg_apply (e : Fin (2 ^ k) → (Fin 2 → (Fin s → Fin d)))
+theorem regLeafCfg_apply (e : Fin (2 ^ k) → Fin 2 → Fin s → Fin d)
     (u : Fin (2 ^ (k + 1))) (r : Fin s) :
     regLeafCfg k e ⟨s * u.val + r.val, by
       have := u.isLt; have := r.isLt
@@ -454,7 +447,7 @@ variable (dig enc) in
 /-- The configuration after the depths `0, …, j` is the input of the depth `j + 1`: the output
 registers of the sub-block `p` of depth `j` are the input registers of its two halves. -/
 theorem regRegisterCfg_eq_placeCfg {j : ℕ} (hj : j + 1 ≤ k)
-    (e : Fin (2 ^ j) → (Fin 2 → Fin (D * D))) :
+    (e : Fin (2 ^ j) → Fin 2 → Fin (D * D)) :
     regRegisterCfg (s := s) enc k j e =
       placeCfg (fun p : Fin (2 ^ (j + 1)) => regWindow k (j + 1) p)
         fun p => regInput dig enc (j + 1) p (unpair e p) := by
@@ -671,7 +664,7 @@ theorem regTreeOp_apply_blockInputCfg (A : MPSTensor d D)
     (treeLayers k (Kraus.block A s)) _ _ = _
   rw [binaryTreeMatrix_treeLayers, ← polarIsoMatrix_block_eq_treeIsoMatrix,
     polarIsoMatrix_block_block,
-    iteratedBlockIndex_decodeBlockEquiv_symm _ _ fun u r => regLeafCfg_apply e u r]
+    nestedBlockEquiv_symm_eq_of_blocks _ _ fun u r => regLeafCfg_apply e u r]
 
 end Tree
 

@@ -89,7 +89,8 @@ theorem binaryTreeMatrix_treeLayers (k : ℕ) (A : MPTensor α (Fin D)) :
 /-- If the physical rotation `W · Y` of a tensor is injective, so is `Y`: the matrices of
 `W · Y` are combinations of those of `Y`. -/
 theorem isInjective_of_isInjective_rotatePhysical {β : Type*} (W : Matrix β α ℂ)
-    {Y : MPTensor α (Fin D)} (h : Kraus.IsInjective (rotatePhysical W Y)) : Kraus.IsInjective Y := by
+    {Y : MPTensor α (Fin D)} (h : Kraus.IsInjective (rotatePhysical W Y)) :
+    Kraus.IsInjective Y := by
   refine eq_top_iff.2 (h.symm.le.trans (Submodule.span_le.2 ?_))
   rintro _ ⟨i, rfl⟩
   rw [rotatePhysical_apply]

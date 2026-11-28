@@ -22,10 +22,10 @@ transfer maps \cite{gap:mswc24_block_form_mixed_overlap}.
 
 \begin{lemma}[Decay of mixed transfer maps]
     \label{lem:ldp_mixed_transfer_decay}
-    \lean{MPSTensor.mixedMapLM_blockTensor_apply,
+    \lean{MPSTensor.mixedMapLM_block_apply,
         MPSTensor.conjTranspose_physicalMatrix_mul_physicalMatrix_apply,
         MPSTensor.exists_norm_mixedMapLM_pow_apply_le,
-        MPSTensor.exists_norm_gram_blockTensor_mixed_le,
+        MPSTensor.exists_norm_gram_block_mixed_le,
         MPSTensor.exists_norm_mpvOverlap_le_of_mixedMapLM,
         MPSTensor.exp_neg_div_correlationLength_le_one}
     \leanok
@@ -179,10 +179,10 @@ transfer maps \cite{gap:mswc24_block_form_mixed_overlap}.
 \begin{lemma}[Positive part for overlapping blocks]
     \label{lem:ldp_overlapping_positive_part}
     \lean{MPSTensor.blockSumGramLimit, MPSTensor.blockSumPosLimit,
-        MPSTensor.physicalMatrix_blockTensor_blockSum_one,
-        MPSTensor.gram_blockTensor_blockSum,
-        MPSTensor.exists_norm_gram_blockTensor_blockSum_sub_le,
-        MPSTensor.exists_norm_polarPos_blockTensor_blockSum_sub_le}
+        MPSTensor.physicalMatrix_block_blockSum_one,
+        MPSTensor.gram_block_blockSum,
+        MPSTensor.exists_norm_gram_block_blockSum_sub_le,
+        MPSTensor.exists_norm_polarPos_block_blockSum_sub_le}
     \leanok
     \uses{lem:ldp_shared_overlap_estimates,lem:ldp_mixed_transfer_decay,thm:ldp_positive_part_rate,thm:ldp_sqrt_lipschitz,thm:ldp_polar_uniqueness}
     Let $A^i=\bigoplus_{j=1}^b\mu_jA_j^i$ be the direct sum with weights $\mu_j\in\C$ of

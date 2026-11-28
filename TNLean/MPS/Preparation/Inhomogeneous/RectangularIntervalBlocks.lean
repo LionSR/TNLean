@@ -80,25 +80,15 @@ theorem rectangularKrausMap_block_cast_eq_channelInterval (A : VaryingBondChain 
       Matrix.channelInterval (siteTransferAt A) (blockOffset ℓ k.val)
         (blockOffset ℓ k.val + ℓ k) (Nat.le_add_right _ _) := by
   refine Eq.trans ?_ (rectangularTransfer_block_eq_channelInterval A hN k)
-  have ht (s : (Fin (ℓ k) → Fin d)) :
+  have ht (s : Fin (ℓ k) → Fin d) :
       (rectangularBlockTensor A hN k s).submatrix id
           (Fin.cast (blockBondDim_length A hN k)) =
-        Kraus.rectangularEval (blockBondDim A ℓ k) (rectangularBlockSites A hN k)
-          (decodeBlockEquiv d (ℓ k) s) := by
+        Kraus.rectangularEval (blockBondDim A ℓ k) (rectangularBlockSites A hN k) s := by
     ext x y
     rfl
   simp_rw [ht]
-  calc
-    Matrix.rectangularKrausMap (fun s =>
-        Kraus.rectangularEval (blockBondDim A ℓ k) (rectangularBlockSites A hN k)
-          (decodeBlockEquiv d (ℓ k) s)) =
-      Matrix.rectangularKrausMap
-        (Kraus.rectangularEval (blockBondDim A ℓ k) (rectangularBlockSites A hN k)) :=
-      Matrix.rectangularKrausMap_equiv (Kraus.rectangularEval (blockBondDim A ℓ k) (rectangularBlockSites A hN k))
-    _ =
-        Kraus.rectangularTransfer (blockBondDim A ℓ k) (rectangularBlockSites A hN k) := by
-      ext X : 1
-      exact (Kraus.rectangularTransfer_apply _ _ X).symm
+  ext X : 1
+  exact (Kraus.rectangularTransfer_apply _ _ X).symm
 
 end VaryingBondChain
 
