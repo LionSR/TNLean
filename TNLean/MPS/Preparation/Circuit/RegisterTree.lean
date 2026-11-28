@@ -134,14 +134,14 @@ theorem isZeroOn_pairLayerOp_mulVec_productVector {M N : ℕ} [NeZero d] {ℓ : 
     exact Fin.ext (by simp)
   · exact absurd rfl hx
 
-/-- An injective tensor with physical dimension `d^m` has `D² ≤ d^m`: its matrices span the
+/-- An injective tensor on the alphabet of `m`-site words has `D² ≤ d^m`: its matrices span the
 `D²`-dimensional matrix algebra. -/
 theorem mul_self_le_pow_of_isInjective_block {D m : ℕ} {A : MPSTensor d D}
     (h : Kraus.IsInjective (Kraus.block A m)) : D * D ≤ d ^ m := by
   have h1 := finrank_range_le_card (R := ℂ) (Kraus.block A m)
   rw [Set.finrank, h, finrank_top, Module.finrank_matrix, Fintype.card_fin, Fintype.card_fin,
     Module.finrank_self, mul_one] at h1
-  simpa [blockPhysDim_eq_pow] using h1
+  simpa using h1
 
 /-! ### The tree of a block -/
 

@@ -355,7 +355,6 @@ theorem exists_isometric_chain_polarIsoMatrix_of_isInjectiveOn {q : ℕ}
   · simp only [V, hG, Matrix.of_apply]
   · have h := MPSTensor.sum_star_polarIsoMatrix_mul hB ((virtualPairEquiv D).symm (π x))
       ((virtualPairEquiv D).symm (π y))
-    rw [← .sum_comp] at h
     simp only [V]
     rw [h]
     have hS := (hπ x).mp hx
@@ -434,19 +433,18 @@ theorem exists_isometric_chain_polarIsoMatrix_mul_unitary {q : ℕ} (A : MPSChai
   obtain ⟨n, rfl⟩ : ∃ n, q = n + 1 := ⟨q - 1, by omega⟩
   set B := MPSChainTensor.eval A with hBdef
   set V := MPSTensor.polarIsoMatrix B with hV
-  set dec := decodeBlockEquiv d (n + 1)
   have hgram : (V * T)ᴴ * (V * T) = Matrix.diagonal fun y => if y.val < r then 1 else 0 := by
     rw [Matrix.conjTranspose_mul, Matrix.mul_assoc, ← Matrix.mul_assoc Vᴴ,
       MPSTensor.conjTranspose_polarIsoMatrix_mul_polarIsoMatrix, hET, ← Matrix.mul_assoc,
       ← Matrix.star_eq_conjTranspose, Unitary.star_mul_self_of_mem hT, Matrix.one_mul]
-  have hcol : ∀ x y, ∑ σ, star ((V * T) (dec.symm σ) x) * (V * T) (dec.symm σ) y =
+  have hcol : ∀ x y, ∑ σ, star ((V * T) σ x) * (V * T) σ y =
       if x = y then (if x.val < r then 1 else 0) else 0 := fun x y => by
     have h := congrFun (congrFun hgram x) y
-    rw [Matrix.mul_apply, ← dec.symm.sum_comp, Matrix.diagonal_apply] at h
+    rw [Matrix.mul_apply, Matrix.diagonal_apply] at h
     simpa only [Matrix.conjTranspose_apply] using h
   obtain ⟨G₀, hG₀⟩ := MPSTensor.exists_polarIsoMatrix_eq_sum B
   obtain ⟨b, Q, hb0, hbl, hb, hrow, hcolQ, hiso, hVQ⟩ :=
-    exists_isometric_chain_of_eq_mul_of_le A hr (G₀ * T) (fun σ y => (V * T) (dec.symm σ) y)
+    exists_isometric_chain_of_eq_mul_of_le A hr (G₀ * T) (fun σ y => (V * T) σ y)
       (fun σ y _ => by
         simp only [Matrix.mul_apply, Finset.mul_sum]
         rw [Finset.sum_comm]
@@ -461,7 +459,7 @@ theorem exists_isometric_chain_polarIsoMatrix_mul_unitary {q : ℕ} (A : MPSChai
   have h := hcol x x
   simp only [↓reduceIte, show ¬ x.val < r by omega] at h
   have hz := (Finset.sum_eq_zero_iff_of_nonneg fun σ _ => star_mul_self_nonneg
-    ((V * T) (dec.symm σ) x)).mp h σ (Finset.mem_univ _)
+    ((V * T) σ x)).mp h σ (Finset.mem_univ _)
   rcases mul_eq_zero.mp hz with h' | h'
   · exact star_eq_zero.mp h'
   · exact h'

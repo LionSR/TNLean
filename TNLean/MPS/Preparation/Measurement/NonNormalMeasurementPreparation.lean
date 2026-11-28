@@ -444,7 +444,8 @@ theorem exists_isOneRoundConversion_copyApproxVector (d b : ℕ)
       simp at hα
     have hD := Matrix.neZero_of_trace_eq_one (htr ⟨0, hb⟩)
     have : IsEmpty (Fin q → Fin 0) := by
-      rw [blockPhysDim_eq_pow, zero_pow (by omega)]; infer_instance
+      have : Nonempty (Fin q) := ⟨⟨0, by omega⟩⟩
+      infer_instance
     have h := hB ⟨0, hb⟩
     rw [Kraus.IsInjective, Set.range_eq_empty, Submodule.span_empty] at h
     have h1 : (1 : Matrix (Fin (Dj ⟨0, hb⟩)) (Fin (Dj ⟨0, hb⟩)) ℂ) ∈ (⊥ : Submodule ℂ _) :=
@@ -575,8 +576,8 @@ theorem exists_isOneRoundConversion_le_log_repeatedBlockSum [NeZero b]
     have : ∑ s, ‖ψ s‖ ^ 2 = 1 := by
       rw [← hsq, ← (Kraus.blockConfigEquiv (Fin d) M q).sum_comp]
       refine Finset.sum_congr rfl fun τ _ => ?_
-      rw [show ψ (Kraus.blockConfigEquiv (Fin d) M q τ) = v (Kraus.blockConfigEquiv (Fin d) M q τ) from
-        congrFun hψ _, hv]
+      rw [show ψ (Kraus.blockConfigEquiv (Fin d) M q τ) =
+          v (Kraus.blockConfigEquiv (Fin d) M q τ) from congrFun hψ _, hv]
       simp only [Equiv.symm_apply_apply]
     rw [this, Real.sqrt_one]
   have hinner : ⟪ψ, normalizedMPVState (repeatedBlockSum Aj ι μ) (M * q)⟫_ℂ =

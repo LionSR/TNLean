@@ -259,7 +259,7 @@ theorem exists_isMeasurementConversion_blockIsometryState (d s c : ℕ) [NeZero 
   obtain ⟨W, hWu, hW⟩ := exists_pairUnitary hd hdig ω hω
   obtain ⟨u, -, hud, huop⟩ := isUnitaryCircuitOn_pairLayerOp hN hr fun _ => hK W hWu
   -- The same coherent tree implementation is used for all root inputs.
-  obtain ⟨R, hRf, hRd, hRE, -⟩ := hC (cfgPolarIso A) (mergeIso A) h ℓ hN
+  obtain ⟨R, hRf, hRd, hRE, -⟩ := hC (fun n => polarIsoMatrix (Kraus.block A n)) (mergeIso A) h ℓ hN
     (fun b => balancedWidths (2 ^ (h + 1)) (ℓ b)) hT
     (fun b p => leafLen_balancedWidths_le (hℓ₂ b) p.val) ι₀ enc
   set v₀ : Fin N → Fin d → ℂ := fun _ => Pi.single ⟨0, hd⟩ 1
@@ -286,11 +286,12 @@ theorem exists_isMeasurementConversion_blockIsometryState (d s c : ℕ) [NeZero 
     ((u.forall_isUnitary.mono fun _ hK ↦ Or.inl hK).comp _ hRf) hdepth hv₀ rfl
   have hψ : (fun x => blockIsometryState A ω hN x) =
       ((blockLayerOp hN fun b =>
-        treeBlockOp (hT b) (cfgPolarIso A) (mergeIso A) (ι₀ b) enc) *
+        treeBlockOp (hT b) (fun n => polarIsoMatrix (Kraus.block A n)) (mergeIso A) (ι₀ b) enc) *
         pairLayerOp hN hr fun _ => W) *ᵥ φ₀ := by
     funext x
     exact blockIsometryState_eq_mulVec hd hN hr hdig A ω
-      (U := fun b => treeBlockOp (hT b) (cfgPolarIso A) (mergeIso A) (ι₀ b) enc) (fun b l r τ => by
+      (U := fun b => treeBlockOp (hT b) (fun n => polarIsoMatrix (Kraus.block A n)) (mergeIso A)
+        (ι₀ b) enc) (fun b l r τ => by
         rw [hroot, treeBlockOp_apply (hT b)
           (fun m hm => isIsometry_polarIsoMatrix_of_isInjective (hinj m hm))
           (fun m₁ m₂ hm₁ _ => isIsometry_mergeIso A (hinj _ (by omega)))

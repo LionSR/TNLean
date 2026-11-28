@@ -212,7 +212,7 @@ depth $O(q)$.
     \label{lem:ldp_sequential_factorization_first_inputs}
     \lean{MPSPreparation.exists_isometric_chain_of_eq_mul_of_le,
         MPSPreparation.polarIsoMatrix_chainBlockTensor_eq_sum,
-        MPSPreparation.polarIsoMatrix_blockTensor_eq_sum}
+        MPSPreparation.polarIsoMatrix_block_eq_sum}
     \leanok
     \uses{thm:ldp_sequential_factorization_general}
     In Lemma~\ref{thm:ldp_sequential_factorization_general}, let the matrix
@@ -415,7 +415,7 @@ depth $O(q)$.
 
 \begin{lemma}[Normal sectors after fixed blocking]
     \label{lem:ldp_arbitrary_blocked_sectors}
-    \lean{MPSTensor.exists_blockTensor_normal_sectors, MPSTensor.exists_blockTensor_normal_sectors_fixedPoints}
+    \lean{MPSTensor.exists_block_normal_sectors, MPSTensor.exists_block_normal_sectors_fixedPoints}
     \leanok
     \uses{thm:cpsv_canonical_form_representative_after_blocking,thm:cpsv_canonical_form_bnt_refinement,thm:ldp_inequivalent_mixed_gap}
     For every tensor $A$, there are $p>0$ and a finite family of gauge-phase inequivalent
@@ -517,7 +517,7 @@ depth $O(q)$.
 
 \begin{lemma}[Arbitrary tensors on grouped sites]
     \label{lem:ldp_arbitrary_blocked_measurement}
-    \lean{MPSPreparation.exists_isOneRoundConversion_blockTensor_le_log, MPSPreparation.exists_isMeasurementConversion_blockTensor_le_log_log}
+    \lean{MPSPreparation.exists_isOneRoundConversion_block_le_log, MPSPreparation.exists_isMeasurementConversion_block_le_log_log}
     \leanok
     \uses{lem:ldp_arbitrary_blocked_sectors,lem:ldp_measurement_sector_expansion,thm:ldp_nonnormal_loglog}
     For every tensor $A$, each of the following depth bounds holds after a

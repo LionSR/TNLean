@@ -117,7 +117,8 @@ variable {d D b : ℕ} {m : Fin b → ℕ} {Dj : Fin b → ℕ}
 
 /-- Applying `Wᴴ^{⊗M}` on the physical legs of the positive part: the tensor read from `Wᴴ P` is
 the positive part with `Wᴴ` applied to its physical leg. -/
-private theorem ofPhysicalMatrixLM_mul_polarPos {n D' : ℕ} (B : MPSTensor n D)
+private theorem ofPhysicalMatrixLM_mul_polarPos {α : Type*} [Fintype α] {D' : ℕ}
+    (B : MPTensor α (Fin D))
     (W : Matrix (Fin D × Fin D) (Fin D' × Fin D') ℂ) :
     ofPhysicalMatrixLM (Wᴴ * Matrix.polarPos (physicalMatrix B)) =
       rotatePhysical (Wᴴ.submatrix (virtualPairEquiv D') (virtualPairEquiv D))

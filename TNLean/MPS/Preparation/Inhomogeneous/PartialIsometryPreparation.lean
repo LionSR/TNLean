@@ -105,14 +105,14 @@ open QuantumCircuit
 
 namespace MPSTensor
 
-variable {n D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 /-- **The isometric factor is supported on the projector:** `V Π = V`, as `V†V = Π` and
 `Π² = Π`.
 
 arXiv:2307.01696, Supplemental Material, "Proof of Lemma 1 and extension to non-normal
 tensors": `V†V = Π`. -/
-theorem polarIsoMatrix_mul_polarSupportMatrix (B : MPSTensor n D) :
+theorem polarIsoMatrix_mul_polarSupportMatrix (B : MPTensor α (Fin D)) :
     polarIsoMatrix B * polarSupportMatrix B = polarIsoMatrix B := by
   set V := polarIsoMatrix B
   set E := polarSupportMatrix B
@@ -151,7 +151,7 @@ theorem exists_blockUnitary_isometricExtension (hd : 0 < d) {dig : Fin D → Cfg
         W * polarSupportMatrix (MPSChainTensor.eval A) =
           polarIsoMatrix (MPSChainTensor.eval A) ∧
         ∀ (l r : Fin D) τ, U τ (blockInputCfg hd q dig l r) =
-          W (τ) (finProdFinEquiv (l, r)) := by
+          W τ (finProdFinEquiv (l, r)) := by
   classical
   obtain ⟨C, hC⟩ := exists_blockUnitary_of_equiv_mul hd (r₁ := D) hD hdig hD (virtualPairEquiv D)
   refine ⟨C, fun q hq A => ?_⟩
@@ -159,7 +159,6 @@ theorem exists_blockUnitary_isometricExtension (hd : 0 < d) {dig : Fin D → Cfg
   set B := MPSChainTensor.eval A with hBdef
   set V := polarIsoMatrix B with hV
   set E := polarSupportMatrix B with hEdef
-  set dec := decodeBlockEquiv d (n + 1)
   obtain ⟨r, T, hr, hT, hET⟩ := Matrix.exists_unitary_mul_diagonal_of_isHermitian
     (isHermitian_polarSupportMatrix B) (polarSupportMatrix_mul_self B)
   set Λ : Matrix (Fin (D * D)) (Fin (D * D)) ℂ := diagonal fun y => if y.val < r then 1 else 0
@@ -168,16 +167,16 @@ theorem exists_blockUnitary_isometricExtension (hd : 0 < d) {dig : Fin D → Cfg
     exists_isometric_chain_polarIsoMatrix_mul_unitary A (Nat.succ_pos n) hr hT hET
   obtain ⟨U, Z, hU, hZ, hUZ⟩ := hC (n + 1) hq b Q hb0 hrow hiso (star T) (Unitary.star_mem hT)
   let W : Matrix (Fin (n + 1) → Fin d) (Fin (D * D)) ℂ := of fun i x =>
-    U (dec i) (blockInputCfg hd (n + 1) dig (virtualPairEquiv D x).1 (virtualPairEquiv D x).2)
-  have hWZ : W = (of fun i y => Z (dec i) y) * star T := by
+    U i (blockInputCfg hd (n + 1) dig (virtualPairEquiv D x).1 (virtualPairEquiv D x).2)
+  have hWZ : W = (of fun i y => Z i y) * star T := by
     ext i x
     simp only [W, of_apply, mul_apply]
-    exact hUZ x (dec i)
+    exact hUZ x i
   refine ⟨U, W, hU, ?_, ?_, fun l r' τ => ?_⟩
   · -- the columns of `W` are columns of the unitary `U` at distinct configurations
     have hUu := Unitary.star_mul_self_of_mem hU.mem_unitaryGroup
     ext x x'
-    rw [mul_apply, ← dec.symm.sum_comp]
+    rw [mul_apply]
     have h := congrFun (congrFun hUu
       (blockInputCfg hd (n + 1) dig (virtualPairEquiv D x).1 (virtualPairEquiv D x).2))
       (blockInputCfg hd (n + 1) dig (virtualPairEquiv D x').1 (virtualPairEquiv D x').2)
@@ -196,7 +195,7 @@ theorem exists_blockUnitary_isometricExtension (hd : 0 < d) {dig : Fin D → Cfg
         show (star fun y : Fin (D * D) => if y.val < r then (1 : ℂ) else 0) =
           fun y => if y.val < r then 1 else 0 from funext fun y => by
             simp only [Pi.star_apply]; split_ifs <;> simp] at h
-    have hZΛ : (of fun i y => Z (dec i) y) * Λ = V * T := by
+    have hZΛ : (of fun i y => Z i y) * Λ = V * T := by
       have hVTΛ : V * T * Λ = V * T := by
         rw [Matrix.mul_assoc, ← hET, ← Matrix.mul_assoc, hV,
           polarIsoMatrix_mul_polarSupportMatrix]
@@ -204,7 +203,7 @@ theorem exists_blockUnitary_isometricExtension (hd : 0 < d) {dig : Fin D → Cfg
       ext i y
       rw [hΛ, mul_diagonal, mul_diagonal, of_apply]
       split_ifs with hy
-      · rw [hZ y (by rw [hbl]; exact hy), ← hVQ (dec i) y hy, Equiv.symm_apply_apply]
+      · rw [hZ y (by rw [hbl]; exact hy), ← hVQ i y hy]
       · simp
     rw [hWZ, Matrix.mul_assoc, hTE, ← Matrix.mul_assoc, hZΛ, Matrix.mul_assoc,
       Unitary.mul_star_self_of_mem hT, Matrix.mul_one]

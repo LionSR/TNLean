@@ -76,7 +76,7 @@ remaining eigenvalues have modulus strictly less than $1$.
 
 \begin{lemma}[Convergence of the positive part]
     \label{thm:ldp_positive_part_converges}
-    \lean{MPSTensor.tendsto_polarPosTensor_blockTensor_of_isNormal,
+    \lean{MPSTensor.tendsto_polarPosTensor_block_of_isNormal,
         MPSTensor.tendsto_polarPosTensor_of_tendsto_transferMap,
         MPSTensor.tendsto_polarPos_physicalMatrix_of_tendsto_transferMap}
     \leanok
@@ -220,8 +220,8 @@ remaining eigenvalues have modulus strictly less than $1$.
     \label{thm:ldp_positive_part_rate}
     \lean{MPSTensor.lt_exp_neg_div_correlationLength,
         MPSTensor.exists_norm_transferMap_pow_sub_le,
-        MPSTensor.exists_norm_gram_blockTensor_sub_le,
-        MPSTensor.exists_norm_polarPos_blockTensor_sub_le}
+        MPSTensor.exists_norm_gram_block_sub_le,
+        MPSTensor.exists_norm_polarPos_block_sub_le}
     \leanok
     \uses{def:correlation_length}
     Let $A$ be normal in the gauge~(\ref{eq:ldp_normal_gauge}), let
@@ -589,15 +589,15 @@ remaining eigenvalues have modulus strictly less than $1$.
     \label{thm:ldp_tree_factorization}
     \lean{MPSTensor.treePosTensor,
         MPSTensor.treeIsoMatrix, MPSTensor.blockKron,
-        MPSTensor.blockTensor_pairRegroupEquiv,
-        MPSTensor.blockKron_polarSupportMatrix_mul_physicalMatrix_blockTensor,
-        MPSTensor.blockTensor_eq_rotatePhysical_treeIsoMatrix,
-        MPSTensor.physicalMatrix_blockTensor_eq_treeIsoMatrix_mul,
+        MPSTensor.block_pairRegroupEquiv,
+        MPSTensor.blockKron_polarSupportMatrix_mul_physicalMatrix_block,
+        MPSTensor.block_eq_rotatePhysical_treeIsoMatrix,
+        MPSTensor.physicalMatrix_block_eq_treeIsoMatrix_mul,
         MPSTensor.conjTranspose_blockKron_polarIsoMatrix_mul_self,
         MPSTensor.conjTranspose_treeIsoMatrix_mul_self,
-        MPSTensor.polarIsoMatrix_blockTensor_eq_treeIsoMatrix,
-        MPSTensor.polarPosTensor_blockTensor_eq_treePosTensor,
-        MPSTensor.polarSupportMatrix_blockTensor_eq_treeSupportMatrix}
+        MPSTensor.polarIsoMatrix_block_eq_treeIsoMatrix,
+        MPSTensor.polarPosTensor_block_eq_treePosTensor,
+        MPSTensor.polarSupportMatrix_block_eq_treeSupportMatrix}
     \leanok
     \uses{thm:ldpolar_tensor_decomposition}
     Put $T_0=A$ and, for $j\ge1$, let $\mathcal B^{(j)}=V^{(j)}P_j$ be the polar
@@ -1132,7 +1132,7 @@ Chapter~\ref{ch:local_quantum_circuits}.
         MPSPreparation.isUnitaryCircuitOn_blockLayerOp,
         MPSPreparation.isUnitaryCircuitOn_pairLayerOp,
         MPSPreparation.blockSite_const,
-        MPSPreparation.blockedConfigEquiv_symm_eq_blockIndexEquiv}
+        MPSPreparation.blockConfigEquiv_symm_eq_blockCfgEquiv}
     \leanok
     There is $C$, depending only on $d$ and $D$, such that the following
     holds. Let $A$ be a tensor, let $\omega$ be a unit vector on

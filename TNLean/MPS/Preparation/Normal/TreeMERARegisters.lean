@@ -20,8 +20,9 @@ injective, as in the source's picture, which starts from a blocked tensor.
 
 ## The MERA on registers
 
-A `MPSPreparation.BinaryMERA (d^s) D k`, with `d^s = blockPhysDim d s`, has its finest isometry
-`ℂ^{D²} → ℂ^{d^s} ⊗ ℂ^{d^s}`, that is, from one site to two neighbouring registers of `s` sites;
+A `MPSPreparation.BinaryMERA (Fin s → Fin d) D k`, on the alphabet of registers of `s` sites,
+has its finest isometry `ℂ^{D²} → ℂ^{d^s} ⊗ ℂ^{d^s}`, that is, from one site to two neighbouring
+registers of `s` sites;
 the coarse isometries and the disentanglers are those of `BinaryMERA`. Its state on
 `M 2^{k+1}` registers, read on the `M s 2^{k+1}` sites (`MPSPreparation.registerCfgEquiv`), is
 `MPSPreparation.BinaryMERA.registerState`.
@@ -73,14 +74,14 @@ variable {d D s k : ℕ}
 /-- The configurations of `M` blocks of `s q` sites, read as configurations of `M` blocks of `q`
 registers of `s` sites. -/
 noncomputable def registerCfgEquiv (d s q M : ℕ) :
-    Cfg d (M * (s * q)) ≃ Cfg (blockPhysDim d s) (M * q) :=
+    Cfg d (M * (s * q)) ≃ (Fin (M * q) → Fin s → Fin d) :=
   ((Kraus.blockConfigEquiv (Fin d) M (s * q)).symm.trans
-    (Equiv.piCongrRight fun _ => directIteratedBlockEquiv d s q)).trans
-    (Kraus.blockedConfigEquiv (blockPhysDim d s) M q)
+    (Equiv.piCongrRight fun _ => nestedBlockEquiv (Fin d) rfl)).trans
+    (Kraus.blockConfigEquiv (Fin s → Fin d) M q)
 
 namespace BinaryMERA
 
-variable (𝓜 : BinaryMERA (blockPhysDim d s) D k)
+variable (𝓜 : BinaryMERA (Fin s → Fin d) D k)
 
 /-- The **state of a MERA on registers of `s` sites**, read on the `N = M s 2^{k+1}` sites: the
 state of the MERA on `M 2^{k+1}` sites of dimension `d^s`, each site a register of `s` sites. -/
@@ -91,7 +92,7 @@ noncomputable def registerState [NeZero D] (M : ℕ) : MPVSpace (Fin d) (M * (s 
 /-- The amplitude of the state on registers at a configuration of the sites: the amplitude of
 the MERA at the configuration of the registers of every block. -/
 theorem registerState_apply [NeZero D] (M : ℕ) (τ : Cfg d (M * (s * 2 ^ (k + 1)))) :
-    𝓜.registerState M τ = 𝓜.amplitude fun j => directIteratedBlockEquiv d s (2 ^ (k + 1))
+    𝓜.registerState M τ = 𝓜.amplitude fun j => nestedBlockEquiv (Fin d) rfl
       ((Kraus.blockConfigEquiv (Fin d) M (s * 2 ^ (k + 1))).symm τ j) := by
   rw [registerState, LinearIsometryEquiv.piLpCongrLeft_apply, Equiv.piCongrLeft'_apply,
     Equiv.symm_symm, state_apply]
@@ -131,8 +132,7 @@ theorem approximatingMPVState_eq_registerState_treeMERA [NeZero D] (A : MPSTenso
   rw [approximatingMPVStateRaw_apply, BinaryMERA.registerState_apply, BinaryMERA.amplitude, htop,
     htree, mpv_approximatingTensor]
   refine Finset.sum_congr rfl fun x _ => congrArg (· * _) (Finset.prod_congr rfl fun j _ => ?_)
-  rw [polarIsoMatrix_block_block, ← directIteratedBlockEquiv_symm_apply,
-    Equiv.symm_apply_apply]
+  rw [polarIsoMatrix_block_block, Equiv.symm_apply_apply]
 
 /-- **Normal MPS are finite-range MERA on registers, within `ε`** (arXiv:2307.01696, paragraph
 "Connection to MERA"). Let `A` be normal, in the gauge `∑ᵢ (Aⁱ)† Aⁱ = 1`, `E_A(σ) = σ`, `σ > 0`,
@@ -229,7 +229,7 @@ blocked tensors of `B` are injective, and the rescaling changes `|φ_N⟩` by a 
 theorem exists_binaryMERA_registerState_approximationError_le [NeZero D] (A : MPSTensor d D)
     (hA : Kraus.IsNormal A) :
     ∃ s₀ : ℕ, 0 < s₀ ∧ ∃ ξ C : ℝ, 0 < ξ ∧ 0 < C ∧ ∀ s : ℕ, s₀ ≤ s → ∀ ε : ℝ, 0 < ε →
-      ∀ (M : ℕ) [NeZero M], ∃ (k : ℕ) (𝓜 : BinaryMERA (blockPhysDim d s) D k),
+      ∀ (M : ℕ) [NeZero M], ∃ (k : ℕ) (𝓜 : BinaryMERA (Fin s → Fin d) D k),
         (k : ℝ) ≤ Real.logb 2 (max 1 (ξ * Real.log (C * (M * (s * 2 ^ (k + 1))) / ε))) ∧
         1 - ‖⟪𝓜.registerState M, normalizedMPVState A (M * (s * 2 ^ (k + 1)))⟫_ℂ‖ ≤ ε := by
   obtain ⟨B, ζ, σ, t, L, hζ, hmpv, hNB, hLC, hσ, htr, hfix, ht0, ht1, hlam, hnorm, hinj⟩ :=

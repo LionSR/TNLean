@@ -46,7 +46,7 @@ decomposition of the $\ell$-site blocked map of $\bigoplus_jA_j$.
     \lean{MPSTensor.offBlockProj,
         MPSTensor.exists_pos_algebraMap_le_blockSumGramLimit_add,
         MPSTensor.isInjectiveOn_of_eq_zero_of_mulVec_eq_zero,
-        MPSTensor.exists_isInjectiveOn_blockTensor_blockSum}
+        MPSTensor.exists_isInjectiveOn_block_blockSum}
     \leanok
     \uses{lem:ldp_overlapping_positive_part,def:ldpolar_injective_on}
     Let $S$ be the set of bond pairs $(E_ja,E_jc)$ whose two indices lie in the
@@ -86,7 +86,7 @@ decomposition of the $\ell$-site blocked map of $\bigoplus_jA_j$.
 
 \begin{lemma}[The states of the blocks through the isometries of the direct sum]
     \label{lem:ldp_overlapping_block_states}
-    \lean{MPSTensor.blockPosTensor, MPSTensor.blockTensor_blockSum_single,
+    \lean{MPSTensor.blockPosTensor, MPSTensor.block_blockSum_single,
         MPSTensor.mpvState_eq_blockIsoVector,
         MPSTensor.mem_blockPairs_of_pairProductState_embedPair_ne_zero,
         MPSTensor.blockIsometryState_eq_blockIsoVector,

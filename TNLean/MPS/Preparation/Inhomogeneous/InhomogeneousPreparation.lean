@@ -96,12 +96,12 @@ the positive part of the decomposition of `|φ_N⟩`". -/
 noncomputable def chainPosState (A : MPSChainTensor d D N) (hN : ∑ k, ℓ k = N) :
     MPVSpace (Fin (D * D)) M :=
   (EuclideanSpace.equiv (ι := Cfg (D * D) M) (𝕜 := ℂ)).symm fun τ =>
-    mpvFamily (n := fun _ => D * D) (fun k => polarPosTensor (chainBlockTensor A hN k)) τ
+    mpvFamily (n := fun _ => Fin (D * D)) (fun k => polarPosTensor (chainBlockTensor A hN k)) τ
 
 @[simp] theorem chainPosState_apply (A : MPSChainTensor d D N) (hN : ∑ k, ℓ k = N)
     (τ : Cfg (D * D) M) :
     chainPosState A hN τ =
-      mpvFamily (n := fun _ => D * D) (fun k => polarPosTensor (chainBlockTensor A hN k)) τ := by
+      mpvFamily (n := fun _ => Fin (D * D)) (fun k => polarPosTensor (chainBlockTensor A hN k)) τ := by
   simp [chainPosState, EuclideanSpace.equiv, PiLp.toLp_apply]
 
 /-- **The state is the isometries applied to the positive parts:** `|φ_N⟩ = (⊗ₖ V_k) |φ_pos⟩`,

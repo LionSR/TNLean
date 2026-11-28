@@ -131,8 +131,9 @@ theorem pairProductState_embedPair_eq_mulVec {D' M : ℕ} {ι : Fin D' → Fin D
 
 /-- `V^{⊗M}` applied to the product of the pairs of `σ` is the periodic state of the tensor
 `V P_∞` of the normal case (arXiv:2307.01696, eqs. (9) and (10)). -/
-theorem piKronecker_polarIso_mulVec_pairProductState {n D' : ℕ} (B : MPSTensor n D')
-    (σ : Matrix (Fin D') (Fin D') ℂ) (M : ℕ) [NeZero M] (τ : Fin M → Fin n) :
+theorem piKronecker_polarIso_mulVec_pairProductState {α : Type*} [Fintype α] {D' : ℕ}
+    (B : MPTensor α (Fin D'))
+    (σ : Matrix (Fin D') (Fin D') ℂ) (M : ℕ) [NeZero M] (τ : Fin M → α) :
     ((Matrix.piKronecker fun _ : Fin M ↦ (polarIso (physicalMatrix B))) *ᵥ pairProductState
         (fixedPointPair σ)) τ =
       mpv (approximatingTensor B σ) τ := by
@@ -200,8 +201,9 @@ theorem nonNormalApproxVector_blockSum (hι : ∀ j, Function.Injective (ι j))
 /-- **Orthogonal columns give a vanishing mixed transfer map.** If the physical matrices of two
 tensors have orthogonal columns, `(Y)ᴴ X = 0`, i.e. `∑ᵢ conj(Yⁱ_{a'c'}) Xⁱ_{ac} = 0`, then the
 mixed transfer map `E_{XY}(ρ) = ∑ᵢ Xⁱ ρ (Yⁱ)†` vanishes. -/
-theorem mixedMapLM_eq_zero_of_conjTranspose_physicalMatrix_mul_eq_zero {n D₁ D₂ : ℕ}
-    {X : MPSTensor n D₁} {Y : MPSTensor n D₂} (h : (physicalMatrix Y)ᴴ * physicalMatrix X = 0) :
+theorem mixedMapLM_eq_zero_of_conjTranspose_physicalMatrix_mul_eq_zero {α : Type*} [Fintype α]
+    {D₁ D₂ : ℕ} {X : MPTensor α (Fin D₁)} {Y : MPTensor α (Fin D₂)}
+    (h : (physicalMatrix Y)ᴴ * physicalMatrix X = 0) :
     Kraus.mixedMapLM X Y = 0 := by
   ext ρ a a'
   have hij : ∀ a c a' c', ∑ i, X i a c * star (Y i a' c') = 0 := fun a c a' c' => by
@@ -221,16 +223,16 @@ theorem mixedMapLM_eq_zero_of_conjTranspose_physicalMatrix_mul_eq_zero {n D₁ D
 `(Y)ᴴ X = 0`, then the periodic states on `M ≥ 1` sites are orthogonal:
 `∑_s φ_M(X)(s) conj(φ_M(Y)(s)) = 0`, since the mixed transfer map vanishes
 (`mixedMapLM_eq_zero_of_conjTranspose_physicalMatrix_mul_eq_zero`). -/
-theorem mpvOverlap_eq_zero {n D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂] {X : MPSTensor n D₁}
-    {Y : MPSTensor n D₂} (h : (physicalMatrix Y)ᴴ * physicalMatrix X = 0) {M : ℕ}
+theorem mpvOverlap_eq_zero {α : Type*} [Fintype α] {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
+    {X : MPTensor α (Fin D₁)} {Y : MPTensor α (Fin D₂)} (h : (physicalMatrix Y)ᴴ * physicalMatrix X = 0) {M : ℕ}
     (hM : M ≠ 0) : mpvOverlap X Y M = 0 := by
   rw [← trace_mixedMapLM_rect_pow_eq_mpvOverlap,
     mixedMapLM_eq_zero_of_conjTranspose_physicalMatrix_mul_eq_zero h, zero_pow hM, map_zero]
 
 /-- The physical matrices of the approximating tensors `V_j P_{j,∞}` of blocks with orthogonal
 blocked tensors have orthogonal columns: `(V_j F_j)ᴴ (V_{j'} F_{j'}) = 0`. -/
-theorem conjTranspose_physicalMatrix_approximatingTensor_mul {n D₁ D₂ : ℕ}
-    {B₁ : MPSTensor n D₁} {B₂ : MPSTensor n D₂}
+theorem conjTranspose_physicalMatrix_approximatingTensor_mul {α : Type*} [Fintype α] {D₁ D₂ : ℕ}
+    {B₁ : MPTensor α (Fin D₁)} {B₂ : MPTensor α (Fin D₂)}
     (h : (physicalMatrix B₁)ᴴ * physicalMatrix B₂ = 0) (σ₁ : Matrix (Fin D₁) (Fin D₁) ℂ)
     (σ₂ : Matrix (Fin D₂) (Fin D₂) ℂ) :
     (physicalMatrix (approximatingTensor B₁ σ₁))ᴴ * physicalMatrix (approximatingTensor B₂ σ₂) =

@@ -398,7 +398,8 @@ theorem copyApproxOverlap_eq (A : MPSTensor d D) (q M : ℕ) (α : Fin b → ℂ
     copyApproxOverlap A q M α L σ =
       ((Real.sqrt (∑ τ, ‖copyApproxVector A q M α L σ τ‖ ^ 2) : ℂ)⁻¹ *
         (‖mpvState A (M * q)‖ : ℂ)⁻¹) *
-        ∑ τ, star (copyApproxVector A q M α L σ τ) * mpv A (Kraus.blockConfigEquiv (Fin d) M q τ) := by
+        ∑ τ, star (copyApproxVector A q M α L σ τ) *
+          mpv A (Kraus.blockConfigEquiv (Fin d) M q τ) := by
   rw [copyApproxOverlap, Finset.mul_sum]
   refine Finset.sum_congr rfl fun τ _ => ?_
   simp only [normalizedMPVState, star_mul', Complex.star_def, map_inv₀, Complex.conj_ofReal,

@@ -59,7 +59,8 @@ def topPair : Fin D × Fin D → ℂ :=
 /-- The state obtained by contracting the forest against the cyclic product of pairs
 prepared by the top disentanglers. -/
 noncomputable def state : MPVSpace (Fin d) N :=
-  blockMatVector (fun k => (𝓜.tree k).matrix) 𝓜.sum_blockLength (pairFamilyVector fun _ => 𝓜.topPair)
+  blockMatVector (fun k => (𝓜.tree k).matrix) 𝓜.sum_blockLength
+    (pairFamilyVector fun _ => 𝓜.topPair)
 
 @[simp] theorem state_apply (s : Cfg d N) :
     𝓜.state s = ∑ τ : Fin 𝓜.numBlocks → Fin (D * D),

@@ -59,7 +59,7 @@ variable {d D b : ℕ} {Dj : Fin b → ℕ}
 tensor vanish outside a set `S` of bond pairs and `B x = 0` has no solution `x ≠ 0` supported on
 `S`, then the tensor is injective on `S`: its matrices span every matrix unit `|α⟩⟨β|` with
 `(α, β) ∈ S`. This is the converse of `MPSTensor.IsInjectiveOn.eq_zero_of_mulVec_eq_zero`. -/
-theorem isInjectiveOn_of_eq_zero_of_mulVec_eq_zero {n : ℕ} {B : MPSTensor n D}
+theorem isInjectiveOn_of_eq_zero_of_mulVec_eq_zero {α : Type*} [Fintype α] {B : MPTensor α (Fin D)}
     {S : Set (Fin D × Fin D)} (h0 : ∀ i p, p ∉ S → B i p.1 p.2 = 0)
     (hker : ∀ x : Fin D × Fin D → ℂ, (∀ p, p ∉ S → x p = 0) →
       (physicalMatrix B).mulVec x = 0 → x = 0) :

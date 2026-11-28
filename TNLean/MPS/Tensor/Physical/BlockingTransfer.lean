@@ -14,88 +14,48 @@ import Mathlib.LinearAlgebra.Eigenspace.Basic
 # Transfer maps under physical blocking
 
 The transfer map of a physically blocked tensor is the corresponding iterate of the
-original transfer map (`Kraus.transferMap_blockTensor`). As consequences,
-`transferMap_blockTensor_quasi_idempotent` and `transferMap_blockTensor_hasEigenvalue`
-transport quasi-idempotence and eigenvalues through blocking; fixed points are
-`Kraus.transferMap_blockTensor_fixedPoint`.
+original transfer map (`Kraus.transferMap_block`). As consequences,
+`transferMap_block_quasi_idempotent` transports quasi-idempotence through blocking,
+`transferMap_block_mul` compares iterated and direct blocking, and `mixedMapLM_block_apply`
+computes blocked mixed transfer maps; fixed points are `Kraus.transferMap_block_fixedPoint`.
 -/
 
 open scoped Matrix ComplexOrder BigOperators
-open Kraus (blockPhysDim decodeBlockEquiv blockTensor)
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 /-- Quasi-idempotence propagates through physical blocking, with the scalar raised to the
 blocking length. -/
-theorem transferMap_blockTensor_quasi_idempotent
-    (A : MPSTensor d D) (L : ℕ) (c : ℂ)
-    (h : Kraus.transferMap (ι := Fin d) (n := Fin D) A *
-        Kraus.transferMap (ι := Fin d) (n := Fin D) A =
-      c • Kraus.transferMap (ι := Fin d) (n := Fin D) A) :
-    Kraus.transferMap (ι := Fin (blockPhysDim d L)) (n := Fin D)
-        (blockTensor (d := d) (n := Fin D) A L) *
-      Kraus.transferMap (ι := Fin (blockPhysDim d L)) (n := Fin D)
-        (blockTensor (d := d) (n := Fin D) A L) =
-      c ^ L • Kraus.transferMap (ι := Fin (blockPhysDim d L)) (n := Fin D)
-        (blockTensor (d := d) (n := Fin D) A L) := by
-  rw [Kraus.transferMap_blockTensor]
+theorem transferMap_block_quasi_idempotent
+    (A : MPTensor α (Fin D)) (L : ℕ) (c : ℂ)
+    (h : Kraus.transferMap A * Kraus.transferMap A = c • Kraus.transferMap A) :
+    Kraus.transferMap (Kraus.block A L) * Kraus.transferMap (Kraus.block A L) =
+      c ^ L • Kraus.transferMap (Kraus.block A L) := by
+  rw [Kraus.transferMap_block]
   calc
-    (Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ L *
-          (Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ L =
-        ((Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ L) ^ 2 := by rw [pow_two]
-    _ = ((Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ 2) ^ L := by
-      simpa only [pow_mul] using congrArg
-        (fun n : ℕ => (Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ n) (Nat.mul_comm L 2)
-    _ = (c • Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ L := by rw [pow_two, h]
-    _ = c ^ L • (Kraus.transferMap (ι := Fin d) (n := Fin D) A) ^ L := by rw [smul_pow]
-
-/-- Eigenvalues transport along physical blocking: if `μ` is an eigenvalue of
-`Kraus.transferMap A`, then `μ ^ L` is an eigenvalue of the transfer map of the blocked tensor. -/
-@[deprecated
-  "Rewrite with `Kraus.transferMap_blockTensor`, then apply `Module.End.HasEigenvalue.pow`."
-  (since := "2026-08-15")]
-theorem transferMap_blockTensor_hasEigenvalue
-    (A : MPSTensor d D) (L : ℕ) {μ : ℂ}
-    (hμ : Module.End.HasEigenvalue (Kraus.transferMap (ι := Fin d) (n := Fin D) A) μ) :
-    Module.End.HasEigenvalue
-        (Kraus.transferMap (ι := Fin (blockPhysDim d L)) (n := Fin D)
-          (blockTensor (d := d) (n := Fin D) A L))
-        (μ ^ L) := by
-  -- Rewrite the blocked transfer map as an iterate and apply the standard power lemma.
-  -- (We use `rw` rather than `simp` to ensure the rewrite happens under the eigenvalue predicate.)
-  rw [Kraus.transferMap_blockTensor (A := A) (L := L)]
-  simpa using hμ.pow L
+    Kraus.transferMap A ^ L * Kraus.transferMap A ^ L = (Kraus.transferMap A ^ L) ^ 2 := by
+      rw [pow_two]
+    _ = (Kraus.transferMap A ^ 2) ^ L := by
+      simpa only [pow_mul] using congrArg (fun n : ℕ => Kraus.transferMap A ^ n) (Nat.mul_comm L 2)
+    _ = (c • Kraus.transferMap A) ^ L := by rw [pow_two, h]
+    _ = c ^ L • Kraus.transferMap A ^ L := by rw [smul_pow]
 
 /-- Iterated physical blocking is compatible with direct blocking by the multiplied period,
 at the transfer-map level:
 `Kraus.transferMap(block(block(A, m), n)) = Kraus.transferMap(block(A, m * n))`. -/
-theorem transferMap_blockTensor_mul
-    (A : MPSTensor d D) (m n : ℕ) :
-    Kraus.transferMap (ι := Fin (blockPhysDim (blockPhysDim d m) n)) (n := Fin D)
-        (blockTensor (d := blockPhysDim d m) (n := Fin D)
-          (blockTensor (d := d) (n := Fin D) A m) n) =
-      Kraus.transferMap (ι := Fin (blockPhysDim d (m * n))) (n := Fin D)
-        (blockTensor (d := d) (n := Fin D) A (m * n)) := by
-  rw [Kraus.transferMap_blockTensor, Kraus.transferMap_blockTensor,
-    Kraus.transferMap_blockTensor]
-  simp [pow_mul]
+theorem transferMap_block_mul (A : MPTensor α (Fin D)) (m n : ℕ) :
+    Kraus.transferMap (Kraus.block (Kraus.block A m) n) =
+      Kraus.transferMap (Kraus.block A (m * n)) := by
+  rw [Kraus.transferMap_block, Kraus.transferMap_block, Kraus.transferMap_block, pow_mul]
 
 /-- The mixed transfer map of two `L`-site blocked tensors is the `L`-th power of the mixed
 transfer map of the tensors. -/
-theorem mixedMapLM_blockTensor_apply {D₁ D₂ : ℕ} (X : MPSTensor d D₁) (Y : MPSTensor d D₂)
+theorem mixedMapLM_block_apply {D₁ D₂ : ℕ} (X : MPTensor α (Fin D₁)) (Y : MPTensor α (Fin D₂))
     (L : ℕ) (Z : Matrix (Fin D₁) (Fin D₂) ℂ) :
-    Kraus.mixedMapLM (blockTensor X L) (blockTensor Y L) Z = (Kraus.mixedMapLM X Y ^ L) Z := by
-  classical
+    Kraus.mixedMapLM (Kraus.block X L) (Kraus.block Y L) Z = (Kraus.mixedMapLM X Y ^ L) Z := by
   rw [Kraus.mixedMapLM_pow_apply, Kraus.mixedMapLM_apply]
-  simp only [Kraus.blockTensor, Kraus.reindexPhysical, Kraus.block_apply]
-  let e : Fin (blockPhysDim d L) ≃ (Fin L → Fin d) := decodeBlockEquiv d L
-  simpa [Kraus.decodeBlockEquiv_apply, e] using
-    (Fintype.sum_equiv e
-      (f := fun i =>
-        Kraus.evalWord X (List.ofFn (e i)) * Z * (Kraus.evalWord Y (List.ofFn (e i)))ᴴ)
-      (g := fun σ => Kraus.evalWord X (List.ofFn σ) * Z * (Kraus.evalWord Y (List.ofFn σ))ᴴ)
-      (by intro i; rfl))
+  rfl
 
 end MPSTensor

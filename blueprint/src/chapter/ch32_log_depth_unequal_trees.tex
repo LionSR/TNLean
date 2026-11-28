@@ -27,13 +27,13 @@ configurations of the $n$ sites.
 
 \begin{lemma}[The partial isometry of a block of unequal halves]
     \label{lem:ldp_polar_merge}
-    \lean{MPSPreparation.pairProductTensor, MPSPreparation.MPSPreparation.mergeIso, MPSPreparation.isIsometry_MPSPreparation.blockTensor_add_apply,
+    \lean{MPSPreparation.pairProductTensor, MPSPreparation.MPSPreparation.mergeIso, MPSPreparation.isIsometry_MPSPreparation.block_add_apply,
         MPSPreparation.polarIsoMatrix_block_append, MPSPreparation.polarIsoMatrix_block_split,
-        MPSPreparation.polarPosTensor_blockTensor_add,
+        MPSPreparation.polarPosTensor_block_add,
         MPSPreparation.pairProductTensor_self, MPSPreparation.mergeIso_self,
         MPSPreparation.isInjective_pairProductTensor,
         MPSPreparation.isIsometry_mergeIso,
-        MPSPreparation.polarPosTensor_blockTensor_two_pow,
+        MPSPreparation.polarPosTensor_block_two_pow,
         MPSPreparation.mergeIso_two_pow}
     \leanok
     \uses{thm:ldpolar_tensor_decomposition,thm:ldp_tree_factorization}
@@ -310,7 +310,7 @@ configurations of the $n$ sites.
     \label{thm:ldp_unequal_blocks_measurements}
     \lean{MPSPreparation.isZeroOn_pairLayerOp_mulVec_productVector,
         MPSPreparation.blockInputCfg_eq_placeCfg,
-        MPSPreparation.mul_self_le_pow_of_isInjective_blockTensor,
+        MPSPreparation.mul_self_le_pow_of_isInjective_block,
         MPSPreparation.le_pow_sub_one_of_mul_self_le,
         MPSPreparation.exists_isMeasurementConversion_blockIsometryState}
     \leanok

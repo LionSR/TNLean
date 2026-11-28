@@ -93,7 +93,7 @@ noncomputable def rectangularBlockTensor (A : VaryingBondChain d D N) {ℓ : Fin
     (hN : ∑ j, ℓ j = N) (k : Fin M) (s : (Fin (ℓ k) → Fin d)) :
     Matrix (Fin (blockBondDim A ℓ k 0)) (Fin (rightBond A ℓ k)) ℂ :=
   (Kraus.rectangularEval (blockBondDim A ℓ k) (rectangularBlockSites A hN k)
-    (decodeBlockEquiv d (ℓ k) s)).submatrix id (Fin.cast (blockBondDim_length A hN k).symm)
+    s).submatrix id (Fin.cast (blockBondDim_length A hN k).symm)
 
 /-- The rectangular blocked tensor pads to exactly the blocked padded tensor. -/
 theorem zeroPad_rectangularBlockTensor (A : VaryingBondChain d D N) {ℓ : Fin M → ℕ}
