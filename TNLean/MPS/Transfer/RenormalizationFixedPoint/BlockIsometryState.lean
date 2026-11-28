@@ -106,7 +106,8 @@ theorem mpv_eq_mpvFamily_block (A : MPSTensor d D) {N : ℕ} {ℓ : Fin M → �
   rfl
 
 /-- The entries of the mixed transfer matrix: `τ_{(j,i),(l,m)} = ∑ₐ (X^a)_{im} (Y^a)*_{jl}`. -/
-theorem transferMatrix_mixedMapLM_apply {κ : ℕ} (X Y : MPSTensor κ D) (p p' : Fin D × Fin D) :
+theorem transferMatrix_mixedMapLM_apply {κ : Type*} [Fintype κ] (X Y : MPTensor κ (Fin D))
+    (p p' : Fin D × Fin D) :
     transferMatrix (Kraus.mixedMapLM X Y) p p' =
       ∑ a, X a p.2 p'.2 * star (Y a p.1 p'.1) := by
   obtain ⟨j, i⟩ := p
@@ -291,7 +292,8 @@ noncomputable def blockIsoVector {N : ℕ} {ℓ : Fin M → ℕ}
     ∑ τ : Fin M → Fin (D * D), (∏ k, polarIsoMatrix (B k) (blockCfgEquiv d hN s k) (τ k)) * x τ
 
 @[simp] theorem blockIsoVector_apply {N : ℕ} {ℓ : Fin M → ℕ}
-    (B : ∀ k, MPTensor (Fin (ℓ k) → Fin d) (Fin D)) (hN : ∑ k, ℓ k = N) (x : MPVSpace (Fin (D * D)) M)
+    (B : ∀ k, MPTensor (Fin (ℓ k) → Fin d) (Fin D)) (hN : ∑ k, ℓ k = N)
+    (x : MPVSpace (Fin (D * D)) M)
     (s : Cfg d N) :
     blockIsoVector B hN x s = ∑ τ : Fin M → Fin (D * D),
       (∏ k, polarIsoMatrix (B k) (blockCfgEquiv d hN s k) (τ k)) * x τ := by

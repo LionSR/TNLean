@@ -71,7 +71,8 @@ lemma physicalMatrix_rotatePhysical (W : Matrix β α ℂ) (A : MPTensor α (Fin
 /-- The mixed Gram matrix `Xᴴ Y` of the physical matrices of two tensors is a rearrangement of
 their mixed transfer map: `(Xᴴ Y)_{(α,β),(α',β')} = E_{YX}(|β'⟩⟨β|)_{α' α}`. -/
 theorem conjTranspose_physicalMatrix_mul_physicalMatrix_apply {D₁ D₂ : ℕ}
-    (X : MPTensor α (Fin D₁)) (Y : MPTensor α (Fin D₂)) (a : Fin D₁ × Fin D₁) (b : Fin D₂ × Fin D₂) :
+    (X : MPTensor α (Fin D₁)) (Y : MPTensor α (Fin D₂)) (a : Fin D₁ × Fin D₁)
+    (b : Fin D₂ × Fin D₂) :
     ((physicalMatrix X)ᴴ * physicalMatrix Y) a b =
       Kraus.mixedMapLM Y X (Matrix.single b.2 a.2 1) b.1 a.1 := by
   rw [Kraus.mixedMapLM_apply, Matrix.sum_apply, Matrix.mul_apply]

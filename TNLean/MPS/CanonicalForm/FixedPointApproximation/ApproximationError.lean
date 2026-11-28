@@ -436,7 +436,8 @@ noncomputable def approximatingMPVState (A : MPSTensor d D) (σ : Matrix (Fin D)
 @[simp] lemma approximatingMPVStateRaw_apply (A : MPSTensor d D)
     (σ : Matrix (Fin D) (Fin D) ℂ) (q M : ℕ) (s : Cfg d (M * q)) :
     approximatingMPVStateRaw A σ q M s =
-      mpv (approximatingTensor (Kraus.block A q) σ) ((Kraus.blockConfigEquiv (Fin d) M q).symm s) := by
+      mpv (approximatingTensor (Kraus.block A q) σ)
+        ((Kraus.blockConfigEquiv (Fin d) M q).symm s) := by
   simp [approximatingMPVStateRaw, EuclideanSpace.equiv, PiLp.toLp_apply]
 
 /-- For `B_q` injective, the unnormalized approximating state is a unit vector.

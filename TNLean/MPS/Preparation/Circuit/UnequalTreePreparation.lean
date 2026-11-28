@@ -295,8 +295,7 @@ theorem exists_isMeasurementConversion_blockIsometryState (d s c : ℕ) [NeZero 
         rw [hroot, treeBlockOp_apply (hT b)
           (fun m hm => isIsometry_polarIsoMatrix_of_isInjective (hinj m hm))
           (fun m₁ m₂ hm₁ _ => isIsometry_mergeIso A (hinj _ (by omega)))
-          (fun _ _ hn τ x => polarIsoMatrix_block_split A hn τ x) (hι₀ b) enc.injective]
-        rfl) hW x
+          (fun _ _ hn τ x => polarIsoMatrix_block_split A hn τ x) (hι₀ b) enc.injective]) hW x
   rw [hψ]
   exact ⟨v₀, hprep⟩
 

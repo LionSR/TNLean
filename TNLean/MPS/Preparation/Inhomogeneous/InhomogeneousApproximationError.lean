@@ -118,7 +118,7 @@ theorem exists_norm_polarPos_sub_le_transferMatrix
   have hpd : (σᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)).PosDef :=
     (Matrix.PosDef.transpose_iff.2 hσ).kronecker Matrix.PosDef.one
   obtain ⟨L, hL, hlip⟩ := hpd.isStrictlyPositive.exists_norm_sqrt_sub_sqrt_le
-  refine ⟨L * K, by positivity, fun {d} A => ?_⟩
+  refine ⟨L * K, by positivity, fun {α} _ A => ?_⟩
   have hsqrt := hlip _ (Matrix.posSemidef_conjTranspose_mul_self (physicalMatrix A)).nonneg
   rw [sqrt_transpose_kronecker_one hσ.posSemidef] at hsqrt
   rw [mul_assoc]
@@ -153,7 +153,7 @@ theorem exists_norm_trace_prod_polarPos_sub_one_le
   have hK : 0 ≤ K := by positivity
   let C := ‖trL‖ * c * K + K + 1
   have hC : 0 < C := by dsimp [C]; positivity
-  refine ⟨C, hC, fun {M} _ d A δ hδ hA => ?_⟩
+  refine ⟨C, hC, fun {M} _ d _ A δ hδ hA => ?_⟩
   let X : ℕ → Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ := fun j =>
     if h : j < M then transferMatrix
       (Kraus.mixedMapLM (polarPosTensor (A ⟨j, h⟩)) (fixedPointTensor σ)) else T

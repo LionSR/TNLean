@@ -92,14 +92,14 @@ theorem sqrt_transpose_kronecker_corner {D : ℕ} {σ : Matrix (Fin D) (Fin D) �
 /-- The global square-root Hölder estimate for a corner reset reference. The constant depends
 only on `D`, including for singular density matrices and smaller endpoint bonds. -/
 theorem exists_norm_polarPos_sub_le_sqrt_cornerReferenceMap (D : ℕ) :
-    ∃ K : ℝ, 0 ≤ K ∧ ∀ {d : ℕ} (A : MPSTensor d D)
+    ∃ K : ℝ, 0 ≤ K ∧ ∀ {α : Type} [Fintype α] (A : MPTensor α (Fin D))
       (σ : Matrix (Fin D) (Fin D) ℂ) (b : ℕ), σ.PosSemidef →
       ‖Matrix.polarPos (physicalMatrix A) -
           (CFC.sqrt σ)ᵀ ⊗ₖ cornerProjection D b‖ ≤
         K * Real.sqrt ‖transferMatrix (Kraus.transferMap A) -
           transferMatrix (cornerReferenceMap σ b)‖ := by
   obtain ⟨K, hK, h⟩ := exists_norm_polarPos_sub_le_sqrt_transferMatrix_of_square D
-  refine ⟨K, hK, fun {d} A σ b hσ => h A _ _ ?_ ?_⟩
+  refine ⟨K, hK, fun {α} _ A σ b hσ => h A _ _ ?_ ?_⟩
   · exact (Matrix.nonneg_iff_posSemidef.mp (CFC.sqrt_nonneg σ)).transpose.kronecker
       (posSemidef_cornerProjection D b)
   · intro a c
@@ -229,7 +229,7 @@ theorem exists_norm_trace_prod_polarPos_sub_one_le_corner_reference (D : ℕ) :
   have hc0 : 0 ≤ c := by linarith
   obtain ⟨C, hC, hbound⟩ := exists_norm_trace_prod_sub_one_le_of_reference_bounds D c
     (c * Kp) hc (mul_nonneg hc0 hKp)
-  refine ⟨C, hC, fun {M} _ d A σ b hσ htr hsupp δ hδ hA => ?_⟩
+  refine ⟨C, hC, fun {M} _ d _ A σ b hσ htr hsupp δ hδ hA => ?_⟩
   have := Matrix.neZero_of_trace_eq_one (htr 0)
   let ι : ℕ → Fin M := fun j => ⟨j % M, Nat.mod_lt _ (Nat.pos_of_ne_zero (NeZero.ne M))⟩
   have hi (j : ℕ) (hj : j < M) : ι j = ⟨j, hj⟩ := by
@@ -322,8 +322,8 @@ namespace MPSPreparation
 with a constant depending only on the common bond bound. The rectangular operator norm
 uses matrix-unit bases, and hence the Hilbert--Schmidt norm on both matrix spaces. -/
 theorem exists_norm_transferMatrix_zeroPad_sub_cornerReferenceMap_le (D : ℕ) :
-    ∃ K : ℝ, 0 < K ∧ ∀ {d a b : ℕ} (_ha : a ≤ D) (_hb : b ≤ D)
-      (A : Fin d → Matrix (Fin a) (Fin b) ℂ) (σ : Matrix (Fin a) (Fin a) ℂ),
+    ∃ K : ℝ, 0 < K ∧ ∀ {α : Type} [Fintype α] {a b : ℕ} (_ha : a ≤ D) (_hb : b ≤ D)
+      (A : α → Matrix (Fin a) (Fin b) ℂ) (σ : Matrix (Fin a) (Fin a) ℂ),
       ‖transferMatrix (Kraus.transferMap (fun i => Matrix.zeroPad D (A i))) -
         transferMatrix (cornerReferenceMap (Matrix.zeroPad D σ) b)‖ ≤
       K * ‖Matrix.linearMapMatrix (Matrix.rectangularKrausMap A -
@@ -342,7 +342,7 @@ theorem exists_norm_transferMatrix_zeroPad_sub_cornerReferenceMap_le (D : ℕ) :
   let K : ℝ := 1 + ∑ a : Fin (D + 1), ∑ b : Fin (D + 1), ‖Rc a b‖
   have hK : 0 < K := add_pos_of_pos_of_nonneg zero_lt_one
     (Finset.sum_nonneg fun _ _ => Finset.sum_nonneg fun _ _ => norm_nonneg _)
-  refine ⟨K, hK, fun {d a b} ha hb A σ => ?_⟩
+  refine ⟨K, hK, fun {α} _ {a b} ha hb A σ => ?_⟩
   let ai : Fin (D + 1) := ⟨a, Nat.lt_succ_of_le ha⟩
   let bi : Fin (D + 1) := ⟨b, Nat.lt_succ_of_le hb⟩
   have hRc : ‖Rc ai bi‖ ≤ K := by

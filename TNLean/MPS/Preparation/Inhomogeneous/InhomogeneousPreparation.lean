@@ -101,7 +101,8 @@ noncomputable def chainPosState (A : MPSChainTensor d D N) (hN : ∑ k, ℓ k = 
 @[simp] theorem chainPosState_apply (A : MPSChainTensor d D N) (hN : ∑ k, ℓ k = N)
     (τ : Cfg (D * D) M) :
     chainPosState A hN τ =
-      mpvFamily (n := fun _ => Fin (D * D)) (fun k => polarPosTensor (chainBlockTensor A hN k)) τ := by
+      mpvFamily (n := fun _ => Fin (D * D))
+        (fun k => polarPosTensor (chainBlockTensor A hN k)) τ := by
   simp [chainPosState, EuclideanSpace.equiv, PiLp.toLp_apply]
 
 /-- **The state is the isometries applied to the positive parts:** `|φ_N⟩ = (⊗ₖ V_k) |φ_pos⟩`,

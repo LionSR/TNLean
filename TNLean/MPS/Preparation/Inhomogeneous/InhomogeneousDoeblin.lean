@@ -86,17 +86,17 @@ namespace MPSChainTensor
 variable {d D n : ℕ}
 
 /-- The blocked chain has a trace-preserving transfer map when every site map does. -/
-theorem trace_transferMap_block (A : MPSChainTensor d D n)
+theorem trace_transferMap_eval (A : MPSChainTensor d D n)
     (hA : ∀ i, IsTracePreservingMap (Kraus.transferMap (A i)))
     (X : Matrix (Fin D) (Fin D) ℂ) :
-    (Kraus.transferMap (Kraus.block A) X).trace = X.trace := by
+    (Kraus.transferMap (eval A) X).trace = X.trace := by
   induction n with
-  | zero => simp [transferMap_block]
+  | zero => simp [transferMap_eval]
   | succ n ih =>
-    rw [transferMap_block, List.ofFn_succ, List.prod_cons]
+    rw [transferMap_eval, List.ofFn_succ, List.prod_cons]
     change (Kraus.transferMap (A 0)
       (((List.ofFn fun i => Kraus.transferMap (A i.succ)).prod) X)).trace = _
-    rw [hA 0, ← transferMap_block]
+    rw [hA 0, ← transferMap_eval]
     exact ih _ (fun i => hA i.succ)
 
 /-- **Uniform Doeblin contraction on a chain.** If every site's normalized Choi matrix
@@ -106,7 +106,7 @@ matrices by at least the factor `(1 - ε)^n`. No translation invariance is assum
 
 When each site is a fixed-length contiguous block, the condition is imposed on those actual
 blocks, not on powers of the individual microscopic site maps. -/
-theorem traceNorm_transferMap_block_sub_le_of_choi_domination
+theorem traceNorm_transferMap_eval_sub_le_of_choi_domination
     {ε : ℝ} (hε : 0 ≤ ε) (hε1 : ε ≤ 1)
     {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosSemidef) (htr : σ.trace = 1)
     (A : MPSChainTensor d D n)
@@ -115,31 +115,31 @@ theorem traceNorm_transferMap_block_sub_le_of_choi_domination
       ((ε : ℂ) / D) • (σ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)))
     {ρ₁ ρ₂ : Matrix (Fin D) (Fin D) ℂ} (h₁ : ρ₁.PosSemidef)
     (h₂ : ρ₂.PosSemidef) (h₁tr : ρ₁.trace = 1) (h₂tr : ρ₂.trace = 1) :
-    traceNorm (Kraus.transferMap (Kraus.block A) ρ₁ -
-      Kraus.transferMap (Kraus.block A) ρ₂) ≤
+    traceNorm (Kraus.transferMap (eval A) ρ₁ -
+      Kraus.transferMap (eval A) ρ₂) ≤
       (1 - ε) ^ n * traceNorm (ρ₁ - ρ₂) := by
   induction n with
-  | zero => simp [transferMap_block]
+  | zero => simp [transferMap_eval]
   | succ n ih =>
     let B : MPSChainTensor d D n := fun i => A i.succ
     have hB : ∀ i, IsTracePreservingMap (Kraus.transferMap (B i)) := fun i => hA i.succ
-    have hhead : Kraus.transferMap (Kraus.block A) =
-        Kraus.transferMap (A 0) * Kraus.transferMap (Kraus.block B) := by
-      rw [transferMap_block, transferMap_block, List.ofFn_succ, List.prod_cons]
+    have hhead : Kraus.transferMap (eval A) =
+        Kraus.transferMap (A 0) * Kraus.transferMap (eval B) := by
+      rw [transferMap_eval, transferMap_eval, List.ofFn_succ, List.prod_cons]
     rw [hhead]
-    change traceNorm (Kraus.transferMap (A 0) (Kraus.transferMap (Kraus.block B) ρ₁) -
-      Kraus.transferMap (A 0) (Kraus.transferMap (Kraus.block B) ρ₂)) ≤ _
+    change traceNorm (Kraus.transferMap (A 0) (Kraus.transferMap (eval B) ρ₁) -
+      Kraus.transferMap (A 0) (Kraus.transferMap (eval B) ρ₂)) ≤ _
     have hstep := traceNorm_map_sub_map_le_of_choi_domination (hA 0)
       (fun X hX => isHermitian_map_of_positive
         (fun Y hY => Kraus.transferMap_pos (A 0) hY) hX)
       hσ.isHermitian htr hε (hchoi 0)
-      (Kraus.transferMap_pos (Kraus.block B) h₁)
-      (Kraus.transferMap_pos (Kraus.block B) h₂)
-      ((trace_transferMap_block B hB ρ₁).trans h₁tr)
-      ((trace_transferMap_block B hB ρ₂).trans h₂tr)
+      (Kraus.transferMap_pos (eval B) h₁)
+      (Kraus.transferMap_pos (eval B) h₂)
+      ((trace_transferMap_eval B hB ρ₁).trans h₁tr)
+      ((trace_transferMap_eval B hB ρ₂).trans h₂tr)
     have htail := ih B hB (fun i => hchoi i.succ)
-    calc _ ≤ (1 - ε) * traceNorm (Kraus.transferMap (Kraus.block B) ρ₁ -
-        Kraus.transferMap (Kraus.block B) ρ₂) := hstep
+    calc _ ≤ (1 - ε) * traceNorm (Kraus.transferMap (eval B) ρ₁ -
+        Kraus.transferMap (eval B) ρ₂) := hstep
       _ ≤ (1 - ε) * ((1 - ε) ^ n * traceNorm (ρ₁ - ρ₂)) :=
         mul_le_mul_of_nonneg_left htail (sub_nonneg.mpr hε1)
       _ = _ := by rw [pow_succ]; ring
@@ -157,7 +157,8 @@ namespace MPSPreparation
 
 /-- The physical Gram matrix is the bond dimension times the transpose of the normalized
 Choi matrix of the transfer map, with both indexed by the ordered pair of bond indices. -/
-theorem gram_eq_smul_choi_transpose {d D : ℕ} [NeZero D] (A : MPSTensor d D) :
+theorem gram_eq_smul_choi_transpose {α : Type*} [Fintype α] {D : ℕ} [NeZero D]
+    (A : MPTensor α (Fin D)) :
     (physicalMatrix A)ᴴ * physicalMatrix A =
       (D : ℂ) • (ChoiRectangular.choiMatrix (Kraus.transferMap A)).transpose := by
   ext a b

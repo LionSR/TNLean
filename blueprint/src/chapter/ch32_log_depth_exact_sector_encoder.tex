@@ -62,7 +62,7 @@
 
 \begin{definition}[Fixed-width virtual coefficient matrix]
     \label{def:ldp_exact_sector_coefficients}
-    \lean{MPSTensor.cfgPhysicalMatrix, MPSTensor.cfgPhysicalMatrix_apply,
+    \lean{MPSTensor.physicalMatrix_block_apply,
         MPSTensor.sectorTraceSelector, MPSTensor.sectorCoefficientMatrix}
     \leanok
     \uses{def:ldp_embedded_sectors,def:ldpolar_matrix}
@@ -83,7 +83,7 @@
 
 \begin{lemma}[The trace selectors recover periodic sectors]
     \label{thm:ldp_sector_trace_selectors}
-    \lean{MPSTensor.cfgPhysicalMatrix_mul_sectorTraceSelector,
+    \lean{MPSTensor.physicalMatrix_block_mul_sectorTraceSelector,
         MPSTensor.sectorTraceSelector_apply_diagonal,
         MPSTensor.sectorTraceSelector_eq_zero_of_notMem}
     \leanok
