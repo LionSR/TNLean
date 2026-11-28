@@ -51,9 +51,9 @@ namespace MPSTensor
 
 /-- Physical mixing commutes with a weighted direct sum, letter by letter.
 Source: arXiv:1708.00029, Section 4.2, lines 834--845. -/
-theorem toTensorFromBlocks_sum_smul {d m r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (B : (k : Fin r) → MPSTensor d (dim k))
-    (W : Matrix (Fin m) (Fin d) ℂ) (τ : Fin m) :
+theorem toTensorFromBlocks_sum_smul {α β : Type*} [Fintype α] {r : ℕ} {dim : Fin r → ℕ}
+    (μ : Fin r → ℂ) (B : (k : Fin r) → MPTensor α (Fin (dim k)))
+    (W : Matrix β α ℂ) (τ : β) :
     ∑ σ, W τ σ • toTensorFromBlocks μ B σ =
       toTensorFromBlocks μ (fun k τ ↦ ∑ σ, W τ σ • B k σ) τ := by
   classical
@@ -100,9 +100,9 @@ fundamental theorem, transported from a basis of periodic tensors back to the
 original blocks. Source: arXiv:1708.00029, `thm:bdequal`, lines 643--693, with
 the grouping `eq:bdnr`, lines 286--305, and the unitary gauge of line 625. -/
 theorem exists_unitary_matching_of_periodic_block_families
-    {d r s : ℕ} {dim : Fin r → ℕ} {dim' : Fin s → ℕ}
-    (A : (j : Fin r) → MPSTensor d (dim j)) (μ : Fin r → ℂ) (hμ : ∀ j, μ j ≠ 0)
-    (B : (k : Fin s) → MPSTensor d (dim' k)) (ν : Fin s → ℂ) (hν : ∀ k, ν k ≠ 0)
+    {α : Type*} [Fintype α] {r s : ℕ} {dim : Fin r → ℕ} {dim' : Fin s → ℕ}
+    (A : (j : Fin r) → MPTensor α (Fin (dim j))) (μ : Fin r → ℂ) (hμ : ∀ j, μ j ≠ 0)
+    (B : (k : Fin s) → MPTensor α (Fin (dim' k))) (ν : Fin s → ℂ) (hν : ∀ k, ν k ≠ 0)
     (periodA : Fin r → ℕ) (periodB : Fin s → ℕ)
     (hPerA : ∀ j, IsPeriodic (periodA j) (A j))
     (hPerB : ∀ k, IsPeriodic (periodB k) (B k))
@@ -160,8 +160,8 @@ theorem exists_unitary_matching_of_periodic_block_families
 direct sum of periodic blocks unchanged, including the empty word.
 Source: arXiv:1708.00029, `thm:bdequal`, lines 655 and 661--663. -/
 theorem sameMPV₂_toTensorFromBlocks_of_periodic_phases
-    {d r : ℕ} {dim : Fin r → ℕ}
-    (A : (j : Fin r) → MPSTensor d (dim j)) (μ c : Fin r → ℂ)
+    {α : Type*} [Fintype α] {r : ℕ} {dim : Fin r → ℕ}
+    (A : (j : Fin r) → MPTensor α (Fin (dim j))) (μ c : Fin r → ℂ)
     (period : Fin r → ℕ) (hPer : ∀ j, IsPeriodic (period j) (A j))
     (hc : ∀ j, c j ^ period j = 1) :
     SameMPV₂ (toTensorFromBlocks μ A) (toTensorFromBlocks (fun j ↦ c j * μ j) A) := by
@@ -182,10 +182,10 @@ are roots of unity `z_j`, of order dividing the period of `A_j`, and a unitary
 commutes with every `A^i` and leaves the vectors of `A` unchanged.
 Source: arXiv:1708.00029, Section 4.2, lines 834--845, equation `eq:symm`. -/
 theorem exists_blockScalar_unitary_of_periodic_physical_symmetry
-    {d r : ℕ} {dim : Fin r → ℕ}
-    (A : (j : Fin r) → MPSTensor d (dim j)) (μ : Fin r → ℂ) (hμ : ∀ j, μ j ≠ 0)
+    {α : Type*} [Fintype α] [DecidableEq α] {r : ℕ} {dim : Fin r → ℕ}
+    (A : (j : Fin r) → MPTensor α (Fin (dim j))) (μ : Fin r → ℂ) (hμ : ∀ j, μ j ≠ 0)
     (period : Fin r → ℕ) (hPer : ∀ j, IsPeriodic (period j) (A j))
-    (u : Matrix (Fin d) (Fin d) ℂ) (hu : u ∈ Matrix.unitaryGroup (Fin d) ℂ)
+    (u : Matrix α α ℂ) (hu : u ∈ Matrix.unitaryGroup α ℂ)
     (hSym : SameMPV₂Pos (toTensorFromBlocks μ A)
       (fun i ↦ ∑ j, u i j • toTensorFromBlocks μ A j)) :
     ∃ (z : Fin r → ℂ) (U : Matrix (Fin (∑ j, dim j)) (Fin (∑ j, dim j)) ℂ),
@@ -197,8 +197,8 @@ theorem exists_blockScalar_unitary_of_periodic_physical_symmetry
       ∀ i, ∑ j, u i j • toTensorFromBlocks μ A j =
         blockScalarMatrix dim z * U * toTensorFromBlocks μ A i * Uᴴ := by
   classical
-  let C : (k : Fin r) → MPSTensor d (dim k) := fun k i ↦ ∑ j, u i j • A k j
-  have hLetters (i : Fin d) : ∑ j, u i j • toTensorFromBlocks μ A j = toTensorFromBlocks μ C i :=
+  let C : (k : Fin r) → MPTensor α (Fin (dim k)) := fun k i ↦ ∑ j, u i j • A k j
+  have hLetters (i : α) : ∑ j, u i j • toTensorFromBlocks μ A j = toTensorFromBlocks μ C i :=
     toTensorFromBlocks_sum_smul μ A u i
   have hIso : uᴴ * u = 1 := by
     simpa only [Matrix.star_eq_conjTranspose] using Matrix.mem_unitaryGroup_iff'.mp hu
@@ -245,14 +245,14 @@ allowed. The diagonality of the fixed points in irreducible form II is not used.
 Source: arXiv:1708.00029, Section 4.2, lines 834--845, equation `eq:symm`;
 irreducible form II, lines 313--332. -/
 theorem exists_diagonal_unitary_of_irreducibleForm_physical_symmetry
-    {d r : ℕ} {dim : Fin r → ℕ}
-    (A : (j : Fin r) → MPSTensor d (dim j)) (μ : Fin r → ℂ) (hμ : ∀ j, μ j ≠ 0)
+    {α : Type*} [Fintype α] [DecidableEq α] {r : ℕ} {dim : Fin r → ℕ}
+    (A : (j : Fin r) → MPTensor α (Fin (dim j))) (μ : Fin r → ℂ) (hμ : ∀ j, μ j ≠ 0)
     (hIrr : ∀ j, Kraus.IsIrreducibleFamily (A j))
     (hRad : ∀ j, spectralRadius ℂ
       ((Module.End.toContinuousLinearMap (Matrix (Fin (dim j)) (Fin (dim j)) ℂ))
         (Kraus.transferMap (A j))) = 1)
     (hTP : ∀ j, IsLeftCanonical (A j))
-    (u : Matrix (Fin d) (Fin d) ℂ) (hu : u ∈ Matrix.unitaryGroup (Fin d) ℂ)
+    (u : Matrix α α ℂ) (hu : u ∈ Matrix.unitaryGroup α ℂ)
     (hSym : SameMPV₂Pos (toTensorFromBlocks μ A)
       (fun i ↦ ∑ j, u i j • toTensorFromBlocks μ A j)) :
     ∃ (z : Fin (∑ j, dim j) → ℂ) (U : Matrix (Fin (∑ j, dim j)) (Fin (∑ j, dim j)) ℂ),

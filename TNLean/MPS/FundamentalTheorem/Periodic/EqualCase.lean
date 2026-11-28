@@ -38,7 +38,7 @@ open scoped BigOperators
 
 namespace MPSTensor
 
-variable {d : ℕ}
+variable {α : Type*} [Fintype α]
 
 /-- **Coefficient extraction in the equal case.**
 
@@ -63,13 +63,13 @@ In the intended application they are the unit-modulus scalars of the
 repeated-block relation, supplied by
 `HetRepeatedBlocks.exists_unit_phase_power_mpv`. -/
 theorem SectorDecomposition.coeff_eq_of_sameMPV_of_matched_basis
-    {P Q : SectorDecomposition (Fin d)}
+    {P Q : SectorDecomposition α}
     (periodP : Fin P.basisCount → ℕ)
     (hPerP : ∀ j, IsPeriodic (periodP j) (P.basis j))
     (hNonRepP : ∀ i j, i ≠ j → ¬ HetRepeatedBlocks (P.basis i) (P.basis j))
     (perm : Fin P.basisCount ≃ Fin Q.basisCount)
     (ζ : Fin P.basisCount → ℂ) (hζ : ∀ j, ζ j ≠ 0)
-    (hBasis : ∀ (j : Fin P.basisCount) (N : ℕ) (σ : Fin N → Fin d),
+    (hBasis : ∀ (j : Fin P.basisCount) (N : ℕ) (σ : Fin N → α),
       mpv (P.basis j) σ = ζ j ^ N * mpv (Q.basis (perm j)) σ)
     (hSame : SameMPV₂Pos P.toTensor Q.toTensor) :
     ∃ N₀ : ℕ, ∀ N, N₀ ≤ N → ∀ j : Fin P.basisCount, periodP j ∣ N →
@@ -83,8 +83,8 @@ theorem SectorDecomposition.coeff_eq_of_sameMPV_of_matched_basis
   have hNpos : 0 < N := lt_of_lt_of_le Nat.one_pos (le_trans (le_max_right _ _) hN)
   -- The matched basis vectors differ by the reciprocal phase power.
   have hState : ∀ j : Fin P.basisCount,
-      mpvState (α := Fin d) (Q.basis (perm j)) N
-        = ((ζ j)⁻¹ ^ N) • mpvState (α := Fin d) (P.basis j) N := by
+      mpvState (Q.basis (perm j)) N
+        = ((ζ j)⁻¹ ^ N) • mpvState (P.basis j) N := by
     intro j
     ext σ
     simp only [mpvState_apply, PiLp.smul_apply, smul_eq_mul, hBasis j N σ]
@@ -92,26 +92,26 @@ theorem SectorDecomposition.coeff_eq_of_sameMPV_of_matched_basis
   -- Both expansions run over the same basis, so their difference vanishes.
   have hSum : ∑ j : Fin P.basisCount,
       (P.coeff N j - (ζ j)⁻¹ ^ N * Q.coeff N (perm j)) •
-        mpvState (α := Fin d) (P.basis j) N = 0 := by
-    have hP : mpvState (α := Fin d) P.toTensor N
-        = ∑ j : Fin P.basisCount, P.coeff N j • mpvState (α := Fin d) (P.basis j) N :=
+        mpvState (P.basis j) N = 0 := by
+    have hP : mpvState P.toTensor N
+        = ∑ j : Fin P.basisCount, P.coeff N j • mpvState (P.basis j) N :=
       P.mpvState_toTensor_eq_sum_coeff N
-    have hQ : mpvState (α := Fin d) Q.toTensor N
+    have hQ : mpvState Q.toTensor N
         = ∑ j : Fin P.basisCount,
-            ((ζ j)⁻¹ ^ N * Q.coeff N (perm j)) • mpvState (α := Fin d) (P.basis j) N := by
+            ((ζ j)⁻¹ ^ N * Q.coeff N (perm j)) • mpvState (P.basis j) N := by
       rw [Q.mpvState_toTensor_eq_sum_coeff N,
         ← Equiv.sum_comp perm
-          (fun k => Q.coeff N k • mpvState (α := Fin d) (Q.basis k) N)]
+          (fun k => Q.coeff N k • mpvState (Q.basis k) N)]
       exact Finset.sum_congr rfl fun j _ => by
         rw [hState j, smul_smul, mul_comm]
-    have hEq : mpvState (α := Fin d) P.toTensor N = mpvState (α := Fin d) Q.toTensor N := by
+    have hEq : mpvState P.toTensor N = mpvState Q.toTensor N := by
       ext σ
       simpa using hSame N hNpos σ
     rw [hP, hQ] at hEq
     have hSplit : ∑ j : Fin P.basisCount,
-        (P.coeff N j • mpvState (α := Fin d) (P.basis j) N
+        (P.coeff N j • mpvState (P.basis j) N
           - ((ζ j)⁻¹ ^ N * Q.coeff N (perm j)) •
-            mpvState (α := Fin d) (P.basis j) N) = 0 := by
+            mpvState (P.basis j) N) = 0 := by
       rw [Finset.sum_sub_distrib, hEq, sub_self]
     simpa [sub_smul] using hSplit
   -- Off-period basis vectors vanish, so only the divisible indices survive.
@@ -120,22 +120,22 @@ theorem SectorDecomposition.coeff_eq_of_sameMPV_of_matched_basis
     intro x; simp
   have hDrop : ∑ x ∈ Finset.univ.filter (fun x => periodP x ∣ N),
       (P.coeff N x - (ζ x)⁻¹ ^ N * Q.coeff N (perm x)) •
-        mpvState (α := Fin d) (P.basis x) N = 0 := by
+        mpvState (P.basis x) N = 0 := by
     rw [Finset.sum_subset (Finset.filter_subset _ _)]
     · exact hSum
     · intro x _ hx
       have hnd : ¬ periodP x ∣ N := by simpa using hx
-      have hzero : mpvState (α := Fin d) (P.basis x) N = 0 := by
+      have hzero : mpvState (P.basis x) N = 0 := by
         ext σ
         simpa using
           pgvwc07_stateVector_eq_zero_of_not_dvd (P.basis x) (hPerP x) hnd σ
       rw [hzero, smul_zero]
   have hSubtype : ∑ k : {x : Fin P.basisCount // periodP x ∣ N},
       (P.coeff N ↑k - (ζ ↑k)⁻¹ ^ N * Q.coeff N (perm ↑k)) •
-        mpvState (α := Fin d) (P.basis ↑k) N = 0 :=
+        mpvState (P.basis ↑k) N = 0 :=
     (Finset.sum_subtype (Finset.univ.filter (fun x => periodP x ∣ N)) hFilter
       (fun x => (P.coeff N x - (ζ x)⁻¹ ^ N * Q.coeff N (perm x)) •
-        mpvState (α := Fin d) (P.basis x) N)).symm.trans hDrop
+        mpvState (P.basis x) N)).symm.trans hDrop
   exact sub_eq_zero.mp
     (Fintype.linearIndependent_iff.mp (hN₁ N hN₁')
       (fun k => P.coeff N ↑k - (ζ ↑k)⁻¹ ^ N * Q.coeff N (perm ↑k)) hSubtype ⟨j, hj⟩)
@@ -162,13 +162,13 @@ matrix holds against the *rescaled* multiplicities, and the rescaling factor is
 in general different from one even when the period is one, as the block pair
 `B = e^{iθ} A` with period one shows. -/
 theorem equalCase_blockwise_zgauge
-    {P Q : SectorDecomposition (Fin d)}
+    {P Q : SectorDecomposition α}
     (periodP : Fin P.basisCount → ℕ)
     (hPerP : ∀ j, IsPeriodic (periodP j) (P.basis j))
     (hNonRepP : ∀ i j, i ≠ j → ¬ HetRepeatedBlocks (P.basis i) (P.basis j))
     (perm : Fin P.basisCount ≃ Fin Q.basisCount)
     (ζ : Fin P.basisCount → ℂ) (hζ : ∀ j, ζ j ≠ 0)
-    (hBasis : ∀ (j : Fin P.basisCount) (N : ℕ) (σ : Fin N → Fin d),
+    (hBasis : ∀ (j : Fin P.basisCount) (N : ℕ) (σ : Fin N → α),
       mpv (P.basis j) σ = ζ j ^ N * mpv (Q.basis (perm j)) σ)
     (hSame : SameMPV₂Pos P.toTensor Q.toTensor) :
     ∀ j : Fin P.basisCount,

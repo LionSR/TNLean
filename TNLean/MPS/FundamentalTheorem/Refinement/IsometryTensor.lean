@@ -27,13 +27,13 @@ namespace MPSTensor
 
 section Theorem41Forward
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 /-- Evaluation of the tensor \(C\) defined from \(W\) on a blocked word is a \(W\)-weighted sum
 of evaluations of the original tensor.
 
 If `C τ = ∑_σ W(τ, σ) • B σ` is the isometric mixing of an MPS tensor
-`B : MPSTensor d D` by `W : Matrix ι (Fin d) ℂ`, then for every `N` and
+`B : MPTensor α (Fin D)` by `W : Matrix ι α ℂ`, then for every `N` and
 every `τ : Fin N → ι`,
 `Kraus.evalWord C (List.ofFn τ) = ∑_σ (∏_k W (τ k) (σ k)) • Kraus.evalWord B (List.ofFn σ)`.
 
@@ -42,10 +42,10 @@ in the forward direction it rewrites a refinement witness as `SameMPV` for the
 tensor \(C\), and in the reverse direction it expands the blocked witness
 produced by Wolf Theorem 2.1(4). -/
 theorem evalWord_sum_smul_ofFn
-    {ι : Type*} [Fintype ι] (B : MPSTensor d D) (W : Matrix ι (Fin d) ℂ) :
+    {ι : Type*} [Fintype ι] (B : MPTensor α (Fin D)) (W : Matrix ι α ℂ) :
     ∀ (N : ℕ) (τ : Fin N → ι),
-      Kraus.evalWord (fun τ' : ι => ∑ σ' : Fin d, W τ' σ' • B σ') (List.ofFn τ) =
-        ∑ σ : Fin N → Fin d,
+      Kraus.evalWord (fun τ' : ι => ∑ σ' : α, W τ' σ' • B σ') (List.ofFn τ) =
+        ∑ σ : Fin N → α,
           (∏ k : Fin N, W (τ k) (σ k)) • Kraus.evalWord B (List.ofFn σ) := by
   classical
   intro N τ
@@ -55,28 +55,28 @@ theorem evalWord_sum_smul_ofFn
   rw [List.prod_ofFn_smul, evalWord_ofFn_eq_prod]
 
 private theorem mpv_sum_smul_ofFn
-    {ι : Type*} [Fintype ι] (B : MPSTensor d D) (W : Matrix ι (Fin d) ℂ)
+    {ι : Type*} [Fintype ι] (B : MPTensor α (Fin D)) (W : Matrix ι α ℂ)
     (N : ℕ) (τ : Fin N → ι) :
-    mpv (fun τ' : ι => ∑ σ' : Fin d, W τ' σ' • B σ') τ =
-      ∑ σ : Fin N → Fin d,
+    mpv (fun τ' : ι => ∑ σ' : α, W τ' σ' • B σ') τ =
+      ∑ σ : Fin N → α,
         (∏ k : Fin N, W (τ k) (σ k)) * coeff B (List.ofFn σ) := by
   simp [mpv_eq, coeff_eq, evalWord_sum_smul_ofFn, Matrix.trace_sum, Matrix.trace_smul]
 
 /-- Physical-index mixing by a fixed matrix preserves `SameMPV₂`. -/
 theorem sameMPV₂_sum_smul_ofFn
-    {ι : Type*} [Fintype ι] {D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (W : Matrix ι (Fin d) ℂ)
+    {ι : Type*} [Fintype ι] {D₁ D₂ : ℕ} (A : MPTensor α (Fin D₁)) (B : MPTensor α (Fin D₂))
+    (W : Matrix ι α ℂ)
     (hAB : SameMPV₂ A B) :
     SameMPV₂
-      (fun τ : ι => ∑ σ : Fin d, W τ σ • A σ)
-      (fun τ : ι => ∑ σ : Fin d, W τ σ • B σ) := by
+      (fun τ : ι => ∑ σ : α, W τ σ • A σ)
+      (fun τ : ι => ∑ σ : α, W τ σ • B σ) := by
   intro N τ
   calc
-    mpv (fun τ' : ι => ∑ σ' : Fin d, W τ' σ' • A σ') τ =
-        ∑ σ : Fin N → Fin d,
+    mpv (fun τ' : ι => ∑ σ' : α, W τ' σ' • A σ') τ =
+        ∑ σ : Fin N → α,
           (∏ k : Fin N, W (τ k) (σ k)) * coeff A (List.ofFn σ) := by
           exact mpv_sum_smul_ofFn A W N τ
-    _ = ∑ σ : Fin N → Fin d,
+    _ = ∑ σ : Fin N → α,
           (∏ k : Fin N, W (τ k) (σ k)) * coeff B (List.ofFn σ) := by
           refine Finset.sum_congr rfl ?_
           intro σ _
@@ -84,17 +84,17 @@ theorem sameMPV₂_sum_smul_ofFn
             congrArg
               (fun z : ℂ => (∏ k : Fin N, W (τ k) (σ k)) * z)
               (hAB N σ)
-    _ = mpv (fun τ' : ι => ∑ σ' : Fin d, W τ' σ' • B σ') τ := by
+    _ = mpv (fun τ' : ι => ∑ σ' : α, W τ' σ' • B σ') τ := by
           symm
           exact mpv_sum_smul_ofFn B W N τ
 
 /-- A physical-index isometry preserves periodicity and its period. -/
-theorem isPeriodic_kraus_isometry
-    {ι : Type*} [Fintype ι] {p : ℕ} (B : MPSTensor d D)
-    (W : Matrix ι (Fin d) ℂ) (hW : Wᴴ * W = 1)
+theorem isPeriodic_kraus_isometry [DecidableEq α]
+    {ι : Type*} [Fintype ι] {p : ℕ} (B : MPTensor α (Fin D))
+    (W : Matrix ι α ℂ) (hW : Wᴴ * W = 1)
     (hB : IsPeriodic p B) :
-    IsPeriodic p (fun τ : ι => ∑ σ : Fin d, W τ σ • B σ) := by
-  let C : MPTensor ι (Fin D) := fun τ => ∑ σ : Fin d, W τ σ • B σ
+    IsPeriodic p (fun τ : ι => ∑ σ : α, W τ σ • B σ) := by
+  let C : MPTensor ι (Fin D) := fun τ => ∑ σ : α, W τ σ • B σ
   have hEq : Kraus.transferMap C = Kraus.transferMap B := by
     simpa [C] using transferMap_kraus_isometry B W hW
   have hIrrMapB : IsIrreducibleMap (Kraus.transferMap B) :=
@@ -109,84 +109,84 @@ theorem isPeriodic_kraus_isometry
 private theorem sameMPV₂_toTensorFromBlocks_sum_smul_ofFn
     {ι : Type*} [Fintype ι] {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (W : Matrix ι (Fin d) ℂ) :
+    (blocks : (k : Fin r) → MPTensor α (Fin (dim k)))
+    (W : Matrix ι α ℂ) :
     SameMPV₂
-      (fun τ : ι => ∑ σ : Fin d, W τ σ •
-        toTensorFromBlocks (α := Fin d) (μ := μ) blocks σ)
+      (fun τ : ι => ∑ σ : α, W τ σ •
+        toTensorFromBlocks (μ := μ) blocks σ)
       (toTensorFromBlocks (α := ι) (μ := μ)
-        (fun k : Fin r => fun τ : ι => ∑ σ : Fin d, W τ σ • blocks k σ)) := by
+        (fun k : Fin r => fun τ : ι => ∑ σ : α, W τ σ • blocks k σ)) := by
   intro N τ
   calc
-    mpv (fun τ' : ι => ∑ σ' : Fin d, W τ' σ' •
-        toTensorFromBlocks (α := Fin d) (μ := μ) blocks σ') τ =
-        ∑ σ : Fin N → Fin d,
+    mpv (fun τ' : ι => ∑ σ' : α, W τ' σ' •
+        toTensorFromBlocks (μ := μ) blocks σ') τ =
+        ∑ σ : Fin N → α,
           (∏ k : Fin N, W (τ k) (σ k)) *
-            mpv (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) σ := by
+            mpv (toTensorFromBlocks (μ := μ) blocks) σ := by
           simpa [mpv_eq, coeff_eq] using
-            mpv_sum_smul_ofFn (B := toTensorFromBlocks (α := Fin d) (μ := μ) blocks) W N τ
-    _ = ∑ σ : Fin N → Fin d,
+            mpv_sum_smul_ofFn (B := toTensorFromBlocks (μ := μ) blocks) W N τ
+    _ = ∑ σ : Fin N → α,
           (∏ k : Fin N, W (τ k) (σ k)) *
             ∑ j : Fin r, (μ j) ^ N * mpv (blocks j) σ := by
           refine Finset.sum_congr rfl ?_
           intro σ _
           rw [mpv_toTensorFromBlocks_eq_sum]
           simp only [smul_eq_mul]
-    _ = ∑ σ : Fin N → Fin d,
+    _ = ∑ σ : Fin N → α,
           ∑ j : Fin r,
             (∏ k : Fin N, W (τ k) (σ k)) *
               ((μ j) ^ N * mpv (blocks j) σ) := by
           simp_rw [Finset.mul_sum]
     _ = ∑ j : Fin r,
-          ∑ σ : Fin N → Fin d,
+          ∑ σ : Fin N → α,
             (∏ k : Fin N, W (τ k) (σ k)) *
               ((μ j) ^ N * mpv (blocks j) σ) := by
           rw [Finset.sum_comm]
     _ = ∑ j : Fin r,
           (μ j) ^ N *
-            ∑ σ : Fin N → Fin d,
+            ∑ σ : Fin N → α,
               (∏ k : Fin N, W (τ k) (σ k)) * mpv (blocks j) σ := by
           refine Finset.sum_congr rfl ?_
           intro j _
           calc
-            ∑ σ : Fin N → Fin d,
+            ∑ σ : Fin N → α,
                 (∏ k : Fin N, W (τ k) (σ k)) *
                   ((μ j) ^ N * mpv (blocks j) σ)
-                = ∑ σ : Fin N → Fin d,
+                = ∑ σ : Fin N → α,
                     (μ j) ^ N *
                       ((∏ k : Fin N, W (τ k) (σ k)) * mpv (blocks j) σ) := by
                     refine Finset.sum_congr rfl ?_
                     intro σ _
                     simp [mul_assoc, mul_comm]
             _ = (μ j) ^ N *
-                  ∑ σ : Fin N → Fin d,
+                  ∑ σ : Fin N → α,
                     (∏ k : Fin N, W (τ k) (σ k)) * mpv (blocks j) σ := by
                     rw [← Finset.mul_sum]
     _ = ∑ j : Fin r,
           (μ j) ^ N *
-            mpv (fun τ' : ι => ∑ σ' : Fin d, W τ' σ' • blocks j σ') τ := by
+            mpv (fun τ' : ι => ∑ σ' : α, W τ' σ' • blocks j σ') τ := by
           refine Finset.sum_congr rfl ?_
           intro j _
           congr 1
           symm
           simpa [mpv_eq, coeff_eq] using mpv_sum_smul_ofFn (B := blocks j) W N τ
     _ = mpv (toTensorFromBlocks (α := ι) (μ := μ)
-          (fun k : Fin r => fun τ' : ι => ∑ σ : Fin d, W τ' σ • blocks k σ)) τ := by
+          (fun k : Fin r => fun τ' : ι => ∑ σ : α, W τ' σ • blocks k σ)) τ := by
           symm
           rw [mpv_toTensorFromBlocks_eq_sum]
           simp only [smul_eq_mul]
 
 /-- A physical-index isometry preserves irreducible form II. -/
-noncomputable def isIrreducibleForm_kraus_isometry
-    {ι : Type*} [Fintype ι] (B : MPSTensor d D)
-    (W : Matrix ι (Fin d) ℂ) (hW : Wᴴ * W = 1)
+noncomputable def isIrreducibleForm_kraus_isometry [DecidableEq α]
+    {ι : Type*} [Fintype ι] (B : MPTensor α (Fin D))
+    (W : Matrix ι α ℂ) (hW : Wᴴ * W = 1)
     (hB : IsIrreducibleForm B) :
-    IsIrreducibleForm (fun τ : ι => ∑ σ : Fin d, W τ σ • B σ) := by
+    IsIrreducibleForm (fun τ : ι => ∑ σ : α, W τ σ • B σ) := by
   refine
     { r := hB.r
       dim := hB.dim
       blocks := fun k : Fin hB.r =>
-        fun τ : ι => ∑ σ : Fin d, W τ σ • hB.blocks k σ
+        fun τ : ι => ∑ σ : α, W τ σ • hB.blocks k σ
       μ := hB.μ
       period := hB.period
       periodic := ?_
@@ -196,20 +196,24 @@ noncomputable def isIrreducibleForm_kraus_isometry
     exact isPeriodic_kraus_isometry (B := hB.blocks k) W hW (hB.periodic k)
   · have hPullbackSame :
         SameMPV₂
-          (fun τ : ι => ∑ σ : Fin d, W τ σ • B σ)
-          (fun τ : ι => ∑ σ : Fin d, W τ σ •
-            toTensorFromBlocks (α := Fin d) (μ := hB.μ) hB.blocks σ) :=
+          (fun τ : ι => ∑ σ : α, W τ σ • B σ)
+          (fun τ : ι => ∑ σ : α, W τ σ •
+            toTensorFromBlocks (μ := hB.μ) hB.blocks σ) :=
         sameMPV₂_sum_smul_ofFn B
-          (toTensorFromBlocks (α := Fin d) (μ := hB.μ) hB.blocks) W hB.sameMPV
+          (toTensorFromBlocks (μ := hB.μ) hB.blocks) W hB.sameMPV
     have hBlocksSame :
         SameMPV₂
-          (fun τ : ι => ∑ σ : Fin d, W τ σ •
-            toTensorFromBlocks (α := Fin d) (μ := hB.μ) hB.blocks σ)
+          (fun τ : ι => ∑ σ : α, W τ σ •
+            toTensorFromBlocks (μ := hB.μ) hB.blocks σ)
           (toTensorFromBlocks (α := ι) (μ := hB.μ)
-            (fun k : Fin hB.r => fun τ : ι => ∑ σ : Fin d, W τ σ • hB.blocks k σ)) :=
+            (fun k : Fin hB.r => fun τ : ι => ∑ σ : α, W τ σ • hB.blocks k σ)) :=
         sameMPV₂_toTensorFromBlocks_sum_smul_ofFn hB.μ hB.blocks W
     intro N τ
     exact (hPullbackSame N τ).trans (hBlocksSame N τ)
+
+section Refinable
+
+variable {d : ℕ}
 
 /-- **The tensor \(C\) in the forward proof of Theorem 4.1.**
 
@@ -268,9 +272,11 @@ theorem pRefinementCanonicalization_pullback_of_irreducibleForm
     pRefinementCanonicalization_pullback B p hRefine
   exact ⟨A, W, isIrreducibleForm_kraus_isometry B W hW hB, hW, hTransfer, hSame⟩
 
+end Refinable
+
 /-- **Theorem 4.1, forward direction (witness-based form).**
 
-If we can produce a witness `A : MPSTensor d D` for the `p`-refinement of `B`
+If we can produce a witness `A : MPTensor α (Fin D)` for the `p`-refinement of `B`
 satisfying *both* left-canonical normalization (`∑ᵢ Aᵢᴴ · Aᵢ = 1`, so that the
 transfer map `E_A` is a CPTP channel) *and* the channel-level matching
 `E_B = E_{A^{[p]}}`, then `E_B` is `p`-divisible: concretely, it equals
@@ -283,9 +289,9 @@ The proof combines the channel-level blocking identity `E_{A^{[p]}} = (E_A)^p`
 `isPDivisibleChannel_of_isPRefinable_toTensorFromBlocks` in
 `Theorem41ForwardBlockForm`. -/
 theorem thm_4_1_p_refinement_forward_witness
-    (B : MPSTensor d D) (p : ℕ)
-    (A : MPSTensor d D)
-    (hA_norm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+    (B : MPTensor α (Fin D)) (p : ℕ)
+    (A : MPTensor α (Fin D))
+    (hA_norm : ∑ i : α, (A i)ᴴ * A i = 1)
     (hTransferEq : Kraus.transferMap B = Kraus.transferMap (Kraus.block A p)) :
     IsPDivisibleChannel (Kraus.transferMap B) p :=
   ⟨Kraus.transferMap A, Kraus.isChannel_mapLM A hA_norm, by

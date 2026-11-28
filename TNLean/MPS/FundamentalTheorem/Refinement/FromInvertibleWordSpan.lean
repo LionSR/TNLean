@@ -49,7 +49,7 @@ theorem choiRank_transferMap_le_of_isUnit_mem_root_wordSpan_pred
       Kraus.wordSpan_one_finrank_le_of_isUnit_mem_wordSpan_pred A hp hX hUnit
     _ = Channel.choiRank (Kraus.transferMap (Kraus.block A p)) := by
       -- The Choi-rank count is stated for numbered letters: number the blocks.
-      let e := (Fintype.equivFin (Fin p → Fin d)).symm
+      let e := (Fintype.equivFin (Fin p → Fin r)).symm
       rw [← Kraus.transferMap_reindexPhysical_equiv e, Channel.choiRank_mapLM_eq_finrank_wordSpan_one,
         Kraus.wordSpan_eq_of_range_eq (K := Kraus.reindexPhysical e (Kraus.block A p))
         (e.surjective.range_comp _), Kraus.wordSpan_block_one]

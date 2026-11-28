@@ -39,7 +39,7 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d : ℕ}
+variable {α : Type*} [Fintype α]
 
 /-! ## Block-scalar matrices on flattened bond coordinates -/
 
@@ -125,9 +125,9 @@ theorem blockScalarMatrix_mul_toTensorFromBlocks {α : Type*}
 /-- Multiplying a block-diagonal tensor on the right by a block-scalar matrix
 rescales the block weights in the same way. -/
 theorem toTensorFromBlocks_mul_blockScalarMatrix
-    (z μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) (i : Fin d) :
-    toTensorFromBlocks (α := Fin d) (μ := μ) A i * blockScalarMatrix dim z =
-      toTensorFromBlocks (α := Fin d) (μ := fun k => z k * μ k) A i := by
+    (z μ : Fin r → ℂ) (A : (k : Fin r) → MPTensor α (Fin (dim k))) (i : α) :
+    toTensorFromBlocks (μ := μ) A i * blockScalarMatrix dim z =
+      toTensorFromBlocks (μ := fun k => z k * μ k) A i := by
   classical
   have hmul := map_mul (Matrix.reindexAlgEquiv ℂ ℂ
       (finSigmaFinEquiv (m := r) (n := dim)))
@@ -239,11 +239,11 @@ weights. If each blockwise similarity is unitary, its global inverse is the
 conjugate transpose. -/
 theorem toTensorFromBlocks_conj_of_matched_blocks_smul
     {r r' : ℕ} {dim : Fin r → ℕ} {dim' : Fin r' → ℕ}
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
-    (μ' : Fin r' → ℂ) (B : (t : Fin r') → MPSTensor d (dim' t))
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPTensor α (Fin (dim k)))
+    (μ' : Fin r' → ℂ) (B : (t : Fin r') → MPTensor α (Fin (dim' t)))
     (e : Fin r ≃ Fin r') (hd : ∀ k, dim k = dim' (e k))
     (X : (t : Fin r') → GL (Fin (dim' t)) ℂ)
-    (hrel : ∀ (k : Fin r) (i : Fin d),
+    (hrel : ∀ (k : Fin r) (i : α),
       Matrix.reindex (finCongr (hd k)) (finCongr (hd k)) (μ k • A k i) =
         μ' (e k) • ((X (e k) : Matrix (Fin (dim' (e k))) (Fin (dim' (e k))) ℂ) *
           B (e k) i *
@@ -254,12 +254,12 @@ theorem toTensorFromBlocks_conj_of_matched_blocks_smul
       Y * Y' = 1 ∧ Y' * Y = 1 ∧
       ((∀ t, (X t : Matrix (Fin (dim' t)) (Fin (dim' t)) ℂ) ∈
         Matrix.unitaryGroup (Fin (dim' t)) ℂ) → Y' = Yᴴ) ∧
-      ∀ (c : Fin r → ℂ) (i : Fin d),
-        toTensorFromBlocks (α := Fin d) (μ := fun k => c k * μ k) A i =
-          Y * toTensorFromBlocks (α := Fin d) (μ := fun t => c (e.symm t) * μ' t) B i * Y' := by
+      ∀ (c : Fin r → ℂ) (i : α),
+        toTensorFromBlocks (μ := fun k => c k * μ k) A i =
+          Y * toTensorFromBlocks (μ := fun t => c (e.symm t) * μ' t) B i * Y' := by
   classical
   -- The conjugated `B`-family, still indexed by the `B`-side blocks.
-  set B' : (t : Fin r') → MPSTensor d (dim' t) := fun t i =>
+  set B' : (t : Fin r') → MPTensor α (Fin (dim' t)) := fun t i =>
     (X t : Matrix (Fin (dim' t)) (Fin (dim' t)) ℂ) * B t i *
       (((X t)⁻¹ : GL (Fin (dim' t)) ℂ) : Matrix (Fin (dim' t)) (Fin (dim' t)) ℂ)
     with hB'
@@ -308,9 +308,9 @@ theorem toTensorFromBlocks_conj_of_matched_blocks_smul
       simp [permMatrixOfEquiv, Matrix.conjTranspose_apply, Matrix.transpose_apply]
     rw [Matrix.conjTranspose_mul, hGadj, hEadj]
   · intro c i
-    have hconj := toTensorFromBlocks_eq_globalGaugeOfBlocks_conj (α := Fin d)
+    have hconj := toTensorFromBlocks_eq_globalGaugeOfBlocks_conj (α := α)
       (μ := fun t => c (e.symm t) * μ' t) (A := B) (B := B') X (fun t i => rfl)
-    have hblocks : ∀ (k : Fin r) (i : Fin d),
+    have hblocks : ∀ (k : Fin r) (i : α),
         (c k * μ k) • A k i =
           Matrix.reindex (finCongr (hd k)).symm (finCongr (hd k)).symm
             ((c (e.symm (e k)) * μ' (e k)) • B' (e k) i) := by
@@ -320,7 +320,7 @@ theorem toTensorFromBlocks_conj_of_matched_blocks_smul
       rw [hB', mul_smul, mul_smul, ← h]
       ext x y
       simp
-    have hreindex := toTensorFromBlocks_eq_reindex_of_equiv (α := Fin d)
+    have hreindex := toTensorFromBlocks_eq_reindex_of_equiv (α := α)
       (fun k => c k * μ k) A (fun t => c (e.symm t) * μ' t) B' e hd hblocks
     rw [hreindex i, hconj i, reindex_eq_permMatrixOfEquiv_conj]
     simp only [Matrix.mul_assoc]
@@ -333,11 +333,11 @@ unchanged: the matrix `Y = ⊕_j T_j ⊗ Y_j` of arXiv:1708.00029, line 690,
 relates the two assembled tensors. -/
 theorem toTensorFromBlocks_conj_of_matched_blocks
     {r r' : ℕ} {dim : Fin r → ℕ} {dim' : Fin r' → ℕ}
-    (μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k))
-    (μ' : Fin r' → ℂ) (B : (t : Fin r') → MPSTensor d (dim' t))
+    (μ : Fin r → ℂ) (A : (k : Fin r) → MPTensor α (Fin (dim k)))
+    (μ' : Fin r' → ℂ) (B : (t : Fin r') → MPTensor α (Fin (dim' t)))
     (e : Fin r ≃ Fin r') (hd : ∀ k, dim k = dim' (e k))
     (X : (t : Fin r') → GL (Fin (dim' t)) ℂ)
-    (hrel : ∀ (k : Fin r) (i : Fin d),
+    (hrel : ∀ (k : Fin r) (i : α),
       Matrix.reindex (finCongr (hd k)) (finCongr (hd k)) (μ k • A k i) =
         μ' (e k) • ((X (e k) : Matrix (Fin (dim' (e k))) (Fin (dim' (e k))) ℂ) *
           B (e k) i *
@@ -348,9 +348,9 @@ theorem toTensorFromBlocks_conj_of_matched_blocks
       Y * Y' = 1 ∧ Y' * Y = 1 ∧
       ((∀ t, (X t : Matrix (Fin (dim' t)) (Fin (dim' t)) ℂ) ∈
         Matrix.unitaryGroup (Fin (dim' t)) ℂ) → Y' = Yᴴ) ∧
-      ∀ i : Fin d,
-        toTensorFromBlocks (α := Fin d) (μ := μ) A i =
-          Y * toTensorFromBlocks (α := Fin d) (μ := μ') B i * Y' := by
+      ∀ i : α,
+        toTensorFromBlocks (μ := μ) A i =
+          Y * toTensorFromBlocks (μ := μ') B i * Y' := by
   obtain ⟨Y, Y', hYY', hY'Y, hunit, hconj⟩ :=
     toTensorFromBlocks_conj_of_matched_blocks_smul μ A μ' B e hd X hrel
   refine ⟨Y, Y', hYY', hY'Y, hunit, fun i => ?_⟩
@@ -362,9 +362,9 @@ section Transport
 
 /-- Reindexing the matrices of a tensor along an equality of bond dimensions is
 the transport of the tensor itself. -/
-theorem reindex_finCongr_apply_eq_cast {n m : ℕ} (h : n = m) (A : MPSTensor d n) (i : Fin d) :
+theorem reindex_finCongr_apply_eq_cast {n m : ℕ} (h : n = m) (A : MPTensor α (Fin n)) (i : α) :
     Matrix.reindex (finCongr h) (finCongr h) (A i) =
-      (cast (congr_arg (MPSTensor d) h) A) i := by
+      (cast (congr_arg (fun n ↦ MPTensor α (Fin n)) h) A) i := by
   subst h
   ext x y
   simp
@@ -372,9 +372,9 @@ theorem reindex_finCongr_apply_eq_cast {n m : ℕ} (h : n = m) (A : MPSTensor d 
 /-- A weighted conjugated block is transported along an equality of bond
 dimensions by reindexing. -/
 theorem reindex_smul_conj_eq {n m : ℕ} (h : n = m)
-    (c c' : ℂ) (A : MPSTensor d n) (A' : MPSTensor d m)
+    (c c' : ℂ) (A : MPTensor α (Fin n)) (A' : MPTensor α (Fin m))
     (Xg : GL (Fin n) ℂ) (Xg' : GL (Fin m) ℂ)
-    (hc : c = c') (hA : A ≍ A') (hX : Xg ≍ Xg') (i : Fin d) :
+    (hc : c = c') (hA : A ≍ A') (hX : Xg ≍ Xg') (i : α) :
     Matrix.reindex (finCongr h) (finCongr h)
         (c • ((Xg : Matrix (Fin n) (Fin n) ℂ) * A i *
           ((Xg⁻¹ : GL (Fin n) ℂ) : Matrix (Fin n) (Fin n) ℂ))) =
@@ -395,7 +395,7 @@ theorem reindex_trans_finCongr {n m k : ℕ} (h₁ : n = m) (h₂ : m = k)
   subst h₂
   rfl
 
-@[simp] theorem matched_block_gauge_apply {Q : SectorDecomposition (Fin d)}
+@[simp] theorem matched_block_gauge_apply {Q : SectorDecomposition α}
     (Xblock : (k : Fin Q.basisCount) → GL (Fin (Q.basisDim k)) ℂ)
     (t : Fin Q.totalCopies) :
     matched_block_gauge (Q := Q) Xblock t = Xblock (Q.flatIndexEquiv.symm t).1 := rfl
@@ -470,11 +470,11 @@ the zero vector.
 
 Source: arXiv:1708.00029, theorem `thm:bdequal`, lines 655 and 661--663. -/
 theorem sameMPV₂Pos_blockScalarMatrix_mul_toTensor
-    (P : SectorDecomposition (Fin d))
+    (P : SectorDecomposition α)
     (z : (j : Fin P.basisCount) → Fin (P.copies j) → ℂ)
     (period : Fin P.basisCount → ℕ)
     (hzm : ∀ j q, z j q ^ period j = 1)
-    (hZero : ∀ (j : Fin P.basisCount) (N : ℕ) (σ : Fin N → Fin d),
+    (hZero : ∀ (j : Fin P.basisCount) (N : ℕ) (σ : Fin N → α),
       ¬ period j ∣ N → mpv (P.basis j) σ = 0) :
     SameMPV₂Pos P.toTensor
       (fun i => blockScalarMatrix P.flatDim (P.flatCopyScalar z) * P.toTensor i) := by
@@ -482,12 +482,12 @@ theorem sameMPV₂Pos_blockScalarMatrix_mul_toTensor
   intro N _hN σ
   have hfun :
       (fun i => blockScalarMatrix P.flatDim (P.flatCopyScalar z) * P.toTensor i) =
-        toTensorFromBlocks (α := Fin d)
+        toTensorFromBlocks (α := α)
           (μ := fun s => P.flatCopyScalar z s * P.flatWeight s) P.flatBasis :=
     funext fun i =>
       blockScalarMatrix_mul_toTensorFromBlocks _ P.flatWeight P.flatBasis i
   rw [hfun]
-  change mpv (toTensorFromBlocks (α := Fin d) (μ := P.flatWeight) P.flatBasis) σ = _
+  change mpv (toTensorFromBlocks (μ := P.flatWeight) P.flatBasis) σ = _
   rw [mpv_toTensorFromBlocks_eq_sum, mpv_toTensorFromBlocks_eq_sum]
   refine Finset.sum_congr rfl fun s _ => ?_
   by_cases hdvd : period (P.flatIndexEquiv.symm s).1 ∣ N
@@ -519,14 +519,14 @@ unity is the one between the multiplicity entries of the second tensor and the
 arXiv:1708.00029, lines 667--671 and 681--688. Unitary blockwise
 similarities give a unitary global similarity, as used at lines 747--756. -/
 theorem equalCase_global_zgauge_of_blockwise
-    {P Q : SectorDecomposition (Fin d)}
+    {P Q : SectorDecomposition α}
     (perm : Fin P.basisCount ≃ Fin Q.basisCount)
     (hDim : ∀ j, P.basisDim j = Q.basisDim (perm j))
     (τ : (j : Fin P.basisCount) → Fin (P.copies j) ≃ Fin (Q.copies (perm j)))
     (ξ : Fin P.basisCount → ℂ)
     (Yb : (k : Fin Q.basisCount) → GL (Fin (Q.basisDim k)) ℂ)
-    (hConj : ∀ (j : Fin P.basisCount) (i : Fin d),
-      (cast (congr_arg (MPSTensor d) (hDim j)) (P.basis j)) i =
+    (hConj : ∀ (j : Fin P.basisCount) (i : α),
+      (cast (congr_arg (fun n ↦ MPTensor α (Fin n)) (hDim j)) (P.basis j)) i =
         ξ j • ((Yb (perm j) :
             Matrix (Fin (Q.basisDim (perm j))) (Fin (Q.basisDim (perm j))) ℂ) *
           Q.basis (perm j) i *
@@ -544,10 +544,10 @@ theorem equalCase_global_zgauge_of_blockwise
       ((∀ k, (Yb k : Matrix (Fin (Q.basisDim k)) (Fin (Q.basisDim k)) ℂ) ∈
         Matrix.unitaryGroup (Fin (Q.basisDim k)) ℂ) → Y' = Yᴴ) ∧
       blockScalarMatrix P.flatDim (P.flatCopyScalar z) ^ L = 1 ∧
-      (∀ i : Fin d,
+      (∀ i : α,
         blockScalarMatrix P.flatDim (P.flatCopyScalar z) * P.toTensor i =
           P.toTensor i * blockScalarMatrix P.flatDim (P.flatCopyScalar z)) ∧
-      (∀ i : Fin d,
+      (∀ i : α,
         blockScalarMatrix P.flatDim (P.flatCopyScalar z) * P.toTensor i =
           Y * Q.toTensor i * Y') ∧
       SameMPV₂Pos P.toTensor
@@ -561,12 +561,12 @@ theorem equalCase_global_zgauge_of_blockwise
   set Z : Matrix (Fin P.totalDim) (Fin P.totalDim) ℂ :=
     blockScalarMatrix P.flatDim zflat with hZ
   -- The gauged first tensor is the first tensor with rescaled multiplicities.
-  have hZmul : ∀ i : Fin d, Z * P.toTensor i =
-      toTensorFromBlocks (α := Fin d)
+  have hZmul : ∀ i : α, Z * P.toTensor i =
+      toTensorFromBlocks (α := α)
         (μ := fun s => zflat s * P.flatWeight s) P.flatBasis i := fun i =>
     blockScalarMatrix_mul_toTensorFromBlocks zflat P.flatWeight P.flatBasis i
-  have hZmulr : ∀ i : Fin d, P.toTensor i * Z =
-      toTensorFromBlocks (α := Fin d)
+  have hZmulr : ∀ i : α, P.toTensor i * Z =
+      toTensorFromBlocks (α := α)
         (μ := fun s => zflat s * P.flatWeight s) P.flatBasis i := fun i =>
     toTensorFromBlocks_mul_blockScalarMatrix zflat P.flatWeight P.flatBasis i
   -- The matched flattened copy indices.
@@ -575,7 +575,7 @@ theorem equalCase_global_zgauge_of_blockwise
   have hd : ∀ s, P.flatDim s = Q.flatDim (e s) := fun s =>
     (SectorDecomposition.flatDim_sectorFlatEquiv (P := Q) (Q := P) perm
       (fun j => (hDim j).symm) τ s).symm
-  have hrel : ∀ (s : Fin P.totalCopies) (i : Fin d),
+  have hrel : ∀ (s : Fin P.totalCopies) (i : α),
       Matrix.reindex (finCongr (hd s)) (finCongr (hd s))
           ((zflat s * P.flatWeight s) • P.flatBasis s i) =
         Q.flatWeight (e s) •
@@ -620,7 +620,7 @@ theorem equalCase_global_zgauge_of_blockwise
     rw [← hz j q]
     ring
   obtain ⟨Y, Y', hYY', hY'Y, hUnitary, hconj⟩ :=
-    toTensorFromBlocks_conj_of_matched_blocks (d := d)
+    toTensorFromBlocks_conj_of_matched_blocks (α := α)
       (fun s => zflat s * P.flatWeight s) P.flatBasis
       Q.flatWeight Q.flatBasis e hd (matched_block_gauge (Q := Q) Yb) hrel
   refine ⟨Y, Y', hYY', hY'Y, ?_, ?_, ?_, ?_, ?_⟩

@@ -47,15 +47,15 @@ open Filter Topology
 
 namespace MPSTensor
 
-variable {d : ℕ}
+variable {α : Type*} [Fintype α]
 
 /-- Repeated blocks have proportional matrix-product states at every length.
 
 Source: arXiv:1708.00029, definition `eq:rep`, lines 276--284. -/
 private lemma mpvState_eq_smul_of_hetRepeatedBlocks
-    {D₁ D₂ : ℕ} {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    {D₁ D₂ : ℕ} {A : MPTensor α (Fin D₁)} {B : MPTensor α (Fin D₂)}
     (hRep : HetRepeatedBlocks A B) :
-    ∃ α : ℕ → ℂ, ∀ N : ℕ, mpvState (α := Fin d) A N = α N • mpvState (α := Fin d) B N := by
+    ∃ s : ℕ → ℂ, ∀ N : ℕ, mpvState A N = s N • mpvState B N := by
   classical
   obtain ⟨ξ, _hξ, hmpv⟩ := hRep.exists_unit_phase_power_mpv
   refine ⟨fun N : ℕ => ξ ^ N, ?_⟩
@@ -72,64 +72,64 @@ Source: arXiv:1708.00029, proof of theorem `thm:bd`, lines 630--631. -/
 private lemma exists_nondecaying_overlap_of_nonzeroProportionalDecompositions
     {rA rB D₁ D₂ : ℕ} {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
     [∀ j, NeZero (dimA j)] [∀ k, NeZero (dimB k)]
-    (A : (j : Fin rA) → MPSTensor d (dimA j))
-    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (A : (j : Fin rA) → MPTensor α (Fin (dimA j)))
+    (B : (k : Fin rB) → MPTensor α (Fin (dimB k)))
     (periodA : Fin rA → ℕ) (periodB : Fin rB → ℕ)
     (hPerA : ∀ j, IsPeriodic (periodA j) (A j))
     (hPerB : ∀ k, IsPeriodic (periodB k) (B k))
     (hNonRepA : ∀ i j, i ≠ j → ¬ HetRepeatedBlocks (A i) (A j))
     (hNonRepB : ∀ i j, i ≠ j → ¬ HetRepeatedBlocks (B i) (B j))
-    (X : MPSTensor d D₁) (Y : MPSTensor d D₂)
+    (X : MPTensor α (Fin D₁)) (Y : MPTensor α (Fin D₂))
     (coeffA : ℕ → Fin rA → ℂ) (coeffB : ℕ → Fin rB → ℂ)
-    (hExpandA : ∀ {N : ℕ} (σ : Fin N → Fin d),
+    (hExpandA : ∀ {N : ℕ} (σ : Fin N → α),
       mpv X σ = ∑ j : Fin rA, coeffA N j * mpv (A j) σ)
-    (hExpandB : ∀ {N : ℕ} (σ : Fin N → Fin d),
+    (hExpandB : ∀ {N : ℕ} (σ : Fin N → α),
       mpv Y σ = ∑ k : Fin rB, coeffB N k * mpv (B k) σ)
     (hCoeffA : ∀ p : ℕ, 0 < p → ∀ j : Fin rA,
       ¬ (∀ᶠ N in atTop, coeffA (p * N) j = 0))
     (hProp : NonzeroProportionalMPV₂ X Y)
     (j₀ : Fin rA) :
     ∃ k₀ : Fin rB,
-      ¬ Tendsto (fun N ↦ mpvOverlap (α := Fin d) (A j₀) (B k₀) N) atTop (nhds 0) := by
+      ¬ Tendsto (fun N ↦ mpvOverlap (A j₀) (B k₀) N) atTop (nhds 0) := by
   classical
   by_contra hNo
   push Not at hNo
   let T : Finset (Fin rA) := Finset.univ.filter fun j : Fin rA ↦
     ∀ k : Fin rB,
-      Tendsto (fun N ↦ mpvOverlap (α := Fin d) (A j) (B k) N) atTop (nhds 0)
+      Tendsto (fun N ↦ mpvOverlap (A j) (B k) N) atTop (nhds 0)
   have hj₀T : j₀ ∈ T := by
     simp [T, hNo]
   have hTQ : ∀ (j : Fin rA), j ∈ T → ∀ k : Fin rB,
-      Tendsto (fun N ↦ mpvOverlap (α := Fin d) (A j) (B k) N) atTop (nhds 0) := by
+      Tendsto (fun N ↦ mpvOverlap (A j) (B k) N) atTop (nhds 0) := by
     intro j hj k
     simpa [T] using (Finset.mem_filter.mp hj).2 k
   have hNotT_nondecay : ∀ j : Fin rA, j ∉ T →
       ∃ k : Fin rB,
-        ¬ Tendsto (fun N ↦ mpvOverlap (α := Fin d) (A j) (B k) N) atTop (nhds 0) := by
+        ¬ Tendsto (fun N ↦ mpvOverlap (A j) (B k) N) atTop (nhds 0) := by
     intro j hjT
     have hNot : ¬ ∀ k : Fin rB,
-        Tendsto (fun N ↦ mpvOverlap (α := Fin d) (A j) (B k) N) atTop (nhds 0) := by
+        Tendsto (fun N ↦ mpvOverlap (A j) (B k) N) atTop (nhds 0) := by
       intro hAll
       exact hjT (by simp [T, hAll])
     push Not at hNot
     exact hNot
   have hScalar : ∀ c : {j : Fin rA // j ∉ T},
-      ∃ k : Fin rB, ∃ α : ℕ → ℂ, ∀ N : ℕ,
-        mpvState (α := Fin d) (A c.1) N = α N • mpvState (α := Fin d) (B k) N := by
+      ∃ k : Fin rB, ∃ s : ℕ → ℂ, ∀ N : ℕ,
+        mpvState (A c.1) N = s N • mpvState (B k) N := by
     intro c
     obtain ⟨k, hk⟩ := hNotT_nondecay c.1 c.2
     rcases periodicOverlapDichotomy (A c.1) (B k) (hPerA c.1) (hPerB k) with
       hDecay | hRep
     · exact (hk hDecay).elim
-    · obtain ⟨α, hα⟩ := mpvState_eq_smul_of_hetRepeatedBlocks hRep
-      exact ⟨k, α, hα⟩
+    · obtain ⟨s, hs⟩ := mpvState_eq_smul_of_hetRepeatedBlocks hRep
+      exact ⟨k, s, hs⟩
   choose kOf αOf hStateOf using hScalar
   let : Fintype {j : Fin rA // j ∈ T} := Subtype.fintype (fun j ↦ j ∈ T)
   let : Fintype {j : Fin rA // j ∉ T} := Subtype.fintype (fun j ↦ j ∉ T)
   let dimC : Sum {j : Fin rA // j ∈ T} (Fin rB) → ℕ :=
     Sum.elim (fun j ↦ dimA j.1) dimB
-  let C : (x : Sum {j : Fin rA // j ∈ T} (Fin rB)) → MPSTensor d (dimC x) :=
-    Sum.rec (motive := fun x ↦ MPSTensor d (dimC x))
+  let C : (x : Sum {j : Fin rA // j ∈ T} (Fin rB)) → MPTensor α (Fin (dimC x)) :=
+    Sum.rec (motive := fun x ↦ MPTensor α (Fin (dimC x)))
       (fun j ↦ A j.1) (fun k ↦ B k)
   let periodC : Sum {j : Fin rA // j ∈ T} (Fin rB) → ℕ :=
     Sum.elim (fun j ↦ periodA j.1) periodB
@@ -156,7 +156,7 @@ private lemma exists_nondecaying_overlap_of_nonzeroProportionalDecompositions
         simpa [periodC, p] using dvd_mul_of_dvd_right
           (Finset.dvd_prod_of_mem periodB (Finset.mem_univ k)) pA
   have hCrossC : ∀ x y, x ≠ y →
-      Tendsto (fun N ↦ mpvOverlap (α := Fin d) (C x) (C y) N) atTop (nhds 0) := by
+      Tendsto (fun N ↦ mpvOverlap (C x) (C y) N) atTop (nhds 0) := by
     intro x y hxy
     cases x with
     | inl i =>
@@ -197,55 +197,55 @@ private lemma exists_nondecaying_overlap_of_nonzeroProportionalDecompositions
     have hNpos : 0 < N := lt_of_lt_of_le Nat.zero_lt_one
       (le_trans (le_max_right N₀ 1) hN)
     have hLIN : LinearIndependent ℂ
-        (fun x ↦ mpvState (α := Fin d) (C x) (p * N)) := hLI N hN₀
+        (fun x ↦ mpvState (C x) (p * N)) := hLI N hN₀
     have hpNpos : 0 < p * N := Nat.mul_pos hp hNpos
     obtain ⟨c, _hc, hEq⟩ := hProp (p * N) hpNpos
     have hAstate :
-        mpvState (α := Fin d) X (p * N) =
+        mpvState X (p * N) =
           ∑ j : Fin rA, coeffA (p * N) j •
-            mpvState (α := Fin d) (A j) (p * N) := by
-      refine mpvState_eq_sum_of_decomp (α := Fin d) X A
+            mpvState (A j) (p * N) := by
+      refine mpvState_eq_sum_of_decomp X A
         (N := p * N) (coeffA (p * N)) ?_
       intro σ
       simpa [smul_eq_mul] using hExpandA σ
     have hBstate :
-        mpvState (α := Fin d) Y (p * N) =
+        mpvState Y (p * N) =
           ∑ k : Fin rB, coeffB (p * N) k •
-            mpvState (α := Fin d) (B k) (p * N) := by
-      refine mpvState_eq_sum_of_decomp (α := Fin d) Y B
+            mpvState (B k) (p * N) := by
+      refine mpvState_eq_sum_of_decomp Y B
         (N := p * N) (coeffB (p * N)) ?_
       intro σ
       simpa [smul_eq_mul] using hExpandB σ
     have hStateEq :
-        mpvState (α := Fin d) X (p * N) = c • mpvState (α := Fin d) Y (p * N) := by
+        mpvState X (p * N) = c • mpvState Y (p * N) := by
       apply PiLp.ext
       intro σ
       simpa [mpvState_apply] using hEq σ
     have hSum :
         (∑ j : Fin rA, coeffA (p * N) j •
-            mpvState (α := Fin d) (A j) (p * N)) =
+            mpvState (A j) (p * N)) =
           ∑ k : Fin rB, (c * coeffB (p * N) k) •
-            mpvState (α := Fin d) (B k) (p * N) := by
+            mpvState (B k) (p * N) := by
       calc
         (∑ j : Fin rA, coeffA (p * N) j •
-            mpvState (α := Fin d) (A j) (p * N)) =
-            mpvState (α := Fin d) X (p * N) := hAstate.symm
-        _ = c • mpvState (α := Fin d) Y (p * N) := hStateEq
+            mpvState (A j) (p * N)) =
+            mpvState X (p * N) := hAstate.symm
+        _ = c • mpvState Y (p * N) := hStateEq
         _ = c • (∑ k : Fin rB, coeffB (p * N) k •
-            mpvState (α := Fin d) (B k) (p * N)) := by rw [hBstate]
+            mpvState (B k) (p * N)) := by rw [hBstate]
         _ = ∑ k : Fin rB, (c * coeffB (p * N) k) •
-            mpvState (α := Fin d) (B k) (p * N) := by
+            mpvState (B k) (p * N) := by
           simp [Finset.smul_sum, smul_smul]
     have hLIN' : LinearIndependent ℂ
         (Sum.elim
-          (fun j : {j : Fin rA // j ∈ T} ↦ mpvState (α := Fin d) (A j.1) (p * N))
-          (fun k : Fin rB ↦ mpvState (α := Fin d) (B k) (p * N))) := by
+          (fun j : {j : Fin rA // j ∈ T} ↦ mpvState (A j.1) (p * N))
+          (fun k : Fin rB ↦ mpvState (B k) (p * N))) := by
       have hFamily :
-          (fun x ↦ mpvState (α := Fin d) (C x) (p * N)) =
+          (fun x ↦ mpvState (C x) (p * N)) =
             Sum.elim
               (fun j : {j : Fin rA // j ∈ T} ↦
-                mpvState (α := Fin d) (A j.1) (p * N))
-              (fun k : Fin rB ↦ mpvState (α := Fin d) (B k) (p * N)) := by
+                mpvState (A j.1) (p * N))
+              (fun k : Fin rB ↦ mpvState (B k) (p * N)) := by
         funext x
         cases x <;> rfl
       rw [← hFamily]
@@ -253,9 +253,9 @@ private lemma exists_nondecaying_overlap_of_nonzeroProportionalDecompositions
     exact LinearIndependent.coefficient_eq_zero_of_sum_eq_of_complement_smul
       (T := T)
       (a := coeffA (p * N))
-      (u := fun j ↦ mpvState (α := Fin d) (A j) (p * N))
+      (u := fun j ↦ mpvState (A j) (p * N))
       (b := fun k ↦ c * coeffB (p * N) k)
-      (v := fun k ↦ mpvState (α := Fin d) (B k) (p * N))
+      (v := fun k ↦ mpvState (B k) (p * N))
       (kOf := kOf)
       (α := fun i ↦ αOf i (p * N))
       (hComplement := fun i ↦ hStateOf i (p * N))
@@ -290,7 +290,7 @@ with the source. This theorem constructs the three fields of
 source theorem `thm:bd`. This restriction is recorded in
 `docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`. -/
 theorem PeriodicOverlapHypothesis.ofSectorDecompositions
-    (P Q : SectorDecomposition (Fin d))
+    (P Q : SectorDecomposition α)
     (periodP : Fin P.basisCount → ℕ)
     (periodQ : Fin Q.basisCount → ℕ)
     (hPerP : ∀ j, IsPeriodic (periodP j) (P.basis j))
@@ -303,7 +303,7 @@ theorem PeriodicOverlapHypothesis.ofSectorDecompositions
   let : ∀ j, NeZero (P.basisDim j) := fun j ↦ ⟨(hPerP j).bondDim_ne_zero⟩
   let : ∀ k, NeZero (Q.basisDim k) := fun k ↦ ⟨(hPerQ k).bondDim_ne_zero⟩
   have hExP : ∀ j₀ : Fin P.basisCount, ∃ k₀ : Fin Q.basisCount,
-      ¬ Tendsto (fun N ↦ mpvOverlap (α := Fin d) (P.basis j₀) (Q.basis k₀) N)
+      ¬ Tendsto (fun N ↦ mpvOverlap (P.basis j₀) (Q.basis k₀) N)
         atTop (nhds 0) := fun j₀ ↦
     exists_nondecaying_overlap_of_nonzeroProportionalDecompositions
       P.basis Q.basis periodP periodQ hPerP hPerQ hNonRepP hNonRepQ
@@ -312,7 +312,7 @@ theorem PeriodicOverlapHypothesis.ofSectorDecompositions
       (fun σ ↦ Q.mpv_toTensor_eq_sum_coeff σ)
       (fun p hp j ↦ P.coeff_mul_not_eventually_zero p hp j) hProp j₀
   have hExQ : ∀ k₀ : Fin Q.basisCount, ∃ j₀ : Fin P.basisCount,
-      ¬ Tendsto (fun N ↦ mpvOverlap (α := Fin d) (P.basis j₀) (Q.basis k₀) N)
+      ¬ Tendsto (fun N ↦ mpvOverlap (P.basis j₀) (Q.basis k₀) N)
         atTop (nhds 0) := by
     intro k₀
     obtain ⟨j₀, hNondecay⟩ :=
@@ -344,7 +344,7 @@ Source: arXiv:1708.00029, equations `eq:bdnr` and `eq:Bbdnr`, lines 286--305
 and 575--585; normalization by block-diagonal similarity, lines 313--332; and
 theorem `thm:bd`, lines 613--623. -/
 theorem PeriodicOverlapHypothesis.ofSpectrallyPeriodicSectorDecompositions
-    (P Q : SectorDecomposition (Fin d))
+    (P Q : SectorDecomposition α)
     (periodP : Fin P.basisCount → ℕ)
     (periodQ : Fin Q.basisCount → ℕ)
     (hPerP : ∀ j, IsSpectrallyPeriodic (periodP j) (P.basis j))
@@ -420,7 +420,7 @@ conclusion of source theorem `thm:bd`. These restrictions are recorded in
 `docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`. -/
 theorem PeriodicOverlapHypothesis.ofIsIrreducibleForm
     {D₁ D₂ : ℕ}
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
+    (A : MPTensor α (Fin D₁)) (B : MPTensor α (Fin D₂))
     (hA : IsIrreducibleForm A) (hB : IsIrreducibleForm B)
     (hNonRepA : ∀ i j : Fin hA.r, i ≠ j →
       ¬ HetRepeatedBlocks (hA.blocks i) (hA.blocks j))
@@ -438,25 +438,25 @@ theorem PeriodicOverlapHypothesis.ofIsIrreducibleForm
     intro k hzero
     simpa [hzero] using (hB.weight_pos k).1
   have hPropAssemblies : NonzeroProportionalMPV₂
-      (toTensorFromBlocks (α := Fin d) hA.μ hA.blocks)
-      (toTensorFromBlocks (α := Fin d) hB.μ hB.blocks) := by
+      (toTensorFromBlocks hA.μ hA.blocks)
+      (toTensorFromBlocks hB.μ hB.blocks) := by
     intro N hN
     obtain ⟨c, hc, hEq⟩ := hProp N hN
     refine ⟨c, hc, fun σ ↦ ?_⟩
     calc
-      mpv (toTensorFromBlocks (α := Fin d) hA.μ hA.blocks) σ = mpv A σ :=
+      mpv (toTensorFromBlocks hA.μ hA.blocks) σ = mpv A σ :=
         (hA.sameMPV N σ).symm
       _ = c * mpv B σ := hEq σ
-      _ = c * mpv (toTensorFromBlocks (α := Fin d) hB.μ hB.blocks) σ := by
+      _ = c * mpv (toTensorFromBlocks hB.μ hB.blocks) σ := by
         rw [hB.sameMPV N σ]
   have hExA : ∀ j₀ : Fin hA.r, ∃ k₀ : Fin hB.r,
-      ¬ Tendsto (fun N ↦ mpvOverlap (α := Fin d) (hA.blocks j₀) (hB.blocks k₀) N)
+      ¬ Tendsto (fun N ↦ mpvOverlap (hA.blocks j₀) (hB.blocks k₀) N)
         atTop (nhds 0) := fun j₀ ↦
     exists_nondecaying_overlap_of_nonzeroProportionalDecompositions
       hA.blocks hB.blocks hA.period hB.period hA.periodic hB.periodic
       hNonRepA hNonRepB
-      (toTensorFromBlocks (α := Fin d) hA.μ hA.blocks)
-      (toTensorFromBlocks (α := Fin d) hB.μ hB.blocks)
+      (toTensorFromBlocks hA.μ hA.blocks)
+      (toTensorFromBlocks hB.μ hB.blocks)
       (fun N j ↦ (hA.μ j) ^ N) (fun N k ↦ (hB.μ k) ^ N)
       (fun σ ↦ by
         simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum hA.μ hA.blocks σ)
@@ -468,15 +468,15 @@ theorem PeriodicOverlapHypothesis.ofIsIrreducibleForm
         exact pow_ne_zero (p * M) (hμA j) (hM M le_rfl))
       hPropAssemblies j₀
   have hExB : ∀ k₀ : Fin hB.r, ∃ j₀ : Fin hA.r,
-      ¬ Tendsto (fun N ↦ mpvOverlap (α := Fin d) (hA.blocks j₀) (hB.blocks k₀) N)
+      ¬ Tendsto (fun N ↦ mpvOverlap (hA.blocks j₀) (hB.blocks k₀) N)
         atTop (nhds 0) := by
     intro k₀
     obtain ⟨j₀, hNondecay⟩ :=
       exists_nondecaying_overlap_of_nonzeroProportionalDecompositions
         hB.blocks hA.blocks hB.period hA.period hB.periodic hA.periodic
         hNonRepB hNonRepA
-        (toTensorFromBlocks (α := Fin d) hB.μ hB.blocks)
-        (toTensorFromBlocks (α := Fin d) hA.μ hA.blocks)
+        (toTensorFromBlocks hB.μ hB.blocks)
+        (toTensorFromBlocks hA.μ hA.blocks)
         (fun N k ↦ (hB.μ k) ^ N) (fun N j ↦ (hA.μ j) ^ N)
         (fun σ ↦ by
           simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum hB.μ hB.blocks σ)
@@ -524,7 +524,7 @@ irreducibility and spectral radius one at lines 257--258. This is the working
 form; the source statement, with the periods produced, is
 `fundamentalTheorem_periodic_proportional_irreducibleForm`. -/
 theorem fundamentalTheorem_periodic_proportional_sectorDecomposition
-    (P Q : SectorDecomposition (Fin d))
+    (P Q : SectorDecomposition α)
     (periodP : Fin P.basisCount → ℕ)
     (periodQ : Fin Q.basisCount → ℕ)
     (hPerP : ∀ j, IsSpectrallyPeriodic (periodP j) (P.basis j))

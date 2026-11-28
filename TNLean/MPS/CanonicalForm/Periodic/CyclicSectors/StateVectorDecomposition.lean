@@ -379,9 +379,9 @@ theorem pgvwc07_periodic_stateVector_decomposition_of_dvd
 
 /-- **PGVWC07 Theorem 5, vanishing branch.**
 
-If the period does not divide the ring length, every explicit cyclic-projector
-component has zero coefficient, and therefore the original fixed-length state
-vector is zero.
+If the period does not divide the ring length, every cyclic-projector
+component of the trace has zero contribution, and therefore the original
+fixed-length state vector is zero.
 
 This is the trace-preserving companion of the source-facing unital theorem
 `pgvwc07_unital_stateVector_decomposition` in
@@ -389,22 +389,40 @@ This is the trace-preserving companion of the source-facing unital theorem
 convention is recorded in `docs/paper-gaps/pgvwc07_periodic_decomposition_scope.tex`.
 
 Source: PGVWC07, arXiv:quant-ph/0608197, Theorem 5, lines 849--880. -/
-theorem pgvwc07_stateVector_eq_zero_of_not_dvd
-    (A : MPSTensor d D) (hA : IsPeriodic p A)
+theorem pgvwc07_stateVector_eq_zero_of_not_dvd {α : Type*} [Fintype α]
+    (A : MPTensor α (Fin D)) (hA : IsPeriodic p A)
     {N : ℕ} (hN : ¬p ∣ N) :
-    ∀ σ : Fin N → Fin d, mpv A σ = 0 := by
+    ∀ σ : Fin N → α, mpv A σ = 0 := by
   let : NeZero p := ⟨Nat.ne_of_gt hA.period_pos⟩
   obtain ⟨Q, hQproj, hQsum, _, hshift⟩ := exists_paper_cyclic_projectors_of_isPeriodic A hA
-  have hNpos : 0 < N := by
-    by_contra h
-    have : N = 0 := Nat.eq_zero_of_not_pos h
-    exact hN (this ▸ dvd_zero p)
-  obtain ⟨n, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hNpos)
+  have hstep : (N • (1 : Fin p)) ≠ 0 := by
+    intro hzero
+    apply hN
+    have hnsmul_val : ∀ t : ℕ, ((t • (1 : Fin p)) : Fin p).val = t % p := by
+      intro t
+      induction t with
+      | zero => simp
+      | succ k ih => rw [succ_nsmul, Fin.val_add, ih]; simp
+    apply Nat.dvd_iff_mod_eq_zero.mpr
+    simpa only [hnsmul_val, Fin.val_zero] using congrArg Fin.val hzero
   intro σ
-  rw [mpv_eq_sum_projectorComponentChain_coeff Q A hQproj hQsum hshift]
-  exact Finset.sum_eq_zero fun u _ =>
-    projectorComponentChain_coeff_eq_zero_of_not_dvd
-      Q A hQproj hQsum hshift hN u σ
+  simp only [mpv, coeff]
+  rw [← one_mul (Kraus.evalWord A (List.ofFn σ)), ← hQsum, Finset.sum_mul, Matrix.trace_sum]
+  refine Finset.sum_eq_zero fun u _ => ?_
+  have hne : u + N • (1 : Fin p) ≠ u := fun h =>
+    hstep (add_left_cancel (h.trans (add_zero u).symm))
+  have ht := projector_mul_evalWord_eq_evalWord_mul_projector Q A hshift u (List.ofFn σ)
+  rw [List.length_ofFn] at ht
+  calc (Q u * Kraus.evalWord A (List.ofFn σ)).trace
+      = (Q u * (Q u * Kraus.evalWord A (List.ofFn σ))).trace := by
+        rw [← Matrix.mul_assoc, (hQproj u).2]
+    _ = (Q u * Kraus.evalWord A (List.ofFn σ) * Q (u + N • (1 : Fin p))).trace := by
+        rw [Matrix.mul_assoc (Q u), ← ht]
+    _ = (Q (u + N • (1 : Fin p)) * Q u * Kraus.evalWord A (List.ofFn σ)).trace :=
+        Matrix.trace_mul_cycle _ _ _
+    _ = 0 := by
+        rw [orthogonalProjection_mul_eq_zero_of_sum_eq_one Q hQproj hQsum hne, zero_mul,
+          Matrix.trace_zero]
 
 end IsPeriodic
 

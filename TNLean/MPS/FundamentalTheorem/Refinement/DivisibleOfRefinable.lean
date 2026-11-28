@@ -104,10 +104,11 @@ section Blocked
 
 variable {r : ℕ} {dim : Fin r → ℕ}
 
-private theorem sum_dim_eq_of_sameMPV₂Pos (μ : Fin r → ℂ) (hμ : ∀ k, μ k ≠ 0)
-    (A : (k : Fin r) → MPSTensor d (dim k))
+private theorem sum_dim_eq_of_sameMPV₂Pos {α : Type*} [Fintype α]
+    (μ : Fin r → ℂ) (hμ : ∀ k, μ k ≠ 0)
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
     (period : Fin r → ℕ) (hper : ∀ k, IsPeriodic (period k) (A k))
-    (Q : SectorDecomposition (Fin d)) (periodQ : Fin Q.basisCount → ℕ)
+    (Q : SectorDecomposition α) (periodQ : Fin Q.basisCount → ℕ)
     (hPerQ : ∀ j, IsPeriodic (periodQ j) (Q.basis j))
     (hNonRepQ : ∀ i j, i ≠ j → ¬ HetRepeatedBlocks (Q.basis i) (Q.basis j))
     (hSame : SameMPV₂Pos (toTensorFromBlocks μ A) Q.toTensor) :

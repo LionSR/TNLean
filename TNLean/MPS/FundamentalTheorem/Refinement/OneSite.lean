@@ -39,13 +39,15 @@ theorem isPRefinable_one {d D : ℕ} (B : MPSTensor d D) : IsPRefinable B 1 := b
     change mpv (Kraus.block B 1) τ =
       ∑ σ : Fin N → Fin d, (∏ k : Fin N, W (τ k) (σ k)) * mpv B σ
     have hτ : mpv (Kraus.block B 1) τ = mpv B (fun x => E.symm (τ x)) := by
-      have h1 : ∀ x, List.ofFn (τ x) = [E.symm (τ x)] := fun x => by
-        simp [E, List.ofFn_succ]
-      simp only [mpv, coeff, Kraus.evalWord_block, h1, List.flatMap_singleton', List.map_ofFn,
-        Function.comp_def]
+      have h1 : (List.ofFn : (Fin 1 → Fin d) → List (Fin d)) = fun v => [E.symm v] :=
+        funext fun v => by simp [E, List.ofFn_succ]
+      have h2 : List.flatMap (fun v => [E.symm v]) (List.ofFn τ) =
+          List.ofFn fun x => E.symm (τ x) := by
+        exact (List.flatMap_pure_eq_map E.symm _).trans List.map_ofFn
+      simp only [mpv, coeff, Kraus.evalWord_block, h1, h2]
     rw [hτ]
     rw [Finset.sum_eq_single (fun x => E.symm (τ x))]
-    · simp [W, permMatrixOfEquiv, E]
+    · simp [W, permMatrixOfEquiv, E, funext_iff, Unique.forall_iff]
     · intro σ _ hσ
       have hcoord : ∃ k : Fin N, σ k ≠ E.symm (τ k) := by
         by_contra h
