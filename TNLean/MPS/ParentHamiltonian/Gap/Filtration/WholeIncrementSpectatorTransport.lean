@@ -56,7 +56,7 @@ theorem mem_range_leftBoundaryMapES_iff_rightFiber
             (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   simp only [leftBoundaryMapES, LinearMap.coe_toContinuousLinearMap,
     LinearMap.range_comp, LinearEquiv.range, Submodule.map_top,
-    Submodule.mem_map_equiv, mem_map_groundSpace_iff]
+    Submodule.mem_map_equiv]
   rw [← SetLike.mem_coe, leftBoundaryMap_range_eq]
   rfl
 
