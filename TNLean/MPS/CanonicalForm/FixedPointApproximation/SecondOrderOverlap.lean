@@ -97,7 +97,7 @@ theorem mpvOverlap_fixedPointTensor_self {σ : Matrix (Fin D) (Fin D) ℂ} (hσ 
   rfl
 
 /-- The squared norm of the periodic state is the self-overlap: `‖φ_N(A)‖² = ⟨φ_N|φ_N⟩`. -/
-theorem ofReal_norm_mpvState_sq (A : MPSTensor d D) (N : ℕ) :
+theorem ofReal_norm_mpvState_sq {α : Type*} [Fintype α] (A : MPTensor α (Fin D)) (N : ℕ) :
     ((‖mpvState A N‖ ^ 2 : ℝ) : ℂ) = mpvOverlap A A N := by
   rw [EuclideanSpace.norm_sq_eq, mpvOverlap]
   push_cast

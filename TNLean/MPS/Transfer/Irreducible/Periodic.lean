@@ -152,13 +152,13 @@ structure.
 structure is a normalized MPV-level representation of the source irreducible
 form and imposes the additional empty-word equality. Documented in
 `docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`. -/
-structure IsIrreducibleForm (A : MPSTensor d D) where
+structure IsIrreducibleForm (A : MPTensor α (Fin D)) where
   /-- Number of blocks. -/
   r : ℕ
   /-- Bond dimensions of the blocks. -/
   dim : Fin r → ℕ
   /-- Block tensors. -/
-  blocks : (k : Fin r) → MPSTensor d (dim k)
+  blocks : (k : Fin r) → MPTensor α (Fin (dim k))
   /-- Complex weights, written as positive real scalars. -/
   μ : Fin r → ℂ
   /-- Every block is periodic with period `period k`. -/
@@ -170,7 +170,7 @@ structure IsIrreducibleForm (A : MPSTensor d D) where
   weight_pos : ∀ k, 0 < (μ k).re ∧ (μ k).im = 0
   /-- The scalar-weight direct-sum tensor generates the same MPV family,
   including at the empty word. -/
-  sameMPV : SameMPV₂ A (toTensorFromBlocks (α := Fin d) (μ := μ) blocks)
+  sameMPV : SameMPV₂ A (toTensorFromBlocks (μ := μ) blocks)
 
 /-- `ℤ_m`-gauge equivalence for periodic tensors. -/
 def ZGaugeEquiv (m : ℕ) (A B : MPSTensor d D) : Prop :=

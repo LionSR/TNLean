@@ -70,7 +70,7 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d : ℕ}
+variable {α : Type*} [Fintype α]
 
 /-! ## Repeated blocks for different bond dimensions -/
 
@@ -79,20 +79,20 @@ variable {d : ℕ}
 The witness includes equality of the two bond dimensions, avoiding explicit
 `cast` manipulation in theorems involving families of varying-dimension blocks
 (for example, `IsIrreducibleForm`). -/
-def HetRepeatedBlocks {D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂) : Prop :=
-  ∃ (h : D₁ = D₂), RepeatedBlocks (cast (congr_arg (MPSTensor d) h) A) B
+def HetRepeatedBlocks {D₁ D₂ : ℕ} (A : MPTensor α (Fin D₁)) (B : MPTensor α (Fin D₂)) : Prop :=
+  ∃ (h : D₁ = D₂), RepeatedBlocks (cast (congr_arg (fun n ↦ MPTensor α (Fin n)) h) A) B
 
-theorem HetRepeatedBlocks.dim_eq {D₁ D₂ : ℕ} {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+theorem HetRepeatedBlocks.dim_eq {D₁ D₂ : ℕ} {A : MPTensor α (Fin D₁)} {B : MPTensor α (Fin D₂)}
     (h : HetRepeatedBlocks A B) : D₁ = D₂ :=
   h.1
 
-theorem HetRepeatedBlocks.symm {D₁ D₂ : ℕ} {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+theorem HetRepeatedBlocks.symm {D₁ D₂ : ℕ} {A : MPTensor α (Fin D₁)} {B : MPTensor α (Fin D₂)}
     (h : HetRepeatedBlocks A B) : HetRepeatedBlocks B A := by
   obtain ⟨heq, hrep⟩ := h
   subst heq; exact ⟨rfl, hrep.symm⟩
 
 theorem HetRepeatedBlocks.trans {D₁ D₂ D₃ : ℕ}
-    {A : MPSTensor d D₁} {B : MPSTensor d D₂} {C : MPSTensor d D₃}
+    {A : MPTensor α (Fin D₁)} {B : MPTensor α (Fin D₂)} {C : MPTensor α (Fin D₃)}
     (h₁ : HetRepeatedBlocks A B) (h₂ : HetRepeatedBlocks B C) :
     HetRepeatedBlocks A C := by
   obtain ⟨heq₁, hrep₁⟩ := h₁
@@ -100,7 +100,7 @@ theorem HetRepeatedBlocks.trans {D₁ D₂ D₃ : ℕ}
   subst heq₁; subst heq₂
   exact ⟨rfl, hrep₁.trans hrep₂⟩
 
-theorem HetRepeatedBlocks.of_repeatedBlocks {D : ℕ} {A B : MPSTensor d D}
+theorem HetRepeatedBlocks.of_repeatedBlocks {D : ℕ} {A B : MPTensor α (Fin D)}
     (h : RepeatedBlocks A B) : HetRepeatedBlocks A B :=
   ⟨rfl, h⟩
 
@@ -110,7 +110,7 @@ also in the heterogeneous-dimension formulation.
 Source: arXiv:1708.00029, definition `def:repeated` and equation `eq:rep`,
 lines 276--284; the pure normalization similarities used here occur at
 lines 313--332. -/
-theorem _root_.MPTensor.GaugeEquiv.toHetRepeatedBlocks {D : ℕ} {A B : MPSTensor d D}
+theorem _root_.MPTensor.GaugeEquiv.toHetRepeatedBlocks {D : ℕ} {A B : MPTensor α (Fin D)}
     (h : GaugeEquiv A B) : HetRepeatedBlocks A B :=
   HetRepeatedBlocks.of_repeatedBlocks
     ((equivalentBlocks_iff_gaugeEquiv.mpr h).to_repeatedBlocks)
@@ -131,12 +131,12 @@ Source: arXiv:1708.00029, definition `def:repeated` and equation `eq:rep`,
 lines 276--284; the proportional statement compared at every length is the
 hypothesis of theorem `thm:bd`, lines 613--623. -/
 theorem HetRepeatedBlocks.exists_unit_phase_power_mpv {D₁ D₂ : ℕ}
-    {A : MPSTensor d D₁} {B : MPSTensor d D₂} (h : HetRepeatedBlocks A B) :
-    ∃ ζ : ℂ, ‖ζ‖ = 1 ∧ ∀ (N : ℕ) (σ : Fin N → Fin d), mpv A σ = ζ ^ N * mpv B σ := by
+    {A : MPTensor α (Fin D₁)} {B : MPTensor α (Fin D₂)} (h : HetRepeatedBlocks A B) :
+    ∃ ζ : ℂ, ‖ζ‖ = 1 ∧ ∀ (N : ℕ) (σ : Fin N → α), mpv A σ = ζ ^ N * mpv B σ := by
   obtain ⟨hDim, ξ, Y, hξ, hGauge⟩ := h
   refine ⟨ξ, hξ, fun N σ => ?_⟩
   rw [← mpv_cast_dim hDim A N σ]
-  exact mpv_eq_pow_mul_of_gaugePhase B (cast (congr_arg (MPSTensor d) hDim) A) Y ξ hGauge N σ
+  exact mpv_eq_pow_mul_of_gaugePhase B (cast (congr_arg (fun n ↦ MPTensor α (Fin n)) hDim) A) Y ξ hGauge N σ
 
 /-- The phase of a repeated-block relation can be absorbed into one of the two
 blocks: rescaling the first block by the reciprocal phase makes the two
@@ -152,7 +152,7 @@ matched pair of basis tensors. Distinct matched pairs may carry distinct phases,
 so no single phase is asserted for the assembled tensors of lines 286--305; see
 `docs/paper-gaps/dccsp17_periodic_overlap_route_alignment.tex`. -/
 theorem HetRepeatedBlocks.exists_phase_rescaling_sameMPV₂Pos {D₁ D₂ : ℕ}
-    {A : MPSTensor d D₁} {B : MPSTensor d D₂} (h : HetRepeatedBlocks A B) :
+    {A : MPTensor α (Fin D₁)} {B : MPTensor α (Fin D₂)} (h : HetRepeatedBlocks A B) :
     ∃ ξ : ℂ, ‖ξ‖ = 1 ∧ SameMPV₂Pos (fun i => ξ • A i) B := by
   obtain ⟨ζ, hζ, hmpv⟩ := h.exists_unit_phase_power_mpv
   have hζ0 : ζ ≠ 0 := Complex.ne_zero_of_norm_eq_one hζ
@@ -173,16 +173,16 @@ Source: arXiv:1708.00029, definition `def:repeated` and equation `eq:rep`,
 lines 276--284; the spectral invariance supports the last clause of proposition
 `equal-or-orthogonal-generalized`, lines 602--604. -/
 theorem RepeatedBlocks.peripheralEigenvalues_transferMap_eq {D : ℕ}
-    {A B : MPSTensor d D} (h : RepeatedBlocks A B) :
-    peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) A) =
-      peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) B) := by
+    {A B : MPTensor α (Fin D)} (h : RepeatedBlocks A B) :
+    peripheralEigenvalues (Kraus.transferMap (ι := α) (n := Fin D) A) =
+      peripheralEigenvalues (Kraus.transferMap (ι := α) (n := Fin D) B) := by
   obtain ⟨ξ, Y, hξ, hRel⟩ := h
   have hGauge : GaugeEquiv B (fun i =>
       (Y : Matrix (Fin D) (Fin D) ℂ) * B i *
         (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))) :=
     ⟨Y, fun _ => rfl⟩
-  have hSmul : Kraus.transferMap (ι := Fin d) (n := Fin D) A =
-      Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i =>
+  have hSmul : Kraus.transferMap (ι := α) (n := Fin D) A =
+      Kraus.transferMap (ι := α) (n := Fin D) (fun i =>
         (Y : Matrix (Fin D) (Fin D) ℂ) * B i *
           (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))) := by
     have hAeq : A = fun i => ξ • ((Y : Matrix (Fin D) (Fin D) ℂ) * B i *
@@ -199,7 +199,7 @@ This is the last clause of arXiv:1708.00029, proposition
 `equal-or-orthogonal-generalized`, lines 602--604: the repeated-block relation
 can only hold between blocks of equal period. -/
 theorem IsSpectrallyPeriodic.period_eq_of_hetRepeatedBlocks
-    {D₁ D₂ m n : ℕ} {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    {D₁ D₂ m n : ℕ} {A : MPTensor α (Fin D₁)} {B : MPTensor α (Fin D₂)}
     (hA : IsSpectrallyPeriodic m A) (hB : IsSpectrallyPeriodic n B)
     (h : HetRepeatedBlocks A B) : m = n := by
   obtain ⟨hDim, hRep⟩ := h
@@ -215,8 +215,8 @@ theorem IsSpectrallyPeriodic.period_eq_of_hetRepeatedBlocks
 abbrev PeriodicBlockMatchingWitness
     {rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    (A : (j : Fin rA) → MPSTensor d (dimA j))
-    (B : (k : Fin rB) → MPSTensor d (dimB k)) : Prop :=
+    (A : (j : Fin rA) → MPTensor α (Fin (dimA j)))
+    (B : (k : Fin rB) → MPTensor α (Fin (dimB k))) : Prop :=
   ∃ _h : rA = rB,
     ∃ perm : Fin rA ≃ Fin rB,
       ∀ j : Fin rA, HetRepeatedBlocks (A j) (B (perm j))
@@ -232,8 +232,8 @@ in arXiv:1708.00029, theorem `thm:bd`, lines 616--620 ("there is exactly one
 abbrev PeriodicBasisMatchingWitness
     {rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    (A : (j : Fin rA) → MPSTensor d (dimA j))
-    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (A : (j : Fin rA) → MPTensor α (Fin (dimA j)))
+    (B : (k : Fin rB) → MPTensor α (Fin (dimB k)))
     (periodA : Fin rA → ℕ) (periodB : Fin rB → ℕ) : Prop :=
   ∃ _h : rA = rB,
     ∃ perm : Fin rA ≃ Fin rB,
@@ -256,17 +256,17 @@ hypothesis — no separate cross-overlap decay field is needed. -/
 structure PeriodicOverlapHypothesis
     {rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    (A : (j : Fin rA) → MPSTensor d (dimA j))
-    (B : (k : Fin rB) → MPSTensor d (dimB k)) where
+    (A : (j : Fin rA) → MPTensor α (Fin (dimA j)))
+    (B : (k : Fin rB) → MPTensor α (Fin (dimB k))) where
   /-- For each A-block, ∃ B-block with non-decaying overlap. -/
   exists_nondecaying_A : ∀ j₀ : Fin rA, ∃ k₀ : Fin rB,
-    ¬ Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A j₀) (B k₀) N) Filter.atTop (nhds 0)
+    ¬ Filter.Tendsto (fun N => mpvOverlap (α := α) (A j₀) (B k₀) N) Filter.atTop (nhds 0)
   /-- For each B-block, ∃ A-block with non-decaying overlap. -/
   exists_nondecaying_B : ∀ k₀ : Fin rB, ∃ j₀ : Fin rA,
-    ¬ Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A j₀) (B k₀) N) Filter.atTop (nhds 0)
+    ¬ Filter.Tendsto (fun N => mpvOverlap (α := α) (A j₀) (B k₀) N) Filter.atTop (nhds 0)
   /-- Non-decaying cross-family overlap forces `HetRepeatedBlocks`. -/
   hetRepeatedBlocks_of_nondecaying : ∀ j k,
-    ¬ Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A j) (B k) N) Filter.atTop (nhds 0) →
+    ¬ Filter.Tendsto (fun N => mpvOverlap (α := α) (A j) (B k) N) Filter.atTop (nhds 0) →
     HetRepeatedBlocks (A j) (B k)
 
 /-- Pure bond-space similarities transport a periodic overlap hypothesis back to the
@@ -282,8 +282,8 @@ and proposition `equal-or-orthogonal-generalized`, lines 589--609. -/
 theorem PeriodicOverlapHypothesis.of_gaugeEquiv
     {rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    {A A' : (j : Fin rA) → MPSTensor d (dimA j)}
-    {B B' : (k : Fin rB) → MPSTensor d (dimB k)}
+    {A A' : (j : Fin rA) → MPTensor α (Fin (dimA j))}
+    {B B' : (k : Fin rB) → MPTensor α (Fin (dimB k))}
     (hGaugeA : ∀ j, GaugeEquiv (A j) (A' j))
     (hGaugeB : ∀ k, GaugeEquiv (B k) (B' k))
     (hOverlap : PeriodicOverlapHypothesis A' B') :
@@ -294,7 +294,7 @@ theorem PeriodicOverlapHypothesis.of_gaugeEquiv
   have hRepB : ∀ k, HetRepeatedBlocks (B k) (B' k) := fun k =>
     (hGaugeB k).toHetRepeatedBlocks
   have hOverlapEq : ∀ j k N,
-      mpvOverlap (α := Fin d) (A j) (B k) N = mpvOverlap (α := Fin d) (A' j) (B' k) N := by
+      mpvOverlap (α := α) (A j) (B k) N = mpvOverlap (α := α) (A' j) (B' k) N := by
     intro j k N
     apply Finset.sum_congr rfl
     intro σ _
@@ -317,7 +317,7 @@ theorem PeriodicOverlapHypothesis.of_gaugeEquiv
     exact hDecay.congr' (Filter.Eventually.of_forall fun N ↦ hOverlapEq j k N)
   · intro j k hNondecay
     have hNondecay' : ¬ Filter.Tendsto
-        (fun N ↦ mpvOverlap (α := Fin d) (A' j) (B' k) N) Filter.atTop (nhds 0) := by
+        (fun N ↦ mpvOverlap (α := α) (A' j) (B' k) N) Filter.atTop (nhds 0) := by
       intro hDecay
       apply hNondecay
       exact hDecay.congr'
@@ -344,16 +344,16 @@ split. -/
 theorem PeriodicOverlapHypothesis.ofIsPeriodic
     {rA rB : ℕ}
     {dimA : Fin rA → ℕ} {dimB : Fin rB → ℕ}
-    (A : (j : Fin rA) → MPSTensor d (dimA j))
-    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (A : (j : Fin rA) → MPTensor α (Fin (dimA j)))
+    (B : (k : Fin rB) → MPTensor α (Fin (dimB k)))
     (periodA : Fin rA → ℕ) (periodB : Fin rB → ℕ)
     (hPerA : ∀ j, IsPeriodic (periodA j) (A j))
     (hPerB : ∀ k, IsPeriodic (periodB k) (B k))
     (hExA : ∀ j₀ : Fin rA, ∃ k₀ : Fin rB,
-      ¬ Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A j₀) (B k₀) N)
+      ¬ Filter.Tendsto (fun N => mpvOverlap (α := α) (A j₀) (B k₀) N)
         Filter.atTop (nhds 0))
     (hExB : ∀ k₀ : Fin rB, ∃ j₀ : Fin rA,
-      ¬ Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A j₀) (B k₀) N)
+      ¬ Filter.Tendsto (fun N => mpvOverlap (α := α) (A j₀) (B k₀) N)
         Filter.atTop (nhds 0)) :
     PeriodicOverlapHypothesis A B where
   exists_nondecaying_A := hExA
@@ -388,13 +388,13 @@ dichotomy from Appendix A, lines 1023--1117. The positive-length formulation is 
 -/
 theorem peripheralProportionalCase_periodicFT_of_sameMPV₂Pos
     {D₁ D₂ : ℕ}
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂) {m_a m_b : ℕ}
+    (A : MPTensor α (Fin D₁)) (B : MPTensor α (Fin D₂)) {m_a m_b : ℕ}
     (hA : IsPeriodic m_a A) (hB : IsPeriodic m_b B)
     (hSame : SameMPV₂Pos A B) :
     HetRepeatedBlocks A B := by
   rcases periodicOverlapDichotomy A B hA hB with hDecay | ⟨hdim, hRep⟩
   · have hSameOverlap : ∀ᶠ N : ℕ in Filter.atTop,
-        mpvOverlap (α := Fin d) A B N = mpvOverlap A A N := by
+        mpvOverlap (α := α) A B N = mpvOverlap A A N := by
       filter_upwards [Filter.eventually_gt_atTop 0] with N hN
       unfold mpvOverlap
       refine Finset.sum_congr rfl ?_
@@ -455,19 +455,19 @@ The `PeriodicOverlapHypothesis` parameter can be supplied via
 `PeriodicOverlapHypothesis.ofIsPeriodic`, which uses the proved
 `periodicOverlapDichotomy` to fill the `hetRepeatedBlocks_of_nondecaying` field. -/
 theorem fundamentalTheorem_periodic_proportional
-    (A : (j : Fin rA) → MPSTensor d (dimA j))
-    (B : (k : Fin rB) → MPSTensor d (dimB k))
+    (A : (j : Fin rA) → MPTensor α (Fin (dimA j)))
+    (B : (k : Fin rB) → MPTensor α (Fin (dimB k)))
     (hNonRepA : ∀ j₁ j₂ : Fin rA, j₁ ≠ j₂ →
       ¬ HetRepeatedBlocks (A j₁) (A j₂))
     (hNonRepB : ∀ k₁ k₂ : Fin rB, k₁ ≠ k₂ →
       ¬ HetRepeatedBlocks (B k₁) (B k₂))
     (hOverlap : PeriodicOverlapHypothesis A B) :
-    PeriodicBlockMatchingWitness (d := d) A B := by
+    PeriodicBlockMatchingWitness (α := α) A B := by
   classical
   -- Step 1: Matching function from A-blocks to B-blocks.
   let fA : Fin rA → Fin rB := fun j => (hOverlap.exists_nondecaying_A j).choose
   have hfA_nd : ∀ j,
-      ¬ Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A j) (B (fA j)) N)
+      ¬ Filter.Tendsto (fun N => mpvOverlap (α := α) (A j) (B (fA j)) N)
         Filter.atTop (nhds 0) :=
     fun j => (hOverlap.exists_nondecaying_A j).choose_spec
   -- Step 2: HetRepeatedBlocks from overlap dichotomy.
@@ -487,7 +487,7 @@ theorem fundamentalTheorem_periodic_proportional
   -- Step 4: Matching function from B-blocks to A-blocks, also injective.
   let gB : Fin rB → Fin rA := fun k => (hOverlap.exists_nondecaying_B k).choose
   have hgB_nd : ∀ k,
-      ¬ Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (A (gB k)) (B k) N)
+      ¬ Filter.Tendsto (fun N => mpvOverlap (α := α) (A (gB k)) (B k) N)
         Filter.atTop (nhds 0) :=
     fun k => (hOverlap.exists_nondecaying_B k).choose_spec
   have hgB_rep : ∀ k, HetRepeatedBlocks (A (gB k)) (B k) :=

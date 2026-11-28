@@ -248,8 +248,8 @@ orientation used by PGVWC07, Theorem 5:
 
 The projectors act on the original \(D\)-dimensional virtual space; no
 bond-dimension compression occurs. -/
-theorem exists_paper_cyclic_projectors_of_isPeriodic
-    (A : MPSTensor d D) (hA : IsPeriodic p A) :
+theorem exists_paper_cyclic_projectors_of_isPeriodic {α : Type*} [Fintype α]
+    (A : MPTensor α (Fin D)) (hA : IsPeriodic p A) :
     let _ : NeZero p := ⟨Nat.ne_of_gt hA.period_pos⟩
     ∃ Q : Fin p → MatrixAlg D,
       (∀ k, IsOrthogonalProjection (Q k)) ∧
@@ -263,7 +263,7 @@ theorem exists_paper_cyclic_projectors_of_isPeriodic
     _hV_iso, _hV_range, _hEmbed⟩ :=
     exists_cyclic_sector_decomp_with_letter_and_isometry_after_blocking_of_isPeriodic A hA
   have hCyclic' :
-      ∀ k, Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) (P (k + 1)) = P k := by
+      ∀ k, Kraus.transferMap (fun i => (A i)ᴴ) (P (k + 1)) = P k := by
     intro k
     simpa [cyclicNextOfPos, Fin.add_def] using hCyclic k
   let Q : Fin p → MatrixAlg D := fun k => P (-k)

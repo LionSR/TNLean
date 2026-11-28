@@ -33,7 +33,7 @@ variable {d D : ℕ}
 of evaluations of the original tensor.
 
 If `C τ = ∑_σ W(τ, σ) • B σ` is the isometric mixing of an MPS tensor
-`B : MPSTensor d D` by `W : Matrix (ι) (Fin d) ℂ`, then for every `N` and
+`B : MPSTensor d D` by `W : Matrix ι (Fin d) ℂ`, then for every `N` and
 every `τ : Fin N → ι`,
 `Kraus.evalWord C (List.ofFn τ) = ∑_σ (∏_k W (τ k) (σ k)) • Kraus.evalWord B (List.ofFn σ)`.
 
@@ -42,7 +42,7 @@ in the forward direction it rewrites a refinement witness as `SameMPV` for the
 tensor \(C\), and in the reverse direction it expands the blocked witness
 produced by Wolf Theorem 2.1(4). -/
 theorem evalWord_sum_smul_ofFn
-    {ι : Type*} [Fintype ι] (B : MPSTensor d D) (W : Matrix (ι) (Fin d) ℂ) :
+    {ι : Type*} [Fintype ι] (B : MPSTensor d D) (W : Matrix ι (Fin d) ℂ) :
     ∀ (N : ℕ) (τ : Fin N → ι),
       Kraus.evalWord (fun τ' : ι => ∑ σ' : Fin d, W τ' σ' • B σ') (List.ofFn τ) =
         ∑ σ : Fin N → Fin d,
@@ -55,7 +55,7 @@ theorem evalWord_sum_smul_ofFn
   rw [List.prod_ofFn_smul, evalWord_ofFn_eq_prod]
 
 private theorem mpv_sum_smul_ofFn
-    {ι : Type*} [Fintype ι] (B : MPSTensor d D) (W : Matrix (ι) (Fin d) ℂ)
+    {ι : Type*} [Fintype ι] (B : MPSTensor d D) (W : Matrix ι (Fin d) ℂ)
     (N : ℕ) (τ : Fin N → ι) :
     mpv (fun τ' : ι => ∑ σ' : Fin d, W τ' σ' • B σ') τ =
       ∑ σ : Fin N → Fin d,
@@ -65,7 +65,7 @@ private theorem mpv_sum_smul_ofFn
 /-- Physical-index mixing by a fixed matrix preserves `SameMPV₂`. -/
 theorem sameMPV₂_sum_smul_ofFn
     {ι : Type*} [Fintype ι] {D₁ D₂ : ℕ} (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (W : Matrix (ι) (Fin d) ℂ)
+    (W : Matrix ι (Fin d) ℂ)
     (hAB : SameMPV₂ A B) :
     SameMPV₂
       (fun τ : ι => ∑ σ : Fin d, W τ σ • A σ)
@@ -91,10 +91,10 @@ theorem sameMPV₂_sum_smul_ofFn
 /-- A physical-index isometry preserves periodicity and its period. -/
 theorem isPeriodic_kraus_isometry
     {ι : Type*} [Fintype ι] {p : ℕ} (B : MPSTensor d D)
-    (W : Matrix (ι) (Fin d) ℂ) (hW : Wᴴ * W = 1)
+    (W : Matrix ι (Fin d) ℂ) (hW : Wᴴ * W = 1)
     (hB : IsPeriodic p B) :
     IsPeriodic p (fun τ : ι => ∑ σ : Fin d, W τ σ • B σ) := by
-  let C : MPSTensor m D := fun τ => ∑ σ : Fin d, W τ σ • B σ
+  let C : MPTensor ι (Fin D) := fun τ => ∑ σ : Fin d, W τ σ • B σ
   have hEq : Kraus.transferMap C = Kraus.transferMap B := by
     simpa [C] using transferMap_kraus_isometry B W hW
   have hIrrMapB : IsIrreducibleMap (Kraus.transferMap B) :=
@@ -110,7 +110,7 @@ private theorem sameMPV₂_toTensorFromBlocks_sum_smul_ofFn
     {ι : Type*} [Fintype ι] {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (W : Matrix (ι) (Fin d) ℂ) :
+    (W : Matrix ι (Fin d) ℂ) :
     SameMPV₂
       (fun τ : ι => ∑ σ : Fin d, W τ σ •
         toTensorFromBlocks (α := Fin d) (μ := μ) blocks σ)
@@ -179,7 +179,7 @@ private theorem sameMPV₂_toTensorFromBlocks_sum_smul_ofFn
 /-- A physical-index isometry preserves irreducible form II. -/
 noncomputable def isIrreducibleForm_kraus_isometry
     {ι : Type*} [Fintype ι] (B : MPSTensor d D)
-    (W : Matrix (ι) (Fin d) ℂ) (hW : Wᴴ * W = 1)
+    (W : Matrix ι (Fin d) ℂ) (hW : Wᴴ * W = 1)
     (hB : IsIrreducibleForm B) :
     IsIrreducibleForm (fun τ : ι => ∑ σ : Fin d, W τ σ • B σ) := by
   refine

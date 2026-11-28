@@ -294,7 +294,11 @@ theorem _root_.TNLean.MPS.FundamentalTheorem.choiRank_le_pow_fin_two
     _ ≤ Module.finrank ℂ (Kraus.wordSpan A p) :=
       Kraus.wordSpan_one_finrank_le_of_isUnit_mem_wordSpan_one A hp hX hUnit
     _ = choiRank (Kraus.transferMap (Kraus.block A p)) := by
-      rw [choiRank_mapLM_eq_finrank_wordSpan_one, Kraus.wordSpan_block_one]
+      -- The Choi-rank count is stated for numbered letters: number the blocks.
+      let e := (Fintype.equivFin (Fin p → Fin r)).symm
+      rw [← Kraus.transferMap_reindexPhysical_equiv e, choiRank_mapLM_eq_finrank_wordSpan_one,
+        Kraus.wordSpan_eq_of_range_eq (K := Kraus.reindexPhysical e (Kraus.block A p))
+        (e.surjective.range_comp _), Kraus.wordSpan_block_one]
     _ = choiRank (F ^ p) := by rw [Kraus.transferMap_block, hA]
 
 end Channel

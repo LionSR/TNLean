@@ -9,6 +9,7 @@ import QICLean.Channel.Peripheral.Projection.JordanBlocks
 import QICLean.Channel.Peripheral.Spectrum.SpectralRadius
 import TNLean.MPS.Tensor.Defs
 import QICLean.Kraus.Transfer
+import QICLean.Kraus.BlockingTransfer
 
 /-!
 # Peripheral spectrum of a one-block unital canonical tensor
@@ -55,11 +56,13 @@ theorem isIrreducible_transferMap_of_unital_canonical
     IsIrreducibleMap (Kraus.transferMap A) := by
   have hOne : Kraus.transferMap A 1 = 1 := by
     simpa only [Kraus.transferMap_apply, Matrix.mul_one] using hU
+  -- The Kraus witness of the spectral criterion is numbered by `Fintype.equivFin`.
+  let e : Fin (Fintype.card α) ≃ α := (Fintype.equivFin α).symm
   apply isIrreducibleMap_of_hasSpectralProperties
   refine ⟨{
-    n := d
-    K := A
-    map_eq := rfl
+    n := Fintype.card α
+    K := Kraus.reindexPhysical e A
+    map_eq := (Kraus.transferMap_reindexPhysical_equiv e A).symm
     ρ := 1
     σ := Λ
     r := 1
@@ -71,7 +74,11 @@ theorem isIrreducible_transferMap_of_unital_canonical
     unique_psd_eigenvector := ?_
     spectralRadius_eq := ?_ }⟩
   · simpa only [Complex.ofReal_one, one_smul] using hOne
-  · simpa only [Complex.ofReal_one, one_smul] using hΛfix
+  · have h : Kraus.transferMap (Kraus.reindexPhysical e fun i => (A i)ᴴ) Λ = Λ := by
+      rw [Kraus.transferMap_reindexPhysical_equiv]
+      exact hΛfix
+    rw [Complex.ofReal_one, one_smul]
+    exact h
   · intro X _ hX
     exact hUnique X (by simpa only [Complex.ofReal_one, one_smul] using hX)
   · simpa only [spectralRadius_eq_of_unital, AlgEquiv.spectrum_eq,

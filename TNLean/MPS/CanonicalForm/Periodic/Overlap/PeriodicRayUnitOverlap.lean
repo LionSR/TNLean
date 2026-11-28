@@ -30,6 +30,8 @@ open Filter
 
 namespace MPSTensor
 
+variable {α : Type*} [Fintype α]
+
 /-- Equal periodic spans give equality in the overlap norm bound, including
 when both vectors vanish. Source context: arXiv:1010.3732, Appendix C,
 lines 2653–2717, comparison of the limiting periodic lines. -/
