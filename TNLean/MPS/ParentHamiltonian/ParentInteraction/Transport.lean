@@ -64,7 +64,7 @@ Hilbert-space model `EuclideanSpace`. -/
 noncomputable def cyclicRestrictES {N : ℕ} (hN : 0 < N) (L : ℕ) (i : Fin N)
     (τ : Fin N → Fin d) :
     EuclideanSpace ℂ (Cfg d N) →ₗ[ℂ] EuclideanSpace ℂ (Cfg d L) :=
-  LinearMap.withLpMap 2 (cyclicRestrictₗ (d := d) hN L i τ)
+  LinearMap.withLpMap 2 (cyclicRestrictₗ (α := Fin d) hN L i τ)
 
 /-! ### Disjoint cyclic windows and the ground space of the parent Hamiltonian -/
 
@@ -282,7 +282,7 @@ theorem restrictLast_eq_cyclicRestrictES_zero {L : ℕ}
           τ v) := by
   ext σ
   change v.ofLp (Fin.snoc σ (τ (Fin.last L))) = v.ofLp
-    (cyclicCfg (d := d) (Fin.pos (0 : Fin (L + 1))) L (0 : Fin (L + 1)) σ τ)
+    (cyclicCfg (α := Fin d) (Fin.pos (0 : Fin (L + 1))) L (0 : Fin (L + 1)) σ τ)
   apply congrArg v.ofLp
   funext k
   rcases Fin.eq_castSucc_or_eq_last k with ⟨r, rfl⟩ | rfl
@@ -304,7 +304,7 @@ theorem restrictFirst_eq_cyclicRestrictES_one {L : ℕ} (hL : 0 < L)
           τ v) := by
   ext σ
   change v.ofLp (Fin.cons (τ 0) σ) = v.ofLp
-    (cyclicCfg (d := d) (Fin.pos (1 : Fin (L + 1))) L (1 : Fin (L + 1)) σ τ)
+    (cyclicCfg (α := Fin d) (Fin.pos (1 : Fin (L + 1))) L (1 : Fin (L + 1)) σ τ)
   apply congrArg v.ofLp
   funext k
   have hOneNat : 1 % (L + 1) = 1 := Nat.mod_eq_of_lt (Nat.succ_lt_succ hL)
@@ -464,12 +464,12 @@ private theorem cyclicRestrictES_toEuclideanLin_parentRingInteraction_term (A : 
   ext ω
   rw [cyclicRestrictES_apply,
     toEuclideanLin_parentRingInteraction_term_apply A hLN i v (cyclicCfg (Fin.pos i) L i ω τ)]
-  have hsame : SameOutsideWindow (L := L) i (cyclicCfg (d := d) (Fin.pos i) L i ω τ) τ :=
+  have hsame : SameOutsideWindow (L := L) i (cyclicCfg (α := Fin d) (Fin.pos i) L i ω τ) τ :=
     sameOutsideWindow_of_cyclicCfg_eq (d := d) (Fin.pos i) i rfl
   have hrestrict : cyclicRestrictES (d := d) (Fin.pos i) L i τ =
-      cyclicRestrictES (Fin.pos i) L i (cyclicCfg (d := d) (Fin.pos i) L i ω τ) :=
+      cyclicRestrictES (Fin.pos i) L i (cyclicCfg (α := Fin d) (Fin.pos i) L i ω τ) :=
     cyclicRestrictES_eq_of_sameOutsideWindow (d := d) (Fin.pos i) i hsame
-  have hextract : extractWindow L i (cyclicCfg (d := d) (Fin.pos i) L i ω τ) = ω := by
+  have hextract : extractWindow L i (cyclicCfg (α := Fin d) (Fin.pos i) L i ω τ) = ω := by
     rw [cyclicCfg_eq_replaceWindow (d := d) (Fin.pos i) L hLN]
     exact extractWindow_replaceWindow L hLN i τ ω
   rw [← hrestrict, hextract]

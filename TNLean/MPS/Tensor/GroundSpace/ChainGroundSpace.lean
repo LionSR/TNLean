@@ -70,10 +70,10 @@ explicitly. -/
 that every cyclic window of \(L\) consecutive sites restricts into \(G_L(A)\).
 
 When \(N = 0\) or \(L > N\), we return \(\top\) as a degenerate convention. -/
-noncomputable def chainGroundSpace (A : MPSTensor d D) (L N : ℕ) :
-    Submodule ℂ (NSiteSpace (Fin d) N) :=
+noncomputable def chainGroundSpace {α : Type*} (A : MPTensor α (Fin D)) (L N : ℕ) :
+    Submodule ℂ (NSiteSpace α N) :=
   if hN : 0 < N ∧ L ≤ N then
-    ⨅ (i : Fin N) (τ : Fin N → Fin d),
+    ⨅ (i : Fin N) (τ : Fin N → α),
       (groundSpace A L).comap (cyclicRestrictₗ hN.1 L i τ)
   else ⊤
 
@@ -82,8 +82,8 @@ noncomputable def chainGroundSpace (A : MPSTensor d D) (L N : ℕ) :
 This is a derived congruence for the local-space construction used in
 arXiv:1606.00608, Definition 3.9, lines 511--525; it is not separately stated
 in the paper. -/
-theorem chainGroundSpace_eq_of_groundSpace_eq
-    {D₁ D₂ L N : ℕ} {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+theorem chainGroundSpace_eq_of_groundSpace_eq {α : Type*}
+    {D₁ D₂ L N : ℕ} {A : MPTensor α (Fin D₁)} {B : MPTensor α (Fin D₂)}
     (hG : groundSpace A L = groundSpace B L) :
     chainGroundSpace A L N = chainGroundSpace B L N := by
   rw [chainGroundSpace, chainGroundSpace]

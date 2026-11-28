@@ -61,7 +61,7 @@ theorem exists_hasComplementaryFixedPointGap_family_of_isNormal
       (∀ i L, groundSpace (A i) L = groundSpace (B i) L) ∧
       (∀ i j, i ≠ j → ∀ h : D j = D i, ¬ GaugePhaseEquiv (h ▸ B j) (B i)) := by
   classical
-  choose B ζ ρ hζ hGauge _hmpv hP hρ hGS _hPI using
+  choose B ζ ρ hζ hGauge _hmpv hP hρ hGS _hPI _hCGS using
     fun i ↦ exists_hasComplementaryFixedPointGap_gauge_of_isNormal (hNormal i)
   refine ⟨B, ρ, hP, hρ, hGS, fun i j hij h hGP ↦ ?_⟩
   exact hDistinct i j hij h (by
@@ -164,7 +164,7 @@ theorem exists_hasComplementaryFixedPointGap_family_hamiltonian_eq_of_common_isN
           (parentRingInteraction (toTensorFromBlocks (α := Fin d)
             (μ := μ) B) L N).hamiltonian) := by
   classical
-  choose B ζ ρ hζ hGauge _hmpv hP hρ hGS _hPI using
+  choose B ζ ρ hζ hGauge _hmpv hP hρ hGS _hPI _hCGS using
     fun j ↦ exists_hasComplementaryFixedPointGap_gauge_of_isNormal ⟨L₀, hL₀, hBlk j⟩
   refine ⟨B, ρ, hP, hρ, fun j ↦ ?_, ?_, ?_⟩
   · exact isNBlkInjective_of_gaugeEquiv

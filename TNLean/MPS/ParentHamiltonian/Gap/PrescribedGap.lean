@@ -177,7 +177,7 @@ theorem eventually_hamiltonian_parentRingInteraction_gap_ge_one_sub_of_isNormal
       ∀ z : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin (parentRingInteraction A (l + 1) N).hamiltonian) z →
           z = 0 ∨ (((1 - η) : ℝ) : ℂ) ≤ z := by
-  obtain ⟨B, _, ρ, _, _, _, hP, hρ, hGS, _⟩ :=
+  obtain ⟨B, _, ρ, _, _, _, hP, hρ, hGS, _, _⟩ :=
     exists_hasComplementaryFixedPointGap_gauge_of_isNormal hA
   filter_upwards [hP.eventually_parentRingInteraction_gap_ge_one_sub hρ hη hηone]
     with l hl

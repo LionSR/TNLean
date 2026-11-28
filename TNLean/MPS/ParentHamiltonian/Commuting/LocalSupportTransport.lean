@@ -304,9 +304,9 @@ private theorem re_inner_eq_sum_cyclicRestrict_three {N : ℕ} (hN : 3 ≤ N)
     [NeZero d] (i : Fin N) (u v : EuclideanSpace ℂ (Cfg d N)) :
     (⟪u, v⟫_ℂ).re =
       ∑ τ : Cfg d (N - 3),
-        (⟪LinearMap.withLpMap 2 (cyclicRestrictₗ (d := d) (by omega) 3 i
+        (⟪LinearMap.withLpMap 2 (cyclicRestrictₗ (α := Fin d) (by omega) 3 i
               (cyclicWindowCfgEquiv hN i ((fun _ ↦ 0), τ))) u,
-            LinearMap.withLpMap 2 (cyclicRestrictₗ (d := d) (by omega) 3 i
+            LinearMap.withLpMap 2 (cyclicRestrictₗ (α := Fin d) (by omega) 3 i
               (cyclicWindowCfgEquiv hN i ((fun _ ↦ 0), τ))) v⟫_ℂ).re := by
   rw [PiLp.inner_apply]
   trans (∑ p : Cfg d 3 × Cfg d (N - 3),

@@ -46,7 +46,7 @@ theorem exists_hamiltonian_parentChainInteraction_uniform_gap_of_isNBlkInjective
       ∀ N : ℕ, W ≤ N → ∀ μ : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin (parentChainInteraction A (p + 1) N).hamiltonian) μ →
           μ = 0 ∨ (δ : ℂ) ≤ μ := by
-  obtain ⟨B, ζ, ρ, _hζ, _hGauge, _hMPV, hP, hρ, hGS, _hPI⟩ :=
+  obtain ⟨B, ζ, ρ, _hζ, _hGauge, _hMPV, hP, hρ, hGS, _hPI, _hChain⟩ :=
     exists_hasComplementaryFixedPointGap_gauge_of_isNormal ⟨p, hp, hA⟩
   obtain ⟨l, hlp, hl, hInjB, ε, hε, hsmall, hDefect⟩ :=
     ((Filter.eventually_ge_atTop p).and

@@ -396,8 +396,8 @@ private def cyclicWindowCounterclockwiseNeighbours (N L : ℕ) (i : Fin N) : Fin
 Site \(k\) gets the window value \(\sigma(\mathrm{offset})\), where
 \(\mathrm{offset} = (k - i + N) \bmod N\), if \(\mathrm{offset} < L\);
 otherwise it gets \(\tau(k)\). -/
-def cyclicCfg {N : ℕ} (_hN : 0 < N) (L : ℕ)
-    (i : Fin N) (σ : Fin L → Fin d) (τ : Fin N → Fin d) : Fin N → Fin d :=
+def cyclicCfg {α : Type*} {N : ℕ} (_hN : 0 < N) (L : ℕ)
+    (i : Fin N) (σ : Fin L → α) (τ : Fin N → α) : Fin N → α :=
   fun k =>
     if h : (k.val + N - i.val) % N < L
     then σ ⟨(k.val + N - i.val) % N, h⟩
@@ -609,15 +609,15 @@ theorem cyclicWindowsOverlap_card_le {N L : ℕ} (hLN : 2 * L ≤ N) (hL : 1 < L
     _ = 2 * (L - 1) := by omega
 
 /-- Linear restriction to a cyclic window at position \(i\). -/
-def cyclicRestrictₗ {N : ℕ} (hN : 0 < N) (L : ℕ)
-    (i : Fin N) (τ : Fin N → Fin d) : NSiteSpace (Fin d) N →ₗ[ℂ] NSiteSpace (Fin d) L where
+def cyclicRestrictₗ {α : Type*} {N : ℕ} (hN : 0 < N) (L : ℕ)
+    (i : Fin N) (τ : Fin N → α) : NSiteSpace α N →ₗ[ℂ] NSiteSpace α L where
   toFun ψ σ := ψ (cyclicCfg hN L i σ τ)
   map_add' _ _ := by ext; simp
   map_smul' _ _ := by ext; simp
 
 @[simp]
-theorem cyclicRestrictₗ_apply {N : ℕ} (hN : 0 < N) (L : ℕ)
-    (i : Fin N) (τ : Fin N → Fin d) (ψ : NSiteSpace (Fin d) N) (σ : Fin L → Fin d) :
+theorem cyclicRestrictₗ_apply {α : Type*} {N : ℕ} (hN : 0 < N) (L : ℕ)
+    (i : Fin N) (τ : Fin N → α) (ψ : NSiteSpace α N) (σ : Fin L → α) :
     cyclicRestrictₗ hN L i τ ψ σ = ψ (cyclicCfg hN L i σ τ) := rfl
 
 /-- A cyclic restriction depends on the outside configuration only away from

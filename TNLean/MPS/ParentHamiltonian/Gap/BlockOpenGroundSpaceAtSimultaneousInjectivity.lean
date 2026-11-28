@@ -35,7 +35,7 @@ theorem wordTupleSpanTop_of_ge
     (hS : 0 < S) (hSpan : WordTupleSpanTop A S) (hSn : S ≤ n) :
     WordTupleSpanTop A n := by
   classical
-  choose B ζ ρ hζ hGauge _hmpv hP _hρ _hGS _hPI using
+  choose B ζ ρ hζ hGauge _hmpv hP _hρ _hGS _hPI _hCGS using
     fun j ↦ exists_hasComplementaryFixedPointGap_gauge_of_isNormal
       ⟨S, hS, isNBlkInjective_of_wordTupleSpanTop A hSpan j⟩
   have hSpanB : WordTupleSpanTop B n :=

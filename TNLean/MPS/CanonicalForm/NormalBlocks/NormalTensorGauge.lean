@@ -493,10 +493,9 @@ For a normal tensor \(A\) there are a nonzero scalar \(\zeta\), a virtual gauge,
 and a matrix \(\rho>0\) such that the rescaled gauged tensor \(B\) satisfies
 \(\sum_i (B^i)^\dagger B^i=\mathbb 1\) and has \(\rho\) as the distinguished
 fixed point of a complementary transfer-map gap.  The matrix product vectors of
-\(B\) are those of \(A\) rescaled by \(\zeta^N\), and the local MPS spaces and the
-parent interactions of \(A\) and \(B\) coincide; so do the periodic chain ground
-spaces, which are cut out by the local MPS spaces
-(`chainGroundSpace_eq_of_groundSpace_eq`).
+\(B\) are those of \(A\) rescaled by \(\zeta^N\), and the local MPS spaces, the
+parent interactions, and the periodic chain ground spaces of \(A\) and \(B\)
+coincide.
 
 This is the step taken without loss of generality at
 arXiv:cond-mat/9410110, equations (3.1)--(3.2b), lines 1394--1435, and at
@@ -523,7 +522,8 @@ theorem exists_hasComplementaryFixedPointGap_gauge_of_isNormal {α : Type*} [Fin
       (∀ (N : ℕ) (σ : Fin N → α), mpv B σ = ζ ^ N * mpv A σ) ∧
       Kraus.HasComplementaryFixedPointGap B ρ ∧ ρ.PosDef ∧
       (∀ L : ℕ, groundSpace A L = groundSpace B L) ∧
-      (∀ L : ℕ, parentInteraction A L = parentInteraction B L) := by
+      (∀ L : ℕ, parentInteraction A L = parentInteraction B L) ∧
+      (∀ L N : ℕ, chainGroundSpace A L N = chainGroundSpace B L N) := by
   classical
   have hIrr : Kraus.IsIrreducibleFamily A :=
     isIrreducibleFamily_of_isNormal A hA
@@ -542,7 +542,7 @@ theorem exists_hasComplementaryFixedPointGap_gauge_of_isNormal {α : Type*} [Fin
     intro L
     rw [← groundSpace_smul_eq A ζ hζ L]
     exact hgauge.groundSpace_eq L
-  refine ⟨B, ζ, ρ, hζ, hgauge, ?_, hPrim, hρ, hGS, ?_⟩
+  refine ⟨B, ζ, ρ, hζ, hgauge, ?_, hPrim, hρ, hGS, ?_, ?_⟩
   · intro N τ
     rw [← hgauge.sameMPV N τ]
     simp only [mpv, coeff]
@@ -550,6 +550,7 @@ theorem exists_hasComplementaryFixedPointGap_gauge_of_isNormal {α : Type*} [Fin
     rw [Kraus.evalWord_smul]
     simp [List.length_ofFn, Matrix.trace_smul]
   · exact fun L => parentInteraction_eq_of_groundSpace_eq (hGS L)
+  · exact fun L N => chainGroundSpace_eq_of_groundSpace_eq (hGS L)
 
 /-- A normal tensor of bond dimension \(D>0\) is injective at length
 \(D^4\), without assuming a trace-preserving normalization. A nonzero
@@ -559,7 +560,7 @@ arXiv:0909.5347, Theorem 1; arXiv:1606.00608, line 332. -/
 theorem isNBlkInjective_pow_four_of_isNormal [NeZero D]
     (A : MPSTensor d D) (hA : Kraus.IsNormal A) :
     Kraus.IsNBlkInjective A (D ^ 4) := by
-  obtain ⟨B, ζ, ρ, hζ, hGauge, _hMPV, hP, _hρ, _hGS, _hPI⟩ :=
+  obtain ⟨B, ζ, ρ, hζ, hGauge, _hMPV, hP, _hρ, _hGS, _hPI, _hChain⟩ :=
     exists_hasComplementaryFixedPointGap_gauge_of_isNormal hA
   have hNormalB : Kraus.IsNormal B :=
     isNormal_of_gaugeEquiv ((isNormal_smul_iff hζ A).2 hA) hGauge
