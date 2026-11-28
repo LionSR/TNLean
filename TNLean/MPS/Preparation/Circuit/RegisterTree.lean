@@ -50,7 +50,7 @@ site of every block other than its first and its last `s` sites
 * `MPSPreparation.exists_rounds_blockLayerOp_regTreeOp`.
 * `MPSPreparation.isZeroOn_pairLayerOp_mulVec_productVector` — the pairs leave `|0⟩` at the
   sites of every block other than its first and its last `s` sites.
-* `MPSPreparation.mul_self_le_pow_of_isInjective_blockTensor` — an injective blocked tensor over
+* `MPSPreparation.mul_self_le_pow_of_isInjective_block` — an injective blocked tensor over
   `m` sites has `D² ≤ d^m`.
 
 ## References

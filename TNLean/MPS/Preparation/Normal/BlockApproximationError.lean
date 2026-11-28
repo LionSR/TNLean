@@ -156,7 +156,8 @@ theorem exists_norm_trace_prod_transferMatrix_sub_one_le_sq (A : MPSTensor d D)
     simp only [List.getElem_ofFn, List.getElem_map]
     rw [List.getElem_range]
     dsimp only [T, L]
-    rw [dite_eq_left hi]
+    exact congrArg (fun n => transferMatrix (Kraus.mixedMapLM (polarPosTensor (Kraus.block A n))
+      (fixedPointTensor σ))) (by simp [hi])
   rw [← hprod, hy] at h
   refine h.trans ?_
   have hC : C₀ * K ^ 2 ≤ C₀ * K ^ 2 + 1 := by linarith

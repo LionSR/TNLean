@@ -224,7 +224,8 @@ theorem mixedMapLM_eq_zero_of_conjTranspose_physicalMatrix_mul_eq_zero {α : Typ
 `∑_s φ_M(X)(s) conj(φ_M(Y)(s)) = 0`, since the mixed transfer map vanishes
 (`mixedMapLM_eq_zero_of_conjTranspose_physicalMatrix_mul_eq_zero`). -/
 theorem mpvOverlap_eq_zero {α : Type*} [Fintype α] {D₁ D₂ : ℕ} [NeZero D₁] [NeZero D₂]
-    {X : MPTensor α (Fin D₁)} {Y : MPTensor α (Fin D₂)} (h : (physicalMatrix Y)ᴴ * physicalMatrix X = 0) {M : ℕ}
+    {X : MPTensor α (Fin D₁)} {Y : MPTensor α (Fin D₂)}
+    (h : (physicalMatrix Y)ᴴ * physicalMatrix X = 0) {M : ℕ}
     (hM : M ≠ 0) : mpvOverlap X Y M = 0 := by
   rw [← trace_mixedMapLM_rect_pow_eq_mpvOverlap,
     mixedMapLM_eq_zero_of_conjTranspose_physicalMatrix_mul_eq_zero h, zero_pow hM, map_zero]

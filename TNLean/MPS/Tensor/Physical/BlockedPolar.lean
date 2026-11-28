@@ -249,7 +249,8 @@ private lemma rotatePhysical_one_submatrix [DecidableEq α] (X : MPTensor α (Fi
   simp [rotatePhysical, Matrix.one_apply]
 
 /-- The permutation matrix of a bijection is an isometry, so it fixes every tensor. -/
-private lemma rotatePhysical_conjTranspose_one_submatrix_mul [DecidableEq α] (X : MPTensor α (Fin D))
+private lemma rotatePhysical_conjTranspose_one_submatrix_mul [DecidableEq α]
+    (X : MPTensor α (Fin D))
     (e : β ≃ α) :
     rotatePhysical (((1 : Matrix α α ℂ).submatrix e id)ᴴ *
       (1 : Matrix α α ℂ).submatrix e id) X = X := by

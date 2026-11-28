@@ -37,17 +37,11 @@ namespace MPSTensor
 
 variable {d D b : ℕ} {Dj : Fin b → ℕ}
 
-/-- The blocked physical matrix with rows indexed by the original site configurations. -/
-noncomputable def cfgPhysicalMatrix (A : MPSTensor d D) (N : ℕ) :
-    Matrix (Cfg d N) (Fin D × Fin D) ℂ :=
-  (physicalMatrix (Kraus.block A N)).submatrix id
-
-/-- In configuration coordinates the physical matrix is the product of the site tensors. -/
-theorem cfgPhysicalMatrix_apply (A : MPSTensor d D) (N : ℕ) (s : Cfg d N)
+/-- In configuration coordinates the blocked physical matrix is the product of the site
+tensors. -/
+theorem physicalMatrix_block_apply (A : MPSTensor d D) (N : ℕ) (s : Cfg d N)
     (p : Fin D × Fin D) :
-    cfgPhysicalMatrix A N s p = Kraus.evalWord A (List.ofFn s) p.1 p.2 := by
-  change Kraus.block A N (s) p.1 p.2 = _
-  rw [← MPSChainTensor.eval_const_eq_block, MPSChainTensor.eval_const]
+    physicalMatrix (Kraus.block A N) s p = Kraus.evalWord A (List.ofFn s) p.1 p.2 := rfl
 
 /-- Each virtual column selects the trace on one embedded sector. -/
 noncomputable def sectorTraceSelector (ι : (j : Fin b) → Fin (Dj j) → Fin D) :
@@ -56,12 +50,12 @@ noncomputable def sectorTraceSelector (ι : (j : Fin b) → Fin (Dj j) → Fin D
 
 /-- The actual periodic-sector matrix is the blocked unweighted direct sum applied to the
 fixed family of virtual trace selectors. -/
-theorem cfgPhysicalMatrix_mul_sectorTraceSelector
+theorem physicalMatrix_block_mul_sectorTraceSelector
     (A : (j : Fin b) → MPSTensor d (Dj j))
     (ι : (j : Fin b) → Fin (Dj j) → Fin D)
     (hι : ∀ j, Function.Injective (ι j))
     (hdisj : ∀ i j, i ≠ j → ∀ a a', ι i a ≠ ι j a') {N : ℕ} (hN : N ≠ 0) :
-    cfgPhysicalMatrix (blockSum A ι fun _ => 1) N * sectorTraceSelector ι =
+    physicalMatrix (Kraus.block (blockSum A ι fun _ => 1) N) * sectorTraceSelector ι =
       sectorColumnMatrix A N := by
   classical
   have hsector (j : Fin b) :
@@ -75,15 +69,15 @@ theorem cfgPhysicalMatrix_mul_sectorTraceSelector
       rw [conjTranspose_pairEmbedding_mul_eq_zero (hdisj i j hij), Matrix.mul_zero]
     · simp
   ext s j
-  change (∑ p, cfgPhysicalMatrix (blockSum A ι fun _ => 1) N s p *
+  change (∑ p, physicalMatrix (Kraus.block (blockSum A ι fun _ => 1) N) s p *
     ∑ a : Fin (Dj j), pairEmbedding (ι j) p (a, a)) = mpv (A j) s
   simp_rw [Finset.mul_sum]
   rw [Finset.sum_comm]
   have hentry (a : Fin (Dj j)) :
-      (∑ p, cfgPhysicalMatrix (blockSum A ι fun _ => 1) N s p *
-        pairEmbedding (ι j) p (a, a)) = cfgPhysicalMatrix (A j) N s (a, a) :=
+      (∑ p, physicalMatrix (Kraus.block (blockSum A ι fun _ => 1) N) s p *
+        pairEmbedding (ι j) p (a, a)) = physicalMatrix (Kraus.block (A j) N) s (a, a) :=
     congrFun (congrFun (hsector j) (s)) (a, a)
-  simp_rw [hentry, cfgPhysicalMatrix_apply]
+  simp_rw [hentry, physicalMatrix_block_apply]
   rfl
 
 /-- A diagonal coordinate in one sector reads exactly that sector's logical coefficient. -/
@@ -136,14 +130,13 @@ theorem injective_sectorColumnMatrix_of_isInjectiveOn
       simp only [Matrix.mulVec, dotProduct]
       exact Finset.sum_eq_zero fun j _ => by
         rw [sectorTraceSelector_eq_zero_of_notMem ι hp j, zero_mul]
-    · have hc : cfgPhysicalMatrix (blockSum A ι fun _ => 1) N *ᵥ
+    · have hc : physicalMatrix (Kraus.block (blockSum A ι fun _ => 1) N) *ᵥ
           (sectorTraceSelector ι *ᵥ z) = 0 := by
-        rw [Matrix.mulVec_mulVec, cfgPhysicalMatrix_mul_sectorTraceSelector A ι hι hdisj hN]
+        rw [Matrix.mulVec_mulVec, physicalMatrix_block_mul_sectorTraceSelector A ι hι hdisj hN]
         exact hv
       funext t
       have ht := congrFun hc t
-      simpa only [cfgPhysicalMatrix, Matrix.mulVec, dotProduct, Matrix.submatrix_apply,
-        Equiv.symm_apply_apply, id_eq, Pi.zero_apply] using ht
+      simpa only [Matrix.mulVec, dotProduct, Pi.zero_apply] using ht
   funext j
   let a : Fin (Dj j) := ⟨0, hDj j⟩
   have hj := congrFun hz (ι j a, ι j a)
@@ -156,7 +149,7 @@ theorem injective_sectorColumnMatrix_of_isInjectiveOn
 noncomputable def sectorCoefficientMatrix (A : (j : Fin b) → MPSTensor d (Dj j))
     (ι : (j : Fin b) → Fin (Dj j) → Fin D) (N : ℕ) :
     Matrix (Fin D × Fin D) (Fin b) ℂ :=
-  Matrix.polarPos (cfgPhysicalMatrix (blockSum A ι fun _ => 1) N) * sectorTraceSelector ι
+  Matrix.polarPos (physicalMatrix (Kraus.block (blockSum A ι fun _ => 1) N)) * sectorTraceSelector ι
 
 /-- The canonical encoder factors exactly through a virtual-pair matrix of fixed row width
 `D²`. The identity holds for all logical columns simultaneously. -/
@@ -165,14 +158,14 @@ theorem sectorEncoder_eq_polarIso_mul
     (ι : (j : Fin b) → Fin (Dj j) → Fin D)
     (hι : ∀ j, Function.Injective (ι j))
     (hdisj : ∀ i j, i ≠ j → ∀ a a', ι i a ≠ ι j a') {N : ℕ} (hN : N ≠ 0) :
-    sectorEncoder A N = Matrix.polarIso (cfgPhysicalMatrix (blockSum A ι fun _ => 1) N) *
+    sectorEncoder A N = Matrix.polarIso (physicalMatrix (Kraus.block (blockSum A ι fun _ => 1) N)) *
       Matrix.polarIso (sectorCoefficientMatrix A ι N) := by
-  let C := cfgPhysicalMatrix (blockSum A ι fun _ => 1) N
+  let C := physicalMatrix (Kraus.block (blockSum A ι fun _ => 1) N)
   let R := sectorCoefficientMatrix A ι N
   have hfactor : Matrix.polarIso C * R = sectorColumnMatrix A N := by
     rw [show R = Matrix.polarPos C * sectorTraceSelector ι from rfl,
       ← Matrix.mul_assoc, Matrix.polarIso_mul_polarPos]
-    exact cfgPhysicalMatrix_mul_sectorTraceSelector A ι hι hdisj hN
+    exact physicalMatrix_block_mul_sectorTraceSelector A ι hι hdisj hN
   have hfix : (Matrix.polarIso C)ᴴ * Matrix.polarIso C * R = R := by
     rw [Matrix.conjTranspose_polarIso_mul_polarIso,
       show R = Matrix.polarPos C * sectorTraceSelector ι from rfl,
@@ -194,10 +187,10 @@ theorem isIsometry_polarIso_sectorCoefficientMatrix
   apply Matrix.isIsometry_polarIso_of_injective
   intro x y hxy
   apply hinj
-  have hfactor : Matrix.polarIso (cfgPhysicalMatrix (blockSum A ι fun _ => 1) N) *
+  have hfactor : Matrix.polarIso (physicalMatrix (Kraus.block (blockSum A ι fun _ => 1) N)) *
       sectorCoefficientMatrix A ι N = sectorColumnMatrix A N := by
     rw [sectorCoefficientMatrix, ← Matrix.mul_assoc, Matrix.polarIso_mul_polarPos]
-    exact cfgPhysicalMatrix_mul_sectorTraceSelector A ι hι hdisj hN
+    exact physicalMatrix_block_mul_sectorTraceSelector A ι hι hdisj hN
   rw [← hfactor, ← Matrix.mulVec_mulVec, ← Matrix.mulVec_mulVec, hxy]
 
 /-- The virtual polar encoder has no row outside the support of the blocked direct sum.
@@ -209,7 +202,7 @@ theorem polarIso_sectorCoefficientMatrix_eq_zero_of_notMem
     {p : Fin D × Fin D} (hp : p ∉ S) (j : Fin b) :
     Matrix.polarIso (sectorCoefficientMatrix A ι N) p j = 0 := by
   classical
-  let C := cfgPhysicalMatrix (blockSum A ι fun _ => 1) N
+  let C := physicalMatrix (Kraus.block (blockSum A ι fun _ => 1) N)
   let R := sectorCoefficientMatrix A ι N
   have hS : Matrix.polarSupport C = Matrix.diagonal fun p => if p ∈ S then 1 else 0 := by
     apply Matrix.polarSupport_eq_diagonal_of_support
@@ -219,8 +212,7 @@ theorem polarIso_sectorCoefficientMatrix_eq_zero_of_notMem
       apply hinj.eq_zero_of_mulVec_eq_zero hx
       funext t
       have ht := congrFun hzero t
-      simpa only [C, cfgPhysicalMatrix, Matrix.mulVec, dotProduct, Matrix.submatrix_apply,
-        Equiv.symm_apply_apply, id_eq, Pi.zero_apply] using ht
+      simpa only [C, Matrix.mulVec, dotProduct, Pi.zero_apply] using ht
   have hfix : Matrix.polarSupport C * R = R := by
     rw [show R = Matrix.polarPos C * sectorTraceSelector ι from rfl,
       ← Matrix.mul_assoc, Matrix.polarSupport_mul_polarPos]
@@ -236,7 +228,7 @@ theorem blockIsometryState_one_eq_polarIso_mulVec
     (A : MPSTensor d D) {N : ℕ} (hN : ∑ _ : Fin 1, N = N)
     (v : Fin D × Fin D → ℂ) :
     (fun s => blockIsometryState A (fun p => v p.swap) hN s) =
-      Matrix.polarIso (cfgPhysicalMatrix A N) *ᵥ v := by
+      Matrix.polarIso (physicalMatrix (Kraus.block A N)) *ᵥ v := by
   classical
   have hsite : blockSite hN (0 : Fin 1) = id := by
     funext i
@@ -248,7 +240,6 @@ theorem blockIsometryState_one_eq_polarIso_mulVec
   funext s
   rw [blockIsometryState_apply]
   simp only [Fin.prod_univ_one, hblock, pairProductState]
-  rw [cfgPhysicalMatrix, Matrix.polarIso_submatrix_equiv]
   change (∑ τ : Fin 1 → Fin (D * D),
     polarIsoMatrix (Kraus.block A N) (s) (τ 0) *
       v ((finProdFinEquiv.symm (τ 0)).1, (finProdFinEquiv.symm (τ 0)).2)) = _
@@ -326,7 +317,7 @@ theorem exists_isUnitaryCircuit_sectorEncoder_exact
     (blockSum A ι fun _ => 1) hN (fun p => Q p j)) s
   change blockIsometryState (blockSum A ι fun _ => 1) (ω j) hN s = _
   rw [hs]
-  change (Matrix.polarIso (cfgPhysicalMatrix (blockSum A ι fun _ => 1) N) * Q) s j = _
+  change (Matrix.polarIso (physicalMatrix (Kraus.block (blockSum A ι fun _ => 1) N)) * Q) s j = _
   exact congrFun (congrFun (sectorEncoder_eq_polarIso_mul A ι hι hdisj (NeZero.ne N)).symm s) j
 
 end MPSPreparation

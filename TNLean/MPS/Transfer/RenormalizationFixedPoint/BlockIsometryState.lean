@@ -292,7 +292,8 @@ noncomputable def blockIsoVector {N : ℕ} {ℓ : Fin M → ℕ}
     ∑ τ : Fin M → Fin (D * D), (∏ k, polarIsoMatrix (B k) (blockCfgEquiv d hN s k) (τ k)) * x τ
 
 @[simp] theorem blockIsoVector_apply {N : ℕ} {ℓ : Fin M → ℕ}
-    (B : ∀ k, MPTensor (Fin (ℓ k) → Fin d) (Fin D)) (hN : ∑ k, ℓ k = N) (x : MPVSpace (Fin (D * D)) M)
+    (B : ∀ k, MPTensor (Fin (ℓ k) → Fin d) (Fin D)) (hN : ∑ k, ℓ k = N)
+    (x : MPVSpace (Fin (D * D)) M)
     (s : Cfg d N) :
     blockIsoVector B hN x s = ∑ τ : Fin M → Fin (D * D),
       (∏ k, polarIsoMatrix (B k) (blockCfgEquiv d hN s k) (τ k)) * x τ := by

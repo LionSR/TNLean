@@ -208,7 +208,8 @@ theorem tendsto_gram_physicalMatrix_of_tendsto_transferMap {nq : ℕ → Type*} 
 `|α, β⟩ ↦ ∑_γ (√σ)_{αγ} |γ, β⟩`.
 
 arXiv:2307.01696, eq. (8): `P → P_∞` as `q → ∞`. -/
-theorem tendsto_polarPos_physicalMatrix_of_tendsto_transferMap {nq : ℕ → Type*} [∀ q, Fintype (nq q)]
+theorem tendsto_polarPos_physicalMatrix_of_tendsto_transferMap {nq : ℕ → Type*}
+    [∀ q, Fintype (nq q)]
     (B : ∀ q, MPTensor (nq q) (Fin D)) {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosSemidef)
     (hlim : ∀ X, Tendsto (fun q => Kraus.transferMap (B q) X) atTop (𝓝 (X.trace • σ))) :
     Tendsto (fun q => Matrix.polarPos (physicalMatrix (B q))) atTop
@@ -312,7 +313,8 @@ indices of a block to a basis vector of `ℂ^α`; in the source, where `D = d` s
 are single sites, it is `(l, r) ↦ |l⟩_L |0⟩_C |r⟩_R`.
 
 arXiv:2307.01696, eq. (10). -/
-noncomputable def embeddedPairState [DecidableEq α] (ι : Fin D × Fin D → α) (σ : Matrix (Fin D) (Fin D) ℂ)
+noncomputable def embeddedPairState [DecidableEq α] (ι : Fin D × Fin D → α)
+    (σ : Matrix (Fin D) (Fin D) ℂ)
     {M : ℕ} (t : Fin M → α) : ℂ :=
   ∑ c : Fin M → Fin D × Fin D,
     if (fun j => ι (c j)) = t then pairProductState (fixedPointPair σ) c else 0
