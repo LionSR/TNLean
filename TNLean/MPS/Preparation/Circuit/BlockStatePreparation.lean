@@ -591,11 +591,10 @@ theorem blockSite_const (q : ℕ) (hN : ∑ _ : Fin M, q = M * q) (k : Fin M) (j
 theorem blockConfigEquiv_symm_eq_blockCfgEquiv (q : ℕ) (hN : ∑ _ : Fin M, q = M * q)
     (s : Cfg d (M * q)) : (Kraus.blockConfigEquiv (Fin d) M q).symm s = blockCfgEquiv d hN s := by
   funext k
-  rw [blockCfgEquiv_apply, Equiv.eq_symm_apply]
+  rw [blockCfgEquiv_apply]
   funext j
   conv_rhs => rw [← (Kraus.blockConfigEquiv (Fin d) M q).apply_symm_apply s]
-  rw [Function.comp_apply, blockSite_const]
-  simp [Kraus.blockConfigEquiv_apply]
+  rw [Function.comp_apply, blockSite_const, Kraus.blockConfigEquiv_apply, Equiv.symm_apply_apply]
 
 end MPSPreparation
 
