@@ -23,10 +23,11 @@ namespace MPSChainTensor
 
 variable {d D : ℕ}
 
-/-- Constant blocked chain obtained by repeating `blockTensor A L` at every site. -/
+/-- Constant blocked chain obtained by repeating the blocking `Kraus.block A L` at every site,
+with the blocked alphabet numbered by `Kraus.decodeBlockEquiv`. -/
 noncomputable def blockedChain (A : MPSTensor d D) (L n : ℕ) :
     MPSChainTensor (Kraus.blockPhysDim d L) D n :=
-  fun _ => Kraus.blockTensor A L
+  fun _ => Kraus.reindexPhysical (Kraus.decodeBlockEquiv d L) (Kraus.block A L)
 
 /-- If `A` is `L`-block injective, then the constant chain of `L`-blocked tensors
 is injective at every site. -/
@@ -34,8 +35,12 @@ lemma blockedChain_isInjective (A : MPSTensor d D) (L n : ℕ)
     (hA : Kraus.IsNBlkInjective A L) :
     IsInjective (blockedChain A L n) := by
   intro k
-  simp only [blockedChain]
-  exact (Kraus.isNBlkInjective_iff_blockTensor_isInjective A L).1 hA
+  have h : Set.range (Kraus.reindexPhysical (Kraus.decodeBlockEquiv d L) (Kraus.block A L)) =
+      Set.range (Kraus.block A L) :=
+    (Kraus.decodeBlockEquiv d L).surjective.range_comp _
+  have hB := (Kraus.isNBlkInjective_iff_isInjective_block A L).1 hA
+  simp only [Kraus.IsInjective] at hB
+  simp only [blockedChain, Kraus.IsInjective, h, hB]
 
 /-- **Fundamental Theorem for blocked chains**.
 

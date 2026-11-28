@@ -30,9 +30,9 @@ into a single constant.
 
 \begin{definition}[Blocked tensors of an inhomogeneous chain]
     \label{def:ldp_chain_block_tensor}
-    \lean{MPSChainTensor.blockTensor,
+    \lean{MPSChainTensor.eval,
         MPSChainTensor.blockTensor_decodeBlockEquiv_symm,
-        MPSChainTensor.blockTensor_const, MPSChainTensor.eval_eq_prod_ofFn,
+        MPSChainTensor.eval_const_eq_block, MPSChainTensor.eval_eq_prod_ofFn,
         MPSChainTensor.eval_const, MPSTensor.chainBlockTensor,
         MPSTensor.chainBlockTensor_const, MPSPreparation.chainState,
         MPSPreparation.chainState_apply}
@@ -257,7 +257,7 @@ into a single constant.
         coe_finRotate_mod,
         MPSPreparation.blockOffset_add_mod,
         MPSChainTensor.eval_eq_zero_of_support,
-        MPSChainTensor.blockTensor_eq_zero_of_support,
+        MPSChainTensor.eval_eq_zero_of_support_of_pos,
         VaryingBondChain.chainBlockTensor_zeroPad_eq_zero,
         VaryingBondChain.IsBlockInjective.isInjectiveOn,
         VaryingBondChain.isBlockInjective_iff_forall_isInjectiveOn,

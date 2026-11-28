@@ -33,7 +33,6 @@ open MPTensor
 section Periodic
 
 open scoped Matrix BigOperators Matrix.Norms.Operator Kraus
-open Kraus (wordOfBlock blockTensor)
 
 namespace MPSTensor
 
@@ -310,39 +309,39 @@ private lemma evalWord_leftMul_of_commute
 
 /-- Blocking a `ℤ_m`-gauge equivalence by a full period kills the `Z`-phase and
 produces an ordinary gauge equivalence. -/
-theorem ZGaugeEquiv.blockTensor_gaugeEquiv {m : ℕ} {A B : MPSTensor d D}
+theorem ZGaugeEquiv.block_gaugeEquiv {m : ℕ} {A B : MPSTensor d D}
     (h : ZGaugeEquiv m A B) :
-    GaugeEquiv (blockTensor A m) (blockTensor B m) := by
+    GaugeEquiv (Kraus.block A m) (Kraus.block B m) := by
   classical
   rcases h with ⟨Y, Z, hpow, hcomm, hrel⟩
   refine ⟨Y⁻¹, ?_⟩
   intro i
   have hWord :
-      Kraus.evalWord A (wordOfBlock d m i) =
-        (Y : Matrix (Fin D) (Fin D) ℂ) * Kraus.evalWord B (wordOfBlock d m i) *
+      Kraus.evalWord A (List.ofFn i) =
+        (Y : Matrix (Fin D) (Fin D) ℂ) * Kraus.evalWord B (List.ofFn i) *
           (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
     calc
-      Kraus.evalWord A (wordOfBlock d m i)
-          = Z ^ (wordOfBlock d m i).length * Kraus.evalWord A (wordOfBlock d m i) := by
+      Kraus.evalWord A (List.ofFn i)
+          = Z ^ (List.ofFn i).length * Kraus.evalWord A (List.ofFn i) := by
               simp [hpow]
-      _ = Kraus.evalWord (fun j => Z * A j) (wordOfBlock d m i) :=
-            (evalWord_leftMul_of_commute hcomm (wordOfBlock d m i)).symm
-      _ = (Y : Matrix (Fin D) (Fin D) ℂ) * Kraus.evalWord B (wordOfBlock d m i) *
+      _ = Kraus.evalWord (fun j => Z * A j) (List.ofFn i) :=
+            (evalWord_leftMul_of_commute hcomm (List.ofFn i)).symm
+      _ = (Y : Matrix (Fin D) (Fin D) ℂ) * Kraus.evalWord B (List.ofFn i) *
             (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
             simpa using
               (evalWord_gauge (A := B) (B := fun j => Z * A j) Y
-                (by intro j; simpa using hrel j) (wordOfBlock d m i))
+                (by intro j; simpa using hrel j) (List.ofFn i))
   have := congrArg (fun M =>
     (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * M *
       (Y : Matrix (Fin D) (Fin D) ℂ))) hWord
-  simpa [Kraus.blockTensor, Kraus.reindexPhysical, Kraus.wordOfBlock, Matrix.mul_assoc] using
+  simpa [Kraus.block_apply, Matrix.mul_assoc] using
     this.symm
 
 /-- Full-period blocking turns a `ℤ_m`-gauge equivalence into MPV equality. -/
-theorem ZGaugeEquiv.blockTensor_sameMPV {m : ℕ} {A B : MPSTensor d D}
+theorem ZGaugeEquiv.block_sameMPV {m : ℕ} {A B : MPSTensor d D}
     (h : ZGaugeEquiv m A B) :
-    SameMPV (blockTensor A m) (blockTensor B m) :=
-  GaugeEquiv.sameMPV (ZGaugeEquiv.blockTensor_gaugeEquiv h)
+    SameMPV (Kraus.block A m) (Kraus.block B m) :=
+  GaugeEquiv.sameMPV (ZGaugeEquiv.block_gaugeEquiv h)
 
 /-- A positive period is determined by its set of complex roots of unity.
 

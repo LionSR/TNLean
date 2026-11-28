@@ -115,7 +115,7 @@
 \begin{lemma}[Compression to the step orbits]
     \label{thm:periodic_step_orbit_compression}
     \lean{MPSTensor.exists_stepOrbit_blockDecomposition,
-        MPSTensor.adjoint_blockTensor_projection}
+        MPSTensor.adjoint_block_projection}
     \leanok
     \uses{def:periodic_step_orbit_projection}
     Suppose $P_u$ are nonzero orthogonal projections with $\sum_uP_u=\Id_D$,
@@ -180,9 +180,9 @@
 
 \begin{lemma}[Peripheral roots after positive blocking]
     \label{thm:periodic_blocking_peripheral_roots}
-    \lean{MPSTensor.peripheralEigenvalues_blockTensor,
-        MPSTensor.IsPeriodic.peripheral_blockTensor,
-        MPSTensor.IsPeriodic.peripheral_compressed_blockTensor}
+    \lean{MPSTensor.peripheralEigenvalues_block,
+        MPSTensor.IsPeriodic.peripheral_block,
+        MPSTensor.IsPeriodic.peripheral_compressed_block}
     \leanok
     \uses{def:periodic_tensor}
     Let $p>0$. For any tensor $A$, the peripheral eigenvalues of
@@ -215,7 +215,7 @@
 
 \begin{lemma}[Cyclic motion of compressed projections]
     \label{thm:periodic_compressed_projection_shift}
-    \lean{MPSTensor.adjoint_compressed_blockTensor_projection}
+    \lean{MPSTensor.adjoint_compressed_block_projection}
     \leanok
     \uses{def:periodic_step_orbit_projection}
     Suppose $P_u$ are orthogonal projections summing to $\Id_D$, $A$ is

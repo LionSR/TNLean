@@ -74,7 +74,7 @@
 
 \begin{lemma}[Blocking a $\Z_m$-gauge gives an ordinary gauge]
     \label{thm:z_gauge_blockTensor_gauge_equiv}
-    \lean{MPSTensor.ZGaugeEquiv.blockTensor_gaugeEquiv}
+    \lean{MPSTensor.ZGaugeEquiv.block_gaugeEquiv}
     \leanok
     \uses{def:z_gauge_equiv,def:blocked_tensor,def:gauge_equiv}
     If $A$ and $B$ are $\Z_m$-gauge equivalent, then their $m$-blocked
@@ -90,7 +90,7 @@
 
 \begin{corollary}[Blocking a $\Z_m$-gauge preserves the MPV family]
     \label{cor:z_gauge_blockTensor_same_mpv}
-    \lean{MPSTensor.ZGaugeEquiv.blockTensor_sameMPV}
+    \lean{MPSTensor.ZGaugeEquiv.block_sameMPV}
     \leanok
     \uses{thm:z_gauge_blockTensor_gauge_equiv,thm:gauge_invariance}
     If $A$ and $B$ are $\Z_m$-gauge equivalent, then the blocked tensors

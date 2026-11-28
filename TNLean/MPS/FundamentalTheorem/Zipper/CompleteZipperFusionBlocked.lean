@@ -71,7 +71,6 @@ section
 
 open scoped Matrix BigOperators Kronecker
 open Matrix
-open Kraus (blockTensor)
 
 namespace MPSTensor.MultiBlockCompression
 
@@ -190,27 +189,6 @@ namespace MPOTensor
 
 variable {p : ℕ}
 
-/-- The paired word of a blocked doubled physical index: the ket and bra words of the block,
-paired letter by letter. -/
-noncomputable def blockedPairWord (p L : ℕ) (I : Fin (Kraus.blockPhysDim p L *
-    Kraus.blockPhysDim p L)) : List (Fin (p * p)) :=
-  Kraus.wordOfBlock (p * p) L (blockedDoubledIndexEquiv p L I)
-
-theorem blockedPairWord_ne_nil {L : ℕ} (hL : 0 < L)
-    (I : Fin (Kraus.blockPhysDim p L * Kraus.blockPhysDim p L)) :
-    blockedPairWord p L I ≠ [] := by
-  intro h
-  have := congrArg List.length h
-  rw [blockedPairWord, Kraus.length_wordOfBlock, List.length_nil] at this
-  omega
-
-/-- A letter of a blocked MPO tensor, read as a tensor on the doubled alphabet, is the
-evaluation of the paired word. -/
-theorem toMPSTensor_blockTensor_apply {D : ℕ} (M : MPOTensor p D) (L : ℕ)
-    (I : Fin (Kraus.blockPhysDim p L * Kraus.blockPhysDim p L)) :
-    (blockTensor M L).toMPSTensor I = Kraus.evalWord M.toMPSTensor (blockedPairWord p L I) :=
-  congrFun (toMPSTensor_blockTensor M) I
-
 /-- **Simultaneous left inverse after blocking.** Let `T_1, …, T_g` be MPO tensors that are
 normal on the pair alphabet, of positive bond dimension, and pairwise not gauge
 equivalent up to a nonzero scalar.  Then there is a positive blocking length `L` at which the
@@ -252,7 +230,7 @@ theorem exists_blockTensor_isMPOBlockLeftInverse {g : ℕ} {D : Fin g → ℕ}
       (fun c ↦ (blockTensor (T c) L).toMPSTensor) 1 := by
     have hFamily : (fun c ↦ (blockTensor (T c) L).toMPSTensor) =
         fun c ↦ Kraus.reindexPhysical (blockedDoubledIndexEquiv p L)
-          (Kraus.blockTensor (T c).toMPSTensor L) :=
+          (Kraus.block (T c).toMPSTensor L) :=
       funext fun c ↦ toMPSTensor_blockTensor (T c)
     rw [hFamily]
     exact (MPSTensor.wordTupleSpanTop_reindexPhysical_equiv
@@ -275,11 +253,12 @@ fusion tensors, which are independent of the blocking) and lines 427--431 (commo
 noncomputable def PairCompression.blockTensor {a b : Fin g} (P : PairCompression T N a b)
     {L : ℕ} (hL : 0 < L) :
     PairCompression (fun c => MPOTensor.blockTensor (T c) L) N a b :=
-  P.ofWords (blockedPairWord p L) (blockedPairWord_ne_nil hL)
+  P.ofWords (fun I => List.ofFn (blockedDoubledIndexEquiv p L I))
+    (fun _ => mt List.ofFn_eq_nil_iff.1 hL.ne')
     (fun I => by
-      rw [← blockTensor_mulTensor]
-      exact toMPSTensor_blockTensor_apply _ L I)
-    (fun s I => toMPSTensor_blockTensor_apply (T s.1) L I)
+      rw [← blockTensor_mulTensor, toMPSTensor_blockTensor]
+      rfl)
+    (fun s I => by rw [toMPSTensor_blockTensor]; rfl)
 
 theorem PairCompression.remainder_blockTensor_eq_zero {a b : Fin g}
     (P : PairCompression T N a b) (hP : P.remainder = 0) {L : ℕ} (hL : 0 < L) :
