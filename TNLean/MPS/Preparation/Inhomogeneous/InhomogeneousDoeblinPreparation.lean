@@ -37,7 +37,7 @@ private theorem transferMap_chainBlockTensor_one {d D N : ℕ} (A : MPSChainTens
   have hi : blockSite hN j (0 : Fin 1) = j := by
     apply Fin.ext
     simp [blockSite_val, blockOffset_const 1 j.isLt.le]
-  rw [chainBlockTensor, MPSChainTensor.transferMap_blockTensor]
+  rw [chainBlockTensor, MPSChainTensor.transferMap_eval]
   simp only [List.ofFn_succ, List.ofFn_zero, List.prod_cons, List.prod_nil, mul_one, hi]
 
 /-- Actual-site Choi domination gives an exponential bound in the `L²` norm of the transfer
@@ -46,7 +46,7 @@ dimension, length, and domination parameter are chosen. Both endpoints `η = 0,1
 
 This is the inverse Gram reshuffling of the actual-block Doeblin estimate, based on
 Wolf, *Quantum Channels & Operations*, Theorem 8.17. -/
-theorem exists_norm_transferMatrix_blockTensor_sub_le_of_choi_domination
+theorem exists_norm_transferMatrix_block_sub_le_of_choi_domination
     {D : ℕ} {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosDef) (htr : σ.trace = 1) :
     ∃ K : ℝ, 0 < K ∧ ∀ {d N : ℕ} (A : MPSChainTensor d D N) {η : ℝ},
       0 ≤ η → η ≤ 1 →
@@ -54,7 +54,7 @@ theorem exists_norm_transferMatrix_blockTensor_sub_le_of_choi_domination
       (∀ j, Kraus.transferMap (A j) σ = σ) →
       (∀ j, ChoiRectangular.choiMatrix (Kraus.transferMap (A j)) ≥
         ((η : ℂ) / D) • (σ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ))) →
-      ‖transferMatrix (Kraus.transferMap (MPSChainTensor.blockTensor A)) -
+      ‖transferMatrix (Kraus.transferMap (MPSChainTensor.eval A)) -
         transferMatrix (Kraus.transferMap (fixedPointTensor σ))‖ ≤ K * (1 - η) ^ N := by
   have := Matrix.neZero_of_trace_eq_one htr
   obtain ⟨Kr, hKr, hr⟩ := exists_norm_gram_transferMatrix_sub_le D
@@ -89,7 +89,7 @@ theorem le_norm_chainState_sq_of_choi_domination
   obtain ⟨n, rfl⟩ : ∃ n, N = n + 1 :=
     ⟨N - 1, (Nat.succ_pred_eq_of_ne_zero (NeZero.ne N)).symm⟩
   let B : MPSChainTensor d D n := fun j => A j.succ
-  let S := Kraus.transferMap (MPSChainTensor.blockTensor B)
+  let S := Kraus.transferMap (MPSChainTensor.eval B)
   let P := Matrix.tracePrepareMap (α := Fin D) σ
   let R := Kraus.transferMap (A 0) - (η : ℂ) • P
   have hRcp : IsCPMap R := by
@@ -109,14 +109,14 @@ theorem le_norm_chainState_sq_of_choi_domination
       ring
     rw [heq]
     exact Matrix.le_iff.mp (hchoi 0)
-  have hScp : IsCPMap S := isCPMap_of_krausMapLM (MPSChainTensor.blockTensor B)
+  have hScp : IsCPMap S := isCPMap_of_krausMapLM (MPSChainTensor.eval B)
   have hStr : ∀ X, (S X).trace = X.trace :=
-    MPSChainTensor.trace_transferMap_blockTensor B (fun j => htp j.succ)
-  have hwhole : Kraus.transferMap (MPSChainTensor.blockTensor A) =
+    MPSChainTensor.trace_transferMap_eval B (fun j => htp j.succ)
+  have hwhole : Kraus.transferMap (MPSChainTensor.eval A) =
       R * S + (η : ℂ) • P := by
-    rw [MPSChainTensor.transferMap_blockTensor, List.ofFn_succ, List.prod_cons]
+    rw [MPSChainTensor.transferMap_eval, List.ofFn_succ, List.prod_cons]
     have htail : (List.ofFn fun j => Kraus.transferMap (A j.succ)).prod = S :=
-      (MPSChainTensor.transferMap_blockTensor B).symm
+      (MPSChainTensor.transferMap_eval B).symm
     rw [htail]
     ext X : 1
     change Kraus.transferMap (A 0) (S X) = R (S X) + (η : ℂ) • P X
@@ -179,7 +179,7 @@ theorem exists_isPreparedInDepth_inhomogeneous_le_log_of_choi_domination
     have hη0 : η ≤ 0 := by simpa only [hz, norm_zero, zero_pow two_ne_zero] using hb
     exact (not_le_of_gt hη) hη0
   obtain ⟨K, hK, hmix⟩ :=
-    exists_norm_transferMatrix_blockTensor_sub_le_of_choi_domination hσ htr
+    exists_norm_transferMatrix_block_sub_le_of_choi_domination hσ htr
   have hh0 : 0 ≤ η / 2 := by positivity
   have hh1 : η / 2 ≤ 1 := by linarith
   have hρ0 : 0 < 1 - η / 2 := by linarith
@@ -199,7 +199,7 @@ theorem exists_isPreparedInDepth_inhomogeneous_le_log_of_choi_domination
   intro N _ M ℓ hN j _
   have h := hmix (fun i : Fin (ℓ j) => A N (blockSite hN j i)) hh0 hh1
     (fun i => htp N _) (fun i => hfix N _) (fun i => hdom.trans (hchoi N _))
-  rw [MPSChainTensor.transferMap_blockTensor] at h
+  rw [MPSChainTensor.transferMap_eval] at h
   have hexp : Real.exp (-(-Real.log (1 - η / 2) * (ℓ j : ℝ))) = (1 - η / 2) ^ ℓ j := by
     rw [neg_mul, neg_neg, mul_comm, Real.exp_nat_mul, Real.exp_log hρ0]
   rwa [hexp]

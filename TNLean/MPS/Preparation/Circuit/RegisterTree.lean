@@ -62,7 +62,6 @@ site of every block other than its first and its last `s` sites
 open Matrix MPSTensor
 open scoped BigOperators
 open QuantumCircuit
-open Kraus (blockPhysDim_eq_pow blockTensor)
 
 namespace MPSPreparation
 
@@ -137,9 +136,9 @@ theorem isZeroOn_pairLayerOp_mulVec_productVector {M N : ℕ} [NeZero d] {ℓ : 
 
 /-- An injective tensor with physical dimension `d^m` has `D² ≤ d^m`: its matrices span the
 `D²`-dimensional matrix algebra. -/
-theorem mul_self_le_pow_of_isInjective_blockTensor {D m : ℕ} {A : MPSTensor d D}
-    (h : Kraus.IsInjective (blockTensor A m)) : D * D ≤ d ^ m := by
-  have h1 := finrank_range_le_card (R := ℂ) (blockTensor A m)
+theorem mul_self_le_pow_of_isInjective_block {D m : ℕ} {A : MPSTensor d D}
+    (h : Kraus.IsInjective (Kraus.block A m)) : D * D ≤ d ^ m := by
+  have h1 := finrank_range_le_card (R := ℂ) (Kraus.block A m)
   rw [Set.finrank, h, finrank_top, Module.finrank_matrix, Fintype.card_fin, Fintype.card_fin,
     Module.finrank_self, mul_one] at h1
   simpa [blockPhysDim_eq_pow] using h1

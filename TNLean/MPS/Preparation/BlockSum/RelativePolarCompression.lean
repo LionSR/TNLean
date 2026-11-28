@@ -44,7 +44,6 @@ open MPTensor
 section RelativePolarCompression
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder Kronecker InnerProductSpace
-open Kraus (blockTensor)
 
 noncomputable section
 
@@ -210,21 +209,21 @@ theorem relative_column_gram
     (μ : CopyWeights b m) {q : ℕ} (hq : q ≠ 0) (j : Fin b) :
     ∑ k, (relativeRow (repeatedBlockSum Aj ι μ) ι μ q k j)ᴴ *
       relativeRow (repeatedBlockSum Aj ι μ) ι μ q k j =
-      (physicalMatrix (blockTensor (Aj j) q))ᴴ * physicalMatrix (blockTensor (Aj j) q) := by
+      (physicalMatrix (Kraus.block (Aj j) q))ᴴ * physicalMatrix (Kraus.block (Aj j) q) := by
   have hPs := polarPos_mul_sum_copyIsometry (Aj := Aj) hι hdisj μ hq
   have hPh := (Matrix.posSemidef_polarPos
-    (physicalMatrix (blockTensor (repeatedBlockSum Aj ι μ) q))).isHermitian.eq
+    (physicalMatrix (Kraus.block (repeatedBlockSum Aj ι μ) q))).isHermitian.eq
   have hSupp := congrArg Matrix.conjTranspose hPs
   simp only [Matrix.conjTranspose_mul, Matrix.conjTranspose_sum,
     Matrix.conjTranspose_conjTranspose, hPh] at hSupp
-  rw [physicalMatrix_blockTensor_repeatedBlockSum_eq_copyIsometry hι hdisj hq] at hSupp
+  rw [physicalMatrix_block_repeatedBlockSum_eq_copyIsometry hι hdisj hq] at hSupp
   have h := polar_column_gram (fun k => copyIsometry ι μ q k)
-    (fun k => physicalMatrix (blockTensor (Aj k) q)) (copyNorm μ q)
+    (fun k => physicalMatrix (Kraus.block (Aj k) q)) (copyNorm μ q)
     (fun k => copyNorm_pos (μ.weight_fun_ne_zero k) q)
     (fun k => conjTranspose_copyIsometry_mul_self hι hdisj (μ.weight_fun_ne_zero k) q)
     (fun k l hkl => conjTranspose_copyIsometry_mul_eq_zero hdisj μ q hkl) hSupp j
   dsimp only at h
-  rw [← physicalMatrix_blockTensor_repeatedBlockSum_eq_copyIsometry hι hdisj hq] at h
+  rw [← physicalMatrix_block_repeatedBlockSum_eq_copyIsometry hι hdisj hq] at h
   simp_rw [relativeRow_eq_smul hι hdisj]
   exact h
 
@@ -243,11 +242,11 @@ theorem sum_norm_relative_column_sq
   simp_rw [norm_sqrtWeight_eq_weightedGram _ hσ]
   rw [← map_sum, relative_column_gram hι hdisj μ hq j]
   change weightedGramTraceLM σ
-    ((physicalMatrix (blockTensor (Aj j) q))ᴴ * physicalMatrix (blockTensor (Aj j) q)) = (1 : ℂ)
+    ((physicalMatrix (Kraus.block (Aj j) q))ᴴ * physicalMatrix (Kraus.block (Aj j) q)) = (1 : ℂ)
   change (∑ a, ∑ c, ∑ t, σ c t *
-    ((physicalMatrix (blockTensor (Aj j) q))ᴴ * physicalMatrix (blockTensor (Aj j) q))
+    ((physicalMatrix (Kraus.block (Aj j) q))ᴴ * physicalMatrix (Kraus.block (Aj j) q))
       (a, t) (a, c)) = _
-  rw [← trace_transfer_eq_gram, Kraus.transferMap_blockTensor_apply, Module.End.pow_apply,
+  rw [← trace_transfer_eq_gram, Kraus.transferMap_block, Module.End.pow_apply,
     Function.iterate_fixed hfix, htr]
 
 /-- Positivity of the actual diagonal relative compression coefficient. -/

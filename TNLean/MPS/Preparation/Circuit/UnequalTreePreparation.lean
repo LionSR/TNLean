@@ -55,7 +55,6 @@ an even number of sites apart. After every sequence of outcomes the output is a 
 open Matrix MPSTensor
 open scoped BigOperators
 open QuantumCircuit
-open Kraus (blockTensor)
 
 namespace MPSPreparation
 
@@ -204,7 +203,7 @@ local circuits, and the depths `0, …, h` of the trees one at a time with measu
 is post-selected. -/
 theorem exists_isMeasurementConversion_blockIsometryState (d s c : ℕ) [NeZero d]
     (hs : 2 ≤ s) :
-    ∃ C : ℕ, ∀ {D : ℕ} (A : MPSTensor d D), (∀ m, s ≤ m → Kraus.IsInjective (blockTensor A m)) →
+    ∃ C : ℕ, ∀ {D : ℕ} (A : MPSTensor d D), (∀ m, s ≤ m → Kraus.IsInjective (Kraus.block A m)) →
       ∀ (ω : Fin D × Fin D → ℂ), ∑ p, star (ω p) * ω p = 1 →
       ∀ (h : ℕ) {M : ℕ} [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} [NeZero N] (hN : ∑ b, ℓ b = N),
         (∀ b, 2 ^ (h + 2) * s ≤ ℓ b) → (∀ b, ℓ b ≤ 2 ^ (h + 1) * c) →
@@ -223,7 +222,7 @@ theorem exists_isMeasurementConversion_blockIsometryState (d s c : ℕ) [NeZero 
   rcases Nat.eq_zero_or_pos D with rfl | hD
   · exact absurd hω (by simp)
   -- the legs on the first `s - 1` sites of a register, and `ℂ^{D²}` on a register
-  have hDD := mul_self_le_pow_of_isInjective_blockTensor (hinj s le_rfl)
+  have hDD := mul_self_le_pow_of_isInjective_block (hinj s le_rfl)
   obtain ⟨dig₀⟩ : Nonempty (Fin D ↪ Cfg d (s - 1)) :=
     Function.Embedding.nonempty_of_card_le (by simpa using le_pow_sub_one_of_mul_self_le hs hd hDD)
   obtain ⟨enc⟩ : Nonempty (Fin (D * D) ↪ Cfg d s) :=
@@ -293,9 +292,9 @@ theorem exists_isMeasurementConversion_blockIsometryState (d s c : ℕ) [NeZero 
     exact blockIsometryState_eq_mulVec hd hN hr hdig A ω
       (U := fun b => treeBlockOp (hT b) (cfgPolarIso A) (mergeIso A) (ι₀ b) enc) (fun b l r τ => by
         rw [hroot, treeBlockOp_apply (hT b)
-          (fun m hm => isIsometry_cfgPolarIso A (hinj m hm))
+          (fun m hm => isIsometry_polarIsoMatrix_of_isInjective (hinj m hm))
           (fun m₁ m₂ hm₁ _ => isIsometry_mergeIso A (hinj _ (by omega)))
-          (fun _ _ hn τ x => cfgPolarIso_split A hn τ x) (hι₀ b) enc.injective]
+          (fun _ _ hn τ x => polarIsoMatrix_block_split A hn τ x) (hι₀ b) enc.injective]
         rfl) hW x
   rw [hψ]
   exact ⟨v₀, hprep⟩

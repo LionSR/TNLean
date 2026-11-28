@@ -58,6 +58,28 @@ theorem _root_.MPTensor.isNBlkInjective_mul_of_isNBlkInjective {α : Type*}
                 (⊤ : Submodule ℂ (Matrix (Fin D) (Fin D) ℂ)) from
               Submodule.mem_top))
 
+/-! ### Nested blocks -/
+
+/-- Words of `p = m * e` letters read as `e` blocks of `m` letters. -/
+noncomputable def nestedBlockEquiv (α : Type*) {p m e : ℕ} (h : p = m * e) :
+    (Fin p → α) ≃ (Fin e → Fin m → α) :=
+  (Equiv.arrowCongr (finCongr (h.trans (Nat.mul_comm m e))) (Equiv.refl α)).trans
+    (Kraus.blockConfigEquiv α e m).symm
+
+/-- Reading a word of `p = m * e` letters as `e` blocks of `m` letters, the iterated blocking
+is the direct blocking. -/
+theorem reindexPhysical_nestedBlockEquiv_block_block (A : MPTensor α (Fin D))
+    {p m e : ℕ} (h : p = m * e) :
+    Kraus.reindexPhysical (nestedBlockEquiv α h) (Kraus.block (Kraus.block A m) e) =
+      Kraus.block A p := by
+  subst h
+  funext σ
+  simp only [Kraus.reindexPhysical, Kraus.block_apply, Kraus.evalWord_block,
+    ← Kraus.ofFn_blockConfigEquiv, nestedBlockEquiv, Equiv.trans_apply, Equiv.apply_symm_apply]
+  change Kraus.evalWord A (List.ofFn fun i : Fin (e * m) => σ (Fin.cast (Nat.mul_comm e m) i)) =
+    Kraus.evalWord A (List.ofFn σ)
+  exact congrArg (Kraus.evalWord A) (List.ofFn_congr (Nat.mul_comm e m).symm σ).symm
+
 /-! ### The Kronecker-power lift of a physical-index operator through blocking
 
 For a physical-index operator `P` from `β` to `α`, the blocked operator `blockKron` acts on

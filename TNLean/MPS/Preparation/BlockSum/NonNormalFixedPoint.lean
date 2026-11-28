@@ -79,7 +79,6 @@ which is made in `TNLean.MPS.Preparation.NonNormalCanonicalForm`.
 open scoped BigOperators Matrix
 open Matrix
 open QuantumCircuit
-open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 
@@ -239,8 +238,8 @@ Material, the display eq. (S7) and the text following it, which replaces the pos
 of each blocked site by the fixed point and keeps `V`. -/
 noncomputable def nonNormalApproxVector {d : ℕ} (A : MPSTensor d D) (q M : ℕ)
     (α : Fin b → ℂ) (ω : Fin b → Fin D × Fin D → ℂ) :
-    (Fin M → Fin (blockPhysDim d q)) → ℂ :=
-  (Matrix.piKronecker fun _ : Fin M ↦ (Matrix.polarIso (physicalMatrix (blockTensor A q)))) *ᵥ
+    (Fin M → (Fin q → Fin d)) → ℂ :=
+  (Matrix.piKronecker fun _ : Fin M ↦ (Matrix.polarIso (physicalMatrix (Kraus.block A q)))) *ᵥ
     nonNormalFixedPointState α ω
 
 /-- The approximating state `|\tilde{φ}_N⟩ = V^{⊗M}|Ω'⟩ / ‖V^{⊗M}|Ω'⟩‖` of arXiv:2307.01696,
@@ -249,7 +248,7 @@ When the denominator vanishes the source leaves the state undefined; here the va
 the zero vector. -/
 noncomputable def nonNormalApproxState {d : ℕ} (A : MPSTensor d D) (q M : ℕ)
     (α : Fin b → ℂ) (ω : Fin b → Fin D × Fin D → ℂ) :
-    (Fin M → Fin (blockPhysDim d q)) → ℂ :=
+    (Fin M → (Fin q → Fin d)) → ℂ :=
   (Real.sqrt (∑ σ, ‖nonNormalApproxVector A q M α ω σ‖ ^ 2) : ℂ)⁻¹ •
     nonNormalApproxVector A q M α ω
 

@@ -123,7 +123,6 @@ isometry of the blocked direct sum only under it. Documented in
 
 open scoped BigOperators
 open QuantumCircuit
-open Kraus (blockTensor)
 
 namespace MPSPreparation
 
@@ -154,9 +153,9 @@ theorem exists_isOneRoundConversion_sum_blockIsometryState_of_encoding
       ∀ α : Fin b → ℂ, ∑ j, star (α j) * α j = 1 →
       ∀ {M : ℕ} [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} [NeZero N] (hN : ∑ k, ℓ k = N) (L : ℕ),
         (∀ k, 3 * r₁ ≤ ℓ k) → (∀ k, ℓ k ≤ L) →
-        (∀ j k, Kraus.IsInjective (blockTensor (A j) (ℓ k))) →
-        (∀ j j' k, j ≠ j' → (physicalMatrix (blockTensor (A j) (ℓ k)))ᴴ *
-          physicalMatrix (blockTensor (A j') (ℓ k)) = 0) →
+        (∀ j k, Kraus.IsInjective (Kraus.block (A j) (ℓ k))) →
+        (∀ j j' k, j ≠ j' → (physicalMatrix (Kraus.block (A j) (ℓ k)))ᴴ *
+          physicalMatrix (Kraus.block (A j') (ℓ k)) = 0) →
         ∃ T₁ T₂, T₁ + T₂ ≤ C * L ∧ ∃ v : Fin N → Fin d → ℂ,
           IsOneRoundConversion (Geometry.ring N) T₁ T₂ (fun σ ↦ ∏ s, v s (σ s))
             (fun s => ∑ j, α j * blockIsometryState (A j) (ω j) hN s) := by
@@ -278,9 +277,9 @@ theorem exists_isOneRoundConversion_sum_blockIsometryState
       ∀ α : Fin b → ℂ, ∑ j, star (α j) * α j = 1 →
       ∀ {M : ℕ} [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} [NeZero N] (hN : ∑ k, ℓ k = N) (L : ℕ),
         (∀ k, L₀ ≤ ℓ k) → (∀ k, ℓ k ≤ L) →
-        (∀ j k, Kraus.IsInjective (blockTensor (A j) (ℓ k))) →
-        (∀ j j' k, j ≠ j' → (physicalMatrix (blockTensor (A j) (ℓ k)))ᴴ *
-          physicalMatrix (blockTensor (A j') (ℓ k)) = 0) →
+        (∀ j k, Kraus.IsInjective (Kraus.block (A j) (ℓ k))) →
+        (∀ j j' k, j ≠ j' → (physicalMatrix (Kraus.block (A j) (ℓ k)))ᴴ *
+          physicalMatrix (Kraus.block (A j') (ℓ k)) = 0) →
         ∃ T₁ T₂, T₁ + T₂ ≤ C * L ∧ ∃ v : Fin N → Fin d → ℂ,
           IsOneRoundConversion (Geometry.ring N) T₁ T₂ (fun σ ↦ ∏ s, v s (σ s))
             (fun s => ∑ j, α j * blockIsometryState (A j) (ω j) hN s) := by
@@ -342,8 +341,6 @@ section NonNormalMeasurementPreparation
 
 open scoped BigOperators ComplexOrder InnerProductSpace
 open QuantumCircuit
-open Kraus (blockPhysDim blockPhysDim_eq_pow blockTensor
-  isNBlkInjective_iff_blockTensor_isInjective)
 
 namespace MPSPreparation
 
@@ -361,12 +358,12 @@ theorem copyApproxVector_eq_sum (hι : ∀ j k, Function.Injective (ι j k))
     (hdisj : ∀ p p' : (j : Fin b) × Fin (m j), p ≠ p' → ∀ a a', ι p.1 p.2 a ≠ ι p'.1 p'.2 a')
     {μ : CopyWeights b m} {σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ}
     (hσ : ∀ j, (σ j).PosSemidef) (htr : ∀ j, (σ j).trace = 1) {q : ℕ} (hq : q ≠ 0)
-    (hB : ∀ j, Kraus.IsInjective (blockTensor (Aj j) q))
-    (horth : ∀ j j', j ≠ j' → (physicalMatrix (blockTensor (Aj j) q))ᴴ *
-      physicalMatrix (blockTensor (Aj j') q) = 0) (M : ℕ) [NeZero M] (α : Fin b → ℂ)
+    (hB : ∀ j, Kraus.IsInjective (Kraus.block (Aj j) q))
+    (horth : ∀ j j', j ≠ j' → (physicalMatrix (Kraus.block (Aj j) q))ᴴ *
+      physicalMatrix (Kraus.block (Aj j') q) = 0) (M : ℕ) [NeZero M] (α : Fin b → ℂ)
     (hN : ∑ _ : Fin M, q = M * q) (s : Cfg d (M * q)) :
     copyApproxVector (repeatedBlockSum Aj ι μ) q M α (copyIsometry ι μ q) σ
-        ((Kraus.blockedConfigEquiv d M q).symm s) =
+        ((Kraus.blockConfigEquiv (Fin d) M q).symm s) =
       ∑ j, α j * blockIsometryState (Aj j) (fixedPointPair (σ j)) hN s := by
   rw [copyApproxVector_repeatedBlockSum hι hdisj hq horth σ M α]
   refine Finset.sum_congr rfl fun j _ => ?_
@@ -383,19 +380,19 @@ theorem sum_norm_sq_copyApproxVector (hι : ∀ j k, Function.Injective (ι j k)
     (hdisj : ∀ p p' : (j : Fin b) × Fin (m j), p ≠ p' → ∀ a a', ι p.1 p.2 a ≠ ι p'.1 p'.2 a')
     {μ : CopyWeights b m} {σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ}
     (hσ : ∀ j, (σ j).PosSemidef) (htr : ∀ j, (σ j).trace = 1) {q : ℕ} (hq : q ≠ 0)
-    (hB : ∀ j, Kraus.IsInjective (blockTensor (Aj j) q))
-    (horth : ∀ j j', j ≠ j' → (physicalMatrix (blockTensor (Aj j) q))ᴴ *
-      physicalMatrix (blockTensor (Aj j') q) = 0) (M : ℕ) [NeZero M] {α : Fin b → ℂ}
+    (hB : ∀ j, Kraus.IsInjective (Kraus.block (Aj j) q))
+    (horth : ∀ j j', j ≠ j' → (physicalMatrix (Kraus.block (Aj j) q))ᴴ *
+      physicalMatrix (Kraus.block (Aj j') q) = 0) (M : ℕ) [NeZero M] {α : Fin b → ℂ}
     (hα : ∑ j, star (α j) * α j = 1) :
     ∑ τ, ‖copyApproxVector (repeatedBlockSum Aj ι μ) q M α (copyIsometry ι μ q) σ τ‖ ^ 2 = 1 := by
   have : ∀ j, NeZero (Dj j) := fun j => Matrix.neZero_of_trace_eq_one (htr j)
-  set s : (j : Fin b) → (Fin M → Fin (blockPhysDim d q)) → ℂ :=
-    fun j τ => mpv (approximatingTensor (blockTensor (Aj j) q) (σ j)) τ
+  set s : (j : Fin b) → (Fin M → (Fin q → Fin d)) → ℂ :=
+    fun j τ => mpv (approximatingTensor (Kraus.block (Aj j) q) (σ j)) τ
   have hss : ∀ j j', ∑ τ, star (s j τ) * s j' τ = if j = j' then 1 else 0 := fun j j' => by
     split_ifs with h
     · subst h; exact mpv_approximatingTensor_norm_sq (hB j) (hσ j) (htr j)
-    · have := mpvOverlap_eq_zero (X := approximatingTensor (blockTensor (Aj j') q) (σ j'))
-        (Y := approximatingTensor (blockTensor (Aj j) q) (σ j))
+    · have := mpvOverlap_eq_zero (X := approximatingTensor (Kraus.block (Aj j') q) (σ j'))
+        (Y := approximatingTensor (Kraus.block (Aj j) q) (σ j))
         (conjTranspose_physicalMatrix_approximatingTensor_mul (horth j j' h) _ _)
         (NeZero.ne M)
       rw [mpvOverlap] at this
@@ -429,14 +426,14 @@ theorem exists_isOneRoundConversion_copyApproxVector (d b : ℕ)
       (∀ p p' : (j : Fin b) × Fin (m j), p ≠ p' → ∀ a a', ι p.1 p.2 a ≠ ι p'.1 p'.2 a') →
       ∀ (μ : CopyWeights b m) (σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ),
       (∀ j, (σ j).PosSemidef) → (∀ j, (σ j).trace = 1) →
-      ∀ q, L₀ ≤ q → (∀ j, Kraus.IsInjective (blockTensor (Aj j) q)) →
-      (∀ j j', j ≠ j' → (physicalMatrix (blockTensor (Aj j) q))ᴴ *
-        physicalMatrix (blockTensor (Aj j') q) = 0) →
+      ∀ q, L₀ ≤ q → (∀ j, Kraus.IsInjective (Kraus.block (Aj j) q)) →
+      (∀ j j', j ≠ j' → (physicalMatrix (Kraus.block (Aj j) q))ᴴ *
+        physicalMatrix (Kraus.block (Aj j') q) = 0) →
       ∀ (M : ℕ) [NeZero (M * q)] (α : Fin b → ℂ), ∑ j, star (α j) * α j = 1 →
         ∃ T₁ T₂, T₁ + T₂ ≤ C * q ∧ ∃ v : Fin (M * q) → Fin d → ℂ,
           IsOneRoundConversion (Geometry.ring (M * q)) T₁ T₂ (fun x ↦ ∏ i, v i (x i)) fun s =>
             copyApproxVector (repeatedBlockSum Aj ι μ) q M α (copyIsometry ι μ q) σ
-              ((Kraus.blockedConfigEquiv d M q).symm s) := by
+              ((Kraus.blockConfigEquiv (Fin d) M q).symm s) := by
   rcases Nat.eq_zero_or_pos d with rfl | hd
   · -- No physical states: the hypotheses are contradictory.
     refine ⟨0, 1, fun Aj ι _ _ μ σ _ htr q hq hB _ M _ α hα => ?_⟩
@@ -446,7 +443,7 @@ theorem exists_isOneRoundConversion_copyApproxVector (d b : ℕ)
       obtain rfl : b = 0 := by omega
       simp at hα
     have hD := Matrix.neZero_of_trace_eq_one (htr ⟨0, hb⟩)
-    have : IsEmpty (Fin (blockPhysDim 0 q)) := by
+    have : IsEmpty (Fin q → Fin 0) := by
       rw [blockPhysDim_eq_pow, zero_pow (by omega)]; infer_instance
     have h := hB ⟨0, hb⟩
     rw [Kraus.IsInjective, Set.range_eq_empty, Submodule.span_empty] at h
@@ -498,8 +495,8 @@ theorem exists_isOneRoundConversion_le_log_repeatedBlockSum [NeZero b]
     ∃ a b' c : ℝ, 0 < a ∧ 1 ≤ b' ∧ ∀ ε : ℝ, 0 < ε → ε ≤ 1 →
       ∀ (N q : ℕ) [NeZero N], 2 ≤ N → q ∣ N → a * Real.log (N / ε) + b' ≤ q →
         (q : ℝ) ≤ 2 * (a * Real.log (N / ε) + b') →
-        (∀ j j', j ≠ j' → (physicalMatrix (blockTensor (Aj j) q))ᴴ *
-          physicalMatrix (blockTensor (Aj j') q) = 0) →
+        (∀ j j', j ≠ j' → (physicalMatrix (Kraus.block (Aj j) q))ᴴ *
+          physicalMatrix (Kraus.block (Aj j') q) = 0) →
         bntWeight μ N ≠ 0 →
         ∃ (ψ : MPVSpace (Fin d) N) (T : ℕ), ‖ψ‖ = 1 ∧ (T : ℝ) ≤ c * Real.log (N / ε) ∧
           (∃ T₁ T₂, T₁ + T₂ ≤ T ∧ ∃ v : Fin N → Fin d → ℂ,
@@ -557,8 +554,8 @@ theorem exists_isOneRoundConversion_le_log_repeatedBlockSum [NeZero b]
   rw [mul_comm] at hM
   subst hM
   have : NeZero M := ⟨fun h => NeZero.ne (M * q) (by rw [h, zero_mul])⟩
-  have hB : ∀ j, Kraus.IsInjective (blockTensor (Aj j) q) := fun j =>
-    (isNBlkInjective_iff_blockTensor_isInjective (Aj j) q).1
+  have hB : ∀ j, Kraus.IsInjective (Kraus.block (Aj j) q) := fun j =>
+    (Kraus.isNBlkInjective_iff_isInjective_block (Aj j) q).1
       (Kraus.isNBlkInjective_of_le (hLpos j) (hLinj j) (hLmq j))
   have hq0 : q ≠ 0 := by
     have : (0 : ℝ) < q := by linarith
@@ -567,7 +564,7 @@ theorem exists_isOneRoundConversion_le_log_repeatedBlockSum [NeZero b]
   have hα : ∑ j, star (α j) * α j = 1 := ghzAmplitude_norm_sq hβ
   have hprep := hCp Aj ι hι hdisj μ σ (fun j => (hσ j).posSemidef) htr q hLq hB horth M α hα
   set v : Cfg d (M * q) → ℂ := fun s => copyApproxVector (repeatedBlockSum Aj ι μ) q M α
-    (copyIsometry ι μ q) σ ((Kraus.blockedConfigEquiv d M q).symm s) with hv
+    (copyIsometry ι μ q) σ ((Kraus.blockConfigEquiv (Fin d) M q).symm s) with hv
   set ψ : MPVSpace (Fin d) (M * q) := (EuclideanSpace.equiv (ι := Cfg d (M * q)) (𝕜 := ℂ)).symm v
   have hψ : (fun s => ψ s) = v := funext fun s => by
     simp [ψ, PiLp.toLp_apply]
@@ -576,19 +573,19 @@ theorem exists_isOneRoundConversion_le_log_repeatedBlockSum [NeZero b]
   have hψn : ‖ψ‖ = 1 := by
     rw [EuclideanSpace.norm_eq]
     have : ∑ s, ‖ψ s‖ ^ 2 = 1 := by
-      rw [← hsq, ← (Kraus.blockedConfigEquiv d M q).sum_comp]
+      rw [← hsq, ← (Kraus.blockConfigEquiv (Fin d) M q).sum_comp]
       refine Finset.sum_congr rfl fun τ _ => ?_
-      rw [show ψ (Kraus.blockedConfigEquiv d M q τ) = v (Kraus.blockedConfigEquiv d M q τ) from
+      rw [show ψ (Kraus.blockConfigEquiv (Fin d) M q τ) = v (Kraus.blockConfigEquiv (Fin d) M q τ) from
         congrFun hψ _, hv]
       simp only [Equiv.symm_apply_apply]
     rw [this, Real.sqrt_one]
   have hinner : ⟪ψ, normalizedMPVState (repeatedBlockSum Aj ι μ) (M * q)⟫_ℂ =
       copyApproxOverlap (repeatedBlockSum Aj ι μ) q M α (copyIsometry ι μ q) σ := by
     rw [copyApproxOverlap, hsq, Real.sqrt_one, Complex.ofReal_one, inv_one, PiLp.inner_apply,
-      ← (Kraus.blockedConfigEquiv d M q).sum_comp]
+      ← (Kraus.blockConfigEquiv (Fin d) M q).sum_comp]
     refine Finset.sum_congr rfl fun τ _ => ?_
-    rw [RCLike.inner_apply, one_mul, show ψ (Kraus.blockedConfigEquiv d M q τ) =
-      v (Kraus.blockedConfigEquiv d M q τ) from congrFun hψ _, hv]
+    rw [RCLike.inner_apply, one_mul, show ψ (Kraus.blockConfigEquiv (Fin d) M q τ) =
+      v (Kraus.blockConfigEquiv (Fin d) M q τ) from congrFun hψ _, hv]
     simp only [Equiv.symm_apply_apply]
     rw [mul_comm]
     rfl

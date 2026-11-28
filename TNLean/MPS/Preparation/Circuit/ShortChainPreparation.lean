@@ -29,7 +29,6 @@ The source does not treat chains shorter than the block length: its proof of The
 open Matrix MPSTensor
 open scoped BigOperators ComplexOrder InnerProductSpace
 open QuantumCircuit
-open Kraus (blockTensor)
 
 namespace MPSPreparation
 
@@ -99,7 +98,7 @@ theorem exists_isPreparedInDepth_of_norm_eq_one (hd : 0 < d) (n₀ : ℕ) :
 blocked tensor `B_N = V P`: up to normalization, `ω` is `P |𝟙⟩` with `|𝟙⟩ = ∑_α |α, α⟩`. -/
 noncomputable def normalizedTracePair (A : MPSTensor d D) (N : ℕ) : Fin D × Fin D → ℂ :=
   fun p => (‖mpvState A N‖ : ℂ)⁻¹ *
-    Matrix.trace (polarPosTensor (blockTensor A N) (finProdFinEquiv (p.2, p.1)))
+    Matrix.trace (polarPosTensor (Kraus.block A N) (finProdFinEquiv (p.2, p.1)))
 
 /-- **The periodic state is a one-block state.** On a single block of `N` sites, the state
 `V ⊗ |ω⟩` with the pair `ω = normalizedTracePair A N`, whose right leg is joined to its own left
@@ -110,9 +109,9 @@ theorem blockIsometryState_normalizedTracePair (A : MPSTensor d D) (N : ℕ)
     blockIsometryState A (normalizedTracePair A N) hN = normalizedMPVState A N := by
   ext s
   rw [blockIsometryState_apply, normalizedMPVState, PiLp.smul_apply, mpvState_apply,
-    mpv_eq_mpvFamily_blockTensor A hN,
-    show (fun _ : Fin 1 => blockTensor A N) = fun k => rotatePhysical
-      (polarIsoMatrix (blockTensor A N)) (polarPosTensor (blockTensor A N)) from
+    mpv_eq_mpvFamily_block A hN,
+    show (fun _ : Fin 1 => Kraus.block A N) = fun k => rotatePhysical
+      (polarIsoMatrix (Kraus.block A N)) (polarPosTensor (Kraus.block A N)) from
         funext fun _ => (rotatePhysical_polarIsoMatrix_polarPosTensor _).symm,
     mpvFamily_rotatePhysical, smul_eq_mul, Finset.mul_sum]
   refine Finset.sum_congr rfl fun τ _ => ?_
@@ -132,7 +131,7 @@ block covering the whole ring, with the pair `ω ∝ P |𝟙⟩` in place of the
 point. -/
 theorem exists_isPreparedInDepth_normalizedMPVState (d D : ℕ) :
     ∃ C : ℕ, ∀ (A : MPSTensor d D) (N : ℕ) [NeZero N], 3 * D ≤ N →
-      Kraus.IsInjective (blockTensor A N) → mpvState A N ≠ 0 →
+      Kraus.IsInjective (Kraus.block A N) → mpvState A N ≠ 0 →
         IsPreparedInDepth (Geometry.ring N) (C * N) fun s => normalizedMPVState A N s := by
   obtain ⟨C, hC⟩ := exists_isPreparedInDepth_blockIsometryState d D
   refine ⟨C, fun A N _ hN3 hinj h0 => ?_⟩

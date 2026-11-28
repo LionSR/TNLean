@@ -78,7 +78,6 @@ open MPTensor
 
 open Matrix MPSTensor
 open scoped BigOperators ComplexOrder InnerProductSpace
-open Kraus (blockTensor)
 
 namespace MPSPreparation
 
@@ -90,19 +89,19 @@ MERA", with eqs. (10) and (16)). Let the two-site blocked tensor of `A` be injec
 `q = 2^{k+1}` and `M ≥ 1` blocks, the approximating state `|φ'_N⟩ = V^{⊗M} |Ω⟩` of eq. (10) is
 exactly the state of the tree-RG MERA with `k + 1` isometry layers. -/
 theorem approximatingMPVState_eq_state_treeMERA [NeZero D] (A : MPSTensor d D)
-    (hA : Kraus.IsInjective (blockTensor A 2)) {σ : Matrix (Fin D) (Fin D) ℂ}
+    (hA : Kraus.IsInjective (Kraus.block A 2)) {σ : Matrix (Fin D) (Fin D) ℂ}
     (hσ : σ.PosSemidef) (htr : σ.trace = 1) (k M : ℕ) [NeZero M]
     (u : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ)
     (hu : u ∈ Matrix.unitaryGroup (Fin D × Fin D) ℂ) (hu0 : ∀ p, u p (0, 0) = fixedPointPair σ p) :
     approximatingMPVState A σ (2 ^ (k + 1)) M = (treeMERA A hA k u hu).state M := by
-  have hq : Kraus.IsInjective (blockTensor A (2 ^ (k + 1))) := by
+  have hq : Kraus.IsInjective (Kraus.block A (2 ^ (k + 1))) := by
     have := block_isInjective_mul_of_block_isInjective A
       (pow_pos two_pos k) hA
     rwa [← pow_succ] at this
   rw [(inner_approximatingMPVState_mpvState A hq hσ htr M).1]
   have htop : (treeMERA A hA k u hu).topPair = fixedPointPair σ := funext hu0
-  have htree : (treeMERA A hA k u hu).treeMatrix = polarIsoMatrix (blockTensor A (2 ^ (k + 1))) :=
-    (binaryTreeMatrix_treeLayers k A).trans (polarIsoMatrix_blockTensor_eq_treeIsoMatrix k A).symm
+  have htree : (treeMERA A hA k u hu).treeMatrix = polarIsoMatrix (Kraus.block A (2 ^ (k + 1))) :=
+    (binaryTreeMatrix_treeLayers k A).trans (polarIsoMatrix_block_eq_treeIsoMatrix k A).symm
   ext s
   rw [approximatingMPVStateRaw_apply, BinaryMERA.state_apply, BinaryMERA.amplitude, htop, htree,
     mpv_approximatingTensor]
@@ -189,7 +188,7 @@ theorem strengthens Lemma 1'(i) of the source, which is stated for `0 < γ < 1/2
 `e^{-γq/ξ}` and would give the threshold `(ξ/γ) log(C N/ε)` instead. The MERA state is the
 approximating state (`approximatingMPVState_eq_state_treeMERA`). -/
 theorem exists_state_treeMERA_approximationError_le [NeZero D] (A : MPSTensor d D)
-    (hN : Kraus.IsNormal A) (hA : IsLeftCanonical A) (h2 : Kraus.IsInjective (blockTensor A 2))
+    (hN : Kraus.IsNormal A) (hA : IsLeftCanonical A) (h2 : Kraus.IsInjective (Kraus.block A 2))
     {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosDef) (htr : σ.trace = 1)
     (hfix : Kraus.transferMap A σ = σ) {t : ℝ} (ht0 : 0 < t) (ht1 : t < 1)
     (hlam : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ t) :
@@ -227,7 +226,7 @@ layers has error at most `ε`, and `k ≤ log₂(max 1 x)`. The exponent `k` is 
 threshold: the left side of the threshold grows linearly in `k` and the right side exponentially,
 and if `k ≥ 1` the threshold fails at `k - 1`, so `2^k < x`. -/
 theorem exists_state_treeMERA_approximationError_le_and_le_logb [NeZero D] (A : MPSTensor d D)
-    (hN : Kraus.IsNormal A) (hA : IsLeftCanonical A) (h2 : Kraus.IsInjective (blockTensor A 2))
+    (hN : Kraus.IsNormal A) (hA : IsLeftCanonical A) (h2 : Kraus.IsInjective (Kraus.block A 2))
     {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosDef) (htr : σ.trace = 1)
     (hfix : Kraus.transferMap A σ = σ) {t : ℝ} (ht0 : 0 < t) (ht1 : t < 1)
     (hlam : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ t) :

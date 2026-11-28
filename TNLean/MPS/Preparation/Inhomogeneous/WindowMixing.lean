@@ -61,12 +61,12 @@ theorem exists_compatible_density_family {d D N : ℕ} [NeZero D]
     ∃ σ : ℕ → Matrix (Fin D) (Fin D) ℂ,
       (∀ i, (σ i).PosSemidef ∧ (σ i).trace = 1) ∧ σ N = σ 0 ∧
       ∀ a n (h : a + n ≤ N),
-        Kraus.transferMap (MPSChainTensor.blockTensor (A.interval a n h)) (σ (a + n)) = σ a := by
+        Kraus.transferMap (MPSChainTensor.eval (A.interval a n h)) (σ (a + n)) = σ a := by
   classical
-  let T := Kraus.transferMap (MPSChainTensor.blockTensor A)
+  let T := Kraus.transferMap (MPSChainTensor.eval A)
   obtain ⟨ρ, hρ, hρne, hfix⟩ := IsPositiveMap.exists_posSemidef_fixedPoint
     (E := T) (fun X hX => Kraus.transferMap_pos _ hX)
-    (MPSChainTensor.trace_transferMap_blockTensor A htp)
+    (MPSChainTensor.trace_transferMap_eval A htp)
     (Nat.pos_of_ne_zero (NeZero.ne D))
   have hρtr : ρ.trace ≠ 0 := fun h => hρne (hρ.trace_eq_zero_iff.mp h)
   let θ := ρ.trace⁻¹ • ρ
@@ -93,7 +93,7 @@ theorem exists_compatible_density_family {d D N : ℕ} [NeZero D]
     exact ⟨fun X hX => Kraus.transferMap_pos _ hX, htp i⟩
   refine ⟨σ, hσ, ?_, fun a n h => ?_⟩
   · have hzero : σ 0 = θ := by
-      simpa [σ, Es, T, MPSChainTensor.transferMap_blockTensor] using hθfix
+      simpa [σ, Es, T, MPSChainTensor.transferMap_eval] using hθfix
     rw [hzero]
     have hdrop : Es.drop N = [] := List.drop_eq_nil_iff.mpr (by simp [Es])
     change (Es.drop N).prod θ = θ
@@ -107,18 +107,18 @@ theorem exists_compatible_density_family {d D N : ℕ} [NeZero D]
 /-- A fixed-width Choi minorization of each actual nonwrapping window bounds the whole
 chain Gram error by the number of complete windows. The final shorter block uses only
 trace preservation and complete positivity. Window-dependent minorizers are allowed. -/
-theorem norm_gram_blockTensor_sub_transport_le_of_window_domination
+theorem norm_gram_block_sub_transport_le_of_window_domination
     {d D N : ℕ} (A : MPSChainTensor d D N) (s : ℕ) (_hs : 0 < s) (δ : ℝ)
     (htp : ∀ i, IsTracePreservingMap (Kraus.transferMap (A i)))
     (hwindow : ∀ a (ha : a + s ≤ N), ∃ τ : Matrix (Fin D) (Fin D) ℂ,
       τ.PosSemidef ∧ τ.trace = 1 ∧
       ChoiRectangular.choiMatrix (Kraus.transferMap
-        (MPSChainTensor.blockTensor (A.interval a s ha))) ≥
+        (MPSChainTensor.eval (A.interval a s ha))) ≥
           ((δ : ℂ) / D) • (τ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)))
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef) (hρtr : ρ.trace = 1) :
-    ‖(physicalMatrix (MPSChainTensor.blockTensor A))ᴴ *
-        physicalMatrix (MPSChainTensor.blockTensor A) -
-      (Kraus.transferMap (MPSChainTensor.blockTensor A) ρ)ᵀ ⊗ₖ
+    ‖(physicalMatrix (MPSChainTensor.eval A))ᴴ *
+        physicalMatrix (MPSChainTensor.eval A) -
+      (Kraus.transferMap (MPSChainTensor.eval A) ρ)ᵀ ⊗ₖ
         (1 : Matrix (Fin D) (Fin D) ℂ)‖ ≤ 2 * D * (1 - δ) ^ (N / s) := by
   classical
   have := Matrix.neZero_of_trace_eq_one hρtr
@@ -150,14 +150,14 @@ theorem norm_gram_blockTensor_sub_transport_le_of_window_domination
     · exact hρtr
   have heq (j : Fin (m + 1)) (hj : j ≠ Fin.last m) :
       Kraus.transferMap (chainBlockTensor A hsum j) =
-        Kraus.transferMap (MPSChainTensor.blockTensor
+        Kraus.transferMap (MPSChainTensor.eval
           (A.interval (j.val * s) s (hbound ⟨j.val, by
             have := j.isLt
             have := Fin.val_ne_of_ne hj
             simp only [Fin.val_last] at this
             omega⟩))) := by
     have hℓ : ℓ j = s := by simp [ℓ, hj]
-    simp only [chainBlockTensor, MPSChainTensor.transferMap_blockTensor]
+    simp only [chainBlockTensor, MPSChainTensor.transferMap_eval]
     congr 1
     apply List.ext_getElem
     · simp [hℓ]
@@ -179,8 +179,8 @@ theorem norm_gram_blockTensor_sub_transport_le_of_window_domination
         simp only [Fin.val_last] at this
         omega
       simpa only [e, hj, ite_false, ω, dite_eq_left hv, heq j hj] using (hτ ⟨j.val, hv⟩).2.2
-  have hb := norm_gram_blockTensor_sub_transport_le_of_choi_domination A ℓ hsum e ω hωtr
-    (fun j X => MPSChainTensor.trace_transferMap_blockTensor _ (fun i => htp _) X)
+  have hb := norm_gram_block_sub_transport_le_of_choi_domination A ℓ hsum e ω hωtr
+    (fun j X => MPSChainTensor.trace_transferMap_eval _ (fun i => htp _) X)
     hc ρ hρ hρtr
   have heprod : ∏ j, (1 - e j) = (1 - δ) ^ m := by
     rw [Fin.prod_univ_castSucc]
@@ -198,12 +198,12 @@ theorem exists_norm_transferMatrix_interval_sub_le_of_window_domination
       (∀ a (ha : a + s ≤ N), ∃ τ : Matrix (Fin D) (Fin D) ℂ,
         τ.PosSemidef ∧ τ.trace = 1 ∧
         ChoiRectangular.choiMatrix (Kraus.transferMap
-          (MPSChainTensor.blockTensor (A.interval a s ha))) ≥
+          (MPSChainTensor.eval (A.interval a s ha))) ≥
             ((δ : ℂ) / D) • (τ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ))) →
       ∃ σ : ℕ → Matrix (Fin D) (Fin D) ℂ,
         (∀ i, (σ i).PosSemidef ∧ (σ i).trace = 1) ∧ σ N = σ 0 ∧
         ∀ a n (h : a + n ≤ N),
-        ‖transferMatrix (Kraus.transferMap (MPSChainTensor.blockTensor (A.interval a n h))) -
+        ‖transferMatrix (Kraus.transferMap (MPSChainTensor.eval (A.interval a n h))) -
           transferMatrix (Kraus.transferMap (fixedPointTensor (σ a)))‖ ≤
             K * (1 - δ) ^ (n / s) := by
   obtain ⟨Kr, hKr, hconv⟩ := exists_norm_gram_transferMatrix_sub_le D
@@ -216,20 +216,20 @@ theorem exists_norm_transferMatrix_interval_sub_le_of_window_domination
   have hBwindow : ∀ b (hb : b + s ≤ n), ∃ τ : Matrix (Fin D) (Fin D) ℂ,
       τ.PosSemidef ∧ τ.trace = 1 ∧
       ChoiRectangular.choiMatrix (Kraus.transferMap
-        (MPSChainTensor.blockTensor (B.interval b s hb))) ≥
+        (MPSChainTensor.eval (B.interval b s hb))) ≥
           ((δ : ℂ) / D) • (τ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) := by
     intro b hb
     dsimp only [B]
     rw [MPSChainTensor.interval_interval]
     exact hwindow (a + b) (by omega)
-  have hg := norm_gram_blockTensor_sub_transport_le_of_window_domination B s hs δ hBtp
+  have hg := norm_gram_block_sub_transport_le_of_window_domination B s hs δ hBtp
     hBwindow (σ (a + n)) (hσ _).1 (hσ _).2
-  change ‖(physicalMatrix (MPSChainTensor.blockTensor B))ᴴ *
-      physicalMatrix (MPSChainTensor.blockTensor B) -
-      (Kraus.transferMap (MPSChainTensor.blockTensor (A.interval a n h)) (σ (a + n)))ᵀ ⊗ₖ
+  change ‖(physicalMatrix (MPSChainTensor.eval B))ᴴ *
+      physicalMatrix (MPSChainTensor.eval B) -
+      (Kraus.transferMap (MPSChainTensor.eval (A.interval a n h)) (σ (a + n)))ᵀ ⊗ₖ
         (1 : Matrix (Fin D) (Fin D) ℂ)‖ ≤ _ at hg
   rw [htransport] at hg
-  exact (hconv (MPSChainTensor.blockTensor B) (σ a) (hσ a).1).2.trans
+  exact (hconv (MPSChainTensor.eval B) (σ a) (hσ a).1).2.trans
     (by simpa only [mul_assoc] using mul_le_mul_of_nonneg_left hg hKr.le)
 
 end MPSPreparation
@@ -261,7 +261,7 @@ theorem exists_isPreparedInDepth_inhomogeneous_le_log_eventually_of_window_domin
     (hwindow : ∀ (N a : ℕ) (ha : a + s ≤ N), ∃ τ : Matrix (Fin D) (Fin D) ℂ,
       τ.PosSemidef ∧ τ.trace = 1 ∧
       ChoiRectangular.choiMatrix (Kraus.transferMap
-        (MPSChainTensor.blockTensor ((A N).interval a s ha))) ≥
+        (MPSChainTensor.eval ((A N).interval a s ha))) ≥
           ((η : ℂ) / D) • (τ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ))) :
     ∃ N₀ : ℕ, s ≤ N₀ ∧ ∃ C : ℝ, ∀ ε : ℝ, 0 < ε → ε ≤ 1 →
       ∀ (N : ℕ) [NeZero N], N₀ ≤ N →
@@ -272,7 +272,7 @@ theorem exists_isPreparedInDepth_inhomogeneous_le_log_eventually_of_window_domin
   obtain ⟨τ₀, hτ₀, hτ₀tr, _⟩ := hwindow s 0 (by omega)
   have := Matrix.neZero_of_trace_eq_one hτ₀tr
   have hη1 : η ≤ 1 := by
-    have hg := norm_gram_blockTensor_sub_transport_le_of_window_domination
+    have hg := norm_gram_block_sub_transport_le_of_window_domination
       (A s) s hs η (htp s) (hwindow s) τ₀ hτ₀ hτ₀tr
     have hD : (0 : ℝ) < D := Nat.cast_pos.mpr (Nat.pos_of_ne_zero (NeZero.ne D))
     have hp : 0 ≤ 2 * D * (1 - η) :=
@@ -286,7 +286,7 @@ theorem exists_isPreparedInDepth_inhomogeneous_le_log_eventually_of_window_domin
   have hweak : ∀ (N a : ℕ) (ha : a + s ≤ N), ∃ τ : Matrix (Fin D) (Fin D) ℂ,
       τ.PosSemidef ∧ τ.trace = 1 ∧
       ChoiRectangular.choiMatrix (Kraus.transferMap
-        (MPSChainTensor.blockTensor ((A N).interval a s ha))) ≥
+        (MPSChainTensor.eval ((A N).interval a s ha))) ≥
           (((η / 2 : ℝ) : ℂ) / D) • (τ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)) := by
     intro N a ha
     obtain ⟨τ, hτ, htr, hc⟩ := hwindow N a ha
@@ -319,7 +319,7 @@ theorem exists_isPreparedInDepth_inhomogeneous_le_log_eventually_of_window_domin
     have h := hm N (blockOffset ℓ j.val) (ℓ j) hbound
     have hg := Real.pow_nat_div_le_two_mul_exp s (ℓ j) hs (1 - η / 2) hρhalf hρ1
     have hfinal := h.trans (mul_le_mul_of_nonneg_left hg hK.le)
-    simpa only [MPSChainTensor.transferMap_blockTensor, MPSChainTensor.interval,
+    simpa only [MPSChainTensor.transferMap_eval, MPSChainTensor.interval,
       blockSite, Nat.add_zero, mul_assoc, mul_left_comm K 2] using hfinal
   obtain ⟨N₀, C, hC⟩ := happrox hm'
   refine ⟨max s N₀, le_max_left _ _, C, fun ε hε hε1 N _ hN => ?_⟩

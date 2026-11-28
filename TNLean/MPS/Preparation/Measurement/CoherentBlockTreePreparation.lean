@@ -44,7 +44,6 @@ section
 
 open Matrix MPSTensor QuantumCircuit
 open scoped BigOperators
-open Kraus (decodeBlockEquiv blockTensor)
 
 namespace MPSPreparation
 
@@ -85,7 +84,7 @@ theorem exists_isMeasurementConversion_sum_blockIsometryState
     (d s c : ℕ) [NeZero d] (hs : 2 ≤ s) :
     ∃ C : ℕ, ∀ {D b χ : ℕ} (A : MPSTensor d D) (S : Finset (Fin D × Fin D))
       (e : Fin χ ↪ Fin (D * D)), Set.range (virtualPairEquiv D ∘ e) = (S : Set _) →
-      (∀ m, s ≤ m → IsInjectiveOn (blockTensor A m) (S : Set _)) →
+      (∀ m, s ≤ m → IsInjectiveOn (Kraus.block A m) (S : Set _)) →
       ∀ (dig : Fin D → Cfg d s), Function.Injective dig →
       (∀ l, dig l ⟨s - 1, by omega⟩ = 0) →
       ∀ (dig₀ : Fin b → Cfg d s), Function.Injective dig₀ →
@@ -143,7 +142,7 @@ theorem exists_isMeasurementConversion_sum_blockIsometryState
     (fun k p => leafLen_balancedWidths_le (hℓ₂ k) p) ι₀ enc hι₀ henc
   have hUS : ∀ k l r τ, (l, r) ∈ S →
       U k τ (blockInputCfg (NeZero.pos d) (ℓ k) dig l r) =
-        polarIsoMatrix (blockTensor A (ℓ k)) ((decodeBlockEquiv d (ℓ k)).symm τ)
+        polarIsoMatrix (Kraus.block A (ℓ k)) (τ)
           (finProdFinEquiv (l, r)) := by
     intro k l r τ hp
     obtain ⟨x, hx⟩ : ∃ x, virtualPairEquiv D (e x) = (l, r) := by
@@ -154,7 +153,7 @@ theorem exists_isMeasurementConversion_sum_blockIsometryState
     have hex : e x = finProdFinEquiv (l, r) := by
       apply (virtualPairEquiv D).injective
       simpa [virtualPairEquiv] using hx
-    simpa only [hex, cfgPolarIso, virtualPairEquiv, Equiv.symm_apply_apply] using hu
+    simpa only [hex, virtualPairEquiv, Equiv.symm_apply_apply] using hu
   obtain ⟨W, hWu, hW⟩ := exists_pairFamilyUnitary hdig hdig₀ ω hω
   obtain ⟨u, -, hud, huop⟩ := isUnitaryCircuitOn_pairLayerOp hN hr fun _ => hK W hWu
   set seed := windowGHZState hN hr (Function.extend dig₀ α 0)
@@ -187,7 +186,7 @@ The same constants apply to every number of labels at most `B`, so a canonical f
 the one-label exact whole-ring pair use the same tree scale. -/
 theorem exists_supported_block_preparation_constants {d D : ℕ} (hd : 2 ≤ d)
     (A : MPSTensor d D) (S : Finset (Fin D × Fin D)) (B L : ℕ)
-    (hinj : ∀ m, L ≤ m → IsInjectiveOn (blockTensor A m) (S : Set _)) :
+    (hinj : ∀ m, L ≤ m → IsInjectiveOn (Kraus.block A m) (S : Set _)) :
     ∃ s C : ℕ, 2 ≤ s ∧ L ≤ s ∧ ∀ {b : ℕ}, b ≤ B →
       ∀ (h : ℕ) {M N : ℕ} [NeZero M] [NeZero N]
         (ℓ : Fin M → ℕ) (hN : ∑ k, ℓ k = N),
@@ -248,7 +247,6 @@ section
 
 open Matrix MPSTensor QuantumCircuit
 open scoped BigOperators InnerProductSpace
-open Kraus (blockTensor)
 
 namespace MPSPreparation
 
@@ -257,7 +255,7 @@ all-length double-logarithmic measurement depth. Constants precede the length an
 the exact one-block hypothesis imposes no support condition at unused ring sizes. -/
 theorem exists_log_log_preparation_of_supported_block_approximation
     {d D b : ℕ} (hd : 2 ≤ d) (A : MPSTensor d D) (S : Finset (Fin D × Fin D))
-    (L : ℕ) (hinj : ∀ m, L ≤ m → IsInjectiveOn (blockTensor A m) (S : Set _))
+    (L : ℕ) (hinj : ∀ m, L ≤ m → IsInjectiveOn (Kraus.block A m) (S : Set _))
     (ω : Fin b → Fin D × Fin D → ℂ)
     (hω : ∀ j j', ∑ p, star (ω j p) * ω j' p = if j = j' then 1 else 0)
     (hωS : ∀ j {M : ℕ} (x : Fin M → Fin D × Fin D),

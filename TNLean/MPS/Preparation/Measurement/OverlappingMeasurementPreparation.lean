@@ -43,7 +43,7 @@ length `N ≥ 2`:
 The chain is cut as in the Supplemental Material, proof of Theorem 1: blocks "all of the same
 size, `q_N`, except for the last one, which may be larger". The isometries are those of the
 direct sum `⊕ⱼ A_j` with unit weights, whose blocked tensors are injective on the bond pairs of
-the blocks for large block lengths (`MPSTensor.exists_isInjectiveOn_blockTensor_blockSum`).
+the blocks for large block lengths (`MPSTensor.exists_isInjectiveOn_block_blockSum`).
 
 **Local fix (isometry of the unweighted direct sum):** the state prepared is
 `∑ⱼ αⱼ (⊗ₖ V_k) ⊗ₖ |ω_j⟩` with `αⱼ = βⱼ / (∑ₗ |βₗ|²)^{1/2}` and `V_k` the isometries of the direct
@@ -143,7 +143,6 @@ section
 open Matrix MPSTensor
 open scoped BigOperators ComplexOrder InnerProductSpace
 open QuantumCircuit
-open Kraus (blockPhysDim blockTensor)
 
 namespace MPSPreparation
 
@@ -177,7 +176,7 @@ private theorem exists_isOneRoundConversion_of_encoding_of_isInjectiveOn
       ∀ α : Fin b → ℂ, ∑ j, star (α j) * α j = 1 →
       ∀ {M : ℕ} [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} [NeZero N] (hN : ∑ k, ℓ k = N) (L : ℕ),
         (∀ k, 3 * r₁ ≤ ℓ k) → (∀ k, ℓ k ≤ L) →
-        (∀ k, IsInjectiveOn (blockTensor A (ℓ k)) (S : Set (Fin D × Fin D))) →
+        (∀ k, IsInjectiveOn (Kraus.block A (ℓ k)) (S : Set (Fin D × Fin D))) →
         ∃ T₁ T₂, T₁ + T₂ ≤ C * L ∧ ∃ v : Fin N → Fin d → ℂ,
           IsOneRoundConversion (Geometry.ring N) T₁ T₂ (fun σ ↦ ∏ s, v s (σ s))
             (fun s => ∑ j, α j * blockIsometryState A (ω j) hN s) := by
@@ -219,7 +218,7 @@ theorem exists_isOneRoundConversion_blockIsometryState_of_isInjectiveOn
       ∀ α : Fin b → ℂ, ∑ j, star (α j) * α j = 1 →
       ∀ {M : ℕ} [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} [NeZero N] (hN : ∑ k, ℓ k = N) (L : ℕ),
         (∀ k, L₀ ≤ ℓ k) → (∀ k, ℓ k ≤ L) →
-        (∀ k, IsInjectiveOn (blockTensor A (ℓ k)) (S : Set (Fin D × Fin D))) →
+        (∀ k, IsInjectiveOn (Kraus.block A (ℓ k)) (S : Set (Fin D × Fin D))) →
         ∃ T₁ T₂, T₁ + T₂ ≤ C * L ∧ ∃ v : Fin N → Fin d → ℂ,
           IsOneRoundConversion (Geometry.ring N) T₁ T₂ (fun σ ↦ ∏ s, v s (σ s))
             (fun s => ∑ j, α j * blockIsometryState A (ω j) hN s) := by
@@ -263,7 +262,7 @@ theorem exists_isOneRoundConversion_of_isPreparedInDepth {N : ℕ}
 /-- The isometries on the blocks act linearly on the vector of bond pairs. -/
 private theorem blockIsoVector_sum_smul {D M N : ℕ} {ℓ : Fin M → ℕ} {κ : Type*}
     [Fintype κ]
-    (B : ∀ k, MPSTensor (blockPhysDim d (ℓ k)) D) (hN : ∑ k, ℓ k = N) (c : κ → ℂ)
+    (B : ∀ k, MPTensor (Fin (ℓ k) → Fin d) (Fin D)) (hN : ∑ k, ℓ k = N) (c : κ → ℂ)
     (x : κ → MPVSpace (Fin (D * D)) M) :
     blockIsoVector B hN (∑ i, c i • x i) = ∑ i, c i • blockIsoVector B hN (x i) := by
   ext s
@@ -281,7 +280,7 @@ theorem exists_blockIsometryState_eq_smul {D b : ℕ} {Dj : Fin b → ℕ}
     {Aj : (j : Fin b) → MPSTensor d (Dj j)} {ι : (j : Fin b) → Fin (Dj j) → Fin D}
     (hι : ∀ j, Function.Injective (ι j)) (hdisj : ∀ j j', j ≠ j' → ∀ a a', ι j a ≠ ι j' a')
     {N : ℕ} [NeZero N] (hN1 : ∑ _ : Fin 1, N = N)
-    (hinj : IsInjectiveOn (blockTensor (blockSum Aj ι fun _ => 1) N)
+    (hinj : IsInjectiveOn (Kraus.block (blockSum Aj ι fun _ => 1) N)
       (blockPairs ι : Set (Fin D × Fin D)))
     (β : Fin b → ℂ) (φ : MPVSpace (Fin d) N) (hφ : ∀ s, φ s = ∑ j, β j * mpv (Aj j) s)
     (hφ0 : φ ≠ 0) :
@@ -290,7 +289,7 @@ theorem exists_blockIsometryState_eq_smul {D b : ℕ} {Dj : Fin b → ℕ}
         ∀ k, c k ∈ blockPairs ι) ∧
       blockIsometryState (blockSum Aj ι fun _ => 1) ω hN1 = ((‖φ‖ : ℂ)⁻¹) • φ := by
   classical
-  set B := blockTensor (blockSum Aj ι fun _ => 1) N
+  set B := Kraus.block (blockSum Aj ι fun _ => 1) N
   have hN0 : N ≠ 0 := NeZero.ne N
   set y : Fin b → MPVSpace (Fin (D * D)) 1 := fun j =>
     (EuclideanSpace.equiv (ι := Cfg (D * D) 1) (𝕜 := ℂ)).symm fun τ =>
@@ -437,7 +436,7 @@ theorem exists_isOneRoundConversion_le_log_of_mpv_eq_sum
     exists_forall_eigenvalue_norm_le_of_mixed hN hA hDj hmix
   have hnorm : ‖(t : ℂ)‖ = t := by rw [Complex.norm_real, Real.norm_eq_abs, abs_of_pos ht0]
   -- The constants.
-  obtain ⟨L₀, hL₀⟩ := exists_isInjectiveOn_blockTensor_blockSum hι' hdisj' hN hA hσ htr hfix
+  obtain ⟨L₀, hL₀⟩ := exists_isInjectiveOn_block_blockSum hι' hdisj' hN hA hσ htr hfix
     (lam₂ := (t : ℂ)) (by rw [hnorm]; exact ht1) hlam hmixle
   obtain ⟨K, hK, herr⟩ := exists_one_sub_norm_inner_sum_blockIsometryState_le hι' hdisj' hN hA hσ
     htr hfix hlam hmixle (γ := 1 / 4) (by norm_num) (by norm_num)
@@ -511,7 +510,7 @@ theorem exists_isOneRoundConversion_le_log_of_mpv_eq_sum
   by_cases hqN : q ≤ N
   · -- Long chains: `M - 1` blocks of length `q` and one of length `q' = q + N % q < 2q`.
     obtain ⟨m', ℓ, hm, hsum, hℓq, hℓ2⟩ := exists_remainderBlocks hq0 hqN
-    have hinjℓ : ∀ k, IsInjectiveOn (blockTensor AJ (ℓ k))
+    have hinjℓ : ∀ k, IsInjectiveOn (Kraus.block AJ (ℓ k))
         (blockPairs ι' : Set (Fin D' × Fin D')) := fun k => hL₀ _ (by have := hℓq k; omega)
     have hβ : β ≠ 0 := by
       intro hβ0
@@ -556,7 +555,7 @@ theorem exists_isOneRoundConversion_le_log_of_mpv_eq_sum
     have hψ1 := norm_normalizedMPVState h0
     by_cases hNL : Lmin ≤ N
     · have hN1 : ∑ _ : Fin 1, N = N := by simp
-      have hinjN : IsInjectiveOn (blockTensor AJ N) (blockPairs ι' : Set (Fin D' × Fin D')) :=
+      have hinjN : IsInjectiveOn (Kraus.block AJ N) (blockPairs ι' : Set (Fin D' × Fin D')) :=
         hL₀ N (by omega)
       obtain ⟨ω₁, hω₁, hω₁S, heq⟩ := exists_blockIsometryState_eq_smul hι' hdisj' hN1 hinjN β _
         hφ h0

@@ -27,7 +27,6 @@ open MPTensor
 
 open scoped BigOperators ComplexOrder InnerProductSpace
 open MPSTensor QuantumCircuit
-open Kraus (blockTensor isNBlkInjective_iff_blockTensor_isInjective)
 
 namespace MPSPreparation
 
@@ -129,8 +128,8 @@ theorem exists_isPreparedInDepth_allLengthPolynomialState {d D : ℕ} (A : MPSTe
   obtain ⟨Ce, hCe⟩ := exists_isPreparedInDepth_normalizedMPVState d D
   obtain ⟨Nz, hNz⟩ := exists_mpvState_ne_zero_of_le A hNormal
   obtain ⟨L, hLpos, hL⟩ := hNormal
-  have hinj : ∀ n, L ≤ n → Kraus.IsInjective (blockTensor A n) := fun n hn =>
-    (isNBlkInjective_iff_blockTensor_isInjective A n).mp (Kraus.isNBlkInjective_of_le hLpos hL hn)
+  have hinj : ∀ n, L ≤ n → Kraus.IsInjective (Kraus.block A n) := fun n hn =>
+    (Kraus.isNBlkInjective_iff_isInjective_block A n).mp (Kraus.isNBlkInjective_of_le hLpos hL hn)
   set R := L + 3 * D
   set ξ := correlationLength lam₂
   set a := 2 * ξ + 1 / Real.log 2
@@ -163,7 +162,7 @@ theorem exists_isPreparedInDepth_allLengthPolynomialState {d D : ℕ} (A : MPSTe
     have : NeZero (N / q) := ⟨(Nat.div_pos hqN hq0).ne'⟩
     have hℓq : ∀ k, q ≤ ℓ k := le_remainderBlockLengths q N
     have hℓ2 : ∀ k, ℓ k ≤ 2 * q := fun k => (remainderBlockLengths_lt_two_mul hq0 k).le
-    have hinjℓ : ∀ k, Kraus.IsInjective (blockTensor A (ℓ k)) :=
+    have hinjℓ : ∀ k, Kraus.IsInjective (Kraus.block A (ℓ k)) :=
       fun k => hinj _ (hLq.trans (hℓq k))
     have hω : ∑ p, star (fixedPointPair σ p) * fixedPointPair σ p = 1 := by
       rw [fixedPointPair_norm_sq hσ.posSemidef, htr]

@@ -75,7 +75,6 @@ open MPTensor
 
 open scoped BigOperators Matrix ComplexOrder
 open Matrix Filter Topology Complex
-open Kraus (blockTensor)
 
 namespace MPSTensor
 
@@ -130,18 +129,18 @@ theorem diagGram_phaseBlockDiag {μ : ℂ} (hμ : ‖μ‖ = 1) {q : ℕ} (hq : 
 
 /-- The positive part of the `q`-site blocked tensor is `J Jᴴ`, for `q ≥ 1`. -/
 theorem polarPos_phaseBlockTensor {μ : ℂ} (hμ : ‖μ‖ = 1) {q : ℕ} (hq : q ≠ 0) :
-    polarPos (physicalMatrix (blockTensor (phaseBlockTensor μ) q)) =
+    polarPos (physicalMatrix (Kraus.block (phaseBlockTensor μ) q)) =
       diagPairEmbedding (Fin 2) * (1 : Matrix (Fin 2) (Fin 2) ℂ) *
         (diagPairEmbedding (Fin 2))ᴴ :=
-  polarPos_physicalMatrix_blockTensor_diagonal (phaseBlockDiag μ) q PosSemidef.one
+  polarPos_physicalMatrix_block_diagonal (phaseBlockDiag μ) q PosSemidef.one
     (by rw [Matrix.one_mul, diagGram_phaseBlockDiag hμ hq])
 
 /-- The support projector of the `q`-site blocked tensor is `J Jᴴ`, for `q ≥ 1`. -/
 theorem polarSupport_phaseBlockTensor {μ : ℂ} (hμ : ‖μ‖ = 1) {q : ℕ} (hq : q ≠ 0) :
-    polarSupport (physicalMatrix (blockTensor (phaseBlockTensor μ) q)) =
+    polarSupport (physicalMatrix (Kraus.block (phaseBlockTensor μ) q)) =
       diagPairEmbedding (Fin 2) * (1 : Matrix (Fin 2) (Fin 2) ℂ) *
         (diagPairEmbedding (Fin 2))ᴴ :=
-  polarSupport_physicalMatrix_blockTensor_diagonal (phaseBlockDiag μ) q PosSemidef.one
+  polarSupport_physicalMatrix_block_diagonal (phaseBlockDiag μ) q PosSemidef.one
     (by rw [Matrix.one_mul, diagGram_phaseBlockDiag hμ hq]) isHermitian_one (Matrix.one_mul 1)
     (Matrix.one_mul _) (R := 1) (Matrix.one_mul 1)
 

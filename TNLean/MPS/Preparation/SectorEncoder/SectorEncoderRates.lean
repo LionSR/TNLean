@@ -51,7 +51,6 @@ section
 
 open Matrix QuantumCircuit
 open scoped BigOperators ComplexOrder InnerProductSpace Matrix.Norms.L2Operator
-open Kraus (blockTensor)
 
 namespace MPSTensor
 
@@ -124,7 +123,7 @@ theorem exists_norm_cross_blockIsometryEncoder_sectorColumnMatrix_sub_one_le
     {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) :
     ∃ K : ℝ, 0 < K ∧ ∀ (M : ℕ) [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ}
       (hN : ∑ k, ℓ k = N) (q : ℕ), q ≠ 0 → (∀ k, q ≤ ℓ k) →
-      (∀ k, IsInjectiveOn (blockTensor (blockSum A ι fun _ => 1) (ℓ k))
+      (∀ k, IsInjectiveOn (Kraus.block (blockSum A ι fun _ => 1) (ℓ k))
         (blockPairs ι : Set (Fin D × Fin D))) →
       ‖(blockIsometryEncoder (blockSum A ι fun _ => 1)
           (fun j => embedPair (ι j) (fixedPointPair (σ j))) hN)ᴴ * sectorColumnMatrix A N - 1‖ ≤
@@ -243,7 +242,6 @@ section
 
 open Matrix MPSTensor QuantumCircuit
 open scoped BigOperators ComplexOrder InnerProductSpace Matrix.Norms.L2Operator
-open Kraus (blockTensor)
 
 namespace MPSPreparation
 
@@ -267,7 +265,7 @@ theorem exists_sectorEncoder_preparation_bounds
     (hr₀ : 2 ≤ r₀) {dig : Fin D → Cfg d r₀} (hdig : Function.Injective dig)
     {dig₀ : Fin b → Cfg d r₀} (hdig₀ : Function.Injective dig₀)
     (L : ℕ) (hL : 3 * r₀ ≤ L)
-    (hinj : ∀ n, L ≤ n → IsInjectiveOn (blockTensor (blockSum A ι fun _ => 1) n)
+    (hinj : ∀ n, L ≤ n → IsInjectiveOn (Kraus.block (blockSum A ι fun _ => 1) n)
       (blockPairs ι : Set (Fin D × Fin D))) :
     ∃ (C : ℕ) (K : ℝ), 1 ≤ K ∧
       (∀ (M : ℕ) [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} [NeZero N]
@@ -437,9 +435,9 @@ theorem exists_log_depth_coherent_sectorEncoder_conversion
     ⟨0, Finset.mem_univ _⟩
   have hDBs : 0 < ∑ j, DB j := Finset.sum_pos (fun j _ => hDBpos j)
     ⟨0, Finset.mem_univ _⟩
-  obtain ⟨LA, hinjA⟩ := exists_isInjectiveOn_blockTensor_blockSum hιA hdisjA hAN hAL hσA htrA
+  obtain ⟨LA, hinjA⟩ := exists_isInjectiveOn_block_blockSum hιA hdisjA hAN hAL hσA htrA
     hfixA (lam₂ := (t : ℂ)) (by rwa [hnorm]) hAlam hAμ
-  obtain ⟨LB, hinjB⟩ := exists_isInjectiveOn_blockTensor_blockSum hιB hdisjB hBN hBL hσB htrB
+  obtain ⟨LB, hinjB⟩ := exists_isInjectiveOn_block_blockSum hιB hdisjB hBN hBL hσB htrB
     hfixB (lam₂ := (t : ℂ)) (by rwa [hnorm]) hBlam hBμ
   set r₀ := (∑ j, DA j) + (∑ j, DB j) + b + 2
   have hr₀ : 2 ≤ r₀ := by omega

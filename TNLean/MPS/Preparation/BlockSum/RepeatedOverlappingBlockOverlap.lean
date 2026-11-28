@@ -19,7 +19,7 @@ states of distinct blocks overlap:
 
 * the positive part `P` of `B` is close to `P_∞ = ∑ⱼ cⱼ L_j ((√σ_j)ᵀ ⊗ 1) L_jᴴ`,
   `‖P - P_∞‖ ≤ K e^{-γ q/ξ}` for `0 < γ < 1/2` and weights `|μ_{j,k}| ≤ 1`
-  (`exists_norm_polarPos_blockTensor_repeatedBlockSum_sub_le`), from the Gram estimate
+  (`exists_norm_polarPos_block_repeatedBlockSum_sub_le`), from the Gram estimate
   `exists_norm_gram_sum_sub_le` and the Hölder bound `Matrix.norm_polarPos_sub_le_sqrt` shared
   with blocks of multiplicity one;
 * `L_jᴴ P_∞ = ∑ₖ μ_{j,k}^q ((√σ_j)ᵀ ⊗ 1) K_{j,k}ᴴ` (`conjTranspose_copyIsometry_mul_copyPosLimit`),
@@ -44,7 +44,7 @@ mixed transfer maps of distinct blocks, in place of the block form (S5) and the 
 ## Main declarations
 
 * `MPSTensor.copyPosLimit`, `MPSTensor.copyPosLimitRow` — the limit `P_∞` and its rows `L_jᴴ P_∞`.
-* `MPSTensor.exists_norm_polarPos_blockTensor_repeatedBlockSum_sub_le` — the rate of `P → P_∞`.
+* `MPSTensor.exists_norm_polarPos_block_repeatedBlockSum_sub_le` — the rate of `P → P_∞`.
 * `MPSTensor.mixedMapLM_copyPosLimitRow_apply` — the mixed transfer map of `L_jᴴ P_∞`.
 * `MPSTensor.exists_norm_mpvOverlap_sub_bntWeight_le_of_norm_sub_copyPosLimitRow_le` — the
   overlaps of one block.
@@ -64,7 +64,6 @@ open MPTensor
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators NNReal ENNReal
 open Matrix
-open Kraus (blockTensor)
 
 namespace MPSTensor
 
@@ -93,7 +92,7 @@ noncomputable def copyPosLimitRow (ι : (j : Fin b) → Fin (m j) → Fin (Dj j)
 /-- The limit `P_∞ = ∑ⱼ cⱼ L_j ((√σ_j)ᵀ ⊗ 1) L_jᴴ` of the positive parts of the `q`-site blocked
 direct sum with multiplicities, with `cⱼ = copyNorm μ q j` and `L_j = copyIsometry ι μ q j`: the
 corrected block form `P = ∑ⱼ cⱼ L_j P_j L_jᴴ` of arXiv:2307.01696, Supplemental Material,
-eq. (S5) (`polarPos_blockTensor_repeatedBlockSum`) with each `P_j` replaced by its limit. -/
+eq. (S5) (`polarPos_block_repeatedBlockSum`) with each `P_j` replaced by its limit. -/
 noncomputable def copyPosLimit (ι : (j : Fin b) → Fin (m j) → Fin (Dj j) → Fin D)
     (μ : (j : Fin b) → Fin (m j) → ℂ) (q : ℕ)
     (σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ) :
@@ -181,7 +180,7 @@ direct sum `⊕ⱼ diag(μ_{j,1}, …, μ_{j,m_j}) ⊗ A_j` satisfies `‖P - P_
 The Gram estimate `exists_norm_gram_sum_sub_le` applies to `B = ∑ⱼ cⱼ B_j L_jᴴ` with
 `cⱼ ≤ (∑ⱼ m_j)^{1/2}`, and the Hölder bound `Matrix.norm_polarPos_sub_le_sqrt` (arXiv:2103.13367,
 Supplemental Material, eq. (26)) halves the rate `e^{-2γ q/ξ}` of the Gram matrices. -/
-theorem exists_norm_polarPos_blockTensor_repeatedBlockSum_sub_le
+theorem exists_norm_polarPos_block_repeatedBlockSum_sub_le
     (hι : ∀ j k, Function.Injective (ι j k))
     (hdisj : ∀ p p' : (j : Fin b) × Fin (m j), p ≠ p' → ∀ a a', ι p.1 p.2 a ≠ ι p'.1 p'.2 a')
     (hN : ∀ j, Kraus.IsNormal (Aj j)) (hA : ∀ j, IsLeftCanonical (Aj j))
@@ -194,7 +193,7 @@ theorem exists_norm_polarPos_blockTensor_repeatedBlockSum_sub_le
       ‖μ'‖ ≤ ‖lam₂‖)
     {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1 / 2) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ μ : CopyWeights b m, (∀ j k, ‖μ j k‖ ≤ 1) → ∀ q : ℕ, q ≠ 0 →
-      ‖Matrix.polarPos (physicalMatrix (blockTensor (repeatedBlockSum Aj ι μ) q)) -
+      ‖Matrix.polarPos (physicalMatrix (Kraus.block (repeatedBlockSum Aj ι μ) q)) -
         copyPosLimit ι μ q σ‖ ≤ K * Real.exp (-γ / correlationLength lam₂) ^ q := by
   obtain ⟨K, hK, hG⟩ := exists_norm_gram_sum_sub_le (D := D) hN hA hσ htr hfix hl hlam hmix
     (by linarith : 0 < 2 * γ) (by linarith : 2 * γ < 1)
@@ -213,10 +212,10 @@ theorem exists_norm_polarPos_blockTensor_repeatedBlockSum_sub_le
   have h := hG R (fun j => (copyNorm μ q j : ℂ)) (copyIsometry ι μ q) hc
     (fun j => Matrix.l2_opNorm_le_one_of_conjTranspose_mul_self_eq_one
       (conjTranspose_copyIsometry_mul_self hι hdisj (μ.weight_fun_ne_zero j) q)) q
-  rw [← physicalMatrix_blockTensor_repeatedBlockSum_eq_copyIsometry hι hdisj hq,
+  rw [← physicalMatrix_block_repeatedBlockSum_eq_copyIsometry hι hdisj hq,
     ← copyPosLimit_mul_self hι hdisj μ q fun j => (hσ j).posSemidef] at h
   have hhol := Matrix.norm_polarPos_sub_le_sqrt
-    (physicalMatrix (blockTensor (repeatedBlockSum Aj ι μ) q))
+    (physicalMatrix (Kraus.block (repeatedBlockSum Aj ι μ) q))
     (posSemidef_copyPosLimit (ι := ι) μ q σ)
   have hx2 : Real.exp (-(2 * γ) / correlationLength lam₂) ^ q = (x ^ q) ^ 2 := by
     rw [exp_neg_two_mul_div_correlationLength, ← pow_mul, ← pow_mul, mul_comm]

@@ -78,7 +78,6 @@ section
 
 open Matrix MPSTensor QuantumCircuit
 open scoped BigOperators InnerProductSpace Matrix.Norms.L2Operator
-open Kraus (blockTensor)
 
 namespace MPSTensor
 
@@ -200,7 +199,7 @@ theorem exists_isUnitaryCircuit_registerEncoder
       (∀ j {M : ℕ} (c : Fin M → Fin D × Fin D), pairProductState (ω j) c ≠ 0 → ∀ k, c k ∈ S) →
       ∀ {M : ℕ} [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} [NeZero N] (hN : ∑ k, ℓ k = N) (L : ℕ),
         ∀ hℓ : ∀ k, 3 * r ≤ ℓ k, (∀ k, ℓ k ≤ L) →
-        (∀ k, IsInjectiveOn (blockTensor A (ℓ k)) (S : Set (Fin D × Fin D))) →
+        (∀ k, IsInjectiveOn (Kraus.block A (ℓ k)) (S : Set (Fin D × Fin D))) →
         ∃ (U : Matrix (Cfg d N) (Cfg d N) ℂ) (T : ℕ),
           IsUnitaryCircuit (Geometry.ring N) T U ∧ T ≤ C * L ∧
           U * registerEncoder hN (fun k => by have := hℓ k; omega) dig₀ =

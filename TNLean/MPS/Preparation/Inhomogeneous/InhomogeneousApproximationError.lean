@@ -218,7 +218,6 @@ section
 open Matrix MPSTensor
 open scoped BigOperators InnerProductSpace ComplexOrder MatrixOrder Kronecker
   Matrix.Norms.L2Operator
-open Kraus (blockPhysDim decodeBlockEquiv)
 
 namespace MPSPreparation
 
@@ -226,17 +225,17 @@ namespace MPSPreparation
 whole blocked tensor. This identifies the normalization with an ordered transfer product. -/
 theorem ofReal_norm_chainState_sq {d D N : ℕ} [NeZero D] (A : MPSChainTensor d D N) :
     ((‖chainState A‖ ^ 2 : ℝ) : ℂ) =
-      Matrix.trace (transferMatrix (Kraus.transferMap (MPSChainTensor.blockTensor A))) := by
+      Matrix.trace (transferMatrix (Kraus.transferMap (MPSChainTensor.eval A))) := by
   classical
   rw [← pow_one (transferMatrix _), trace_transferMatrix_transferMap_pow_eq_mpvOverlap]
   rw [EuclideanSpace.norm_sq_eq, mpvOverlap]
   push_cast
-  let e := (Equiv.funUnique (Fin 1) (Fin (blockPhysDim d N))).trans (decodeBlockEquiv d N)
+  let e := (Equiv.funUnique (Fin 1) (Fin N → Fin d)).trans (decodeBlockEquiv d N)
   refine (Fintype.sum_equiv e _ _ fun t => ?_).symm
   simp only [chainState_apply, ← Complex.mul_conj']
-  have ht : mpv (MPSChainTensor.blockTensor A) t = MPSChainTensor.coeff A (e t) := by
+  have ht : mpv (MPSChainTensor.eval A) t = MPSChainTensor.coeff A (e t) := by
     simp [e, Equiv.funUnique, Equiv.piUnique, mpv, coeff, List.ofFn_succ,
-      List.ofFn_zero, MPSChainTensor.blockTensor, MPSChainTensor.coeff]
+      List.ofFn_zero, MPSChainTensor.eval, MPSChainTensor.coeff]
   simp only [ht, starRingEnd_apply]
 
 /-- The overlap of the product of fixed-point pairs with the positive-part state is the
@@ -259,7 +258,7 @@ theorem exists_abs_norm_chainState_sq_sub_one_le {D : ℕ}
     {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosSemidef) (htr : σ.trace = 1) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ {d N : ℕ} (A : MPSChainTensor d D N),
       |‖chainState A‖ ^ 2 - 1| ≤ K *
-        ‖transferMatrix (Kraus.transferMap (MPSChainTensor.blockTensor A)) -
+        ‖transferMatrix (Kraus.transferMap (MPSChainTensor.eval A)) -
           transferMatrix (Kraus.transferMap (fixedPointTensor σ))‖ := by
   have := Matrix.neZero_of_trace_eq_one htr
   let trL := LinearMap.toContinuousLinearMap (Matrix.traceLinearMap (Fin D × Fin D) ℂ ℂ)
@@ -269,12 +268,12 @@ theorem exists_abs_norm_chainState_sq_sub_one_le {D : ℕ}
       (trace_transferMatrix_transferMap_pow_eq_mpvOverlap (fixedPointTensor σ) 1).trans
         (mpvOverlap_fixedPointTensor_self hσ htr 1)
   have heq : ((‖chainState A‖ ^ 2 - 1 : ℝ) : ℂ) =
-      trL (transferMatrix (Kraus.transferMap (MPSChainTensor.blockTensor A)) -
+      trL (transferMatrix (Kraus.transferMap (MPSChainTensor.eval A)) -
         transferMatrix (Kraus.transferMap (fixedPointTensor σ))) := by
     change _ = Matrix.trace _
     rw [Matrix.trace_sub, htrace, Complex.ofReal_sub, Complex.ofReal_one,
       ofReal_norm_chainState_sq]
-  have h := trL.le_opNorm (transferMatrix (Kraus.transferMap (MPSChainTensor.blockTensor A)) -
+  have h := trL.le_opNorm (transferMatrix (Kraus.transferMap (MPSChainTensor.eval A)) -
     transferMatrix (Kraus.transferMap (fixedPointTensor σ)))
   rw [← heq, Complex.norm_real, Real.norm_eq_abs] at h
   exact h
@@ -295,7 +294,7 @@ theorem exists_one_sub_norm_inner_chainPosState_le
       0 ≤ δ →
       (∀ j, ‖transferMatrix (Kraus.transferMap (chainBlockTensor A hN j)) -
         transferMatrix (Kraus.transferMap (fixedPointTensor σ))‖ ≤ δ) →
-      ‖transferMatrix (Kraus.transferMap (MPSChainTensor.blockTensor A)) -
+      ‖transferMatrix (Kraus.transferMap (MPSChainTensor.eval A)) -
         transferMatrix (Kraus.transferMap (fixedPointTensor σ))‖ ≤ δ →
       1 - ‖⟪pairFamilyVector (fun _ : Fin M => fixedPointPair σ),
         (‖chainPosState A hN‖ : ℂ)⁻¹ • chainPosState A hN⟫_ℂ‖ ≤ C * (M * δ) := by
@@ -395,19 +394,19 @@ theorem exists_isPairApproximable_of_ordered_mixing {D : ℕ}
   have hblock : ∀ j, ‖transferMatrix (Kraus.transferMap (chainBlockTensor A hsum j)) -
       transferMatrix (Kraus.transferMap (fixedPointTensor σ))‖ ≤ δ := by
     intro j
-    rw [chainBlockTensor, MPSChainTensor.transferMap_blockTensor]
+    rw [chainBlockTensor, MPSChainTensor.transferMap_eval]
     refine (hmix ℓ hsum j (hq.trans_le (hℓq j))).trans ?_
     dsimp [δ]
     gcongr
     exact hℓq j
-  have hwhole : ‖transferMatrix (Kraus.transferMap (MPSChainTensor.blockTensor A)) -
+  have hwhole : ‖transferMatrix (Kraus.transferMap (MPSChainTensor.eval A)) -
       transferMatrix (Kraus.transferMap (fixedPointTensor σ))‖ ≤ δ := by
     have hsingle : ∑ _ : Fin 1, N = N := by simp
     have hi := blockSite_singleton hsingle
     have h := hmix (fun _ : Fin 1 => N) hsingle 0
       (Nat.pos_of_ne_zero (NeZero.ne N))
     simp only [hi] at h
-    rw [MPSChainTensor.transferMap_blockTensor]
+    rw [MPSChainTensor.transferMap_eval]
     refine h.trans ?_
     dsimp [δ]
     gcongr
@@ -722,10 +721,10 @@ theorem exists_isPreparedInDepth_inhomogeneous_le_log_eventually_of_ordered_mixi
     have ht := hmix N (fun _ : Fin 1 => N) hsingle 0
       (Nat.pos_of_ne_zero (NeZero.ne N))
     simp only [hi] at ht
-    rw [← MPSChainTensor.transferMap_blockTensor] at ht
+    rw [← MPSChainTensor.transferMap_eval] at ht
     have hb : |‖chainState (A N)‖ ^ 2 - 1| ≤ 1 / 2 := by
       calc |‖chainState (A N)‖ ^ 2 - 1|
-          ≤ Kn * ‖transferMatrix (Kraus.transferMap (MPSChainTensor.blockTensor (A N))) -
+          ≤ Kn * ‖transferMatrix (Kraus.transferMap (MPSChainTensor.eval (A N))) -
             transferMatrix (Kraus.transferMap (fixedPointTensor σ))‖ := hnorm _
         _ ≤ Kn * (K * Real.exp (-(r * N))) := mul_le_mul_of_nonneg_left ht hKn
         _ ≤ L * Real.exp (-(r * N)) := by

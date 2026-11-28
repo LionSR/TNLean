@@ -98,7 +98,6 @@ open Matrix MPSTensor
 open MPSChainTensor (eval)
 open scoped BigOperators ComplexOrder
 open QuantumCircuit
-open Kraus (blockPhysDim decodeBlockEquiv)
 
 /-! ### A basis adapted to a projector -/
 
@@ -147,17 +146,17 @@ theorem exists_blockUnitary_isometricExtension (hd : 0 < d) {dig : Fin D → Cfg
     (hdig : Function.Injective dig) (hD : 0 < D) :
     ∃ C : ℕ, ∀ q, 3 * D ≤ q → ∀ A : MPSChainTensor d D q,
       ∃ (U : Matrix (Cfg d q) (Cfg d q) ℂ)
-        (W : Matrix (Fin (blockPhysDim d q)) (Fin (D * D)) ℂ),
+        (W : Matrix (Fin q → Fin d) (Fin (D * D)) ℂ),
         IsGateProduct (Geometry.graph (SimpleGraph.pathGraph q)) (C * q) U ∧ W.IsIsometry ∧
-        W * polarSupportMatrix (MPSChainTensor.blockTensor A) =
-          polarIsoMatrix (MPSChainTensor.blockTensor A) ∧
+        W * polarSupportMatrix (MPSChainTensor.eval A) =
+          polarIsoMatrix (MPSChainTensor.eval A) ∧
         ∀ (l r : Fin D) τ, U τ (blockInputCfg hd q dig l r) =
-          W ((decodeBlockEquiv d q).symm τ) (finProdFinEquiv (l, r)) := by
+          W (τ) (finProdFinEquiv (l, r)) := by
   classical
   obtain ⟨C, hC⟩ := exists_blockUnitary_of_equiv_mul hd (r₁ := D) hD hdig hD (virtualPairEquiv D)
   refine ⟨C, fun q hq A => ?_⟩
   obtain ⟨n, rfl⟩ : ∃ n, q = n + 1 := ⟨q - 1, by omega⟩
-  set B := MPSChainTensor.blockTensor A with hBdef
+  set B := MPSChainTensor.eval A with hBdef
   set V := polarIsoMatrix B with hV
   set E := polarSupportMatrix B with hEdef
   set dec := decodeBlockEquiv d (n + 1)
@@ -168,7 +167,7 @@ theorem exists_blockUnitary_isometricExtension (hd : 0 < d) {dig : Fin D → Cfg
   obtain ⟨b, Q, hb0, hbl, -, hrow, -, hiso, hVQ, -⟩ :=
     exists_isometric_chain_polarIsoMatrix_mul_unitary A (Nat.succ_pos n) hr hT hET
   obtain ⟨U, Z, hU, hZ, hUZ⟩ := hC (n + 1) hq b Q hb0 hrow hiso (star T) (Unitary.star_mem hT)
-  let W : Matrix (Fin (blockPhysDim d (n + 1))) (Fin (D * D)) ℂ := of fun i x =>
+  let W : Matrix (Fin (n + 1) → Fin d) (Fin (D * D)) ℂ := of fun i x =>
     U (dec i) (blockInputCfg hd (n + 1) dig (virtualPairEquiv D x).1 (virtualPairEquiv D x).2)
   have hWZ : W = (of fun i y => Z (dec i) y) * star T := by
     ext i x
@@ -219,7 +218,6 @@ open Matrix MPSTensor
 open MPSChainTensor (eval)
 open scoped BigOperators InnerProductSpace
 open QuantumCircuit
-open Kraus (blockPhysDim)
 
 namespace MPSPreparation
 
@@ -230,7 +228,7 @@ variable {d D : ℕ}
 variable {M N : ℕ} {ℓ : Fin M → ℕ}
 
 /-- Matrices on the blocks commute with scalars. -/
-theorem blockMatVector_smul {W : ∀ k, Matrix (Fin (blockPhysDim d (ℓ k))) (Fin (D * D)) ℂ}
+theorem blockMatVector_smul {W : ∀ k, Matrix (Fin (ℓ k) → Fin d) (Fin (D * D)) ℂ}
     (hN : ∑ k, ℓ k = N) (c : ℂ) (x : MPVSpace (Fin (D * D)) M) :
     blockMatVector W hN (c • x) = c • blockMatVector W hN x := by
   ext s
@@ -244,7 +242,7 @@ theorem blockMatVector_smul {W : ∀ k, Matrix (Fin (blockPhysDim d (ℓ k))) (F
 arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS" and Supplemental
 Material, "Proof of Lemma 1 and extension to non-normal tensors": `Π P = P`. -/
 theorem chainState_eq_blockMatVector {A : MPSChainTensor d D N} (hN : ∑ k, ℓ k = N)
-    {W : ∀ k, Matrix (Fin (blockPhysDim d (ℓ k))) (Fin (D * D)) ℂ}
+    {W : ∀ k, Matrix (Fin (ℓ k) → Fin d) (Fin (D * D)) ℂ}
     (hW : ∀ k, W k * polarSupportMatrix (chainBlockTensor A hN k) =
       polarIsoMatrix (chainBlockTensor A hN k)) :
     chainState A = blockMatVector W hN (chainPosState A hN) := by
@@ -254,7 +252,7 @@ theorem chainState_eq_blockMatVector {A : MPSChainTensor d D N} (hN : ∑ k, ℓ
     rw [rotatePhysical_rotatePhysical, hW, rotatePhysical_polarIsoMatrix_polarPosTensor]
   ext s
   have h := mpvFamily_rotatePhysical W (fun k => polarPosTensor (chainBlockTensor A hN k))
-    (blockIndexEquiv d hN s)
+    (blockCfgEquiv d hN s)
   simp only [hrot] at h
   rw [chainState_apply, coeff_eq_mpvFamily_chainBlockTensor A hN, h, blockMatVector_apply]
   simp only [chainPosState_apply]
@@ -269,7 +267,7 @@ arXiv:2307.01696, paragraph "Inhomogeneous short-range correlated MPS": the sche
 `ε(Ω, φ_pos)`"; Supplemental Material, "Proof of Lemma 1 and extension to non-normal tensors",
 `V†V = Π`. -/
 theorem inner_blockMatVector_chainState_normalize {A : MPSChainTensor d D N}
-    (hN : ∑ k, ℓ k = N) {W : ∀ k, Matrix (Fin (blockPhysDim d (ℓ k))) (Fin (D * D)) ℂ}
+    (hN : ∑ k, ℓ k = N) {W : ∀ k, Matrix (Fin (ℓ k) → Fin d) (Fin (D * D)) ℂ}
     (hWi : ∀ k, (W k).IsIsometry)
     (hW : ∀ k, W k * polarSupportMatrix (chainBlockTensor A hN k) =
       polarIsoMatrix (chainBlockTensor A hN k)) (ω : Fin M → Fin D × Fin D → ℂ) :
@@ -316,7 +314,7 @@ theorem exists_isPreparedInDepth_blockMatVector (d D : ℕ) (hdD : D * D ≤ d ^
     ∃ C : ℕ, ∀ {M : ℕ} [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} [NeZero N] (hN : ∑ k, ℓ k = N)
       (A : MPSChainTensor d D N) (ω : Fin M → Fin D × Fin D → ℂ),
       (∀ k, ∑ p, star (ω k p) * ω k p = 1) → ∀ L : ℕ, (∀ k, 3 * D ≤ ℓ k) → (∀ k, ℓ k ≤ L) →
-        ∃ W : ∀ k, Matrix (Fin (blockPhysDim d (ℓ k))) (Fin (D * D)) ℂ,
+        ∃ W : ∀ k, Matrix (Fin (ℓ k) → Fin d) (Fin (D * D)) ℂ,
           (∀ k, (W k).IsIsometry) ∧
           (∀ k, W k * polarSupportMatrix (chainBlockTensor A hN k) =
             polarIsoMatrix (chainBlockTensor A hN k)) ∧
@@ -381,7 +379,7 @@ theorem exists_isPreparedInDepth_inhomogeneous_isometricExtension (d D : ℕ)
     ∃ C : ℕ, ∀ {M : ℕ} [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} [NeZero N] (hN : ∑ k, ℓ k = N)
       (A : VaryingBondChain d D N) (ω : ∀ k, Fin (rightBond A ℓ k) × Fin (rightBond A ℓ k) → ℂ),
       (∀ k, ∑ p, star (ω k p) * ω k p = 1) → ∀ L : ℕ, (∀ k, 3 * D ≤ ℓ k) → (∀ k, ℓ k ≤ L) →
-        ∃ W : ∀ k, Matrix (Fin (blockPhysDim d (ℓ k))) (Fin (D * D)) ℂ,
+        ∃ W : ∀ k, Matrix (Fin (ℓ k) → Fin d) (Fin (D * D)) ℂ,
           (∀ k, (W k).IsIsometry) ∧
           (∀ k, W k * polarSupportMatrix (chainBlockTensor (zeroPad A) hN k) =
             polarIsoMatrix (chainBlockTensor (zeroPad A) hN k)) ∧

@@ -70,7 +70,6 @@ varying along the ring. Documented in `docs/paper-gaps/mswc24_inhomogeneous_scop
 open Matrix MPSTensor
 open scoped BigOperators InnerProductSpace
 open QuantumCircuit
-open Kraus (blockPhysDim)
 
 namespace MPSPreparation
 
@@ -115,13 +114,13 @@ theorem chainState_eq_blockIsoVector (A : MPSChainTensor d D N) (hN : ∑ k, ℓ
     chainState A = blockIsoVector (chainBlockTensor A hN) hN (chainPosState A hN) := by
   ext s
   have h := mpvFamily_rotatePhysical (fun k => polarIsoMatrix (chainBlockTensor A hN k))
-    (fun k => polarPosTensor (chainBlockTensor A hN k)) (blockIndexEquiv d hN s)
+    (fun k => polarPosTensor (chainBlockTensor A hN k)) (blockCfgEquiv d hN s)
   simp only [rotatePhysical_polarIsoMatrix_polarPosTensor] at h
   rw [chainState_apply, coeff_eq_mpvFamily_chainBlockTensor A hN, h, blockIsoVector_apply]
   simp only [chainPosState_apply]
 
 /-- The isometries on the blocks commute with scalars. -/
-theorem blockIsoVector_smul {B : ∀ k, MPSTensor (blockPhysDim d (ℓ k)) D} (hN : ∑ k, ℓ k = N)
+theorem blockIsoVector_smul {B : ∀ k, MPTensor (Fin (ℓ k) → Fin d) (Fin D)} (hN : ∑ k, ℓ k = N)
     (c : ℂ) (x : MPVSpace (Fin (D * D)) M) :
     blockIsoVector B hN (c • x) = c • blockIsoVector B hN x := by
   ext s
@@ -159,7 +158,7 @@ theorem norm_chainState_eq (A : MPSChainTensor d D N) (hN : ∑ k, ℓ k = N) :
   have key : ⟪chainState A, chainState A⟫_ℂ = ⟪chainPosState A hN, chainPosState A hN⟫_ℂ := by
     rw [chainState_eq_blockIsoVector A hN]
     simp only [PiLp.inner_apply, RCLike.inner_apply, blockIsoVector_apply]
-    rw [Fintype.sum_equiv (blockIndexEquiv d hN) _ (fun s => star (∑ τ,
+    rw [Fintype.sum_equiv (blockCfgEquiv d hN) _ (fun s => star (∑ τ,
       (∏ j, polarIsoMatrix (chainBlockTensor A hN j) (s j) (τ j)) * chainPosState A hN τ) *
       ∑ τ, (∏ j, polarIsoMatrix (chainBlockTensor A hN j) (s j) (τ j)) * chainPosState A hN τ)
       fun s => by rw [mul_comm]; rfl,

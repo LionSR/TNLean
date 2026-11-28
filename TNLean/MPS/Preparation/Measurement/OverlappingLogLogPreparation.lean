@@ -44,7 +44,7 @@ The blocking length and depth constants are chosen before the chain length and a
 There is no supplied canonical form, period, transfer gap or injectivity assumption.
 
 **Scope restriction (grouped sites):** circuits act on sites of dimension `d ^ p`.
-The target is `blockTensor A p` on `M` grouped sites, representing physical lengths `p * M`.
+The target is `Kraus.block A p` on `M` grouped sites, representing physical lengths `p * M`.
 Transport to circuits on the original sites and lengths not divisible by `p` remains open;
 these results do not close the unrestricted source theorem. See
 `docs/paper-gaps/mswc24_measurement_preparation_scope.tex`.
@@ -61,7 +61,6 @@ section
 
 open Matrix MPSTensor QuantumCircuit
 open scoped BigOperators ComplexOrder InnerProductSpace
-open Kraus (blockTensor)
 
 namespace MPSPreparation
 
@@ -123,7 +122,7 @@ theorem exists_isMeasurementConversion_le_log_log_of_mpv_eq_sum
     exists_forall_eigenvalue_norm_le_of_mixed hN hA hDj hmix
   have hnorm : ‖(t : ℂ)‖ = t := by rw [Complex.norm_real, Real.norm_eq_abs, abs_of_pos ht0]
   -- The constants.
-  obtain ⟨L₀, hL₀⟩ := exists_isInjectiveOn_blockTensor_blockSum hι' hdisj' hN hA hσ htr hfix
+  obtain ⟨L₀, hL₀⟩ := exists_isInjectiveOn_block_blockSum hι' hdisj' hN hA hσ htr hfix
     (lam₂ := (t : ℂ)) (by rw [hnorm]; exact ht1) hlam hmixle
   obtain ⟨K, hK, herr⟩ := exists_one_sub_norm_inner_sum_blockIsometryState_le hι' hdisj' hN hA hσ
     htr hfix hlam hmixle (γ := 1 / 4) (by norm_num) (by norm_num)
@@ -147,7 +146,7 @@ theorem exists_isMeasurementConversion_le_log_log_of_mpv_eq_sum
       rw [mpvState_apply, hφ N x, PiLp.zero_apply]
       simp [hβ0]
     refine ⟨ghzAmplitude (β N), ghzAmplitude_norm_sq hβ, fun M _ ℓ hsum q hLq hℓq => ?_⟩
-    have hinjℓ : ∀ k, IsInjectiveOn (blockTensor AJ (ℓ k)) (blockPairs ι' : Set _) :=
+    have hinjℓ : ∀ k, IsInjectiveOn (Kraus.block AJ (ℓ k)) (blockPairs ι' : Set _) :=
       fun k => hL₀ _ (hLq.trans (hℓq k))
     refine ⟨norm_sum_smul_blockIsometryState hι' hdisj' (fun j => (hσ j).posSemidef)
       htr (ghzAmplitude_norm_sq hβ) hsum hinjℓ, ?_⟩
@@ -219,7 +218,6 @@ section
 
 open MPSTensor QuantumCircuit
 open scoped BigOperators InnerProductSpace
-open Kraus (blockPhysDim blockTensor)
 
 namespace MPSPreparation
 
@@ -228,22 +226,22 @@ at every nonzero blocked length at least two. Only the tensor is supplied; the n
 sectors, multiplicities, faithful fixed points and mixed spectral gaps are derived.
 Circuits and depths are measured on the grouped sites.
 Source: arXiv:2307.01696, "Long-range MPS using measurements" (fixed-blocking restriction). -/
-theorem exists_isOneRoundConversion_blockTensor_le_log
+theorem exists_isOneRoundConversion_block_le_log
     {d D : ℕ} (A : MPSTensor d D) :
     ∃ p : ℕ, 0 < p ∧ ∃ c : ℝ,
       ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (M : ℕ) [NeZero M], 2 ≤ M →
-        mpvState (blockTensor A p) M ≠ 0 →
-        ∃ (ψ : MPVSpace (Fin (blockPhysDim d p)) M) (T : ℕ), ‖ψ‖ = 1 ∧
+        mpvState (Kraus.block A p) M ≠ 0 →
+        ∃ (ψ : MPVSpace (Fin p → Fin d) M) (T : ℕ), ‖ψ‖ = 1 ∧
           (T : ℝ) ≤ c * Real.log (M / ε) ∧
-          (∃ T₁ T₂, T₁ + T₂ ≤ T ∧ ∃ v : Fin M → Fin (blockPhysDim d p) → ℂ,
+          (∃ T₁ T₂, T₁ + T₂ ≤ T ∧ ∃ v : Fin M → (Fin p → Fin d) → ℂ,
             IsOneRoundConversion (Geometry.ring M) T₁ T₂ (fun σ ↦ ∏ i, v i (σ i))
               (fun s => ψ s)) ∧
-          1 - ‖⟪ψ, normalizedMPVState (blockTensor A p) M⟫_ℂ‖ ≤ ε := by
+          1 - ‖⟪ψ, normalizedMPVState (Kraus.block A p) M⟫_ℂ‖ ≤ ε := by
   obtain ⟨p, hp, P, σ, heq, hnormal, hleft, hpos, htr, hfix, hmix⟩ :=
-    exists_blockTensor_normal_sectors_fixedPoints A
+    exists_block_normal_sectors_fixedPoints A
   refine ⟨p, hp, ?_⟩
   apply exists_isOneRoundConversion_le_log_of_mpv_eq_sum
-    (blockTensor A p) hnormal hleft hpos htr hfix hmix P.coeff
+    (Kraus.block A p) hnormal hleft hpos htr hfix hmix P.coeff
   intro M _ s
   exact (heq M (Nat.pos_of_ne_zero (NeZero.ne M)) s).trans (P.mpv_toTensor_eq_sum_coeff s)
 
@@ -252,21 +250,21 @@ using measurement rounds at every nonzero blocked length at least two. The const
 are uniform in length, accuracy and the resulting sector amplitudes; vanishing individual
 power sums are allowed. Circuits act on grouped sites, not the original physical sites.
 Source: arXiv:2307.01696, "Long-range MPS using measurements" (fixed-blocking restriction). -/
-theorem exists_isMeasurementConversion_blockTensor_le_log_log
+theorem exists_isMeasurementConversion_block_le_log_log
     {d D : ℕ} (A : MPSTensor d D) :
     ∃ p : ℕ, 0 < p ∧ ∃ c : ℝ,
       ∀ ε : ℝ, 0 < ε → ε ≤ 1 → ∀ (M : ℕ) [NeZero M], 2 ≤ M →
-        mpvState (blockTensor A p) M ≠ 0 →
-        ∃ (ψ : MPVSpace (Fin (blockPhysDim d p)) M) (T : ℕ), ‖ψ‖ = 1 ∧
+        mpvState (Kraus.block A p) M ≠ 0 →
+        ∃ (ψ : MPVSpace (Fin p → Fin d) M) (T : ℕ), ‖ψ‖ = 1 ∧
           (T : ℝ) ≤ c * Real.log (Real.log (M / ε) + 1) ∧
-          (∃ v : Fin M → Fin (blockPhysDim d p) → ℂ, IsMeasurementConversion (Geometry.ring M) T
+          (∃ v : Fin M → (Fin p → Fin d) → ℂ, IsMeasurementConversion (Geometry.ring M) T
             (fun σ ↦ ∏ i, v i (σ i)) (fun s => ψ s)) ∧
-          1 - ‖⟪ψ, normalizedMPVState (blockTensor A p) M⟫_ℂ‖ ≤ ε := by
+          1 - ‖⟪ψ, normalizedMPVState (Kraus.block A p) M⟫_ℂ‖ ≤ ε := by
   obtain ⟨p, hp, P, σ, heq, hnormal, hleft, hpos, htr, hfix, hmix⟩ :=
-    exists_blockTensor_normal_sectors_fixedPoints A
+    exists_block_normal_sectors_fixedPoints A
   refine ⟨p, hp, ?_⟩
   apply exists_isMeasurementConversion_le_log_log_of_mpv_eq_sum
-    (blockTensor A p) hnormal hleft hpos htr hfix hmix P.coeff
+    (Kraus.block A p) hnormal hleft hpos htr hfix hmix P.coeff
   intro M _ s
   exact (heq M (Nat.pos_of_ne_zero (NeZero.ne M)) s).trans (P.mpv_toTensor_eq_sum_coeff s)
 

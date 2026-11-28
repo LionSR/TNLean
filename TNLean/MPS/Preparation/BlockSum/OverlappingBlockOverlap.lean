@@ -75,7 +75,6 @@ open MPTensor
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators NNReal ENNReal
 open Matrix
-open Kraus (blockTensor)
 
 namespace MPSTensor
 
@@ -159,7 +158,7 @@ private theorem sum_single_mul_mul_conjTranspose_single (X : Matrix (Fin D) (Fin
 /-- `√(t² σ) = t √σ` for `t ≥ 0`. -/
 private theorem cfc_sqrt_ofReal_sq_smul {D' : ℕ} {σ : Matrix (Fin D') (Fin D') ℂ}
     (hσ : σ.PosSemidef) {t : ℝ} (ht : 0 ≤ t) :
-    CFC.sqrt ((((t ^ 2 : ℝ)) : ℂ) • σ) = (t : ℂ) • CFC.sqrt σ := by
+    CFC.sqrt (((t ^ 2 : ℝ) : ℂ) • σ) = (t : ℂ) • CFC.sqrt σ := by
   refine CFC.sqrt_unique ?_ (smul_nonneg (Complex.zero_le_real.2 ht) (CFC.sqrt_nonneg σ))
   rw [Matrix.smul_mul, Matrix.mul_smul, smul_smul, CFC.sqrt_mul_sqrt_self σ hσ.nonneg]
   push_cast
@@ -219,7 +218,7 @@ against the fixed-point tensor `P'_{j,∞}` of block `j`, placed in the full bon
 theorem mixedMapLM_blockSumPosLimit_smul_apply (hσ : ∀ j, (σ j).PosSemidef) (t : Fin b → ℝ)
     (ht : ∀ k, 0 ≤ t k) (j : Fin b) (ρ : Matrix (Fin D) (Fin D) ℂ) :
     Kraus.mixedMapLM
-        (ofPhysicalMatrixLM (blockSumPosLimit ι fun k => (((t k ^ 2 : ℝ)) : ℂ) • σ k))
+        (ofPhysicalMatrixLM (blockSumPosLimit ι fun k => ((t k ^ 2 : ℝ) : ℂ) • σ k))
         (fixedPointTensor (embeddedBlockState (ι j) (σ j))) ρ =
       (t j : ℂ) • ((coordEmbedding (ι j) * (coordEmbedding (ι j))ᴴ * ρ).trace •
         embeddedBlockState (ι j) (σ j)) := by
@@ -230,11 +229,11 @@ theorem mixedMapLM_blockSumPosLimit_smul_apply (hσ : ∀ j, (σ j).PosSemidef) 
   set s : Fin (D * D) → Matrix (Fin D) (Fin D) ℂ :=
     fun i => Matrix.single (virtualPairEquiv D i).1 (virtualPairEquiv D i).2 (1 : ℂ)
   have hletter : ∀ i, ofPhysicalMatrixLM
-      (blockSumPosLimit ι fun k => (((t k ^ 2 : ℝ)) : ℂ) • σ k) i =
+      (blockSumPosLimit ι fun k => ((t k ^ 2 : ℝ) : ℂ) • σ k) i =
         ∑ k, (t k : ℂ) • (r k * s i * Q k) := by
     intro i
     ext a c
-    change (blockSumPosLimit ι fun k => (((t k ^ 2 : ℝ)) : ℂ) • σ k)
+    change (blockSumPosLimit ι fun k => ((t k ^ 2 : ℝ) : ℂ) • σ k)
       (virtualPairEquiv D i) (a, c) = _
     rw [blockSumPosLimit_eq_sum_kronecker, Matrix.sum_apply, Matrix.sum_apply]
     refine Finset.sum_congr rfl fun k _ => ?_
@@ -399,7 +398,7 @@ theorem exists_norm_mpvOverlap_sub_pow_le_of_norm_sub_blockSumPosLimit_le
     (htr : ∀ j, (σ j).trace = 1) (j : Fin b) :
     ∃ C : ℝ, 0 < C ∧ ∀ t : Fin b → ℝ, (∀ k, 0 ≤ t k) → t j ≤ 1 →
       ∀ (P : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ) (δ : ℝ) (M : ℕ) [NeZero M],
-      ‖P - blockSumPosLimit ι (fun k => (((t k ^ 2 : ℝ)) : ℂ) • σ k)‖ ≤ δ →
+      ‖P - blockSumPosLimit ι (fun k => ((t k ^ 2 : ℝ) : ℂ) • σ k)‖ ≤ δ →
       ‖mpvOverlap (ofPhysicalMatrixLM P) (fixedPointTensor (embeddedBlockState (ι j) (σ j))) M -
           (t j : ℂ) ^ M‖ ≤ C * (M * δ) * Real.exp (C * (M * δ)) := by
   have : NeZero (Dj j) := Matrix.neZero_of_trace_eq_one (htr j)
@@ -418,7 +417,7 @@ theorem exists_norm_mpvOverlap_sub_pow_le_of_norm_sub_blockSumPosLimit_le
   obtain ⟨C, hC, hgen⟩ := exists_norm_mpvOverlap_sub_trace_pow_le (D₁ := D) F hc
   refine ⟨C, hC, fun t ht htj P δ M _ hP => ?_⟩
   set T := Kraus.mixedMapLM
-    (ofPhysicalMatrixLM (blockSumPosLimit ι fun k => (((t k ^ 2 : ℝ)) : ℂ) • σ k)) F
+    (ofPhysicalMatrixLM (blockSumPosLimit ι fun k => ((t k ^ 2 : ℝ) : ℂ) • σ k)) F
   have hT : T = (t j : ℂ) • R := by
     ext1 ρ
     rw [mixedMapLM_blockSumPosLimit_smul_apply hι hdisj hσ t ht, LinearMap.smul_apply, hR]
@@ -443,7 +442,7 @@ variable {Aj : (j : Fin b) → MPSTensor d (Dj j)}
 
 open scoped Matrix.Norms.L2Operator in
 /-- **The overlap of one block.** In the setting of
-`exists_norm_polarPos_blockTensor_blockSum_sub_le`, with `0 < γ < 1`, the overlap
+`exists_norm_polarPos_block_blockSum_sub_le`, with `0 < γ < 1`, the overlap
 `zⱼ = ⟨φ_M(P'_{j,∞})|φ_M(P)⟩` of the positive part `P` of the `q`-site blocked direct sum with the
 fixed-point tensor of block `j` placed in the full bond space satisfies
 `|zⱼ - 1| ≤ C u e^{C u}` with `u = M e^{-γ q/ξ}`, for `q ≥ 1` and `M ≥ 1`.
@@ -464,11 +463,11 @@ theorem exists_norm_mpvOverlap_polarPosTensor_blockSum_sub_one_le
       ‖μ'‖ ≤ ‖lam₂‖)
     {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) (j : Fin b) :
     ∃ C : ℝ, 0 < C ∧ ∀ (q M : ℕ) [NeZero M], q ≠ 0 →
-      ‖mpvOverlap (polarPosTensor (blockTensor (blockSum Aj ι fun _ => 1) q))
+      ‖mpvOverlap (polarPosTensor (Kraus.block (blockSum Aj ι fun _ => 1) q))
           (fixedPointTensor (embeddedBlockState (ι j) (σ j))) M - 1‖ ≤
         C * (M * Real.exp (-γ / correlationLength lam₂) ^ q) *
           Real.exp (C * (M * Real.exp (-γ / correlationLength lam₂) ^ q)) := by
-  obtain ⟨K₁, hK₁, hpos⟩ := exists_norm_polarPos_blockTensor_blockSum_sub_le hι hdisj hN hA hσ
+  obtain ⟨K₁, hK₁, hpos⟩ := exists_norm_polarPos_block_blockSum_sub_le hι hdisj hN hA hσ
     htr hfix hl hlam hmix hγ0 hγ
   obtain ⟨C₀, hC₀, hgen⟩ := exists_norm_mpvOverlap_sub_pow_le_of_norm_sub_blockSumPosLimit_le hι
     hdisj (fun j => (hσ j).posSemidef) htr j
@@ -514,7 +513,7 @@ theorem exists_norm_mpvOverlap_le_of_mixedMapLM {D₁ D₂ : ℕ} [NeZero D₁] 
     _ = K₂ * C * ‖(Matrix.single p r 1 : Matrix (Fin D₁) (Fin D₂) ℂ)‖ * x ^ N := by ring
 
 /-- **The norm of a combination of block states.** In the setting of
-`exists_norm_gram_blockTensor_blockSum_sub_le`, with `0 < γ < 1`, there is `K` such that for
+`exists_norm_gram_block_blockSum_sub_le`, with `0 < γ < 1`, there is `K` such that for
 all `R` and all coefficients `βⱼ` with `|βⱼ| ≤ R`, the vector `∑ⱼ βⱼ |φ_N(A_j)⟩` on `N` sites
 satisfies `|‖∑ⱼ βⱼ |φ_N(A_j)⟩‖² - ∑ⱼ |βⱼ|²| ≤ R² K e^{-γ N/ξ}`: its squared norm is
 `∑ⱼ ∑ₖ βⱼ conj(βₖ) ⟨φ_N(A_k)|φ_N(A_j)⟩`, the diagonal terms are `|βⱼ|²` up to the normalization
@@ -606,7 +605,7 @@ theorem exists_abs_sum_norm_sq_sum_mpv_sub_le
       _ = R ^ 2 * Ko j k * x ^ N := by ring
 
 /-- **The norm of the target with weights.** In the setting of
-`exists_norm_gram_blockTensor_blockSum_sub_le`, with `0 < γ < 1`, there is `K` such that for all
+`exists_norm_gram_block_blockSum_sub_le`, with `0 < γ < 1`, there is `K` such that for all
 weights `μⱼ` with `|μⱼ| ≤ 1` the periodic state of the direct sum `⊕ⱼ μⱼ A_j` on `N ≥ 1` sites
 satisfies `|‖φ_N‖² - ∑ⱼ |μⱼ^N|²| ≤ K e^{-γ N/ξ}`: it is `∑ⱼ μⱼ^N |φ_N(A_j)⟩` (`mpv_blockSum`),
 and `exists_abs_sum_norm_sq_sum_mpv_sub_le` applies with `R = 1`.
@@ -636,7 +635,7 @@ theorem exists_abs_norm_mpvState_blockSum_weight_sq_sub_le
   rw [EuclideanSpace.norm_sq_eq]
   simpa only [mpvState_apply, mpv_blockSum hι hdisj μ hN0] using h'
 
-/-- **The norm of the target.** In the setting of `exists_norm_gram_blockTensor_blockSum_sub_le`,
+/-- **The norm of the target.** In the setting of `exists_norm_gram_block_blockSum_sub_le`,
 with `0 < γ < 1`, the periodic state of the direct sum with unit weights on `N ≥ 1` sites
 satisfies `|‖φ_N‖² - b| ≤ K e^{-γ N/ξ}`: its squared norm is `∑ⱼ ∑ₖ ⟨φ_N(A_j)|φ_N(A_k)⟩`, the
 diagonal terms are `1` up to the normalization of the normal case

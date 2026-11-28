@@ -47,7 +47,6 @@ open MPTensor
 section
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators InnerProductSpace
-open Kraus (blockTensor)
 
 namespace MPSTensor
 
@@ -69,7 +68,7 @@ theorem exists_norm_trace_prod_transferMatrix_sub_one_le_sq (A : MPSTensor d D)
     ∃ C : ℝ, 0 < C ∧ ∀ (M : ℕ) (ℓ : Fin M → ℕ) (q : ℕ), 2 ≤ M → (∀ k, q ≤ ℓ k) →
       C * (M * (Real.exp (-γ / correlationLength lam₂) ^ 2) ^ q) < 1 →
       ‖Matrix.trace (List.ofFn fun k => transferMatrix (Kraus.mixedMapLM
-          (polarPosTensor (blockTensor A (ℓ k))) (fixedPointTensor σ))).prod - 1‖ ≤
+          (polarPosTensor (Kraus.block A (ℓ k))) (fixedPointTensor σ))).prod - 1‖ ≤
         C * (M * (Real.exp (-γ / correlationLength lam₂) ^ 2) ^ q) *
           Real.exp (C * (M * (Real.exp (-γ / correlationLength lam₂) ^ 2) ^ q)) := by
   have := Matrix.neZero_of_trace_eq_one htr
@@ -104,9 +103,9 @@ theorem exists_norm_trace_prod_transferMatrix_sub_one_le_sq (A : MPSTensor d D)
     · exact hq _
     · rfl
   set T : ℕ → Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ := fun j =>
-    transferMatrix (Kraus.mixedMapLM (polarPosTensor (blockTensor A (L j))) (fixedPointTensor σ))
+    transferMatrix (Kraus.mixedMapLM (polarPosTensor (Kraus.block A (L j))) (fixedPointTensor σ))
   set α : ℕ → ℂ := fun j =>
-    (Kraus.mixedMapLM (polarPosTensor (blockTensor A (L j))) (fixedPointTensor σ) σ).trace
+    (Kraus.mixedMapLM (polarPosTensor (Kraus.block A (L j))) (fixedPointTensor σ) σ).trace
   have hcomp : ∀ j, τ * T j * τ = α j • τ := fun j =>
     transferMatrix_fixedPointTensor_mul_mul hσ.posSemidef _ _
   have hTd : ∀ j, ‖T j - τ‖ ≤ δ := fun j => by
@@ -114,9 +113,9 @@ theorem exists_norm_trace_prod_transferMatrix_sub_one_le_sq (A : MPSTensor d D)
       _ ≤ Kt * x ^ q :=
           mul_le_mul_of_nonneg_left (pow_le_pow_of_le_one hx0 hx1 (hqL j)) hKt
       _ ≤ δ := by dsimp only [δ, K]; nlinarith [pow_nonneg hx0 q]
-  have hιd : ∀ j, ‖sqrtWeightLM σ (polarPosTensor (blockTensor A (L j))) -
+  have hιd : ∀ j, ‖sqrtWeightLM σ (polarPosTensor (Kraus.block A (L j))) -
       sqrtWeightLM σ (fixedPointTensor σ)‖ ≤ δ := fun j => by
-    calc ‖sqrtWeightLM σ (polarPosTensor (blockTensor A (L j))) -
+    calc ‖sqrtWeightLM σ (polarPosTensor (Kraus.block A (L j))) -
           sqrtWeightLM σ (fixedPointTensor σ)‖ ≤ Kι * x ^ (L j) := hι _
       _ ≤ Kι * x ^ q :=
           mul_le_mul_of_nonneg_left (pow_le_pow_of_le_one hx0 hx1 (hqL j)) hKι
@@ -124,10 +123,10 @@ theorem exists_norm_trace_prod_transferMatrix_sub_one_le_sq (A : MPSTensor d D)
   have hαpos : ∀ j, 0 ≤ α j := fun j =>
     mixedMapLM_polarPosTensor_fixedPointTensor_trace_nonneg _ hσ.posSemidef
   have hgeom : ∀ j, (α j).re ≤ 1 ∧ 1 - (α j).re =
-      ‖sqrtWeightLM σ (polarPosTensor (blockTensor A (L j))) -
+      ‖sqrtWeightLM σ (polarPosTensor (Kraus.block A (L j))) -
         sqrtWeightLM σ (fixedPointTensor σ)‖ ^ 2 / 2 := fun j =>
     mixedMapLM_polarPosTensor_fixedPointTensor_trace_geometry _ hσ.posSemidef htr (by
-      rw [Kraus.transferMap_blockTensor, Module.End.pow_apply, Function.iterate_fixed hfix]
+      rw [Kraus.transferMap_block, Module.End.pow_apply, Function.iterate_fixed hfix]
       exact htr)
   have hαre : ∀ j, α j = ((α j).re : ℂ) := fun j =>
     Complex.ext rfl (by simp [(Complex.nonneg_iff.1 (hαpos j)).2])
@@ -151,7 +150,7 @@ theorem exists_norm_trace_prod_transferMatrix_sub_one_le_sq (A : MPSTensor d D)
       _ < 1 := hsmall
   have h := hG T α δ M hM2 hcomp hTd hα1 hαsq hsmall'
   have hprod : (List.ofFn fun k => transferMatrix (Kraus.mixedMapLM
-      (polarPosTensor (blockTensor A (ℓ k))) (fixedPointTensor σ))) = (List.range M).map T := by
+      (polarPosTensor (Kraus.block A (ℓ k))) (fixedPointTensor σ))) = (List.range M).map T := by
     refine List.ext_getElem (by simp) fun i h1 _ => ?_
     have hi : i < M := by simpa using h1
     simp only [List.getElem_ofFn, List.getElem_map]
@@ -172,7 +171,6 @@ end
 section
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators InnerProductSpace
-open Kraus (blockTensor)
 
 namespace MPSTensor
 
@@ -198,7 +196,7 @@ theorem exists_norm_trace_prod_transferMatrix_sub_one_le (A : MPSTensor d D)
     (hlam₁ : ‖lam₂‖ ≤ 1) {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) :
     ∃ C : ℝ, 0 < C ∧ ∀ (M : ℕ) [NeZero M] (ℓ : Fin M → ℕ) (q : ℕ), (∀ k, q ≤ ℓ k) →
       ‖Matrix.trace (List.ofFn fun k => transferMatrix (Kraus.mixedMapLM
-          (polarPosTensor (blockTensor A (ℓ k))) (fixedPointTensor σ))).prod - 1‖ ≤
+          (polarPosTensor (Kraus.block A (ℓ k))) (fixedPointTensor σ))).prod - 1‖ ≤
         C * (M * Real.exp (-γ * q / correlationLength lam₂)) *
           Real.exp (C * (M * Real.exp (-γ * q / correlationLength lam₂))) := by
   have := Matrix.neZero_of_trace_eq_one htr
@@ -210,7 +208,7 @@ theorem exists_norm_trace_prod_transferMatrix_sub_one_le (A : MPSTensor d D)
   have hx1 : x ≤ 1 := exp_neg_div_correlationLength_le_one hγ0.le hlam₁
   set Tinf := transferMatrix (Kraus.mixedMapLM (fixedPointTensor σ) (fixedPointTensor σ))
   set T : ℕ → Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ := fun L =>
-    transferMatrix (Kraus.mixedMapLM (polarPosTensor (blockTensor A L)) (fixedPointTensor σ))
+    transferMatrix (Kraus.mixedMapLM (polarPosTensor (Kraus.block A L)) (fixedPointTensor σ))
   -- Pad the `M` factors with `τ_∞`, which does not enter the product of the first `M`.
   set X : ℕ → Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ := fun j =>
     if h : j < M then T (ℓ ⟨j, h⟩) else Tinf
@@ -241,7 +239,7 @@ theorem exists_blockApproximationError_le_mul (A : MPSTensor d D) (hN : Kraus.Is
     (hlam : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ ‖lam₂‖)
     (hlam₁ : ‖lam₂‖ ≤ 1) {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) :
     ∃ C : ℝ, 0 < C ∧ ∀ (M : ℕ) [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} (hN : ∑ k, ℓ k = N)
-      (q : ℕ), (∀ k, q ≤ ℓ k) → (∀ k, Kraus.IsInjective (blockTensor A (ℓ k))) →
+      (q : ℕ), (∀ k, q ≤ ℓ k) → (∀ k, Kraus.IsInjective (Kraus.block A (ℓ k))) →
         1 - ‖⟪blockIsometryState A (fixedPointPair σ) hN, normalizedMPVState A N⟫_ℂ‖ ≤
           C * (M * Real.exp (-(2 * γ) * q / correlationLength lam₂)) := by
   have := Matrix.neZero_of_trace_eq_one htr
@@ -312,13 +310,13 @@ theorem exists_blockApproximationError_le_mul (A : MPSTensor d D) (hN : Kraus.Is
     · obtain rfl : M = 1 := by have := NeZero.ne M; omega
       have hℓ : ℓ 0 = N := by simpa only [Fin.sum_univ_one] using hN
       have hz1 : ⟪ψ, mpvState A N⟫_ℂ =
-          mpvOverlap (polarPosTensor (blockTensor A N)) (fixedPointTensor σ) 1 := by
+          mpvOverlap (polarPosTensor (Kraus.block A N)) (fixedPointTensor σ) 1 := by
         rw [hz, ← trace_transferMatrix_mixedMapLM_pow_eq_mpvOverlap]
         simp only [List.ofFn_succ, List.ofFn_zero, List.prod_cons, List.prod_nil,
           mul_one, pow_one]
         rw [hℓ]
-      have hvu : ‖mpvState A N‖ = ‖mpvState (polarPosTensor (blockTensor A N)) 1‖ := by
-        rw [norm_mpvState_polarPosTensor_blockTensor, mul_one]
+      have hvu : ‖mpvState A N‖ = ‖mpvState (polarPosTensor (Kraus.block A N)) 1‖ := by
+        rw [norm_mpvState_polarPosTensor_block, mul_one]
       have hW : ‖mpvState A N‖ ^ 2 - ‖⟪ψ, mpvState A N⟫_ℂ‖ ^ 2 ≤ K₁ * u := by
         rw [hz1, hvu]
         refine (hone N).trans (mul_le_mul_of_nonneg_left ?_ hK₁)
@@ -381,7 +379,7 @@ theorem exists_blockApproximationError_le_exp (A : MPSTensor d D) (hN : Kraus.Is
     (ht0 : 0 < t) (ht1 : t < 1) :
     ∃ C r : ℝ, 0 < C ∧ 0 < r ∧ r = -Real.log t ∧
       ∀ (M : ℕ) [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} (hN : ∑ k, ℓ k = N)
-        (q : ℕ), (∀ k, q ≤ ℓ k) → (∀ k, Kraus.IsInjective (blockTensor A (ℓ k))) →
+        (q : ℕ), (∀ k, q ≤ ℓ k) → (∀ k, Kraus.IsInjective (Kraus.block A (ℓ k))) →
           1 - ‖⟪blockIsometryState A (fixedPointPair σ) hN, normalizedMPVState A N⟫_ℂ‖ ≤
             C * (M * Real.exp (-(r * q))) := by
   have hnorm : ‖(t : ℂ)‖ = t := by rw [Complex.norm_real, Real.norm_eq_abs, abs_of_pos ht0]

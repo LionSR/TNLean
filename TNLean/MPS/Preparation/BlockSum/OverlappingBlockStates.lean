@@ -35,14 +35,14 @@ The steps:
 
 * the `ℓ`-site blocked tensor of `A_j`, placed along `ι_j`, is `V P K_j K_jᴴ`, with `V P` the
   polar decomposition of the blocked direct sum and `K_j` the isometry placing the bond pairs of
-  block `j` (`MPSTensor.blockTensor_blockSum_single`), so `|φ_N(A_j)⟩` is `⊗ₖ V_k` applied to the
+  block `j` (`MPSTensor.block_blockSum_single`), so `|φ_N(A_j)⟩` is `⊗ₖ V_k` applied to the
   periodic state of the tensors `P_k K_j K_jᴴ` (`MPSTensor.mpvState_eq_blockIsoVector`);
 * since `V_k` is an isometry on the bond pairs of the blocks
-  (`MPSTensor.exists_isInjectiveOn_blockTensor_blockSum`), the overlaps
+  (`MPSTensor.exists_isInjectiveOn_block_blockSum`), the overlaps
   `z_{jj'} = ⟨(⊗ₖ V_k) ⊗ₖ ω_j | φ_N(A_{j'})⟩` are traces of products of mixed transfer matrices
   (`MPSTensor.inner_blockIsometryState_embedPair_mpvState`);
 * `P_k` is within `K e^{-γ ℓ_k/ξ}` of the limit `P_∞`
-  (`MPSTensor.exists_norm_polarPos_blockTensor_blockSum_sub_le`), whose mixed transfer matrix
+  (`MPSTensor.exists_norm_polarPos_block_blockSum_sub_le`), whose mixed transfer matrix
   against the fixed point of block `j` after `K_{j'} K_{j'}ᴴ` is the idempotent of trace one for
   `j = j'` and zero otherwise (`MPSTensor.mixedMapLM_blockSumPosLimit_mul_apply`), so
   `|z_{jj'} - δ_{jj'}| ≤ C y e^{C y}` with `y = M e^{-γ q/ξ}`
@@ -64,7 +64,7 @@ Documented in `docs/paper-gaps/mswc24_measurement_preparation_scope.tex`.
 ## Main declarations
 
 * `MPSTensor.blockPosTensor` — the tensor `P K_j K_jᴴ` of block `j`.
-* `MPSTensor.blockTensor_blockSum_single`, `MPSTensor.mpvState_eq_blockIsoVector` — the states of
+* `MPSTensor.block_blockSum_single`, `MPSTensor.mpvState_eq_blockIsoVector` — the states of
   the blocks after the isometries of the direct sum.
 * `MPSTensor.inner_blockIsometryState_embedPair_mpvState` — the overlaps `z_{jj'}`.
 * `MPSTensor.norm_sum_smul_blockIsometryState` — `|ψ⟩` is a unit vector.
@@ -87,7 +87,6 @@ open MPTensor
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators InnerProductSpace
 open Matrix
-open Kraus (blockTensor)
 
 /-! ### Telescoping for products of different matrices -/
 
@@ -108,21 +107,21 @@ noncomputable def blockPosTensor {n : ℕ} (ι : (j : Fin b) → Fin (Dj j) → 
 
 /-- The blocked tensor of block `j` alone, placed along `ι_j`, is that of the direct sum with
 unit weights followed by `K_j K_jᴴ`, for `q ≥ 1`. -/
-private theorem physicalMatrix_blockTensor_blockSum_single
+private theorem physicalMatrix_block_blockSum_single
     (hι : ∀ j, Function.Injective (ι j))
     (hdisj : ∀ j j', j ≠ j' → ∀ a a', ι j a ≠ ι j' a') (j : Fin b) {q : ℕ} (hq : q ≠ 0) :
-    physicalMatrix (blockTensor (blockSum Aj ι (Pi.single j 1)) q) =
-      physicalMatrix (blockTensor (blockSum Aj ι fun _ => 1) q) *
+    physicalMatrix (Kraus.block (blockSum Aj ι (Pi.single j 1)) q) =
+      physicalMatrix (Kraus.block (blockSum Aj ι fun _ => 1) q) *
         (pairEmbedding (ι j) * (pairEmbedding (ι j))ᴴ) := by
   classical
-  have hL : physicalMatrix (blockTensor (blockSum Aj ι (Pi.single j 1)) q) =
-      physicalMatrix (blockTensor (Aj j) q) * (pairEmbedding (ι j))ᴴ := by
-    rw [physicalMatrix_blockTensor_blockSum hι hdisj _ hq, Finset.sum_eq_single j]
+  have hL : physicalMatrix (Kraus.block (blockSum Aj ι (Pi.single j 1)) q) =
+      physicalMatrix (Kraus.block (Aj j) q) * (pairEmbedding (ι j))ᴴ := by
+    rw [physicalMatrix_block_blockSum hι hdisj _ hq, Finset.sum_eq_single j]
     · rw [Pi.single_eq_same, one_pow, one_smul]
     · intro k _ hk
       rw [Pi.single_eq_of_ne hk, zero_pow hq, zero_smul]
     · simp
-  rw [hL, physicalMatrix_blockTensor_blockSum_one hι hdisj hq, Matrix.sum_mul,
+  rw [hL, physicalMatrix_block_blockSum_one hι hdisj hq, Matrix.sum_mul,
     Finset.sum_eq_single j]
   · rw [Matrix.mul_assoc, ← Matrix.mul_assoc (pairEmbedding (ι j))ᴴ,
       conjTranspose_pairEmbedding_mul_self (hι j), Matrix.one_mul]
@@ -135,14 +134,14 @@ private theorem physicalMatrix_blockTensor_blockSum_single
 the `q`-site blocked tensor of block `j`, placed along `ι_j`, is `V` applied to the tensor
 `P K_j K_jᴴ`, where `B = V P` is the polar decomposition of the blocked direct sum with unit
 weights. -/
-theorem blockTensor_blockSum_single (hι : ∀ j, Function.Injective (ι j))
+theorem block_blockSum_single (hι : ∀ j, Function.Injective (ι j))
     (hdisj : ∀ j j', j ≠ j' → ∀ a a', ι j a ≠ ι j' a') (j : Fin b) {q : ℕ} (hq : q ≠ 0) :
-    blockTensor (blockSum Aj ι (Pi.single j 1)) q =
-      rotatePhysical (polarIsoMatrix (blockTensor (blockSum Aj ι fun _ => 1) q))
-        (blockPosTensor ι (blockTensor (blockSum Aj ι fun _ => 1) q) j) := by
+    Kraus.block (blockSum Aj ι (Pi.single j 1)) q =
+      rotatePhysical (polarIsoMatrix (Kraus.block (blockSum Aj ι fun _ => 1) q))
+        (blockPosTensor ι (Kraus.block (blockSum Aj ι fun _ => 1) q) j) := by
   apply physicalMatrix_injective
-  rw [physicalMatrix_rotatePhysical, physicalMatrix_blockTensor_blockSum_single hι hdisj j hq]
-  set B := blockTensor (blockSum Aj ι fun _ => 1) q
+  rw [physicalMatrix_rotatePhysical, physicalMatrix_block_blockSum_single hι hdisj j hq]
+  set B := Kraus.block (blockSum Aj ι fun _ => 1) q
   change _ = polarIsoMatrix B * (Matrix.polarPos (physicalMatrix B) *
     (pairEmbedding (ι j) * (pairEmbedding (ι j))ᴴ)).submatrix (virtualPairEquiv D) id
   rw [polarIsoMatrix, Matrix.submatrix_mul_equiv, Matrix.submatrix_id_id,
@@ -156,10 +155,10 @@ sites cut into blocks of lengths `ℓ_k ≥ 1`, `|φ_N(A_j)⟩ = (⊗ₖ V_k) |�
 theorem mpvState_eq_blockIsoVector (hι : ∀ j, Function.Injective (ι j))
     (hdisj : ∀ j j', j ≠ j' → ∀ a a', ι j a ≠ ι j' a') (j : Fin b) {M : ℕ} {ℓ : Fin M → ℕ}
     {N : ℕ} (hN : ∑ k, ℓ k = N) (hN0 : N ≠ 0) (hℓ : ∀ k, ℓ k ≠ 0) :
-    mpvState (Aj j) N = blockIsoVector (fun k => blockTensor (blockSum Aj ι fun _ => 1) (ℓ k)) hN
+    mpvState (Aj j) N = blockIsoVector (fun k => Kraus.block (blockSum Aj ι fun _ => 1) (ℓ k)) hN
       ((EuclideanSpace.equiv (ι := Cfg (D * D) M) (𝕜 := ℂ)).symm fun τ =>
         mpvFamily (n := fun _ => D * D)
-          (fun k => blockPosTensor ι (blockTensor (blockSum Aj ι fun _ => 1) (ℓ k)) j) τ) := by
+          (fun k => blockPosTensor ι (Kraus.block (blockSum Aj ι fun _ => 1) (ℓ k)) j) τ) := by
   classical
   ext s
   rw [mpvState_apply, blockIsoVector_apply]
@@ -169,11 +168,11 @@ theorem mpvState_eq_blockIsoVector (hι : ∀ j, Function.Injective (ι j))
     · intro k _ hk
       rw [Pi.single_eq_of_ne hk, zero_pow hN0, zero_mul]
     · simp
-  rw [h1, mpv_eq_mpvFamily_blockTensor _ hN,
-    show (fun k => blockTensor (blockSum Aj ι (Pi.single j 1)) (ℓ k)) = fun k =>
-      rotatePhysical (polarIsoMatrix (blockTensor (blockSum Aj ι fun _ => 1) (ℓ k)))
-        (blockPosTensor ι (blockTensor (blockSum Aj ι fun _ => 1) (ℓ k)) j) from
-      funext fun k => blockTensor_blockSum_single hι hdisj j (hℓ k),
+  rw [h1, mpv_eq_mpvFamily_block _ hN,
+    show (fun k => Kraus.block (blockSum Aj ι (Pi.single j 1)) (ℓ k)) = fun k =>
+      rotatePhysical (polarIsoMatrix (Kraus.block (blockSum Aj ι fun _ => 1) (ℓ k)))
+        (blockPosTensor ι (Kraus.block (blockSum Aj ι fun _ => 1) (ℓ k)) j) from
+      funext fun k => block_blockSum_single hι hdisj j (hℓ k),
     mpvFamily_rotatePhysical]
   simp [EuclideanSpace.equiv, PiLp.toLp_apply]
 
@@ -199,7 +198,7 @@ blocked tensors applied to the product of the pairs. -/
 theorem blockIsometryState_eq_blockIsoVector (A : MPSTensor d D) (ω : Fin D × Fin D → ℂ)
     {M : ℕ} {ℓ : Fin M → ℕ} {N : ℕ} (hN : ∑ k, ℓ k = N) :
     blockIsometryState A ω hN =
-      blockIsoVector (fun k => blockTensor A (ℓ k)) hN (pairFamilyVector fun _ => ω) := by
+      blockIsoVector (fun k => Kraus.block A (ℓ k)) hN (pairFamilyVector fun _ => ω) := by
   rw [blockIsometryState_eq_chainBlockIsometryState, chainBlockIsometryState]
   congr 1
   funext k
@@ -221,12 +220,12 @@ theorem inner_blockIsometryState_embedPair_mpvState (hι : ∀ j, Function.Injec
     (hdisj : ∀ j j', j ≠ j' → ∀ a a', ι j a ≠ ι j' a') (hσ : ∀ j, (σ j).PosSemidef)
     (j j' : Fin b) {M : ℕ} [NeZero M] {ℓ : Fin M → ℕ} {N : ℕ} (hN : ∑ k, ℓ k = N)
     (hℓ : ∀ k, ℓ k ≠ 0)
-    (hinj : ∀ k, IsInjectiveOn (blockTensor (blockSum Aj ι fun _ => 1) (ℓ k))
+    (hinj : ∀ k, IsInjectiveOn (Kraus.block (blockSum Aj ι fun _ => 1) (ℓ k))
       (blockPairs ι : Set (Fin D × Fin D))) :
     ⟪blockIsometryState (blockSum Aj ι fun _ => 1) (embedPair (ι j) (fixedPointPair (σ j))) hN,
         mpvState (Aj j') N⟫_ℂ =
       Matrix.trace (List.ofFn fun k => transferMatrix (Kraus.mixedMapLM
-        (blockPosTensor ι (blockTensor (blockSum Aj ι fun _ => 1) (ℓ k)) j')
+        (blockPosTensor ι (Kraus.block (blockSum Aj ι fun _ => 1) (ℓ k)) j')
         (fixedPointTensor (embeddedBlockState (ι j) (σ j))))).prod := by
   classical
   have hN0 : N ≠ 0 := by
@@ -252,7 +251,7 @@ theorem inner_blockIsometryState_embedPair (hι : ∀ j, Function.Injective (ι 
     (hdisj : ∀ j j', j ≠ j' → ∀ a a', ι j a ≠ ι j' a') (hσ : ∀ j, (σ j).PosSemidef)
     (htr : ∀ j, (σ j).trace = 1) (j j' : Fin b) {M : ℕ} [NeZero M] {ℓ : Fin M → ℕ} {N : ℕ}
     (hN : ∑ k, ℓ k = N)
-    (hinj : ∀ k, IsInjectiveOn (blockTensor (blockSum Aj ι fun _ => 1) (ℓ k))
+    (hinj : ∀ k, IsInjectiveOn (Kraus.block (blockSum Aj ι fun _ => 1) (ℓ k))
       (blockPairs ι : Set (Fin D × Fin D))) :
     ⟪blockIsometryState (blockSum Aj ι fun _ => 1) (embedPair (ι j) (fixedPointPair (σ j))) hN,
         blockIsometryState (blockSum Aj ι fun _ => 1)
@@ -285,7 +284,7 @@ theorem norm_sum_smul_blockIsometryState (hι : ∀ j, Function.Injective (ι j)
     (hdisj : ∀ j j', j ≠ j' → ∀ a a', ι j a ≠ ι j' a') (hσ : ∀ j, (σ j).PosSemidef)
     (htr : ∀ j, (σ j).trace = 1) {α : Fin b → ℂ} (hα : ∑ j, star (α j) * α j = 1) {M : ℕ}
     [NeZero M] {ℓ : Fin M → ℕ} {N : ℕ} (hN : ∑ k, ℓ k = N)
-    (hinj : ∀ k, IsInjectiveOn (blockTensor (blockSum Aj ι fun _ => 1) (ℓ k))
+    (hinj : ∀ k, IsInjectiveOn (Kraus.block (blockSum Aj ι fun _ => 1) (ℓ k))
       (blockPairs ι : Set (Fin D × Fin D))) :
     ‖∑ j, α j • blockIsometryState (blockSum Aj ι fun _ => 1)
       (embedPair (ι j) (fixedPointPair (σ j))) hN‖ = 1 := by
@@ -311,9 +310,9 @@ private theorem blockSumPosLimit_mul_pairEmbedding
     (σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ)
     (j' : Fin b) :
     blockSumPosLimit ι σ * (pairEmbedding (ι j') * (pairEmbedding (ι j'))ᴴ) =
-      blockSumPosLimit ι (fun k => ((((Pi.single j' 1 : Fin b → ℝ) k ^ 2 : ℝ)) : ℂ) • σ k) := by
+      blockSumPosLimit ι (fun k => (((Pi.single j' 1 : Fin b → ℝ) k ^ 2 : ℝ) : ℂ) • σ k) := by
   classical
-  have hR : blockSumPosLimit ι (fun k => ((((Pi.single j' 1 : Fin b → ℝ) k ^ 2 : ℝ)) : ℂ) • σ k) =
+  have hR : blockSumPosLimit ι (fun k => (((Pi.single j' 1 : Fin b → ℝ) k ^ 2 : ℝ) : ℂ) • σ k) =
       pairEmbedding (ι j') * ((CFC.sqrt (σ j'))ᵀ ⊗ₖ (1 : Matrix (Fin (Dj j')) (Fin (Dj j')) ℂ)) *
         (pairEmbedding (ι j'))ᴴ := by
     rw [blockSumPosLimit, Finset.sum_eq_single j']
@@ -353,7 +352,7 @@ variable {Aj : (j : Fin b) → MPSTensor d (Dj j)}
 
 open scoped Matrix.Norms.L2Operator in
 /-- **The overlaps of the blocks near the limit.** In the setting of
-`exists_norm_polarPos_blockTensor_blockSum_sub_le`, for blocks `j, j'` there is `C > 0` such that
+`exists_norm_polarPos_block_blockSum_sub_le`, for blocks `j, j'` there is `C > 0` such that
 for every cutting of a ring into `M ≥ 1` blocks of lengths `ℓ_k ≥ q ≥ 1`, the trace `z_{jj'}` of
 the ordered product of the mixed transfer matrices of `P_k K_{j'} K_{j'}ᴴ` against the
 fixed-point tensor of block `j` satisfies `|z_{jj'} - δ_{jj'}| ≤ C y e^{C y}` with
@@ -376,7 +375,7 @@ theorem exists_norm_trace_prod_blockPosTensor_sub_le (hι : ∀ j, Function.Inje
     {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) (j j' : Fin b) :
     ∃ C : ℝ, 0 < C ∧ ∀ (M : ℕ) [NeZero M] (ℓ : Fin M → ℕ) (q : ℕ), q ≠ 0 → (∀ k, q ≤ ℓ k) →
       ‖Matrix.trace (List.ofFn fun k => transferMatrix (Kraus.mixedMapLM
-          (blockPosTensor ι (blockTensor (blockSum Aj ι fun _ => 1) (ℓ k)) j')
+          (blockPosTensor ι (Kraus.block (blockSum Aj ι fun _ => 1) (ℓ k)) j')
           (fixedPointTensor (embeddedBlockState (ι j) (σ j))))).prod -
             (if j = j' then 1 else 0)‖ ≤
         C * (M * Real.exp (-γ / correlationLength lam₂) ^ q) *
@@ -384,7 +383,7 @@ theorem exists_norm_trace_prod_blockPosTensor_sub_le (hι : ∀ j, Function.Inje
   classical
   have : NeZero (Dj j) := Matrix.neZero_of_trace_eq_one (htr j)
   have : NeZero D := ⟨fun h => by subst h; exact (ι j 0).elim0⟩
-  obtain ⟨K₁, hK₁, hpos⟩ := exists_norm_polarPos_blockTensor_blockSum_sub_le hι hdisj hN hA hσ
+  obtain ⟨K₁, hK₁, hpos⟩ := exists_norm_polarPos_block_blockSum_sub_le hι hdisj hN hA hσ
     htr hfix hl hlam hmix hγ0 hγ
   set F := fixedPointTensor (embeddedBlockState (ι j) (σ j))
   set Ψ := mixedTransferMatrixLeft F
@@ -443,14 +442,14 @@ theorem exists_norm_trace_prod_blockPosTensor_sub_le (hι : ∀ j, Function.Inje
   have hx0 : 0 ≤ x := (Real.exp_pos _).le
   have hx1 : x ≤ 1 := exp_neg_div_correlationLength_le_one hγ0.le hl.le
   have hδ : ∀ k, ‖Ψ (Matrix.polarPos (physicalMatrix
-      (blockTensor (blockSum Aj ι fun _ => 1) (ℓ k))) * Pj) - E‖ ≤ K₃ * K₁ * x ^ q := fun k => by
+      (Kraus.block (blockSum Aj ι fun _ => 1) (ℓ k))) * Pj) - E‖ ≤ K₃ * K₁ * x ^ q := fun k => by
     rw [← map_sub, ← Matrix.sub_mul]
     refine (hΨ _).trans ?_
     rw [mul_assoc]
     refine mul_le_mul_of_nonneg_left ?_ hK₃
-    calc ‖(Matrix.polarPos (physicalMatrix (blockTensor (blockSum Aj ι fun _ => 1) (ℓ k))) -
+    calc ‖(Matrix.polarPos (physicalMatrix (Kraus.block (blockSum Aj ι fun _ => 1) (ℓ k))) -
           blockSumPosLimit ι σ) * Pj‖
-        ≤ ‖Matrix.polarPos (physicalMatrix (blockTensor (blockSum Aj ι fun _ => 1) (ℓ k))) -
+        ≤ ‖Matrix.polarPos (physicalMatrix (Kraus.block (blockSum Aj ι fun _ => 1) (ℓ k))) -
           blockSumPosLimit ι σ‖ * ‖Pj‖ := Matrix.l2_opNorm_mul _ _
       _ ≤ K₁ * x ^ (ℓ k) * 1 := mul_le_mul (hpos _ (by have := hℓ k; omega)) hPj (norm_nonneg _)
           (by positivity)
@@ -511,7 +510,7 @@ theorem exists_one_sub_norm_inner_sum_blockIsometryState_le (hι : ∀ j, Functi
     {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) :
     ∃ C : ℝ, 0 < C ∧ ∀ β : Fin b → ℂ, β ≠ 0 → ∀ (M : ℕ) [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ}
       (hNs : ∑ k, ℓ k = N) (q : ℕ), (∀ k, q ≤ ℓ k) →
-      (∀ k, IsInjectiveOn (blockTensor (blockSum Aj ι fun _ => 1) (ℓ k))
+      (∀ k, IsInjectiveOn (Kraus.block (blockSum Aj ι fun _ => 1) (ℓ k))
         (blockPairs ι : Set (Fin D × Fin D))) →
       ∀ φ : MPVSpace (Fin d) N, (∀ s, φ s = ∑ j, β j * mpv (Aj j) s) →
         1 - ‖⟪∑ j, ghzAmplitude β j • blockIsometryState (blockSum Aj ι fun _ => 1)
@@ -582,7 +581,7 @@ theorem exists_one_sub_norm_inner_sum_blockIsometryState_le (hι : ∀ j, Functi
     Real.le_sqrt_of_sq_le (Finset.single_le_sum (f := fun j => ‖β j‖ ^ 2)
       (fun _ _ => by positivity) (Finset.mem_univ j))
   set S := ∑ j, ∑ j', star (β j) * β j' * z j j'
-  have hinner : ⟪ψ, φ⟫_ℂ = ((sb : ℂ))⁻¹ * S := by
+  have hinner : ⟪ψ, φ⟫_ℂ = (sb : ℂ)⁻¹ * S := by
     have hψφ : ∀ j, ⟪blockIsometryState (blockSum Aj ι fun _ => 1)
         (embedPair (ι j) (fixedPointPair (σ j))) hNs, φ⟫_ℂ = ∑ j', β j' * z j j' := fun j => by
       simp only [z, PiLp.inner_apply, RCLike.inner_apply, hφ, mpvState_apply, Finset.mul_sum,

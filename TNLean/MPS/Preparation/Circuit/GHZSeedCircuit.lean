@@ -25,7 +25,6 @@ unreported ancillary state or trace-out.
 open Matrix MPSTensor
 open scoped BigOperators ComplexOrder InnerProductSpace
 open QuantumCircuit
-open Kraus (decodeBlockEquiv blockTensor)
 
 namespace MPSPreparation
 variable {d : ℕ} [NeZero d]
@@ -98,7 +97,7 @@ theorem blockLayerOp_pairLayerOp_mulVec_registerCfg {D r₁ M N : ℕ}
     {W : Matrix (Cfg d (r₁ + r₁)) (Cfg d (r₁ + r₁)) ℂ}
     (hU : ∀ k l r τ, (l, r) ∈ S →
       U k τ (blockInputCfg (NeZero.pos d) (ℓ k) dig l r) =
-        polarIsoMatrix (blockTensor A (ℓ k)) ((decodeBlockEquiv d (ℓ k)).symm τ)
+        polarIsoMatrix (Kraus.block A (ℓ k)) (τ)
           (finProdFinEquiv (l, r)))
     (hW : ∀ u, W u (windowInput u₀) =
       Function.extend (fun p : Fin D × Fin D => twoCfg dig p.1 p.2) ω 0 u) :
@@ -129,7 +128,7 @@ theorem exists_isUnitaryCircuit_registerCfg_of_pairProductState_supported
       ∀ {M : ℕ} [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} [NeZero N] (hN : ∑ k, ℓ k = N) (L : ℕ),
         (∀ j (c : Fin M → Fin D × Fin D), pairProductState (ω j) c ≠ 0 → ∀ k, c k ∈ S) →
         ∀ hℓ : ∀ k, 3 * r₁ ≤ ℓ k, (∀ k, ℓ k ≤ L) →
-        (∀ k, IsInjectiveOn (blockTensor A (ℓ k)) (S : Set (Fin D × Fin D))) →
+        (∀ k, IsInjectiveOn (Kraus.block A (ℓ k)) (S : Set (Fin D × Fin D))) →
         ∃ (U : Matrix (Cfg d N) (Cfg d N) ℂ) (T : ℕ),
           IsUnitaryCircuit (Geometry.ring N) T U ∧ T ≤ C * L ∧
           ∀ j, U *ᵥ Pi.single (registerCfg hN (fun k => by have := hℓ k; omega)
@@ -155,12 +154,12 @@ theorem exists_isUnitaryCircuit_registerCfg_of_pairProductState_supported
       IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (ℓ k))) (Cb * ℓ k) U ∧
         ∀ l r τ, (l, r) ∈ S →
         U τ (blockInputCfg hd (ℓ k) dig l r) =
-          polarIsoMatrix (blockTensor A (ℓ k)) ((decodeBlockEquiv d (ℓ k)).symm τ)
+          polarIsoMatrix (Kraus.block A (ℓ k)) (τ)
             (finProdFinEquiv (l, r)) := fun k => by
     obtain ⟨π, hπ⟩ := exists_pairEquiv_val_lt_card_iff_mem S
     obtain ⟨bq, Q, hb0, hbq, -, hrow, -, hiso, hVQ⟩ :=
       exists_isometric_chain_polarIsoMatrix_of_isInjectiveOn (fun _ : Fin (ℓ k) => A)
-        (by have := hℓ k; omega) (by rw [MPSChainTensor.blockTensor_const]; exact hinj k) π hπ
+        (by have := hℓ k; omega) (by rw [MPSChainTensor.eval_const_eq_block]; exact hinj k) π hπ
     obtain ⟨U, hUpp, hUQ⟩ := hCπ π (ℓ k) (hℓ k) bq Q hb0 hrow hiso
     refine ⟨U, hUpp.mono (Nat.mul_le_mul_right _ (Finset.le_sup (Finset.mem_univ π))),
       fun l r τ hlr => ?_⟩
@@ -168,7 +167,7 @@ theorem exists_isUnitaryCircuit_registerCfg_of_pairProductState_supported
       (hπ (π.symm (l, r))).mpr (by rw [Equiv.apply_symm_apply]; exact hlr)
     have h1 := hUQ (π.symm (l, r)) (by rw [hbq]; exact hx) τ
     have h2 := hVQ τ (π.symm (l, r)) hx
-    simp only [Equiv.apply_symm_apply, MPSChainTensor.blockTensor_const] at h1 h2
+    simp only [Equiv.apply_symm_apply, MPSChainTensor.eval_const_eq_block] at h1 h2
     rw [h1, ← h2]
     rfl
   choose U hUpp hU using hUk
@@ -200,7 +199,7 @@ theorem exists_isUnitaryCircuit_registerCfg_of_isInjectiveOn
       (∀ j {M : ℕ} (c : Fin M → Fin D × Fin D), pairProductState (ω j) c ≠ 0 → ∀ k, c k ∈ S) →
       ∀ {M : ℕ} [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} [NeZero N] (hN : ∑ k, ℓ k = N) (L : ℕ),
         ∀ hℓ : ∀ k, 3 * r₁ ≤ ℓ k, (∀ k, ℓ k ≤ L) →
-        (∀ k, IsInjectiveOn (blockTensor A (ℓ k)) (S : Set (Fin D × Fin D))) →
+        (∀ k, IsInjectiveOn (Kraus.block A (ℓ k)) (S : Set (Fin D × Fin D))) →
         ∃ (U : Matrix (Cfg d N) (Cfg d N) ℂ) (T : ℕ),
           IsUnitaryCircuit (Geometry.ring N) T U ∧ T ≤ C * L ∧
           ∀ j, U *ᵥ Pi.single (registerCfg hN (fun k => by have := hℓ k; omega)

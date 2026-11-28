@@ -75,7 +75,6 @@ section
 open Matrix MPSTensor
 open scoped BigOperators ComplexOrder InnerProductSpace
 open QuantumCircuit
-open Kraus (blockTensor isNBlkInjective_iff_blockTensor_isInjective)
 
 namespace MPSPreparation
 
@@ -114,7 +113,7 @@ theorem exists_normalGaugeData {D : ℕ} [NeZero D] {A : MPSTensor d D}
       Kraus.IsNormal B ∧ IsLeftCanonical B ∧ σ.PosDef ∧ σ.trace = 1 ∧
       Kraus.transferMap B σ = σ ∧ 0 < t ∧ t < 1 ∧
       (∀ μ, Module.End.HasEigenvalue (Kraus.transferMap B) μ → μ ≠ 1 → ‖μ‖ ≤ ‖(t : ℂ)‖) ∧
-      ‖(t : ℂ)‖ = t ∧ ∀ n, L ≤ n → Kraus.IsInjective (blockTensor B n) := by
+      ‖(t : ℂ)‖ = t ∧ ∀ n, L ≤ n → Kraus.IsInjective (Kraus.block B n) := by
   obtain ⟨B, ζ, ρ, hζ, hGauge, hmpv, hP, hρ, -⟩ :=
     exists_hasComplementaryFixedPointGap_gauge_of_isNormal hA
   have hNB : Kraus.IsNormal B :=
@@ -127,7 +126,7 @@ theorem exists_normalGaugeData {D : ℕ} [NeZero D] {A : MPSTensor d D}
   refine ⟨B, ζ, (Matrix.trace ρ)⁻¹ • ρ, t, L, hζ, hmpv, ⟨L, hLpos, hL⟩, hLC,
     hρ.inv_trace_smul, Matrix.trace_inv_trace_smul (ne_of_gt hρ.trace_pos),
     hPσ.fixedPoint_is_fixed, ht0, ht1, fun μ hμ hne => ?_, hnorm, fun n hn =>
-      (isNBlkInjective_iff_blockTensor_isInjective B n).1 (Kraus.isNBlkInjective_of_le hLpos hL hn)⟩
+      (Kraus.isNBlkInjective_iff_isInjective_block B n).1 (Kraus.isNBlkInjective_of_le hLpos hL hn)⟩
   rw [hnorm]; exact hgap μ hμ hne
 
 /-- **The error at block length `q ≥ a log(Mq/ε) + b₀` for every slope `a > ξ/2`.** Let `B` be a
@@ -210,8 +209,8 @@ theorem exists_isPreparedInDepth_approximationError_le_of_slope (d D : ℕ) [NeZ
   obtain ⟨b₀, hb₀, herr⟩ := exists_approximationError_le_of_slope hζ hmpv hNB hLC hσ htr hfix
     ht0 ht1 hlam ha
   obtain ⟨L, hLpos, hL⟩ := hNB
-  have hinj : ∀ n, L ≤ n → Kraus.IsInjective (blockTensor B n) := fun n hn =>
-    (isNBlkInjective_iff_blockTensor_isInjective B n).1 (Kraus.isNBlkInjective_of_le hLpos hL hn)
+  have hinj : ∀ n, L ≤ n → Kraus.IsInjective (Kraus.block B n) := fun n hn =>
+    (Kraus.isNBlkInjective_iff_isInjective_block B n).1 (Kraus.isNBlkInjective_of_le hLpos hL hn)
   refine ⟨b₀ + L + 3 * D + 1, by linarith, fun ε hε hε1 N q _ hqN hq => ?_⟩
   have hN1 : (1 : ℝ) ≤ N := by exact_mod_cast Nat.one_le_iff_ne_zero.2 (NeZero.ne N)
   have hlog0 : 0 ≤ Real.log (N / ε) :=
@@ -226,7 +225,7 @@ theorem exists_isPreparedInDepth_approximationError_le_of_slope (d D : ℕ) [NeZ
   rw [mul_comm] at hM
   subst hM
   have : NeZero M := ⟨fun h => NeZero.ne (M * q) (by rw [h, zero_mul])⟩
-  have hB : Kraus.IsInjective (blockTensor B q) := hinj q hLq
+  have hB : Kraus.IsInjective (Kraus.block B q) := hinj q hLq
   refine ⟨approximatingMPVState B σ q M, norm_approximatingMPVState B hB hσ.posSemidef htr M,
     hC B σ hσ.posSemidef htr q h3D hB M, herr ε hε q M hq1 ?_⟩
   push_cast at hq
@@ -323,7 +322,6 @@ section
 
 open Matrix MPSTensor QuantumCircuit
 open scoped BigOperators ComplexOrder InnerProductSpace
-open Kraus (blockTensor isNBlkInjective_iff_blockTensor_isInjective)
 
 namespace MPSPreparation
 
@@ -364,8 +362,8 @@ theorem exists_isPreparedInDepth_allLength_of_slope (d D : ℕ) (hd : 0 < d) :
     (γ := correlationLength (t : ℂ) / (2 * a)) (by positivity)
     ((div_lt_one (by positivity)).2 (by linarith))
   obtain ⟨L, hLpos, hL⟩ := hNB
-  have hinj : ∀ n, L ≤ n → Kraus.IsInjective (blockTensor B n) := fun n hn =>
-    (isNBlkInjective_iff_blockTensor_isInjective B n).mp (Kraus.isNBlkInjective_of_le hLpos hL hn)
+  have hinj : ∀ n, L ≤ n → Kraus.IsInjective (Kraus.block B n) := fun n hn =>
+    (Kraus.isNBlkInjective_iff_isInjective_block B n).mp (Kraus.isNBlkInjective_of_le hLpos hL hn)
   let b : ℝ := a * max (Real.log K) 0 + L + 3 * D + 1
   have hb : 1 ≤ b := by
     have : 0 ≤ a * max (Real.log K) 0 + L + 3 * D := by positivity
@@ -390,7 +388,7 @@ theorem exists_isPreparedInDepth_allLength_of_slope (d D : ℕ) (hd : 0 < d) :
     have hℓq : ∀ j, q ≤ ℓ j := le_remainderBlockLengths q N
     have hℓ2q : ∀ j, ℓ j ≤ 2 * q := fun j =>
       (remainderBlockLengths_lt_two_mul hq0 j).le
-    have hinjℓ : ∀ j, Kraus.IsInjective (blockTensor B (ℓ j)) :=
+    have hinjℓ : ∀ j, Kraus.IsInjective (Kraus.block B (ℓ j)) :=
       fun j => hinj _ (hLq.trans (hℓq j))
     have hω : ∑ p, star (fixedPointPair σ p) * fixedPointPair σ p = 1 := by
       rw [fixedPointPair_norm_sq hσ.posSemidef, htr]

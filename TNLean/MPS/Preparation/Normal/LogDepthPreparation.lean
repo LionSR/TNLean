@@ -63,7 +63,6 @@ open QuantumCircuit
 
 section LogDepthPreparation
 
-open Kraus (blockTensor)
 
 namespace MPSPreparation
 
@@ -163,7 +162,7 @@ theorem exists_isPreparedInDepth_le_log_of_mpvState_ne_zero {D : ℕ} (A : MPSTe
       push_cast
       have : (0 : ℝ) ≤ a * Real.log (N / ε) + max (Real.log K) 0 / r + L + 1 := by positivity
       linarith
-    have hinjℓ : ∀ k, Kraus.IsInjective (blockTensor B (ℓ k)) := fun k =>
+    have hinjℓ : ∀ k, Kraus.IsInjective (Kraus.block B (ℓ k)) := fun k =>
       hinj _ ((show L ≤ q by exact_mod_cast hLq).trans (hℓq k))
     have h3D : ∀ k, 3 * D ≤ ℓ k := fun k =>
       (show 3 * D ≤ q by exact_mod_cast hDq).trans (hℓq k)

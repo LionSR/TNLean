@@ -67,7 +67,6 @@ open MPTensor
 
 open scoped BigOperators Matrix ComplexOrder
 open Matrix Filter Topology Complex
-open Kraus (blockTensor)
 
 namespace MPSTensor
 
@@ -164,16 +163,16 @@ theorem repeatedBlockSqrt_mul_self {q : ℕ} (hq : q ≠ 0) :
 
 /-- The positive part of the `q`-site blocked tensor, `P = J Q Jᴴ`. -/
 theorem polarPos_repeatedBlockTensor {q : ℕ} (hq : q ≠ 0) :
-    polarPos (physicalMatrix (blockTensor repeatedBlockTensor q)) =
+    polarPos (physicalMatrix (Kraus.block repeatedBlockTensor q)) =
       diagPairEmbedding (Fin 3) * repeatedBlockSqrt * (diagPairEmbedding (Fin 3))ᴴ :=
-  polarPos_physicalMatrix_blockTensor_diagonal repeatedBlockDiag q
+  polarPos_physicalMatrix_block_diagonal repeatedBlockDiag q
     posSemidef_repeatedBlockSqrt (repeatedBlockSqrt_mul_self hq)
 
 /-- The support projector of the `q`-site blocked tensor, `Π = J E Jᴴ`. -/
 theorem polarSupport_repeatedBlockTensor {q : ℕ} (hq : q ≠ 0) :
-    polarSupport (physicalMatrix (blockTensor repeatedBlockTensor q)) =
+    polarSupport (physicalMatrix (Kraus.block repeatedBlockTensor q)) =
       diagPairEmbedding (Fin 3) * repeatedBlockProj * (diagPairEmbedding (Fin 3))ᴴ := by
-  refine polarSupport_physicalMatrix_blockTensor_diagonal repeatedBlockDiag q
+  refine polarSupport_physicalMatrix_block_diagonal repeatedBlockDiag q
     posSemidef_repeatedBlockSqrt (repeatedBlockSqrt_mul_self hq) (R :=
       !![invSqrtTwo, 0, 0; 0, invSqrtTwo, 0; 0, 0, 1]) ?_ ?_ ?_ ?_
   · refine Matrix.IsHermitian.ext fun e e' => ?_

@@ -59,14 +59,13 @@ theorem exists_mixedPolarIsoMatrix_eq_mixedProductMap {l r : ℕ}
     ∃ G : Matrix (Fin (D * D)) (Fin (D * D)) ℂ,
       mixedPolarIsoMatrix L A R = mixedProductMap L A R G := by
   obtain ⟨G, hG⟩ := MPSTensor.exists_polarIsoMatrix_eq_sum
-    (MPSChainTensor.blockTensor (mixedChain L A R))
+    (MPSChainTensor.eval (mixedChain L A R))
   refine ⟨G, ?_⟩
   ext σ x
-  change MPSTensor.polarIsoMatrix (MPSChainTensor.blockTensor (mixedChain L A R))
-      ((Kraus.decodeBlockEquiv d (l + (r + 1))).symm
-        (mixedConfigurationEquiv d l r σ)) x = _
+  change MPSTensor.polarIsoMatrix (MPSChainTensor.eval (mixedChain L A R))
+      (mixedConfigurationEquiv d l r σ) x = _
   rw [hG, mixedProductMap_apply]
-  simp only [MPSChainTensor.blockTensor_decodeBlockEquiv_symm, eval_mixedChain]
+  simp only [eval_mixedChain]
 
 /-- Splitting and reversing physical coordinates preserves the polar support Gram matrix.
 
@@ -75,7 +74,7 @@ arXiv:2307.01696, equation (15), under the pseudoinverse convention of footnote 
 theorem conjTranspose_mixedPolarIsoMatrix_mul {l r : ℕ}
     (L : MPSChainTensor d D l) (A : MPSTensor d D) (R : MPSChainTensor d D r) :
     (mixedPolarIsoMatrix L A R)ᴴ * mixedPolarIsoMatrix L A R =
-      MPSTensor.polarSupportMatrix (MPSChainTensor.blockTensor (mixedChain L A R)) := by
+      MPSTensor.polarSupportMatrix (MPSChainTensor.eval (mixedChain L A R)) := by
   simp only [mixedPolarIsoMatrix, Matrix.reindex_apply, Matrix.conjTranspose_submatrix]
   rw [Matrix.submatrix_mul_equiv,
     MPSTensor.conjTranspose_polarIsoMatrix_mul_polarIsoMatrix]
@@ -88,7 +87,7 @@ Source: arXiv:2307.01696, footnotes 3–4 to equations (13)–(15). -/
 theorem exists_mixed_sequential_polarIsoMatrix_on_support {l r s : ℕ} (hD : 0 < D)
     (L : MPSChainTensor d D l) (A : MPSTensor d D) (R : MPSChainTensor d D r)
     (J : Matrix (Fin (D * D)) (Fin s) ℂ) (hJ : J.IsIsometry)
-    (hPJ : MPSTensor.polarSupportMatrix (MPSChainTensor.blockTensor (mixedChain L A R)) *
+    (hPJ : MPSTensor.polarSupportMatrix (MPSChainTensor.eval (mixedChain L A R)) *
       J = J) :
     HasMixedSequentialFactorization hD (mixedPolarIsoMatrix L A R * J) := by
   have hV : (mixedPolarIsoMatrix L A R * J).IsIsometry := by
@@ -111,10 +110,10 @@ theorem exists_mixed_sequential_polar_support_of_split {l r : ℕ} (hD : 0 < D)
     ∃ (s : ℕ) (J : Matrix (Fin (D * D)) (Fin s) ℂ),
       s ≤ D * D ∧ J.IsIsometry ∧
       J * Jᴴ = MPSTensor.polarSupportMatrix
-        (MPSChainTensor.blockTensor (mixedChain L A R)) ∧
+        (MPSChainTensor.eval (mixedChain L A R)) ∧
       HasMixedSequentialFactorization hD (mixedPolarIsoMatrix L A R * J) ∧
       (mixedPolarIsoMatrix L A R * J) * Jᴴ = mixedPolarIsoMatrix L A R := by
-  let B := MPSChainTensor.blockTensor (mixedChain L A R)
+  let B := MPSChainTensor.eval (mixedChain L A R)
   have hP : IsOrthogonalProjection (MPSTensor.polarSupportMatrix B) :=
     ⟨MPSTensor.isHermitian_polarSupportMatrix B, MPSTensor.polarSupportMatrix_mul_self B⟩
   obtain ⟨s, J, hJ, hRange⟩ := hP.exists_range_isometry
@@ -140,13 +139,12 @@ theorem exists_mixed_sequential_polar_support {l r : ℕ} (hD : 0 < D)
     (A : MPSChainTensor d D (l + (r + 1))) :
     ∃ (s : ℕ) (J : Matrix (Fin (D * D)) (Fin s) ℂ),
       s ≤ D * D ∧ J.IsIsometry ∧
-      J * Jᴴ = MPSTensor.polarSupportMatrix (MPSChainTensor.blockTensor A) ∧
+      J * Jᴴ = MPSTensor.polarSupportMatrix (MPSChainTensor.eval A) ∧
       HasMixedSequentialFactorization hD
-        ((Matrix.reindex ((Kraus.decodeBlockEquiv d (l + (r + 1))).trans
-          (mixedConfigurationEquiv d l r).symm) (Equiv.refl _)
-            (MPSTensor.polarIsoMatrix (MPSChainTensor.blockTensor A))) * J) ∧
-      (MPSTensor.polarIsoMatrix (MPSChainTensor.blockTensor A) * J) * Jᴴ =
-        MPSTensor.polarIsoMatrix (MPSChainTensor.blockTensor A) := by
+        ((Matrix.reindex (mixedConfigurationEquiv d l r).symm (Equiv.refl _)
+            (MPSTensor.polarIsoMatrix (MPSChainTensor.eval A))) * J) ∧
+      (MPSTensor.polarIsoMatrix (MPSChainTensor.eval A) * J) * Jᴴ =
+        MPSTensor.polarIsoMatrix (MPSChainTensor.eval A) := by
   obtain ⟨L, M, R, hA⟩ := exists_eq_mixedChain A
   obtain ⟨s, J, hs, hJ, hRange, hFac, _⟩ :=
     exists_mixed_sequential_polar_support_of_split hD L M R

@@ -19,14 +19,14 @@ pairs `|Ω_j⟩` (eq. (S7)). For `m_j ≥ 2` both the block form and the approxi
 This file computes the correct block form when the `q`-site states of distinct blocks are
 orthogonal. With the copy `k` of block `j` placed on the bond coordinates `ι_{j,k}` and
 `K_{j,k} = E_{j,k} ⊗ E_{j,k}` the isometry placing its bond pairs, the blocked tensor is
-`B = ∑ⱼ cⱼ B_j L_jᴴ` (`physicalMatrix_blockTensor_repeatedBlockSum_eq_copyIsometry`), where
+`B = ∑ⱼ cⱼ B_j L_jᴴ` (`physicalMatrix_block_repeatedBlockSum_eq_copyIsometry`), where
 
   `cⱼ = (∑ₖ |μ_{j,k}|^{2q})^{1/2}`,  `L_j = ∑ₖ (conj(μ_{j,k}^q) / cⱼ) K_{j,k}`
 
 (`copyNorm`, `copyIsometry`). The `L_j` are isometries with orthogonal ranges, so the positive
 part is `P = ∑ⱼ cⱼ L_j P_j L_jᴴ`: on the copy index of block `j` it has rank one, rather than the
 diagonal `diag(μ_{j,1}^q, …, μ_{j,m_j}^q)` of eq. (S5). The partial isometry is
-`V = ∑ⱼ V_j L_jᴴ` (`polarIso_blockTensor_repeatedBlockSum`).
+`V = ∑ⱼ V_j L_jᴴ` (`polarIso_block_repeatedBlockSum`).
 
 Replacing `P_j` by its fixed point in this block form gives the corrected fixed-point state
 `∑ⱼ βⱼ L_j^{⊗M} |Ω_j⟩` (`copyFixedPointState`), where `|Ω_j⟩` is the product of the pairs of
@@ -51,9 +51,9 @@ and without which the block form fails. Documented in
 * `MPSTensor.repeatedBlockSum` — the direct sum `⊕ⱼ diag(μ_{j,1}, …, μ_{j,m_j}) ⊗ A_j`.
 * `MPSTensor.mpv_repeatedBlockSum` — its state is `∑ⱼ βⱼ |φ_N(A_j)⟩`.
 * `MPSTensor.copyNorm`, `MPSTensor.copyIsometry` — `cⱼ` and `L_j`.
-* `MPSTensor.physicalMatrix_blockTensor_repeatedBlockSum_eq_copyIsometry` — `B = ∑ⱼ cⱼ B_j L_jᴴ`.
-* `MPSTensor.polarIso_blockTensor_repeatedBlockSum`,
-  `MPSTensor.polarPos_blockTensor_repeatedBlockSum` — the corrected block form of eq. (S5).
+* `MPSTensor.physicalMatrix_block_repeatedBlockSum_eq_copyIsometry` — `B = ∑ⱼ cⱼ B_j L_jᴴ`.
+* `MPSTensor.polarIso_block_repeatedBlockSum`,
+  `MPSTensor.polarPos_block_repeatedBlockSum` — the corrected block form of eq. (S5).
 * `MPSTensor.copyFixedPointState`, `MPSTensor.copyApproxVector` — the corrected state of
   eq. (S7), before and after `V^{⊗M}`.
 * `MPSTensor.copyApproxVector_repeatedBlockSum` — `V^{⊗M} ∑ⱼ αⱼ L_j^{⊗M}|Ω_j⟩` is
@@ -97,7 +97,6 @@ section
 
 open scoped BigOperators Matrix ComplexOrder Kronecker
 open Matrix
-open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 
@@ -171,16 +170,16 @@ theorem mpv_repeatedBlockSum (hι : ∀ j k, Function.Injective (ι j k))
 
 /-- The physical matrix of the `q`-site blocked tensor of the direct sum, for `q ≥ 1`:
 `B = ∑ⱼ ∑ₖ μ_{j,k}^q B_j K_{j,k}ᴴ`. -/
-theorem physicalMatrix_blockTensor_repeatedBlockSum (hι : ∀ j k, Function.Injective (ι j k))
+theorem physicalMatrix_block_repeatedBlockSum (hι : ∀ j k, Function.Injective (ι j k))
     (hdisj : ∀ p p' : (j : Fin b) × Fin (m j), p ≠ p' → ∀ a a', ι p.1 p.2 a ≠ ι p'.1 p'.2 a')
     (μ : CopyWeights b m) {q : ℕ} (hq : q ≠ 0) :
-    physicalMatrix (blockTensor (repeatedBlockSum Aj ι μ) q) =
+    physicalMatrix (Kraus.block (repeatedBlockSum Aj ι μ) q) =
       ∑ j, ∑ k, μ j k ^ q •
-        (physicalMatrix (blockTensor (Aj j) q) * (pairEmbedding (ι j k))ᴴ) := by
+        (physicalMatrix (Kraus.block (Aj j) q) * (pairEmbedding (ι j k))ᴴ) := by
   rw [repeatedBlockSum_eq_blockSum,
-    physicalMatrix_blockTensor_blockSum (fun p => hι _ _) (flat_disjoint_coord hdisj) _ hq,
+    physicalMatrix_block_blockSum (fun p => hι _ _) (flat_disjoint_coord hdisj) _ hq,
     Equiv.sum_comp flat (fun p => μ p.1 p.2 ^ q •
-      (physicalMatrix (blockTensor (Aj p.1) q) * (pairEmbedding (ι p.1 p.2))ᴴ)),
+      (physicalMatrix (Kraus.block (Aj p.1) q) * (pairEmbedding (ι p.1 p.2))ᴴ)),
     Fintype.sum_sigma]
 
 /-! ### The copy isometries -/
@@ -262,14 +261,14 @@ theorem conjTranspose_copyIsometry_mul_eq_zero
 
 /-- The physical matrix of the `q`-site blocked tensor of the direct sum, for `q ≥ 1` and blocks
 with nonzero weights: `B = ∑ⱼ cⱼ B_j L_jᴴ`. -/
-theorem physicalMatrix_blockTensor_repeatedBlockSum_eq_copyIsometry
+theorem physicalMatrix_block_repeatedBlockSum_eq_copyIsometry
     (hι : ∀ j k, Function.Injective (ι j k))
     (hdisj : ∀ p p' : (j : Fin b) × Fin (m j), p ≠ p' → ∀ a a', ι p.1 p.2 a ≠ ι p'.1 p'.2 a')
     {μ : CopyWeights b m} {q : ℕ} (hq : q ≠ 0) :
-    physicalMatrix (blockTensor (repeatedBlockSum Aj ι μ) q) =
+    physicalMatrix (Kraus.block (repeatedBlockSum Aj ι μ) q) =
       ∑ j, (copyNorm μ q j : ℂ) •
-        (physicalMatrix (blockTensor (Aj j) q) * (copyIsometry ι μ q j)ᴴ) := by
-  rw [physicalMatrix_blockTensor_repeatedBlockSum hι hdisj μ hq]
+        (physicalMatrix (Kraus.block (Aj j) q) * (copyIsometry ι μ q j)ᴴ) := by
+  rw [physicalMatrix_block_repeatedBlockSum hι hdisj μ hq]
   refine Finset.sum_congr rfl fun j _ => ?_
   have hc0 : (copyNorm μ q j : ℂ) ≠ 0 :=
     Complex.ofReal_ne_zero.2 (copyNorm_pos (μ.weight_fun_ne_zero j) q).ne'
@@ -283,32 +282,32 @@ theorem physicalMatrix_blockTensor_repeatedBlockSum_eq_copyIsometry
 `q`-site states are orthogonal, `B_jᴴ B_{j'} = 0` for `j ≠ j'`, the partial isometry of the
 `q`-site blocked tensor is `V = ∑ⱼ V_j L_jᴴ`: the corrected form of arXiv:2307.01696,
 Supplemental Material, eq. (S5), for blocks with multiplicities. -/
-theorem polarIso_blockTensor_repeatedBlockSum (hι : ∀ j k, Function.Injective (ι j k))
+theorem polarIso_block_repeatedBlockSum (hι : ∀ j k, Function.Injective (ι j k))
     (hdisj : ∀ p p' : (j : Fin b) × Fin (m j), p ≠ p' → ∀ a a', ι p.1 p.2 a ≠ ι p'.1 p'.2 a')
     {μ : CopyWeights b m} {q : ℕ} (hq : q ≠ 0)
-    (horth : ∀ j j', j ≠ j' → (physicalMatrix (blockTensor (Aj j) q))ᴴ *
-      physicalMatrix (blockTensor (Aj j') q) = 0) :
-    polarIso (physicalMatrix (blockTensor (repeatedBlockSum Aj ι μ) q)) =
-      ∑ j, polarIso (physicalMatrix (blockTensor (Aj j) q)) * (copyIsometry ι μ q j)ᴴ := by
-  rw [physicalMatrix_blockTensor_repeatedBlockSum_eq_copyIsometry hι hdisj hq]
+    (horth : ∀ j j', j ≠ j' → (physicalMatrix (Kraus.block (Aj j) q))ᴴ *
+      physicalMatrix (Kraus.block (Aj j') q) = 0) :
+    polarIso (physicalMatrix (Kraus.block (repeatedBlockSum Aj ι μ) q)) =
+      ∑ j, polarIso (physicalMatrix (Kraus.block (Aj j) q)) * (copyIsometry ι μ q j)ᴴ := by
+  rw [physicalMatrix_block_repeatedBlockSum_eq_copyIsometry hι hdisj hq]
   exact (polarIso_sum_of_orthogonal horth (fun j => copyNorm_pos (μ.weight_fun_ne_zero j) q)
     (fun j => conjTranspose_copyIsometry_mul_self hι hdisj (μ.weight_fun_ne_zero j) q)
     (fun j j' h => conjTranspose_copyIsometry_mul_eq_zero hdisj μ q h)).1
 
 /-- **The positive part of the blocked direct sum.** In the setting of
-`polarIso_blockTensor_repeatedBlockSum`, the positive part is `P = ∑ⱼ cⱼ L_j P_j L_jᴴ`. On the
+`polarIso_block_repeatedBlockSum`, the positive part is `P = ∑ⱼ cⱼ L_j P_j L_jᴴ`. On the
 copies of block `j` it is `cⱼ w_j w_jᴴ ⊗ P_j` with the unit vector `w_{j,k} = conj(μ_{j,k}^q)/cⱼ`,
 of rank one in the copy index, where arXiv:2307.01696, Supplemental Material, eq. (S5), prints
 `diag(μ_{j,1}^q, …, μ_{j,m_j}^q) ⊗ P_j`. -/
-theorem polarPos_blockTensor_repeatedBlockSum (hι : ∀ j k, Function.Injective (ι j k))
+theorem polarPos_block_repeatedBlockSum (hι : ∀ j k, Function.Injective (ι j k))
     (hdisj : ∀ p p' : (j : Fin b) × Fin (m j), p ≠ p' → ∀ a a', ι p.1 p.2 a ≠ ι p'.1 p'.2 a')
     {μ : CopyWeights b m} {q : ℕ} (hq : q ≠ 0)
-    (horth : ∀ j j', j ≠ j' → (physicalMatrix (blockTensor (Aj j) q))ᴴ *
-      physicalMatrix (blockTensor (Aj j') q) = 0) :
-    polarPos (physicalMatrix (blockTensor (repeatedBlockSum Aj ι μ) q)) =
+    (horth : ∀ j j', j ≠ j' → (physicalMatrix (Kraus.block (Aj j) q))ᴴ *
+      physicalMatrix (Kraus.block (Aj j') q) = 0) :
+    polarPos (physicalMatrix (Kraus.block (repeatedBlockSum Aj ι μ) q)) =
       ∑ j, (copyNorm μ q j : ℂ) • (copyIsometry ι μ q j *
-        polarPos (physicalMatrix (blockTensor (Aj j) q)) * (copyIsometry ι μ q j)ᴴ) := by
-  rw [physicalMatrix_blockTensor_repeatedBlockSum_eq_copyIsometry hι hdisj hq]
+        polarPos (physicalMatrix (Kraus.block (Aj j) q)) * (copyIsometry ι μ q j)ᴴ) := by
+  rw [physicalMatrix_block_repeatedBlockSum_eq_copyIsometry hι hdisj hq]
   exact (polarIso_sum_of_orthogonal horth (fun j => copyNorm_pos (μ.weight_fun_ne_zero j) q)
     (fun j => conjTranspose_copyIsometry_mul_self hι hdisj (μ.weight_fun_ne_zero j) q)
     (fun j j' h => conjTranspose_copyIsometry_mul_eq_zero hdisj μ q h)).2
@@ -320,7 +319,7 @@ theorem polarPos_blockTensor_repeatedBlockSum (hι : ∀ j k, Function.Injective
 bond space of block `j` and `L_j` maps the two legs of each site into the bond pairs of the full
 tensor. With `L_j = copyIsometry ι μ q j` this replaces `∑ⱼ βⱼ |Ω_j⟩` in arXiv:2307.01696,
 Supplemental Material, eq. (S7), by the fixed point of the corrected block form
-`P = ∑ⱼ cⱼ L_j P_j L_jᴴ` (`polarPos_blockTensor_repeatedBlockSum`). -/
+`P = ∑ⱼ cⱼ L_j P_j L_jᴴ` (`polarPos_block_repeatedBlockSum`). -/
 noncomputable def copyFixedPointState {M : ℕ} (α : Fin b → ℂ)
     (L : (j : Fin b) → Matrix (Fin D × Fin D) (Fin (Dj j) × Fin (Dj j)) ℂ)
     (σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ) : (Fin M → Fin D × Fin D) → ℂ :=
@@ -333,8 +332,8 @@ Supplemental Material, eq. (S7), corrected as in the module docstring). -/
 noncomputable def copyApproxVector (A : MPSTensor d D) (q M : ℕ) (α : Fin b → ℂ)
     (L : (j : Fin b) → Matrix (Fin D × Fin D) (Fin (Dj j) × Fin (Dj j)) ℂ)
     (σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ) :
-    (Fin M → Fin (blockPhysDim d q)) → ℂ :=
-  (Matrix.piKronecker fun _ : Fin M ↦ (polarIso (physicalMatrix (blockTensor A
+    (Fin M → (Fin q → Fin d)) → ℂ :=
+  (Matrix.piKronecker fun _ : Fin M ↦ (polarIso (physicalMatrix (Kraus.block A
       q)))) *ᵥ copyFixedPointState α L σ
 
 /-- **The corrected approximating state of a direct sum with multiplicities.** For blocks with
@@ -345,15 +344,15 @@ the module docstring). -/
 theorem copyApproxVector_repeatedBlockSum (hι : ∀ j k, Function.Injective (ι j k))
     (hdisj : ∀ p p' : (j : Fin b) × Fin (m j), p ≠ p' → ∀ a a', ι p.1 p.2 a ≠ ι p'.1 p'.2 a')
     {μ : CopyWeights b m} {q : ℕ} (hq : q ≠ 0)
-    (horth : ∀ j j', j ≠ j' → (physicalMatrix (blockTensor (Aj j) q))ᴴ *
-      physicalMatrix (blockTensor (Aj j') q) = 0)
+    (horth : ∀ j j', j ≠ j' → (physicalMatrix (Kraus.block (Aj j) q))ᴴ *
+      physicalMatrix (Kraus.block (Aj j') q) = 0)
     (σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ) (M : ℕ) [NeZero M] (α : Fin b → ℂ)
-    (τ : Fin M → Fin (blockPhysDim d q)) :
+    (τ : Fin M → (Fin q → Fin d)) :
     copyApproxVector (repeatedBlockSum Aj ι μ) q M α (copyIsometry ι μ q) σ τ =
-      ∑ j, α j * mpv (approximatingTensor (blockTensor (Aj j) q) (σ j)) τ := by
-  have hV := polarIso_blockTensor_repeatedBlockSum (μ := μ) hι hdisj hq horth
-  have hVL : ∀ j, polarIso (physicalMatrix (blockTensor (repeatedBlockSum Aj ι μ) q)) *
-      copyIsometry ι μ q j = polarIso (physicalMatrix (blockTensor (Aj j) q)) := fun j => by
+      ∑ j, α j * mpv (approximatingTensor (Kraus.block (Aj j) q) (σ j)) τ := by
+  have hV := polarIso_block_repeatedBlockSum (μ := μ) hι hdisj hq horth
+  have hVL : ∀ j, polarIso (physicalMatrix (Kraus.block (repeatedBlockSum Aj ι μ) q)) *
+      copyIsometry ι μ q j = polarIso (physicalMatrix (Kraus.block (Aj j) q)) := fun j => by
     rw [hV, Matrix.sum_mul, Finset.sum_eq_single j]
     · rw [Matrix.mul_assoc, conjTranspose_copyIsometry_mul_self hι hdisj (μ.weight_fun_ne_zero j),
         Matrix.mul_one]
@@ -390,7 +389,7 @@ noncomputable def copyApproxOverlap (A : MPSTensor d D) (q M : ℕ) (α : Fin b 
     (σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ) : ℂ :=
   ∑ τ, star (((Real.sqrt (∑ τ', ‖copyApproxVector A q M α L σ τ'‖ ^ 2) : ℂ)⁻¹) *
       copyApproxVector A q M α L σ τ) *
-    normalizedMPVState A (M * q) (Kraus.blockedConfigEquiv d M q τ)
+    normalizedMPVState A (M * q) (Kraus.blockConfigEquiv (Fin d) M q τ)
 
 /-- The overlap is the unnormalized overlap divided by the two norms. -/
 theorem copyApproxOverlap_eq (A : MPSTensor d D) (q M : ℕ) (α : Fin b → ℂ)
@@ -399,7 +398,7 @@ theorem copyApproxOverlap_eq (A : MPSTensor d D) (q M : ℕ) (α : Fin b → ℂ
     copyApproxOverlap A q M α L σ =
       ((Real.sqrt (∑ τ, ‖copyApproxVector A q M α L σ τ‖ ^ 2) : ℂ)⁻¹ *
         (‖mpvState A (M * q)‖ : ℂ)⁻¹) *
-        ∑ τ, star (copyApproxVector A q M α L σ τ) * mpv A (Kraus.blockedConfigEquiv d M q τ) := by
+        ∑ τ, star (copyApproxVector A q M α L σ τ) * mpv A (Kraus.blockConfigEquiv (Fin d) M q τ) := by
   rw [copyApproxOverlap, Finset.mul_sum]
   refine Finset.sum_congr rfl fun τ _ => ?_
   simp only [normalizedMPVState, star_mul', Complex.star_def, map_inv₀, Complex.conj_ofReal,

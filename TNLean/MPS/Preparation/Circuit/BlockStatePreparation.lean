@@ -74,7 +74,6 @@ section BlockStatePreparation
 
 open scoped BigOperators ComplexOrder
 open QuantumCircuit ManyBody
-open Kraus (blockPhysDim decodeBlockEquiv blockTensor)
 
 namespace MPSPreparation
 
@@ -313,11 +312,11 @@ arXiv:2307.01696, eqs. (10), (11), and (12), and the paragraph "Inhomogeneous sh
 correlated MPS". -/
 theorem blockMatVector_pairFamilyVector_eq_mulVec (hd : 0 < d) (hN : ∑ k, ℓ k = N)
     (hr : ∀ k, r₁ + r₁ ≤ ℓ k) {dig : Fin D → Cfg d r₁} (hdig : Function.Injective dig)
-    (X : ∀ k, Matrix (Fin (blockPhysDim d (ℓ k))) (Fin (D * D)) ℂ)
+    (X : ∀ k, Matrix (Fin (ℓ k) → Fin d) (Fin (D * D)) ℂ)
     (ω : Fin M → Fin D × Fin D → ℂ) {U : ∀ k, Matrix (Cfg d (ℓ k)) (Cfg d (ℓ k)) ℂ}
     (hU : ∀ c : Fin M → Fin D × Fin D, pairFamilyState ω c ≠ 0 → ∀ k τ,
       U k τ (blockInputCfg hd (ℓ k) dig (c k).1 (c k).2) =
-        X k ((decodeBlockEquiv d (ℓ k)).symm τ) (finProdFinEquiv (c k)))
+        X k (τ) (finProdFinEquiv (c k)))
     {W : Fin M → Matrix (Cfg d (r₁ + r₁)) (Cfg d (r₁ + r₁)) ℂ}
     (hW : ∀ k u, W k u (fun _ => ⟨0, hd⟩) =
       Function.extend (fun p : Fin D × Fin D => twoCfg dig p.1 p.2) (ω k) 0 u)
@@ -356,7 +355,7 @@ theorem blockMatVector_pairFamilyVector_eq_mulVec (hd : 0 < d) (hN : ∑ k, ℓ 
     Finset.sum_image fun c _ c' _ h => siteCfg_injective hd hN hr hdig h]
   -- the value at a configuration carrying the pairs
   have hval : ∀ c : Fin M → Fin D × Fin D, g (siteCfg hd hN dig c) =
-      (∏ k, X k (blockIndexEquiv d hN s k) (finProdFinEquiv (c k))) * pairFamilyState ω c := by
+      (∏ k, X k (blockCfgEquiv d hN s k) (finProdFinEquiv (c k))) * pairFamilyState ω c := by
     intro c
     have hext : ∀ k a b, Function.extend (fun p : Fin D × Fin D => twoCfg dig p.1 p.2) (ω k) 0
         (twoCfg dig a b) = ω k (a, b) := fun k a b => hs.extend_apply _ _ (a, b)
@@ -370,7 +369,7 @@ theorem blockMatVector_pairFamilyVector_eq_mulVec (hd : 0 < d) (hN : ∑ k, ℓ 
     refine Finset.prod_congr rfl fun k _ => ?_
     have : siteCfg hd hN dig c ∘ blockSite hN k = blockInputCfg hd (ℓ k) dig (c k).1 (c k).2 :=
       funext fun j => siteCfg_blockSite hd hN dig c k j
-    rw [this, hU c hc, blockIndexEquiv_apply]
+    rw [this, hU c hc, blockCfgEquiv_apply]
   simp_rw [hval, blockMatVector_apply, pairFamilyVector_apply]
   exact Fintype.sum_equiv (Equiv.piCongrRight fun _ => finProdFinEquiv.symm) _ _ fun τ => by
     simp only [Equiv.piCongrRight_apply, Pi.map_apply, Equiv.apply_symm_apply]
@@ -390,7 +389,7 @@ theorem chainBlockIsometryState_eq_mulVec (hd : 0 < d) (hN : ∑ k, ℓ k = N)
     {U : ∀ k, Matrix (Cfg d (ℓ k)) (Cfg d (ℓ k)) ℂ}
     (hU : ∀ c : Fin M → Fin D × Fin D, pairFamilyState ω c ≠ 0 → ∀ k τ,
       U k τ (blockInputCfg hd (ℓ k) dig (c k).1 (c k).2) =
-        polarIsoMatrix (chainBlockTensor A hN k) ((decodeBlockEquiv d (ℓ k)).symm τ)
+        polarIsoMatrix (chainBlockTensor A hN k) (τ)
           (finProdFinEquiv (c k)))
     {W : Fin M → Matrix (Cfg d (r₁ + r₁)) (Cfg d (r₁ + r₁)) ℂ}
     (hW : ∀ k u, W k u (fun _ => ⟨0, hd⟩) =
@@ -413,7 +412,7 @@ theorem blockIsometryState_eq_mulVec (hd : 0 < d) (hN : ∑ k, ℓ k = N)
     (hr : ∀ k, r₁ + r₁ ≤ ℓ k) {dig : Fin D → Cfg d r₁} (hdig : Function.Injective dig)
     (A : MPSTensor d D) (ω : Fin D × Fin D → ℂ) {U : ∀ k, Matrix (Cfg d (ℓ k)) (Cfg d (ℓ k)) ℂ}
     (hU : ∀ k l r τ, U k τ (blockInputCfg hd (ℓ k) dig l r) =
-      polarIsoMatrix (blockTensor A (ℓ k)) ((decodeBlockEquiv d (ℓ k)).symm τ)
+      polarIsoMatrix (Kraus.block A (ℓ k)) (τ)
         (finProdFinEquiv (l, r)))
     {W : Matrix (Cfg d (r₁ + r₁)) (Cfg d (r₁ + r₁)) ℂ}
     (hW : ∀ u, W u (fun _ => ⟨0, hd⟩) =
@@ -504,7 +503,7 @@ theorem exists_isPreparedInDepth_chainBlockIsometryState_of_isInjectiveOn (d D :
       IsGateProduct (Geometry.graph (SimpleGraph.pathGraph (ℓ k))) (Cb * ℓ k) U ∧
         ∀ l r τ, (l, r) ∈ S k →
         U τ (blockInputCfg hd (ℓ k) dig l r) =
-          polarIsoMatrix (chainBlockTensor A hN k) ((decodeBlockEquiv d (ℓ k)).symm τ)
+          polarIsoMatrix (chainBlockTensor A hN k) (τ)
             (finProdFinEquiv (l, r)) := fun k => by
     obtain ⟨π, hπ⟩ := exists_pairEquiv_val_lt_card_iff_mem (S k)
     obtain ⟨b, Q, hb0, hbq, -, hrow, -, hiso, hVQ⟩ :=
@@ -574,7 +573,7 @@ pairs. -/
 theorem exists_isPreparedInDepth_blockIsometryState (d D : ℕ) :
     ∃ C : ℕ, ∀ (A : MPSTensor d D) (ω : Fin D × Fin D → ℂ), ∑ p, star (ω p) * ω p = 1 →
       ∀ {M : ℕ} [NeZero M] (ℓ : Fin M → ℕ) {N : ℕ} [NeZero N] (hN : ∑ k, ℓ k = N) (L : ℕ),
-        (∀ k, 3 * D ≤ ℓ k) → (∀ k, ℓ k ≤ L) → (∀ k, Kraus.IsInjective (blockTensor A (ℓ k))) →
+        (∀ k, 3 * D ≤ ℓ k) → (∀ k, ℓ k ≤ L) → (∀ k, Kraus.IsInjective (Kraus.block A (ℓ k))) →
           IsPreparedInDepth (Geometry.ring N) (C * L) fun s => blockIsometryState A ω hN s := by
   obtain ⟨C, hC⟩ := exists_isPreparedInDepth_chainBlockIsometryState d D
   refine ⟨C, fun A ω hω M _ ℓ N _ hN L hℓ hL hinj => ?_⟩
@@ -590,11 +589,11 @@ theorem blockSite_const (q : ℕ) (hN : ∑ _ : Fin M, q = M * q) (k : Fin M) (j
 /-- For blocks of equal length, reading a configuration in blocks is the regrouping
 `Kraus.blockedConfigEquiv` of the uniform blocking. -/
 theorem blockedConfigEquiv_symm_eq_blockIndexEquiv (q : ℕ) (hN : ∑ _ : Fin M, q = M * q)
-    (s : Cfg d (M * q)) : (Kraus.blockedConfigEquiv d M q).symm s = blockIndexEquiv d hN s := by
+    (s : Cfg d (M * q)) : (Kraus.blockConfigEquiv (Fin d) M q).symm s = blockCfgEquiv d hN s := by
   funext k
-  rw [blockIndexEquiv_apply, Equiv.eq_symm_apply]
+  rw [blockCfgEquiv_apply, Equiv.eq_symm_apply]
   funext j
-  conv_rhs => rw [← (Kraus.blockedConfigEquiv d M q).apply_symm_apply s]
+  conv_rhs => rw [← (Kraus.blockConfigEquiv (Fin d) M q).apply_symm_apply s]
   rw [Function.comp_apply, blockSite_const]
   simp [Kraus.blockedConfigEquiv, Equiv.arrowCongr, Kraus.blockConfigEquiv_apply]
 

@@ -46,7 +46,6 @@ This identifies the pairs used by the varying-bond preparation theorem.
 section
 
 open scoped BigOperators Matrix
-open Kraus (blockPhysDim)
 
 namespace VaryingBondChain
 
@@ -81,12 +80,12 @@ def blockCorner [NeZero N] (A : VaryingBondChain d D N) (ℓ : Fin M → ℕ) (k
 `[0, D_{o_k}) × [0, D_{o_{k+1}})`, for a block of length at least one. -/
 theorem chainBlockTensor_zeroPad_eq_zero [NeZero N] (A : VaryingBondChain d D N)
     {ℓ : Fin M → ℕ} (hN : ∑ k, ℓ k = N) {k : Fin M} (hk : 0 < ℓ k)
-    (t : Fin (blockPhysDim d (ℓ k))) {p : Fin D × Fin D} (hp : p ∉ blockCorner A ℓ k) :
+    (t : (Fin (ℓ k) → Fin d)) {p : Fin D × Fin D} (hp : p ∉ blockCorner A ℓ k) :
     chainBlockTensor (zeroPad A) hN k t p.1 p.2 = 0 := by
   have hNpos := Nat.pos_of_ne_zero (NeZero.ne N)
   let b : Fin (ℓ k + 1) → ℕ := fun j =>
     A.bondDim ⟨(blockOffset ℓ k.val + j.val) % N, Nat.mod_lt _ hNpos⟩
-  refine MPSChainTensor.blockTensor_eq_zero_of_support _ hk b
+  refine MPSChainTensor.eval_eq_zero_of_support_of_pos _ hk b
     (fun j i α β h => zeroPad_eq_zero A ?_) t ?_
   · have h1 : A.bondDim (blockSite hN k j) = b j.castSucc := congrArg A.bondDim (Fin.ext (by
       simp [Nat.mod_eq_of_lt (blockOffset_add_lt hN k j)]))
