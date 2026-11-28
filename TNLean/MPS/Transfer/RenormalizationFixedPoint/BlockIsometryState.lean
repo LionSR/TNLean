@@ -106,7 +106,8 @@ theorem mpv_eq_mpvFamily_block (A : MPSTensor d D) {N : ℕ} {ℓ : Fin M → �
   rfl
 
 /-- The entries of the mixed transfer matrix: `τ_{(j,i),(l,m)} = ∑ₐ (X^a)_{im} (Y^a)*_{jl}`. -/
-theorem transferMatrix_mixedMapLM_apply {κ : ℕ} (X Y : MPSTensor κ D) (p p' : Fin D × Fin D) :
+theorem transferMatrix_mixedMapLM_apply {κ : Type*} [Fintype κ] (X Y : MPTensor κ (Fin D))
+    (p p' : Fin D × Fin D) :
     transferMatrix (Kraus.mixedMapLM X Y) p p' =
       ∑ a, X a p.2 p'.2 * star (Y a p.1 p'.1) := by
   obtain ⟨j, i⟩ := p

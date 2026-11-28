@@ -34,14 +34,14 @@ namespace MPSPreparation
 its reference positive matrix squares to the reshuffled reference map. This is the global
 Hölder estimate of arXiv:2103.13367, Supplemental Material, eq. (26). -/
 theorem exists_norm_polarPos_sub_le_sqrt_transferMatrix_of_square (D : ℕ) :
-    ∃ K : ℝ, 0 ≤ K ∧ ∀ {d : ℕ} (A : MPSTensor d D)
+    ∃ K : ℝ, 0 ≤ K ∧ ∀ {α : Type} [Fintype α] (A : MPTensor α (Fin D))
       (T : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ))
       (H : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ), H.PosSemidef →
       (∀ a b, (H * H) a b = T (Matrix.single b.2 a.2 1) b.1 a.1) →
       ‖Matrix.polarPos (physicalMatrix A) - H‖ ≤
         K * Real.sqrt ‖transferMatrix (Kraus.transferMap A) - transferMatrix T‖ := by
   obtain ⟨K, hK, hgram⟩ := exists_norm_gram_transferMatrix_sub_le_of_entries D
-  refine ⟨Real.sqrt K, Real.sqrt_nonneg _, fun {d} A T H hH hsq => ?_⟩
+  refine ⟨Real.sqrt K, Real.sqrt_nonneg _, fun {α} _ A T H hH hsq => ?_⟩
   have hHH : (H * H).PosSemidef := by
     simpa only [hH.isHermitian.eq] using Matrix.posSemidef_conjTranspose_mul_self H
   have hsqrt := CFC.norm_sqrt_sub_sqrt_le
@@ -56,14 +56,14 @@ theorem exists_norm_polarPos_sub_le_sqrt_transferMatrix_of_square (D : ℕ) :
 /-- The positive-polar error has a uniform square-root bound over all positive semidefinite
 references, including singular ones. The constant depends only on the bond dimension. -/
 theorem exists_norm_polarPos_sub_le_sqrt_transferMatrix (D : ℕ) :
-    ∃ K : ℝ, 0 ≤ K ∧ ∀ {d : ℕ} (A : MPSTensor d D)
+    ∃ K : ℝ, 0 ≤ K ∧ ∀ {α : Type} [Fintype α] (A : MPTensor α (Fin D))
       (σ : Matrix (Fin D) (Fin D) ℂ), σ.PosSemidef →
       ‖Matrix.polarPos (physicalMatrix A) -
           (CFC.sqrt σ)ᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)‖ ≤
         K * Real.sqrt ‖transferMatrix (Kraus.transferMap A) -
           transferMatrix (Kraus.transferMap (fixedPointTensor σ))‖ := by
   obtain ⟨K, hK, h⟩ := exists_norm_polarPos_sub_le_sqrt_transferMatrix_of_square D
-  refine ⟨K, hK, fun {d} A σ hσ => h A _ _ ?_ ?_⟩
+  refine ⟨K, hK, fun {α} _ A σ hσ => h A _ _ ?_ ?_⟩
   · exact (Matrix.nonneg_iff_posSemidef.mp (CFC.sqrt_nonneg σ)).transpose.kronecker
       Matrix.PosSemidef.one
   · intro a b
@@ -279,7 +279,7 @@ theorem exists_norm_trace_prod_polarPos_sub_one_le_varying_reference (D : ℕ) :
   have hc0 : 0 ≤ c := by linarith
   obtain ⟨C, hC, hbound⟩ := exists_norm_trace_prod_sub_one_le_of_reference_bounds D c
     (c * Kp) hc (mul_nonneg hc0 hKp)
-  refine ⟨C, hC, fun {M} _ d A σ hσ htr δ hδ hA => ?_⟩
+  refine ⟨C, hC, fun {M} _ d _ A σ hσ htr δ hδ hA => ?_⟩
   have := Matrix.neZero_of_trace_eq_one (htr 0)
   let ρ : ℕ → Matrix (Fin D) (Fin D) ℂ := fun j =>
     if h : j < M then σ ⟨j, h⟩ else σ 0

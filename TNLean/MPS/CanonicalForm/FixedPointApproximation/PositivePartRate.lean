@@ -252,7 +252,7 @@ bond dimension and is chosen before the tensor, reference map, and reference mat
 Both matrix norms are `L²` operator norms. The entry identity is the regrouping in
 arXiv:2307.01696, eq. (8), and arXiv:2103.13367, Supplemental Material, eqs. (19) and (21). -/
 theorem exists_norm_gram_transferMatrix_sub_le_of_entries (D : ℕ) :
-    ∃ K : ℝ, 0 < K ∧ ∀ {d : ℕ} (A : MPSTensor d D)
+    ∃ K : ℝ, 0 < K ∧ ∀ {α : Type} [Fintype α] (A : MPTensor α (Fin D))
       (T : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ))
       (G : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ),
       (∀ a b, G a b = T (Matrix.single b.2 a.2 1) b.1 a.1) →
@@ -270,7 +270,7 @@ theorem exists_norm_gram_transferMatrix_sub_le_of_entries (D : ℕ) :
   have hbound (X : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ) :
       ‖Rc X‖ ≤ (‖Rc‖ + 1) * ‖X‖ :=
     (Rc.le_opNorm X).trans (mul_le_mul_of_nonneg_right (by linarith) (norm_nonneg X))
-  refine ⟨‖Rc‖ + 1, by positivity, fun {d} A T G hG => ?_⟩
+  refine ⟨‖Rc‖ + 1, by positivity, fun {α} _ A T G hG => ?_⟩
   have hgram : (physicalMatrix A)ᴴ * physicalMatrix A - G =
       Rc (transferMatrix (Kraus.transferMap A) - transferMatrix T) := by
     ext a b
@@ -297,7 +297,7 @@ Supplemental Material, equations (19) and (21), and arXiv:2307.01696, equation (
 Positivity is used only to identify the transfer map of `fixedPointTensor σ` with
 `X ↦ Tr(X) σ`; the reset-map reshuffling itself is an algebraic identity. -/
 theorem exists_norm_gram_transferMatrix_sub_le (D : ℕ) :
-    ∃ K : ℝ, 0 < K ∧ ∀ {d : ℕ} (A : MPSTensor d D)
+    ∃ K : ℝ, 0 < K ∧ ∀ {α : Type} [Fintype α] (A : MPTensor α (Fin D))
       (σ : Matrix (Fin D) (Fin D) ℂ), σ.PosSemidef →
       (‖(physicalMatrix A)ᴴ * physicalMatrix A -
           σᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)‖ ≤
@@ -308,7 +308,7 @@ theorem exists_norm_gram_transferMatrix_sub_le (D : ℕ) :
         K * ‖(physicalMatrix A)ᴴ * physicalMatrix A -
           σᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)‖) := by
   obtain ⟨K, hK, h⟩ := exists_norm_gram_transferMatrix_sub_le_of_entries D
-  refine ⟨K, hK, fun {d} A σ hσ => h A _ _ fun a b => ?_⟩
+  refine ⟨K, hK, fun {α} _ A σ hσ => h A _ _ fun a b => ?_⟩
   rw [transpose_kronecker_one_apply, transferMap_fixedPointTensor_apply hσ]
 
 open scoped Matrix.Norms.L2Operator in
