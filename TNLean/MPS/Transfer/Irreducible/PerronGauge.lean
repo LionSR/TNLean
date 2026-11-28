@@ -99,26 +99,26 @@ the same MPV as `A` up to a system-size-dependent factor `(1/√r)^N`.
 
 This theorem combines `exists_posDef_adjoint_eigenvector` with the explicit
 `Kraus.tpGauge` construction. -/
-theorem exists_tp_data_of_irreducible
+theorem exists_tp_data_of_irreducible {α : Type*} [Fintype α]
     [NeZero D]
-    (A : MPSTensor d D)
-    (hIrr : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) A)
+    (A : MPTensor α (Fin D))
+    (hIrr : Kraus.IsIrreducibleFamily A)
     (hA : ∃ i, A i ≠ 0) :
-    ∃ (B : MPSTensor d D) (r : ℝ) (σ : Matrix (Fin D) (Fin D) ℂ),
+    ∃ (B : MPTensor α (Fin D)) (r : ℝ) (σ : Matrix (Fin D) (Fin D) ℂ),
       σ.PosDef ∧ 0 < r ∧
       -- B is the Kraus.tpGauge of the rescaled tensor
-      (∀ i : Fin d,
+      (∀ i : α,
         B i = CFC.sqrt σ *
           ((↑((Real.sqrt r)⁻¹) : ℂ) • A i) * (CFC.sqrt σ)⁻¹) ∧
       -- B is TP
-      (∑ i : Fin d, (B i)ᴴ * B i = 1) ∧
+      (∑ i : α, (B i)ᴴ * B i = 1) ∧
       -- B is gauge-equivalent to the rescaled tensor
-      GaugeEquiv (α := Fin d) (β := Fin D)
+      GaugeEquiv
         (fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • A i) B := by
   obtain ⟨σ, r, hσ_pd, hr_pos, hσ_eig⟩ :=
     exists_posDef_adjoint_eigenvector A hIrr hA
-  let A' : MPSTensor d D := fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • A i
-  let B := Kraus.tpGauge (ι := Fin d) (D := D) A' σ
+  let A' : MPTensor α (Fin D) := fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • A i
+  let B := Kraus.tpGauge (ι := α) (D := D) A' σ
   refine ⟨B, r, σ, hσ_pd, hr_pos, fun i => rfl, ?_, gaugeEquiv_tpGauge A' σ hσ_pd⟩
   exact Kraus.tpGauge_isTP_of_map_conjTranspose_eigenvector A σ r hσ_pd hr_pos hσ_eig
 

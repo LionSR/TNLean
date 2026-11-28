@@ -4,9 +4,11 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import QICLean.Channel.Irreducible.FromSpectral
+import QICLean.Kraus.PrimitiveFixedPoint.Blocking
 import TNLean.MPS.Transfer.Primitivity.ImpliesStronglyIrreducible
 import TNLean.MPS.Transfer.Primitivity.Definitions
 import TNLean.MPS.Tensor
+import TNLean.MPS.Transfer.Irreducible.PhysicalReindexTransport
 
 /-!
 # Proposition 3 of the quantum Wielandt paper
@@ -59,17 +61,28 @@ variable {d D : ℕ}
 /-! ## The complementary gap of a normal tensor -/
 
 /-- A normal left-canonical tensor has a complementary fixed-point gap at a
-positive-definite fixed matrix.
+positive-definite fixed matrix. The alphabet is numbered by `Fintype.equivFin`, where the
+vector-spreading argument applies; the normalization, normality and the transfer map do not
+depend on the numbering.
 
 Source: arXiv:0909.5347, Proposition 3, (b)⟹(c); Wolf, Chapter 6, Theorem 6.7. -/
-theorem exists_hasComplementaryFixedPointGap_posDef_of_isNormal [NeZero D]
-    (A : MPSTensor d D)
-    (hNorm : ∑ i : Fin d, (A i)ᴴ * A i = 1)
+theorem exists_hasComplementaryFixedPointGap_posDef_of_isNormal {α : Type*} [Fintype α]
+    [NeZero D] (A : MPTensor α (Fin D))
+    (hNorm : ∑ i : α, (A i)ᴴ * A i = 1)
     (hA : Kraus.IsNormal A) :
-    ∃ ρ : Matrix (Fin D) (Fin D) ℂ, Kraus.HasComplementaryFixedPointGap A ρ ∧ ρ.PosDef :=
-  exists_hasComplementaryFixedPointGap_posDef_of_isIrreducibleMap_of_isPrimitive A hNorm
-    (isIrreducibleMap_transferMap_of_isNormal A hA)
-    (isPrimitive_transferMap_of_isNormal A hNorm hA)
+    ∃ ρ : Matrix (Fin D) (Fin D) ℂ, Kraus.HasComplementaryFixedPointGap A ρ ∧ ρ.PosDef := by
+  let e : Fin (Fintype.card α) ≃ α := (Fintype.equivFin α).symm
+  let A' : MPSTensor (Fintype.card α) D := Kraus.reindexPhysical e A
+  have hNorm' : ∑ i, (A' i)ᴴ * A' i = 1 := (Kraus.isTP_reindexPhysical_iff e A).2 hNorm
+  have hA' : Kraus.IsNormal A' := (isNormal_reindexPhysical_equiv e A).2 hA
+  obtain ⟨ρ, hP, hρ⟩ :=
+    exists_hasComplementaryFixedPointGap_posDef_of_isIrreducibleMap_of_isPrimitive A' hNorm'
+      (isIrreducibleMap_transferMap_of_isNormal A' hA')
+      (isPrimitive_transferMap_of_isNormal A' hNorm' hA')
+  have hA'A : Kraus.reindexPhysical e.symm A' = A := by
+    funext i
+    simp [A', Kraus.reindexPhysical]
+  exact ⟨ρ, hA'A ▸ hP.reindexPhysical e.symm, hρ⟩
 
 /-! ## Proposition 3 -/
 

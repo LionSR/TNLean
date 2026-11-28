@@ -110,7 +110,7 @@ theorem exists_hamiltonian_parentRingInteraction_gap_of_isNormal [NeZero D] {A :
       ∀ (N : ℕ) [NeZero N], 2 * m ≤ N → ∀ μ : ℂ, Module.End.HasEigenvalue
         (Matrix.toEuclideanLin (parentRingInteraction A (l + 1) N).hamiltonian) μ →
           μ = 0 ∨ (δ : ℂ) ≤ μ := by
-  obtain ⟨B, ζ, ρ, hζ, hgauge, _hmpv, hPrim, hρ, hGS, _hPI, _hCGS⟩ :=
+  obtain ⟨B, ζ, ρ, hζ, hgauge, _hmpv, hPrim, hρ, hGS, _hPI⟩ :=
     exists_hasComplementaryFixedPointGap_gauge_of_isNormal hA
   obtain ⟨l, ε, m, δ, hl, hInjB, hε, hεlt, hm, hδ_def, hδ, hGap⟩ :=
     hPrim.exists_hamiltonian_parentRingInteraction_gap_of_finiteRangeKnabe hρ

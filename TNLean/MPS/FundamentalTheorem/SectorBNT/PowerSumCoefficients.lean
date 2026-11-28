@@ -70,7 +70,7 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d : ℕ}
+variable {α : Type*} [Fintype α]
 
 /-- **Left-canonical normalized representative of an algebraically normal tensor.**
 
@@ -80,11 +80,11 @@ This is the normalization taken without loss of generality at
 arXiv:quant-ph/0608197, proof of Theorem 4, lines 765--770.  The scalar `ζ`
 records the rescaling in the periodic vectors. -/
 theorem exists_leftCanonical_normalTensor_scale_of_isNormal
-    {D : ℕ} [NeZero D] {A : MPSTensor d D} (hA : Kraus.IsNormal A) :
-    ∃ (B : MPSTensor d D) (ζ : ℂ), ζ ≠ 0 ∧ GaugeEquiv (ζ • A) B ∧
-      (∀ (N : ℕ) (σ : Fin N → Fin d), mpv B σ = ζ ^ N * mpv A σ) ∧
+    {D : ℕ} [NeZero D] {A : MPTensor α (Fin D)} (hA : Kraus.IsNormal A) :
+    ∃ (B : MPTensor α (Fin D)) (ζ : ℂ), ζ ≠ 0 ∧ GaugeEquiv (ζ • A) B ∧
+      (∀ (N : ℕ) (σ : Fin N → α), mpv B σ = ζ ^ N * mpv A σ) ∧
       IsLeftCanonical B ∧ IsNormalTensor B := by
-  obtain ⟨B, ζ, ρ, hζ, hGauge, hMpv, hPrim, _hρ, _, _, _⟩ :=
+  obtain ⟨B, ζ, ρ, hζ, hGauge, hMpv, hPrim, _hρ, _, _⟩ :=
     exists_hasComplementaryFixedPointGap_gauge_of_isNormal hA
   have hLC : IsLeftCanonical B := hPrim.norm
   have hNormalB : Kraus.IsNormal B :=
@@ -94,11 +94,11 @@ theorem exists_leftCanonical_normalTensor_scale_of_isNormal
 
 /-- Nonzero rescalings on either side do not affect gauge-phase equivalence. -/
 theorem gaugePhaseEquiv_of_smul_smul_cast
-    {D₁ D₂ : ℕ} (hdim : D₁ = D₂) {A : MPSTensor d D₁} {B : MPSTensor d D₂}
+    {D₁ D₂ : ℕ} (hdim : D₁ = D₂) {A : MPTensor α (Fin D₁)} {B : MPTensor α (Fin D₂)}
     {c e : ℂ} (hc : c ≠ 0) (he : e ≠ 0)
     (h : GaugePhaseEquiv
-      (cast (congr_arg (MPSTensor d) hdim) (c • A)) (e • B)) :
-    GaugePhaseEquiv (cast (congr_arg (MPSTensor d) hdim) A) B := by
+      (cast (congr_arg (fun n ↦ MPTensor α (Fin n)) hdim) (c • A)) (e • B)) :
+    GaugePhaseEquiv (cast (congr_arg (fun n ↦ MPTensor α (Fin n)) hdim) A) B := by
   subst hdim
   simp only [cast_eq] at h ⊢
   obtain ⟨X, ζ, hζ, hrel⟩ := h
@@ -116,36 +116,36 @@ This is the arbitrary finite index set version of
 `exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhaseEquiv`. -/
 theorem exists_eventually_linearIndependent_of_normalTensor_distinct
     {ι : Type*} [Finite ι] {dim : ι → ℕ} [∀ k, NeZero (dim k)]
-    (A : (k : ι) → MPSTensor d (dim k))
+    (A : (k : ι) → MPTensor α (Fin (dim k)))
     (hNormal : ∀ k, IsNormalTensor (A k))
     (hDistinct : ∀ j k : ι, j ≠ k → ∀ h : dim j = dim k,
-      ¬ GaugePhaseEquiv (cast (congr_arg (MPSTensor d) h) (A j)) (A k)) :
+      ¬ GaugePhaseEquiv (cast (congr_arg (fun n ↦ MPTensor α (Fin n)) h) (A j)) (A k)) :
     ∃ N₀ : ℕ, ∀ N > N₀,
-      LinearIndependent ℂ (fun k : ι => mpvState (α := Fin d) (A k) N) := by
+      LinearIndependent ℂ (fun k : ι => mpvState (A k) N) := by
   classical
   let : Fintype ι := Fintype.ofFinite ι
   set e := Fintype.equivFin ι with he
   obtain ⟨N₀, hLI⟩ :=
     exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhaseEquiv
-      (α := Fin d) (dim := fun k => dim (e.symm k)) (fun k => A (e.symm k))
+      (dim := fun k => dim (e.symm k)) (fun k => A (e.symm k))
       (fun k => hNormal (e.symm k))
       (fun j k hjk h => hDistinct (e.symm j) (e.symm k)
         (fun hEq => hjk (by simpa using congrArg e hEq)) h)
   refine ⟨N₀, fun N hN => ?_⟩
-  have hfun : ((fun k : Fin (Fintype.card ι) => mpvState (α := Fin d) (A (e.symm k)) N) ∘ e)
-      = fun k : ι => mpvState (α := Fin d) (A k) N := by
+  have hfun : ((fun k : Fin (Fintype.card ι) => mpvState (A (e.symm k)) N) ∘ e)
+      = fun k : ι => mpvState (A k) N := by
     funext k
-    exact congrArg (fun y : ι => mpvState (α := Fin d) (A y) N) (e.symm_apply_apply k)
+    exact congrArg (fun y : ι => mpvState (A y) N) (e.symm_apply_apply k)
   rw [← hfun]
   exact (hLI N hN).comp e e.injective
 
 /-- A vanishing pointwise combination of matrix product vectors is a vanishing
 combination of the corresponding states. -/
 theorem sum_smul_mpvState_eq_zero
-    {ι : Type*} [Fintype ι] {dim : ι → ℕ} (A : (k : ι) → MPSTensor d (dim k))
+    {ι : Type*} [Fintype ι] {dim : ι → ℕ} (A : (k : ι) → MPTensor α (Fin (dim k)))
     (g : ι → ℂ) {N : ℕ}
-    (h : ∀ σ : Fin N → Fin d, ∑ k, g k * mpv (A k) σ = 0) :
-    ∑ k, g k • mpvState (α := Fin d) (A k) N = 0 := by
+    (h : ∀ σ : Fin N → α, ∑ k, g k * mpv (A k) σ = 0) :
+    ∑ k, g k • mpvState (A k) N = 0 := by
   apply PiLp.ext
   intro σ
   simp only [WithLp.ofLp_sum, WithLp.ofLp_smul, Finset.sum_apply, Pi.smul_apply,

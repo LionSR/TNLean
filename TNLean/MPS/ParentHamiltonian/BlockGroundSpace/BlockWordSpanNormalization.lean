@@ -81,7 +81,7 @@ theorem exists_hasComplementaryFixedPointGap_family_of_wordTupleSpanTop
       (∀ j L, groundSpace (A j) L = groundSpace (B j) L) ∧
       (∀ N, bntMPSVectorSpan A N = bntMPSVectorSpan B N) := by
   classical
-  choose B ζ ρ hζ hGauge hmpv hP hρ hGS _hPI _hCGS using
+  choose B ζ ρ hζ hGauge hmpv hP hρ hGS _hPI using
     fun j ↦ exists_hasComplementaryFixedPointGap_gauge_of_isNormal
       ⟨S, hS, isNBlkInjective_of_wordTupleSpanTop A hSpan j⟩
   refine ⟨B, ρ, hP, hρ,

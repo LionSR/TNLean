@@ -373,18 +373,16 @@ namespace MPSTensor
 
 open MPTensor
 
-variable {d : ℕ}
-
 /-- Gauge equivalence on both sides transports a casted gauge-phase
 equivalence back to the original tensors. -/
-lemma gaugePhaseEquiv_of_gaugeEquiv_left_right_cast
+lemma gaugePhaseEquiv_of_gaugeEquiv_left_right_cast {α : Type*}
     {D₁ D₂ : ℕ} (hdim : D₁ = D₂)
-    {A A' : MPSTensor d D₁} {B B' : MPSTensor d D₂}
+    {A A' : MPTensor α (Fin D₁)} {B B' : MPTensor α (Fin D₂)}
     (hAA' : GaugeEquiv A A')
     (hA'B' : GaugePhaseEquiv
-      (cast (congr_arg (MPSTensor d) hdim) A') B')
+      (cast (congr_arg (fun n ↦ MPTensor α (Fin n)) hdim) A') B')
     (hBB' : GaugeEquiv B B') :
-    GaugePhaseEquiv (cast (congr_arg (MPSTensor d) hdim) A) B := by
+    GaugePhaseEquiv (cast (congr_arg (fun n ↦ MPTensor α (Fin n)) hdim) A) B := by
   subst hdim
   simpa using gaugePhaseEquiv_of_gaugeEquiv_left_right hAA' hA'B' hBB'
 
