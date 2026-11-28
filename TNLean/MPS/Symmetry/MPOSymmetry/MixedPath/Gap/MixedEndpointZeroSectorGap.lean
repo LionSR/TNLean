@@ -93,6 +93,7 @@ theorem mixedEndpointParentInteraction_zeroSector_eq_toMatrix'_parentInteraction
   rw [toEuclideanLin_mixedEndpointParentInteraction, hproj,
     toEuclideanLin_toMatrix'_parentInteraction]
   simp only [Submodule.starProjection_orthogonal']
+  rfl
 
 /-- The full actual nonwrapping sum is the ordinary open parent Hamiltonian
 at every volume. Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
