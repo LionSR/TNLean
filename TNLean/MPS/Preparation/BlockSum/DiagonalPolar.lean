@@ -32,8 +32,8 @@ For such tensors the blocked tensor is diagonal too, with diagonal entries
 `J : |e⟩ ↦ |e e⟩`, with `C` the matrix of the diagonal entries. The polar factors are then
 computed from any positive square root `Q` of the Gram matrix `Cᴴ C`:
 `P = J Q Jᴴ` and `Π = J E Jᴴ` for the projector `E` onto the range of `Q`
-(`polarPos_physicalMatrix_blockTensor_diagonal`,
-`polarSupport_physicalMatrix_blockTensor_diagonal`).
+(`polarPos_physicalMatrix_block_diagonal`,
+`polarSupport_physicalMatrix_block_diagonal`).
 The overlap of the approximating state with the target reduces to entries of `P` and `Π`
 (`nonNormalApproxOverlap_diagonal`).
 
@@ -57,7 +57,6 @@ open MPTensor
 
 open scoped BigOperators Matrix ComplexOrder MatrixOrder
 open Matrix
-open Kraus (blockPhysDim blockTensor evalWord_blockTensor)
 
 namespace MPSTensor
 
@@ -77,32 +76,30 @@ theorem evalWord_diagonal (a : Fin d → Fin D → ℂ) (l : List (Fin d)) :
 /-- The diagonal entry `b_e(w) = ∏ₖ a^{w_k}_e` of the `q`-site blocked tensor of the diagonal
 tensor `Aⁱ = diag(aⁱ)` at the blocked index `w` (arXiv:2307.01696, eq. `eq:B`). -/
 noncomputable def blockDiagEntry (a : Fin d → Fin D → ℂ) (q : ℕ)
-    (w : Fin (blockPhysDim d q)) (e : Fin D) : ℂ :=
-  ∏ k, a (Kraus.decodeBlock d q w k) e
+    (w : Fin q → Fin d) (e : Fin D) : ℂ :=
+  ∏ k, a (w k) e
 
 /-- Blocking a diagonal tensor gives a diagonal tensor. -/
-theorem blockTensor_diagonal (a : Fin d → Fin D → ℂ) (q : ℕ) (w : Fin (blockPhysDim d q)) :
-    blockTensor (fun i => diagonal (a i)) q w = diagonal (blockDiagEntry a q w) := by
-  simp [blockTensor, Kraus.blockTensor, Kraus.reindexPhysical, evalWord_diagonal, List.map_ofFn,
+theorem block_diagonal (a : Fin d → Fin D → ℂ) (q : ℕ) (w : Fin q → Fin d) :
+    Kraus.block (fun i => diagonal (a i)) q w = diagonal (blockDiagEntry a q w) := by
+  simp [Kraus.block_apply, evalWord_diagonal, List.map_ofFn,
     blockDiagEntry, List.prod_ofFn, Function.comp_def]
 
 /-- The physical matrix of the blocked diagonal tensor factors through `J : |e⟩ ↦ |e e⟩`:
 `B = C Jᴴ` with `C` the matrix of diagonal entries. -/
-theorem physicalMatrix_blockTensor_diagonal (a : Fin d → Fin D → ℂ) (q : ℕ) :
-    physicalMatrix (blockTensor (fun i => diagonal (a i)) q) =
+theorem physicalMatrix_block_diagonal (a : Fin d → Fin D → ℂ) (q : ℕ) :
+    physicalMatrix (Kraus.block (fun i => diagonal (a i)) q) =
       of (blockDiagEntry a q) * (diagPairEmbedding (Fin D))ᴴ := by
   ext w p
   rw [mul_conjTranspose_diagPairEmbedding_apply]
-  simp only [physicalMatrix, blockTensor_diagonal, diagonal_apply, of_apply]
+  simp only [physicalMatrix, block_diagonal, diagonal_apply, of_apply]
 
 /-- The Gram matrix of the diagonal entries of the blocked tensor is the `q`-th power, entry by
 entry, of the Gram matrix of one site. -/
 theorem sum_star_blockDiagEntry_mul (a : Fin d → Fin D → ℂ) (q : ℕ) (e e' : Fin D) :
     ∑ w, star (blockDiagEntry a q w e) * blockDiagEntry a q w e' =
       (∑ i, star (a i e) * a i e') ^ q := by
-  rw [← (Kraus.decodeBlockEquiv d q).symm.sum_comp]
-  simp only [blockDiagEntry, Kraus.decodeBlock_decodeBlockEquiv_symm, star_prod,
-    ← Finset.prod_mul_distrib]
+  simp only [blockDiagEntry, star_prod, ← Finset.prod_mul_distrib]
   rw [← Fintype.prod_sum (fun (_ : Fin q) i => star (a i e) * a i e'), Finset.prod_const,
     Finset.card_univ, Fintype.card_fin]
 
@@ -110,35 +107,35 @@ theorem sum_star_blockDiagEntry_mul (a : Fin d → Fin D → ℂ) (q : ℕ) (e e
 noncomputable def diagGram (a : Fin d → Fin D → ℂ) (q : ℕ) : Matrix (Fin D) (Fin D) ℂ :=
   of fun e e' => (∑ i, star (a i e) * a i e') ^ q
 
-theorem conjTranspose_physicalMatrix_blockTensor_diagonal_mul (a : Fin d → Fin D → ℂ) (q : ℕ) :
-    (physicalMatrix (blockTensor (fun i => diagonal (a i)) q))ᴴ *
-        physicalMatrix (blockTensor (fun i => diagonal (a i)) q) =
+theorem conjTranspose_physicalMatrix_block_diagonal_mul (a : Fin d → Fin D → ℂ) (q : ℕ) :
+    (physicalMatrix (Kraus.block (fun i => diagonal (a i)) q))ᴴ *
+        physicalMatrix (Kraus.block (fun i => diagonal (a i)) q) =
       diagPairEmbedding (Fin D) * diagGram a q * (diagPairEmbedding (Fin D))ᴴ := by
   have hC : (of (blockDiagEntry a q))ᴴ * of (blockDiagEntry a q) = diagGram a q := by
     ext e e'
     rw [mul_apply, diagGram, of_apply, ← sum_star_blockDiagEntry_mul]
     rfl
-  rw [physicalMatrix_blockTensor_diagonal, conjTranspose_mul, conjTranspose_conjTranspose,
+  rw [physicalMatrix_block_diagonal, conjTranspose_mul, conjTranspose_conjTranspose,
     Matrix.mul_assoc, ← Matrix.mul_assoc (of (blockDiagEntry a q))ᴴ, hC, Matrix.mul_assoc]
 
 /-- **Positive part of a blocked diagonal tensor**: if `Q ≥ 0` is a square root of the Gram
 matrix, `Q Q = Cᴴ C`, then `P = J Q Jᴴ`. -/
-theorem polarPos_physicalMatrix_blockTensor_diagonal (a : Fin d → Fin D → ℂ) (q : ℕ)
+theorem polarPos_physicalMatrix_block_diagonal (a : Fin d → Fin D → ℂ) (q : ℕ)
     {Q : Matrix (Fin D) (Fin D) ℂ} (hQ : Q.PosSemidef) (hQQ : Q * Q = diagGram a q) :
-    polarPos (physicalMatrix (blockTensor (fun i => diagonal (a i)) q)) =
+    polarPos (physicalMatrix (Kraus.block (fun i => diagonal (a i)) q)) =
       diagPairEmbedding (Fin D) * Q * (diagPairEmbedding (Fin D))ᴴ := by
   refine polarPos_eq_of_mul_self_eq (hQ.mul_mul_conjTranspose_same _) ?_
-  rw [conjTranspose_physicalMatrix_blockTensor_diagonal_mul, ← hQQ]
+  rw [conjTranspose_physicalMatrix_block_diagonal_mul, ← hQQ]
   simp only [Matrix.mul_assoc]
   rw [← Matrix.mul_assoc (diagPairEmbedding (Fin D))ᴴ, conjTranspose_diagPairEmbedding_mul_self,
     Matrix.one_mul]
 
 /-- **Support projector of a blocked diagonal tensor**: if moreover `E` is a Hermitian idempotent
 with `E Q = Q` and `Q R = E`, so that `E` projects onto the range of `Q`, then `Π = J E Jᴴ`. -/
-theorem polarSupport_physicalMatrix_blockTensor_diagonal (a : Fin d → Fin D → ℂ) (q : ℕ)
+theorem polarSupport_physicalMatrix_block_diagonal (a : Fin d → Fin D → ℂ) (q : ℕ)
     {Q E R : Matrix (Fin D) (Fin D) ℂ} (hQ : Q.PosSemidef) (hQQ : Q * Q = diagGram a q)
     (hE : E.IsHermitian) (hEE : E * E = E) (hEQ : E * Q = Q) (hQR : Q * R = E) :
-    polarSupport (physicalMatrix (blockTensor (fun i => diagonal (a i)) q)) =
+    polarSupport (physicalMatrix (Kraus.block (fun i => diagonal (a i)) q)) =
       diagPairEmbedding (Fin D) * E * (diagPairEmbedding (Fin D))ᴴ := by
   set J := diagPairEmbedding (Fin D)
   have hJ : Jᴴ * J = 1 := conjTranspose_diagPairEmbedding_mul_self
@@ -151,24 +148,17 @@ theorem polarSupport_physicalMatrix_blockTensor_diagonal (a : Fin d → Fin D �
       hE.eq]
     exact (Matrix.mul_assoc _ _ _).symm
   · rw [hsand, hEE]
-  · rw [polarPos_physicalMatrix_blockTensor_diagonal a q hQ hQQ]
+  · rw [polarPos_physicalMatrix_block_diagonal a q hQ hQQ]
     exact range_mulVecLin_eq_of_mul_eq (R := J * R * Jᴴ) (by rw [hsand, hEQ])
       (by rw [hsand, hQR])
 
-/-- The periodic state on `N = qM` sites, read in blocks, is the periodic state of the blocked
-tensor. -/
-theorem mpv_blockedConfigEquiv (A : MPSTensor d D) (q M : ℕ)
-    (τ : Fin M → Fin (blockPhysDim d q)) :
-    mpv A (Kraus.blockedConfigEquiv d M q τ) = mpv (blockTensor A q) τ := by
-  simp only [mpv, coeff, Kraus.ofFn_blockedConfigEquiv, evalWord_blockTensor]
-
 /-- The periodic state of the diagonal tensor on `N = qM` sites, read through the regrouping of
 sites into `M` blocks: `φ_N(A)(τ) = ∑_e ∏ₖ b_e(τ_k)`. -/
-theorem mpv_blockedConfigEquiv_diagonal (a : Fin d → Fin D → ℂ) (q M : ℕ)
-    (τ : Fin M → Fin (blockPhysDim d q)) :
-    mpv (fun i => diagonal (a i)) (Kraus.blockedConfigEquiv d M q τ) =
+theorem mpv_blockConfigEquiv_diagonal (a : Fin d → Fin D → ℂ) (q M : ℕ)
+    (τ : Fin M → Fin q → Fin d) :
+    mpv (fun i => diagonal (a i)) (Kraus.blockConfigEquiv (Fin d) M q τ) =
       ∑ e, ∏ k, blockDiagEntry a q (τ k) e := by
-  rw [mpv_blockedConfigEquiv, mpv, coeff, funext (blockTensor_diagonal a q), evalWord_diagonal,
+  rw [← mpv_block_eq_mpv_blockConfig, mpv, coeff, funext (block_diagonal a q), evalWord_diagonal,
     trace_diagonal]
   simp [List.map_ofFn, List.prod_ofFn, Function.comp_def]
 
@@ -226,9 +216,9 @@ theorem pairProductState_basisPair {M : ℕ} (c : Fin D) (x : Fin M → Fin D ×
 /-- The unnormalized approximating state `V^{⊗M} ∑ⱼ αⱼ |Ω_j⟩` of arXiv:2307.01696, eq. (S7),
 for the basis pairs `|c_j c_j⟩`: `∑ⱼ αⱼ ∏ₖ V_{τ_k, (c_j, c_j)}`. -/
 theorem nonNormalApproxVector_basisPair (A : MPSTensor d D) (q M : ℕ) (α : Fin b → ℂ)
-    (c : Fin b → Fin D) (τ : Fin M → Fin (blockPhysDim d q)) :
+    (c : Fin b → Fin D) (τ : Fin M → (Fin q → Fin d)) :
     nonNormalApproxVector A q M α (fun j => basisPair (c j)) τ =
-      ∑ j, α j * ∏ k, polarIso (physicalMatrix (blockTensor A q)) (τ k) (c j, c j) := by
+      ∑ j, α j * ∏ k, polarIso (physicalMatrix (Kraus.block A q)) (τ k) (c j, c j) := by
   simp only [nonNormalApproxVector, mulVec, dotProduct, Matrix.piKronecker, of_apply,
     nonNormalFixedPointState, pairProductState_basisPair, mul_ite, mul_one, mul_zero,
     Finset.mul_sum]
@@ -246,7 +236,7 @@ sites. The approximation error of Lemma 1' of the source is `ε = 1 - |⟨φ~_N|
 noncomputable def nonNormalApproxOverlap (A : MPSTensor d D) (q M : ℕ) (α : Fin b → ℂ)
     (ω : Fin b → Fin D × Fin D → ℂ) : ℂ :=
   ∑ τ, star (nonNormalApproxState A q M α ω τ) *
-    normalizedMPVState A (M * q) (Kraus.blockedConfigEquiv d M q τ)
+    normalizedMPVState A (M * q) (Kraus.blockConfigEquiv (Fin d) M q τ)
 
 /-- The squared norm of a vector, as a complex number. -/
 theorem ofReal_sum_norm_sq {n : Type*} [Fintype n] (f : n → ℂ) :
@@ -262,7 +252,7 @@ theorem nonNormalApproxOverlap_eq (A : MPSTensor d D) (q M : ℕ) (α : Fin b �
       ((Real.sqrt (∑ τ, ‖nonNormalApproxVector A q M α ω τ‖ ^ 2) : ℂ)⁻¹ *
         (‖mpvState A (M * q)‖ : ℂ)⁻¹) *
         ∑ τ, star (nonNormalApproxVector A q M α ω τ) *
-          mpv A (Kraus.blockedConfigEquiv d M q τ) := by
+          mpv A (Kraus.blockConfigEquiv (Fin d) M q τ) := by
   rw [nonNormalApproxOverlap, Finset.mul_sum]
   refine Finset.sum_congr rfl fun τ _ => ?_
   simp only [nonNormalApproxState, normalizedMPVState, Pi.smul_apply, smul_eq_mul, star_mul',
@@ -312,11 +302,11 @@ theorem ofReal_norm_mpvState_sq_diagonal (a : Fin d → Fin D → ℂ) (q M : �
     ((‖mpvState (fun i => diagonal (a i)) (M * q)‖ ^ 2 : ℝ) : ℂ) =
       ∑ e, ∑ e', diagGram a q e e' ^ M := by
   rw [EuclideanSpace.norm_eq, Real.sq_sqrt (Finset.sum_nonneg fun _ _ => by positivity),
-    ofReal_sum_norm_sq, ← (Kraus.blockedConfigEquiv d M q).sum_comp]
-  simp only [mpvState_apply, mpv_blockedConfigEquiv_diagonal]
+    ofReal_sum_norm_sq, ← (Kraus.blockConfigEquiv (Fin d) M q).sum_comp]
+  simp only [mpvState_apply, mpv_blockConfigEquiv_diagonal]
   rw [sum_star_sum_mul_sum
-    (fun e (τ : Fin M → Fin (blockPhysDim d q)) => ∏ k, blockDiagEntry a q (τ k) e)
-    (fun e (τ : Fin M → Fin (blockPhysDim d q)) => ∏ k, blockDiagEntry a q (τ k) e)]
+    (fun e (τ : Fin M → (Fin q → Fin d)) => ∏ k, blockDiagEntry a q (τ k) e)
+    (fun e (τ : Fin M → (Fin q → Fin d)) => ∏ k, blockDiagEntry a q (τ k) e)]
   refine Finset.sum_congr rfl fun e _ => Finset.sum_congr rfl fun e' _ => ?_
   rw [sum_star_prod_mul_prod (fun w => blockDiagEntry a q w e)
     (fun w => blockDiagEntry a q w e'), sum_star_blockDiagEntry_mul]
@@ -329,12 +319,12 @@ theorem sum_star_nonNormalApproxVector_basisPair (A : MPSTensor d D) (q M : ℕ)
     ∑ τ, star (nonNormalApproxVector A q M α (fun j => basisPair (c j)) τ) *
         nonNormalApproxVector A q M α (fun j => basisPair (c j)) τ =
       ∑ j, ∑ j', star (α j) * α j' *
-        polarSupport (physicalMatrix (blockTensor A q)) (c j, c j) (c j', c j') ^ M := by
-  set V := polarIso (physicalMatrix (blockTensor A q))
+        polarSupport (physicalMatrix (Kraus.block A q)) (c j, c j) (c j', c j') ^ M := by
+  set V := polarIso (physicalMatrix (Kraus.block A q))
   simp only [nonNormalApproxVector_basisPair]
   rw [sum_star_sum_mul_sum
-    (fun j (τ : Fin M → Fin (blockPhysDim d q)) => α j * ∏ k, V (τ k) (c j, c j))
-    (fun j (τ : Fin M → Fin (blockPhysDim d q)) => α j * ∏ k, V (τ k) (c j, c j))]
+    (fun j (τ : Fin M → (Fin q → Fin d)) => α j * ∏ k, V (τ k) (c j, c j))
+    (fun j (τ : Fin M → (Fin q → Fin d)) => α j * ∏ k, V (τ k) (c j, c j))]
   refine Finset.sum_congr rfl fun j _ => Finset.sum_congr rfl fun j' _ => ?_
   rw [sum_star_mul_mul_mul, sum_star_prod_mul_prod (fun w => V w (c j, c j))
     (fun w => V w (c j', c j')), ← conjTranspose_polarIso_mul_polarIso, mul_apply]
@@ -346,18 +336,18 @@ theorem sum_star_nonNormalApproxVector_basisPair_mul_mpv (a : Fin d → Fin D �
     (α : Fin b → ℂ) (c : Fin b → Fin D) :
     ∑ τ, star (nonNormalApproxVector (fun i => diagonal (a i)) q M α
           (fun j => basisPair (c j)) τ) *
-        mpv (fun i => diagonal (a i)) (Kraus.blockedConfigEquiv d M q τ) =
+        mpv (fun i => diagonal (a i)) (Kraus.blockConfigEquiv (Fin d) M q τ) =
       ∑ j, ∑ e, star (α j) *
-        polarPos (physicalMatrix (blockTensor (fun i => diagonal (a i)) q))
+        polarPos (physicalMatrix (Kraus.block (fun i => diagonal (a i)) q))
           (c j, c j) (e, e) ^ M := by
-  set B := physicalMatrix (blockTensor (fun i => diagonal (a i)) q)
+  set B := physicalMatrix (Kraus.block (fun i => diagonal (a i)) q)
   set V := polarIso B
   have hcol : ∀ w e, blockDiagEntry a q w e = B w (e, e) := fun w e => by
-    simp [B, physicalMatrix, blockTensor_diagonal]
-  simp only [nonNormalApproxVector_basisPair, mpv_blockedConfigEquiv_diagonal, hcol]
+    simp [B, physicalMatrix, block_diagonal]
+  simp only [nonNormalApproxVector_basisPair, mpv_blockConfigEquiv_diagonal, hcol]
   rw [sum_star_sum_mul_sum
-    (fun j (τ : Fin M → Fin (blockPhysDim d q)) => α j * ∏ k, V (τ k) (c j, c j))
-    (fun (e : Fin D) (τ : Fin M → Fin (blockPhysDim d q)) => ∏ k, B (τ k) (e, e))]
+    (fun j (τ : Fin M → (Fin q → Fin d)) => α j * ∏ k, V (τ k) (c j, c j))
+    (fun (e : Fin D) (τ : Fin M → (Fin q → Fin d)) => ∏ k, B (τ k) (e, e))]
   refine Finset.sum_congr rfl fun j _ => Finset.sum_congr rfl fun e _ => ?_
   rw [sum_star_mul_mul, sum_star_prod_mul_prod (fun w => V w (c j, c j))
     (fun w => B w (e, e)), ← conjTranspose_polarIso_mul_self, mul_apply]
@@ -371,13 +361,13 @@ theorem sum_star_nonNormalApproxVector_basisPair_mul_mpv (a : Fin d → Fin D �
 theorem nonNormalApproxOverlap_diagonal (a : Fin d → Fin D → ℂ) (q M : ℕ) (α : Fin b → ℂ)
     (c : Fin b → Fin D) {X Y : ℝ}
     (hX : (X : ℂ) = ∑ j, ∑ j', star (α j) * α j' *
-      polarSupport (physicalMatrix (blockTensor (fun i => diagonal (a i)) q))
+      polarSupport (physicalMatrix (Kraus.block (fun i => diagonal (a i)) q))
         (c j, c j) (c j', c j') ^ M)
     (hY : (Y : ℂ) = ∑ e, ∑ e', diagGram a q e e' ^ M) :
     nonNormalApproxOverlap (fun i => diagonal (a i)) q M α (fun j => basisPair (c j)) =
       ((Real.sqrt X : ℂ)⁻¹ * (Real.sqrt Y : ℂ)⁻¹) *
         ∑ j, ∑ e, star (α j) *
-          polarPos (physicalMatrix (blockTensor (fun i => diagonal (a i)) q))
+          polarPos (physicalMatrix (Kraus.block (fun i => diagonal (a i)) q))
             (c j, c j) (e, e) ^ M := by
   have e₁ : Real.sqrt (∑ τ, ‖nonNormalApproxVector (fun i => diagonal (a i)) q M α
       (fun j => basisPair (c j)) τ‖ ^ 2) = Real.sqrt X := by

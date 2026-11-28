@@ -32,7 +32,6 @@ Supplemental Material, "Proof of Lemma 1 and extension to non-normal tensors".
 
 open Matrix MPSTensor
 open scoped BigOperators ComplexOrder
-open Kraus (blockPhysDim decodeBlock decodeBlockEquiv blockTensor)
 
 namespace MPSPreparation
 
@@ -45,7 +44,7 @@ noncomputable def supportedCfgPolarIso (A : MPSTensor d D)
 
 private theorem cfgPolarIso_eq_zero_of_notMem {A : MPSTensor d D} {n : ℕ}
     {e : Fin χ ↪ Fin (D * D)}
-    (hinj : IsInjectiveOn (blockTensor A n) (Set.range (virtualPairEquiv D ∘ e)))
+    (hinj : IsInjectiveOn (Kraus.block A n) (Set.range (virtualPairEquiv D ∘ e)))
     {x : Fin (D * D)} (hx : x ∉ Set.range e) (τ : Cfg d n) :
     cfgPolarIso A n τ x = 0 := by
   classical
@@ -54,35 +53,35 @@ private theorem cfgPolarIso_eq_zero_of_notMem {A : MPSTensor d D} {n : ℕ}
     exact hx ⟨y, (virtualPairEquiv D).injective hy⟩
   have h := MPSTensor.sum_star_polarIsoMatrix_mul hinj x x
   rw [ite_eq_right (by simp [hxS])] at h
-  have hz : (fun i => polarIsoMatrix (blockTensor A n) i x) = 0 :=
+  have hz : (fun i => polarIsoMatrix (Kraus.block A n) i x) = 0 :=
     dotProduct_star_self_eq_zero.mp h
-  exact congrFun hz ((decodeBlockEquiv d n).symm τ)
+  exact congrFun hz (τ)
 
 /-- The polar factor is a genuine isometry on an injectively enumerated support. -/
 theorem isIsometry_supportedCfgPolarIso {A : MPSTensor d D} {n : ℕ}
     {e : Fin χ ↪ Fin (D * D)}
-    (hinj : IsInjectiveOn (blockTensor A n) (Set.range (virtualPairEquiv D ∘ e))) :
+    (hinj : IsInjectiveOn (Kraus.block A n) (Set.range (virtualPairEquiv D ∘ e))) :
     (supportedCfgPolarIso A e n).IsIsometry := by
   classical
   ext x y
   rw [Matrix.mul_apply, Matrix.one_apply]
   simp only [supportedCfgPolarIso, Matrix.conjTranspose_apply, Matrix.submatrix_apply,
     id_eq, cfgPolarIso]
-  rw [(decodeBlockEquiv d n).symm.sum_comp (fun i =>
-    star (polarIsoMatrix (blockTensor A n) i (e x)) *
-      polarIsoMatrix (blockTensor A n) i (e y))]
+  rw [.sum_comp (fun i =>
+    star (polarIsoMatrix (Kraus.block A n) i (e x)) *
+      polarIsoMatrix (Kraus.block A n) i (e y))]
   rw [MPSTensor.sum_star_polarIsoMatrix_mul hinj]
   simp only [e.injective.eq_iff, Set.mem_range, Function.comp_apply]
   simp
 
 private theorem pairIndexEquiv_symm_fst (κ : ℕ) (a b : Fin κ) :
-    decodeBlock κ 2 ((IsometryTree.pairIndexEquiv κ).symm (a, b)) 0 = a := by
+    ((IsometryTree.pairIndexEquiv κ).symm (a, b)) 0 = a := by
   change (IsometryTree.pairIndexEquiv κ
     ((IsometryTree.pairIndexEquiv κ).symm (a, b))).1 = a
   rw [Equiv.apply_symm_apply]
 
 private theorem pairIndexEquiv_symm_snd (κ : ℕ) (a b : Fin κ) :
-    decodeBlock κ 2 ((IsometryTree.pairIndexEquiv κ).symm (a, b)) 1 = b := by
+    ((IsometryTree.pairIndexEquiv κ).symm (a, b)) 1 = b := by
   change (IsometryTree.pairIndexEquiv κ
     ((IsometryTree.pairIndexEquiv κ).symm (a, b))).2 = b
   rw [Equiv.apply_symm_apply]
@@ -91,21 +90,21 @@ private theorem pairIndexEquiv_symm_snd (κ : ℕ) (a b : Fin κ) :
 children. The two output labels are encoded in the same order as an isometry tree. -/
 noncomputable def supportedMergeIso (A : MPSTensor d D)
     (e : Fin χ ↪ Fin (D * D)) (n₁ n₂ : ℕ) :
-    Matrix (Fin (blockPhysDim χ 2)) (Fin χ) ℂ := fun t x =>
+    Matrix (Fin 2 → Fin χ) (Fin χ) ℂ := fun t x =>
   mergeIso A n₁ n₂
     ((IsometryTree.pairIndexEquiv (D * D)).symm
-      (e (decodeBlock χ 2 t 0), e (decodeBlock χ 2 t 1))) (e x)
+      (e (t 0), e (t 1))) (e x)
 
 /-- The supported polar factor of a joined block factors exactly through its two supported
 children. This equality preserves all supported input vectors simultaneously. -/
 theorem supportedCfgPolarIso_append {A : MPSTensor d D} {n₁ n₂ : ℕ}
     {e : Fin χ ↪ Fin (D * D)}
-    (h₁ : IsInjectiveOn (blockTensor A n₁) (Set.range (virtualPairEquiv D ∘ e)))
-    (h₂ : IsInjectiveOn (blockTensor A n₂) (Set.range (virtualPairEquiv D ∘ e)))
+    (h₁ : IsInjectiveOn (Kraus.block A n₁) (Set.range (virtualPairEquiv D ∘ e)))
+    (h₂ : IsInjectiveOn (Kraus.block A n₂) (Set.range (virtualPairEquiv D ∘ e)))
     (τ₁ : Cfg d n₁) (τ₂ : Cfg d n₂) (x : Fin χ) :
     supportedCfgPolarIso A e (n₁ + n₂) (Fin.append τ₁ τ₂) x =
-      ∑ t, supportedCfgPolarIso A e n₁ τ₁ (decodeBlock χ 2 t 0) *
-        supportedCfgPolarIso A e n₂ τ₂ (decodeBlock χ 2 t 1) *
+      ∑ t, supportedCfgPolarIso A e n₁ τ₁ (t 0) *
+        supportedCfgPolarIso A e n₂ τ₂ (t 1) *
         supportedMergeIso A e n₁ n₂ t x := by
   classical
   change cfgPolarIso A (n₁ + n₂) (Fin.append τ₁ τ₂) (e x) = _
@@ -129,14 +128,14 @@ theorem supportedCfgPolarIso_append {A : MPSTensor d D} {n₁ n₂ : ℕ}
 with the parent length. -/
 theorem supportedCfgPolarIso_split {A : MPSTensor d D} {n₁ n₂ n : ℕ}
     {e : Fin χ ↪ Fin (D * D)}
-    (h₁ : IsInjectiveOn (blockTensor A n₁) (Set.range (virtualPairEquiv D ∘ e)))
-    (h₂ : IsInjectiveOn (blockTensor A n₂) (Set.range (virtualPairEquiv D ∘ e)))
+    (h₁ : IsInjectiveOn (Kraus.block A n₁) (Set.range (virtualPairEquiv D ∘ e)))
+    (h₂ : IsInjectiveOn (Kraus.block A n₂) (Set.range (virtualPairEquiv D ∘ e)))
     (hn : n₁ + n₂ = n) (τ : Cfg d n) (x : Fin χ) :
     supportedCfgPolarIso A e n τ x =
       ∑ t, supportedCfgPolarIso A e n₁ (fun i => τ ⟨i.val, by omega⟩)
-          (decodeBlock χ 2 t 0) *
+          (t 0) *
         supportedCfgPolarIso A e n₂ (fun i => τ ⟨n₁ + i.val, by omega⟩)
-          (decodeBlock χ 2 t 1) * supportedMergeIso A e n₁ n₂ t x := by
+          (t 1) * supportedMergeIso A e n₁ n₂ t x := by
   subst n
   have hτ : Fin.append (fun i : Fin n₁ => τ ⟨i.val, by omega⟩)
       (fun i : Fin n₂ => τ ⟨n₁ + i.val, by omega⟩) = τ := by
@@ -151,8 +150,8 @@ theorem supportedCfgPolarIso_split {A : MPSTensor d D} {n₁ n₂ n : ℕ}
 /-- Matrix form of the exact supported polar-merge identity. -/
 theorem supportedCfgPolarIso_eq_joinMatrix_mul {A : MPSTensor d D} {n₁ n₂ : ℕ}
     {e : Fin χ ↪ Fin (D * D)}
-    (h₁ : IsInjectiveOn (blockTensor A n₁) (Set.range (virtualPairEquiv D ∘ e)))
-    (h₂ : IsInjectiveOn (blockTensor A n₂) (Set.range (virtualPairEquiv D ∘ e))) :
+    (h₁ : IsInjectiveOn (Kraus.block A n₁) (Set.range (virtualPairEquiv D ∘ e)))
+    (h₂ : IsInjectiveOn (Kraus.block A n₂) (Set.range (virtualPairEquiv D ∘ e))) :
     supportedCfgPolarIso A e (n₁ + n₂) =
       IsometryTree.joinMatrix (supportedCfgPolarIso A e n₁) (supportedCfgPolarIso A e n₂) *
         supportedMergeIso A e n₁ n₂ := by
@@ -165,9 +164,9 @@ theorem supportedCfgPolarIso_eq_joinMatrix_mul {A : MPSTensor d D} {n₁ n₂ : 
 The input and both children may contain several canonical sectors. -/
 theorem isIsometry_supportedMergeIso {A : MPSTensor d D} {n₁ n₂ : ℕ}
     {e : Fin χ ↪ Fin (D * D)}
-    (h₁ : IsInjectiveOn (blockTensor A n₁) (Set.range (virtualPairEquiv D ∘ e)))
-    (h₂ : IsInjectiveOn (blockTensor A n₂) (Set.range (virtualPairEquiv D ∘ e)))
-    (h : IsInjectiveOn (blockTensor A (n₁ + n₂))
+    (h₁ : IsInjectiveOn (Kraus.block A n₁) (Set.range (virtualPairEquiv D ∘ e)))
+    (h₂ : IsInjectiveOn (Kraus.block A n₂) (Set.range (virtualPairEquiv D ∘ e)))
+    (h : IsInjectiveOn (Kraus.block A (n₁ + n₂))
       (Set.range (virtualPairEquiv D ∘ e))) :
     (supportedMergeIso A e n₁ n₂).IsIsometry := by
   have hV := isIsometry_supportedCfgPolarIso h
@@ -192,7 +191,7 @@ Source: arXiv:2307.01696, eq. (16) and "Long-range MPS using measurements". -/
 theorem exists_isometryTree_matrix_eq_supportedCfgPolarIso {s : ℕ} (A : MPSTensor d D)
     (e : Fin χ ↪ Fin (D * D)) (hs : 0 < s)
     (hinj : ∀ m, s ≤ m →
-      IsInjectiveOn (blockTensor A m) (Set.range (virtualPairEquiv D ∘ e)))
+      IsInjectiveOn (Kraus.block A m) (Set.range (virtualPairEquiv D ∘ e)))
     (h n c : ℕ) (hlower : 2 ^ h * s ≤ n) (hupper : n ≤ 2 ^ h * c) :
     ∃ T : IsometryTree d χ c h n, T.matrix = supportedCfgPolarIso A e n := by
   induction h generalizing n with

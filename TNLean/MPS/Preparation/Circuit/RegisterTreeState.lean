@@ -48,7 +48,6 @@ The proof follows the tree from the root: after the depths `0, …, j` the regis
 open Matrix MPSTensor
 open scoped BigOperators
 open QuantumCircuit
-open Kraus (blockPhysDim decodeBlock decodeBlockEquiv decodeBlock_decodeBlockEquiv_symm blockTensor)
 
 namespace MPSPreparation
 
@@ -232,32 +231,32 @@ variable {d D : ℕ}
 
 /-- Blocking a blocked tensor reads the polar isometry of the directly blocked tensor through the
 grouping of its sites. -/
-theorem polarIsoMatrix_blockTensor_blockTensor (A : MPSTensor d D) (m n : ℕ)
-    (I : Fin (blockPhysDim (blockPhysDim d m) n)) (x : Fin (D * D)) :
-    polarIsoMatrix (blockTensor (blockTensor A m) n) I x =
-      polarIsoMatrix (blockTensor A (m * n)) (iteratedBlockIndex d m n I) x := by
-  have h : blockTensor (blockTensor A m) n =
-      fun I => blockTensor A (m * n) ((directIteratedBlockEquiv d m n).symm I) := by
+theorem polarIsoMatrix_block_block (A : MPSTensor d D) (m n : ℕ)
+    (I : (Fin n → (Fin m → Fin d))) (x : Fin (D * D)) :
+    polarIsoMatrix (Kraus.block (Kraus.block A m) n) I x =
+      polarIsoMatrix (Kraus.block A (m * n)) (iteratedBlockIndex d m n I) x := by
+  have h : Kraus.block (Kraus.block A m) n =
+      fun I => Kraus.block A (m * n) ((directIteratedBlockEquiv d m n).symm I) := by
     funext I
-    rw [directIteratedBlockEquiv_symm_apply, blockTensor_blockTensor_apply]
+    rw [directIteratedBlockEquiv_symm_apply, block_block_apply]
   rw [h, polarIsoMatrix_comp_equiv]
   rfl
 
 /-- The blocked index of `n` blocks of `m` sites, each carrying the word `σ u`, is the blocked
 index of the concatenated word `τ`. -/
-theorem iteratedBlockIndex_decodeBlockEquiv_symm {m n : ℕ} (σ : Fin n → Fin (blockPhysDim d m))
+theorem iteratedBlockIndex_decodeBlockEquiv_symm {m n : ℕ} (σ : Fin n → (Fin m → Fin d))
     (τ : Fin (m * n) → Fin d)
     (h : ∀ (u : Fin n) (r : Fin m), τ ⟨m * u.val + r.val, by
       have := u.isLt; have := r.isLt
       calc m * u.val + r.val < m * (u.val + 1) := by rw [Nat.mul_succ]; omega
-        _ ≤ m * n := Nat.mul_le_mul_left m (by omega)⟩ = decodeBlock d m (σ u) r) :
-    iteratedBlockIndex d m n ((decodeBlockEquiv (blockPhysDim d m) n).symm σ) =
-      (decodeBlockEquiv d (m * n)).symm τ := by
+        _ ≤ m * n := Nat.mul_le_mul_left m (by omega)⟩ = (σ u) r) :
+    iteratedBlockIndex d m n (σ) =
+      τ := by
   apply wordOfBlock_injective
   rw [wordOfBlock_iteratedBlockIndex]
-  change ((List.ofFn (decodeBlock _ n ((decodeBlockEquiv _ n).symm σ))).map
-    (Kraus.wordOfBlock d m)).flatten = List.ofFn (decodeBlock d (m * n) _)
-  rw [decodeBlock_decodeBlockEquiv_symm, decodeBlock_decodeBlockEquiv_symm, List.map_ofFn,
+  change ((List.ofFn (σ)).map
+    (Kraus.wordOfBlock d m)).flatten = List.ofFn (_)
+  rw [List.map_ofFn,
     List.ofFn_mul']
   congr 1
   refine congrArg List.ofFn (funext fun u => ?_)
@@ -285,12 +284,12 @@ def regInput (j p : ℕ) (x : Fin (D * D)) : Cfg d (s + s) :=
 
 /-- The two registers written by an isometry `ℂ^χ → ℂ^χ ⊗ ℂ^χ`. -/
 noncomputable def coarseOutput {χ : ℕ} (enc : Fin χ → Cfg d s)
-    (e : Fin (blockPhysDim χ 2)) : Cfg d (s + s) :=
-  Fin.append (enc (decodeBlock _ 2 e 0)) (enc (decodeBlock _ 2 e 1))
+    (e : (Fin 2 → Fin χ)) : Cfg d (s + s) :=
+  Fin.append (enc (e 0)) (enc (e 1))
 
 /-- The two registers of the finest layer, read as `2s` sites. -/
-noncomputable def fineOutput (e : Fin (blockPhysDim (blockPhysDim d s) 2)) : Cfg d (s + s) :=
-  Fin.append (decodeBlock d s (decodeBlock _ 2 e 0)) (decodeBlock d s (decodeBlock _ 2 e 1))
+noncomputable def fineOutput (e : (Fin 2 → (Fin s → Fin d))) : Cfg d (s + s) :=
+  Fin.append (e 0) (e 1)
 
 variable {dig enc}
 
@@ -305,9 +304,9 @@ theorem regInput_injective (hdig : Function.Injective dig) (henc : Function.Inje
   · exact henc (append_injective h).2
 
 omit [NeZero d] in
-private theorem decodeBlock_two_injective {β : ℕ} {e e' : Fin (blockPhysDim β 2)}
-    (h0 : decodeBlock β 2 e 0 = decodeBlock β 2 e' 0)
-    (h1 : decodeBlock β 2 e 1 = decodeBlock β 2 e' 1) : e = e' := by
+private theorem decodeBlock_two_injective {β : ℕ} {e e' : (Fin 2 → Fin β)}
+    (h0 : e 0 = e' 0)
+    (h1 : e 1 = e' 1) : e = e' := by
   apply (decodeBlockEquiv β 2).injective
   funext i
   fin_cases i
@@ -325,23 +324,21 @@ theorem fineOutput_bijective : Function.Bijective (fineOutput (d := d) (s := s))
   refine ⟨fun e e' h => decodeBlock_two_injective ((decodeBlockEquiv d s).injective
     (append_injective h).1) ((decodeBlockEquiv d s).injective (append_injective h).2),
     fun z => ?_⟩
-  refine ⟨(decodeBlockEquiv _ 2).symm ![(decodeBlockEquiv d s).symm fun i => z (Fin.castAdd s i),
-    (decodeBlockEquiv d s).symm fun i => z (Fin.natAdd s i)], ?_⟩
+  refine ⟨(decodeBlockEquiv _ 2).symm ![fun i => z (Fin.castAdd s i),
+    fun i => z (Fin.natAdd s i)], ?_⟩
   funext t
   refine Fin.addCases (fun i => ?_) (fun i => ?_) t
-  · simp only [fineOutput, Fin.append_left, decodeBlock_decodeBlockEquiv_symm,
-      Matrix.cons_val_zero]
-  · simp only [fineOutput, Fin.append_right, decodeBlock_decodeBlockEquiv_symm,
-      Matrix.cons_val_one, Matrix.cons_val_fin_one]
+  · simp only [fineOutput, Fin.append_left, Matrix.cons_val_zero]
+  · simp only [fineOutput, Fin.append_right, Matrix.cons_val_one, Matrix.cons_val_fin_one]
 
-variable (dig enc) (B : MPSTensor (blockPhysDim d s) D)
+variable (dig enc) (B : MPTensor (Fin s → Fin d) (Fin D))
 
 /-- The coarse layer `V⁽ᵐ⁺²⁾ : ℂ^{D²} → ℂ^{D²} ⊗ ℂ^{D²}` of the tree-RG circuit of `B`, the
 isometric factor of the two-site blocked tensor of `T_{m+1}` (`MPSTensor.treeLayers`).
 
 arXiv:2307.01696, eq. (16). -/
-noncomputable def regLayer (m : ℕ) : Matrix (Fin (blockPhysDim (D * D) 2)) (Fin (D * D)) ℂ :=
-  polarIsoMatrix (blockTensor
+noncomputable def regLayer (m : ℕ) : Matrix (Fin 2 → Fin (D * D)) (Fin (D * D)) ℂ :=
+  polarIsoMatrix (Kraus.block
     ((pairPosTensor : MPSTensor (D * D) D → MPSTensor (D * D) D)^[m] (pairPosTensor B)) 2)
 
 /-- The unitary of the sub-block `p` of depth `j` of the tree-RG circuit of `B` with `k + 1`
@@ -350,7 +347,7 @@ layers: the extension of the layer `V⁽ᵏ⁺¹⁻ʲ⁾` from its input to its 
 arXiv:2307.01696, eq. (16) and paragraph "Tree-RG circuit with measurements". -/
 noncomputable def regTreeGate (k j p : ℕ) : Matrix (Cfg d (s + s)) (Cfg d (s + s)) ℂ :=
   if j < k then extUnitary (regLayer B (k - 1 - j)) (regInput dig enc j p) (coarseOutput enc)
-  else extUnitary (polarIsoMatrix (blockTensor B 2)) (regInput dig enc j p) fineOutput
+  else extUnitary (polarIsoMatrix (Kraus.block B 2)) (regInput dig enc j p) fineOutput
 
 theorem regTreeGate_mem_unitary (k j p : ℕ) :
     regTreeGate dig enc B k j p ∈ unitary (Matrix (Cfg d (s + s)) (Cfg d (s + s)) ℂ) := by
@@ -359,21 +356,21 @@ theorem regTreeGate_mem_unitary (k j p : ℕ) :
 
 variable {dig enc B}
 
-theorem regTreeGate_apply_of_lt (h2 : Kraus.IsInjective (blockTensor B 2))
+theorem regTreeGate_apply_of_lt (h2 : Kraus.IsInjective (Kraus.block B 2))
     (hdig : Function.Injective dig) (henc : Function.Injective enc) {k j : ℕ} (hj : j < k)
     (p : ℕ) (c : Fin (D * D)) (z : Cfg d (s + s)) :
     regTreeGate dig enc B k j p z (regInput dig enc j p c) =
       Function.extend (coarseOutput enc) (fun b => regLayer B (k - 1 - j) b c) 0 z := by
   simp only [regTreeGate, hj, ↓reduceIte]
   exact extUnitary_apply (isIsometry_polarIsoMatrix_of_isInjective
-    (isInjective_blockTensor_iterate_pairPosTensor h2 _)) (regInput_injective hdig henc j p)
+    (isInjective_block_iterate_pairPosTensor h2 _)) (regInput_injective hdig henc j p)
     (coarseOutput_injective henc) c z
 
-theorem regTreeGate_apply_of_le (h2 : Kraus.IsInjective (blockTensor B 2))
+theorem regTreeGate_apply_of_le (h2 : Kraus.IsInjective (Kraus.block B 2))
     (hdig : Function.Injective dig) (henc : Function.Injective enc) {k j : ℕ} (hj : k ≤ j)
     (p : ℕ) (c : Fin (D * D)) (z : Cfg d (s + s)) :
     regTreeGate dig enc B k j p z (regInput dig enc j p c) =
-      Function.extend fineOutput (fun b => polarIsoMatrix (blockTensor B 2) b c) 0 z := by
+      Function.extend fineOutput (fun b => polarIsoMatrix (Kraus.block B 2) b c) 0 z := by
   simp only [regTreeGate, show ¬ j < k by omega, ↓reduceIte]
   exact extUnitary_apply (isIsometry_polarIsoMatrix_of_isInjective h2)
     (regInput_injective hdig henc j p) fineOutput_bijective.1 c z
@@ -390,13 +387,13 @@ variable {d s D : ℕ} [NeZero d] [NeZero s] {dig : Fin D → Cfg d s} {enc : Fi
 variable (dig enc k) in
 /-- The configuration of a block after the depths `0, …, j` of the tree: the registers of the
 sub-blocks of depth `j` carry the outputs `e` of their unitaries, the other sites `|0⟩`. -/
-noncomputable def regRegisterCfg (j : ℕ) (e : Fin (2 ^ j) → Fin (blockPhysDim (D * D) 2)) :
+noncomputable def regRegisterCfg (j : ℕ) (e : Fin (2 ^ j) → (Fin 2 → Fin (D * D))) :
     Cfg d (s * 2 ^ (k + 1)) :=
   placeCfg (fun p : Fin (2 ^ j) => regWindow k j p) fun p => coarseOutput enc (e p)
 
 variable (k) in
 /-- The configuration of a block written by the finest depth from the outputs `e`. -/
-noncomputable def regLeafCfg (e : Fin (2 ^ k) → Fin (blockPhysDim (blockPhysDim d s) 2)) :
+noncomputable def regLeafCfg (e : Fin (2 ^ k) → (Fin 2 → (Fin s → Fin d))) :
     Cfg d (s * 2 ^ (k + 1)) :=
   placeCfg (fun p : Fin (2 ^ k) => regWindow k k p) fun p => fineOutput (e p)
 
@@ -417,13 +414,13 @@ theorem regLeafCfg_bijective : Function.Bijective (regLeafCfg (d := d) (s := s) 
 
 /-- The configuration written by the finest depth carries at the site `s u + r` the letter `r`
 of the register `u`. -/
-theorem regLeafCfg_apply (e : Fin (2 ^ k) → Fin (blockPhysDim (blockPhysDim d s) 2))
+theorem regLeafCfg_apply (e : Fin (2 ^ k) → (Fin 2 → (Fin s → Fin d)))
     (u : Fin (2 ^ (k + 1))) (r : Fin s) :
     regLeafCfg k e ⟨s * u.val + r.val, by
       have := u.isLt; have := r.isLt
       calc s * u.val + r.val < s * (u.val + 1) := by rw [Nat.mul_succ]; omega
         _ ≤ s * 2 ^ (k + 1) := Nat.mul_le_mul_left s (by omega)⟩ =
-      decodeBlock d s (unpair e u) r := by
+      (unpair e u) r := by
   have hW := regWindow_injective₂ (s := s) (le_refl k)
   have hu := u.isLt
   have hp : u.val / 2 < 2 ^ k := by have : 2 ^ (k + 1) = 2 ^ k * 2 := pow_succ 2 k; omega
@@ -457,7 +454,7 @@ variable (dig enc) in
 /-- The configuration after the depths `0, …, j` is the input of the depth `j + 1`: the output
 registers of the sub-block `p` of depth `j` are the input registers of its two halves. -/
 theorem regRegisterCfg_eq_placeCfg {j : ℕ} (hj : j + 1 ≤ k)
-    (e : Fin (2 ^ j) → Fin (blockPhysDim (D * D) 2)) :
+    (e : Fin (2 ^ j) → (Fin 2 → Fin (D * D))) :
     regRegisterCfg (s := s) enc k j e =
       placeCfg (fun p : Fin (2 ^ (j + 1)) => regWindow k (j + 1) p)
         fun p => regInput dig enc (j + 1) p (unpair e p) := by
@@ -573,7 +570,7 @@ end Configs
 section Tree
 
 variable {d s D : ℕ} [NeZero d] [NeZero s] {dig : Fin D → Cfg d s} {enc : Fin (D * D) → Cfg d s}
-  {B : MPSTensor (blockPhysDim d s) D} {k : ℕ}
+  {B : MPTensor (Fin s → Fin d) (Fin D)} {k : ℕ}
 
 private theorem prod_fin_two_pow_zero {M : Type*} [CommMonoid M] (f : Fin (2 ^ 0) → M) :
     ∏ p, f p = f 0 :=
@@ -582,7 +579,7 @@ private theorem prod_fin_two_pow_zero {M : Type*} [CommMonoid M] (f : Fin (2 ^ 0
 
 /-- After the depths `0, …, j < k`, the registers of the sub-blocks of depth `j` carry the
 outputs `e` with the amplitude of the coarse layers `V⁽ᵏ⁺¹⁻ʲ⁾, …, V⁽ᵏ⁺¹⁾` of the tree. -/
-theorem regTreeOp_apply_regRegisterCfg (h2 : Kraus.IsInjective (blockTensor B 2))
+theorem regTreeOp_apply_regRegisterCfg (h2 : Kraus.IsInjective (Kraus.block B 2))
     (hdig : Function.Injective dig) (henc : Function.Injective enc) (x : Fin (D * D)) :
     ∀ j, j < k → ∀ y, regTreeOp (regTreeGate dig enc B k) k (j + 1) y
         (placeCfg (fun p : Fin (2 ^ 0) => regWindow k 0 p) fun p => regInput dig enc 0 p x) =
@@ -617,19 +614,19 @@ theorem regTreeOp_apply_regRegisterCfg (h2 : Kraus.IsInjective (blockTensor B 2)
 
 /-- After all the depths the block carries the outputs `e` of the finest layer with the
 amplitude of the whole tree. -/
-theorem regTreeOp_apply_regLeafCfg (h2 : Kraus.IsInjective (blockTensor B 2))
+theorem regTreeOp_apply_regLeafCfg (h2 : Kraus.IsInjective (Kraus.block B 2))
     (hdig : Function.Injective dig) (henc : Function.Injective enc) (x : Fin (D * D))
     (y : Cfg d (s * 2 ^ (k + 1))) :
     regTreeOp (regTreeGate dig enc B k) k (k + 1) y
         (placeCfg (fun p : Fin (2 ^ 0) => regWindow k 0 p) fun p => regInput dig enc 0 p x) =
       Function.extend (regLeafCfg k)
-        (fun e => treeAmp k (polarIsoMatrix (blockTensor B 2)) (regLayer B) e x) 0 y := by
+        (fun e => treeAmp k (polarIsoMatrix (Kraus.block B 2)) (regLayer B) e x) 0 y := by
   cases k with
   | zero =>
     rw [regTreeOp, regTreeOp, Matrix.mul_one, regLevelOp,
       list_prod_placeAlong_placeCfg (regWindow_injective₂ le_rfl) _
         (fun p => regInput dig enc 0 p) (fun _ => fineOutput) (fun _ => fineOutput_bijective.1)
-        (fun _ => polarIsoMatrix (blockTensor B 2))
+        (fun _ => polarIsoMatrix (Kraus.block B 2))
         (fun p c z => regTreeGate_apply_of_le h2 hdig henc le_rfl p c z) (fun _ => x) y]
     congr 1
     funext e
@@ -638,7 +635,7 @@ theorem regTreeOp_apply_regLeafCfg (h2 : Kraus.IsInjective (blockTensor B 2))
     have ih := regTreeOp_apply_regRegisterCfg (k := k + 1) h2 hdig henc x k (by omega)
     rw [regTreeOp, Matrix.mul_apply_extend _ _ _ (regRegisterCfg_injective henc (by omega)) _ ih
       regLeafCfg_bijective.1
-      (fun e e' => ∏ p, polarIsoMatrix (blockTensor B 2) (e' p) (unpair e p)) ?_ y]
+      (fun e e' => ∏ p, polarIsoMatrix (Kraus.block B 2) (e' p) (unpair e p)) ?_ y]
     · congr 1
       funext e'
       have e1 : k + 1 - 1 - k = 0 := by omega
@@ -649,7 +646,7 @@ theorem regTreeOp_apply_regLeafCfg (h2 : Kraus.IsInjective (blockTensor B 2))
       rw [regRegisterCfg_eq_placeCfg dig enc (show k + 1 ≤ k + 1 from le_rfl) e, regLevelOp]
       exact list_prod_placeAlong_placeCfg (regWindow_injective₂ le_rfl) _
         (fun p => regInput dig enc (k + 1) p) (fun _ => fineOutput)
-        (fun _ => fineOutput_bijective.1) (fun _ => polarIsoMatrix (blockTensor B 2))
+        (fun _ => fineOutput_bijective.1) (fun _ => polarIsoMatrix (Kraus.block B 2))
         (fun p c z => regTreeGate_apply_of_le h2 hdig henc le_rfl p c z) (unpair e) y
 
 /-- **The tree of registers implements the isometry of the block** (arXiv:2307.01696,
@@ -659,21 +656,21 @@ registers injectively. On a block of `q = s 2^{k+1}` sites the tree of the unita
 `regTreeGate` satisfies `⟨σ| T |dig l, 0 ⋯ 0, dig r⟩ = ⟨σ| V |l, r⟩` for every configuration
 `σ`, with `B_q = V P` the polar decomposition of `A` blocked over `q` sites. -/
 theorem regTreeOp_apply_blockInputCfg (A : MPSTensor d D)
-    (h2 : Kraus.IsInjective (blockTensor (blockTensor A s) 2)) (hdig : Function.Injective dig)
+    (h2 : Kraus.IsInjective (Kraus.block (Kraus.block A s) 2)) (hdig : Function.Injective dig)
     (henc : Function.Injective enc) (l r : Fin D) (τ : Cfg d (s * 2 ^ (k + 1))) :
-    regTreeOp (regTreeGate dig enc (blockTensor A s) k) k (k + 1) τ
+    regTreeOp (regTreeGate dig enc (Kraus.block A s) k) k (k + 1) τ
         (blockInputCfg (Nat.pos_of_ne_zero (NeZero.ne d)) (s * 2 ^ (k + 1)) dig l r) =
-      polarIsoMatrix (blockTensor A (s * 2 ^ (k + 1)))
-        ((decodeBlockEquiv d (s * 2 ^ (k + 1))).symm τ) (finProdFinEquiv (l, r)) := by
+      polarIsoMatrix (Kraus.block A (s * 2 ^ (k + 1)))
+        (τ) (finProdFinEquiv (l, r)) := by
   have hx := placeCfg_regInput_zero dig enc (k := k) (finProdFinEquiv (l, r))
   simp only [Equiv.symm_apply_apply] at hx
   rw [← hx, regTreeOp_apply_regLeafCfg h2 hdig henc]
   obtain ⟨e, rfl⟩ := regLeafCfg_bijective.2 τ
   rw [regLeafCfg_bijective.1.extend_apply, ← binaryTreeMatrix_apply_unpair]
-  change binaryTreeMatrix k (polarIsoMatrix (blockTensor (blockTensor A s) 2))
-    (treeLayers k (blockTensor A s)) _ _ = _
-  rw [binaryTreeMatrix_treeLayers, ← polarIsoMatrix_blockTensor_eq_treeIsoMatrix,
-    polarIsoMatrix_blockTensor_blockTensor,
+  change binaryTreeMatrix k (polarIsoMatrix (Kraus.block (Kraus.block A s) 2))
+    (treeLayers k (Kraus.block A s)) _ _ = _
+  rw [binaryTreeMatrix_treeLayers, ← polarIsoMatrix_block_eq_treeIsoMatrix,
+    polarIsoMatrix_block_block,
     iteratedBlockIndex_decodeBlockEquiv_symm _ _ fun u r => regLeafCfg_apply e u r]
 
 end Tree

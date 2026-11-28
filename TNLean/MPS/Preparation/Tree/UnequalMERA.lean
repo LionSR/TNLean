@@ -30,7 +30,6 @@ and the Supplemental Material, proof of Theorem 1, where the last block may be l
 
 open Matrix MPSTensor
 open scoped BigOperators InnerProductSpace
-open Kraus (blockPhysDim decodeBlockEquiv)
 
 namespace MPSPreparation
 
@@ -60,19 +59,19 @@ def topPair : Fin D × Fin D → ℂ :=
 /-- The contraction of tree `k`, with its physical configurations encoded as a single
 blocked physical index. -/
 noncomputable def treeMatrix (k : Fin 𝓜.numBlocks) :
-    Matrix (Fin (blockPhysDim d (𝓜.blockLength k))) (Fin (D * D)) ℂ :=
-  Matrix.reindex (decodeBlockEquiv d (𝓜.blockLength k)).symm (Equiv.refl _)
+    Matrix (Fin (𝓜.blockLength k) → Fin d) (Fin (D * D)) ℂ :=
+  Matrix.reindex (Equiv.refl _)
     (𝓜.tree k).matrix
 
 @[simp] theorem treeMatrix_apply (k : Fin 𝓜.numBlocks)
-    (s : Fin (blockPhysDim d (𝓜.blockLength k))) (x : Fin (D * D)) :
+    (s : (Fin (𝓜.blockLength k) → Fin d)) (x : Fin (D * D)) :
     𝓜.treeMatrix k s x =
       (𝓜.tree k).matrix (decodeBlockEquiv d (𝓜.blockLength k) s) x := rfl
 
 /-- Every contracted tree is an isometry. -/
 theorem isIsometry_treeMatrix (k : Fin 𝓜.numBlocks) : (𝓜.treeMatrix k).IsIsometry :=
   Matrix.IsIsometry.reindex _ (𝓜.tree k).isIsometry_matrix
-    (decodeBlockEquiv d (𝓜.blockLength k)).symm (Equiv.refl _)
+    (Equiv.refl _)
 
 /-- The state obtained by contracting the forest against the cyclic product of pairs
 prepared by the top disentanglers. -/
@@ -81,7 +80,7 @@ noncomputable def state : MPVSpace (Fin d) N :=
 
 @[simp] theorem state_apply (s : Cfg d N) :
     𝓜.state s = ∑ τ : Fin 𝓜.numBlocks → Fin (D * D),
-      (∏ k, 𝓜.treeMatrix k (blockIndexEquiv d 𝓜.sum_blockLength s k) (τ k)) *
+      (∏ k, 𝓜.treeMatrix k (blockCfgEquiv d 𝓜.sum_blockLength s k) (τ k)) *
         pairProductState 𝓜.topPair (fun k => finProdFinEquiv.symm (τ k)) := by
   simp only [state, blockMatVector_apply, pairFamilyVector_apply, pairFamilyState_const]
 
@@ -149,8 +148,7 @@ theorem exists_of_trees (hD : 0 < D) {M : ℕ} (hM : 0 < M) {ℓ : Fin M → ℕ
     (hN : ∑ k, ℓ k = N) (T : ∀ k, IsometryTree d (D * D) R h (ℓ k))
     (ω : Fin D × Fin D → ℂ) (hω : ∑ p, star (ω p) * ω p = 1) :
     ∃ 𝓜 : UnequalMERA d D R h N, 𝓜.state =
-      blockMatVector (fun k => Matrix.reindex (decodeBlockEquiv d (ℓ k)).symm
-        (Equiv.refl _) (T k).matrix) hN (pairFamilyVector fun _ => ω) := by
+      blockMatVector (fun k => Matrix.reindex (Equiv.refl _) (T k).matrix) hN (pairFamilyVector fun _ => ω) := by
   obtain ⟨u, hu, huω⟩ := exists_disentangler_pair hD ω hω
   refine ⟨ofTrees hD hM hN T u hu, ?_⟩
   have htop : (ofTrees hD hM hN T u hu).topPair = ω := funext huω
@@ -193,8 +191,8 @@ theorem exists_single_leaf (hN : 0 < N) (hR : N ≤ R) (ψ : MPVSpace (Fin d) N)
   rw [blockMatVector_apply]
   simp only [Fintype.sum_unique, Fin.prod_univ_one, pairFamilyVector_apply,
     pairFamilyState, mul_one]
-  change ψ (decodeBlockEquiv d N (blockIndexEquiv d hsum s 0)) = ψ s
-  rw [blockIndexEquiv_apply, Equiv.apply_symm_apply]
+  change ψ (decodeBlockEquiv d N (blockCfgEquiv d hsum s 0)) = ψ s
+  rw [blockCfgEquiv_apply, Equiv.apply_symm_apply]
   apply congrArg (fun cfg : Cfg d N => ψ cfg)
   funext i
   apply congrArg s

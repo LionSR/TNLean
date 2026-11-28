@@ -87,7 +87,6 @@ open MPTensor
 
 open scoped BigOperators Matrix ComplexOrder
 open Matrix
-open Kraus (blockTensor)
 
 namespace MPSTensor
 
@@ -100,19 +99,19 @@ variable {d D b : ℕ} {Dj : Fin b → ℕ} {Aj : (j : Fin b) → MPSTensor d (D
 blocked tensors, which vanishes, so every eigenvalue of `E_{XY}` is `0`. -/
 theorem eq_zero_of_hasEigenvalue_mixedMapLM_of_conjTranspose_mul_eq_zero {D₁ D₂ : ℕ}
     {X : MPSTensor d D₁} {Y : MPSTensor d D₂} {q : ℕ}
-    (h : (physicalMatrix (blockTensor Y q))ᴴ * physicalMatrix (blockTensor X q) = 0) {μ : ℂ}
+    (h : (physicalMatrix (Kraus.block Y q))ᴴ * physicalMatrix (Kraus.block X q) = 0) {μ : ℂ}
     (hμ : Module.End.HasEigenvalue (Kraus.mixedMapLM X Y) μ) : μ = 0 := by
   have h0 : Kraus.mixedMapLM X Y ^ q = 0 := by
     ext1 Z
-    rw [← mixedMapLM_blockTensor_apply,
+    rw [← mixedMapLM_block_apply,
       mixedMapLM_eq_zero_of_conjTranspose_physicalMatrix_mul_eq_zero h]
   exact (hμ.isNilpotent_of_isNilpotent ⟨q, h0⟩).eq_zero
 
 /-- If the `q₀`-site states of distinct blocks are orthogonal for some `q₀`, every eigenvalue of
 every mixed transfer map of distinct blocks is bounded by `|λ₂|`, for every `λ₂`. -/
 private theorem norm_le_of_hasEigenvalue_mixedMapLM_of_orthogonal {q₀ : ℕ}
-    (horth : ∀ j j', j ≠ j' → (physicalMatrix (blockTensor (Aj j) q₀))ᴴ *
-      physicalMatrix (blockTensor (Aj j') q₀) = 0) (lam₂ : ℂ) :
+    (horth : ∀ j j', j ≠ j' → (physicalMatrix (Kraus.block (Aj j) q₀))ᴴ *
+      physicalMatrix (Kraus.block (Aj j') q₀) = 0) (lam₂ : ℂ) :
     ∀ j j', j ≠ j' → ∀ μ', Module.End.HasEigenvalue (Kraus.mixedMapLM (Aj j) (Aj j')) μ' →
       ‖μ'‖ ≤ ‖lam₂‖ := fun j j' h μ' hμ' => by
   rw [eq_zero_of_hasEigenvalue_mixedMapLM_of_conjTranspose_mul_eq_zero
@@ -163,15 +162,15 @@ theorem exists_approximationError_le_repeatedBlockSum
       μ' ≠ 1 → ‖μ'‖ ≤ ‖lam₂‖)
     {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) :
     ∃ C : ℝ, 0 < C ∧ ∀ (μ : CopyWeights b m) (q M : ℕ) [NeZero M],
-      (∀ j j', j ≠ j' → (physicalMatrix (blockTensor (Aj j) q))ᴴ *
-        physicalMatrix (blockTensor (Aj j') q) = 0) →
+      (∀ j j', j ≠ j' → (physicalMatrix (Kraus.block (Aj j) q))ᴴ *
+        physicalMatrix (Kraus.block (Aj j') q) = 0) →
       bntWeight μ (M * q) ≠ 0 →
       1 - ‖copyApproxOverlap (repeatedBlockSum Aj ι μ) q M
           (ghzAmplitude (bntWeight μ (M * q))) (copyIsometry ι μ q) σ‖ ≤
         C * (M * Real.exp (-γ * q / correlationLength lam₂)) *
           Real.exp (C * (M * Real.exp (-γ * q / correlationLength lam₂))) := by
-  by_cases hex : ∃ q₀, ∀ j j', j ≠ j' → (physicalMatrix (blockTensor (Aj j) q₀))ᴴ *
-      physicalMatrix (blockTensor (Aj j') q₀) = 0
+  by_cases hex : ∃ q₀, ∀ j j', j ≠ j' → (physicalMatrix (Kraus.block (Aj j) q₀))ᴴ *
+      physicalMatrix (Kraus.block (Aj j') q₀) = 0
   · obtain ⟨q₀, horth₀⟩ := hex
     obtain ⟨C, hC, h⟩ := exists_approximationError_le_repeatedOverlappingBlockSum hι hdisj hN hA
       hσ htr hfix hlam (norm_le_of_hasEigenvalue_mixedMapLM_of_orthogonal horth₀ lam₂) hγ0 hγ
@@ -194,8 +193,8 @@ theorem exists_approximationError_le_mul_repeatedBlockSum
       μ' ≠ 1 → ‖μ'‖ ≤ ‖lam₂‖)
     {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) :
     ∃ C : ℝ, 0 < C ∧ ∀ (μ : CopyWeights b m) (q M : ℕ) [NeZero M],
-      (∀ j j', j ≠ j' → (physicalMatrix (blockTensor (Aj j) q))ᴴ *
-        physicalMatrix (blockTensor (Aj j') q) = 0) →
+      (∀ j j', j ≠ j' → (physicalMatrix (Kraus.block (Aj j) q))ᴴ *
+        physicalMatrix (Kraus.block (Aj j') q) = 0) →
       bntWeight μ (M * q) ≠ 0 →
       1 - ‖copyApproxOverlap (repeatedBlockSum Aj ι μ) q M
           (ghzAmplitude (bntWeight μ (M * q))) (copyIsometry ι μ q) σ‖ ≤
@@ -226,8 +225,8 @@ theorem exists_approximationError_le_repeatedBlockSum_oneCopy
     {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) :
     ∃ C : ℝ, 0 < C ∧ ∀ (μ : CopyWeights b m) (k : (j : Fin b) → Fin (m j)) (q M : ℕ) [NeZero M],
       q ≠ 0 →
-      (∀ j j', j ≠ j' → (physicalMatrix (blockTensor (Aj j) q))ᴴ *
-        physicalMatrix (blockTensor (Aj j') q) = 0) →
+      (∀ j j', j ≠ j' → (physicalMatrix (Kraus.block (Aj j) q))ᴴ *
+        physicalMatrix (Kraus.block (Aj j') q) = 0) →
       bntWeight μ (M * q) ≠ 0 →
       1 - ‖nonNormalApproxOverlap (repeatedBlockSum Aj ι μ) q M
           (ghzAmplitude (oneCopyWeight μ k q M))
@@ -255,8 +254,8 @@ theorem exists_approximationError_le_mul_repeatedBlockSum_oneCopy
     {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) :
     ∃ C : ℝ, 0 < C ∧ ∀ (μ : CopyWeights b m) (k : (j : Fin b) → Fin (m j)) (q M : ℕ) [NeZero M],
       q ≠ 0 →
-      (∀ j j', j ≠ j' → (physicalMatrix (blockTensor (Aj j) q))ᴴ *
-        physicalMatrix (blockTensor (Aj j') q) = 0) →
+      (∀ j j', j ≠ j' → (physicalMatrix (Kraus.block (Aj j) q))ᴴ *
+        physicalMatrix (Kraus.block (Aj j') q) = 0) →
       bntWeight μ (M * q) ≠ 0 →
       1 - ‖nonNormalApproxOverlap (repeatedBlockSum Aj ι μ) q M
           (ghzAmplitude (oneCopyWeight μ k q M))
@@ -667,15 +666,15 @@ theorem exists_approximationError_le_blockSum [NeZero b] (hι : ∀ j, Function.
       μ' ≠ 1 → ‖μ'‖ ≤ ‖lam₂‖)
     {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) :
     ∃ C : ℝ, 0 < C ∧ ∀ μ : Fin b → ℝ, (∀ j, 0 < μ j) → ∀ (q M : ℕ) [NeZero M],
-      (∀ j j', j ≠ j' → (physicalMatrix (blockTensor (Aj j) q))ᴴ *
-        physicalMatrix (blockTensor (Aj j') q) = 0) →
+      (∀ j j', j ≠ j' → (physicalMatrix (Kraus.block (Aj j) q))ᴴ *
+        physicalMatrix (Kraus.block (Aj j') q) = 0) →
       1 - ‖nonNormalApproxOverlap (blockSum Aj ι fun j => (μ j : ℂ)) q M
           (ghzAmplitude fun j => (μ j : ℂ) ^ (M * q))
           (fun j => embedPair (ι j) (fixedPointPair (σ j)))‖ ≤
         C * (M * Real.exp (-γ * q / correlationLength lam₂)) *
           Real.exp (C * (M * Real.exp (-γ * q / correlationLength lam₂))) := by
-  by_cases hex : ∃ q₀, ∀ j j', j ≠ j' → (physicalMatrix (blockTensor (Aj j) q₀))ᴴ *
-      physicalMatrix (blockTensor (Aj j') q₀) = 0
+  by_cases hex : ∃ q₀, ∀ j j', j ≠ j' → (physicalMatrix (Kraus.block (Aj j) q₀))ᴴ *
+      physicalMatrix (Kraus.block (Aj j') q₀) = 0
   · obtain ⟨q₀, horth₀⟩ := hex
     obtain ⟨C, hC, h⟩ := exists_approximationError_le_overlappingBlockSum_weight hι hdisj hN hA
       hσ htr hfix hlam (norm_le_of_hasEigenvalue_mixedMapLM_of_orthogonal horth₀ lam₂) hγ0 hγ
@@ -698,8 +697,8 @@ theorem exists_approximationError_le_mul_blockSum [NeZero b]
       μ' ≠ 1 → ‖μ'‖ ≤ ‖lam₂‖)
     {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) :
     ∃ C : ℝ, 0 < C ∧ ∀ μ : Fin b → ℝ, (∀ j, 0 < μ j) → ∀ (q M : ℕ) [NeZero M],
-      (∀ j j', j ≠ j' → (physicalMatrix (blockTensor (Aj j) q))ᴴ *
-        physicalMatrix (blockTensor (Aj j') q) = 0) →
+      (∀ j j', j ≠ j' → (physicalMatrix (Kraus.block (Aj j) q))ᴴ *
+        physicalMatrix (Kraus.block (Aj j') q) = 0) →
       1 - ‖nonNormalApproxOverlap (blockSum Aj ι fun j => (μ j : ℂ)) q M
           (ghzAmplitude fun j => (μ j : ℂ) ^ (M * q))
           (fun j => embedPair (ι j) (fixedPointPair (σ j)))‖ ≤

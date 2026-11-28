@@ -85,7 +85,6 @@ open MPTensor
 
 open scoped BigOperators Matrix ComplexOrder
 open Matrix Filter Topology Complex
-open Kraus (blockTensor)
 
 namespace MPSTensor
 
@@ -236,9 +235,9 @@ theorem isUnit_det_overlappingBlockSqrt {q : ℕ} (hq : q ≠ 0) :
 
 /-- The support projector of the `q`-site blocked tensor is `J Jᴴ`, for `q ≥ 1`. -/
 theorem polarSupport_overlappingBlockTensor {q : ℕ} (hq : q ≠ 0) :
-    polarSupport (physicalMatrix (blockTensor overlappingBlockTensor q)) =
+    polarSupport (physicalMatrix (Kraus.block overlappingBlockTensor q)) =
       diagPairEmbedding (Fin 2) * (1 : Matrix (Fin 2) (Fin 2) ℂ) * (diagPairEmbedding (Fin 2))ᴴ :=
-  polarSupport_physicalMatrix_blockTensor_diagonal overlappingBlockDiag q
+  polarSupport_physicalMatrix_block_diagonal overlappingBlockDiag q
     (posSemidef_overlappingBlockSqrt q) (overlappingBlockSqrt_mul_self q) isHermitian_one
     (Matrix.one_mul 1) (Matrix.one_mul _) (R := (overlappingBlockSqrt q)⁻¹)
     (mul_nonsing_inv _ (isUnit_det_overlappingBlockSqrt hq))
@@ -258,7 +257,7 @@ theorem nonNormalApproxOverlap_overlappingBlockTensor {q M : ℕ} (hq : q ≠ 0)
   rw [show overlappingBlockTensor = fun i => diagonal (overlappingBlockDiag i) from rfl]
   rw [nonNormalApproxOverlap_diagonal overlappingBlockDiag q M _ (fun j => j) (X := 1)
     (Y := 2 * (1 + overlappingBlockOverlap q ^ M))]
-  · rw [polarPos_physicalMatrix_blockTensor_diagonal overlappingBlockDiag q
+  · rw [polarPos_physicalMatrix_block_diagonal overlappingBlockDiag q
       (posSemidef_overlappingBlockSqrt q) (overlappingBlockSqrt_mul_self q),
       ghzAmplitude_overlappingBlock]
     simp only [diagPairEmbedding_mul_mul_conjTranspose_apply, Fin.sum_univ_two,
@@ -651,22 +650,22 @@ Lemma 1'(ii), supplies the normalized-state setting of the example, rather than 
 matrix-norm claim. See `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`. -/
 theorem overlappingBlockOverlap_div_two_le_norm_polarPos_sub_limit (q : ℕ) :
     overlappingBlockOverlap q / 2 ≤
-      ‖Matrix.polarPos (physicalMatrix (blockTensor overlappingBlockTensor q)) -
+      ‖Matrix.polarPos (physicalMatrix (Kraus.block overlappingBlockTensor q)) -
         diagPairEmbedding (Fin 2) * (1 : Matrix (Fin 2) (Fin 2) ℂ) *
           (diagPairEmbedding (Fin 2))ᴴ‖ := by
-  have he : (Matrix.polarPos (physicalMatrix (blockTensor overlappingBlockTensor q)) -
+  have he : (Matrix.polarPos (physicalMatrix (Kraus.block overlappingBlockTensor q)) -
       diagPairEmbedding (Fin 2) * (1 : Matrix (Fin 2) (Fin 2) ℂ) *
           (diagPairEmbedding (Fin 2))ᴴ)
         (0, 0) (1, 1) = (overlappingBlockV q : ℂ) := by
     rw [Matrix.sub_apply,
-      polarPos_physicalMatrix_blockTensor_diagonal overlappingBlockDiag q
+      polarPos_physicalMatrix_block_diagonal overlappingBlockDiag q
         (posSemidef_overlappingBlockSqrt q) (overlappingBlockSqrt_mul_self q),
       diagPairEmbedding_mul_mul_conjTranspose_apply,
       diagPairEmbedding_mul_mul_conjTranspose_apply]
     simp [overlappingBlockSqrt]
   calc overlappingBlockOverlap q / 2 ≤ overlappingBlockV q := overlap_div_two_le_v q
     _ ≤ |overlappingBlockV q| := le_abs_self _
-    _ = ‖(Matrix.polarPos (physicalMatrix (blockTensor overlappingBlockTensor q)) -
+    _ = ‖(Matrix.polarPos (physicalMatrix (Kraus.block overlappingBlockTensor q)) -
         diagPairEmbedding (Fin 2) * (1 : Matrix (Fin 2) (Fin 2) ℂ) *
           (diagPairEmbedding (Fin 2))ᴴ)
           (0, 0) (1, 1)‖ := by rw [he]; simp
@@ -695,7 +694,7 @@ See `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`. -/
 theorem exists_norm_polarPos_overlappingBlockTensor_sub_limit_gt_sq (C : ℝ) (hC : 0 ≤ C) (q₀ : ℕ) :
     ∃ q : ℕ, q₀ ≤ q ∧ q ≠ 0 ∧
       C * overlappingBlockOverlap q ^ 2 <
-        ‖Matrix.polarPos (physicalMatrix (blockTensor overlappingBlockTensor q)) -
+        ‖Matrix.polarPos (physicalMatrix (Kraus.block overlappingBlockTensor q)) -
           diagPairEmbedding (Fin 2) * (1 : Matrix (Fin 2) (Fin 2) ℂ) *
             (diagPairEmbedding (Fin 2))ᴴ‖ := by
   obtain ⟨n, hn⟩ := exists_pow_lt_of_lt_one

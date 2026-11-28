@@ -70,7 +70,6 @@ open MPTensor
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators NNReal ENNReal InnerProductSpace
 open Matrix
-open Kraus (blockTensor)
 
 namespace MPSTensor
 
@@ -231,7 +230,7 @@ theorem norm_eq_of_forall_abs_norm_sub_le_pow {F : Type*} [NormedAddCommGroup F]
 
 open scoped Matrix.Norms.L2Operator in
 /-- **The overlap of one block, to second order.** In the setting of
-`exists_norm_polarPos_blockTensor_blockSum_sub_le`, with `0 < γ < 1` and `x = e^{-γ/ξ}`, the
+`exists_norm_polarPos_block_blockSum_sub_le`, with `0 < γ < 1` and `x = e^{-γ/ξ}`, the
 overlap `zⱼ = ⟨φ_M(P'_{j,∞})|φ_M(P)⟩` of the positive part `P` of the `q`-site blocked direct sum
 with unit weights with the fixed-point tensor of block `j`, placed in the full bond space, satisfies
 `|zⱼ - 1| ≤ C y e^{C y}` with `y = M x^{2q} = M e^{-2γ q/ξ}`, for `q ≥ 1`, `M ≥ 2` and `C y < 1`.
@@ -256,7 +255,7 @@ theorem exists_norm_mpvOverlap_polarPosTensor_blockSum_sub_one_le_sq
     {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) (j : Fin b) :
     ∃ C : ℝ, 0 < C ∧ ∀ q M : ℕ, q ≠ 0 → 2 ≤ M →
       C * (M * (Real.exp (-γ / correlationLength lam₂) ^ 2) ^ q) < 1 →
-      ‖mpvOverlap (polarPosTensor (blockTensor (blockSum Aj ι fun _ => 1) q))
+      ‖mpvOverlap (polarPosTensor (Kraus.block (blockSum Aj ι fun _ => 1) q))
           (fixedPointTensor (embeddedBlockState (ι j) (σ j))) M - 1‖ ≤
         C * (M * (Real.exp (-γ / correlationLength lam₂) ^ 2) ^ q) *
           Real.exp (C * (M * (Real.exp (-γ / correlationLength lam₂) ^ 2) ^ q)) := by
@@ -279,7 +278,7 @@ theorem exists_norm_mpvOverlap_polarPosTensor_blockSum_sub_one_le_sq
   have hx1 : x < 1 := by
     rw [hxdef, neg_div_correlationLength, Real.exp_lt_one_iff]
     exact mul_neg_of_pos_of_neg hγ0 (Real.log_neg (norm_pos_iff.2 h0) hl)
-  obtain ⟨K₁, hK₁, hpos⟩ := exists_norm_polarPos_blockTensor_blockSum_sub_le hι hdisj hN hA hσ
+  obtain ⟨K₁, hK₁, hpos⟩ := exists_norm_polarPos_block_blockSum_sub_le hι hdisj hN hA hσ
     htr hfix hl hlam hmix hγ0 hγ
   -- The linear maps `Ψ` (mixed transfer matrices) and `ι` (the vectors `(Xⁱ √σ'_j)ᵢ`).
   set Ψ := mixedTransferMatrixLeft F
@@ -302,10 +301,10 @@ theorem exists_norm_mpvOverlap_polarPosTensor_blockSum_sub_one_le_sq
   have hιF : ‖sqrtWeightLM σ' F‖ = 1 :=
     norm_sqrtWeightLM_fixedPointTensor hσ' htr'
   have hιq : ∀ q : ℕ,
-      ‖ιL (Matrix.polarPos (physicalMatrix (blockTensor A q)))‖ = 1 := fun q => by
+      ‖ιL (Matrix.polarPos (physicalMatrix (Kraus.block A q)))‖ = 1 := fun q => by
     refine norm_sqrtWeightLM_eq_one hσ' ?_
-    change (Kraus.transferMap (polarPosTensor (blockTensor A q)) σ').trace = 1
-    rw [transferMap_polarPosTensor_blockTensor, Module.End.pow_apply,
+    change (Kraus.transferMap (polarPosTensor (Kraus.block A q)) σ').trace = 1
+    rw [transferMap_polarPosTensor_block, Module.End.pow_apply,
       Function.iterate_fixed (by
         rw [hσ'def, transferMap_blockSum_embeddedBlockState hι hdisj j, hfix j])]
     exact htr'
@@ -329,7 +328,7 @@ theorem exists_norm_mpvOverlap_polarPosTensor_blockSum_sub_one_le_sq
   set K' := Kt * K₁ + Kι * K₁
   have hK' : 0 ≤ K' := by positivity
   refine ⟨C₀ * K' ^ 2 + 1, by positivity, fun q M hq hM2 hsmall => ?_⟩
-  set H := Matrix.polarPos (physicalMatrix (blockTensor A q))
+  set H := Matrix.polarPos (physicalMatrix (Kraus.block A q))
   set δ := K' * x ^ q with hδdef
   have hδ0 : 0 ≤ δ := by positivity
   have hHd : ‖H - Pinf‖ ≤ K₁ * x ^ q := hpos q hq
@@ -382,7 +381,7 @@ theorem exists_norm_mpvOverlap_polarPosTensor_blockSum_sub_one_le_sq
       _ < 1 := hsmall
   have h := hG (Ψ H) αc.re δ M hM2 hcomp hT hα1 hαsq hsmall'
   have hover : Matrix.traceLinearMap (Fin D × Fin D) ℂ ℂ (Ψ H ^ M) =
-      mpvOverlap (polarPosTensor (blockTensor A q)) F M :=
+      mpvOverlap (polarPosTensor (Kraus.block A q)) F M :=
     trace_transferMatrix_mixedMapLM_pow_eq_mpvOverlap _ _ M
   rw [hover, hy] at h
   refine h.trans ?_

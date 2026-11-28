@@ -32,7 +32,6 @@ open MPTensor
 
 open Matrix MPSPreparation
 open scoped BigOperators
-open Kraus (decodeBlockEquiv blockTensor)
 
 namespace MPSTensor
 
@@ -41,15 +40,14 @@ variable {d D b : ℕ} {Dj : Fin b → ℕ}
 /-- The blocked physical matrix with rows indexed by the original site configurations. -/
 noncomputable def cfgPhysicalMatrix (A : MPSTensor d D) (N : ℕ) :
     Matrix (Cfg d N) (Fin D × Fin D) ℂ :=
-  (physicalMatrix (blockTensor A N)).submatrix (decodeBlockEquiv d N).symm id
+  (physicalMatrix (Kraus.block A N)).submatrix id
 
 /-- In configuration coordinates the physical matrix is the product of the site tensors. -/
 theorem cfgPhysicalMatrix_apply (A : MPSTensor d D) (N : ℕ) (s : Cfg d N)
     (p : Fin D × Fin D) :
     cfgPhysicalMatrix A N s p = Kraus.evalWord A (List.ofFn s) p.1 p.2 := by
-  change blockTensor A N ((decodeBlockEquiv d N).symm s) p.1 p.2 = _
-  rw [← MPSChainTensor.blockTensor_const, MPSChainTensor.blockTensor_decodeBlockEquiv_symm,
-    MPSChainTensor.eval_const]
+  change Kraus.block A N (s) p.1 p.2 = _
+  rw [← MPSChainTensor.eval_const_eq_block, MPSChainTensor.eval_const]
 
 /-- Each virtual column selects the trace on one embedded sector. -/
 noncomputable def sectorTraceSelector (ι : (j : Fin b) → Fin (Dj j) → Fin D) :
@@ -67,9 +65,9 @@ theorem cfgPhysicalMatrix_mul_sectorTraceSelector
       sectorColumnMatrix A N := by
   classical
   have hsector (j : Fin b) :
-      physicalMatrix (blockTensor (blockSum A ι fun _ => 1) N) * pairEmbedding (ι j) =
-        physicalMatrix (blockTensor (A j) N) := by
-    rw [physicalMatrix_blockTensor_blockSum hι hdisj _ hN, Matrix.sum_mul]
+      physicalMatrix (Kraus.block (blockSum A ι fun _ => 1) N) * pairEmbedding (ι j) =
+        physicalMatrix (Kraus.block (A j) N) := by
+    rw [physicalMatrix_block_blockSum hι hdisj _ hN, Matrix.sum_mul]
     simp only [one_pow, one_smul, Matrix.mul_assoc]
     rw [Finset.sum_eq_single j]
     · rw [conjTranspose_pairEmbedding_mul_self (hι j), Matrix.mul_one]
@@ -84,7 +82,7 @@ theorem cfgPhysicalMatrix_mul_sectorTraceSelector
   have hentry (a : Fin (Dj j)) :
       (∑ p, cfgPhysicalMatrix (blockSum A ι fun _ => 1) N s p *
         pairEmbedding (ι j) p (a, a)) = cfgPhysicalMatrix (A j) N s (a, a) :=
-    congrFun (congrFun (hsector j) ((decodeBlockEquiv d N).symm s)) (a, a)
+    congrFun (congrFun (hsector j) (s)) (a, a)
   simp_rw [hentry, cfgPhysicalMatrix_apply]
   rfl
 
@@ -124,7 +122,7 @@ theorem injective_sectorColumnMatrix_of_isInjectiveOn
     (hι : ∀ j, Function.Injective (ι j))
     (hdisj : ∀ i j, i ≠ j → ∀ a a', ι i a ≠ ι j a')
     (hDj : ∀ j, 0 < Dj j) {N : ℕ} (hN : N ≠ 0)
-    (hinj : IsInjectiveOn (blockTensor (blockSum A ι fun _ => 1) N)
+    (hinj : IsInjectiveOn (Kraus.block (blockSum A ι fun _ => 1) N)
       (blockPairs ι : Set (Fin D × Fin D))) :
     Function.Injective (sectorColumnMatrix A N).mulVec := by
   classical
@@ -207,7 +205,7 @@ Only support of the actual blocked tensor is required. -/
 theorem polarIso_sectorCoefficientMatrix_eq_zero_of_notMem
     (A : (j : Fin b) → MPSTensor d (Dj j))
     (ι : (j : Fin b) → Fin (Dj j) → Fin D) {N : ℕ} {S : Set (Fin D × Fin D)}
-    (hinj : IsInjectiveOn (blockTensor (blockSum A ι fun _ => 1) N) S)
+    (hinj : IsInjectiveOn (Kraus.block (blockSum A ι fun _ => 1) N) S)
     {p : Fin D × Fin D} (hp : p ∉ S) (j : Fin b) :
     Matrix.polarIso (sectorCoefficientMatrix A ι N) p j = 0 := by
   classical
@@ -245,21 +243,21 @@ theorem blockIsometryState_one_eq_polarIso_mulVec
     apply Fin.ext
     simp [blockSite, blockOffset]
   have hblock (s : Cfg d N) :
-      blockIndexEquiv d hN s (0 : Fin 1) = (decodeBlockEquiv d N).symm s := by
-    rw [blockIndexEquiv_apply, hsite, Function.comp_id]
+      blockCfgEquiv d hN s (0 : Fin 1) = s := by
+    rw [blockCfgEquiv_apply, hsite, Function.comp_id]
   funext s
   rw [blockIsometryState_apply]
   simp only [Fin.prod_univ_one, hblock, pairProductState]
   rw [cfgPhysicalMatrix, Matrix.polarIso_submatrix_equiv]
   change (∑ τ : Fin 1 → Fin (D * D),
-    polarIsoMatrix (blockTensor A N) ((decodeBlockEquiv d N).symm s) (τ 0) *
+    polarIsoMatrix (Kraus.block A N) (s) (τ 0) *
       v ((finProdFinEquiv.symm (τ 0)).1, (finProdFinEquiv.symm (τ 0)).2)) = _
   rw [← (Equiv.funUnique (Fin 1) (Fin (D * D))).symm.sum_comp]
   change (∑ x : Fin (D * D),
-    Matrix.polarIso (physicalMatrix (blockTensor A N)) ((decodeBlockEquiv d N).symm s)
+    Matrix.polarIso (physicalMatrix (Kraus.block A N)) (s)
       (virtualPairEquiv D x) * v (virtualPairEquiv D x)) = _
   exact (virtualPairEquiv D).sum_comp (fun p : Fin D × Fin D =>
-    Matrix.polarIso (physicalMatrix (blockTensor A N)) ((decodeBlockEquiv d N).symm s) p * v p)
+    Matrix.polarIso (physicalMatrix (Kraus.block A N)) (s) p * v p)
 
 end MPSTensor
 
@@ -281,7 +279,7 @@ theorem exists_isUnitaryCircuit_sectorEncoder_exact
       (∀ j, Function.Injective (ι j)) →
       (∀ i j, i ≠ j → ∀ a a', ι i a ≠ ι j a') →
       (∀ j, 0 < Dj j) → ∀ (N : ℕ) (hsize : 3 * r ≤ N),
-      IsInjectiveOn (blockTensor (blockSum A ι fun _ => 1) N)
+      IsInjectiveOn (Kraus.block (blockSum A ι fun _ => 1) N)
         (blockPairs ι : Set (Fin D × Fin D)) →
       ∃ (U : Matrix (Cfg d N) (Cfg d N) ℂ) (T : ℕ),
         IsUnitaryCircuit (Geometry.ring N) T U ∧ T ≤ C * N ∧

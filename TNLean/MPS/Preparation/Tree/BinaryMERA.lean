@@ -25,43 +25,42 @@ No convergence rate or approximation-error estimate is used here.
 
 open Matrix
 open scoped BigOperators ComplexOrder InnerProductSpace
-open Kraus (blockPhysDim blockTensor isNBlkInjective_iff_blockTensor_isInjective)
 
 namespace MPSTensor
 
-variable {n D : ℕ}
+variable {α : Type} [Fintype α] {D : ℕ}
 
 /-! ### Binary trees of layers -/
 
-/-- The map `ℂ^χ → (ℂⁿ)^{⊗2^{k+1}}` of a binary tree with `k + 1` layers: the finest layer
-`W : ℂ^χ → ℂⁿ ⊗ ℂⁿ` and the coarser layers `V 0, …, V (k-1) : ℂ^χ → ℂ^χ ⊗ ℂ^χ`, ordered from
+/-- The map `ℂ^χ → (ℂ^α)^{⊗2^{k+1}}` of a binary tree with `k + 1` layers: the finest layer
+`W : ℂ^χ → ℂ^α ⊗ ℂ^α` and the coarser layers `V 0, …, V (k-1) : ℂ^χ → ℂ^χ ⊗ ℂ^χ`, ordered from
 fine to coarse. For `k + 1` it is `W^{⊗2^{k+1}}` composed with the tree of the coarser layers,
 regrouped along neighbouring pairs; unfolded, `W^{⊗2^k} (V 0)^{⊗2^{k-1}} ⋯ V (k-1)`.
 
 arXiv:2307.01696, eq. (16), and paragraph "Connection to MERA": the isometries of the tree. -/
 noncomputable def binaryTreeMatrix {χ : ℕ} :
-    (k : ℕ) → {n : ℕ} → Matrix (Fin (blockPhysDim n 2)) (Fin χ) ℂ →
-      (Fin k → Matrix (Fin (blockPhysDim χ 2)) (Fin χ) ℂ) →
-      Matrix (Fin (blockPhysDim n (2 ^ (k + 1)))) (Fin χ) ℂ
+    (k : ℕ) → {α : Type} → Matrix (Fin 2 → α) (Fin χ) ℂ →
+      (Fin k → Matrix (Fin 2 → Fin χ) (Fin χ) ℂ) →
+      Matrix (Fin (2 ^ (k + 1)) → α) (Fin χ) ℂ
   | 0, _, W, _ => W
-  | k + 1, n, W, V =>
+  | k + 1, α, W, V =>
       (blockKron (2 ^ (k + 1)) W * binaryTreeMatrix k (V 0) (Fin.tail V)).submatrix
-        (pairRegroupEquiv n k) id
+        (pairRegroupEquiv α k) id
 
 /-- A binary tree of isometries is an isometry. -/
-theorem isIsometry_binaryTreeMatrix {χ : ℕ} (k : ℕ) {n : ℕ}
-    {W : Matrix (Fin (blockPhysDim n 2)) (Fin χ) ℂ}
-    {V : Fin k → Matrix (Fin (blockPhysDim χ 2)) (Fin χ) ℂ} (hW : W.IsIsometry)
+theorem isIsometry_binaryTreeMatrix {χ : ℕ} (k : ℕ)
+    {W : Matrix (Fin 2 → α) (Fin χ) ℂ}
+    {V : Fin k → Matrix (Fin 2 → Fin χ) (Fin χ) ℂ} (hW : W.IsIsometry)
     (hV : ∀ j, (V j).IsIsometry) : (binaryTreeMatrix k W V).IsIsometry := by
-  induction k generalizing n with
+  induction k generalizing α with
   | zero => exact hW
   | succ k ih =>
       have h : (binaryTreeMatrix k (V 0) (Fin.tail V)).IsIsometry :=
         ih (hV 0) fun j => hV j.succ
       rw [Matrix.IsIsometry] at hW h ⊢
       change ((blockKron (2 ^ (k + 1)) W * binaryTreeMatrix k (V 0) (Fin.tail V)).submatrix
-        (pairRegroupEquiv n k) id)ᴴ * (blockKron (2 ^ (k + 1)) W *
-          binaryTreeMatrix k (V 0) (Fin.tail V)).submatrix (pairRegroupEquiv n k) id = 1
+        (pairRegroupEquiv α k) id)ᴴ * (blockKron (2 ^ (k + 1)) W *
+          binaryTreeMatrix k (V 0) (Fin.tail V)).submatrix (pairRegroupEquiv α k) id = 1
       rw [Matrix.conjTranspose_submatrix, Matrix.submatrix_mul_equiv, Matrix.submatrix_id_id,
         Matrix.conjTranspose_mul, Matrix.mul_assoc, ← Matrix.mul_assoc (blockKron _ W)ᴴ,
         blockKron_conjTranspose, ← blockKron_mul, hW, blockKron_one, Matrix.one_mul, h]
@@ -70,18 +69,18 @@ theorem isIsometry_binaryTreeMatrix {χ : ℕ} (k : ℕ) {n : ℕ}
 
 /-- The binary tree of the layers `V⁽¹⁾, …, V⁽ᵏ⁺¹⁾` is the product of the layers of eq. (16)
 of arXiv:2307.01696 (`treeIsoMatrix`). -/
-theorem binaryTreeMatrix_treeLayers (k : ℕ) (A : MPSTensor n D) :
-    binaryTreeMatrix k (polarIsoMatrix (blockTensor A 2)) (treeLayers k A) =
+theorem binaryTreeMatrix_treeLayers (k : ℕ) (A : MPTensor α (Fin D)) :
+    binaryTreeMatrix k (polarIsoMatrix (Kraus.block A 2)) (treeLayers k A) =
       treeIsoMatrix k A := by
-  induction k generalizing n with
+  induction k generalizing α with
   | zero => rfl
   | succ k ih =>
       have htail : Fin.tail (treeLayers (k + 1) A) = treeLayers k (pairPosTensor A) := by
         funext j
         simp only [Fin.tail, treeLayers, Fin.val_succ, Function.iterate_succ_apply]
-      change (blockKron (2 ^ (k + 1)) (polarIsoMatrix (blockTensor A 2)) *
-          binaryTreeMatrix k (polarIsoMatrix (blockTensor (pairPosTensor A) 2))
-            (Fin.tail (treeLayers (k + 1) A))).submatrix (pairRegroupEquiv n k) id = _
+      change (blockKron (2 ^ (k + 1)) (polarIsoMatrix (Kraus.block A 2)) *
+          binaryTreeMatrix k (polarIsoMatrix (Kraus.block (pairPosTensor A) 2))
+            (Fin.tail (treeLayers (k + 1) A))).submatrix (pairRegroupEquiv α k) id = _
       rw [htail, ih]
       rfl
 
@@ -89,8 +88,8 @@ theorem binaryTreeMatrix_treeLayers (k : ℕ) (A : MPSTensor n D) :
 
 /-- If the physical rotation `W · Y` of a tensor is injective, so is `Y`: the matrices of
 `W · Y` are combinations of those of `Y`. -/
-theorem isInjective_of_isInjective_rotatePhysical {m : ℕ} (W : Matrix (Fin m) (Fin n) ℂ)
-    {Y : MPSTensor n D} (h : Kraus.IsInjective (rotatePhysical W Y)) : Kraus.IsInjective Y := by
+theorem isInjective_of_isInjective_rotatePhysical {β : Type*} (W : Matrix β α ℂ)
+    {Y : MPTensor α (Fin D)} (h : Kraus.IsInjective (rotatePhysical W Y)) : Kraus.IsInjective Y := by
   refine eq_top_iff.2 (h.symm.le.trans (Submodule.span_le.2 ?_))
   rintro _ ⟨i, rfl⟩
   rw [rotatePhysical_apply]
@@ -98,42 +97,42 @@ theorem isInjective_of_isInjective_rotatePhysical {m : ℕ} (W : Matrix (Fin m) 
     Submodule.smul_mem _ _ (Submodule.subset_span ⟨j, rfl⟩)
 
 /-- The two-site blocked tensor of an injective tensor is injective. -/
-theorem isInjective_blockTensor_two {B : MPSTensor n D} (h : Kraus.IsInjective B) :
-    Kraus.IsInjective (blockTensor B 2) :=
-  (isNBlkInjective_iff_blockTensor_isInjective B 2).1
+theorem isInjective_block_two {B : MPTensor α (Fin D)} (h : Kraus.IsInjective B) :
+    Kraus.IsInjective (Kraus.block B 2) :=
+  (Kraus.isNBlkInjective_iff_isInjective_block B 2).1
     (Kraus.isNBlkInjective_of_le zero_lt_one (Kraus.isNBlkInjective_one_of_isInjective h)
       one_le_two)
 
 /-- If the two-site blocked tensor of `A` is injective, so is that of `T₁`: blocking
 `B₂ = V⁽¹⁾ T₁` twice gives `(V⁽¹⁾)^{⊗2}` applied to `T₁` blocked twice. -/
-theorem isInjective_blockTensor_pairPosTensor {A : MPSTensor n D}
-    (h : Kraus.IsInjective (blockTensor A 2)) :
-    Kraus.IsInjective (blockTensor (pairPosTensor A) 2) := by
-  have h4 := isInjective_blockTensor_two h
-  rw [← rotatePhysical_polarIsoMatrix_polarPosTensor (blockTensor A 2),
-    blockTensor_rotatePhysical] at h4
+theorem isInjective_block_pairPosTensor {A : MPTensor α (Fin D)}
+    (h : Kraus.IsInjective (Kraus.block A 2)) :
+    Kraus.IsInjective (Kraus.block (pairPosTensor A) 2) := by
+  have h4 := isInjective_block_two h
+  rw [← rotatePhysical_polarIsoMatrix_polarPosTensor (Kraus.block A 2),
+    block_rotatePhysical] at h4
   exact isInjective_of_isInjective_rotatePhysical _ h4
 
 /-- If the two-site blocked tensor of `A` is injective, every coarse layer `V⁽ʲ⁺²⁾` is the
 isometric factor of an injective tensor. -/
-theorem isInjective_blockTensor_iterate_pairPosTensor {A : MPSTensor n D}
-    (h : Kraus.IsInjective (blockTensor A 2)) (j : ℕ) :
-    Kraus.IsInjective (blockTensor
+theorem isInjective_block_iterate_pairPosTensor {A : MPTensor α (Fin D)}
+    (h : Kraus.IsInjective (Kraus.block A 2)) (j : ℕ) :
+    Kraus.IsInjective (Kraus.block
       ((pairPosTensor : MPSTensor (D * D) D → MPSTensor (D * D) D)^[j] (pairPosTensor A)) 2) := by
   induction j with
-  | zero => exact isInjective_blockTensor_pairPosTensor h
+  | zero => exact isInjective_block_pairPosTensor h
   | succ j ih =>
       rw [Function.iterate_succ_apply']
-      exact isInjective_blockTensor_pairPosTensor ih
+      exact isInjective_block_pairPosTensor ih
 
 /-- If the two-site blocked tensor of `A` is injective, every coarse layer of the tree-RG
 circuit is an isometry `ℂ^{D²} → ℂ^{D²} ⊗ ℂ^{D²}`.
 
 arXiv:2307.01696, paragraph "The tree-RG circuit": "each layer but the lowest consists of
 isometries from dimension $D^2$ to $D^4$". -/
-theorem isIsometry_treeLayers {A : MPSTensor n D} (h : Kraus.IsInjective (blockTensor A 2))
+theorem isIsometry_treeLayers {A : MPTensor α (Fin D)} (h : Kraus.IsInjective (Kraus.block A 2))
     (k : ℕ) (j : Fin k) : (treeLayers k A j).IsIsometry :=
-  isIsometry_polarIsoMatrix_of_isInjective (isInjective_blockTensor_iterate_pairPosTensor h j)
+  isIsometry_polarIsoMatrix_of_isInjective (isInjective_block_iterate_pairPosTensor h j)
 
 end MPSTensor
 
@@ -141,7 +140,7 @@ namespace MPSPreparation
 
 open MPSTensor
 
-variable {d n D k : ℕ}
+variable {α : Type} [Fintype α] {d D k : ℕ}
 
 /-! ### A binary finite-range MERA -/
 
@@ -151,7 +150,7 @@ ring whose top sites carry `ℂ^{D²} = L ⊗ R`.
 * `disentangler` is the unitary `u` on `ℂ^D ⊗ ℂ^D` of the first (top) layer, applied to
   `|0⟩|0⟩` on every pair `R_i L_{i+1}` of neighbouring bond legs;
 * `coarseIso j : ℂ^{D²} → ℂ^{D²} ⊗ ℂ^{D²}`, `j < k`, are the isometries of the coarse layers,
-  ordered from fine to coarse, and `fineIso : ℂ^{D²} → ℂⁿ ⊗ ℂⁿ` is the isometry of the finest
+  ordered from fine to coarse, and `fineIso : ℂ^{D²} → ℂ^α ⊗ ℂ^α` is the isometry of the finest
   layer. Each is copied on every site of its layer.
 
 The disentanglers of the lower layers are the identity.
@@ -159,24 +158,24 @@ The disentanglers of the lower layers are the identity.
 arXiv:2307.01696, paragraph "Connection to MERA": the isometries `V⁽ʲ⁾` are the isometries of a
 finite-range MERA, "and all disentanglers are the identity, save for the first layer, which is
 identified with the single layer of unitaries that prepare the fixed-point state". -/
-structure BinaryMERA (n D k : ℕ) where
+structure BinaryMERA (α : Type) [Fintype α] (D k : ℕ) where
   /-- The unitary of the first layer, preparing each pair `R_i L_{i+1}` from `|0⟩|0⟩`. -/
   disentangler : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ
   disentangler_mem_unitaryGroup : disentangler ∈ Matrix.unitaryGroup (Fin D × Fin D) ℂ
-  /-- The isometry `ℂ^{D²} → ℂⁿ ⊗ ℂⁿ` of the finest layer. -/
-  fineIso : Matrix (Fin (blockPhysDim n 2)) (Fin (D * D)) ℂ
+  /-- The isometry `ℂ^{D²} → ℂ^α ⊗ ℂ^α` of the finest layer. -/
+  fineIso : Matrix (Fin 2 → α) (Fin (D * D)) ℂ
   isIsometry_fineIso : fineIso.IsIsometry
   /-- The isometries `ℂ^{D²} → ℂ^{D²} ⊗ ℂ^{D²}` of the coarse layers, from fine to coarse. -/
-  coarseIso : Fin k → Matrix (Fin (blockPhysDim (D * D) 2)) (Fin (D * D)) ℂ
+  coarseIso : Fin k → Matrix (Fin 2 → Fin (D * D)) (Fin (D * D)) ℂ
   isIsometry_coarseIso : ∀ j, (coarseIso j).IsIsometry
 
 namespace BinaryMERA
 
-variable (𝓜 : BinaryMERA n D k)
+variable (𝓜 : BinaryMERA α D k)
 
-/-- The isometry `ℂ^{D²} → (ℂⁿ)^{⊗2^{k+1}}` of the `k + 1` isometry layers under one top
+/-- The isometry `ℂ^{D²} → (ℂ^α)^{⊗2^{k+1}}` of the `k + 1` isometry layers under one top
 site. -/
-noncomputable def treeMatrix : Matrix (Fin (blockPhysDim n (2 ^ (k + 1)))) (Fin (D * D)) ℂ :=
+noncomputable def treeMatrix : Matrix (Fin (2 ^ (k + 1)) → α) (Fin (D * D)) ℂ :=
   binaryTreeMatrix k 𝓜.fineIso 𝓜.coarseIso
 
 /-- The tree map `𝓜.treeMatrix` of the isometry layers of the network is an isometry: a binary
@@ -190,18 +189,18 @@ def topPair [NeZero D] : Fin D × Fin D → ℂ := fun p => 𝓜.disentangler p 
 /-- The amplitude of the MERA state on `M` top sites at a configuration of the `M` blocks of
 `2^{k+1}` sites: the tree isometries applied to the top state `⊗ᵢ u_{R_i L_{i+1}} |0⟩|0⟩`. -/
 noncomputable def amplitude [NeZero D] {M : ℕ}
-    (s : Fin M → Fin (blockPhysDim n (2 ^ (k + 1)))) : ℂ :=
+    (s : Fin M → Fin (2 ^ (k + 1)) → α) : ℂ :=
   ∑ τ : Fin M → Fin (D * D), (∏ j, 𝓜.treeMatrix (s j) (τ j)) *
     pairProductState 𝓜.topPair (fun j => finProdFinEquiv.symm (τ j))
 
 /-- The **state of the MERA** on `N = M 2^{k+1}` sites with `M` top sites, read through the
 regrouping of the sites into blocks. -/
-noncomputable def state [NeZero D] (M : ℕ) : MPVSpace (Fin n) (M * 2 ^ (k + 1)) :=
-  (EuclideanSpace.equiv (ι := Cfg n (M * 2 ^ (k + 1))) (𝕜 := ℂ)).symm fun s =>
-    𝓜.amplitude ((Kraus.blockedConfigEquiv n M (2 ^ (k + 1))).symm s)
+noncomputable def state [NeZero D] (M : ℕ) : MPVSpace α (M * 2 ^ (k + 1)) :=
+  (EuclideanSpace.equiv (ι := Fin (M * 2 ^ (k + 1)) → α) (𝕜 := ℂ)).symm fun s =>
+    𝓜.amplitude ((Kraus.blockConfigEquiv α M (2 ^ (k + 1))).symm s)
 
-@[simp] lemma state_apply [NeZero D] (M : ℕ) (s : Cfg n (M * 2 ^ (k + 1))) :
-    𝓜.state M s = 𝓜.amplitude ((Kraus.blockedConfigEquiv n M (2 ^ (k + 1))).symm s) := by
+@[simp] lemma state_apply [NeZero D] (M : ℕ) (s : Fin (M * 2 ^ (k + 1)) → α) :
+    𝓜.state M s = 𝓜.amplitude ((Kraus.blockConfigEquiv α M (2 ^ (k + 1))).symm s) := by
   simp [state, EuclideanSpace.equiv, PiLp.toLp_apply]
 
 /-- The pair prepared by a unitary from `|0⟩|0⟩` is normalized. -/
@@ -215,7 +214,7 @@ theorem sum_star_topPair_mul [NeZero D] : ∑ p, star (𝓜.topPair p) * 𝓜.to
 top state. -/
 theorem norm_state [NeZero D] (M : ℕ) : ‖𝓜.state M‖ = 1 := by
   have h := (inner_self_eq_norm_sq_to_K (𝕜 := ℂ) (𝓜.state M)).symm
-  rw [PiLp.inner_apply, ← (Kraus.blockedConfigEquiv n M (2 ^ (k + 1))).sum_comp] at h
+  rw [PiLp.inner_apply, ← (Kraus.blockConfigEquiv α M (2 ^ (k + 1))).sum_comp] at h
   simp only [RCLike.inner_apply, state_apply, Equiv.symm_apply_apply, amplitude] at h
   set ψ : (Fin M → Fin (D * D)) → ℂ :=
     fun τ => pairProductState 𝓜.topPair (fun j => finProdFinEquiv.symm (τ j))
@@ -241,12 +240,12 @@ With `u |0⟩|0⟩ = |ω⟩` its top state is the fixed-point state `|Ω⟩`
 (`approximatingMPVState_eq_state_treeMERA`).
 
 arXiv:2307.01696, paragraph "Connection to MERA". -/
-noncomputable def treeMERA (A : MPSTensor n D) (hA : Kraus.IsInjective (blockTensor A 2))
+noncomputable def treeMERA (A : MPTensor α (Fin D)) (hA : Kraus.IsInjective (Kraus.block A 2))
     (k : ℕ) (u : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ)
-    (hu : u ∈ Matrix.unitaryGroup (Fin D × Fin D) ℂ) : BinaryMERA n D k where
+    (hu : u ∈ Matrix.unitaryGroup (Fin D × Fin D) ℂ) : BinaryMERA α D k where
   disentangler := u
   disentangler_mem_unitaryGroup := hu
-  fineIso := polarIsoMatrix (blockTensor A 2)
+  fineIso := polarIsoMatrix (Kraus.block A 2)
   isIsometry_fineIso := isIsometry_polarIsoMatrix_of_isInjective hA
   coarseIso := treeLayers k A
   isIsometry_coarseIso := isIsometry_treeLayers hA k

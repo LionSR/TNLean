@@ -24,7 +24,7 @@ uses the exact transfer map of the blocked chain, not a power of any one site ma
 
 ## Main result
 
-* `MPSChainTensor.traceNorm_transferMap_blockTensor_sub_le_of_choi_domination`: a uniform
+* `MPSChainTensor.traceNorm_transferMap_eval_sub_le_of_choi_domination`: a uniform
   `n`-step trace-distance contraction derived from actual Choi domination.
 
 ## References
@@ -86,17 +86,17 @@ namespace MPSChainTensor
 variable {d D n : ℕ}
 
 /-- The blocked chain has a trace-preserving transfer map when every site map does. -/
-theorem trace_transferMap_blockTensor (A : MPSChainTensor d D n)
+theorem trace_transferMap_block (A : MPSChainTensor d D n)
     (hA : ∀ i, IsTracePreservingMap (Kraus.transferMap (A i)))
     (X : Matrix (Fin D) (Fin D) ℂ) :
-    (Kraus.transferMap (blockTensor A) X).trace = X.trace := by
+    (Kraus.transferMap (Kraus.block A) X).trace = X.trace := by
   induction n with
-  | zero => simp [transferMap_blockTensor]
+  | zero => simp [transferMap_block]
   | succ n ih =>
-    rw [transferMap_blockTensor, List.ofFn_succ, List.prod_cons]
+    rw [transferMap_block, List.ofFn_succ, List.prod_cons]
     change (Kraus.transferMap (A 0)
       (((List.ofFn fun i => Kraus.transferMap (A i.succ)).prod) X)).trace = _
-    rw [hA 0, ← transferMap_blockTensor]
+    rw [hA 0, ← transferMap_block]
     exact ih _ (fun i => hA i.succ)
 
 /-- **Uniform Doeblin contraction on a chain.** If every site's normalized Choi matrix
@@ -106,7 +106,7 @@ matrices by at least the factor `(1 - ε)^n`. No translation invariance is assum
 
 When each site is a fixed-length contiguous block, the condition is imposed on those actual
 blocks, not on powers of the individual microscopic site maps. -/
-theorem traceNorm_transferMap_blockTensor_sub_le_of_choi_domination
+theorem traceNorm_transferMap_block_sub_le_of_choi_domination
     {ε : ℝ} (hε : 0 ≤ ε) (hε1 : ε ≤ 1)
     {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosSemidef) (htr : σ.trace = 1)
     (A : MPSChainTensor d D n)
@@ -115,31 +115,31 @@ theorem traceNorm_transferMap_blockTensor_sub_le_of_choi_domination
       ((ε : ℂ) / D) • (σ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)))
     {ρ₁ ρ₂ : Matrix (Fin D) (Fin D) ℂ} (h₁ : ρ₁.PosSemidef)
     (h₂ : ρ₂.PosSemidef) (h₁tr : ρ₁.trace = 1) (h₂tr : ρ₂.trace = 1) :
-    traceNorm (Kraus.transferMap (blockTensor A) ρ₁ -
-      Kraus.transferMap (blockTensor A) ρ₂) ≤
+    traceNorm (Kraus.transferMap (Kraus.block A) ρ₁ -
+      Kraus.transferMap (Kraus.block A) ρ₂) ≤
       (1 - ε) ^ n * traceNorm (ρ₁ - ρ₂) := by
   induction n with
-  | zero => simp [transferMap_blockTensor]
+  | zero => simp [transferMap_block]
   | succ n ih =>
     let B : MPSChainTensor d D n := fun i => A i.succ
     have hB : ∀ i, IsTracePreservingMap (Kraus.transferMap (B i)) := fun i => hA i.succ
-    have hhead : Kraus.transferMap (blockTensor A) =
-        Kraus.transferMap (A 0) * Kraus.transferMap (blockTensor B) := by
-      rw [transferMap_blockTensor, transferMap_blockTensor, List.ofFn_succ, List.prod_cons]
+    have hhead : Kraus.transferMap (Kraus.block A) =
+        Kraus.transferMap (A 0) * Kraus.transferMap (Kraus.block B) := by
+      rw [transferMap_block, transferMap_block, List.ofFn_succ, List.prod_cons]
     rw [hhead]
-    change traceNorm (Kraus.transferMap (A 0) (Kraus.transferMap (blockTensor B) ρ₁) -
-      Kraus.transferMap (A 0) (Kraus.transferMap (blockTensor B) ρ₂)) ≤ _
+    change traceNorm (Kraus.transferMap (A 0) (Kraus.transferMap (Kraus.block B) ρ₁) -
+      Kraus.transferMap (A 0) (Kraus.transferMap (Kraus.block B) ρ₂)) ≤ _
     have hstep := traceNorm_map_sub_map_le_of_choi_domination (hA 0)
       (fun X hX => isHermitian_map_of_positive
         (fun Y hY => Kraus.transferMap_pos (A 0) hY) hX)
       hσ.isHermitian htr hε (hchoi 0)
-      (Kraus.transferMap_pos (blockTensor B) h₁)
-      (Kraus.transferMap_pos (blockTensor B) h₂)
-      ((trace_transferMap_blockTensor B hB ρ₁).trans h₁tr)
-      ((trace_transferMap_blockTensor B hB ρ₂).trans h₂tr)
+      (Kraus.transferMap_pos (Kraus.block B) h₁)
+      (Kraus.transferMap_pos (Kraus.block B) h₂)
+      ((trace_transferMap_block B hB ρ₁).trans h₁tr)
+      ((trace_transferMap_block B hB ρ₂).trans h₂tr)
     have htail := ih B hB (fun i => hchoi i.succ)
-    calc _ ≤ (1 - ε) * traceNorm (Kraus.transferMap (blockTensor B) ρ₁ -
-        Kraus.transferMap (blockTensor B) ρ₂) := hstep
+    calc _ ≤ (1 - ε) * traceNorm (Kraus.transferMap (Kraus.block B) ρ₁ -
+        Kraus.transferMap (Kraus.block B) ρ₂) := hstep
       _ ≤ (1 - ε) * ((1 - ε) ^ n * traceNorm (ρ₁ - ρ₂)) :=
         mul_le_mul_of_nonneg_left htail (sub_nonneg.mpr hε1)
       _ = _ := by rw [pow_succ]; ring
@@ -174,7 +174,7 @@ theorem gram_eq_smul_choi_transpose {d D : ℕ} [NeZero D] (A : MPSTensor d D) :
 input density. The factors `1-ε_j` multiply. Only trace one is required of the minorizing matrices
 for this algebraic bound; in particular density references may be singular and need not be
 stationary or equal to one another. All Choi matrices are normalized by `1/D`. -/
-theorem norm_gram_blockTensor_sub_transport_le_of_choi_domination
+theorem norm_gram_block_sub_transport_le_of_choi_domination
     {d D N M : ℕ} (A : MPSChainTensor d D N)
     (ℓ : Fin M → ℕ) (hN : ∑ j, ℓ j = N)
     (ε : Fin M → ℝ)
@@ -184,19 +184,19 @@ theorem norm_gram_blockTensor_sub_transport_le_of_choi_domination
     (hchoi : ∀ j, ChoiRectangular.choiMatrix (Kraus.transferMap (chainBlockTensor A hN j)) ≥
       ((ε j : ℂ) / D) • (τ j ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)))
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρ : ρ.PosSemidef) (hρtr : ρ.trace = 1) :
-    ‖(physicalMatrix (MPSChainTensor.blockTensor A))ᴴ *
-        physicalMatrix (MPSChainTensor.blockTensor A) -
-      (Kraus.transferMap (MPSChainTensor.blockTensor A) ρ)ᵀ ⊗ₖ
+    ‖(physicalMatrix (MPSChainTensor.eval A))ᴴ *
+        physicalMatrix (MPSChainTensor.eval A) -
+      (Kraus.transferMap (MPSChainTensor.eval A) ρ)ᵀ ⊗ₖ
         (1 : Matrix (Fin D) (Fin D) ℂ)‖ ≤ 2 * D * ∏ j, (1 - ε j) := by
   classical
   have := Matrix.neZero_of_trace_eq_one hρtr
   let E : Fin M → Module.End ℂ (Matrix (Fin D) (Fin D) ℂ) :=
     fun j => Kraus.transferMap (chainBlockTensor A hN j)
-  have hwhole : Kraus.transferMap (MPSChainTensor.blockTensor A) = (List.ofFn E).prod := by
-    rw [MPSChainTensor.transferMap_blockTensor]
+  have hwhole : Kraus.transferMap (MPSChainTensor.eval A) = (List.ofFn E).prod := by
+    rw [MPSChainTensor.transferMap_eval]
     change (List.ofFn fun i => Kraus.transferMap (A i)).prod =
       (List.ofFn fun j => Kraus.transferMap (chainBlockTensor A hN j)).prod
-    simp only [chainBlockTensor, MPSChainTensor.transferMap_blockTensor]
+    simp only [chainBlockTensor, MPSChainTensor.transferMap_eval]
     exact prod_ofFn_blockSite ℓ hN (fun i => Kraus.transferMap (A i))
   let R (B : Module.End ℂ (Matrix (Fin D) (Fin D) ℂ)) (e : ℝ)
       (ω : Matrix (Fin D) (Fin D) ℂ) := B - (e : ℂ) • Matrix.tracePrepareMap (α := Fin D) ω
@@ -266,8 +266,8 @@ theorem norm_gram_blockTensor_sub_transport_le_of_choi_domination
   let t : ℝ := ∏ j, (1 - ε j)
   have hQtr : ∀ X, (Q X).trace = (t : ℂ) * X.trace := hRprodtr M E ε τ htp hτtr
   let P := Matrix.tracePrepareMap (α := Fin D) (Q ρ)
-  have hmaps : Kraus.transferMap (MPSChainTensor.blockTensor A) -
-      Matrix.tracePrepareMap (α := Fin D) (Kraus.transferMap (MPSChainTensor.blockTensor A) ρ) =
+  have hmaps : Kraus.transferMap (MPSChainTensor.eval A) -
+      Matrix.tracePrepareMap (α := Fin D) (Kraus.transferMap (MPSChainTensor.eval A) ρ) =
         Q - P := by
     ext X : 1
     have hX : (X - X.trace • ρ).trace = 0 := by simp [hρtr]
@@ -306,9 +306,9 @@ theorem norm_gram_blockTensor_sub_transport_le_of_choi_domination
     rw [Matrix.choiMatrix_tracePrepareMap, Matrix.transpose_smul,
       ← Matrix.kroneckerMap_transpose, Matrix.transpose_one, smul_smul]
     simp [NeZero.ne D]
-  have hgram : (physicalMatrix (MPSChainTensor.blockTensor A))ᴴ *
-      physicalMatrix (MPSChainTensor.blockTensor A) -
-      (Kraus.transferMap (MPSChainTensor.blockTensor A) ρ)ᵀ ⊗ₖ
+  have hgram : (physicalMatrix (MPSChainTensor.eval A))ᴴ *
+      physicalMatrix (MPSChainTensor.eval A) -
+      (Kraus.transferMap (MPSChainTensor.eval A) ρ)ᵀ ⊗ₖ
         (1 : Matrix (Fin D) (Fin D) ℂ) =
       (D : ℂ) • ((ChoiRectangular.choiMatrix Q).transpose -
         (ChoiRectangular.choiMatrix P).transpose) := by
@@ -352,10 +352,10 @@ theorem exists_norm_polarPos_chainBlockTensor_sub_le_of_choi_domination
       (∀ k, Kraus.transferMap (chainBlockTensor A hN k) σ = σ) →
       (∀ k, ChoiRectangular.choiMatrix (Kraus.transferMap (chainBlockTensor A hN k)) ≥
         ((ε : ℂ) / D) • (σ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ))) →
-      ‖(physicalMatrix (MPSChainTensor.blockTensor A))ᴴ *
-          physicalMatrix (MPSChainTensor.blockTensor A) - σᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)‖ ≤
+      ‖(physicalMatrix (MPSChainTensor.eval A))ᴴ *
+          physicalMatrix (MPSChainTensor.eval A) - σᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)‖ ≤
         2 * D * (1 - ε) ^ (N / s) ∧
-      ‖Matrix.polarPos (physicalMatrix (MPSChainTensor.blockTensor A)) -
+      ‖Matrix.polarPos (physicalMatrix (MPSChainTensor.eval A)) -
           (CFC.sqrt σ)ᵀ ⊗ₖ (1 : Matrix (Fin D) (Fin D) ℂ)‖ ≤ K * (1 - ε) ^ (N / s) := by
   classical
   have := Matrix.neZero_of_trace_eq_one htr
@@ -366,13 +366,13 @@ theorem exists_norm_polarPos_chainBlockTensor_sub_le_of_choi_domination
     fun {d N M} A ℓ hN s hs hℓ ε hε hε1 hA hfix hchoi => ?_⟩
   let E : Fin M → Module.End ℂ (Matrix (Fin D) (Fin D) ℂ) :=
     fun j => Kraus.transferMap (chainBlockTensor A hN j)
-  have hwhole : Kraus.transferMap (MPSChainTensor.blockTensor A) = (List.ofFn E).prod := by
-    rw [MPSChainTensor.transferMap_blockTensor]
+  have hwhole : Kraus.transferMap (MPSChainTensor.eval A) = (List.ofFn E).prod := by
+    rw [MPSChainTensor.transferMap_eval]
     change (List.ofFn fun i => Kraus.transferMap (A i)).prod =
       (List.ofFn fun j => Kraus.transferMap (chainBlockTensor A hN j)).prod
-    simp only [chainBlockTensor, MPSChainTensor.transferMap_blockTensor]
+    simp only [chainBlockTensor, MPSChainTensor.transferMap_eval]
     exact prod_ofFn_blockSite ℓ hN (fun i => Kraus.transferMap (A i))
-  have hfixed : Kraus.transferMap (MPSChainTensor.blockTensor A) σ = σ := by
+  have hfixed : Kraus.transferMap (MPSChainTensor.eval A) σ = σ := by
     rw [hwhole]
     have hp : ∀ Ts : List (Module.End ℂ (Matrix (Fin D) (Fin D) ℂ)),
         (∀ T ∈ Ts, T σ = σ) → Ts.prod σ = σ := by
@@ -388,7 +388,7 @@ theorem exists_norm_polarPos_chainBlockTensor_sub_le_of_choi_domination
       obtain ⟨j, rfl⟩ := List.mem_ofFn.mp hT
       exact hfix j
   let r : ℝ := 1 - ε
-  have hbound := norm_gram_blockTensor_sub_transport_le_of_choi_domination A ℓ hN
+  have hbound := norm_gram_block_sub_transport_le_of_choi_domination A ℓ hN
     (fun _ => ε) (fun _ => σ) (fun _ => htr) hA hchoi σ hσ.posSemidef htr
   rw [hfixed, Fin.prod_const] at hbound
   have hNs : N ≤ M * s := by
@@ -404,7 +404,7 @@ theorem exists_norm_polarPos_chainBlockTensor_sub_le_of_choi_domination
   refine ⟨hfinal, ?_⟩
   have hsqrt := hlip _
     (Matrix.posSemidef_conjTranspose_mul_self
-      (physicalMatrix (MPSChainTensor.blockTensor A))).nonneg
+      (physicalMatrix (MPSChainTensor.eval A))).nonneg
   rw [sqrt_transpose_kronecker_one hσ.posSemidef] at hsqrt
   exact hsqrt.trans (by simpa [mul_assoc] using mul_le_mul_of_nonneg_left hfinal hL)
 

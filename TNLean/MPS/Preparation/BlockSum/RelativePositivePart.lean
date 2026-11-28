@@ -15,7 +15,7 @@ map is `B = ∑ⱼ cⱼ B_j L_jᴴ = B₀ C`, with `B₀ = ∑ⱼ B_j L_jᴴ`, `
 `cⱼ = (∑ₖ |μ_{j,k}|^{2q})^{1/2}`, and the copy isometries `L_j`
 (`TNLean.MPS.Preparation.RepeatedBlockSum`). The positive part `P` of `B` is close to
 `P_∞ = ∑ⱼ cⱼ L_j ((√σ_j)ᵀ ⊗ 1) L_jᴴ` in absolute terms
-(`exists_norm_polarPos_blockTensor_repeatedBlockSum_sub_le`). This file proves that it is close
+(`exists_norm_polarPos_block_repeatedBlockSum_sub_le`). This file proves that it is close
 relative to each weight:
 
   `‖(P - P_∞) C⁻¹‖ ≤ K e^{-γ q/ξ}`,  `C⁻¹ = ∑ⱼ cⱼ⁻¹ L_j L_jᴴ`,
@@ -65,7 +65,6 @@ open MPTensor
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators
 open Matrix
-open Kraus (blockTensor)
 
 namespace MPSTensor
 
@@ -143,10 +142,10 @@ theorem norm_polarPos_sub_mul_sum_le (hiso : ∀ j, (L j)ᴴ * L j = 1)
   have hc0 : ∀ j, (c j : ℂ) ≠ 0 := fun j => Complex.ofReal_ne_zero.2 (hc j).ne'
   have hreal : ∀ j, star (c j : ℂ) = c j := fun j => Complex.conj_ofReal _
   rw [← isoSum_smul_one (L := L) fun j => (c j : ℂ)] at hM
-  rw [← isoSum_smul_one (L := L) fun j => ((c j : ℂ))⁻¹,
+  rw [← isoSum_smul_one (L := L) fun j => (c j : ℂ)⁻¹,
     ← isoSum_smul (L := L) (fun j => (c j : ℂ)) h]
   change ‖(polarPos M - isoSum L fun j => (c j : ℂ) • h j) *
-      (isoSum L fun j => ((c j : ℂ))⁻¹ • (1 : Matrix (κ j) (κ j) ℂ))‖ ≤
+      (isoSum L fun j => (c j : ℂ)⁻¹ • (1 : Matrix (κ j) (κ j) ℂ))‖ ≤
     _ * (_ * ‖Btᴴ * Bt - isoSum L g‖)
   change ‖Btᴴ * Bt - isoSum L g‖ ≤ l / 2 at hΔ
   -- The algebra of the block sums.
@@ -157,15 +156,15 @@ theorem norm_polarPos_sub_mul_sum_le (hiso : ∀ j, (L j)ᴴ * L j = 1)
     funext j
     rw [conjTranspose_smul, conjTranspose_one, hreal]
   have hCCi : (isoSum L fun j => (c j : ℂ) • (1 : Matrix (κ j) (κ j) ℂ)) *
-      (isoSum L fun j => ((c j : ℂ))⁻¹ • (1 : Matrix (κ j) (κ j) ℂ)) =
+      (isoSum L fun j => (c j : ℂ)⁻¹ • (1 : Matrix (κ j) (κ j) ℂ)) =
       isoSum L fun j => (1 : Matrix (κ j) (κ j) ℂ) := by
     rw [isoSum_mul_isoSum hiso horth]
     congr 1
     funext j
     rw [smul_mul_smul_comm, Matrix.one_mul, mul_inv_cancel₀ (hc0 j), one_smul]
   have hSCi : (isoSum L fun j => (c j : ℂ) • h j) *
-      (isoSum L fun j => ((c j : ℂ))⁻¹ • (1 : Matrix (κ j) (κ j) ℂ)) =
-      (isoSum L fun j => ((c j : ℂ))⁻¹ • (1 : Matrix (κ j) (κ j) ℂ)) *
+      (isoSum L fun j => (c j : ℂ)⁻¹ • (1 : Matrix (κ j) (κ j) ℂ)) =
+      (isoSum L fun j => (c j : ℂ)⁻¹ • (1 : Matrix (κ j) (κ j) ℂ)) *
         isoSum L fun j => (c j : ℂ) • h j := by
     rw [isoSum_mul_isoSum hiso horth, isoSum_mul_isoSum hiso horth]
     congr 1
@@ -208,7 +207,7 @@ theorem norm_polarPos_sub_mul_sum_le (hiso : ∀ j, (L j)ᴴ * L j = 1)
       rw [← Complex.ofReal_mul]; exact Complex.zero_le_real.2 (mul_self_nonneg _))
   -- Forget the block structure.
   generalize isoSum L (fun j => (c j : ℂ) • (1 : Matrix (κ j) (κ j) ℂ)) = C at *
-  generalize isoSum L (fun j => ((c j : ℂ))⁻¹ • (1 : Matrix (κ j) (κ j) ℂ)) = Ci at *
+  generalize isoSum L (fun j => (c j : ℂ)⁻¹ • (1 : Matrix (κ j) (κ j) ℂ)) = Ci at *
   generalize isoSum L (fun j => (c j : ℂ) • h j) = S at *
   generalize isoSum L (fun j => ((c j : ℂ) * c j) • (g j - (l : ℂ) • 1)) = Q at *
   generalize isoSum L (fun j => (1 : Matrix (κ j) (κ j) ℂ)) = Pr at *
@@ -280,7 +279,7 @@ noncomputable def copyScaleInv (ι : (j : Fin b) → Fin (m j) → Fin (Dj j) �
 noncomputable def relativeRow (A : MPSTensor d D)
     (ι : (j : Fin b) → Fin (m j) → Fin (Dj j) → Fin D) (μ : (j : Fin b) → Fin (m j) → ℂ)
     (q : ℕ) (j j' : Fin b) : Matrix (Fin (Dj j) × Fin (Dj j)) (Fin (Dj j') × Fin (Dj j')) ℂ :=
-  (copyIsometry ι μ q j)ᴴ * Matrix.polarPos (physicalMatrix (blockTensor A q)) *
+  (copyIsometry ι μ q j)ᴴ * Matrix.polarPos (physicalMatrix (Kraus.block A q)) *
     copyScaleInv ι μ q * copyIsometry ι μ q j'
 
 /-- The block `L_jᴴ P_∞ C⁻¹ L_{j'}` of the limit `P_∞` of the positive parts: `(√σ_j)ᵀ ⊗ 1` for
@@ -312,7 +311,7 @@ theorem copyScaleInv_mul_copyIsometry (μ : CopyWeights b m) (q : ℕ) (j : Fin 
 /-- `L_jᴴ P C⁻¹ L_{j'} = c_{j'}⁻¹ L_jᴴ P L_{j'}`. -/
 theorem relativeRow_eq_smul (A : MPSTensor d D) (μ : CopyWeights b m) (q : ℕ) (j j' : Fin b) :
     relativeRow A ι μ q j j' = ((copyNorm μ q j' : ℂ)⁻¹) •
-      ((copyIsometry ι μ q j)ᴴ * Matrix.polarPos (physicalMatrix (blockTensor A q)) *
+      ((copyIsometry ι μ q j)ᴴ * Matrix.polarPos (physicalMatrix (Kraus.block A q)) *
         copyIsometry ι μ q j') := by
   rw [relativeRow, Matrix.mul_assoc _ (copyScaleInv ι μ q), copyScaleInv_mul_copyIsometry hι hdisj,
     Matrix.mul_smul]
@@ -427,7 +426,7 @@ theorem exists_norm_relativeRow_sub_le
       ‖μ'‖ ≤ ‖lam₂‖)
     {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) (hx1 : Real.exp (-γ / correlationLength lam₂) < 1) :
     ∃ K : ℝ, 0 ≤ K ∧ ∃ q₀ : ℕ, ∀ μ : CopyWeights b m, ∀ q : ℕ, q₀ ≤ q → q ≠ 0 →
-      ‖(Matrix.polarPos (physicalMatrix (blockTensor (repeatedBlockSum Aj ι μ) q)) -
+      ‖(Matrix.polarPos (physicalMatrix (Kraus.block (repeatedBlockSum Aj ι μ) q)) -
           copyPosLimit ι μ q σ) * copyScaleInv ι μ q‖ ≤
         K * Real.exp (-γ / correlationLength lam₂) ^ q ∧
       ∀ j j', ‖relativeRow (repeatedBlockSum Aj ι μ) ι μ q j j' -
@@ -449,7 +448,7 @@ theorem exists_norm_relativeRow_sub_le
     conjTranspose_copyIsometry_mul_eq_zero hdisj μ q h
   have hLn : ∀ j, ‖L j‖ ≤ 1 := fun j => Matrix.l2_opNorm_le_one_of_conjTranspose_mul_self_eq_one
     (hiso j)
-  set Bt := ∑ j, physicalMatrix (blockTensor (Aj j) q) * (L j)ᴴ
+  set Bt := ∑ j, physicalMatrix (Kraus.block (Aj j) q) * (L j)ᴴ
   have hΔ := hG 1 (fun _ => 1) L (fun _ => by simp) hLn q
   simp only [one_smul, norm_one, one_pow, Complex.ofReal_one, one_mul] at hΔ
   change ‖Btᴴ * Bt - ∑ j, L j * ((σ j)ᵀ ⊗ₖ (1 : Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ)) *
@@ -458,9 +457,9 @@ theorem exists_norm_relativeRow_sub_le
     have h1 : (Kg + 1) * x ^ q₀ < l / 2 := by
       rw [lt_div_iff₀ (by positivity : (0:ℝ) < Kg + 1)] at hq₀; linarith
     nlinarith [pow_nonneg hx0.le q]
-  have hM : physicalMatrix (blockTensor (repeatedBlockSum Aj ι μ) q) =
+  have hM : physicalMatrix (Kraus.block (repeatedBlockSum Aj ι μ) q) =
       Bt * ∑ j, (copyNorm μ q j : ℂ) • (L j * (L j)ᴴ) := by
-    rw [physicalMatrix_blockTensor_repeatedBlockSum_eq_copyIsometry hι hdisj hq0, Matrix.sum_mul]
+    rw [physicalMatrix_block_repeatedBlockSum_eq_copyIsometry hι hdisj hq0, Matrix.sum_mul]
     refine Finset.sum_congr rfl fun j _ => ?_
     have h := conjTranspose_mul_sum_of_isometry hiso horth
       (fun k => (copyNorm μ q k : ℂ) • (L k)ᴴ) j
@@ -478,17 +477,17 @@ theorem exists_norm_relativeRow_sub_le
       CFC.sqrt_mul_sqrt_self (σ j) (hσ j).posSemidef.nonneg]
   have key := norm_polarPos_sub_mul_sum_le hiso horth
     (fun j => copyNorm_pos (μ.weight_fun_ne_zero j) q) hh hhg hl0 hg Bt hM (hΔ.trans hsmall)
-  have hX : ‖(Matrix.polarPos (physicalMatrix (blockTensor (repeatedBlockSum Aj ι μ) q)) -
+  have hX : ‖(Matrix.polarPos (physicalMatrix (Kraus.block (repeatedBlockSum Aj ι μ) q)) -
       copyPosLimit ι μ q σ) * copyScaleInv ι μ q‖ ≤ K * x ^ q := by
     calc _ ≤ (n : ℝ) ^ 2 * ((Real.sqrt (l / 2))⁻¹ * (Kg * x ^ q)) := key.trans (by gcongr)
       _ = K * x ^ q := by simp only [K]; ring
   refine ⟨hX, fun j j' => ?_⟩
   have hdiff : relativeRow (repeatedBlockSum Aj ι μ) ι μ q j j' - relativeRowLimit ι μ q σ j j' =
-      (L j)ᴴ * ((Matrix.polarPos (physicalMatrix (blockTensor (repeatedBlockSum Aj ι μ) q)) -
+      (L j)ᴴ * ((Matrix.polarPos (physicalMatrix (Kraus.block (repeatedBlockSum Aj ι μ) q)) -
         copyPosLimit ι μ q σ) * copyScaleInv ι μ q) * L j' := by
     simp only [relativeRow, relativeRowLimit, Matrix.mul_sub, Matrix.sub_mul, Matrix.mul_assoc, L]
   rw [hdiff]
-  calc _ ≤ ‖(L j)ᴴ‖ * ‖(Matrix.polarPos (physicalMatrix (blockTensor (repeatedBlockSum Aj ι μ) q)) -
+  calc _ ≤ ‖(L j)ᴴ‖ * ‖(Matrix.polarPos (physicalMatrix (Kraus.block (repeatedBlockSum Aj ι μ) q)) -
         copyPosLimit ι μ q σ) * copyScaleInv ι μ q‖ * ‖L j'‖ :=
         (Matrix.l2_opNorm_mul _ _).trans (by gcongr; exact Matrix.l2_opNorm_mul _ _)
     _ ≤ 1 * (K * x ^ q) * 1 := by

@@ -40,7 +40,6 @@ section
 
 open Matrix MPSPreparation MPSTensor Fin.NatCast
 open scoped BigOperators
-open Kraus (blockPhysDim decodeBlockEquiv)
 
 namespace VaryingBondChain
 
@@ -73,7 +72,7 @@ theorem rectangularTransfer_block_eq_channelInterval (A : VaryingBondChain d D N
 
 /-- Relabeling the final actual bond of the blocked tensor by its natural-number cut
 identifies its Kraus map with the actual ordered interval. -/
-theorem rectangularKrausMap_blockTensor_cast_eq_channelInterval (A : VaryingBondChain d D N)
+theorem rectangularKrausMap_block_cast_eq_channelInterval (A : VaryingBondChain d D N)
     {ℓ : Fin M → ℕ} (hN : ∑ j, ℓ j = N) (k : Fin M) :
     Matrix.rectangularKrausMap (fun s =>
       (rectangularBlockTensor A hN k s).submatrix id
@@ -81,7 +80,7 @@ theorem rectangularKrausMap_blockTensor_cast_eq_channelInterval (A : VaryingBond
       Matrix.channelInterval (siteTransferAt A) (blockOffset ℓ k.val)
         (blockOffset ℓ k.val + ℓ k) (Nat.le_add_right _ _) := by
   refine Eq.trans ?_ (rectangularTransfer_block_eq_channelInterval A hN k)
-  have ht (s : Fin (blockPhysDim d (ℓ k))) :
+  have ht (s : (Fin (ℓ k) → Fin d)) :
       (rectangularBlockTensor A hN k s).submatrix id
           (Fin.cast (blockBondDim_length A hN k)) =
         Kraus.rectangularEval (blockBondDim A ℓ k) (rectangularBlockSites A hN k)
@@ -95,8 +94,7 @@ theorem rectangularKrausMap_blockTensor_cast_eq_channelInterval (A : VaryingBond
           (decodeBlockEquiv d (ℓ k) s)) =
       Matrix.rectangularKrausMap
         (Kraus.rectangularEval (blockBondDim A ℓ k) (rectangularBlockSites A hN k)) :=
-      Matrix.rectangularKrausMap_equiv (decodeBlockEquiv d (ℓ k)).symm
-        (Kraus.rectangularEval (blockBondDim A ℓ k) (rectangularBlockSites A hN k))
+      Matrix.rectangularKrausMap_equiv (Kraus.rectangularEval (blockBondDim A ℓ k) (rectangularBlockSites A hN k))
     _ =
         Kraus.rectangularTransfer (blockBondDim A ℓ k) (rectangularBlockSites A hN k) := by
       ext X : 1
@@ -180,7 +178,7 @@ theorem exists_rectangular_block_mixing_of_window_domination (A : VaryingBondCha
             (β := Fin (blockBondDim A ℓ j 0))
           (σ (blockOffset ℓ j.val : Fin N)))‖ := by
     simp only [Fin.cast_refl] at hcast
-    rw [rectangularKrausMap_blockTensor_cast_eq_channelInterval] at hcast
+    rw [rectangularKrausMap_block_cast_eq_channelInterval] at hcast
     exact hcast
   rw [← hnorm]
   refine hm.trans ?_

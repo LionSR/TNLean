@@ -55,7 +55,6 @@ section
 open Matrix MPSTensor
 open scoped BigOperators
 open QuantumCircuit
-open Kraus (blockPhysDim decodeBlock)
 
 namespace MPSPreparation
 
@@ -162,7 +161,7 @@ theorem leafInput_injective {ι₀ : Fin χ → Cfg d (s + s)} {enc : Fin χ →
 /-! ### The gates -/
 
 variable (V : (m : ℕ) → Matrix (Cfg d m) (Fin χ) ℂ)
-  (W : ℕ → ℕ → Matrix (Fin (blockPhysDim χ 2)) (Fin χ) ℂ)
+  (W : ℕ → ℕ → Matrix (Fin 2 → Fin χ) (Fin χ) ℂ)
   (ι₀ : Fin χ → Cfg d (s + s)) (enc : Fin χ → Cfg d s)
 
 /-- The unitary of the node `p` of depth `j`: the extension of the isometry
@@ -265,7 +264,7 @@ theorem two_mul_le_nodeLen (hT : IsTreeLayout h s n w) {j p : ℕ} (hj : j ≤ h
 inputs of the nodes of depth `j + 1`: the output registers of a node are the input registers of
 its two halves. -/
 theorem placeCfg_coarseOutput_eq_nodeCfg {j : ℕ} (hj : j ≤ h)
-    (e : Fin (2 ^ j) → Fin (blockPhysDim χ 2)) :
+    (e : Fin (2 ^ j) → (Fin 2 → Fin χ)) :
     placeCfg (fun p : Fin (2 ^ j) => nodeWindow hT j p) (fun p => coarseOutput enc (e p)) =
       nodeCfg hT ι₀ enc (j + 1) (unpair e) := by
   have hW := nodeWindow_injective₂ hT (by omega : j ≤ h + 1)
@@ -279,7 +278,7 @@ theorem placeCfg_coarseOutput_eq_nodeCfg {j : ℕ} (hj : j ≤ h)
     obtain ⟨q, hqv⟩ : ∃ q : Fin (2 ^ j), q.val = p'.val / 2 := ⟨⟨p'.val / 2, by
       have := p'.isLt; have : 2 ^ (j + 1) = 2 ^ j * 2 := pow_succ 2 j; omega⟩, rfl⟩
     have hq := q.isLt
-    have hun : ∀ i : Fin 2, p'.val = 2 * q.val + i.val → unpair e p' = decodeBlock _ 2 (e q) i :=
+    have hun : ∀ i : Fin 2, p'.val = 2 * q.val + i.val → unpair e p' = (e q) i :=
       fun i hi => by
         rw [show p' = ⟨2 * q.val + i.val, two_mul_add_lt_two_pow q i⟩ from Fin.ext hi,
           unpair_apply]
@@ -391,14 +390,14 @@ theorem nodeCfg_comp_leafWindow (x : Fin (2 ^ (h + 1)) → Fin χ) (p : Fin (2 ^
 
 variable {V W ι₀ enc}
 
-private theorem unpair_two_mul {j β : ℕ} (e : Fin (2 ^ j) → Fin (blockPhysDim β 2))
+private theorem unpair_two_mul {j β : ℕ} (e : Fin (2 ^ j) → (Fin 2 → Fin β))
     (p : Fin (2 ^ j)) (hp : 2 * p.val < 2 ^ (j + 1)) :
-    unpair e ⟨2 * p.val, hp⟩ = decodeBlock β 2 (e p) 0 :=
+    unpair e ⟨2 * p.val, hp⟩ = (e p) 0 :=
   unpair_apply e p 0
 
-private theorem unpair_two_mul_add_one {j β : ℕ} (e : Fin (2 ^ j) → Fin (blockPhysDim β 2))
+private theorem unpair_two_mul_add_one {j β : ℕ} (e : Fin (2 ^ j) → (Fin 2 → Fin β))
     (p : Fin (2 ^ j)) (hp : 2 * p.val + 1 < 2 ^ (j + 1)) :
-    unpair e ⟨2 * p.val + 1, hp⟩ = decodeBlock β 2 (e p) 1 :=
+    unpair e ⟨2 * p.val + 1, hp⟩ = (e p) 1 :=
   unpair_apply e p 1
 
 private theorem prod_fin_two_pow_succ {j : ℕ} (f : Fin (2 ^ (j + 1)) → ℂ) :
@@ -465,8 +464,8 @@ theorem treeLevelsOp_apply_nodeCfg (hV : ∀ m, s ≤ m → (V m).IsIsometry)
     (hW : ∀ m₁ m₂, s ≤ m₁ → s ≤ m₂ → (W m₁ m₂).IsIsometry)
     (hsplit : ∀ {m₁ m₂ m : ℕ}, s ≤ m₁ → s ≤ m₂ → (hm : m₁ + m₂ = m) →
       ∀ (τ : Cfg d m) (x : Fin χ), V m τ x =
-        ∑ e, V m₁ (fun i => τ ⟨i.val, by omega⟩) (decodeBlock χ 2 e 0) *
-          V m₂ (fun i => τ ⟨m₁ + i.val, by omega⟩) (decodeBlock χ 2 e 1) * W m₁ m₂ e x)
+        ∑ e, V m₁ (fun i => τ ⟨i.val, by omega⟩) (e 0) *
+          V m₂ (fun i => τ ⟨m₁ + i.val, by omega⟩) (e 1) * W m₁ m₂ e x)
     (hι₀ : Function.Injective ι₀) (henc : Function.Injective enc) :
     ∀ k j, j + k = h + 1 → ∀ (x : Fin (2 ^ j) → Fin χ) (τ : Cfg d n),
       (treeLeafOp hT (treeLeafGate hT V ι₀ enc) *
@@ -491,7 +490,7 @@ theorem treeLevelsOp_apply_nodeCfg (hV : ∀ m, s ≤ m → (V m).IsIsometry)
     -- the unitaries of depth `j`
     have hlayer : ∀ c : Cfg d n, treeLevelOp hT (treeNodeGate W ι₀ enc) j c
         (nodeCfg hT ι₀ enc j x) =
-        Function.extend (fun e : Fin (2 ^ j) → Fin (blockPhysDim χ 2) =>
+        Function.extend (fun e : Fin (2 ^ j) → (Fin 2 → Fin χ) =>
           placeCfg (fun p : Fin (2 ^ j) => nodeWindow hT j p) fun p => coarseOutput enc (e p))
           (fun e => ∏ p : Fin (2 ^ j), W (nodeLen h n w (j + 1) (2 * p))
             (nodeLen h n w (j + 1) (2 * p + 1)) (e p) (x p)) 0 c := fun c => by
@@ -508,7 +507,7 @@ theorem treeLevelsOp_apply_nodeCfg (hV : ∀ m, s ≤ m → (V m).IsIsometry)
               (show 2 * p.val + 1 < 2 ^ (j + 1) by have := p.isLt; rw [pow_succ]; omega)
             omega) x c
     simp_rw [hlayer]
-    have hinjo : Function.Injective fun e : Fin (2 ^ j) → Fin (blockPhysDim χ 2) =>
+    have hinjo : Function.Injective fun e : Fin (2 ^ j) → (Fin 2 → Fin χ) =>
         placeCfg (d := d) (fun p : Fin (2 ^ j) => nodeWindow hT j p)
           fun p => coarseOutput enc (e p) := fun e e' he =>
       funext fun p => coarseOutput_injective henc
@@ -519,11 +518,11 @@ theorem treeLevelsOp_apply_nodeCfg (hV : ∀ m, s ≤ m → (V m).IsIsometry)
     -- regroup the nodes of depth `j + 1` along their parents
     simp_rw [prod_fin_two_pow_succ, ← Finset.prod_mul_distrib, unpair_two_mul,
       unpair_two_mul_add_one]
-    rw [← Fintype.prod_sum (fun (p : Fin (2 ^ j)) (b : Fin (blockPhysDim χ 2)) =>
+    rw [← Fintype.prod_sum (fun (p : Fin (2 ^ j)) (b : (Fin 2 → Fin χ)) =>
       V (nodeLen h n w (j + 1) (2 * p)) (segCfg hT (j + 1) (2 * p) τ)
-          (decodeBlock χ 2 b 0) *
+          (b 0) *
         V (nodeLen h n w (j + 1) (2 * p + 1)) (segCfg hT (j + 1) (2 * p + 1) τ)
-          (decodeBlock χ 2 b 1) *
+          (b 1) *
         W (nodeLen h n w (j + 1) (2 * p)) (nodeLen h n w (j + 1) (2 * p + 1)) b (x p))]
     refine Finset.prod_congr rfl fun p _ => ?_
     have hp1 : 2 * p.val < 2 ^ (j + 1) := by have := p.isLt; rw [pow_succ]; omega
@@ -565,8 +564,8 @@ theorem treeBlockOp_apply (hV : ∀ m, s ≤ m → (V m).IsIsometry)
     (hW : ∀ m₁ m₂, s ≤ m₁ → s ≤ m₂ → (W m₁ m₂).IsIsometry)
     (hsplit : ∀ {m₁ m₂ m : ℕ}, s ≤ m₁ → s ≤ m₂ → (hm : m₁ + m₂ = m) →
       ∀ (τ : Cfg d m) (x : Fin χ), V m τ x =
-        ∑ e, V m₁ (fun i => τ ⟨i.val, by omega⟩) (decodeBlock χ 2 e 0) *
-          V m₂ (fun i => τ ⟨m₁ + i.val, by omega⟩) (decodeBlock χ 2 e 1) * W m₁ m₂ e x)
+        ∑ e, V m₁ (fun i => τ ⟨i.val, by omega⟩) (e 0) *
+          V m₂ (fun i => τ ⟨m₁ + i.val, by omega⟩) (e 1) * W m₁ m₂ e x)
     (hι₀ : Function.Injective ι₀) (henc : Function.Injective enc) (x : Fin χ)
     (τ : Cfg d n) :
     treeBlockOp hT V W ι₀ enc τ
@@ -600,7 +599,6 @@ section
 open Matrix MPSTensor
 open scoped BigOperators
 open QuantumCircuit
-open Kraus (blockPhysDim)
 
 namespace MPSPreparation
 
@@ -612,7 +610,7 @@ outcome scalar independent of the input.
 Source: arXiv:2307.01696, "Tree-RG circuit with measurements". -/
 theorem exists_rounds_blockLayerOp_treeBlockOp (d s c : ℕ) [NeZero d] [NeZero s] :
     ∃ C : ℕ, ∀ {χ : ℕ} (V : (m : ℕ) → Matrix (Cfg d m) (Fin χ) ℂ)
-      (W : ℕ → ℕ → Matrix (Fin (blockPhysDim χ 2)) (Fin χ) ℂ)
+      (W : ℕ → ℕ → Matrix (Fin 2 → Fin χ) (Fin χ) ℂ)
       (h : ℕ) {M N : ℕ} [NeZero N] (ℓ : Fin M → ℕ) (hN : ∑ b, ℓ b = N)
       (w : Fin M → ℕ → ℕ) (hT : ∀ b, IsTreeLayout h s (ℓ b) (w b)),
       (∀ b (p : Fin (2 ^ (h + 1))), leafLen h (ℓ b) (w b) p ≤ c) →
@@ -711,7 +709,6 @@ Source: arXiv:2307.01696, eq. (16), "Tree-RG circuit with measurements", and
 open Matrix MPSTensor
 open scoped BigOperators
 open QuantumCircuit
-open Kraus (blockTensor)
 
 namespace MPSPreparation
 
@@ -721,7 +718,7 @@ theorem treeBlockOp_apply_supportedCfgPolarIso {d D χ s h n : ℕ} [NeZero d] [
     {w : ℕ → ℕ} (hT : IsTreeLayout h s n w) (A : MPSTensor d D)
     (e : Fin χ ↪ Fin (D * D))
     (hinj : ∀ m, s ≤ m →
-      IsInjectiveOn (blockTensor A m) (Set.range (virtualPairEquiv D ∘ e)))
+      IsInjectiveOn (Kraus.block A m) (Set.range (virtualPairEquiv D ∘ e)))
     {ι₀ : Fin χ → Cfg d (s + s)} {enc : Fin χ → Cfg d s}
     (hι₀ : Function.Injective ι₀) (henc : Function.Injective enc)
     (x : Fin χ) (τ : Cfg d n) :
@@ -743,7 +740,7 @@ long-range MPS. This is the supported-tree step, not a canonicalization theorem.
 theorem exists_rounds_blockLayerOp_supportedPolarTree (d s c : ℕ) [NeZero d] [NeZero s] :
     ∃ C : ℕ, ∀ {D χ : ℕ} (A : MPSTensor d D) (e : Fin χ ↪ Fin (D * D)),
       (∀ m, s ≤ m →
-        IsInjectiveOn (blockTensor A m) (Set.range (virtualPairEquiv D ∘ e))) →
+        IsInjectiveOn (Kraus.block A m) (Set.range (virtualPairEquiv D ∘ e))) →
       ∀ (h : ℕ) {M N : ℕ} [NeZero N] (ℓ : Fin M → ℕ) (hN : ∑ b, ℓ b = N)
         (w : Fin M → ℕ → ℕ) (hT : ∀ b, IsTreeLayout h s (ℓ b) (w b)),
         (∀ b (p : Fin (2 ^ (h + 1))), leafLen h (ℓ b) (w b) p ≤ c) →

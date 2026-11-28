@@ -16,14 +16,14 @@ of distinct blocks have spectral radius below one. The isometry of the source's 
 a tensor that is not normal ("Long-range MPS using measurements") acts on the bond pairs
 `(ι_j a, ι_j c)` of the blocks. This file proves that for every large block length `q` the
 `q`-site blocked tensor of the direct sum is injective on these pairs
-(`MPSTensor.exists_isInjectiveOn_blockTensor_blockSum`): its matrices vanish on the other pairs
+(`MPSTensor.exists_isInjectiveOn_block_blockSum`): its matrices vanish on the other pairs
 and span every matrix unit on these. So the isometric factor of its polar decomposition is an
 isometry on these pairs (`MPSTensor.sum_star_polarIsoMatrix_mul`) even when the `q`-site states
 of distinct blocks overlap.
 
 The proof is the one indicated in `docs/paper-gaps/mswc24_measurement_preparation_scope.tex`:
 the Gram matrix `Bᴴ B` converges to `G_∞ = ∑ⱼ K_j (σ_jᵀ ⊗ 1) K_jᴴ`
-(`MPSTensor.exists_norm_gram_blockTensor_blockSum_sub_le`), which is positive definite on the
+(`MPSTensor.exists_norm_gram_block_blockSum_sub_le`), which is positive definite on the
 bond pairs of the blocks (`MPSTensor.exists_pos_algebraMap_le_blockSumGramLimit_add`); so `B`
 has no kernel on these pairs for large `q`, and by duality its matrices span all matrix units on
 them (`MPSTensor.isInjectiveOn_of_eq_zero_of_mulVec_eq_zero`).
@@ -33,7 +33,7 @@ them (`MPSTensor.isInjectiveOn_of_eq_zero_of_mulVec_eq_zero`).
 * `MPSTensor.blockPairs` — the bond pairs `(ι_j a, ι_j c)` of the blocks.
 * `MPSTensor.isInjectiveOn_of_eq_zero_of_mulVec_eq_zero` — injectivity on a set of bond pairs
   from the absence of a kernel on vectors supported there.
-* `MPSTensor.exists_isInjectiveOn_blockTensor_blockSum` — injectivity of the blocked direct sum
+* `MPSTensor.exists_isInjectiveOn_block_blockSum` — injectivity of the blocked direct sum
   on the bond pairs of the blocks for large block lengths.
 
 ## References
@@ -48,7 +48,6 @@ open MPTensor
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators
 open Matrix
-open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 
@@ -101,13 +100,13 @@ theorem isInjectiveOn_of_eq_zero_of_mulVec_eq_zero {n : ℕ} {B : MPSTensor n D}
 variable {Aj : (j : Fin b) → MPSTensor d (Dj j)} {ι : (j : Fin b) → Fin (Dj j) → Fin D}
 
 /-- The matrices of the blocked direct sum vanish outside the bond pairs of the blocks. -/
-private theorem blockTensor_blockSum_apply_eq_zero
+private theorem block_blockSum_apply_eq_zero
     (hι : ∀ j, Function.Injective (ι j))
     (hdisj : ∀ j j', j ≠ j' → ∀ a a', ι j a ≠ ι j' a') (μ : Fin b → ℂ) {q : ℕ} (hq : q ≠ 0)
-    (i : Fin (blockPhysDim d q)) {p : Fin D × Fin D} (hp : p ∉ blockPairs ι) :
-    blockTensor (blockSum Aj ι μ) q i p.1 p.2 = 0 := by
-  change physicalMatrix (blockTensor (blockSum Aj ι μ) q) i p = 0
-  rw [physicalMatrix_blockTensor_blockSum hι hdisj μ hq, Matrix.sum_apply]
+    (i : (Fin q → Fin d)) {p : Fin D × Fin D} (hp : p ∉ blockPairs ι) :
+    Kraus.block (blockSum Aj ι μ) q i p.1 p.2 = 0 := by
+  change physicalMatrix (Kraus.block (blockSum Aj ι μ) q) i p = 0
+  rw [physicalMatrix_block_blockSum hι hdisj μ hq, Matrix.sum_apply]
   refine Finset.sum_eq_zero fun j _ => ?_
   rw [Matrix.smul_apply, Matrix.mul_apply]
   refine (smul_eq_zero_of_right _ (Finset.sum_eq_zero fun r _ => ?_))
@@ -166,11 +165,11 @@ eigenvalues of the mixed transfer maps of distinct blocks. There is `L₀` such 
 `(ι_j a, ι_j c)` of the blocks: the `q`-site states of the blocks are jointly linearly
 independent although they need not be orthogonal.
 
-The Gram matrix converges to `G_∞` (`exists_norm_gram_blockTensor_blockSum_sub_le`), and
+The Gram matrix converges to `G_∞` (`exists_norm_gram_block_blockSum_sub_le`), and
 `G_∞ + Q ≥ c > 0` (`exists_pos_algebraMap_le_blockSumGramLimit_add`), so for `‖Bᴴ B - G_∞‖ < c` a
 vector `x` supported on the pairs of the blocks with `B x = 0` satisfies
 `0 = x†(Bᴴ B + Q)x ≥ (c - ‖Bᴴ B - G_∞‖) x†x`. -/
-theorem exists_isInjectiveOn_blockTensor_blockSum (hι : ∀ j, Function.Injective (ι j))
+theorem exists_isInjectiveOn_block_blockSum (hι : ∀ j, Function.Injective (ι j))
     (hdisj : ∀ j j', j ≠ j' → ∀ a a', ι j a ≠ ι j' a')
     (hN : ∀ j, Kraus.IsNormal (Aj j)) (hA : ∀ j, IsLeftCanonical (Aj j))
     {σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ} (hσ : ∀ j, (σ j).PosDef)
@@ -181,14 +180,14 @@ theorem exists_isInjectiveOn_blockTensor_blockSum (hι : ∀ j, Function.Injecti
     (hmix : ∀ j j', j ≠ j' → ∀ μ', Module.End.HasEigenvalue (Kraus.mixedMapLM (Aj j) (Aj j')) μ' →
       ‖μ'‖ ≤ ‖lam₂‖) :
     ∃ L₀ : ℕ, ∀ q, L₀ ≤ q →
-      IsInjectiveOn (blockTensor (blockSum Aj ι fun _ => 1) q) (blockPairs ι : Set _) := by
+      IsInjectiveOn (Kraus.block (blockSum Aj ι fun _ => 1) q) (blockPairs ι : Set _) := by
   classical
   -- A rate `0 < t < 1` bounding the eigenvalues, so that the Gram matrices converge.
   set t : ℝ := max ‖lam₂‖ (1 / 2)
   have ht0 : 0 < t := lt_max_of_lt_right (by norm_num)
   have ht1 : t < 1 := max_lt hl (by norm_num)
   have hnt : ‖(t : ℂ)‖ = t := by rw [Complex.norm_real, Real.norm_eq_abs, abs_of_pos ht0]
-  obtain ⟨K, hK, hG⟩ := exists_norm_gram_blockTensor_blockSum_sub_le hι hdisj hN hA hσ htr hfix
+  obtain ⟨K, hK, hG⟩ := exists_norm_gram_block_blockSum_sub_le hι hdisj hN hA hσ htr hfix
     (lam₂ := (t : ℂ)) (by rwa [hnt]) (fun j μ' h h1 => (hlam j μ' h h1).trans (by
       rw [hnt]; exact le_max_left _ _)) (fun j j' h μ' hμ => (hmix j j' h μ' hμ).trans (by
       rw [hnt]; exact le_max_left _ _)) (γ := 1 / 2) (by norm_num) (by norm_num)
@@ -201,7 +200,7 @@ theorem exists_isInjectiveOn_blockTensor_blockSum (hι : ∀ j, Function.Injecti
   obtain ⟨L, hL⟩ := exists_pow_lt_of_lt_one (show 0 < c / (K + 1) by positivity) hx₁
   refine ⟨L + 1, fun q hq => ?_⟩
   have hq0 : q ≠ 0 := by omega
-  set B := physicalMatrix (blockTensor (blockSum Aj ι fun _ => 1) q)
+  set B := physicalMatrix (Kraus.block (blockSum Aj ι fun _ => 1) q)
   set G := blockSumGramLimit ι σ
   set Q := offBlockProj ι
   have hΔ : ‖Bᴴ * B - G‖ < c := by
@@ -213,7 +212,7 @@ theorem exists_isInjectiveOn_blockTensor_blockSum (hι : ∀ j, Function.Injecti
       _ < (K + 1) * (c / (K + 1)) := mul_lt_mul_of_pos_right (by linarith) (by positivity)
       _ = c := by field_simp
   refine isInjectiveOn_of_eq_zero_of_mulVec_eq_zero
-    (fun i p hp => blockTensor_blockSum_apply_eq_zero hι hdisj _ hq0 i hp) fun x hx hBx => ?_
+    (fun i p hp => block_blockSum_apply_eq_zero hι hdisj _ hq0 i hp) fun x hx hBx => ?_
   -- `Bᴴ B + Q ≥ c - ‖Bᴴ B - G‖`.
   have hQx : Q.mulVec x = 0 := offBlockProj_mulVec_eq_zero hι hdisj hx
   have hH₀ : IsSelfAdjoint (G + Q) := by

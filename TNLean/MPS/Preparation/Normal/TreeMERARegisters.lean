@@ -63,7 +63,6 @@ open MPTensor
 
 open Matrix MPSTensor
 open scoped ComplexOrder InnerProductSpace
-open Kraus (blockPhysDim blockTensor)
 
 namespace MPSPreparation
 
@@ -75,7 +74,7 @@ variable {d D s k : ℕ}
 registers of `s` sites. -/
 noncomputable def registerCfgEquiv (d s q M : ℕ) :
     Cfg d (M * (s * q)) ≃ Cfg (blockPhysDim d s) (M * q) :=
-  ((Kraus.blockedConfigEquiv d M (s * q)).symm.trans
+  ((Kraus.blockConfigEquiv (Fin d) M (s * q)).symm.trans
     (Equiv.piCongrRight fun _ => directIteratedBlockEquiv d s q)).trans
     (Kraus.blockedConfigEquiv (blockPhysDim d s) M q)
 
@@ -93,7 +92,7 @@ noncomputable def registerState [NeZero D] (M : ℕ) : MPVSpace (Fin d) (M * (s 
 the MERA at the configuration of the registers of every block. -/
 theorem registerState_apply [NeZero D] (M : ℕ) (τ : Cfg d (M * (s * 2 ^ (k + 1)))) :
     𝓜.registerState M τ = 𝓜.amplitude fun j => directIteratedBlockEquiv d s (2 ^ (k + 1))
-      ((Kraus.blockedConfigEquiv d M (s * 2 ^ (k + 1))).symm τ j) := by
+      ((Kraus.blockConfigEquiv (Fin d) M (s * 2 ^ (k + 1))).symm τ j) := by
   rw [registerState, LinearIsometryEquiv.piLpCongrLeft_apply, Equiv.piCongrLeft'_apply,
     Equiv.symm_symm, state_apply]
   simp [registerCfgEquiv]
@@ -114,25 +113,25 @@ length `q = s 2^{k+1}` and `M ≥ 1` blocks, the approximating state `|φ'_N⟩ 
 eq. (10) is the state, read on the sites, of the tree-RG MERA with `k + 1` isometry layers of
 `A` blocked over `s` sites. -/
 theorem approximatingMPVState_eq_registerState_treeMERA [NeZero D] (A : MPSTensor d D)
-    (hs : Kraus.IsInjective (blockTensor A s)) {σ : Matrix (Fin D) (Fin D) ℂ}
+    (hs : Kraus.IsInjective (Kraus.block A s)) {σ : Matrix (Fin D) (Fin D) ℂ}
     (hσ : σ.PosSemidef) (htr : σ.trace = 1) (k M : ℕ) [NeZero M]
     (u : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ)
     (hu : u ∈ Matrix.unitaryGroup (Fin D × Fin D) ℂ) (hu0 : ∀ p, u p (0, 0) = fixedPointPair σ p) :
     approximatingMPVState A σ (s * 2 ^ (k + 1)) M =
-      (treeMERA (blockTensor A s) (isInjective_blockTensor_two hs) k u hu).registerState M := by
-  have hq : Kraus.IsInjective (blockTensor A (s * 2 ^ (k + 1))) := by
+      (treeMERA (Kraus.block A s) (isInjective_block_two hs) k u hu).registerState M := by
+  have hq : Kraus.IsInjective (Kraus.block A (s * 2 ^ (k + 1))) := by
     rw [mul_comm]
     exact block_isInjective_mul_of_block_isInjective A (pow_pos two_pos _) hs
   rw [(inner_approximatingMPVState_mpvState A hq hσ htr M).1]
-  set 𝓜 := treeMERA (blockTensor A s) (isInjective_blockTensor_two hs) k u hu
+  set 𝓜 := treeMERA (Kraus.block A s) (isInjective_block_two hs) k u hu
   have htop : 𝓜.topPair = fixedPointPair σ := funext hu0
-  have htree : 𝓜.treeMatrix = polarIsoMatrix (blockTensor (blockTensor A s) (2 ^ (k + 1))) :=
-    (binaryTreeMatrix_treeLayers k _).trans (polarIsoMatrix_blockTensor_eq_treeIsoMatrix k _).symm
+  have htree : 𝓜.treeMatrix = polarIsoMatrix (Kraus.block (Kraus.block A s) (2 ^ (k + 1))) :=
+    (binaryTreeMatrix_treeLayers k _).trans (polarIsoMatrix_block_eq_treeIsoMatrix k _).symm
   ext τ
   rw [approximatingMPVStateRaw_apply, BinaryMERA.registerState_apply, BinaryMERA.amplitude, htop,
     htree, mpv_approximatingTensor]
   refine Finset.sum_congr rfl fun x _ => congrArg (· * _) (Finset.prod_congr rfl fun j _ => ?_)
-  rw [polarIsoMatrix_blockTensor_blockTensor, ← directIteratedBlockEquiv_symm_apply,
+  rw [polarIsoMatrix_block_block, ← directIteratedBlockEquiv_symm_apply,
     Equiv.symm_apply_apply]
 
 /-- **Normal MPS are finite-range MERA on registers, within `ε`** (arXiv:2307.01696, paragraph
@@ -152,13 +151,13 @@ theorem exists_registerState_treeMERA_approximationError_le [NeZero D] (A : MPST
     {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosDef) (htr : σ.trace = 1)
     (hfix : Kraus.transferMap A σ = σ) {t : ℝ} (ht0 : 0 < t) (ht1 : t < 1)
     (hlam : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ t) :
-    ∃ C : ℝ, 0 < C ∧ ∀ s : ℕ, 0 < s → ∀ (hs : Kraus.IsInjective (blockTensor A s))
+    ∃ C : ℝ, 0 < C ∧ ∀ s : ℕ, 0 < s → ∀ (hs : Kraus.IsInjective (Kraus.block A s))
       (u : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ)
       (hu : u ∈ Matrix.unitaryGroup (Fin D × Fin D) ℂ), (∀ p, u p (0, 0) = fixedPointPair σ p) →
       ∀ ε : ℝ, 0 < ε → ∀ (k M : ℕ) [NeZero M],
         correlationLength (t : ℂ) * Real.log (C * (M * (s * 2 ^ (k + 1))) / ε) ≤
             s * 2 ^ (k + 1) →
-          1 - ‖⟪(treeMERA (blockTensor A s) (isInjective_blockTensor_two hs) k u hu).registerState
+          1 - ‖⟪(treeMERA (Kraus.block A s) (isInjective_block_two hs) k u hu).registerState
             M, normalizedMPVState A (M * (s * 2 ^ (k + 1)))⟫_ℂ‖ ≤ ε := by
   have hnorm : ‖(t : ℂ)‖ = t := by rw [Complex.norm_real, Real.norm_eq_abs, abs_of_pos ht0]
   have hξ : 0 < correlationLength (t : ℂ) :=
@@ -192,13 +191,13 @@ theorem exists_registerState_treeMERA_approximationError_le_and_le_logb [NeZero 
     {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosDef) (htr : σ.trace = 1)
     (hfix : Kraus.transferMap A σ = σ) {t : ℝ} (ht0 : 0 < t) (ht1 : t < 1)
     (hlam : ∀ μ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → ‖μ‖ ≤ t) :
-    ∃ C : ℝ, 0 < C ∧ ∀ s : ℕ, 0 < s → ∀ (hs : Kraus.IsInjective (blockTensor A s))
+    ∃ C : ℝ, 0 < C ∧ ∀ s : ℕ, 0 < s → ∀ (hs : Kraus.IsInjective (Kraus.block A s))
       (u : Matrix (Fin D × Fin D) (Fin D × Fin D) ℂ)
       (hu : u ∈ Matrix.unitaryGroup (Fin D × Fin D) ℂ), (∀ p, u p (0, 0) = fixedPointPair σ p) →
       ∀ ε : ℝ, 0 < ε → ∀ (M : ℕ) [NeZero M], ∃ k : ℕ,
         correlationLength (t : ℂ) * Real.log (C * (M * (s * 2 ^ (k + 1))) / ε) ≤
             s * 2 ^ (k + 1) ∧
-        1 - ‖⟪(treeMERA (blockTensor A s) (isInjective_blockTensor_two hs) k u hu).registerState
+        1 - ‖⟪(treeMERA (Kraus.block A s) (isInjective_block_two hs) k u hu).registerState
             M, normalizedMPVState A (M * (s * 2 ^ (k + 1)))⟫_ℂ‖ ≤ ε ∧
         (k : ℝ) ≤ Real.logb 2 (max 1
           (correlationLength (t : ℂ) * Real.log (C * (M * (s * 2 ^ (k + 1))) / ε))) := by
@@ -242,7 +241,7 @@ theorem exists_binaryMERA_registerState_approximationError_le [NeZero D] (A : MP
     correlationLength_pos (by rwa [hnorm]) (by rwa [hnorm]), hC, fun s hs ε hε M _ => ?_⟩
   have hsB := hinj s (by omega)
   obtain ⟨k, -, herr, hk⟩ := h s (by omega) hsB u hu hu0 ε hε M
-  refine ⟨k, treeMERA (blockTensor B s) (isInjective_blockTensor_two hsB) k u hu, hk, ?_⟩
+  refine ⟨k, treeMERA (Kraus.block B s) (isInjective_block_two hsB) k u hu, hk, ?_⟩
   rwa [← norm_inner_normalizedMPVState_of_mpv_eq hζ (hmpv _)]
 
 end MPSPreparation

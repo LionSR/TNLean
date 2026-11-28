@@ -72,7 +72,6 @@ on the first column of `T` breaks. Documented in
 -/
 
 open scoped BigOperators Matrix Kronecker ComplexOrder
-open Kraus (decodeBlockEquiv blockTensor)
 
 namespace MPSPreparation
 
@@ -279,14 +278,14 @@ tensors `A₀, …, A_{q-1}` is `V = B P⁻¹`, read as a matrix product map:
 and the paragraph "Inhomogeneous short-range correlated MPS" for tensors that depend on the
 site). -/
 theorem polarIsoMatrix_chainBlockTensor_eq_sum {q : ℕ} (A : MPSChainTensor d D q)
-    (hB : Kraus.IsInjective (MPSChainTensor.blockTensor A)) (σ : Fin q → Fin d)
+    (hB : Kraus.IsInjective (MPSChainTensor.eval A)) (σ : Fin q → Fin d)
     (x : Fin (D * D)) :
-    MPSTensor.polarIsoMatrix (MPSChainTensor.blockTensor A) ((decodeBlockEquiv d q).symm σ) x =
+    MPSTensor.polarIsoMatrix (MPSChainTensor.eval A) (σ) x =
       ∑ a, eval A σ (virtualPairEquiv D a).1 (virtualPairEquiv D a).2 *
-        ((Matrix.polarPos (MPSTensor.physicalMatrix (MPSChainTensor.blockTensor A)))⁻¹.submatrix
+        ((Matrix.polarPos (MPSTensor.physicalMatrix (MPSChainTensor.eval A)))⁻¹.submatrix
           (virtualPairEquiv D) (virtualPairEquiv D)) a x := by
   classical
-  set B := MPSChainTensor.blockTensor A with hBdef
+  set B := MPSChainTensor.eval A with hBdef
   set M := MPSTensor.physicalMatrix B
   let e := virtualPairEquiv D
   have hinj := MPSTensor.injective_physicalMatrix_mulVec_of_isInjective hB
@@ -306,15 +305,15 @@ theorem polarIsoMatrix_chainBlockTensor_eq_sum {q : ℕ} (A : MPSChainTensor d D
 matrix product map: `⟨σ|V|x⟩ = ∑_{α,β} (A^{σ₁} ⋯ A^{σ_q})_{αβ} (P⁻¹)_{(α,β),x}`
 (arXiv:2307.01696, eq. (13)). This is `polarIsoMatrix_chainBlockTensor_eq_sum` for the constant
 chain. -/
-theorem polarIsoMatrix_blockTensor_eq_sum (A : MPSTensor d D) {q : ℕ}
-    (hB : Kraus.IsInjective (blockTensor A q)) (σ : Fin q → Fin d) (x : Fin (D * D)) :
-    MPSTensor.polarIsoMatrix (blockTensor A q) ((decodeBlockEquiv d q).symm σ) x =
+theorem polarIsoMatrix_block_eq_sum (A : MPSTensor d D) {q : ℕ}
+    (hB : Kraus.IsInjective (Kraus.block A q)) (σ : Fin q → Fin d) (x : Fin (D * D)) :
+    MPSTensor.polarIsoMatrix (Kraus.block A q) (σ) x =
       ∑ a, Kraus.evalWord A (List.ofFn σ) (virtualPairEquiv D a).1 (virtualPairEquiv D a).2 *
-        ((Matrix.polarPos (MPSTensor.physicalMatrix (blockTensor A q)))⁻¹.submatrix
+        ((Matrix.polarPos (MPSTensor.physicalMatrix (Kraus.block A q)))⁻¹.submatrix
           (virtualPairEquiv D) (virtualPairEquiv D)) a x := by
   have h := polarIsoMatrix_chainBlockTensor_eq_sum (fun _ : Fin q => A)
-    (by rwa [MPSChainTensor.blockTensor_const]) σ x
-  simpa only [MPSChainTensor.blockTensor_const, MPSChainTensor.eval_const] using h
+    (by rwa [MPSChainTensor.eval_const_eq_block]) σ x
+  simpa only [MPSChainTensor.eval_const_eq_block, MPSChainTensor.eval_const] using h
 
 /-- **Sequential factorization of the isometric factor of a blocked tensor injective on a set
 of bond pairs.** Let `A₀, …, A_{q-1}` be tensors with bond dimension `D`, one on each site,
@@ -332,7 +331,7 @@ inputs in `S` are kept, as in `exists_isometric_chain_of_eq_mul_of_le`. For `S` 
 pairs this is `exists_isometric_chain_polarIsoMatrix`. -/
 theorem exists_isometric_chain_polarIsoMatrix_of_isInjectiveOn {q : ℕ}
     (A : MPSChainTensor d D q) (hq : 0 < q) {S : Finset (Fin D × Fin D)}
-    (hB : MPSTensor.IsInjectiveOn (MPSChainTensor.blockTensor A) (S : Set (Fin D × Fin D)))
+    (hB : MPSTensor.IsInjectiveOn (MPSChainTensor.eval A) (S : Set (Fin D × Fin D)))
     (π : Fin (D * D) ≃ Fin D × Fin D) (hπ : ∀ x, x.val < S.card ↔ π x ∈ S) :
     ∃ (b : Fin (q + 1) → ℕ) (Q : MPSChainTensor d (D * D) q),
       b 0 = 1 ∧ b (Fin.last q) = S.card ∧ (∀ p : Fin q, b p.succ ≤ D * D) ∧
@@ -340,23 +339,23 @@ theorem exists_isometric_chain_polarIsoMatrix_of_isInjectiveOn {q : ℕ}
       (∀ p i α β, b p.succ ≤ β.val → Q p i α β = 0) ∧
       (∀ p, IsIsometryOn (b p.succ) (Q p)) ∧
       ∀ (σ : Fin q → Fin d) (x : Fin (D * D)), x.val < S.card →
-        MPSTensor.polarIsoMatrix (MPSChainTensor.blockTensor A)
-            ((decodeBlockEquiv d q).symm σ) ((virtualPairEquiv D).symm (π x)) =
+        MPSTensor.polarIsoMatrix (MPSChainTensor.eval A)
+            (σ) ((virtualPairEquiv D).symm (π x)) =
           eval Q σ ⟨0, x.pos⟩ x := by
   classical
   obtain ⟨n, rfl⟩ : ∃ n, q = n + 1 := ⟨q - 1, by omega⟩
-  obtain ⟨G, hG⟩ := MPSTensor.exists_polarIsoMatrix_eq_sum (MPSChainTensor.blockTensor A)
+  obtain ⟨G, hG⟩ := MPSTensor.exists_polarIsoMatrix_eq_sum (MPSChainTensor.eval A)
   let V : (Fin (n + 1) → Fin d) → Fin (D * D) → ℂ := fun σ x =>
-    MPSTensor.polarIsoMatrix (MPSChainTensor.blockTensor A) ((decodeBlockEquiv d (n + 1)).symm σ)
+    MPSTensor.polarIsoMatrix (MPSChainTensor.eval A) (σ)
       ((virtualPairEquiv D).symm (π x))
   have hcard : S.card ≤ D * D := by simpa using S.card_le_univ
   refine exists_isometric_chain_of_eq_mul_of_le A hcard
     (Matrix.of fun a x => G a ((virtualPairEquiv D).symm (π x))) V (fun σ x _ => ?_)
     (fun x y hx _ => ?_)
-  · simp only [V, hG, MPSChainTensor.blockTensor_decodeBlockEquiv_symm, Matrix.of_apply]
+  · simp only [V, hG, Matrix.of_apply]
   · have h := MPSTensor.sum_star_polarIsoMatrix_mul hB ((virtualPairEquiv D).symm (π x))
       ((virtualPairEquiv D).symm (π y))
-    rw [← (decodeBlockEquiv d (n + 1)).symm.sum_comp] at h
+    rw [← .sum_comp] at h
     simp only [V]
     rw [h]
     have hS := (hπ x).mp hx
@@ -374,7 +373,7 @@ there are bond dimensions `b₀ = 1`, `b_q = D²`, and `b₁, …, b_q ≤ D²`,
 `⟨σ₁ ⋯ σ_q| V |x⟩ = (Q₀(σ₁) ⋯ Q_{q-1}(σ_q))_{0x}` for every configuration and every
 input `x` of `ℂ^{D²}`. Equivalently, `V` is the ordered composition of the `q`
 isometries, each acting on one site and the bond to its left. For a constant chain the
-blocked tensor is `blockTensor A q` (`MPSChainTensor.blockTensor_const`).
+blocked tensor is `Kraus.block A q` (`MPSChainTensor.eval_const_eq_block`).
 
 arXiv:2307.01696, eqs. (13)–(15): `V = V_q ⋯ V_1` with isometries
 `V_i : ℂ^{D'_i} → ℂ^{d D'_{i+1}}`, `D'_i ≤ D²`, `D'_{q+1} = 1`, where the last factor
@@ -382,15 +381,15 @@ arXiv:2307.01696, eqs. (13)–(15): `V = V_q ⋯ V_1` with isometries
 here `Q_p = V_{q-p}` and `b_p = D'_{q+1-p}`. The paragraph "Inhomogeneous short-range
 correlated MPS" applies the same decomposition to tensors that depend on the site. -/
 theorem exists_isometric_chain_polarIsoMatrix {q : ℕ} (A : MPSChainTensor d D q) (hq : 0 < q)
-    (hB : Kraus.IsInjective (MPSChainTensor.blockTensor A)) :
+    (hB : Kraus.IsInjective (MPSChainTensor.eval A)) :
     ∃ (b : Fin (q + 1) → ℕ) (Q : MPSChainTensor d (D * D) q),
       b 0 = 1 ∧ b (Fin.last q) = D * D ∧ (∀ p : Fin q, b p.succ ≤ D * D) ∧
       (∀ p i, IsRowSupportedBelow (b p.castSucc) (Q p i)) ∧
       (∀ p i α β, b p.succ ≤ β.val → Q p i α β = 0) ∧
       (∀ p, IsIsometryOn (b p.succ) (Q p)) ∧
       ∀ (σ : Fin q → Fin d) (x : Fin (D * D)),
-        MPSTensor.polarIsoMatrix (MPSChainTensor.blockTensor A)
-            ((decodeBlockEquiv d q).symm σ) x =
+        MPSTensor.polarIsoMatrix (MPSChainTensor.eval A)
+            (σ) x =
           eval Q σ ⟨0, x.pos⟩ x := by
   classical
   have hc : (Finset.univ : Finset (Fin D × Fin D)).card = D * D := by simp
@@ -418,7 +417,7 @@ because `(V T)† (V T) = T† Π T` is the diagonal projector. -/
 theorem exists_isometric_chain_polarIsoMatrix_mul_unitary {q : ℕ} (A : MPSChainTensor d D q)
     (hq : 0 < q) {r : ℕ} (hr : r ≤ D * D) {T : Matrix (Fin (D * D)) (Fin (D * D)) ℂ}
     (hT : T ∈ unitary (Matrix (Fin (D * D)) (Fin (D * D)) ℂ))
-    (hET : MPSTensor.polarSupportMatrix (MPSChainTensor.blockTensor A) * T =
+    (hET : MPSTensor.polarSupportMatrix (MPSChainTensor.eval A) * T =
       T * Matrix.diagonal fun y => if y.val < r then 1 else 0) :
     ∃ (b : Fin (q + 1) → ℕ) (Q : MPSChainTensor d (D * D) q),
       b 0 = 1 ∧ b (Fin.last q) = r ∧ (∀ p : Fin q, b p.succ ≤ D * D) ∧
@@ -426,14 +425,14 @@ theorem exists_isometric_chain_polarIsoMatrix_mul_unitary {q : ℕ} (A : MPSChai
       (∀ p i α β, b p.succ ≤ β.val → Q p i α β = 0) ∧
       (∀ p, IsIsometryOn (b p.succ) (Q p)) ∧
       (∀ (σ : Fin q → Fin d) (x : Fin (D * D)), x.val < r →
-        (MPSTensor.polarIsoMatrix (MPSChainTensor.blockTensor A) * T)
-            ((decodeBlockEquiv d q).symm σ) x = eval Q σ ⟨0, x.pos⟩ x) ∧
+        (MPSTensor.polarIsoMatrix (MPSChainTensor.eval A) * T)
+            (σ) x = eval Q σ ⟨0, x.pos⟩ x) ∧
       ∀ (σ : Fin q → Fin d) (x : Fin (D * D)), r ≤ x.val →
-        (MPSTensor.polarIsoMatrix (MPSChainTensor.blockTensor A) * T)
-          ((decodeBlockEquiv d q).symm σ) x = 0 := by
+        (MPSTensor.polarIsoMatrix (MPSChainTensor.eval A) * T)
+          (σ) x = 0 := by
   classical
   obtain ⟨n, rfl⟩ : ∃ n, q = n + 1 := ⟨q - 1, by omega⟩
-  set B := MPSChainTensor.blockTensor A with hBdef
+  set B := MPSChainTensor.eval A with hBdef
   set V := MPSTensor.polarIsoMatrix B with hV
   set dec := decodeBlockEquiv d (n + 1)
   have hgram : (V * T)ᴴ * (V * T) = Matrix.diagonal fun y => if y.val < r then 1 else 0 := by
@@ -454,7 +453,7 @@ theorem exists_isometric_chain_polarIsoMatrix_mul_unitary {q : ℕ} (A : MPSChai
         refine Finset.sum_congr rfl fun j _ => ?_
         rw [hV, hG₀, Finset.sum_mul]
         refine Finset.sum_congr rfl fun a _ => ?_
-        rw [hBdef, MPSChainTensor.blockTensor_decodeBlockEquiv_symm, mul_assoc])
+        rw [hBdef, mul_assoc])
       (fun x y hx _ => by
         rw [hcol x y]
         split_ifs <;> simp_all)

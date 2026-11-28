@@ -21,7 +21,6 @@ Source: arXiv:2307.01696, eqs. (10)–(12), Fig. 1 and the paragraph
 open Matrix MPSTensor
 open scoped BigOperators ComplexOrder
 open QuantumCircuit
-open Kraus (blockTensor)
 
 namespace MPSPreparation
 
@@ -30,7 +29,7 @@ variable {d D M N r₁ : ℕ} {ℓ : Fin M → ℕ}
 /-- For blocks of equal length `q` and the pair of the fixed point, the state
 `(⊗ₖ V_k) ⊗ₖ |ω⟩` is the approximating state `|φ'_N⟩` of eq. (10) of arXiv:2307.01696. -/
 theorem approximatingMPVState_eq_blockIsometryState (A : MPSTensor d D) {q : ℕ}
-    (hB : Kraus.IsInjective (blockTensor A q)) {σ : Matrix (Fin D) (Fin D) ℂ}
+    (hB : Kraus.IsInjective (Kraus.block A q)) {σ : Matrix (Fin D) (Fin D) ℂ}
     (hσ : σ.PosSemidef) (htr : σ.trace = 1) (M : ℕ) [NeZero M]
     (hN : ∑ _ : Fin M, q = M * q) :
     approximatingMPVState A σ q M = blockIsometryState A (fixedPointPair σ) hN := by
@@ -49,7 +48,7 @@ arXiv:2307.01696, paragraph "The sequential-RG circuit" and Fig. 1; this is
 `MPSPreparation.exists_isPreparedInDepth_blockIsometryState` for blocks of equal length. -/
 theorem exists_isPreparedInDepth_approximatingMPVState (d D : ℕ) :
     ∃ C : ℕ, ∀ (A : MPSTensor d D) (σ : Matrix (Fin D) (Fin D) ℂ), σ.PosSemidef →
-      σ.trace = 1 → ∀ q, 3 * D ≤ q → Kraus.IsInjective (blockTensor A q) →
+      σ.trace = 1 → ∀ q, 3 * D ≤ q → Kraus.IsInjective (Kraus.block A q) →
         ∀ (M : ℕ) [NeZero (M * q)],
           IsPreparedInDepth (Geometry.ring (M * q)) (C * q)
             fun s => approximatingMPVState A σ q M s := by

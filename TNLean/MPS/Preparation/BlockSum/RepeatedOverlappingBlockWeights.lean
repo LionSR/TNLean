@@ -108,7 +108,6 @@ in `docs/paper-gaps/mswc24_repeated_block_corrected_state.tex`.
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators NNReal ENNReal
 open Matrix
-open Kraus (blockTensor)
 
 namespace MPSTensor
 
@@ -140,10 +139,10 @@ physical leg is the pair of bond indices of block `j`, and `P_{σ_j}` is the fix
 theorem sum_star_copyApproxVector_mul_mpv (A : MPSTensor d D) (q M : ℕ) [NeZero M]
     (α : Fin b → ℂ) (L : (j : Fin b) → Matrix (Fin D × Fin D) (Fin (Dj j) × Fin (Dj j)) ℂ)
     (σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ) :
-    ∑ τ, star (copyApproxVector A q M α L σ τ) * mpv A (Kraus.blockedConfigEquiv d M q τ) =
+    ∑ τ, star (copyApproxVector A q M α L σ τ) * mpv A (Kraus.blockConfigEquiv (Fin d) M q τ) =
       ∑ j, star (α j) * mpvOverlap (ofPhysicalMatrixLM ((L j)ᴴ *
-        Matrix.polarPos (physicalMatrix (blockTensor A q)))) (fixedPointTensor (σ j)) M := by
-  set Bq := blockTensor A q
+        Matrix.polarPos (physicalMatrix (Kraus.block A q)))) (fixedPointTensor (σ j)) M := by
+  set Bq := Kraus.block A q
   set m : (Fin M → Fin D × Fin D) → ℂ := fun c =>
     mpv (polarPosTensor Bq) fun k => (virtualPairEquiv D).symm (c k)
   have hblock : ∀ j, ∑ c, star (((Matrix.piKronecker fun _ : Fin M ↦ (L j)) *ᵥ
@@ -217,9 +216,9 @@ theorem sum_norm_sq_copyApproxVector_le (A : MPSTensor d D) (q M : ℕ) [NeZero 
     rw [← h]
     refine Finset.sum_congr rfl fun c _ => ?_
     simp [copyFixedPointState, F, Finset.sum_apply]
-  have hidem := Matrix.conjTranspose_polarIso_mul_polarIso (physicalMatrix (blockTensor A q))
+  have hidem := Matrix.conjTranspose_polarIso_mul_polarIso (physicalMatrix (Kraus.block A q))
   have h := Matrix.sum_norm_sq_piKronecker_mulVec_le
-    (W := fun _ : Fin M ↦ Matrix.polarIso (physicalMatrix (blockTensor A q)))
+    (W := fun _ : Fin M ↦ Matrix.polarIso (physicalMatrix (Kraus.block A q)))
     (fun _ ↦ by rw [hidem, Matrix.polarSupport_mul_polarSupport])
     (copyFixedPointState (ghzAmplitude β) L σ)
   exact h.trans (Complex.ofReal_injective (hstate.trans Complex.ofReal_one.symm)).le
@@ -232,7 +231,6 @@ section RepeatedOverlappingBlockWeights
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators
 open Matrix
-open Kraus (blockTensor)
 
 namespace MPSTensor
 
@@ -279,15 +277,15 @@ include hι hdisj
 /-- The positive part vanishes off the ranges of the copy isometries: `P ∑ⱼ L_j L_jᴴ = P`. -/
 theorem polarPos_mul_sum_copyIsometry {Aj : (j : Fin b) → MPSTensor d (Dj j)}
     (μ : CopyWeights b m) {q : ℕ} (hq : q ≠ 0) :
-    Matrix.polarPos (physicalMatrix (blockTensor (repeatedBlockSum Aj ι μ) q)) *
+    Matrix.polarPos (physicalMatrix (Kraus.block (repeatedBlockSum Aj ι μ) q)) *
         ∑ j, copyIsometry ι μ q j * (copyIsometry ι μ q j)ᴴ =
-      Matrix.polarPos (physicalMatrix (blockTensor (repeatedBlockSum Aj ι μ) q)) := by
+      Matrix.polarPos (physicalMatrix (Kraus.block (repeatedBlockSum Aj ι μ) q)) := by
   have hiso := fun j => conjTranspose_copyIsometry_mul_self hι hdisj (μ.weight_fun_ne_zero j) q
   have horth := fun j k (h : j ≠ k) => conjTranspose_copyIsometry_mul_eq_zero hdisj μ q h
-  have hB : physicalMatrix (blockTensor (repeatedBlockSum Aj ι μ) q) *
+  have hB : physicalMatrix (Kraus.block (repeatedBlockSum Aj ι μ) q) *
       ∑ j, copyIsometry ι μ q j * (copyIsometry ι μ q j)ᴴ =
-      physicalMatrix (blockTensor (repeatedBlockSum Aj ι μ) q) := by
-    rw [physicalMatrix_blockTensor_repeatedBlockSum_eq_copyIsometry hι hdisj hq, Matrix.sum_mul]
+      physicalMatrix (Kraus.block (repeatedBlockSum Aj ι μ) q) := by
+    rw [physicalMatrix_block_repeatedBlockSum_eq_copyIsometry hι hdisj hq, Matrix.sum_mul]
     refine Finset.sum_congr rfl fun j _ => ?_
     rw [Matrix.smul_mul, Matrix.mul_assoc,
       conjTranspose_mul_sum_of_isometry hiso horth (fun k => (copyIsometry ι μ q k)ᴴ) j]
@@ -298,10 +296,10 @@ theorem polarPos_mul_sum_copyIsometry {Aj : (j : Fin b) → MPSTensor d (Dj j)}
 theorem conjTranspose_copyIsometry_mul_polarPos_eq_sum {Aj : (j : Fin b) → MPSTensor d (Dj j)}
     (μ : CopyWeights b m) {q : ℕ} (hq : q ≠ 0) (j : Fin b) :
     (copyIsometry ι μ q j)ᴴ *
-        Matrix.polarPos (physicalMatrix (blockTensor (repeatedBlockSum Aj ι μ) q)) =
+        Matrix.polarPos (physicalMatrix (Kraus.block (repeatedBlockSum Aj ι μ) q)) =
       ∑ j', ∑ k, μ j' k ^ q • (relativeRow (repeatedBlockSum Aj ι μ) ι μ q j j' *
         (pairEmbedding (ι j' k))ᴴ) := by
-  set P := Matrix.polarPos (physicalMatrix (blockTensor (repeatedBlockSum Aj ι μ) q))
+  set P := Matrix.polarPos (physicalMatrix (Kraus.block (repeatedBlockSum Aj ι μ) q))
   have hterm : ∀ j', ∑ k, μ j' k ^ q • (relativeRow (repeatedBlockSum Aj ι μ) ι μ q j j' *
       (pairEmbedding (ι j' k))ᴴ) =
       (copyIsometry ι μ q j)ᴴ * P * (copyIsometry ι μ q j' * (copyIsometry ι μ q j')ᴴ) :=
@@ -334,7 +332,7 @@ theorem ofPhysicalMatrixLM_conjTranspose_copyIsometry_mul_polarPos
     {Aj : (j : Fin b) → MPSTensor d (Dj j)} (μ : CopyWeights b m) {q : ℕ} (hq : q ≠ 0)
     (j : Fin b) :
     ofPhysicalMatrixLM ((copyIsometry ι μ q j)ᴴ *
-        Matrix.polarPos (physicalMatrix (blockTensor (repeatedBlockSum Aj ι μ) q))) =
+        Matrix.polarPos (physicalMatrix (Kraus.block (repeatedBlockSum Aj ι μ) q))) =
       repeatedBlockSum (fun j' => ofPhysicalMatrixLM
         (relativeRow (repeatedBlockSum Aj ι μ) ι μ q j j')) ι (μ.pow q) := by
   funext i
@@ -351,7 +349,7 @@ theorem mpvOverlap_conjTranspose_copyIsometry_mul_polarPos
     {Aj : (j : Fin b) → MPSTensor d (Dj j)} (μ : CopyWeights b m) {q : ℕ} (hq : q ≠ 0)
     (j : Fin b) {D' : ℕ} (F : MPSTensor (Dj j * Dj j) D') (M : ℕ) [NeZero M] :
     mpvOverlap (ofPhysicalMatrixLM ((copyIsometry ι μ q j)ᴴ *
-        Matrix.polarPos (physicalMatrix (blockTensor (repeatedBlockSum Aj ι μ) q)))) F M =
+        Matrix.polarPos (physicalMatrix (Kraus.block (repeatedBlockSum Aj ι μ) q)))) F M =
       ∑ j', bntWeight μ (M * q) j' * mpvOverlap (ofPhysicalMatrixLM
         (relativeRow (repeatedBlockSum Aj ι μ) ι μ q j j')) F M := by
   rw [ofPhysicalMatrixLM_conjTranspose_copyIsometry_mul_polarPos hι hdisj μ hq, mpvOverlap]
@@ -565,7 +563,7 @@ theorem exists_approximationError_le_repeatedOverlappingBlockSum
   have hβle : ∀ j, ‖β j‖ ≤ Real.sqrt bb := fun j =>
     Real.le_sqrt_of_sq_le (Finset.single_le_sum (f := fun j => ‖β j‖ ^ 2)
       (fun _ _ => by positivity) (Finset.mem_univ j))
-  set P := Matrix.polarPos (physicalMatrix (blockTensor A q))
+  set P := Matrix.polarPos (physicalMatrix (Kraus.block A q))
   set w : Fin b → Fin b → ℂ := fun j j' =>
     mpvOverlap (ofPhysicalMatrixLM (relativeRow A ι μ q j j')) (fixedPointTensor (σ j)) M
   set z : Fin b → ℂ := fun j => mpvOverlap (ofPhysicalMatrixLM ((copyIsometry ι μ q j)ᴴ * P))
@@ -574,7 +572,7 @@ theorem exists_approximationError_le_repeatedOverlappingBlockSum
     mpvOverlap_conjTranspose_copyIsometry_mul_polarPos hι hdisj μ hq0 j
       _ M
   set v := copyApproxVector A q M (ghzAmplitude β) (copyIsometry ι μ q) σ
-  set num := ∑ τ, star (v τ) * mpv A (Kraus.blockedConfigEquiv d M q τ)
+  set num := ∑ τ, star (v τ) * mpv A (Kraus.blockConfigEquiv (Fin d) M q τ)
   set Sz := ∑ j, star (β j) * z j
   have hnum : num = ((Real.sqrt bb : ℝ) : ℂ)⁻¹ * Sz := by
     simp only [num, v, sum_star_copyApproxVector_mul_mpv, Sz, Finset.mul_sum]

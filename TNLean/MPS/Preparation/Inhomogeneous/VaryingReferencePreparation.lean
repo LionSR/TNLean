@@ -51,7 +51,7 @@ theorem exists_abs_norm_chainState_sq_sub_one_le_corner_reference (D : ℕ) :
       (σ : Matrix (Fin D) (Fin D) ℂ) (b : ℕ), σ.trace = 1 →
       cornerProjection D b * σ = σ →
       |‖chainState A‖ ^ 2 - 1| ≤ K *
-        ‖transferMatrix (Kraus.transferMap (MPSChainTensor.blockTensor A)) -
+        ‖transferMatrix (Kraus.transferMap (MPSChainTensor.eval A)) -
           transferMatrix (cornerReferenceMap σ b)‖ := by
   let trL := LinearMap.toContinuousLinearMap (Matrix.traceLinearMap (Fin D × Fin D) ℂ ℂ)
   refine ⟨‖trL‖, norm_nonneg _, fun {d N} A σ b htr hsupp => ?_⟩
@@ -59,12 +59,12 @@ theorem exists_abs_norm_chainState_sq_sub_one_le_corner_reference (D : ℕ) :
   have htrace : Matrix.trace (transferMatrix (cornerReferenceMap σ b)) = 1 := by
     rw [trace_transferMatrix_cornerReferenceMap, hsupp, htr]
   have heq : ((‖chainState A‖ ^ 2 - 1 : ℝ) : ℂ) =
-      trL (transferMatrix (Kraus.transferMap (MPSChainTensor.blockTensor A)) -
+      trL (transferMatrix (Kraus.transferMap (MPSChainTensor.eval A)) -
         transferMatrix (cornerReferenceMap σ b)) := by
     change _ = Matrix.trace _
     rw [Matrix.trace_sub, htrace, Complex.ofReal_sub, Complex.ofReal_one,
       ofReal_norm_chainState_sq]
-  have h := trL.le_opNorm (transferMatrix (Kraus.transferMap (MPSChainTensor.blockTensor A)) -
+  have h := trL.le_opNorm (transferMatrix (Kraus.transferMap (MPSChainTensor.eval A)) -
     transferMatrix (cornerReferenceMap σ b))
   rw [← heq, Complex.norm_real, Real.norm_eq_abs] at h
   exact h
@@ -82,7 +82,7 @@ theorem exists_one_sub_norm_inner_chainPosState_le_varying_reference (D : ℕ) :
       τ.trace = 1 → cornerProjection D c * τ = τ → ∀ {δ : ℝ}, 0 ≤ δ →
       (∀ j, ‖transferMatrix (Kraus.transferMap (chainBlockTensor A hN j)) -
         transferMatrix (cornerReferenceMap (σ j) (b (finRotate M j)))‖ ≤ δ) →
-      ‖transferMatrix (Kraus.transferMap (MPSChainTensor.blockTensor A)) -
+      ‖transferMatrix (Kraus.transferMap (MPSChainTensor.eval A)) -
         transferMatrix (cornerReferenceMap τ c)‖ ≤ δ →
       1 - ‖⟪pairFamilyVector (fun j => fixedPointPair (σ (finRotate M j))),
         (‖chainPosState A hN‖ : ℂ)⁻¹ • chainPosState A hN⟫_ℂ‖ ≤
@@ -174,10 +174,10 @@ theorem exists_isPreparedInDepth_inhomogeneous_le_log_eventually_of_varying_refe
     have ht := hmix N (fun _ : Fin 1 => N) hsingle 0
       (Nat.pos_of_ne_zero (NeZero.ne N))
     simp only [hi] at ht
-    rw [← MPSChainTensor.transferMap_blockTensor] at ht
+    rw [← MPSChainTensor.transferMap_eval] at ht
     have hb : |‖chainState (A N)‖ ^ 2 - 1| ≤ 1 / 2 := by
       calc |‖chainState (A N)‖ ^ 2 - 1|
-          ≤ Kn * ‖transferMatrix (Kraus.transferMap (MPSChainTensor.blockTensor (A N))) -
+          ≤ Kn * ‖transferMatrix (Kraus.transferMap (MPSChainTensor.eval (A N))) -
             transferMatrix (Kraus.transferMap (fixedPointTensor (σ N 0)))‖ :=
               by simpa only [cornerReferenceMap_full (hσ N 0)] using
                 hnorm (A N) (σ N 0) D (htr N 0) (by simp)
@@ -229,19 +229,19 @@ theorem exists_isPreparedInDepth_inhomogeneous_le_log_eventually_of_varying_refe
     have hblock : ∀ j, ‖transferMatrix (Kraus.transferMap (chainBlockTensor (A N) hsum j)) -
         transferMatrix (Kraus.transferMap (fixedPointTensor (ρ j)))‖ ≤ δ := by
       intro j
-      rw [chainBlockTensor, MPSChainTensor.transferMap_blockTensor]
+      rw [chainBlockTensor, MPSChainTensor.transferMap_eval]
       refine (hmix N ℓ hsum j (hq.trans_le (hℓq j))).trans ?_
       dsimp [δ]
       gcongr
       exact hℓq j
-    have hwhole : ‖transferMatrix (Kraus.transferMap (MPSChainTensor.blockTensor (A N))) -
+    have hwhole : ‖transferMatrix (Kraus.transferMap (MPSChainTensor.eval (A N))) -
         transferMatrix (Kraus.transferMap (fixedPointTensor (σ N 0)))‖ ≤ δ := by
       have hsingle : ∑ _ : Fin 1, N = N := by simp
       have hi := blockSite_singleton hsingle
       have h := hmix N (fun _ : Fin 1 => N) hsingle 0
         (Nat.pos_of_ne_zero (NeZero.ne N))
       simp only [hi] at h
-      rw [MPSChainTensor.transferMap_blockTensor]
+      rw [MPSChainTensor.transferMap_eval]
       refine h.trans ?_
       dsimp [δ]
       gcongr
@@ -390,7 +390,7 @@ theorem exists_isPreparedInDepth_le_log_eventually_of_rectangular_mixing
         mul_le_mul_of_nonneg_left (hmix N ℓ hN j hj) hCpad.le
       _ = K' * Real.exp (-(r * ℓ j)) := by dsimp [K']; ring
   have hwhole (N : ℕ) [NeZero N] :
-      ‖transferMatrix (Kraus.transferMap (MPSChainTensor.blockTensor (zeroPad (A N)))) -
+      ‖transferMatrix (Kraus.transferMap (MPSChainTensor.eval (zeroPad (A N)))) -
         transferMatrix (cornerReferenceMap (ρ N 0) ((A N).bondDim 0))‖ ≤
           K' * Real.exp (-(r * N)) := by
     have hsingle : ∑ _ : Fin 1, N = N := by simp
@@ -407,7 +407,7 @@ theorem exists_isPreparedInDepth_le_log_eventually_of_rectangular_mixing
         (hN₀.trans (Nat.cast_le.mpr hcut))
     have hb : |‖chainState (zeroPad (A N))‖ ^ 2 - 1| ≤ 1 / 2 := by
       calc |‖chainState (zeroPad (A N))‖ ^ 2 - 1|
-          ≤ Kn * ‖transferMatrix (Kraus.transferMap (MPSChainTensor.blockTensor (zeroPad (A N)))) -
+          ≤ Kn * ‖transferMatrix (Kraus.transferMap (MPSChainTensor.eval (zeroPad (A N)))) -
             transferMatrix (cornerReferenceMap (ρ N 0) ((A N).bondDim 0))‖ :=
               hnorm _ _ _ (hρtr N 0) (hρsupp N 0)
         _ ≤ Kn * (K' * Real.exp (-(r * N))) := mul_le_mul_of_nonneg_left (hwhole N) hKn
@@ -452,7 +452,7 @@ theorem exists_isPreparedInDepth_le_log_eventually_of_rectangular_mixing
       gcongr
       exact hℓq j
     have hwhole' :
-        ‖transferMatrix (Kraus.transferMap (MPSChainTensor.blockTensor (zeroPad (A N)))) -
+        ‖transferMatrix (Kraus.transferMap (MPSChainTensor.eval (zeroPad (A N)))) -
         transferMatrix (cornerReferenceMap (ρ N 0) ((A N).bondDim 0))‖ ≤ δ := by
       refine (hwhole N).trans ?_
       dsimp [δ]

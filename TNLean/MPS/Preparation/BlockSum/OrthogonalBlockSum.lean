@@ -25,7 +25,7 @@ approximating state of eq. (S7) under the hypothesis that the `q`-site states of
 are orthogonal, `B_jᴴ B_{j'} = 0` for the blocked tensors `B_j` of the blocks.
 
 * The blocked tensor of `A` is `B = ∑ⱼ μⱼ^q B_j K_jᴴ`, where `K_j = E_j ⊗ E_j` embeds the bond
-  pairs of block `j` (`physicalMatrix_blockTensor_blockSum`); by
+  pairs of block `j` (`physicalMatrix_block_blockSum`); by
   `Matrix.polarIso_sum_of_orthogonal` its partial isometry is `V = ∑ⱼ V_j K_jᴴ`.
 * The state `V^{⊗M} ∑ⱼ αⱼ |Ω_j⟩` of eq. (S7), with the pairs of the blocks embedded along
   `ι_j`, is `∑ⱼ αⱼ |φ_M(V_j P_{j,∞})⟩`: each block contributes the approximating state of the
@@ -52,8 +52,8 @@ source does not assume and without which eq. (S5) fails. Documented in
   `K_j = E_j ⊗ E_j`.
 * `MPSTensor.blockSum` — the direct sum `⊕ⱼ μⱼ A_j`.
 * `MPSTensor.evalWord_blockSum`, `MPSTensor.mpv_blockSum` — words and states of the sum.
-* `MPSTensor.physicalMatrix_blockTensor_blockSum` — its blocked tensor.
-* `MPSTensor.polarIso_blockTensor_blockSum` — the partial isometry of its blocked tensor.
+* `MPSTensor.physicalMatrix_block_blockSum` — its blocked tensor.
+* `MPSTensor.polarIso_block_blockSum` — the partial isometry of its blocked tensor.
 * `MPSTensor.nonNormalApproxVector_blockSum` — the unnormalized state of eq. (S7).
 * `MPSTensor.mpvOverlap_eq_zero` — tensors whose physical matrices have orthogonal columns
   generate orthogonal states.
@@ -69,7 +69,6 @@ open MPTensor
 
 open scoped BigOperators Matrix ComplexOrder Kronecker
 open Matrix
-open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 
@@ -145,14 +144,14 @@ theorem piKronecker_polarIso_mulVec_pairProductState {n D' : ℕ} (B : MPSTensor
 /-- The partial isometry of the `q`-site blocked tensor of a direct sum with positive weights
 and orthogonal `q`-site block states is `V = ∑ⱼ V_j K_jᴴ` (arXiv:2307.01696, Supplemental
 Material, eq. (S5), for multiplicity one under the orthogonality that the source omits). -/
-theorem polarIso_blockTensor_blockSum (hι : ∀ j, Function.Injective (ι j))
+theorem polarIso_block_blockSum (hι : ∀ j, Function.Injective (ι j))
     (hdisj : ∀ j j', j ≠ j' → ∀ a a', ι j a ≠ ι j' a') {μ : Fin b → ℝ} (hμ : ∀ j, 0 < μ j)
     {q : ℕ} (hq : q ≠ 0)
-    (horth : ∀ j j', j ≠ j' → (physicalMatrix (blockTensor (Aj j) q))ᴴ *
-      physicalMatrix (blockTensor (Aj j') q) = 0) :
-    polarIso (physicalMatrix (blockTensor (blockSum Aj ι fun j => (μ j : ℂ)) q)) =
-      ∑ j, polarIso (physicalMatrix (blockTensor (Aj j) q)) * (pairEmbedding (ι j))ᴴ := by
-  rw [physicalMatrix_blockTensor_blockSum hι hdisj _ hq]
+    (horth : ∀ j j', j ≠ j' → (physicalMatrix (Kraus.block (Aj j) q))ᴴ *
+      physicalMatrix (Kraus.block (Aj j') q) = 0) :
+    polarIso (physicalMatrix (Kraus.block (blockSum Aj ι fun j => (μ j : ℂ)) q)) =
+      ∑ j, polarIso (physicalMatrix (Kraus.block (Aj j) q)) * (pairEmbedding (ι j))ᴴ := by
+  rw [physicalMatrix_block_blockSum hι hdisj _ hq]
   have h := (polarIso_sum_of_orthogonal horth (c := fun j => μ j ^ q)
     (fun j => pow_pos (hμ j) q) (K := fun j => pairEmbedding (ι j))
     (fun j => conjTranspose_pairEmbedding_mul_self (hι j))
@@ -167,16 +166,16 @@ approximating states of the normal case for the blocks. -/
 theorem nonNormalApproxVector_blockSum (hι : ∀ j, Function.Injective (ι j))
     (hdisj : ∀ j j', j ≠ j' → ∀ a a', ι j a ≠ ι j' a') {μ : Fin b → ℝ} (hμ : ∀ j, 0 < μ j)
     {q : ℕ} (hq : q ≠ 0)
-    (horth : ∀ j j', j ≠ j' → (physicalMatrix (blockTensor (Aj j) q))ᴴ *
-      physicalMatrix (blockTensor (Aj j') q) = 0)
+    (horth : ∀ j j', j ≠ j' → (physicalMatrix (Kraus.block (Aj j) q))ᴴ *
+      physicalMatrix (Kraus.block (Aj j') q) = 0)
     (σ : (j : Fin b) → Matrix (Fin (Dj j)) (Fin (Dj j)) ℂ) (M : ℕ) [NeZero M] (α : Fin b → ℂ)
-    (τ : Fin M → Fin (blockPhysDim d q)) :
+    (τ : Fin M → (Fin q → Fin d)) :
     nonNormalApproxVector (blockSum Aj ι fun j => (μ j : ℂ)) q M α
         (fun j => embedPair (ι j) (fixedPointPair (σ j))) τ =
-      ∑ j, α j * mpv (approximatingTensor (blockTensor (Aj j) q) (σ j)) τ := by
-  have hV := polarIso_blockTensor_blockSum hι hdisj hμ hq horth
-  have hVK : ∀ j, polarIso (physicalMatrix (blockTensor (blockSum Aj ι fun j => (μ j : ℂ)) q)) *
-      pairEmbedding (ι j) = polarIso (physicalMatrix (blockTensor (Aj j) q)) := fun j => by
+      ∑ j, α j * mpv (approximatingTensor (Kraus.block (Aj j) q) (σ j)) τ := by
+  have hV := polarIso_block_blockSum hι hdisj hμ hq horth
+  have hVK : ∀ j, polarIso (physicalMatrix (Kraus.block (blockSum Aj ι fun j => (μ j : ℂ)) q)) *
+      pairEmbedding (ι j) = polarIso (physicalMatrix (Kraus.block (Aj j) q)) := fun j => by
     rw [hV, Matrix.sum_mul, Finset.sum_eq_single j]
     · rw [Matrix.mul_assoc, conjTranspose_pairEmbedding_mul_self (hι j), Matrix.mul_one]
     · intro j' _ hj'

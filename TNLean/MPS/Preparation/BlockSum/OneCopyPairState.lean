@@ -28,7 +28,7 @@ kernel of `B` (`Matrix.polarIso_mul_eq_zero`), hence
 
   `V K_{j,k} = (μ_{j,k}^q / cⱼ) V L_j`
 
-(`polarIso_blockTensor_repeatedBlockSum_mul_pairEmbedding`). No orthogonality of the blocks is
+(`polarIso_block_repeatedBlockSum_mul_pairEmbedding`). No orthogonality of the blocks is
 needed. Applying `V^{⊗M}`, the state with the pairs on copy `k_j` and the coefficients
 
   `β'ⱼ = βⱼ (cⱼ / μ_{j,k_j}^q)^M`
@@ -60,7 +60,7 @@ Documented in `docs/paper-gaps/mswc24_block_form_mixed_overlap.tex`.
 ## Main declarations
 
 * `MPSTensor.oneCopyWeight` — the coefficients `β'ⱼ = βⱼ (cⱼ / μ_{j,k_j}^q)^M`.
-* `MPSTensor.polarIso_blockTensor_repeatedBlockSum_mul_pairEmbedding` —
+* `MPSTensor.polarIso_block_repeatedBlockSum_mul_pairEmbedding` —
   `V K_{j,k} = (μ_{j,k}^q / cⱼ) V L_j`.
 * `MPSTensor.nonNormalApproxVector_repeatedBlockSum_oneCopy`,
   `MPSTensor.nonNormalApproxOverlap_repeatedBlockSum_oneCopy` — the state with the pairs on one
@@ -80,7 +80,6 @@ open MPTensor
 
 open scoped BigOperators Matrix ComplexOrder
 open Matrix
-open Kraus (blockTensor)
 
 namespace MPSTensor
 
@@ -155,20 +154,20 @@ weights and `q ≥ 1`, the partial isometry `V` of the `q`-site blocked tensor s
 `K_{j,k} - (μ_{j,k}^q / cⱼ) L_j` lies in the kernel of `B`, on which `V` vanishes. The `q`-site
 states of distinct blocks need not be orthogonal (arXiv:2307.01696, Supplemental Material,
 eqs. (S5)–(S7)). -/
-theorem polarIso_blockTensor_repeatedBlockSum_mul_pairEmbedding
+theorem polarIso_block_repeatedBlockSum_mul_pairEmbedding
     (hι : ∀ j k, Function.Injective (ι j k))
     (hdisj : ∀ p p' : (j : Fin b) × Fin (m j), p ≠ p' → ∀ a a', ι p.1 p.2 a ≠ ι p'.1 p'.2 a')
     (μ : CopyWeights b m) {q : ℕ} (hq : q ≠ 0) (j : Fin b) (k : Fin (m j)) :
-    polarIso (physicalMatrix (blockTensor (repeatedBlockSum Aj ι μ) q)) * pairEmbedding (ι j k) =
+    polarIso (physicalMatrix (Kraus.block (repeatedBlockSum Aj ι μ) q)) * pairEmbedding (ι j k) =
       (μ j k ^ q / (copyNorm μ q j : ℂ)) •
-        (polarIso (physicalMatrix (blockTensor (repeatedBlockSum Aj ι μ) q)) *
+        (polarIso (physicalMatrix (Kraus.block (repeatedBlockSum Aj ι μ) q)) *
           copyIsometry ι μ q j) := by
   have hc0 : (copyNorm μ q j : ℂ) ≠ 0 :=
     Complex.ofReal_ne_zero.2 (copyNorm_pos (μ.weight_fun_ne_zero j) q).ne'
-  have hB := physicalMatrix_blockTensor_repeatedBlockSum_eq_copyIsometry (Aj := Aj) hι hdisj
+  have hB := physicalMatrix_block_repeatedBlockSum_eq_copyIsometry (Aj := Aj) hι hdisj
     (μ := μ) hq
-  have hBK : physicalMatrix (blockTensor (repeatedBlockSum Aj ι μ) q) * pairEmbedding (ι j k) =
-      μ j k ^ q • physicalMatrix (blockTensor (Aj j) q) := by
+  have hBK : physicalMatrix (Kraus.block (repeatedBlockSum Aj ι μ) q) * pairEmbedding (ι j k) =
+      μ j k ^ q • physicalMatrix (Kraus.block (Aj j) q) := by
     rw [hB, Matrix.sum_mul, Finset.sum_eq_single j]
     · rw [Matrix.smul_mul, Matrix.mul_assoc,
         conjTranspose_copyIsometry_mul_pairEmbedding hι hdisj, Matrix.mul_smul, Matrix.mul_one,
@@ -178,8 +177,8 @@ theorem polarIso_blockTensor_repeatedBlockSum_mul_pairEmbedding
         conjTranspose_copyIsometry_mul_pairEmbedding_eq_zero hdisj _ q hj', Matrix.mul_zero,
         smul_zero]
     · simp
-  have hBL : physicalMatrix (blockTensor (repeatedBlockSum Aj ι μ) q) * copyIsometry ι μ q j =
-      (copyNorm μ q j : ℂ) • physicalMatrix (blockTensor (Aj j) q) := by
+  have hBL : physicalMatrix (Kraus.block (repeatedBlockSum Aj ι μ) q) * copyIsometry ι μ q j =
+      (copyNorm μ q j : ℂ) • physicalMatrix (Kraus.block (Aj j) q) := by
     rw [hB, Matrix.sum_mul, Finset.sum_eq_single j]
     · rw [Matrix.smul_mul, Matrix.mul_assoc,
         conjTranspose_copyIsometry_mul_self hι hdisj (μ.weight_fun_ne_zero j), Matrix.mul_one]
@@ -187,7 +186,7 @@ theorem polarIso_blockTensor_repeatedBlockSum_mul_pairEmbedding
       rw [Matrix.smul_mul, Matrix.mul_assoc, conjTranspose_copyIsometry_mul_eq_zero hdisj _ q hj',
         Matrix.mul_zero, smul_zero]
     · simp
-  have h0 : physicalMatrix (blockTensor (repeatedBlockSum Aj ι μ) q) *
+  have h0 : physicalMatrix (Kraus.block (repeatedBlockSum Aj ι μ) q) *
       (pairEmbedding (ι j k) - (μ j k ^ q / (copyNorm μ q j : ℂ)) • copyIsometry ι μ q j) = 0 := by
     rw [Matrix.mul_sub, Matrix.mul_smul, hBK, hBL, smul_smul, div_mul_cancel₀ _ hc0, sub_self]
   have h := Matrix.polarIso_mul_eq_zero h0
@@ -208,7 +207,7 @@ theorem nonNormalApproxVector_repeatedBlockSum_oneCopy (hι : ∀ j k, Function.
         (fun j => embedPair (ι j (k j)) (fixedPointPair (σ j))) =
       copyApproxVector (repeatedBlockSum Aj ι μ) q M
         (fun j => α j * (μ j (k j) ^ q / (copyNorm μ q j : ℂ)) ^ M) (copyIsometry ι μ q) σ := by
-  set V := polarIso (physicalMatrix (blockTensor (repeatedBlockSum Aj ι μ) q))
+  set V := polarIso (physicalMatrix (Kraus.block (repeatedBlockSum Aj ι μ) q))
   have hstate : nonNormalFixedPointState (M := M) α
       (fun j => embedPair (ι j (k j)) (fixedPointPair (σ j))) =
       ∑ j, α j • pairProductState (embedPair (ι j (k j)) (fixedPointPair (σ j))) := by
@@ -218,7 +217,7 @@ theorem nonNormalApproxVector_repeatedBlockSum_oneCopy (hι : ∀ j k, Function.
     mulVec_sum]
   refine Finset.sum_congr rfl fun j _ => ?_
   rw [mulVec_smul, mulVec_smul, pairProductState_embedPair_eq_mulVec (hι j (k j)), mulVec_mulVec,
-    Matrix.piKronecker_mul, polarIso_blockTensor_repeatedBlockSum_mul_pairEmbedding hι hdisj μ hq,
+    Matrix.piKronecker_mul, polarIso_block_repeatedBlockSum_mul_pairEmbedding hι hdisj μ hq,
     Matrix.piKronecker_smul, Fintype.card_fin, smul_mulVec, ← Matrix.piKronecker_mul,
     ← mulVec_mulVec, smul_smul]
 

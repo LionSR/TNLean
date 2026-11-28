@@ -61,7 +61,6 @@ open MPTensor
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators NNReal ENNReal InnerProductSpace
 open Matrix
-open Kraus (blockTensor)
 
 namespace MPSTensor
 
@@ -108,7 +107,7 @@ theorem one_sub_norm_nonNormalApproxOverlap_blockSum_le [NeZero b]
     1 - ‖nonNormalApproxOverlap (blockSum Aj ι fun _ => 1) q M (ghzAmplitude fun _ => 1)
         (fun j => embedPair (ι j) (fixedPointPair (σ j)))‖ ≤
       1 - ‖mpvState (blockSum Aj ι fun _ => 1) (M * q)‖⁻¹ *
-        (‖∑ j, mpvOverlap (polarPosTensor (blockTensor (blockSum Aj ι fun _ => 1) q))
+        (‖∑ j, mpvOverlap (polarPosTensor (Kraus.block (blockSum Aj ι fun _ => 1) q))
           (fixedPointTensor (embeddedBlockState (ι j) (σ j))) M‖ / Real.sqrt b) := by
   set A := blockSum Aj ι fun _ => 1
   set ω : Fin b → Fin D × Fin D → ℂ := fun j => embedPair (ι j) (fixedPointPair (σ j))
@@ -118,9 +117,9 @@ theorem one_sub_norm_nonNormalApproxOverlap_blockSum_le [NeZero b]
     funext fun j => embedPair_fixedPointPair (hι j) (hσ j)
   set v := nonNormalApproxVector A q M α ω
   set z : Fin b → ℂ := fun j =>
-    mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor (σ' j)) M
+    mpvOverlap (polarPosTensor (Kraus.block A q)) (fixedPointTensor (σ' j)) M
   have hbb : ∑ _l : Fin b, ‖(1 : ℂ)‖ ^ 2 = b := by simp
-  have hnum : ∑ τ, star (v τ) * mpv A (Kraus.blockedConfigEquiv d M q τ) =
+  have hnum : ∑ τ, star (v τ) * mpv A (Kraus.blockConfigEquiv (Fin d) M q τ) =
       ((Real.sqrt b : ℝ) : ℂ)⁻¹ * ∑ j, z j := by
     simp only [v, hω]
     rw [sum_star_nonNormalApproxVector_mul_mpv, Finset.mul_sum]
@@ -130,9 +129,9 @@ theorem one_sub_norm_nonNormalApproxOverlap_blockSum_le [NeZero b]
   -- The approximating vector has norm at most one.
   have hvle : ∑ τ, ‖v τ‖ ^ 2 ≤ 1 := by
     have hidem := Matrix.conjTranspose_polarIso_mul_polarIso
-      (physicalMatrix (blockTensor A q))
+      (physicalMatrix (Kraus.block A q))
     have h := Matrix.sum_norm_sq_piKronecker_mulVec_le
-      (W := fun _ : Fin M ↦ Matrix.polarIso (physicalMatrix (blockTensor A q)))
+      (W := fun _ : Fin M ↦ Matrix.polarIso (physicalMatrix (Kraus.block A q)))
       (fun _ ↦ by rw [hidem, Matrix.polarSupport_mul_polarSupport])
       (nonNormalFixedPointState α ω)
     have horth : ∀ j j', ∑ p, star (ω j p) * ω j' p = if j = j' then 1 else 0 := by
@@ -147,7 +146,7 @@ theorem one_sub_norm_nonNormalApproxOverlap_blockSum_le [NeZero b]
     rw [← ofReal_sum_norm_sq, ← Complex.ofReal_one] at hΩ
     exact h.trans (Complex.ofReal_injective hΩ).le
   -- The overlap is at least `|num| / ‖φ_N‖`.
-  set num := ∑ τ, star (v τ) * mpv A (Kraus.blockedConfigEquiv d M q τ)
+  set num := ∑ τ, star (v τ) * mpv A (Kraus.blockConfigEquiv (Fin d) M q τ)
   set t := ‖mpvState A (M * q)‖
   have hov : t⁻¹ * ‖num‖ ≤ ‖nonNormalApproxOverlap A q M α ω‖ := by
     rw [nonNormalApproxOverlap_eq]
@@ -208,7 +207,7 @@ theorem mpvOverlap_fixedPointTensor_embeddedBlockState (hι : ∀ j, Function.In
 
 open scoped Matrix.Norms.L2Operator in
 /-- **One block of sites, to second order.** In the setting of
-`exists_norm_polarPos_blockTensor_blockSum_sub_le`, with `λ₂ ≠ 0`, `0 < γ < 1` and
+`exists_norm_polarPos_block_blockSum_sub_le`, with `λ₂ ≠ 0`, `0 < γ < 1` and
 `x = e^{-γ/ξ}`, there is `K ≥ 0` with `‖φ_q‖² - |∑ⱼ zⱼ|²/b ≤ K x^{2q}` for `q ≥ 1`, where
 `zⱼ = ⟨φ_1(P'_{j,∞})|φ_1(P)⟩` and `φ_q` is the periodic state of the direct sum with unit weights
 on `q` sites. With `u = φ_1(P)` and `W = ∑ⱼ φ_1(P'_{j,∞})`, `‖u‖ = ‖φ_q‖`, `∑ⱼ zⱼ = ⟨W|u⟩` and
@@ -229,7 +228,7 @@ theorem exists_norm_mpvState_sq_sub_norm_sum_mpvOverlap_sq_le [NeZero b]
     {γ : ℝ} (hγ0 : 0 < γ) (hγ : γ < 1) :
     ∃ K : ℝ, 0 ≤ K ∧ ∀ q : ℕ, q ≠ 0 →
       ‖mpvState (blockSum Aj ι fun _ => 1) q‖ ^ 2 -
-          ‖∑ j, mpvOverlap (polarPosTensor (blockTensor (blockSum Aj ι fun _ => 1) q))
+          ‖∑ j, mpvOverlap (polarPosTensor (Kraus.block (blockSum Aj ι fun _ => 1) q))
             (fixedPointTensor (embeddedBlockState (ι j) (σ j))) 1‖ ^ 2 / b ≤
         K * (Real.exp (-γ / correlationLength lam₂) ^ 2) ^ q := by
   have : NeZero D := ⟨fun h => by
@@ -241,7 +240,7 @@ theorem exists_norm_mpvState_sq_sub_norm_sum_mpvOverlap_sq_le [NeZero b]
   have hx1 : x < 1 := by
     rw [hxdef, neg_div_correlationLength, Real.exp_lt_one_iff]
     exact mul_neg_of_pos_of_neg hγ0 (Real.log_neg (norm_pos_iff.2 h0) hl)
-  obtain ⟨K₁, hK₁, hpos⟩ := exists_norm_polarPos_blockTensor_blockSum_sub_le hι hdisj hN hA hσ
+  obtain ⟨K₁, hK₁, hpos⟩ := exists_norm_polarPos_block_blockSum_sub_le hι hdisj hN hA hσ
     htr hfix hl hlam hmix hγ0 hγ
   obtain ⟨Kn, hKn, hnorm⟩ := exists_abs_norm_mpvState_blockSum_sq_sub_le hι hdisj hN hA
     hσ htr hfix hl hlam hmix hγ0 hγ
@@ -272,13 +271,13 @@ theorem exists_norm_mpvState_sq_sub_norm_sum_mpvOverlap_sq_le [NeZero b]
       rw [hinner, ← trace_transferMatrix_mixedMapLM_pow_eq_mpvOverlap, pow_one]
       exact (isIdempotentElem_mixedTransferMatrixLeft_blockSumPosLimit hι hdisj hσs htr k).2
     simp [h1]
-  have hu : ∀ q : ℕ, ‖μL (Matrix.polarPos (physicalMatrix (blockTensor A q)))‖ =
+  have hu : ∀ q : ℕ, ‖μL (Matrix.polarPos (physicalMatrix (Kraus.block A q)))‖ =
       ‖mpvState A q‖ := fun q => by
-    change ‖mpvState (polarPosTensor (blockTensor A q)) 1‖ = _
-    rw [norm_mpvState_polarPosTensor_blockTensor, mul_one]
+    change ‖mpvState (polarPosTensor (Kraus.block A q)) 1‖ = _
+    rw [norm_mpvState_polarPosTensor_block, mul_one]
   have hvn : ‖μL Pinf‖ = Real.sqrt b := by
     refine norm_eq_of_forall_abs_norm_sub_le_pow (K := Kμ * K₁) (K' := Kn)
-      (u := fun q => μL (Matrix.polarPos (physicalMatrix (blockTensor A q)))) hx0 hx1
+      (u := fun q => μL (Matrix.polarPos (physicalMatrix (Kraus.block A q)))) hx0 hx1
       (fun q hq => ?_) (fun q hq => ?_)
     · rw [hu q]
       have hb1 : (1 : ℝ) ≤ Real.sqrt b := Real.one_le_sqrt.2 (by exact_mod_cast NeZero.one_le)
@@ -299,8 +298,8 @@ theorem exists_norm_mpvState_sq_sub_norm_sum_mpvOverlap_sq_le [NeZero b]
     exact sub_eq_zero.1 (norm_eq_zero.1 (by nlinarith [norm_nonneg (μL Pinf - W)]))
   -- Conclusion.
   refine ⟨(Kμ * K₁) ^ 2, by positivity, fun q hq => ?_⟩
-  set H := Matrix.polarPos (physicalMatrix (blockTensor A q))
-  have hsum : ∑ j, mpvOverlap (polarPosTensor (blockTensor A q))
+  set H := Matrix.polarPos (physicalMatrix (Kraus.block A q))
+  have hsum : ∑ j, mpvOverlap (polarPosTensor (Kraus.block A q))
       (fixedPointTensor (embeddedBlockState (ι j) (σ j))) 1 = ⟪W, μL H⟫_ℂ := by
     simp only [W, sum_inner]
     exact Finset.sum_congr rfl fun k _ => (hinner _ k).symm
@@ -404,7 +403,7 @@ theorem exists_approximationError_le_overlappingBlockSum_sq [NeZero b]
   have hq0 : q ≠ 0 := hq.ne'
   have hexp : 1 ≤ Real.exp (C * y) := Real.one_le_exp (by positivity)
   set A := blockSum Aj ι fun _ => 1
-  set zs := ∑ j, mpvOverlap (polarPosTensor (blockTensor A q))
+  set zs := ∑ j, mpvOverlap (polarPosTensor (Kraus.block A q))
     (fixedPointTensor (embeddedBlockState (ι j) (σ j))) M
   set t := ‖mpvState A (M * q)‖
   set s := ‖zs‖ / Real.sqrt b
@@ -452,7 +451,7 @@ theorem exists_approximationError_le_overlappingBlockSum_sq [NeZero b]
     have hnt := abs_le.1 ((hnorm (M * q) hN0).trans (mul_le_mul_of_nonneg_left hxN hKn))
     have ht2 : 1 / 2 ≤ t ^ 2 := by linarith [hnt.1]
     -- The overlaps of the blocks.
-    have hzj : ∀ j, ‖mpvOverlap (polarPosTensor (blockTensor A q))
+    have hzj : ∀ j, ‖mpvOverlap (polarPosTensor (Kraus.block A q))
         (fixedPointTensor (embeddedBlockState (ι j) (σ j))) M - 1‖ ≤
           Cz j * y * Real.exp (C * y) := fun j => by
       have hsmall : Cz j * y < 1 := lt_of_le_of_lt
@@ -463,7 +462,7 @@ theorem exists_approximationError_le_overlappingBlockSum_sq [NeZero b]
     set δz := S * y * Real.exp (C * y)
     have hδz0 : 0 ≤ δz := by positivity
     have hzs : ‖zs - b‖ ≤ δz := by
-      have e : zs - b = ∑ j, (mpvOverlap (polarPosTensor (blockTensor A q))
+      have e : zs - b = ∑ j, (mpvOverlap (polarPosTensor (Kraus.block A q))
           (fixedPointTensor (embeddedBlockState (ι j) (σ j))) M - 1) := by
         simp [zs, Finset.sum_sub_distrib]
       rw [e]

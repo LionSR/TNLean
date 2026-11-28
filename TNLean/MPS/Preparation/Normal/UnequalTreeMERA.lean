@@ -30,7 +30,6 @@ Supplemental Material, proof of Theorem 1, with its possibly larger last block.
 
 open Matrix MPSTensor
 open scoped BigOperators ComplexOrder InnerProductSpace
-open Kraus (blockTensor)
 
 namespace MPSPreparation
 
@@ -74,7 +73,7 @@ private theorem tree_height_bound {a b X : ℝ} {h : ℕ} (ha : 0 < a) (hb : 0 �
 
 private theorem exists_polarForest {d D s h c M N : ℕ} (A : MPSTensor d D)
     (hD : 0 < D) (hs : 0 < s) (hM : 0 < M)
-    (hinj : ∀ m, s ≤ m → Kraus.IsInjective (blockTensor A m))
+    (hinj : ∀ m, s ≤ m → Kraus.IsInjective (Kraus.block A m))
     (ℓ : Fin M → ℕ) (hN : ∑ k, ℓ k = N)
     (hlower : ∀ k, 2 ^ h * s ≤ ℓ k) (hupper : ∀ k, ℓ k ≤ 2 ^ h * c)
     (ω : Fin D × Fin D → ℂ) (hω : ∑ p, star (ω p) * ω p = 1) :
@@ -120,7 +119,7 @@ theorem exists_unequalMERA_every_length {d D : ℕ} (A : MPSTensor d D)
     exists_normalGaugeData hA
   set s := L + 1 with hsdef
   have hs0 : 0 < s := by omega
-  have hinjs : ∀ m, s ≤ m → Kraus.IsInjective (blockTensor B m) := fun m hm => hinj m (by omega)
+  have hinjs : ∀ m, s ≤ m → Kraus.IsInjective (Kraus.block B m) := fun m hm => hinj m (by omega)
   obtain ⟨K, r, hK, hr0, _, herr⟩ :=
     exists_blockApproximationError_le_exp B hNB hLC hσ htr hfix hlam ht0 ht1
   set a := 1 / r with ha
@@ -181,7 +180,7 @@ theorem exists_unequalMERA_every_length {d D : ℕ} (A : MPSTensor d D)
   by_cases hqN : q ≤ N
   · have hq0 : 0 < q := hs0.trans_le hsq
     obtain ⟨m, ℓ, hm, hsum, hℓq, hℓ2⟩ := exists_remainderBlocks hq0 hqN
-    have hinjℓ : ∀ k, Kraus.IsInjective (blockTensor B (ℓ k)) := fun k =>
+    have hinjℓ : ∀ k, Kraus.IsInjective (Kraus.block B (ℓ k)) := fun k =>
       hinjs _ (hsq.trans (hℓq k))
     have hω : ∑ p, star (fixedPointPair σ p) * fixedPointPair σ p = 1 := by
       rw [fixedPointPair_norm_sq hσ.posSemidef, htr]

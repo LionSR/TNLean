@@ -41,7 +41,6 @@ open MPTensor
 
 open scoped Matrix Kronecker ComplexOrder MatrixOrder BigOperators NNReal ENNReal
 open Matrix
-open Kraus (blockTensor)
 
 namespace MPSTensor
 
@@ -57,20 +56,20 @@ periodic state of the positive part read as a tensor. The source uses `V†V = �
 tensors"); no injectivity is needed. -/
 theorem sum_star_piKronecker_polarIso_mulVec_mul_mpv (A : MPSTensor d D) (q M : ℕ)
     (F : (Fin M → Fin D × Fin D) → ℂ) :
-    ∑ τ, star (((Matrix.piKronecker fun _ : Fin M ↦ (Matrix.polarIso (physicalMatrix (blockTensor A
+    ∑ τ, star (((Matrix.piKronecker fun _ : Fin M ↦ (Matrix.polarIso (physicalMatrix (Kraus.block A
         q)))) *ᵥ F) τ) *
-        mpv A (Kraus.blockedConfigEquiv d M q τ) =
+        mpv A (Kraus.blockConfigEquiv (Fin d) M q τ) =
       ∑ c, star (F c) *
-        mpv (polarPosTensor (blockTensor A q)) fun k => (virtualPairEquiv D).symm (c k) := by
-  set Bq := blockTensor A q
+        mpv (polarPosTensor (Kraus.block A q)) fun k => (virtualPairEquiv D).symm (c k) := by
+  set Bq := Kraus.block A q
   set V := Matrix.polarIso (physicalMatrix Bq)
   set e : (Fin M → Fin (D * D)) ≃ (Fin M → Fin D × Fin D) :=
     Equiv.piCongrRight fun _ => virtualPairEquiv D
   set m : (Fin M → Fin D × Fin D) → ℂ := fun c => mpv (polarPosTensor Bq) (e.symm c)
-  have hT : ∀ τ, mpv A (Kraus.blockedConfigEquiv d M q τ) =
+  have hT : ∀ τ, mpv A (Kraus.blockConfigEquiv (Fin d) M q τ) =
       ((Matrix.piKronecker fun _ : Fin M ↦ V) *ᵥ m) τ := by
     intro τ
-    rw [mpv_blockedConfigEquiv_eq_sum_polar]
+    rw [mpv_blockConfigEquiv_eq_sum_polar]
     simp only [mulVec, dotProduct, Matrix.piKronecker, of_apply, m]
     exact Fintype.sum_equiv e _ _ fun τ' => by
       simp [e, polarIsoMatrix, V, Bq]
@@ -96,10 +95,10 @@ the fixed-point tensor of `σ'_j` (`sum_star_piKronecker_polarIso_mulVec_mul_mpv
 theorem sum_star_nonNormalApproxVector_mul_mpv (A : MPSTensor d D) (q M : ℕ) [NeZero M]
     (α : Fin b → ℂ) (σ' : Fin b → Matrix (Fin D) (Fin D) ℂ) :
     ∑ τ, star (nonNormalApproxVector A q M α (fun j => fixedPointPair (σ' j)) τ) *
-        mpv A (Kraus.blockedConfigEquiv d M q τ) =
+        mpv A (Kraus.blockConfigEquiv (Fin d) M q τ) =
       ∑ j, star (α j) *
-        mpvOverlap (polarPosTensor (blockTensor A q)) (fixedPointTensor (σ' j)) M := by
-  set Bq := blockTensor A q
+        mpvOverlap (polarPosTensor (Kraus.block A q)) (fixedPointTensor (σ' j)) M := by
+  set Bq := Kraus.block A q
   set e : (Fin M → Fin (D * D)) ≃ (Fin M → Fin D × Fin D) :=
     Equiv.piCongrRight fun _ => virtualPairEquiv D
   set m : (Fin M → Fin D × Fin D) → ℂ := fun c => mpv (polarPosTensor Bq) (e.symm c)

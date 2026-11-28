@@ -58,7 +58,6 @@ holds for every `N ≥ N₀`. Documented in
 open Matrix MPSTensor
 open scoped BigOperators ComplexOrder InnerProductSpace
 open QuantumCircuit
-open Kraus (blockTensor)
 
 namespace MPSPreparation
 
@@ -104,7 +103,7 @@ theorem exists_isMeasurementConversion_le_log_log_of_mpvState_ne_zero {D : ℕ}
     exists_normalGaugeData hA
   set s := L + 2 with hsdef
   have hs0 : 0 < s := by omega
-  have hinjs : ∀ m, s ≤ m → Kraus.IsInjective (blockTensor B m) := fun m hm => hinj m (by omega)
+  have hinjs : ∀ m, s ≤ m → Kraus.IsInjective (Kraus.block B m) := fun m hm => hinj m (by omega)
   obtain ⟨C, hC⟩ := exists_isMeasurementConversion_blockIsometryState d s (8 * s)
     (by omega)
   obtain ⟨Ks, hKs⟩ := exists_isPreparedInDepth_of_norm_eq_one hd (4 * s)
@@ -173,7 +172,7 @@ theorem exists_isMeasurementConversion_le_log_log_of_mpvState_ne_zero {D : ℕ}
   · -- Long chains: `M - 1` blocks of length `q` and one of length `q' = q + N % q < 2q`.
     have hq0 : 0 < q := by omega
     obtain ⟨m, ℓ, hm, hsum, hℓq, hℓ2⟩ := exists_remainderBlocks hq0 hqN
-    have hinjℓ : ∀ k, Kraus.IsInjective (blockTensor B (ℓ k)) := fun k =>
+    have hinjℓ : ∀ k, Kraus.IsInjective (Kraus.block B (ℓ k)) := fun k =>
       hinjs _ ((by omega : s ≤ q).trans (hℓq k))
     have hω : ∑ p, star (fixedPointPair σ p) * fixedPointPair σ p = 1 := by
       rw [fixedPointPair_norm_sq hσ.posSemidef, htr]

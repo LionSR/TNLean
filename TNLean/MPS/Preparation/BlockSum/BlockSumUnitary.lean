@@ -55,7 +55,6 @@ not assume; without it the isometry of the blocked direct sum is not the sum of 
 open Matrix MPSTensor
 open scoped BigOperators
 open QuantumCircuit
-open Kraus (blockPhysDim blockPhysDim_eq_pow decodeBlockEquiv blockTensor)
 
 namespace MPSPreparation
 
@@ -95,19 +94,16 @@ theorem evalWord_blockSum_flatCoord (A : (j : Fin b) → MPSTensor d (Dj j)) {w 
 orthonormal columns jointly: for two bond pairs `(j, l, r)` and `(j', l', r')`,
 `⟨V_j|l, r⟩, V_{j'}|l', r'⟩⟩ = δ`. -/
 theorem sum_star_polarIsoMatrix_mul (A : (j : Fin b) → MPSTensor d (Dj j)) {q : ℕ}
-    (hinj : ∀ j, Kraus.IsInjective (blockTensor (A j) q))
-    (horth : ∀ j j', j ≠ j' → (physicalMatrix (blockTensor (A j) q))ᴴ *
-      physicalMatrix (blockTensor (A j') q) = 0)
+    (hinj : ∀ j, Kraus.IsInjective (Kraus.block (A j) q))
+    (horth : ∀ j j', j ≠ j' → (physicalMatrix (Kraus.block (A j) q))ᴴ *
+      physicalMatrix (Kraus.block (A j') q) = 0)
     (p p' : (j : Fin b) × (Fin (Dj j) × Fin (Dj j))) :
     ∑ σ : Fin q → Fin d,
-      star (polarIsoMatrix (blockTensor (A p.1) q) ((decodeBlockEquiv d q).symm σ)
+      star (polarIsoMatrix (Kraus.block (A p.1) q) (σ)
         (finProdFinEquiv p.2)) *
-      polarIsoMatrix (blockTensor (A p'.1) q) ((decodeBlockEquiv d q).symm σ)
+      polarIsoMatrix (Kraus.block (A p'.1) q) (σ)
         (finProdFinEquiv p'.2) = if p = p' then 1 else 0 := by
   classical
-  rw [(decodeBlockEquiv d q).symm.sum_comp (fun t =>
-    star (polarIsoMatrix (blockTensor (A p.1) q) t (finProdFinEquiv p.2)) *
-      polarIsoMatrix (blockTensor (A p'.1) q) t (finProdFinEquiv p'.2))]
   obtain ⟨j, lr⟩ := p
   obtain ⟨j', lr'⟩ := p'
   by_cases hj : j = j'
@@ -131,25 +127,24 @@ theorem sum_star_polarIsoMatrix_mul (A : (j : Fin b) → MPSTensor d (Dj j)) {q 
 and the physical matrices of distinct blocks are orthogonal, the isometries `V_j` have jointly
 orthonormal columns, so `∑ⱼ Dⱼ² ≤ d^q`. -/
 theorem sum_mul_self_le_pow (A : (j : Fin b) → MPSTensor d (Dj j)) {q : ℕ}
-    (hinj : ∀ j, Kraus.IsInjective (blockTensor (A j) q))
-    (horth : ∀ j j', j ≠ j' → (physicalMatrix (blockTensor (A j) q))ᴴ *
-      physicalMatrix (blockTensor (A j') q) = 0) :
+    (hinj : ∀ j, Kraus.IsInjective (Kraus.block (A j) q))
+    (horth : ∀ j j', j ≠ j' → (physicalMatrix (Kraus.block (A j) q))ᴴ *
+      physicalMatrix (Kraus.block (A j') q) = 0) :
     ∑ j, Dj j * Dj j ≤ d ^ q := by
   classical
   let κ := (j : Fin b) × (Fin (Dj j) × Fin (Dj j))
-  let V : Matrix (Fin (blockPhysDim d q)) κ ℂ := Matrix.of fun t p =>
-    polarIsoMatrix (blockTensor (A p.1) q) t (finProdFinEquiv p.2)
+  let V : Matrix (Fin q → Fin d) κ ℂ := Matrix.of fun t p =>
+    polarIsoMatrix (Kraus.block (A p.1) q) t (finProdFinEquiv p.2)
   have hV : Vᴴ * V = 1 := by
     ext p p'
-    rw [Matrix.mul_apply, Matrix.one_apply, ← sum_star_polarIsoMatrix_mul A hinj horth p p',
-      ← (decodeBlockEquiv d q).symm.sum_comp]
+    rw [Matrix.mul_apply, Matrix.one_apply, ← sum_star_polarIsoMatrix_mul A hinj horth p p']
     rfl
   have hcard : Fintype.card κ = ∑ j, Dj j * Dj j := by simp [κ]
   have h := Matrix.rank_mul_le_right Vᴴ V
   rw [hV, Matrix.rank_one] at h
   have h' := Matrix.rank_le_card_height V
-  have h'' : Fintype.card (Fin (blockPhysDim d q)) = d ^ q := by
-    rw [Fintype.card_fin, blockPhysDim_eq_pow]
+  have h'' : Fintype.card (Fin q → Fin d) = d ^ q := by
+    simp
   omega
 
 /-- **One block unitary for several blocks with orthogonal states.** Let the bond indices of all
@@ -163,18 +158,18 @@ of the polar decomposition of the blocked tensor of `A_j`.
 arXiv:2307.01696, paragraph "Long-range MPS using measurements" (the isometry of the blocked
 tensor of a tensor that is not normal, implemented "following the same steps" as for normal
 tensors) and eqs. (13)–(15). The blocks enter only through `V_j`: the isometry of the direct
-sum, `V = ∑ⱼ V_j K_jᴴ` (`MPSTensor.polarIso_blockTensor_blockSum`), agrees with `U` on these
+sum, `V = ∑ⱼ V_j K_jᴴ` (`MPSTensor.polarIso_block_blockSum`), agrees with `U` on these
 inputs. -/
 theorem exists_blockSumUnitary (hd : 0 < d) {r₁ : ℕ} (hr₁ : 1 ≤ r₁)
     {dig : Fin (∑ j, Dj j) → Cfg d r₁} (hdig : Function.Injective dig) (hD : 0 < ∑ j, Dj j) :
     ∃ C : ℕ, ∀ (A : (j : Fin b) → MPSTensor d (Dj j)) (q : ℕ), 3 * r₁ ≤ q →
-      (∀ j, Kraus.IsInjective (blockTensor (A j) q)) →
-      (∀ j j', j ≠ j' → (physicalMatrix (blockTensor (A j) q))ᴴ *
-        physicalMatrix (blockTensor (A j') q) = 0) →
+      (∀ j, Kraus.IsInjective (Kraus.block (A j) q)) →
+      (∀ j j', j ≠ j' → (physicalMatrix (Kraus.block (A j) q))ᴴ *
+        physicalMatrix (Kraus.block (A j') q) = 0) →
       ∃ U : Matrix (Cfg d q) (Cfg d q) ℂ,
         IsGateProduct (Geometry.graph (SimpleGraph.pathGraph q)) (C * q) U ∧
         ∀ j l r τ, U τ (blockInputCfg hd q dig (flatCoord Dj j l) (flatCoord Dj j r)) =
-          polarIsoMatrix (blockTensor (A j) q) ((decodeBlockEquiv d q).symm τ)
+          polarIsoMatrix (Kraus.block (A j) q) (τ)
             (finProdFinEquiv (l, r)) := by
   classical
   let κ := (j : Fin b) × (Fin (Dj j) × Fin (Dj j))
@@ -212,12 +207,12 @@ theorem exists_blockSumUnitary (hd : 0 < d) {r₁ : ℕ} (hr₁ : 1 ≤ r₁)
   obtain ⟨n, rfl⟩ : ∃ n, q = n + 1 := ⟨q - 1, by omega⟩
   -- The isometry `(j, l, r) ↦ V_j |l, r⟩` on the first `r` inputs.
   let Vp : κ → (Fin (n + 1) → Fin d) → ℂ := fun p σ =>
-    polarIsoMatrix (blockTensor (A p.1) (n + 1)) ((decodeBlockEquiv d (n + 1)).symm σ)
+    polarIsoMatrix (Kraus.block (A p.1) (n + 1)) (σ)
       (finProdFinEquiv p.2)
   let V : (Fin (n + 1) → Fin d) → Fin ((∑ j, Dj j) * (∑ j, Dj j)) → ℂ := fun σ x =>
     if h : x.val < r then Vp (eκ.symm ⟨x, h⟩) σ else 0
   let Pinv : (j : Fin b) → Matrix (Fin (Dj j * Dj j)) (Fin (Dj j * Dj j)) ℂ := fun j =>
-    (Matrix.polarPos (physicalMatrix (blockTensor (A j) (n + 1))))⁻¹.submatrix
+    (Matrix.polarPos (physicalMatrix (Kraus.block (A j) (n + 1))))⁻¹.submatrix
       (virtualPairEquiv (Dj j)) (virtualPairEquiv (Dj j))
   let G : Matrix (Fin ((∑ j, Dj j) * (∑ j, Dj j))) (Fin ((∑ j, Dj j) * (∑ j, Dj j))) ℂ :=
     Matrix.of fun a x =>
@@ -236,7 +231,7 @@ theorem exists_blockSumUnitary (hd : 0 < d) {r₁ : ℕ} (hr₁ : 1 ≤ r₁)
     simp only [V, G, dite_eq_left hx, Matrix.of_apply, Finset.mul_sum]
     rw [Finset.sum_comm]
     simp only [Vp]
-    rw [polarIsoMatrix_blockTensor_eq_sum _ (hinj _)]
+    rw [polarIsoMatrix_block_eq_sum _ (hinj _)]
     refine Finset.sum_congr rfl fun c _ => ?_
     rw [Finset.sum_eq_single ((virtualPairEquiv (∑ j, Dj j)).symm
       (flatCoord Dj _ (virtualPairEquiv _ c).1, flatCoord Dj _ (virtualPairEquiv _ c).2))]

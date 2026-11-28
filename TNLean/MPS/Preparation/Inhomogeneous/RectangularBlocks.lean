@@ -25,7 +25,6 @@ its endpoint bond, whose padding is a corner projection rather than the ambient 
 
 open Matrix MPSTensor
 open scoped BigOperators
-open Kraus (blockPhysDim decodeBlockEquiv)
 
 namespace MPSChainTensor
 
@@ -91,14 +90,14 @@ def rectangularBlockSites (A : VaryingBondChain d D N) {ℓ : Fin M → ℕ}
 
 /-- The actual rectangular product along a block, before any ambient-space padding. -/
 noncomputable def rectangularBlockTensor (A : VaryingBondChain d D N) {ℓ : Fin M → ℕ}
-    (hN : ∑ j, ℓ j = N) (k : Fin M) (s : Fin (blockPhysDim d (ℓ k))) :
+    (hN : ∑ j, ℓ j = N) (k : Fin M) (s : (Fin (ℓ k) → Fin d)) :
     Matrix (Fin (blockBondDim A ℓ k 0)) (Fin (rightBond A ℓ k)) ℂ :=
   (Kraus.rectangularEval (blockBondDim A ℓ k) (rectangularBlockSites A hN k)
     (decodeBlockEquiv d (ℓ k) s)).submatrix id (Fin.cast (blockBondDim_length A hN k).symm)
 
 /-- The rectangular blocked tensor pads to exactly the blocked padded tensor. -/
 theorem zeroPad_rectangularBlockTensor (A : VaryingBondChain d D N) {ℓ : Fin M → ℕ}
-    (hN : ∑ j, ℓ j = N) (k : Fin M) (hk : 0 < ℓ k) (s : Fin (blockPhysDim d (ℓ k))) :
+    (hN : ∑ j, ℓ j = N) (k : Fin M) (hk : 0 < ℓ k) (s : (Fin (ℓ k) → Fin d)) :
     Matrix.zeroPad D (rectangularBlockTensor A hN k s) =
       chainBlockTensor (zeroPad A) hN k s := by
   have hcast {a b c : ℕ} (h : b = c) (X : Matrix (Fin a) (Fin b) ℂ) :

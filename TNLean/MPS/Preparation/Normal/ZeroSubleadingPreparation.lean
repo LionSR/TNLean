@@ -108,7 +108,6 @@ end
 section
 
 open scoped BigOperators ComplexOrder
-open Kraus (blockTensor)
 
 namespace MPSTensor
 
@@ -123,27 +122,27 @@ Source: arXiv:2307.01696, `eq:phi_tilde` and the Supplemental Material,
 theorem blockIsometryState_eq_mpvState_of_polarPosTensor_eq_fixedPointTensor
     [NeZero M] (A : MPSTensor d D) (σ : Matrix (Fin D) (Fin D) ℂ)
     {ℓ : Fin M → ℕ} (hN : ∑ k, ℓ k = N)
-    (hP : ∀ k, polarPosTensor (blockTensor A (ℓ k)) = fixedPointTensor σ) :
+    (hP : ∀ k, polarPosTensor (Kraus.block A (ℓ k)) = fixedPointTensor σ) :
     blockIsometryState A (fixedPointPair σ) hN = mpvState A N := by
-  have hB : (fun k => blockTensor A (ℓ k)) =
-      fun k => rotatePhysical (polarIsoMatrix (blockTensor A (ℓ k)))
+  have hB : (fun k => Kraus.block A (ℓ k)) =
+      fun k => rotatePhysical (polarIsoMatrix (Kraus.block A (ℓ k)))
         (fixedPointTensor σ) := by
     funext k
     rw [← hP k]
     exact (rotatePhysical_polarIsoMatrix_polarPosTensor _).symm
   ext s
-  rw [blockIsometryState_apply, mpvState_apply, mpv_eq_mpvFamily_blockTensor A hN,
+  rw [blockIsometryState_apply, mpvState_apply, mpv_eq_mpvFamily_block A hN,
     hB, mpvFamily_rotatePhysical]
   simp only [mpvFamily_const, mpv_fixedPointTensor]
 
-private theorem transferMap_blockTensor_eq_trace_smul_of_subleading_eigenvalues_eq_zero
+private theorem transferMap_block_eq_trace_smul_of_subleading_eigenvalues_eq_zero
     (A : MPSTensor d D) (hnormal : Kraus.IsNormal A) (hA : IsLeftCanonical A)
     {σ : Matrix (Fin D) (Fin D) ℂ} (hσ : σ.PosDef) (htr : σ.trace = 1)
     (hfix : Kraus.transferMap A σ = σ)
     (hzero : ∀ μ : ℂ, Module.End.HasEigenvalue (Kraus.transferMap A) μ → μ ≠ 1 → μ = 0)
     {n : ℕ} (hn : D ^ 2 ≤ n) (X : Matrix (Fin D) (Fin D) ℂ) :
-    Kraus.transferMap (blockTensor A n) X = X.trace • σ := by
-  rw [Kraus.transferMap_blockTensor,
+    Kraus.transferMap (Kraus.block A n) X = X.trace • σ := by
+  rw [Kraus.transferMap_block,
     transferMap_pow_eq_fixedPointProj_of_subleading_eigenvalues_eq_zero
       A hnormal hA hσ htr hfix hzero hn]
   simp [fixedPointProj, htr]
@@ -165,7 +164,7 @@ theorem blockIsometryState_eq_mpvState_of_subleading_eigenvalues_eq_zero
   apply blockIsometryState_eq_mpvState_of_polarPosTensor_eq_fixedPointTensor
   intro k
   apply polarPosTensor_eq_fixedPointTensor_of_transferMap_eq_trace_smul _ hσ.posSemidef
-  exact transferMap_blockTensor_eq_trace_smul_of_subleading_eigenvalues_eq_zero
+  exact transferMap_block_eq_trace_smul_of_subleading_eigenvalues_eq_zero
     A hnormal hA hσ htr hfix hzero (hℓ k)
 
 end MPSTensor
@@ -209,10 +208,10 @@ theorem exists_isPreparedInDepth_normalizedMPVState_of_subleading_eigenvalues_eq
     have h := hℓq k
     dsimp [q] at h
     omega
-  have hinj : ∀ k, Kraus.IsInjective (blockTensor A (ℓ k)) := by
+  have hinj : ∀ k, Kraus.IsInjective (Kraus.block A (ℓ k)) := by
     intro k
     apply isInjective_of_transferMap_eq_trace_smul _ hσ
-    exact transferMap_blockTensor_eq_trace_smul_of_subleading_eigenvalues_eq_zero
+    exact transferMap_block_eq_trace_smul_of_subleading_eigenvalues_eq_zero
       A hnormal hA hσ htr hfix hzero (hℓD k)
   have hω : ∑ p, star (fixedPointPair σ p) * fixedPointPair σ p = 1 := by
     rw [fixedPointPair_norm_sq hσ.posSemidef, htr]

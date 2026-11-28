@@ -70,7 +70,6 @@ and every chain length `N ≥ N₀` by
 open Matrix MPSTensor
 open scoped BigOperators ComplexOrder InnerProductSpace
 open QuantumCircuit
-open Kraus (blockTensor)
 
 namespace MPSPreparation
 
@@ -96,9 +95,9 @@ end Pairs
 /-! ### The approximating state with measurements -/
 
 /-- Injectivity of the blocked tensor over `s` sites passes to blocks of `s 2^{k+1}` sites. -/
-private theorem isInjective_blockTensor_mul_two_pow {d D s : ℕ} {A : MPSTensor d D}
-    (hA : Kraus.IsInjective (blockTensor A s)) (k : ℕ) :
-    Kraus.IsInjective (blockTensor A (s * 2 ^ (k + 1))) := by
+private theorem isInjective_block_mul_two_pow {d D s : ℕ} {A : MPSTensor d D}
+    (hA : Kraus.IsInjective (Kraus.block A s)) (k : ℕ) :
+    Kraus.IsInjective (Kraus.block A (s * 2 ^ (k + 1))) := by
   have := block_isInjective_mul_of_block_isInjective A
     (m := 2 ^ (k + 1)) (pow_pos two_pos _) hA
   rwa [mul_comm] at this
@@ -114,7 +113,7 @@ tree-RG circuit of every block, on registers of `s` sites, is applied with measu
 layer at a time. No outcome is post-selected. -/
 theorem exists_isMeasurementConversion_approximatingMPVState (d s : ℕ)
     [NeZero d] [NeZero s] :
-    ∃ C : ℕ, ∀ {D : ℕ} (A : MPSTensor d D), Kraus.IsInjective (blockTensor A s) →
+    ∃ C : ℕ, ∀ {D : ℕ} (A : MPSTensor d D), Kraus.IsInjective (Kraus.block A s) →
       ∀ (σ : Matrix (Fin D) (Fin D) ℂ), σ.PosSemidef → σ.trace = 1 →
         ∀ (k M : ℕ) [NeZero M],
           ∃ v : Fin (M * (s * 2 ^ (k + 1))) → Fin d → ℂ,
@@ -140,21 +139,21 @@ theorem exists_isMeasurementConversion_approximatingMPVState (d s : ℕ)
         _ ≤ 2 ^ (k + 1) := Nat.pow_le_pow_right two_pos (by omega)
     rw [hq]; nlinarith
   -- Registers of `s` sites carry the bond legs and `ℂ^{D²}`.
-  have hDD : D * D ≤ d ^ s := mul_self_le_pow_of_isInjective_blockTensor hA
+  have hDD : D * D ≤ d ^ s := mul_self_le_pow_of_isInjective_block hA
   obtain ⟨enc⟩ : Nonempty (Fin (D * D) ↪ Cfg d s) :=
     Function.Embedding.nonempty_of_card_le (by simpa using hDD)
   obtain ⟨dig⟩ : Nonempty (Fin D ↪ Cfg d s) :=
     Function.Embedding.nonempty_of_card_le (by simpa using (Nat.le_mul_self D).trans hDD)
-  have h2 : Kraus.IsInjective (blockTensor (blockTensor A s) 2) := isInjective_blockTensor_two hA
-  have hBq : Kraus.IsInjective (blockTensor A q) := isInjective_blockTensor_mul_two_pow hA k
+  have h2 : Kraus.IsInjective (Kraus.block (Kraus.block A s) 2) := isInjective_block_two hA
+  have hBq : Kraus.IsInjective (Kraus.block A q) := isInjective_block_mul_two_pow hA k
   -- The pairs of the fixed point.
   obtain ⟨W, hWu, hW⟩ := exists_pairUnitary hd dig.injective (fixedPointPair σ)
     (by rw [fixedPointPair_norm_sq hσ, htr])
   obtain ⟨u, -, hud, huop⟩ := isUnitaryCircuitOn_pairLayerOp hN hr fun _ => hK W hWu
   -- The trees of the blocks.
-  set T := regTreeGate dig enc (blockTensor A s) k with hT
+  set T := regTreeGate dig enc (Kraus.block A s) k with hT
   obtain ⟨R, hRf, hRd, hRE⟩ := exists_rounds_blockLayerOp_regTreeOp (X := T) (hN := hN)
-    (K := K) fun j p => hK _ (regTreeGate_mem_unitary dig enc (blockTensor A s) k j p)
+    (K := K) fun j p => hK _ (regTreeGate_mem_unitary dig enc (Kraus.block A s) k j p)
   set v₀ : Fin (M * q) → Fin d → ℂ := fun _ => Pi.single ⟨0, hd⟩ 1
   set φ₀ : Cfg d (M * q) → ℂ := fun x => ∏ i, v₀ i (x i) with hφ₀
   have hv₀ : φ₀ ≠ 0 := fun h => by
@@ -212,9 +211,9 @@ theorem exists_isMeasurementConversion_approximationError_le {d D : ℕ} [NeZero
     correlationLength_pos (by rwa [hnorm]) (by rwa [hnorm])
   obtain ⟨b₀, hb₀, herr⟩ := exists_approximationError_le_of_slope hζ hmpv hNB hLC hσ htr hfix
     ht0 ht1 (fun μ hμ hne => (hlam μ hμ hne).trans_eq hnorm) (half_lt_self hξ)
-  have hBs : Kraus.IsInjective (blockTensor B (L + 1)) := hinj (L + 1) (by omega)
+  have hBs : Kraus.IsInjective (Kraus.block B (L + 1)) := hinj (L + 1) (by omega)
   have : NeZero d := ⟨fun hd => by
-    have h := mul_self_le_pow_of_isInjective_blockTensor hBs
+    have h := mul_self_le_pow_of_isInjective_block hBs
     rw [hd, zero_pow (by omega)] at h
     exact absurd h (Nat.not_le.2 (Nat.mul_pos (NeZero.pos D) (NeZero.pos D)))⟩
   obtain ⟨C, hC⟩ := exists_isMeasurementConversion_approximatingMPVState d (L + 1)
@@ -223,8 +222,8 @@ theorem exists_isMeasurementConversion_approximationError_le {d D : ℕ} [NeZero
   rw [mul_comm] at hM
   subst hM
   have : NeZero M := ⟨fun h => NeZero.ne (M * ((L + 1) * 2 ^ (k + 1))) (by rw [h, zero_mul])⟩
-  have hBq : Kraus.IsInjective (blockTensor B ((L + 1) * 2 ^ (k + 1))) :=
-    isInjective_blockTensor_mul_two_pow hBs k
+  have hBq : Kraus.IsInjective (Kraus.block B ((L + 1) * 2 ^ (k + 1))) :=
+    isInjective_block_mul_two_pow hBs k
   refine ⟨approximatingMPVState B σ _ M, norm_approximatingMPVState B hBq hσ.posSemidef htr M,
     hC B hBs σ hσ.posSemidef htr k M, herr ε hε _ M (Nat.one_le_iff_ne_zero.2 (by positivity)) ?_⟩
   push_cast at hq ⊢
