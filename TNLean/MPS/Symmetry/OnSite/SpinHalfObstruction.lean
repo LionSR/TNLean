@@ -61,7 +61,7 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {α : Type*} [Fintype α] {D : ℕ}
+variable {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- Twisting a gauge-transformed family:
 if `Bʲ = c Y Cʲ Y⁻¹`, then `∑ⱼ Pᵢⱼ Bʲ = c Y (∑ⱼ Pᵢⱼ Cʲ) Y⁻¹`. -/

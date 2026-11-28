@@ -36,7 +36,7 @@ general predicate `TNLean.PEPS.IsGInjective (linHom ρ ρ) (mpsSiteMap A)`;
 `IsGInjective.mpsSiteMap_concatTensor`, with the explicit left inverse
 `concatLeftInverse` of `eq:noninj:linv` and its left-inverse identity
 `concatLeftInverse_comp_mpsSiteMap`. Words of any positive length and the blocked tensors
-`Kraus.blockTensor A L` are `G`-injective as corollaries.
+`Kraus.block A L` are `G`-injective as corollaries.
 
 The source writes `U_g†`; for a unitary representation this is `ρ(g⁻¹)`, which is the form
 stated here. No unitarity is used, and no semi-regularity: the source needs it only from
@@ -55,7 +55,7 @@ Theorem 4.12 on.
 * `TNLean.PEPS.concatLeftInverse_comp_mpsSiteMap`: the left inverse of the concatenation.
 * `TNLean.PEPS.IsGInjective.mpsSiteMap_concatTensor`: Lemma 4.7.
 * `TNLean.PEPS.IsGInjective.mpsSiteMap_wordTensor`,
-  `MPSTensor.isGInjective_mpsSiteMap_blockTensor`: blocked tensors of a `G`-injective tensor.
+  `MPSTensor.isGInjective_mpsSiteMap_block`: blocked tensors of a `G`-injective tensor.
 * `StarSubalgebra.exists_isGInjective_mpsSiteMap_of_span`: G-injective tensors spanning a matrix
   C*-algebra.
 
@@ -68,7 +68,6 @@ Theorem 4.12 on.
 section GInjectiveMPS
 
 open Module LinearMap Representation
-open Kraus (decodeBlockEquiv decodeBlockEquiv_apply blockTensor)
 
 namespace TNLean
 namespace PEPS
@@ -414,18 +413,20 @@ theorem toLin'_evalWord (A : MPSTensor d D) (w : List (Fin d)) :
 
 /-- Source: arXiv:1001.3807, Lemma 4.7, `Papers/1001.3807/paper_v3.tex` lines 1036–1063,
 iterated. If the MPS tensor `A` is `G`-injective for a representation `ρ` on its bond space, so
-is the blocked tensor `blockTensor A L` for every positive `L`. -/
-theorem isGInjective_mpsSiteMap_blockTensor (ρ : Representation ℂ G (Fin D → ℂ))
+is the blocked tensor `Kraus.block A L` for every positive `L`. -/
+theorem isGInjective_mpsSiteMap_block (ρ : Representation ℂ G (Fin D → ℂ))
     (A : MPSTensor d D)
     (hA : IsGInjective (linHom ρ ρ) (mpsSiteMap fun i => Matrix.toLin' (A i)))
     {L : ℕ} (hL : 0 < L) :
-    IsGInjective (linHom ρ ρ) (mpsSiteMap fun I => Matrix.toLin' (blockTensor A L I)) := by
+    IsGInjective (linHom ρ ρ) (mpsSiteMap fun I => Matrix.toLin' (Kraus.block A L I)) := by
   obtain ⟨n, rfl⟩ : ∃ n, L = n + 1 := ⟨L - 1, by omega⟩
-  exact (hA.mpsSiteMap_wordTensor n).mpsSiteMap_reindex (decodeBlockEquiv d (n + 1))
-    fun I => by
-      simp only [Kraus.blockTensor, Kraus.reindexPhysical, Kraus.block_apply, toLin'_evalWord,
-        List.map_ofFn, wordTensor]
-      rfl
+  have h : (fun I => Matrix.toLin' (Kraus.block A (n + 1) I)) =
+      wordTensor (fun i => Matrix.toLin' (A i)) (n + 1) := by
+    funext I
+    simp only [Kraus.block_apply, toLin'_evalWord, List.map_ofFn, wordTensor]
+    rfl
+  rw [h]
+  exact hA.mpsSiteMap_wordTensor n
 
 end MPSTensor
 

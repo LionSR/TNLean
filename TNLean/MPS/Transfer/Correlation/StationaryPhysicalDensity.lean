@@ -183,7 +183,8 @@ theorem stationaryBlockDensity_eq_of_unitary_gaugePhase
     simp only [Complex.star_def, Complex.conj_mul', norm_pow, hμ, one_pow, Complex.ofReal_one]
   ext s t
   simp only [stationaryBlockDensity_apply]
-  rw [hw, hw, List.length_ofFn]
+  rw [hw, hw]
+  simp only [List.length_ofFn]
   simp only [Matrix.conjTranspose_smul, Matrix.conjTranspose_mul,
     Matrix.conjTranspose_conjTranspose, Matrix.mul_smul, Matrix.smul_mul,
     smul_smul, hphase, one_smul]

@@ -31,7 +31,6 @@ See `docs/paper-gaps/cpsv16_rfp_gauge_pure_equivalence_false.tex`.
 open MPTensor
 
 open scoped Matrix BigOperators Kronecker
-open Kraus (blockPhysDim blockPhysDim_eq_pow decodeBlock wordOfBlock blockTensor)
 
 namespace MPOTensor
 
@@ -264,14 +263,14 @@ theorem cubePhaseDoubledTensor_exists_weightNormalized :
     intro _
     exact ⟨0, norm_cubePhaseDoubledWeight 0⟩
 
-private lemma blockTensor_cubePhaseTensor_two (i : Fin 1) :
-    blockTensor cubePhaseTensor 2 i =
+private lemma block_cubePhaseTensor_two (i : Fin 1) :
+    Kraus.reindexPhysical (Equiv.ofUnique (Fin 1) (Fin 2 → Fin 1)) (Kraus.block cubePhaseTensor 2) i =
       Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv
         (Matrix.blockDiagonal' fun k =>
           (cubePhaseWeight k • (1 : Matrix (Fin 1) (Fin 1) ℂ)) *
             (cubePhaseWeight k • (1 : Matrix (Fin 1) (Fin 1) ℂ))) := by
-  have hi : i = 0 := Subsingleton.elim _ _
-  subst i
+  have hw : Equiv.ofUnique (Fin 1) (Fin 2 → Fin 1) i = fun _ => 0 := Subsingleton.elim _ _
+  simp only [Kraus.reindexPhysical, hw]
   change cubePhaseTensor 0 * (cubePhaseTensor 0 * 1) = _
   rw [Matrix.mul_one]
   change Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv
@@ -300,12 +299,12 @@ arXiv:1606.00608, lines 2100--2107:
 $A=\omega S A^{[2]}S^{-1}$. -/
 theorem cube_phase_blocked_gauge_identity (i : Fin 1) :
     cubePhaseTensor i = primitiveCubeRoot •
-      ((cubeSwapGauge : Matrix _ _ ℂ) * blockTensor cubePhaseTensor 2 i *
+      ((cubeSwapGauge : Matrix _ _ ℂ) * Kraus.reindexPhysical (Equiv.ofUnique (Fin 1) (Fin 2 → Fin 1)) (Kraus.block cubePhaseTensor 2) i *
         ((cubeSwapGauge⁻¹ : GL (Fin (∑ k : Fin 2, cubePhaseBondDim k)) ℂ) :
           Matrix _ _ ℂ)) := by
   have hi : i = 0 := Subsingleton.elim _ _
   subst i
-  rw [blockTensor_cubePhaseTensor_two]
+  rw [block_cubePhaseTensor_two]
   ext a b
   rw [cubeSwapGauge, permGL_val, permGL_inv_val]
   rw [permMatrix_conj_eq_submatrix]
@@ -336,7 +335,7 @@ this witness implies the exact doubled-MPDO predicate.
 sufficient but is not itself the source predicate. See
 `docs/paper-gaps/cpsv16_rfp_gauge_pure_equivalence_false.tex`. -/
 def IsBlockedGaugePhaseFixedPoint {D : ℕ} (A : MPSTensor 1 D) : Prop :=
-  UnitGaugePhaseEquiv (blockTensor A 2) A
+  UnitGaugePhaseEquiv (Kraus.reindexPhysical (Equiv.ofUnique (Fin 1) (Fin 2 → Fin 1)) (Kraus.block A 2)) A
 
 /-- A one-letter MPS blocking identity with a unit amplitude phase gives the literal
 doubled-MPDO virtual-gauge condition from Appendix D, equation `RFP-gauge`, of
@@ -396,26 +395,15 @@ theorem isPureOneLetterRFPViaTSUpToVirtualGauge_of_isBlockedGaugePhaseFixedPoint
         rw [map_inv]
       _ = ((↑(X⁻¹) : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ)) := rfl
   rw [hmapinv]
-  have hdim : blockPhysDim 1 2 = 1 := by
-    rw [blockPhysDim_eq_pow]
-    norm_num
-  let i0 : Fin (blockPhysDim 1 2) := Fin.cast hdim.symm 0
-  have hword : wordOfBlock 1 2 i0 = [0, 0] := by
-    change List.ofFn (decodeBlock 1 2 i0) = [0, 0]
-    rw [show decodeBlock 1 2 i0 = fun _ => 0 from Subsingleton.elim _ _]
-    rfl
-  have hblock : blockTensor A 2 i0 = A 0 * A 0 := by
-    change Kraus.evalWord A (wordOfBlock 1 2 i0) = A 0 * A 0
-    rw [hword]
-    simp [Kraus.evalWord]
-  have hcast : Fin.cast hdim i0 = (0 : Fin 1) := Subsingleton.elim _ _
+  have hblock : Kraus.reindexPhysical (Equiv.ofUnique (Fin 1) (Fin 2 → Fin 1)) (Kraus.block A 2) 0 = A 0 * A 0 := by
+    have hw : Equiv.ofUnique (Fin 1) (Fin 2 → Fin 1) 0 = fun _ => 0 := Subsingleton.elim _ _
+    simp only [Kraus.reindexPhysical, hw]
+    change A 0 * (A 0 * 1) = A 0 * A 0
+    rw [Matrix.mul_one]
   have hA0 : A 0 = ζ • ((X : Matrix _ _ ℂ) * (A 0 * A 0) *
       ((X⁻¹ : GL (Fin D) ℂ) : Matrix _ _ ℂ)) := by
-    have hAi := hA i0
-    change A (Fin.cast hdim i0) = ζ •
-      ((X : Matrix _ _ ℂ) * blockTensor A 2 i0 *
-        ((X⁻¹ : GL (Fin D) ℂ) : Matrix _ _ ℂ)) at hAi
-    rw [hblock, hcast] at hAi
+    have hAi := hA 0
+    rw [hblock] at hAi
     exact hAi
   have hmapG :
       ((X : Matrix _ _ ℂ) * (A 0 * A 0) *
