@@ -19,7 +19,6 @@ Source context: arXiv:1010.3732, Appendix C, lines 2653–2717, and
 arXiv:1606.00608, lines 318–344.
 -/
 
-open Kraus (blockPhysDim blockTensor)
 
 set_option relaxedAutoImplicit false
 set_option maxSynthPendingDepth 3
@@ -33,7 +32,7 @@ coordinates. Source context: arXiv:1606.00608, lines 318–344. -/
 noncomputable def blockUnitaryPhysicalAction
     {G : Type*} [Monoid G] {d : ℕ}
     (U : G →* Matrix.unitaryGroup (Fin d) ℂ) (L : ℕ) :
-    G →* Matrix.unitaryGroup (Fin (blockPhysDim d L)) ℂ where
+    G →* Matrix.unitaryGroup (Fin L → Fin d) ℂ where
   toFun g := ⟨blockKron L (U g), Matrix.mem_unitaryGroup_iff.mpr
     (blockKron_mul_conjTranspose L _ (Matrix.mem_unitaryGroup_iff.mp (U g).property))⟩
   map_one' := by
@@ -51,7 +50,7 @@ noncomputable def blockUnitaryPhysicalAction
 /-- A unitary projective virtual action implements the blocked on-site
 symmetry with exactly the same factor system. Source context:
 arXiv:1010.3732, Appendix C, lines 2653–2717. -/
-theorem rotatePhysical_blockTensor_of_unitary_virtual_covariance
+theorem rotatePhysical_block_of_unitary_virtual_covariance
     {G : Type} [Group G] {d D : ℕ} (A : MPSTensor d D)
     (U : G →* Matrix.unitaryGroup (Fin d) ℂ) {ω : ScalarCocycle G}
     (ρ : ProjectiveRepresentation (D := D) ω)
@@ -59,12 +58,12 @@ theorem rotatePhysical_blockTensor_of_unitary_virtual_covariance
     (hCov : ∀ g, rotatePhysical (U g) A = fun i =>
       (ρ.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * A i *
         (ρ.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ)ᴴ) (L : ℕ) :
-    ∀ g, rotatePhysical (blockUnitaryPhysicalAction U L g) (blockTensor A L) =
-      fun i => (ρ.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * blockTensor A L i *
+    ∀ g, rotatePhysical (blockUnitaryPhysicalAction U L g) (Kraus.block A L) =
+      fun i => (ρ.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * Kraus.block A L i *
         (ρ.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ)ᴴ := by
   intro g
   funext i
-  have h := twistedTensor_blockTensor_eq_gauge
+  have h := twistedTensor_block_eq_gauge
     (U := (Matrix.unitaryGroup (Fin d) ℂ).subtype.comp U) (g := g) (R := ρ.X g⁻¹)
     (fun i => by
       rw [Matrix.coe_gl_inv_eq_conjTranspose_of_mem_unitaryGroup _ (hρ g⁻¹)]

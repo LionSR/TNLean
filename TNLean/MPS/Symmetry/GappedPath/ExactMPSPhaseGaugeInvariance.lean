@@ -28,18 +28,16 @@ virtual factor systems.
 open MPTensor
 
 open scoped Matrix
-open Kraus (blockTensor)
 
 namespace MPSTensor
 
 /-- Blocking a scalar rescaling raises the scalar to the block length.
 Source context: arXiv:1010.3732, Section II.B, lines 325–355. -/
-theorem blockTensor_smul {d D : ℕ} (c : ℂ) (A : MPSTensor d D) (k : ℕ) :
-    blockTensor (c • A) k = c ^ k • blockTensor A k := by
+theorem block_smul {α : Type*} {D : ℕ} (c : ℂ) (A : MPTensor α (Fin D)) (k : ℕ) :
+    Kraus.block (c • A) k = c ^ k • Kraus.block A k := by
   funext i
-  simpa only [blockTensor, Kraus.blockTensor, Kraus.reindexPhysical, Kraus.block_apply,
-    Function.comp_apply, List.length_ofFn, Pi.smul_def, Pi.smul_apply] using
-    Kraus.evalWord_smul c A (List.ofFn (Kraus.decodeBlockEquiv d k i))
+  simpa only [Kraus.block_apply, List.length_ofFn, Pi.smul_apply] using
+    Kraus.evalWord_smul c A (List.ofFn i)
 
 /-- Physical inclusion preserves an invertible bond gauge. Source context:
 arXiv:1010.3732, Section II.C.2, lines 440–466. -/
@@ -98,19 +96,19 @@ theorem IsSameExactMPSGappedPhase.of_smul_gaugeEquiv
     IsSameExactMPSGappedPhase A₀ A₁ U₀ U₁ := by
   rcases h with ⟨k, hk, m, U, χ₀, χ₁, hχ₀, hχ₁, E₀, E₁,
     hE₀, hE₁, hEorth, hCov₀, hCov₁, P, Q, hQ₀, hQ₁⟩
-  have hBlock₀ : GaugeEquiv (c₀ ^ k • blockTensor A₀ k) (blockTensor B₀ k) := by
-    simpa only [blockTensor_smul] using h₀.blockTensor k
-  have hBlock₁ : GaugeEquiv (c₁ ^ k • blockTensor A₁ k) (blockTensor B₁ k) := by
-    simpa only [blockTensor_smul] using h₁.blockTensor k
+  have hBlock₀ : GaugeEquiv (c₀ ^ k • Kraus.block A₀ k) (Kraus.block B₀ k) := by
+    simpa only [block_smul] using h₀.block k
+  have hBlock₁ : GaugeEquiv (c₁ ^ k • Kraus.block A₁ k) (Kraus.block B₁ k) := by
+    simpa only [block_smul] using h₁.block k
   have hParent₀ := parentInteraction_matrix_rotatePhysical_eq_of_smul_gaugeEquiv
     E₀ hE₀ (c₀ ^ k) (pow_ne_zero k hc₀) hBlock₀
   have hParent₁ := parentInteraction_matrix_rotatePhysical_eq_of_smul_gaugeEquiv
     E₁ hE₁ (c₁ ^ k) (pow_ne_zero k hc₁) hBlock₁
-  have hRotate₀ : GaugeEquiv (c₀ ^ k • rotatePhysical E₀ (blockTensor A₀ k))
-      (rotatePhysical E₀ (blockTensor B₀ k)) := by
+  have hRotate₀ : GaugeEquiv (c₀ ^ k • rotatePhysical E₀ (Kraus.block A₀ k))
+      (rotatePhysical E₀ (Kraus.block B₀ k)) := by
     simpa only [rotatePhysical_smul] using hBlock₀.rotatePhysical E₀
-  have hRotate₁ : GaugeEquiv (c₁ ^ k • rotatePhysical E₁ (blockTensor A₁ k))
-      (rotatePhysical E₁ (blockTensor B₁ k)) := by
+  have hRotate₁ : GaugeEquiv (c₁ ^ k • rotatePhysical E₁ (Kraus.block A₁ k))
+      (rotatePhysical E₁ (Kraus.block B₁ k)) := by
     simpa only [rotatePhysical_smul] using hBlock₁.rotatePhysical E₁
   refine ⟨k, hk, m, U, χ₀, χ₁, hχ₀, hχ₁, E₀, E₁,
     hE₀, hE₁, hEorth, hCov₀, hCov₁, ?_⟩

@@ -303,7 +303,7 @@ theorem pairTraceSeparatingAt_uncast_left {D₁ D₁' D₂ : ℕ}
 /-- The simultaneous word evaluation of two blocks for an arbitrary finite word. -/
 def pairEvalWordTuple {D₁ D₂ : ℕ}
     (A : MPTensor α (Fin D₁)) (B : MPTensor α (Fin D₂))
-    (w : List (α)) :
+    (w : List α) :
     Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ :=
   (Kraus.evalWord A w, Kraus.evalWord B w)
 
@@ -312,7 +312,7 @@ noncomputable def pairCumulativeSpan {D₁ D₂ : ℕ}
     (A : MPTensor α (Fin D₁)) (B : MPTensor α (Fin D₂)) (S : ℕ) :
     Submodule ℂ (Matrix (Fin D₁) (Fin D₁) ℂ × Matrix (Fin D₂) (Fin D₂) ℂ) :=
   Submodule.span ℂ
-    {M | ∃ w : List (α), w.length ≤ S ∧ M = pairEvalWordTuple A B w}
+    {M | ∃ w : List α, w.length ≤ S ∧ M = pairEvalWordTuple A B w}
 
 /-- Finite cumulative pair product-span: pair word tuples of length at most `S`
 span the full product matrix algebra. -/
@@ -329,7 +329,7 @@ def PairTraceSeparatingUpTo {D₁ D₂ : ℕ}
     (A : MPTensor α (Fin D₁)) (B : MPTensor α (Fin D₂)) (S : ℕ) : Prop :=
   ∀ ΔA : Matrix (Fin D₁) (Fin D₁) ℂ,
     ∀ ΔB : Matrix (Fin D₂) (Fin D₂) ℂ,
-      (∀ w : List (α), w.length ≤ S →
+      (∀ w : List α, w.length ≤ S →
         Matrix.trace (ΔA * Kraus.evalWord A w) +
           Matrix.trace (ΔB * Kraus.evalWord B w) = 0) →
       ΔA = 0 ∧ ΔB = 0
@@ -339,7 +339,7 @@ def PairTraceSeparatingAll {D₁ D₂ : ℕ}
     (A : MPTensor α (Fin D₁)) (B : MPTensor α (Fin D₂)) : Prop :=
   ∀ ΔA : Matrix (Fin D₁) (Fin D₁) ℂ,
     ∀ ΔB : Matrix (Fin D₂) (Fin D₂) ℂ,
-      (∀ w : List (α),
+      (∀ w : List α,
         Matrix.trace (ΔA * Kraus.evalWord A w) +
           Matrix.trace (ΔB * Kraus.evalWord B w) = 0) →
       ΔA = 0 ∧ ΔB = 0
@@ -358,7 +358,7 @@ def PairAllWordsSpanTop {D₁ D₂ : ℕ}
 /-- Membership of a pair word tuple in the cumulative pair span. -/
 theorem pairEvalWordTuple_mem_pairCumulativeSpan {D₁ D₂ : ℕ}
     (A : MPTensor α (Fin D₁)) (B : MPTensor α (Fin D₂))
-    {w : List (α)} {S : ℕ} (hw : w.length ≤ S) :
+    {w : List α} {S : ℕ} (hw : w.length ≤ S) :
     pairEvalWordTuple A B w ∈ pairCumulativeSpan A B S :=
   Submodule.subset_span ⟨w, hw, rfl⟩
 

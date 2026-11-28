@@ -22,24 +22,22 @@ lines 2614–2632. No additional chain-length threshold is assumed.
 open MPTensor
 
 open scoped Matrix
-open Kraus (blockPhysDim blockTensor isNBlkInjective_iff_blockTensor_isInjective
-  evalWord_blockTensor)
 
 namespace MPSTensor
 
 /-- Blocking translates proportionality at lengths at least two into
 proportionality at every positive blocked length. Source context:
 arXiv:1010.3732, Appendix B, lines 2614–2632. -/
-theorem mpv_blockTensor_eq_smul_of_mpv_eq_smul_from_two
+theorem mpv_block_eq_smul_of_mpv_eq_smul_from_two
     {d D DA : ℕ} (A : MPSTensor d DA) (B : MPSTensor d D)
     (c : ℕ → ℂ)
     (hC : ∀ N, 2 ≤ N → ∀ σ : Fin N → Fin d, mpv A σ = c N * mpv B σ)
     {L : ℕ} (hL : 2 ≤ L) {N : ℕ} (hN : 0 < N)
-    (σ : Fin N → Fin (blockPhysDim d L)) :
-    mpv (blockTensor A L) σ = c (N * L) * mpv (blockTensor B L) σ := by
+    (σ : Fin N → Fin L → Fin d) :
+    mpv (Kraus.block A L) σ = c (N * L) * mpv (Kraus.block B L) σ := by
   have hNL : 2 ≤ N * L := by nlinarith
-  simpa only [mpv, coeff, Kraus.ofFn_blockedConfigEquiv, evalWord_blockTensor] using
-    hC (N * L) hNL (Kraus.blockedConfigEquiv d N L σ)
+  simpa only [mpv_block_eq_mpv_blockConfig] using
+    hC (N * L) hNL (Kraus.blockConfigEquiv (Fin d) N L σ)
 
 /-- Unimodular MPV proportionality at every length at least two is already
 geometric. The one-site phase is determined by the ratio of the coefficients
@@ -53,12 +51,12 @@ theorem eq_pow_div_of_mpv_eq_smul_from_two
     ∀ N, 2 ≤ N → c N = (c 3 / c 2) ^ N := by
   have hblocked : ∀ L, 2 ≤ L → ∀ N, 0 < N → c (N * L) = c L ^ N := by
     intro L hL
-    have hBL : Kraus.IsInjective (blockTensor B L) :=
-      (isNBlkInjective_iff_blockTensor_isInjective B L).mp
+    have hBL : Kraus.IsInjective (Kraus.block B L) :=
+      (Kraus.isNBlkInjective_iff_isInjective_block B L).mp
         (wordSpan_eq_top_of_isInjective hB (by omega))
-    obtain ⟨lam, _, hlam⟩ := exists_eq_pow_of_mpv_eq_smul (blockTensor A L) hBL
+    obtain ⟨lam, _, hlam⟩ := exists_eq_pow_of_mpv_eq_smul (Kraus.block A L) hBL
       (fun N => c (N * L))
-      (fun N hN σ => mpv_blockTensor_eq_smul_of_mpv_eq_smul_from_two A B c hC hL hN σ)
+      (fun N hN σ => mpv_block_eq_smul_of_mpv_eq_smul_from_two A B c hC hL hN σ)
       (fun N hN => hnorm (N * L) (by nlinarith))
     have hlamL : lam = c L := by simpa using (hlam 1 one_pos).symm
     simpa only [hlamL] using hlam

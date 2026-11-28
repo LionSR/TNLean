@@ -89,8 +89,8 @@ open scoped ScalarCohomology
 namespace MPSTensor
 
 private theorem eventually_class_of_unital_sequence_supported_limit
-    {G : Type} [Group G] {d k E : ℕ}
-    (B : ℕ → MPSTensor d k) (b : MPSTensor d k)
+    {G : Type} [Group G] {α : Type*} [Fintype α] [DecidableEq α] {k E : ℕ}
+    (B : ℕ → MPTensor α (Fin k)) (b : MPTensor α (Fin k))
     (hB : Tendsto B atTop (𝓝 b)) (hUnital : ∀ n, Kraus.IsUnital (B n))
     (hbUnital : Kraus.IsUnital b)
     (σ : ℕ → Matrix (Fin k) (Fin k) ℂ) (hσ : ∀ n, (σ n).PosDef)
@@ -100,10 +100,10 @@ private theorem eventually_class_of_unital_sequence_supported_limit
     (hτTrace : τ.trace = 1) (hτFix : Kraus.adjointMap b τ = τ)
     (K : Matrix (Fin k) (Fin E) ℂ) (hK : K.IsIsometry)
     (hSupport : K * Kᴴ = hτ.supportProj)
-    (C : MPSTensor d E) (hC : ∀ i, C i = Kᴴ * b i * K)
+    (C : MPTensor α (Fin E)) (hC : ∀ i, C i = Kᴴ * b i * K)
     (hCInj : Kraus.IsInjective C)
     (hDim : Module.finrank ℂ (LinearMap.ker (LinearMap.id - Kraus.adjointMapLM b)) = 1)
-    (U : G →* Matrix.unitaryGroup (Fin d) ℂ)
+    (U : G →* Matrix.unitaryGroup α ℂ)
     (ω : ℕ → ScalarCocycle G) (ω₀ : ScalarCocycle G)
     (ρ : ∀ n, ProjectiveRepresentation (D := k) (ω n))
     (ρ₀ : ProjectiveRepresentation (D := E) ω₀)
@@ -134,7 +134,7 @@ private theorem eventually_class_of_unital_sequence_supported_limit
   let density : OnePoint ℕ → Matrix (Fin k) (Fin k) ℂ := OnePoint.rec τ σ
   let frame : ∀ t : OnePoint ℕ, Matrix (Fin k) (Fin (dim t)) ℂ :=
     OnePoint.rec K (fun _ => (1 : Matrix (Fin k) (Fin k) ℂ))
-  let tensor : ∀ t, MPSTensor d (dim t) := OnePoint.rec C B
+  let tensor : ∀ t, MPTensor α (Fin (dim t)) := OnePoint.rec C B
   have hClass := eventually_cohomologousTo_of_continuousAt_unital_supported_family
     dim factor action ambient ∞ ambient.continuous.continuousAt
     (OnePoint.rec hbUnital hUnital) density
@@ -165,9 +165,9 @@ normality and the limiting virtual action are derived inside the argument;
 no continuity of virtual representatives is assumed. Source context:
 arXiv:1010.3732, Appendix C, lines 2653–2717. -/
 theorem eventually_cohomologousTo_of_tendsto_unital_periodic_lines
-    {G : Type} [Group G] {d D k E : ℕ} [NeZero D]
-    (A : MPSTensor d D) (hA : Kraus.IsInjective A) (hAU : Kraus.IsUnital A)
-    (B : ℕ → MPSTensor d k) (b : MPSTensor d k)
+    {G : Type} [Group G] {α : Type*} [Fintype α] [DecidableEq α] {D k E : ℕ} [NeZero D]
+    (A : MPTensor α (Fin D)) (hA : Kraus.IsInjective A) (hAU : Kraus.IsUnital A)
+    (B : ℕ → MPTensor α (Fin k)) (b : MPTensor α (Fin k))
     (hB : Tendsto B atTop (𝓝 b)) (hBU : ∀ n, Kraus.IsUnital (B n))
     (hbU : Kraus.IsUnital b)
     (hDim : Module.finrank ℂ (Module.End.eigenspace (Kraus.transferMap b) 1) = 1)
@@ -178,14 +178,14 @@ theorem eventually_cohomologousTo_of_tendsto_unital_periodic_lines
     (hτTrace : τ.trace = 1) (hτFix : Kraus.adjointMap b τ = τ)
     (K : Matrix (Fin k) (Fin E) ℂ) (hK : K.IsIsometry)
     (hSupport : K * Kᴴ = hτ.supportProj)
-    (C : MPSTensor d E) (hC : ∀ i, C i = Kᴴ * b i * K)
+    (C : MPTensor α (Fin E)) (hC : ∀ i, C i = Kᴴ * b i * K)
     (q : ℝ) (hq : 0 ≤ q) (hqOne : q < 1)
     (hSpecA : ∀ z ∈ spectrum ℂ (Kraus.transferMap A), z ≠ 1 → ‖z‖ ≤ q)
     (hSpecb : ∀ z ∈ spectrum ℂ (Kraus.transferMap b), z ≠ 1 → ‖z‖ ≤ q)
     (hSpan : ∀ᶠ N in atTop,
-      Submodule.span ℂ {(mpv A : (Fin N → Fin d) → ℂ)} =
-        Submodule.span ℂ {(mpv b : (Fin N → Fin d) → ℂ)})
-    (U : G →* Matrix.unitaryGroup (Fin d) ℂ)
+      Submodule.span ℂ {(mpv A : (Fin N → α) → ℂ)} =
+        Submodule.span ℂ {(mpv b : (Fin N → α) → ℂ)})
+    (U : G →* Matrix.unitaryGroup α ℂ)
     (ω : ℕ → ScalarCocycle G) (ω₀ : ScalarCocycle G)
     (ρ : ∀ n, ProjectiveRepresentation (D := k) (ω n))
     (ρ₀ : ProjectiveRepresentation (D := D) ω₀)
@@ -276,11 +276,11 @@ set_option maxSynthPendingDepth 3
 set_option linter.mathlibStandardSet true
 open scoped Matrix
 
-private theorem norm_entry_le_one_of_isUnital {d D : ℕ}
-    (A : MPSTensor d D) (hA : Kraus.IsUnital A) (i : Fin d) (a b : Fin D) :
+private theorem norm_entry_le_one_of_isUnital {α : Type*} [Fintype α] {D : ℕ}
+    (A : MPTensor α (Fin D)) (hA : Kraus.IsUnital A) (i : α) (a b : Fin D) :
     ‖A i a b‖ ≤ 1 := by
   have hdiag := congrArg (fun M : Matrix (Fin D) (Fin D) ℂ => (M a a).re) hA
-  have hsum : ∑ j : Fin d, ∑ c : Fin D, ‖A j a c‖ ^ 2 = 1 := by
+  have hsum : ∑ j : α, ∑ c : Fin D, ‖A j a c‖ ^ 2 = 1 := by
     simpa [Matrix.sum_apply, Matrix.mul_apply, Matrix.conjTranspose_apply,
       map_sum, Complex.mul_re, Complex.norm_mul_self_eq_normSq,
       Complex.normSq_apply, pow_two] using hdiag
@@ -294,12 +294,12 @@ private theorem norm_entry_le_one_of_isUnital {d D : ℕ}
 
 /-- In fixed physical and bond dimensions the unital tensors form a compact
 set, irrespective of injectivity or the rank of a stationary density. -/
-theorem MPSTensor.isCompact_setOf_isUnital (d D : ℕ) :
-    IsCompact {A : MPSTensor d D | Kraus.IsUnital A} := by
-  have hclosed : IsClosed {A : MPSTensor d D | Kraus.IsUnital A} := by
+theorem MPSTensor.isCompact_setOf_isUnital (α : Type*) [Fintype α] (D : ℕ) :
+    IsCompact {A : MPTensor α (Fin D) | Kraus.IsUnital A} := by
+  have hclosed : IsClosed {A : MPTensor α (Fin D) | Kraus.IsUnital A} := by
     apply isClosed_eq ?_ continuous_const
     fun_prop
-  have hcompact : IsCompact {A : MPSTensor d D |
+  have hcompact : IsCompact {A : MPTensor α (Fin D) |
       ∀ i a b, A i a b ∈ Metric.closedBall (0 : ℂ) 1} :=
     isCompact_pi_infinite (fun _ => isCompact_pi_infinite
       (fun _ => isCompact_pi_infinite (fun _ => isCompact_closedBall 0 1)))
@@ -310,12 +310,12 @@ theorem MPSTensor.isCompact_setOf_isUnital (d D : ℕ) :
 
 /-- Unital tensors and stationary density matrices admit a common convergent
 subsequence in fixed dimensions. The limiting density may have smaller rank. -/
-theorem MPSTensor.exists_subsequence_unital_stationary_limit {d D : ℕ}
-    (A : ℕ → MPSTensor d D) (σ : ℕ → Matrix (Fin D) (Fin D) ℂ)
+theorem MPSTensor.exists_subsequence_unital_stationary_limit {α : Type*} [Fintype α] {D : ℕ}
+    (A : ℕ → MPTensor α (Fin D)) (σ : ℕ → Matrix (Fin D) (Fin D) ℂ)
     (hA : ∀ n, Kraus.IsUnital (A n))
     (hσ : ∀ n, σ n ∈ densityMatrices D)
     (hfixed : ∀ n, Kraus.adjointMap (A n) (σ n) = σ n) :
-    ∃ B : MPSTensor d D, ∃ τ : Matrix (Fin D) (Fin D) ℂ,
+    ∃ B : MPTensor α (Fin D), ∃ τ : Matrix (Fin D) (Fin D) ℂ,
       Kraus.IsUnital B ∧ τ ∈ densityMatrices D ∧ Kraus.adjointMap B τ = τ ∧
       ∃ φ : ℕ → ℕ, StrictMono φ ∧
         Filter.Tendsto (A ∘ φ) Filter.atTop (nhds B) ∧
@@ -323,14 +323,14 @@ theorem MPSTensor.exists_subsequence_unital_stationary_limit {d D : ℕ}
   let : FirstCountableTopology (Fin D → ℂ) := inferInstance
   let : FirstCountableTopology (Matrix (Fin D) (Fin D) ℂ) :=
     inferInstanceAs (FirstCountableTopology (Fin D → Fin D → ℂ))
-  let : FirstCountableTopology (MPSTensor d D) :=
-    inferInstanceAs (FirstCountableTopology (Fin d → Matrix (Fin D) (Fin D) ℂ))
+  let : FirstCountableTopology (MPTensor α (Fin D)) :=
+    inferInstanceAs (FirstCountableTopology (α → Matrix (Fin D) (Fin D) ℂ))
   obtain ⟨p, hp, φ, hφ, hconv⟩ :=
-    ((MPSTensor.isCompact_setOf_isUnital d D).prod
+    ((MPSTensor.isCompact_setOf_isUnital α D).prod
       (densityMatrices_isCompact (D := D))).tendsto_subseq
         (fun n => show (A n, σ n) ∈
-          {B : MPSTensor d D | Kraus.IsUnital B} ×ˢ densityMatrices D from ⟨hA n, hσ n⟩)
-  have hadj : Continuous (fun p : MPSTensor d D × Matrix (Fin D) (Fin D) ℂ =>
+          {B : MPTensor α (Fin D) | Kraus.IsUnital B} ×ˢ densityMatrices D from ⟨hA n, hσ n⟩)
+  have hadj : Continuous (fun p : MPTensor α (Fin D) × Matrix (Fin D) (Fin D) ℂ =>
       Kraus.adjointMap p.1 p.2) := by
     unfold Kraus.adjointMap
     fun_prop
@@ -347,7 +347,6 @@ end CompactUnitalTensors
 
 section CompactMinimalClassStability
 
-open Kraus (blockPhysDim wordOfBlock blockTensor evalWord_blockTensor)
 
 set_option relaxedAutoImplicit false
 set_option maxSynthPendingDepth 3
@@ -360,7 +359,7 @@ open scoped ScalarCohomology
 namespace MPSTensor
 
 private theorem fixedSpace_finrank_of_irreducible_unital
-    {d D : ℕ} [NeZero D] {A : MPSTensor d D}
+    {α : Type*} [Fintype α] {D : ℕ} [NeZero D] {A : MPTensor α (Fin D)}
     (hA : Kraus.IsIrreducibleFamily A) (hAU : Kraus.IsUnital A) :
     Module.finrank ℂ (Module.End.eigenspace (Kraus.transferMap A) 1) = 1 :=
   finrank_eigenspace_eq_one_of_irreducible_positive
@@ -370,7 +369,7 @@ private theorem fixedSpace_finrank_of_irreducible_unital
       using Kraus.map_one_of_isUnital A hAU)
 
 private theorem exists_faithful_adjoint_density_of_irreducible_unital
-    {d D : ℕ} [NeZero D] {A : MPSTensor d D}
+    {α : Type*} [Fintype α] {D : ℕ} [NeZero D] {A : MPTensor α (Fin D)}
     (hA : Kraus.IsIrreducibleFamily A) (hAU : Kraus.IsUnital A) :
     ∃ σ : Matrix (Fin D) (Fin D) ℂ,
       σ.PosDef ∧ σ.trace = 1 ∧ Kraus.adjointMap A σ = σ := by
@@ -394,26 +393,26 @@ private theorem exists_faithful_adjoint_density_of_irreducible_unital
   · rw [Matrix.trace_smul, smul_eq_mul, inv_mul_cancel₀ hPos.ne']
   · rw [Kraus.adjointMap_smul, hFix]
 
-private theorem continuous_transferCLM {d D : ℕ} :
-    Continuous (fun A : MPSTensor d D => (Kraus.transferMap A).toContinuousLinearMap) := by
+private theorem continuous_transferCLM {α : Type*} [Fintype α] {D : ℕ} :
+    Continuous (fun A : MPTensor α (Fin D) => (Kraus.transferMap A).toContinuousLinearMap) := by
   refine continuous_clm_apply.mpr (fun X => ?_)
-  change Continuous (fun A : MPSTensor d D => ∑ i : Fin d, A i * X * (A i)ᴴ)
+  change Continuous (fun A : MPTensor α (Fin D) => ∑ i : α, A i * X * (A i)ᴴ)
   fun_prop
 
 /-- Pointwise unital irreducible realizations of convergent periodic rays have
 an eventually constant virtual class in fixed bond dimensions, provided a
 uniform nonunit transfer bound and exact unitary covariance are supplied. -/
 theorem eventually_cohomologousTo_of_tendsto_periodic_ray_sequence
-    {G : Type} [Group G] {d D k r : ℕ} [NeZero D] [NeZero k]
-    (A : MPSTensor d D) (hA : Kraus.IsInjective A) (hAU : Kraus.IsUnital A)
-    (B : ℕ → MPSTensor d k) (hB : ∀ n, Kraus.IsIrreducibleFamily (B n))
+    {G : Type} [Group G] {α : Type*} [Fintype α] [DecidableEq α] {D k r : ℕ} [NeZero D] [NeZero k]
+    (A : MPTensor α (Fin D)) (hA : Kraus.IsInjective A) (hAU : Kraus.IsUnital A)
+    (B : ℕ → MPTensor α (Fin k)) (hB : ∀ n, Kraus.IsIrreducibleFamily (B n))
     (hBU : ∀ n, Kraus.IsUnital (B n))
-    (Q : ℕ → MPSTensor d r) (a : MPSTensor d r) (hQ : Tendsto Q atTop (𝓝 a))
+    (Q : ℕ → MPTensor α (Fin r)) (a : MPTensor α (Fin r)) (hQ : Tendsto Q atTop (𝓝 a))
     (hRay : ∀ n, SamePositiveMpvRay (Q n) (B n)) (hRay₀ : SamePositiveMpvRay a A)
     (q : ℝ) (hq : 0 ≤ q) (hqOne : q < 1)
     (hSpecA : ∀ z ∈ spectrum ℂ (Kraus.transferMap A), z ≠ 1 → ‖z‖ ≤ q)
     (hSpecB : ∀ n z, z ∈ spectrum ℂ (Kraus.transferMap (B n)) → z ≠ 1 → ‖z‖ ≤ q)
-    (U : G →* Matrix.unitaryGroup (Fin d) ℂ)
+    (U : G →* Matrix.unitaryGroup α ℂ)
     (ω : ℕ → ScalarCocycle G) (ω₀ : ScalarCocycle G)
     (ρ : ∀ n, ProjectiveRepresentation (D := k) (ω n))
     (ρ₀ : ProjectiveRepresentation (D := D) ω₀)
@@ -466,26 +465,26 @@ theorem eventually_cohomologousTo_of_tendsto_periodic_ray_sequence
   have hSpecb := ContinuousLinearMap.spectrum_limit_norm_le_of_uniform_nontrivial_bound
     f f₀ hf 1 one_ne_zero hFix hSimple q (fun n => hSpecB (η n))
   obtain ⟨E, K, hK, hSupport⟩ := hτ.1.isOrthogonalProjection_supportProj.exists_range_isometry
-  let C : MPSTensor d E := fun i => Kᴴ * b i * K
+  let C : MPTensor α (Fin E) := fun i => Kᴴ * b i * K
   have hbnorm := norm_mpvState_tendsto_one_of_transfer_spectrum b hbU hDim q hq hqOne hSpecb
-  have hbnz : ∀ᶠ N in atTop, (mpv b : (Fin N → Fin d) → ℂ) ≠ 0 := by
+  have hbnz : ∀ᶠ N in atTop, (mpv b : (Fin N → α) → ℂ) ≠ 0 := by
     filter_upwards [(tendsto_order.mp hbnorm).1 0 zero_lt_one] with N hN
     intro hzero
     have hs : mpvState b N = 0 := by
       ext s
       simp only [mpvState_apply, hzero, Pi.zero_apply, PiLp.zero_apply]
     simp only [hs, norm_zero, lt_self_iff_false] at hN
-  have hSpan : ∀ᶠ N in atTop, Submodule.span ℂ {(mpv A : (Fin N → Fin d) → ℂ)} =
-      Submodule.span ℂ {(mpv b : (Fin N → Fin d) → ℂ)} := by
+  have hSpan : ∀ᶠ N in atTop, Submodule.span ℂ {(mpv A : (Fin N → α) → ℂ)} =
+      Submodule.span ℂ {(mpv b : (Fin N → α) → ℂ)} := by
     filter_upwards [hbnz, eventually_gt_atTop 0] with N hbN hN
     obtain ⟨s, hs⟩ := exists_mpv_ne_zero_of_isInjective hA hN
-    have haN : (mpv a : (Fin N → Fin d) → ℂ) ≠ 0 := by
+    have haN : (mpv a : (Fin N → α) → ℂ) ≠ 0 := by
       intro hzero
-      have hMem : (mpv A : (Fin N → Fin d) → ℂ) ∈
-          Submodule.span ℂ {(mpv a : (Fin N → Fin d) → ℂ)} := by
+      have hMem : (mpv A : (Fin N → α) → ℂ) ∈
+          Submodule.span ℂ {(mpv a : (Fin N → α) → ℂ)} := by
         rw [hRay₀ N hN]
         exact Submodule.mem_span_singleton_self _
-      have hz : (mpv A : (Fin N → Fin d) → ℂ) = 0 := by
+      have hz : (mpv A : (Fin N → α) → ℂ) = 0 := by
         simpa only [hzero, Submodule.span_zero_singleton, Submodule.mem_bot] using hMem
       exact hs (congrFun hz s)
     exact (hRay₀ N hN).symm.trans (mpv_span_eq_of_tendsto
@@ -505,17 +504,17 @@ end MPSTensor
 namespace MPSTensor
 
 private theorem exists_reindexed_unital_symmetry_tensor
-    {G : Type} [Group G] {d D E r : ℕ} {ω : ScalarCocycle G}
-    (hDim : D = E) (A : MPSTensor d D) (hA : Kraus.IsIrreducibleFamily A)
-    (hAU : Kraus.IsUnital A) (Q : MPSTensor d r) (hRay : SamePositiveMpvRay Q A)
+    {G : Type} [Group G] {α : Type*} [Fintype α] [DecidableEq α] {D E r : ℕ} {ω : ScalarCocycle G}
+    (hDim : D = E) (A : MPTensor α (Fin D)) (hA : Kraus.IsIrreducibleFamily A)
+    (hAU : Kraus.IsUnital A) (Q : MPTensor α (Fin r)) (hRay : SamePositiveMpvRay Q A)
     (q : ℝ) (hSpec : ∀ z ∈ spectrum ℂ (Kraus.transferMap A), z ≠ 1 → ‖z‖ ≤ q)
-    (U : G →* Matrix.unitaryGroup (Fin d) ℂ)
+    (U : G →* Matrix.unitaryGroup α ℂ)
     (ρ : ProjectiveRepresentation (D := D) ω)
     (hρ : ∀ g, (ρ.X g : Matrix (Fin D) (Fin D) ℂ) ∈ Matrix.unitaryGroup _ ℂ)
     (hCov : ∀ g, rotatePhysical (U g) A = fun i =>
       (ρ.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ) * A i *
         (ρ.X (g⁻¹) : Matrix (Fin D) (Fin D) ℂ)ᴴ) :
-    ∃ B : MPSTensor d E, ∃ V : ProjectiveRepresentation (D := E) ω,
+    ∃ B : MPTensor α (Fin E), ∃ V : ProjectiveRepresentation (D := E) ω,
       Kraus.IsUnital B ∧ Kraus.IsIrreducibleFamily B ∧ SamePositiveMpvRay Q B ∧
       (∀ z ∈ spectrum ℂ (Kraus.transferMap B), z ≠ 1 → ‖z‖ ≤ q) ∧
       (∀ g, (V.X g : Matrix (Fin E) (Fin E) ℂ) ∈ Matrix.unitaryGroup _ ℂ) ∧
@@ -531,14 +530,14 @@ at an injective base tensor. The transfer bound and exact unitary covariance
 are supplied; no continuous choice of minimal tensors or densities is made. -/
 theorem eventually_cohomologousTo_of_continuousAt_bounded_unital_periodic_rays
     {T G : Type} [TopologicalSpace T] [FirstCountableTopology T] [Group G]
-    {d r M : ℕ} (D : T → ℕ) (hDPos : ∀ t, 0 < D t) (hDBound : ∀ t, D t ≤ M)
-    (A : ∀ t, MPSTensor d (D t)) (hA : ∀ t, Kraus.IsIrreducibleFamily (A t))
+    {α : Type*} [Fintype α] [DecidableEq α] {r M : ℕ} (D : T → ℕ) (hDPos : ∀ t, 0 < D t) (hDBound : ∀ t, D t ≤ M)
+    (A : ∀ t, MPTensor α (Fin (D t))) (hA : ∀ t, Kraus.IsIrreducibleFamily (A t))
     (hAU : ∀ t, Kraus.IsUnital (A t)) (t₀ : T) (hA₀ : Kraus.IsInjective (A t₀))
-    (Q : T → MPSTensor d r) (hQ : ContinuousAt Q t₀)
+    (Q : T → MPTensor α (Fin r)) (hQ : ContinuousAt Q t₀)
     (hRay : ∀ t, SamePositiveMpvRay (Q t) (A t))
     (q : ℝ) (hq : 0 ≤ q) (hqOne : q < 1)
     (hSpec : ∀ t z, z ∈ spectrum ℂ (Kraus.transferMap (A t)) → z ≠ 1 → ‖z‖ ≤ q)
-    (U : G →* Matrix.unitaryGroup (Fin d) ℂ)
+    (U : G →* Matrix.unitaryGroup α ℂ)
     (ω : T → ScalarCocycle G)
     (ρ : ∀ t, ProjectiveRepresentation (D := D t) (ω t))
     (hρ : ∀ t g, ((ρ t).X g : Matrix (Fin (D t)) (Fin (D t)) ℂ) ∈
@@ -573,7 +572,7 @@ theorem eventually_cohomologousTo_of_continuousAt_bounded_unital_periodic_rays
     exact hDPos (t 0)
   let : NeZero k := ⟨hkPos.ne'⟩
   let : NeZero (D t₀) := ⟨(hDPos t₀).ne'⟩
-  have hData : ∀ n, ∃ B : MPSTensor d k,
+  have hData : ∀ n, ∃ B : MPTensor α (Fin k),
       ∃ V : ProjectiveRepresentation (D := k) (ω (t n)),
       Kraus.IsUnital B ∧ Kraus.IsIrreducibleFamily B ∧
       SamePositiveMpvRay (Q (t n)) B ∧
@@ -604,20 +603,19 @@ namespace MPSTensor
 
 /-- Common positive-length physical blocking preserves every positive-length
 periodic ray. Source: arXiv:1606.00608, lines 318–344. -/
-theorem SamePositiveMpvRay.blockTensor {d D E : ℕ}
-    {A : MPSTensor d D} {B : MPSTensor d E} (hRay : SamePositiveMpvRay A B)
+theorem SamePositiveMpvRay.block {α : Type*} [Fintype α] {D E : ℕ}
+    {A : MPTensor α (Fin D)} {B : MPTensor α (Fin E)} (hRay : SamePositiveMpvRay A B)
     (L : ℕ) (hL : 0 < L) :
-    SamePositiveMpvRay (Kraus.blockTensor A L) (Kraus.blockTensor B L) := by
+    SamePositiveMpvRay (Kraus.block A L) (Kraus.block B L) := by
   intro N hN
-  let f := LinearMap.funLeft ℂ ℂ (Kraus.blockedConfigEquiv d N L)
-  have hMap : ∀ {k : ℕ} (C : MPSTensor d k),
-      f (mpv C : (Fin (N * L) → Fin d) → ℂ) =
-        (mpv (Kraus.blockTensor C L) : (Fin N → Fin (blockPhysDim d L)) → ℂ) := by
+  let f := LinearMap.funLeft ℂ ℂ (Kraus.blockConfigEquiv α N L)
+  have hMap : ∀ {k : ℕ} (C : MPTensor α (Fin k)),
+      f (mpv C : (Fin (N * L) → α) → ℂ) =
+        (mpv (Kraus.block C L) : (Fin N → Fin L → α) → ℂ) := by
     intro k C
     funext s
-    simp only [f, LinearMap.funLeft_apply, mpv, coeff,
-      Kraus.ofFn_blockedConfigEquiv, evalWord_blockTensor]
-  have h := congrArg (fun S : Submodule ℂ (((Fin (N * L) → Fin d) → ℂ)) => S.map f)
+    simp only [f, LinearMap.funLeft_apply, mpv_block_eq_mpv_blockConfig]
+  have h := congrArg (fun S : Submodule ℂ (((Fin (N * L) → α) → ℂ)) => S.map f)
     (hRay (N * L) (Nat.mul_pos hN hL))
   simpa only [Submodule.map_span, Set.image_singleton, hMap] using h
 
@@ -625,19 +623,21 @@ end MPSTensor
 
 namespace MPSTensor
 
-private theorem isUnital_blockTensor_of_isUnital {d D : ℕ}
-    (A : MPSTensor d D) (hA : Kraus.IsUnital A) (L : ℕ) :
-    Kraus.IsUnital (blockTensor A L) := by
-  have h := Kraus.transferMap_blockTensor_fixedPoint A L 1 (Kraus.map_one_of_isUnital A hA)
-  change ∑ i, blockTensor A L i * (blockTensor A L i)ᴴ = 1
+private theorem isUnital_block_of_isUnital {α : Type*} [Fintype α] {D : ℕ}
+    (A : MPTensor α (Fin D)) (hA : Kraus.IsUnital A) (L : ℕ) :
+    Kraus.IsUnital (Kraus.block A L) := by
+  have h : Kraus.transferMap (Kraus.block A L) 1 = 1 := by
+    rw [Kraus.transferMap_block, Module.End.pow_apply,
+      Function.iterate_fixed (Kraus.map_one_of_isUnital A hA)]
+  change ∑ i, Kraus.block A L i * (Kraus.block A L i)ᴴ = 1
   simpa only [Kraus.transferMap_apply, Matrix.mul_one] using h
 
-private theorem spectrum_blockTensor_norm_le {d D L : ℕ}
-    (A : MPSTensor d D) (hL : 0 < L) (q : ℝ)
+private theorem spectrum_block_norm_le {α : Type*} [Fintype α] {D L : ℕ}
+    (A : MPTensor α (Fin D)) (hL : 0 < L) (q : ℝ)
     (hSpec : ∀ z ∈ spectrum ℂ (Kraus.transferMap A), z ≠ 1 → ‖z‖ ≤ q) :
-    ∀ z ∈ spectrum ℂ (Kraus.transferMap (blockTensor A L)), z ≠ 1 → ‖z‖ ≤ q ^ L := by
+    ∀ z ∈ spectrum ℂ (Kraus.transferMap (Kraus.block A L)), z ≠ 1 → ‖z‖ ≤ q ^ L := by
   intro z hz hzOne
-  rw [Kraus.transferMap_blockTensor, spectrum.map_pow_of_pos _ hL] at hz
+  rw [Kraus.transferMap_block, spectrum.map_pow_of_pos _ hL] at hz
   obtain ⟨w, hw, rfl⟩ := hz
   have hwOne : w ≠ 1 := by
     intro hwOne
@@ -645,10 +645,10 @@ private theorem spectrum_blockTensor_norm_le {d D L : ℕ}
   rw [norm_pow]
   exact pow_le_pow_left₀ (norm_nonneg w) (hSpec w hw hwOne) L
 
-private theorem continuous_mps_blockTensor {d D : ℕ} (L : ℕ) :
-    Continuous (fun A : MPSTensor d D => blockTensor A L) := by
+private theorem continuous_mps_block {α : Type*} {D : ℕ} (L : ℕ) :
+    Continuous (fun A : MPTensor α (Fin D) => Kraus.block A L) := by
   refine continuous_pi fun i => ?_
-  exact continuous_evalWord_family id continuous_id (wordOfBlock d L i)
+  exact continuous_evalWord_family id continuous_id (List.ofFn i)
 
 /-- Bounded pointwise normal unital realizations of continuous periodic rays
 have locally constant virtual class on a first-countable parameter space,
@@ -658,14 +658,14 @@ matrices are assumed to vary continuously. Source context: arXiv:1010.3732,
 Appendix C, lines 2653–2717; arXiv:1606.00608, lines 318–344. -/
 theorem eventually_cohomologousTo_of_continuousAt_bounded_normal_periodic_rays
     {T G : Type} [TopologicalSpace T] [FirstCountableTopology T] [Group G]
-    {d r M : ℕ} (D : T → ℕ) (hDBound : ∀ t, D t ≤ M)
-    (A : ∀ t, MPSTensor d (D t)) (hA : ∀ t, IsNormalTensor (A t))
+    {α : Type*} [Fintype α] [DecidableEq α] {r M : ℕ} (D : T → ℕ) (hDBound : ∀ t, D t ≤ M)
+    (A : ∀ t, MPTensor α (Fin (D t))) (hA : ∀ t, IsNormalTensor (A t))
     (hAU : ∀ t, Kraus.IsUnital (A t)) (t₀ : T)
-    (Q : T → MPSTensor d r) (hQ : ContinuousAt Q t₀)
+    (Q : T → MPTensor α (Fin r)) (hQ : ContinuousAt Q t₀)
     (hRay : ∀ t, SamePositiveMpvRay (Q t) (A t))
     (q : ℝ) (hq : 0 ≤ q) (hqOne : q < 1)
     (hSpec : ∀ t z, z ∈ spectrum ℂ (Kraus.transferMap (A t)) → z ≠ 1 → ‖z‖ ≤ q)
-    (U : G →* Matrix.unitaryGroup (Fin d) ℂ)
+    (U : G →* Matrix.unitaryGroup α ℂ)
     (ω : T → ScalarCocycle G)
     (ρ : ∀ t, ProjectiveRepresentation (D := D t) (ω t))
     (hρ : ∀ t g, ((ρ t).X g : Matrix (Fin (D t)) (Fin (D t)) ℂ) ∈
@@ -685,22 +685,22 @@ theorem eventually_cohomologousTo_of_continuousAt_bounded_normal_periodic_rays
   have hDPos : ∀ t, 0 < D t := fun t => Nat.pos_of_ne_zero (hA t).bondDim_ne_zero
   have hMPos : 0 < M := (hDPos t₀).trans_le (hDBound t₀)
   have hL : 0 < L := Nat.pow_pos hMPos
-  have hBlock : ∀ t, Kraus.IsInjective (blockTensor (A t) L) := fun t =>
-    (Kraus.isNBlkInjective_iff_blockTensor_isInjective _ L).1
+  have hBlock : ∀ t, Kraus.IsInjective (Kraus.block (A t) L) := fun t =>
+    (Kraus.isNBlkInjective_iff_isInjective_block _ L).1
       ((hA t).isNBlkInjective_of_bondDim_le (hDBound t))
-  have hIrred : ∀ t, Kraus.IsIrreducibleFamily (blockTensor (A t) L) := fun t =>
+  have hIrred : ∀ t, Kraus.IsIrreducibleFamily (Kraus.block (A t) L) := fun t =>
     Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM _
       (Kraus.injective_implies_irreducibleCP _ (hBlock t))
-  have hBlockedQ : ContinuousAt (fun t => blockTensor (Q t) L) t₀ :=
-    (continuous_mps_blockTensor L).continuousAt.comp hQ
+  have hBlockedQ : ContinuousAt (fun t => Kraus.block (Q t) L) t₀ :=
+    (continuous_mps_block L).continuousAt.comp hQ
   exact eventually_cohomologousTo_of_continuousAt_bounded_unital_periodic_rays
-    D hDPos hDBound (fun t => blockTensor (A t) L) hIrred
-    (fun t => isUnital_blockTensor_of_isUnital _ (hAU t) L) t₀ (hBlock t₀)
-    (fun t => blockTensor (Q t) L) hBlockedQ (fun t => (hRay t).blockTensor L hL)
+    D hDPos hDBound (fun t => Kraus.block (A t) L) hIrred
+    (fun t => isUnital_block_of_isUnital _ (hAU t) L) t₀ (hBlock t₀)
+    (fun t => Kraus.block (Q t) L) hBlockedQ (fun t => (hRay t).block L hL)
     (q ^ L) (pow_nonneg hq _) (pow_lt_one₀ hq hqOne hL.ne')
-    (fun t => spectrum_blockTensor_norm_le (A t) hL q (hSpec t))
+    (fun t => spectrum_block_norm_le (A t) hL q (hSpec t))
     (blockUnitaryPhysicalAction U L) ω ρ hρ
-    (fun t => rotatePhysical_blockTensor_of_unitary_virtual_covariance
+    (fun t => rotatePhysical_block_of_unitary_virtual_covariance
       (A t) U (ρ t) (hρ t) (hCov t) L)
 
 end MPSTensor

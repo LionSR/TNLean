@@ -136,7 +136,7 @@ gauge transformations form a projective representation on the bond space.
 
 \begin{lemma}[Twisting commutes with blocking]
     \label{lem:twisted_tensor_block_comm}
-    \lean{MPSTensor.twistedTensor_blockTensor_comm}
+    \lean{MPSTensor.twistedTensor_block_comm}
     \leanok
     \uses{def:block_kron_action,def:blocked_tensor,def:twisted_tensor}
     For every $g\in G$ and $L\ge0$,
@@ -157,7 +157,7 @@ gauge transformations form a projective representation on the bond space.
 
 \begin{lemma}[MPV-family symmetry is preserved by blocking]
     \label{thm:on_site_symmetric_block_tensor}
-    \lean{MPSTensor.isOnSiteSymmetric_blockTensor}
+    \lean{MPSTensor.isOnSiteSymmetric_block}
     \leanok
     \uses{def:on_site_symmetric,def:block_kron_action,lem:twisted_tensor_block_comm}
     If $A$ has MPV-family invariance under $U$, then $A^{[L]}$ has
@@ -173,7 +173,7 @@ gauge transformations form a projective representation on the bond space.
 
 \begin{lemma}[Virtual gauges survive blocking]
     \label{lem:twisted_tensor_block_gauge}
-    \lean{MPSTensor.twistedTensor_blockTensor_eq_gauge}
+    \lean{MPSTensor.twistedTensor_block_eq_gauge}
     \leanok
     If $R\in\GL_{D}(\C)$ satisfies $(\widetilde A_g)^i=R\,A^i\,R^{-1}$ for all
     $i$, then $(\widetilde{(A^{[L]})}^{\,U^{[L]}}_g)^I=R\,(A^{[L]})^I\,R^{-1}$

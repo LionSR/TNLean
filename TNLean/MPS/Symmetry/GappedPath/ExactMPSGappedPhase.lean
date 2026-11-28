@@ -43,7 +43,6 @@ open MPTensor
 section ExactMPSGappedPhase
 
 open scoped Matrix
-open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 
@@ -149,19 +148,19 @@ def IsSameExactMPSGappedPhase {G : Type} [Group G] {d₀ d₁ D₀ D₁ : ℕ}
     ∃ U : G →* Matrix.unitaryGroup (Fin m) ℂ,
     ∃ χ₀ χ₁ : G →* ℂ,
     (∀ g, ‖χ₀ g‖ = 1) ∧ (∀ g, ‖χ₁ g‖ = 1) ∧
-    ∃ E₀ : Matrix (Fin m) (Fin (blockPhysDim d₀ k)) ℂ,
-    ∃ E₁ : Matrix (Fin m) (Fin (blockPhysDim d₁ k)) ℂ,
+    ∃ E₀ : Matrix (Fin m) (Fin k → Fin d₀) ℂ,
+    ∃ E₁ : Matrix (Fin m) (Fin k → Fin d₁) ℂ,
     E₀ᴴ * E₀ = 1 ∧ E₁ᴴ * E₁ = 1 ∧ E₀ᴴ * E₁ = 0 ∧
     (∀ g, (U g : Matrix (Fin m) (Fin m) ℂ) * E₀ =
       E₀ * (χ₀ g • blockKron k (U₀ g))) ∧
     (∀ g, (U g : Matrix (Fin m) (Fin m) ℂ) * E₁ =
       E₁ * (χ₁ g • blockKron k (U₁ g))) ∧
     ∃ P : SymmetricGappedInteractionPath U
-      (LinearMap.toMatrix' (parentInteraction (rotatePhysical E₀ (blockTensor A₀ k)) 2))
-      (LinearMap.toMatrix' (parentInteraction (rotatePhysical E₁ (blockTensor A₁ k)) 2)),
+      (LinearMap.toMatrix' (parentInteraction (rotatePhysical E₀ (Kraus.block A₀ k)) 2))
+      (LinearMap.toMatrix' (parentInteraction (rotatePhysical E₁ (Kraus.block A₁ k)) 2)),
     ∃ Q : ExactMPSGroundPath P,
-      SamePositiveMpvRay (Q.tensor 0) (rotatePhysical E₀ (blockTensor A₀ k)) ∧
-      SamePositiveMpvRay (Q.tensor 1) (rotatePhysical E₁ (blockTensor A₁ k))
+      SamePositiveMpvRay (Q.tensor 0) (rotatePhysical E₀ (Kraus.block A₀ k)) ∧
+      SamePositiveMpvRay (Q.tensor 1) (rotatePhysical E₁ (Kraus.block A₁ k))
 
 /-- Symmetry of the independent exact MPS phase condition follows by
 reversing the physical path and exchanging the endpoint inclusions.

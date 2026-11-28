@@ -58,38 +58,37 @@ only the anticommuting pair `iσ_x`, `iσ_z` inside `SU(2)`.
 open MPTensor
 
 open scoped Matrix BigOperators
-open Kraus (blockTensor isNBlkInjective_iff_blockTensor_isInjective)
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 /-- Twisting a gauge-transformed family:
 if `Bʲ = c Y Cʲ Y⁻¹`, then `∑ⱼ Pᵢⱼ Bʲ = c Y (∑ⱼ Pᵢⱼ Cʲ) Y⁻¹`. -/
-private lemma sum_smul_gauge {B C : MPSTensor d D} (P : Matrix (Fin d) (Fin d) ℂ)
+private lemma sum_smul_gauge {B C : MPTensor α (Fin D)} (P : Matrix α α ℂ)
     (Y : GL (Fin D) ℂ) (c : ℂ)
     (h : ∀ j, B j = c • ((Y : Matrix (Fin D) (Fin D) ℂ) * C j *
-      ((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))) (i : Fin d) :
-    ∑ j : Fin d, P i j • B j = c • ((Y : Matrix (Fin D) (Fin D) ℂ) *
-      (∑ j : Fin d, P i j • C j) * ((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
+      ((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))) (i : α) :
+    ∑ j : α, P i j • B j = c • ((Y : Matrix (Fin D) (Fin D) ℂ) *
+      (∑ j : α, P i j • C j) * ((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
   simp only [h, Finset.mul_sum, Finset.sum_mul, Finset.smul_sum, Matrix.mul_smul,
     Matrix.smul_mul, smul_comm c]
 
 /-- The twist by a product is the composite of the twists. -/
-private lemma sum_mul_smul (A : MPSTensor d D) (P Q : Matrix (Fin d) (Fin d) ℂ) (i : Fin d) :
-    ∑ k : Fin d, (P * Q) i k • A k = ∑ j : Fin d, P i j • ∑ k : Fin d, Q j k • A k := by
+private lemma sum_mul_smul (A : MPTensor α (Fin D)) (P Q : Matrix α α ℂ) (i : α) :
+    ∑ k : α, (P * Q) i k • A k = ∑ j : α, P i j • ∑ k : α, Q j k • A k := by
   simp only [Matrix.mul_apply, Finset.sum_smul, Finset.smul_sum, smul_smul]
   exact Finset.sum_comm
 
 /-- The composite of two gauged twists is gauged by the product of the gauges. -/
-private lemma sum_mul_smul_gauge {A : MPSTensor d D} {P Q : Matrix (Fin d) (Fin d) ℂ}
+private lemma sum_mul_smul_gauge {A : MPTensor α (Fin D)} {P Q : Matrix α α ℂ}
     {X Y : GL (Fin D) ℂ} {ζ η : ℂ}
-    (hX : ∀ i, ∑ j : Fin d, P i j • A j =
+    (hX : ∀ i, ∑ j : α, P i j • A j =
       ζ • ((X : Matrix (Fin D) (Fin D) ℂ) * A i * ((X⁻¹ : GL (Fin D) ℂ) : Matrix _ _ ℂ)))
-    (hY : ∀ i, ∑ j : Fin d, Q i j • A j =
+    (hY : ∀ i, ∑ j : α, Q i j • A j =
       η • ((Y : Matrix (Fin D) (Fin D) ℂ) * A i * ((Y⁻¹ : GL (Fin D) ℂ) : Matrix _ _ ℂ)))
-    (i : Fin d) :
-    ∑ k : Fin d, (P * Q) i k • A k = (η * ζ) •
+    (i : α) :
+    ∑ k : α, (P * Q) i k • A k = (η * ζ) •
       (((Y * X : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * A i *
         (((Y * X)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
   rw [sum_mul_smul, sum_smul_gauge P Y η hY i, hX i]
@@ -102,12 +101,12 @@ lines 1085–1086 and 1117): a physical symmetry acting projectively on the site
 obstructed by eq. `eq:XAX=B`.  If `P Q = -Q P`, no normal tensor of positive bond
 dimension satisfies both `∑ⱼ Pᵢⱼ Aʲ = ζ X Aⁱ X⁻¹` and
 `∑ⱼ Qᵢⱼ Aʲ = η Y Aⁱ Y⁻¹` with `ζ, η ≠ 0`. -/
-theorem not_anticommuting_gauges_of_isNormal [NeZero D] {A : MPSTensor d D}
-    (hA : Kraus.IsNormal A) {P Q : Matrix (Fin d) (Fin d) ℂ} (hPQ : P * Q = -(Q * P))
+theorem not_anticommuting_gauges_of_isNormal [NeZero D] {A : MPTensor α (Fin D)}
+    (hA : Kraus.IsNormal A) {P Q : Matrix α α ℂ} (hPQ : P * Q = -(Q * P))
     (X Y : GL (Fin D) ℂ) {ζ η : ℂ} (hζ : ζ ≠ 0) (hη : η ≠ 0)
-    (hX : ∀ i, ∑ j : Fin d, P i j • A j =
+    (hX : ∀ i, ∑ j : α, P i j • A j =
       ζ • ((X : Matrix (Fin D) (Fin D) ℂ) * A i * ((X⁻¹ : GL (Fin D) ℂ) : Matrix _ _ ℂ)))
-    (hY : ∀ i, ∑ j : Fin d, Q i j • A j =
+    (hY : ∀ i, ∑ j : α, Q i j • A j =
       η • ((Y : Matrix (Fin D) (Fin D) ℂ) * A i * ((Y⁻¹ : GL (Fin D) ℂ) : Matrix _ _ ℂ))) :
     False := by
   have hPQA := sum_mul_smul_gauge hX hY
@@ -118,7 +117,7 @@ theorem not_anticommuting_gauges_of_isNormal [NeZero D] {A : MPSTensor d D}
         ((((X * Y : GL (Fin D) ℂ)) : Matrix (Fin D) (Fin D) ℂ) * A i *
           (((X * Y)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) := by
     intro i
-    have h1 : ∑ k : Fin d, (P * Q) i k • A k = -∑ k : Fin d, (Q * P) i k • A k := by
+    have h1 : ∑ k : α, (P * Q) i k • A k = -∑ k : α, (Q * P) i k • A k := by
       rw [hPQ, ← Finset.sum_neg_distrib]
       exact Finset.sum_congr rfl fun k _ => by rw [Matrix.neg_apply, neg_smul]
     rw [hPQA i, hQPA i, mul_comm ζ η, ← smul_neg] at h1
@@ -128,17 +127,17 @@ theorem not_anticommuting_gauges_of_isNormal [NeZero D] {A : MPSTensor d D}
   norm_num at hc
 
 /-- The Kronecker power of a scalar multiple: `blockKron L (c • P) = c ^ L • blockKron L P`. -/
-theorem blockKron_smul {m n : ℕ} (L : ℕ) (c : ℂ) (P : Matrix (Fin m) (Fin n) ℂ) :
+theorem blockKron_smul {β : Type*} (L : ℕ) (c : ℂ) (P : Matrix α β ℂ) :
     blockKron L (c • P) = c ^ L • blockKron L P := by
   ext I J
   simp [blockKron, Finset.prod_mul_distrib, Finset.prod_const]
 
 /-- **The twisted matrix product vector is the Kronecker-power image of the original.**
 `ψ_{A_g}(σ) = ∑_τ (∏ₗ U(g)_{σₗ τₗ}) ψ_A(τ)`. -/
-theorem mpv_twistedTensor {G : Type*} [Monoid G] (B : MPSTensor d D)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ) (g : G) {N : ℕ} (σ : Fin N → Fin d) :
+theorem mpv_twistedTensor {G : Type*} [Monoid G] (B : MPTensor α (Fin D))
+    (U : G →* Matrix α α ℂ) (g : G) {N : ℕ} (σ : Fin N → α) :
     mpv (twistedTensor B U g) σ =
-      ∑ τ : Fin N → Fin d, (∏ l, U g (σ l) (τ l)) * mpv B τ := by
+      ∑ τ : Fin N → α, (∏ l, U g (σ l) (τ l)) * mpv B τ := by
   simp only [mpv, coeff, evalWord_ofFn_eq_prod, twistedTensor]
   exact Matrix.trace_prod_ofFn_sum_smul (fun l j => U g (σ l) j) (fun _ j => B j)
 
@@ -147,14 +146,14 @@ every twist of `A` has a matrix product vector proportional to that of `A`,
 `U(g)^{⊗N} ψ = c(g) ψ`.  If `k b a = a b`, that is, `k` is the commutator
 `a b a⁻¹ b⁻¹`, then the twist by `k` has the same matrix product vector as `A`: the
 phases `c` are multiplicative whenever `ψ ≠ 0`, so `c(k) = 1`. -/
-theorem mpv_twistedTensor_eq_of_mul_eq {G : Type*} [Group G] {A : MPSTensor d D}
-    {U : G →* Matrix (Fin d) (Fin d) ℂ} {N : ℕ}
-    (hproj : ∀ g : G, ∃ c : ℂ, ∀ σ : Fin N → Fin d,
+theorem mpv_twistedTensor_eq_of_mul_eq {G : Type*} [Group G] {A : MPTensor α (Fin D)}
+    {U : G →* Matrix α α ℂ} {N : ℕ}
+    (hproj : ∀ g : G, ∃ c : ℂ, ∀ σ : Fin N → α,
       mpv (twistedTensor A U g) σ = c * mpv A σ)
-    {a b k : G} (hk : k * (b * a) = a * b) (σ : Fin N → Fin d) :
+    {a b k : G} (hk : k * (b * a) = a * b) (σ : Fin N → α) :
     mpv (twistedTensor A U k) σ = mpv A σ := by
   classical
-  by_cases hψ : ∀ τ : Fin N → Fin d, mpv A τ = 0
+  by_cases hψ : ∀ τ : Fin N → α, mpv A τ = 0
   · obtain ⟨c, hc⟩ := hproj k
     rw [hc, hψ, mul_zero]
   push Not at hψ
@@ -260,13 +259,13 @@ theorem not_forall_mpv_twistedTensor_eq_smul_specialUnitaryGroup_of_isNormal [Ne
     (mpv_twistedTensor_eq_of_mul_eq (fun g => hproj g M) hz σ).symm
   -- Block to the odd length `L = 2N + 1`, where the blocked tensor is injective.
   set L := 2 * N + 1 with hL
-  have hinj : Kraus.IsInjective (blockTensor A L) :=
-    (isNBlkInjective_iff_blockTensor_isInjective A L).1
+  have hinj : Kraus.IsInjective (Kraus.block A L) :=
+    (Kraus.isNBlkInjective_iff_isInjective_block A L).1
       (Kraus.isNBlkInjective_of_le hNpos hN (by omega))
   have hgauge {g : Matrix.specialUnitaryGroup (Fin 2) ℂ} (hS : SameMPV A (twistedTensor A U g)) :
-      GaugeEquiv (blockTensor A L) (twistedTensor (blockTensor A L) (blockKronAction L U) g) := by
-    rw [twistedTensor_blockTensor_comm]
-    exact (sameMPV_iff_gaugeEquiv_of_injective hinj).1 (hS.blockTensor L)
+      GaugeEquiv (Kraus.block A L) (twistedTensor (Kraus.block A L) (blockKronAction L U) g) := by
+    rw [twistedTensor_block_comm]
+    exact (sameMPV_iff_gaugeEquiv_of_injective hinj).1 (hS.block L)
   obtain ⟨X, hX⟩ := hgauge hSx
   obtain ⟨Y, hY⟩ := hgauge hSz
   have hanti : (gx : Matrix (Fin 2) (Fin 2) ℂ) * (gz : Matrix (Fin 2) (Fin 2) ℂ) =

@@ -32,31 +32,26 @@ case with trivial scalar character, as recorded in
 open MPTensor
 
 open scoped Matrix ScalarCohomology
-open Kraus (singleBlockEquiv decodeBlock blockTensor)
 
 namespace MPSTensor
 
 /-- One-site blocking reindexes the physical matrix by the canonical
 one-letter equivalence. Source context: arXiv:1010.3732, Section II.C. -/
-theorem blockKron_one_eq_submatrix {m n : ℕ}
-    (U : Matrix (Fin m) (Fin n) ℂ) :
-    blockKron 1 U = U.submatrix (singleBlockEquiv m) (singleBlockEquiv n) := by
+theorem blockKron_one_eq_submatrix {α β : Type*} (U : Matrix α β ℂ) :
+    blockKron 1 U = U.submatrix (Equiv.funUnique (Fin 1) α) (Equiv.funUnique (Fin 1) β) := by
   ext i j
-  change (∏ k : Fin 1, U (decodeBlock m 1 i k) (decodeBlock n 1 j k)) = _
-  rw [Fin.prod_univ_one]
-  rfl
+  simp [blockKron, Fin.prod_univ_one]
 
 /-- Inclusion after one-site blocking is the original physical inclusion.
 Source context: arXiv:1010.3732, Section II.C. -/
-theorem rotatePhysical_submatrix_singleBlockEquiv_blockTensor_one {d m D : ℕ}
+theorem rotatePhysical_submatrix_funUnique_block_one {d m D : ℕ}
     (E : Matrix (Fin m) (Fin d) ℂ) (A : MPSTensor d D) :
-    rotatePhysical (E.submatrix id (singleBlockEquiv d)) (blockTensor A 1) =
+    rotatePhysical (E.submatrix id (Equiv.funUnique (Fin 1) (Fin d))) (Kraus.block A 1) =
       rotatePhysical E A := by
-  ext i a b
-  simp only [rotatePhysical, Matrix.sum_apply, Matrix.smul_apply,
-    Matrix.submatrix_apply, smul_eq_mul, Kraus.blockTensor_one_apply, id]
-  exact
-    (Equiv.sum_comp (singleBlockEquiv d) (fun j => E i j * A j a b))
+  funext i
+  simp only [rotatePhysical, Matrix.submatrix_apply, id]
+  exact Fintype.sum_equiv (Equiv.funUnique (Fin 1) (Fin d)) _ _ fun j => by
+    simp [Kraus.block_apply, List.ofFn_succ, Kraus.evalWord_cons]
 
 /-- A path between the actual included canonical parents, with exact MPS
 endpoint rays and orthogonal physical embeddings, satisfies the independent
@@ -87,7 +82,7 @@ theorem isSameExactMPSGappedPhase_of_oneSite_path
     rw [Matrix.conjTranspose_submatrix]
     exact (Matrix.submatrix_mul Eᴴ F r id c Function.bijective_id).symm
   refine ⟨1, zero_lt_one, m, U, 1, 1, by simp, by simp,
-    E₀.submatrix id (singleBlockEquiv d₀), E₁.submatrix id (singleBlockEquiv d₁),
+    E₀.submatrix id (Equiv.funUnique (Fin 1) (Fin d₀)), E₁.submatrix id (Equiv.funUnique (Fin 1) (Fin d₁)),
     ?_, ?_, ?_, ?_, ?_, ?_⟩
   · rw [hGram, hE₀, Matrix.submatrix_one_equiv]
   · rw [hGram, hE₁, Matrix.submatrix_one_equiv]
@@ -97,24 +92,24 @@ theorem isSameExactMPSGappedPhase_of_oneSite_path
     simp only [MonoidHom.one_apply, one_smul]
     rw [blockKron_one_eq_submatrix]
     have hL := Matrix.submatrix_mul_equiv (U g : Matrix (Fin m) (Fin m) ℂ) E₀
-      id (Equiv.refl _) (singleBlockEquiv d₀)
+      id (Equiv.refl _) (Equiv.funUnique (Fin 1) (Fin d₀))
     have hR := Matrix.submatrix_mul_equiv E₀ (U₀ g : Matrix (Fin d₀) (Fin d₀) ℂ)
-      id (singleBlockEquiv d₀) (singleBlockEquiv d₀)
+      id (Equiv.funUnique (Fin 1) (Fin d₀)) (Equiv.funUnique (Fin 1) (Fin d₀))
     simpa only [Equiv.coe_refl, Matrix.submatrix_id_id] using
-      hL.trans ((congrArg (fun M => M.submatrix id (singleBlockEquiv d₀))
+      hL.trans ((congrArg (fun M => M.submatrix id (Equiv.funUnique (Fin 1) (Fin d₀)))
         (hCov₀ g)).trans hR.symm)
   · intro g
     simp only [MonoidHom.one_apply, one_smul]
     rw [blockKron_one_eq_submatrix]
     have hL := Matrix.submatrix_mul_equiv (U g : Matrix (Fin m) (Fin m) ℂ) E₁
-      id (Equiv.refl _) (singleBlockEquiv d₁)
+      id (Equiv.refl _) (Equiv.funUnique (Fin 1) (Fin d₁))
     have hR := Matrix.submatrix_mul_equiv E₁ (U₁ g : Matrix (Fin d₁) (Fin d₁) ℂ)
-      id (singleBlockEquiv d₁) (singleBlockEquiv d₁)
+      id (Equiv.funUnique (Fin 1) (Fin d₁)) (Equiv.funUnique (Fin 1) (Fin d₁))
     simpa only [Equiv.coe_refl, Matrix.submatrix_id_id] using
-      hL.trans ((congrArg (fun M => M.submatrix id (singleBlockEquiv d₁))
+      hL.trans ((congrArg (fun M => M.submatrix id (Equiv.funUnique (Fin 1) (Fin d₁)))
         (hCov₁ g)).trans hR.symm)
-  · rw [rotatePhysical_submatrix_singleBlockEquiv_blockTensor_one,
-      rotatePhysical_submatrix_singleBlockEquiv_blockTensor_one]
+  · rw [rotatePhysical_submatrix_funUnique_block_one,
+      rotatePhysical_submatrix_funUnique_block_one]
     exact ⟨P, Q, hQ₀, hQ₁⟩
 
 /-- For a unitary virtual action, inverse conjugation is adjoint

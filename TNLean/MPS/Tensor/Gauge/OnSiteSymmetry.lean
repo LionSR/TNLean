@@ -36,9 +36,9 @@ MPV families into a virtual gauge.
 * `MPSTensor.gauge_product_intertwines` : the chosen product `X(h) * X(g)` implements `g*h`
 * `MPSTensor.gaugeEquiv_twistedTensor_of_injective` :
   injective symmetric tensors have gauge-equivalent twists
-* `MPSTensor.twistedTensor_blockTensor_comm` : twisting by `blockKronAction`
+* `MPSTensor.twistedTensor_block_comm` : twisting by `blockKronAction`
   commutes with physical blocking
-* `MPSTensor.isOnSiteSymmetric_blockTensor` : on-site symmetry transfers to the
+* `MPSTensor.isOnSiteSymmetric_block` : on-site symmetry transfers to the
   blocked tensor under the Kronecker-power action
 
 ## References
@@ -51,11 +51,10 @@ MPV families into a virtual gauge.
 open MPTensor
 
 open scoped Matrix BigOperators
-open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 
-variable {G : Type*} [Monoid G] {α : Type*} [Fintype α] [DecidableEq α] {d D : ℕ}
+variable {G : Type*} [Monoid G] {α : Type*} [Fintype α] [DecidableEq α] {D : ℕ}
 
 /-- Tensor twisted by physical action of `g ∈ G`.
 
@@ -173,37 +172,35 @@ that twisting by it commutes with physical blocking. -/
 
 /-- The on-site representation lifted to the blocked physical space by the
 Kronecker power of each group element's physical action. -/
-noncomputable def blockKronAction (L : ℕ)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ) :
-    G →* Matrix (Fin (blockPhysDim d L)) (Fin (blockPhysDim d L)) ℂ where
+noncomputable def blockKronAction (L : ℕ) (U : G →* Matrix α α ℂ) :
+    G →* Matrix (Fin L → α) (Fin L → α) ℂ where
   toFun g := blockKron L (U g)
   map_one' := by rw [map_one, blockKron_one]
   map_mul' g h := by rw [map_mul, blockKron_mul]
 
-@[simp] lemma blockKronAction_apply (L : ℕ)
-    (U : G →* Matrix (Fin d) (Fin d) ℂ) (g : G) :
+@[simp] lemma blockKronAction_apply (L : ℕ) (U : G →* Matrix α α ℂ) (g : G) :
     blockKronAction L U g = blockKron L (U g) := rfl
 
 /-- Twisting by `blockKronAction` agrees with blocking the twisted tensor:
-`twistedTensor (blockTensor A L) (blockKronAction L U) g = blockTensor
-(twistedTensor A U g) L`.  This is the case `W = U g` of `blockTensor_rotatePhysical`, since
+`twistedTensor (Kraus.block A L) (blockKronAction L U) g = Kraus.block
+(twistedTensor A U g) L`.  This is the case `W = U g` of `block_rotatePhysical`, since
 `twistedTensor A U g` is the physical rotation of `A` by `U g`. -/
-lemma twistedTensor_blockTensor_comm
-    (A : MPSTensor d D) (U : G →* Matrix (Fin d) (Fin d) ℂ) (g : G) (L : ℕ) :
-    twistedTensor (blockTensor A L) (blockKronAction L U) g =
-      blockTensor (twistedTensor A U g) L :=
-  (blockTensor_rotatePhysical (U g) A L).symm
+lemma twistedTensor_block_comm
+    (A : MPTensor α (Fin D)) (U : G →* Matrix α α ℂ) (g : G) (L : ℕ) :
+    twistedTensor (Kraus.block A L) (blockKronAction L U) g =
+      Kraus.block (twistedTensor A U g) L :=
+  (block_rotatePhysical (U g) A L).symm
 
 /-- On-site symmetry transfers to the blocked tensor under the Kronecker-power
-action: if `A` is on-site symmetric under `U`, then `blockTensor A L` is on-site
+action: if `A` is on-site symmetric under `U`, then `Kraus.block A L` is on-site
 symmetric under `blockKronAction L U`.  Blocking preserves the underlying matrix
 product vector family, so no injectivity of `A` is needed. -/
-theorem isOnSiteSymmetric_blockTensor
-    (A : MPSTensor d D) (U : G →* Matrix (Fin d) (Fin d) ℂ) (L : ℕ)
+theorem isOnSiteSymmetric_block
+    (A : MPTensor α (Fin D)) (U : G →* Matrix α α ℂ) (L : ℕ)
     (hSymm : IsOnSiteSymmetric A U) :
-    IsOnSiteSymmetric (blockTensor A L) (blockKronAction L U) := by
+    IsOnSiteSymmetric (Kraus.block A L) (blockKronAction L U) := by
   intro g
-  rw [twistedTensor_blockTensor_comm]
-  exact (hSymm g).blockTensor L
+  rw [twistedTensor_block_comm]
+  exact (hSymm g).block L
 
 end MPSTensor

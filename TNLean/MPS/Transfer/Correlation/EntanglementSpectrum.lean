@@ -46,7 +46,7 @@ every eigenspace is the degeneracy the source asserts.
   representation with non-trivial class leaves no one-dimensional eigenspace of `Λ`
 * `MPSTensor.even_finrank_eigenspace_of_anticommuting_gauges` : two anticommuting
   gauges force every eigenspace of `Λ` to have even dimension
-* `MPSTensor.twistedTensor_blockTensor_eq_gauge` : a virtual gauge of an on-site
+* `MPSTensor.twistedTensor_block_eq_gauge` : a virtual gauge of an on-site
   symmetry is also a virtual gauge of the blocked symmetry of the blocked tensor
 
 ## References
@@ -59,7 +59,6 @@ every eigenspace is the degeneracy the source asserts.
 open MPTensor
 
 open scoped Matrix BigOperators ComplexOrder MatrixOrder ScalarCohomology
-open Kraus (blockPhysDim blockTensor)
 
 namespace MPSTensor
 
@@ -245,16 +244,16 @@ theorem even_finrank_eigenspace_of_anticommuting_gauges
 
 /-- A virtual gauge of an on-site symmetry is also a virtual gauge of the
 Kronecker-power symmetry of the blocked tensor: if the `g`-twist of `A` is
-`R Aⁱ R⁻¹`, then the `g`-twist of `blockTensor A L` is `R (blockTensor A L)ᴵ R⁻¹`. -/
-theorem twistedTensor_blockTensor_eq_gauge {G : Type*} [Monoid G] {A : MPSTensor d D}
+`R Aⁱ R⁻¹`, then the `g`-twist of `Kraus.block A L` is `R (Kraus.block A L)ᴵ R⁻¹`. -/
+theorem twistedTensor_block_eq_gauge {G : Type*} [Monoid G] {A : MPSTensor d D}
     {U : G →* Matrix (Fin d) (Fin d) ℂ} {g : G} {R : GL (Fin D) ℂ}
     (hR : ∀ i, twistedTensor A U g i =
       (R : Matrix (Fin D) (Fin D) ℂ) * A i * ((R⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))
-    (L : ℕ) (I : Fin (blockPhysDim d L)) :
-    twistedTensor (blockTensor A L) (blockKronAction L U) g I =
-      (R : Matrix (Fin D) (Fin D) ℂ) * blockTensor A L I *
+    (L : ℕ) (I : Fin L → Fin d) :
+    twistedTensor (Kraus.block A L) (blockKronAction L U) g I =
+      (R : Matrix (Fin D) (Fin D) ℂ) * Kraus.block A L I *
         ((R⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) := by
-  rw [twistedTensor_blockTensor_comm]
+  rw [twistedTensor_block_comm]
   exact evalWord_gauge R hR _
 
 end MPSTensor

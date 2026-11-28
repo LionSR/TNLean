@@ -223,7 +223,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 
 \begin{lemma}[A one-site character from chain lengths two and three]
     \label{thm:spt_character_from_positive_lengths}
-    \lean{MPSTensor.mpv_blockTensor_eq_smul_of_mpv_eq_smul_from_two,
+    \lean{MPSTensor.mpv_block_eq_smul_of_mpv_eq_smul_from_two,
         MPSTensor.eq_pow_div_of_mpv_eq_smul_from_two,
         MPSTensor.exists_character_pow_of_mpv_eq_smul_from_two,
         MPSTensor.exists_character_sameMPV_smul_of_mpv_eq_smul_from_two}
@@ -601,7 +601,7 @@ continuous virtual path \cite[Section~II.F.2]{Schuch2011Phases}.
 \begin{lemma}[One-site paths give the independent exact MPS phase condition]
     \label{thm:spt_exact_phase_one_site_path}
     \lean{MPSTensor.blockKron_one_eq_submatrix,
-        MPSTensor.rotatePhysical_submatrix_singleBlockEquiv_blockTensor_one,
+        MPSTensor.rotatePhysical_submatrix_funUnique_block_one,
         MPSTensor.isSameExactMPSGappedPhase_of_oneSite_path}
     \leanok
     \uses{def:spt_exact_mps_gapped_phase}

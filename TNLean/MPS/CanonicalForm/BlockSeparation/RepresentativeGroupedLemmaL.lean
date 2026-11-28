@@ -63,7 +63,7 @@ copies are grouped before the word-tuple separation is applied.
 
 Source: arXiv:1606.00608, Appendix C.3, Lemma L, lines 1848--1858. -/
 theorem insertedTensor_basis_eq_of_firstSiteActionAgree_of_coeff_ne_zero
-    (P : SectorDecomposition (α)) {Y Z : Matrix (α) (α) ℂ}
+    (P : SectorDecomposition α) {Y Z : Matrix α α ℂ}
     (hAct : FirstSiteActionAgree P.toTensor Y Z)
     {L : ℕ} (hSpan : P.RepresentativeWordTupleSpanAt L)
     (j₀ : Fin P.basisCount) (hcoeff : P.coeff (L + 1) j₀ ≠ 0) :
@@ -83,7 +83,7 @@ theorem insertedTensor_basis_eq_of_firstSiteActionAgree_of_coeff_ne_zero
             Fin (L + 1) → α) = Fin.cons i w :=
       fun i ↦ by simp [Function.comp_def, Fin.cons_succ]
     simp only [Fin.cons_zero, hsimp] at hA
-    have htrans : ∀ W : Matrix (α) (α) ℂ,
+    have htrans : ∀ W : Matrix α α ℂ,
         ∑ i : α, W s i * P.toTensor.mpv
             (Fin.cons i w : Fin (L + 1) → α) =
           ∑ j : Fin P.basisCount, Matrix.trace
@@ -176,7 +176,7 @@ open.  See `docs/paper-gaps/cpgsv17_bicf_block_separation.tex`.
 
 Source: arXiv:1606.00608, Appendix C.3, Lemma L, lines 1835--1858. -/
 theorem insertedTensor_basis_eq_of_firstSiteActionAgree
-    (P : SectorDecomposition (α)) {Y Z : Matrix (α) (α) ℂ}
+    (P : SectorDecomposition α) {Y Z : Matrix α α ℂ}
     (hSpan : P.EventuallyRepresentativeWordTupleSpan)
     (hAct : FirstSiteActionAgree P.toTensor Y Z) :
     ∀ j, insertedTensor Y (P.basis j) = insertedTensor Z (P.basis j) := by
@@ -212,8 +212,8 @@ needed.
 
 Source: arXiv:1606.00608, Appendix C.3, Lemma L, lines 1835--1858. -/
 theorem insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree
-    {D : ℕ} (A : MPTensor α (Fin D)) (P : SectorDecomposition (α))
-    {Y Z : Matrix (α) (α) ℂ}
+    {D : ℕ} (A : MPTensor α (Fin D)) (P : SectorDecomposition α)
+    {Y Z : Matrix α α ℂ}
     (hAP : SameMPV₂Pos A P.toTensor)
     (hSpan : P.EventuallyRepresentativeWordTupleSpan)
     (hAct : FirstSiteActionAgree A Y Z) :
