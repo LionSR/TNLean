@@ -101,10 +101,10 @@ theorem blockScalarMatrix_pow (z : Fin r → ℂ) (n : ℕ) :
 
 /-- Multiplying a block-diagonal tensor on the left by a block-scalar matrix
 rescales the block weights. -/
-theorem blockScalarMatrix_mul_toTensorFromBlocks
-    (z μ : Fin r → ℂ) (A : (k : Fin r) → MPSTensor d (dim k)) (i : Fin d) :
-    blockScalarMatrix dim z * toTensorFromBlocks (α := Fin d) (μ := μ) A i =
-      toTensorFromBlocks (α := Fin d) (μ := fun k => z k * μ k) A i := by
+theorem blockScalarMatrix_mul_toTensorFromBlocks {α : Type*}
+    (z μ : Fin r → ℂ) (A : (k : Fin r) → MPTensor α (Fin (dim k))) (i : α) :
+    blockScalarMatrix dim z * toTensorFromBlocks (μ := μ) A i =
+      toTensorFromBlocks (μ := fun k => z k * μ k) A i := by
   classical
   have hmul := map_mul (Matrix.reindexAlgEquiv ℂ ℂ
       (finSigmaFinEquiv (m := r) (n := dim)))
@@ -408,7 +408,7 @@ family of multiplicity scalars.
 This flattens `(j, q) ↦ z_{j,q}`, so that the block-scalar matrix built from it
 is the direct sum `⊕_j Z_j ⊗ 1_{D_j}` with `Z_j` the diagonal matrix of the
 `z_{j,q}`, as at arXiv:1708.00029, line 653. -/
-noncomputable def SectorDecomposition.flatCopyScalar (P : SectorDecomposition (Fin d))
+noncomputable def SectorDecomposition.flatCopyScalar {α : Type*} (P : SectorDecomposition α)
     (z : (j : Fin P.basisCount) → Fin (P.copies j) → ℂ) : Fin P.totalCopies → ℂ :=
   fun s => z (P.flatIndexEquiv.symm s).1 (P.flatIndexEquiv.symm s).2
 

@@ -30,8 +30,8 @@ open MPTensor
 open scoped BigOperators Matrix
 namespace MPSTensor
 
-variable {d r : ℕ} {dim : Fin r → ℕ}
-variable {blocks : (k : Fin r) → MPSTensor d (dim k)}
+variable {α : Type*} [Fintype α] {r : ℕ} {dim : Fin r → ℕ}
+variable {blocks : (k : Fin r) → MPTensor α (Fin (dim k))}
 
 /-- Group the original weights by phase class, absorbing a chosen unit phase
 into each copy. This is the multiplicity formula of arXiv:1708.00029,
@@ -39,7 +39,7 @@ into each copy. This is the multiplicity formula of arXiv:1708.00029,
 `MPVPhaseClassData.exists_unitary_sectorDecomposition`. -/
 def MPVPhaseClassData.toSectorDecomposition (classes : MPVPhaseClassData blocks)
     (μ : Fin r → ℂ) (ξ : (j : Fin classes.g) → Fin (classes.copies j) → ℂ)
-    (hμ : ∀ k, μ k ≠ 0) (hξ : ∀ j q, ‖ξ j q‖ = 1) : SectorDecomposition (Fin d) where
+    (hμ : ∀ k, μ k ≠ 0) (hξ : ∀ j q, ‖ξ j q‖ = 1) : SectorDecomposition α where
   basisCount := classes.g
   basisDim := fun j ↦ dim (classes.repr j)
   basis := fun j ↦ blocks (classes.repr j)
@@ -73,7 +73,7 @@ theorem MPVPhaseClassData.exists_unitary_sectorDecomposition
       ∃ Y : Matrix (Fin (∑ k, dim k)) (Fin P.totalDim) ℂ,
         Y * Yᴴ = 1 ∧ Yᴴ * Y = 1 ∧
         (∀ i, toTensorFromBlocks μ blocks i = Y * P.toTensor i * Yᴴ) ∧
-        ∀ (c : (j : Fin classes.g) → Fin (classes.copies j) → ℂ) (i : Fin d),
+        ∀ (c : (j : Fin classes.g) → Fin (classes.copies j) → ℂ) (i : α),
           toTensorFromBlocks (fun k ↦ c (classes.enumEquiv.symm k).1
               (classes.enumEquiv.symm k).2 * μ k) blocks i =
             Y * (blockScalarMatrix P.flatDim (P.flatCopyScalar c) * P.toTensor i) * Yᴴ := by
@@ -85,7 +85,7 @@ theorem MPVPhaseClassData.exists_unitary_sectorDecomposition
     hd (P.flatIndexEquiv.symm t).1 (P.flatIndexEquiv.symm t).2
   let V : (t : Fin P.totalCopies) → Matrix.unitaryGroup (Fin (P.flatDim t)) ℂ :=
     fun t ↦ U (P.flatIndexEquiv.symm t).1 (P.flatIndexEquiv.symm t).2
-  have hflat (t : Fin P.totalCopies) (i : Fin d) :
+  have hflat (t : Fin P.totalCopies) (i : α) :
       Matrix.reindex (finCongr (hdim t)) (finCongr (hdim t)) (μ (f t) • blocks (f t) i) =
         P.flatWeight t • ((V t : Matrix _ _ ℂ) * P.flatBasis t i * (V t : Matrix _ _ ℂ)ᴴ) := by
     have hs : Matrix.reindex (finCongr (hdim t)) (finCongr (hdim t))
@@ -94,14 +94,14 @@ theorem MPVPhaseClassData.exists_unitary_sectorDecomposition
     rw [hs, reindex_finCongr_apply_eq_cast]
     let jq : (j : Fin classes.g) × Fin (classes.copies j) := P.flatIndexEquiv.symm t
     change μ (classes.enum jq.1 jq.2) •
-      (cast (congr_arg (MPSTensor d) (hd jq.1 jq.2)) (blocks (classes.enum jq.1 jq.2))) i =
+      (cast (congr_arg (fun n ↦ MPTensor α (Fin n)) (hd jq.1 jq.2)) (blocks (classes.enum jq.1 jq.2))) i =
       (μ (classes.enum jq.1 jq.2) * ξ jq.1 jq.2) •
         ((U jq.1 jq.2 : Matrix _ _ ℂ) * blocks (classes.repr jq.1) i *
           (U jq.1 jq.2 : Matrix _ _ ℂ)ᴴ)
     rw [hrel, smul_smul]
   have hd' (k : Fin r) : dim k = P.flatDim (f.symm k) := by
     simpa only [f.apply_symm_apply] using hdim (f.symm k)
-  have hmatched (k : Fin r) (i : Fin d) :
+  have hmatched (k : Fin r) (i : α) :
       Matrix.reindex (finCongr (hd' k)) (finCongr (hd' k)) (μ k • blocks k i) =
         P.flatWeight (f.symm k) •
           ((unitaryGL (V (f.symm k)) : Matrix _ _ ℂ) * P.flatBasis (f.symm k) i *
@@ -118,7 +118,7 @@ theorem MPVPhaseClassData.exists_unitary_sectorDecomposition
     toTensorFromBlocks_conj_of_matched_blocks_smul μ blocks P.flatWeight P.flatBasis
       f.symm hd' (fun t ↦ unitaryGL (V t)) hmatched
   have hAdj := hunit (fun t ↦ (V t).property)
-  have hconj' (c : (j : Fin classes.g) → Fin (classes.copies j) → ℂ) (i : Fin d) :
+  have hconj' (c : (j : Fin classes.g) → Fin (classes.copies j) → ℂ) (i : α) :
       toTensorFromBlocks (fun k ↦ c (classes.enumEquiv.symm k).1
           (classes.enumEquiv.symm k).2 * μ k) blocks i =
         Y * (blockScalarMatrix P.flatDim (P.flatCopyScalar c) * P.toTensor i) * Yᴴ := by
@@ -131,7 +131,7 @@ theorem MPVPhaseClassData.exists_unitary_sectorDecomposition
       classes.enumEquiv.symm_apply_apply _
     simp only [Equiv.symm_symm]
     exact congrArg (fun x ↦ c x.1 x.2 * P.flatWeight t) h.symm
-  have hconj (i : Fin d) :
+  have hconj (i : α) :
       toTensorFromBlocks μ blocks i =
         Y * toTensorFromBlocks P.flatWeight P.flatBasis i * Y' := by
     simpa only [one_mul] using hconj (fun _ ↦ 1) i
@@ -169,7 +169,7 @@ false as printed without it; see
 `docs/paper-gaps/dccsp17_thm41_forward_trace_preservation.tex`. -/
 theorem weight_norm_eq_one_of_block_sum_sameMPV₂Pos (μ : Fin r → ℂ) (hμ : ∀ k, μ k ≠ 0)
     (period : Fin r → ℕ) (hper : ∀ k, IsPeriodic (period k) (blocks k))
-    (Q : SectorDecomposition (Fin d)) (periodQ : Fin Q.basisCount → ℕ)
+    (Q : SectorDecomposition α) (periodQ : Fin Q.basisCount → ℕ)
     (hPerQ : ∀ j, IsPeriodic (periodQ j) (Q.basis j))
     (hNonRepQ : ∀ i j, i ≠ j → ¬ HetRepeatedBlocks (Q.basis i) (Q.basis j))
     (hSame : SameMPV₂Pos (toTensorFromBlocks μ blocks) Q.toTensor)

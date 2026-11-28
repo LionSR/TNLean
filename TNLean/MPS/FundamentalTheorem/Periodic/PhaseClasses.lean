@@ -28,17 +28,17 @@ namespace MPSTensor
 /-- Proportional periodic blocks are repeated, without requiring a prescribed
 power law for the proportionality scalars. This is the one-block case of
 arXiv:1708.00029, `thm:bd`, lines 613–623. -/
-theorem hetRepeatedBlocks_of_nonzeroProportionalMPV₂ {d D E m n : ℕ}
-    {A : MPSTensor d D} {B : MPSTensor d E}
+theorem hetRepeatedBlocks_of_nonzeroProportionalMPV₂ {α : Type*} [Fintype α] {D E m n : ℕ}
+    {A : MPTensor α (Fin D)} {B : MPTensor α (Fin E)}
     (hA : IsSpectrallyPeriodic m A) (hB : IsSpectrallyPeriodic n B)
     (hProp : NonzeroProportionalMPV₂ A B) : HetRepeatedBlocks A B := by
   let P := trivialSectorDecomp (fun _ : Fin 1 ↦ (1 : ℂ)) (fun _ ↦ A) (fun _ ↦ one_ne_zero)
   let Q := trivialSectorDecomp (fun _ : Fin 1 ↦ (1 : ℂ)) (fun _ ↦ B) (fun _ ↦ one_ne_zero)
-  have hP (N : ℕ) (σ : Fin N → Fin d) : mpv P.toTensor σ = mpv A σ := by
+  have hP (N : ℕ) (σ : Fin N → α) : mpv P.toTensor σ = mpv A σ := by
     rw [P.mpv_toTensor_eq_sum_coeff]
     change (∑ _ : Fin 1, (∑ _ : Fin 1, (1 : ℂ) ^ N) * mpv A σ) = _
     simp
-  have hQ (N : ℕ) (σ : Fin N → Fin d) : mpv Q.toTensor σ = mpv B σ := by
+  have hQ (N : ℕ) (σ : Fin N → α) : mpv Q.toTensor σ = mpv B σ := by
     rw [Q.mpv_toTensor_eq_sum_coeff]
     change (∑ _ : Fin 1, (∑ _ : Fin 1, (1 : ℂ) ^ N) * mpv B σ) = _
     simp
@@ -54,8 +54,8 @@ theorem hetRepeatedBlocks_of_nonzeroProportionalMPV₂ {d D E m n : ℕ}
 
 /-- Periodic blocks in one matrix-product-vector phase class are repeated.
 Source: arXiv:1708.00029, `thm:bd`, lines 613–623. -/
-theorem MPVBlockPhaseEquiv.hetRepeatedBlocks_of_isSpectrallyPeriodic {d D E m n : ℕ}
-    {A : MPSTensor d D} {B : MPSTensor d E}
+theorem MPVBlockPhaseEquiv.hetRepeatedBlocks_of_isSpectrallyPeriodic {α : Type*} [Fintype α] {D E m n : ℕ}
+    {A : MPTensor α (Fin D)} {B : MPTensor α (Fin E)}
     (hA : IsSpectrallyPeriodic m A) (hB : IsSpectrallyPeriodic n B)
     (h : MPVBlockPhaseEquiv A B) : HetRepeatedBlocks A B := by
   obtain ⟨ζ, hζ, he⟩ := h
@@ -64,7 +64,7 @@ theorem MPVBlockPhaseEquiv.hetRepeatedBlocks_of_isSpectrallyPeriodic {d D E m n 
 
 /-- Left-canonical periodic blocks have spectral radius one, as used in
 arXiv:1708.00029, lines 248–261 and 313–332. -/
-theorem IsPeriodic.isSpectrallyPeriodic {d D m : ℕ} {A : MPSTensor d D} (hA : IsPeriodic m A) :
+theorem IsPeriodic.isSpectrallyPeriodic {α : Type*} [Fintype α] {D m : ℕ} {A : MPTensor α (Fin D)} (hA : IsPeriodic m A) :
     IsSpectrallyPeriodic m A := by
   let : NeZero D := ⟨hA.bondDim_ne_zero⟩
   have hC := Kraus.isChannel_mapLM A hA.leftCanonical
@@ -73,11 +73,11 @@ theorem IsPeriodic.isSpectrallyPeriodic {d D m : ℕ} {A : MPSTensor d D} (hA : 
 
 /-- Repeated left-canonical periodic blocks admit a unitary bond similarity.
 Source: arXiv:1708.00029, the paragraph after `thm:bd`, line 625. -/
-theorem exists_unitary_conj_of_isPeriodic_of_hetRepeatedBlocks {d D E m n : ℕ}
-    {A : MPSTensor d D} {B : MPSTensor d E}
+theorem exists_unitary_conj_of_isPeriodic_of_hetRepeatedBlocks {α : Type*} [Fintype α] {D E m n : ℕ}
+    {A : MPTensor α (Fin D)} {B : MPTensor α (Fin E)}
     (hA : IsPeriodic m A) (hB : IsPeriodic n B) (h : HetRepeatedBlocks A B) :
     ∃ hd : D = E, ∃ ξ : ℂ, ∃ U : Matrix.unitaryGroup (Fin E) ℂ,
-      ‖ξ‖ = 1 ∧ ∀ i, (cast (congr_arg (MPSTensor d) hd) A) i =
+      ‖ξ‖ = 1 ∧ ∀ i, (cast (congr_arg (fun n ↦ MPTensor α (Fin n)) hd) A) i =
         ξ • ((U : Matrix (Fin E) (Fin E) ℂ) * B i * (U : Matrix (Fin E) (Fin E) ℂ)ᴴ) := by
   obtain ⟨hd, ξ, X, hξ, hrel⟩ := h
   subst E
@@ -90,8 +90,8 @@ theorem exists_unitary_conj_of_isPeriodic_of_hetRepeatedBlocks {d D E m n : ℕ}
 
 /-- Representatives of different matrix-product-vector phase classes are not
 repeated blocks, as required by arXiv:1708.00029, `eq:bdnr`, lines 286–305. -/
-theorem MPVPhaseClassData.not_hetRepeatedBlocks {d r : ℕ} {dim : Fin r → ℕ}
-    {blocks : (k : Fin r) → MPSTensor d (dim k)} (classes : MPVPhaseClassData blocks)
+theorem MPVPhaseClassData.not_hetRepeatedBlocks {α : Type*} [Fintype α] {r : ℕ} {dim : Fin r → ℕ}
+    {blocks : (k : Fin r) → MPTensor α (Fin (dim k))} (classes : MPVPhaseClassData blocks)
     (i j : Fin classes.g) (hij : i ≠ j) :
     ¬ HetRepeatedBlocks (blocks (classes.repr i)) (blocks (classes.repr j)) := by
   rintro ⟨hd, hrep⟩
@@ -103,15 +103,15 @@ theorem MPVPhaseClassData.not_hetRepeatedBlocks {d r : ℕ} {dim : Fin r → ℕ
 representative and is a unit phase times a unitary conjugate of it. The original
 block remains identified by `classes.enum j q`.
 Source: arXiv:1708.00029, `eq:bdnr`, lines 286–305, and line 625. -/
-theorem MPVPhaseClassData.periodic_unitary_match {d r : ℕ} {dim : Fin r → ℕ}
-    {blocks : (k : Fin r) → MPSTensor d (dim k)} (classes : MPVPhaseClassData blocks)
+theorem MPVPhaseClassData.periodic_unitary_match {α : Type*} [Fintype α] {r : ℕ} {dim : Fin r → ℕ}
+    {blocks : (k : Fin r) → MPTensor α (Fin (dim k))} (classes : MPVPhaseClassData blocks)
     (period : Fin r → ℕ) (hper : ∀ k, IsPeriodic (period k) (blocks k))
     (j : Fin classes.g) (q : Fin (classes.copies j)) :
     period (classes.enum j q) = period (classes.repr j) ∧
     ∃ hd : dim (classes.enum j q) = dim (classes.repr j),
       ∃ ξ : ℂ, ∃ U : Matrix.unitaryGroup (Fin (dim (classes.repr j))) ℂ,
         ‖ξ‖ = 1 ∧ ∀ i,
-          (cast (congr_arg (MPSTensor d) hd) (blocks (classes.enum j q))) i =
+          (cast (congr_arg (fun n ↦ MPTensor α (Fin n)) hd) (blocks (classes.enum j q))) i =
             ξ • ((U : Matrix _ _ ℂ) * blocks (classes.repr j) i * (U : Matrix _ _ ℂ)ᴴ) := by
   have hrep := (MPVBlockPhaseEquiv.hetRepeatedBlocks_of_isSpectrallyPeriodic
     (hper _).isSpectrallyPeriodic (hper _).isSpectrallyPeriodic (classes.enum_phase j q)).symm

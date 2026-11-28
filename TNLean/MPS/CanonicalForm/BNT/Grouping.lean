@@ -40,7 +40,7 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d : ℕ}
+variable {α : Type*} [Fintype α]
 
 /-- **One-sector-per-block `SectorDecomposition`.**
 
@@ -51,8 +51,8 @@ it does **not** assert the basis-of-normal-tensors linear-independence condition
 `HasBNTSectorData` from `TNLean.MPS.SharedInfra.SectorDecomposition`, and it is
 not the paper's minimal BNT representative construction. -/
 def trivialSectorDecomp {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (hμne : ∀ k, μ k ≠ 0) : SectorDecomposition (Fin d) where
+    (μ : Fin r → ℂ) (blocks : (k : Fin r) → MPTensor α (Fin (dim k)))
+    (hμne : ∀ k, μ k ≠ 0) : SectorDecomposition α where
   basisCount := r
   basisDim   := dim
   basis      := blocks
@@ -70,10 +70,10 @@ as `toTensorFromBlocks μ blocks`.  The proof expands both sides using the
 sector-decomposition formula and the block-sum formula, together with the identity
 `coeff N j = (μ j)^N` because `copies j = 1`. -/
 lemma sameMPV₂_trivialSectorDecomp {r : ℕ} {dim : Fin r → ℕ}
-    (μ : Fin r → ℂ) (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (μ : Fin r → ℂ) (blocks : (k : Fin r) → MPTensor α (Fin (dim k)))
     (hμne : ∀ k, μ k ≠ 0) :
     SameMPV₂ (trivialSectorDecomp μ blocks hμne).toTensor
-      (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) := by
+      (toTensorFromBlocks (α := α) (μ := μ) blocks) := by
   intro N σ
   set P := trivialSectorDecomp μ blocks hμne
   calc mpv P.toTensor σ
@@ -86,7 +86,7 @@ lemma sameMPV₂_trivialSectorDecomp {r : ℕ} {dim : Fin r → ℕ}
             exact Fin.sum_univ_one (fun _q : Fin 1 => μ j ^ N)
           rw [hcoeff]
           rfl
-    _ = mpv (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) σ := by
+    _ = mpv (toTensorFromBlocks (α := α) (μ := μ) blocks) σ := by
           symm
           simpa [smul_eq_mul] using mpv_toTensorFromBlocks_eq_sum μ blocks σ
 
