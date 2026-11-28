@@ -61,12 +61,6 @@ resulting simultaneous span transfers back at the same length.
 This is the common-blocking step in Garre-Rubio, Lootens and Molnár,
 arXiv:2203.12563v3, Appendix A, using the block-injectivity theorem of
 arXiv:1606.00608, lines 317--345.
-
-**Bridge (T.2b):** The proof of `exists_positive_wordTupleSpanTop_of_isInjective` and
-`toMPSTensor_blockTensor_apply` still reads an operator tensor through `MPOTensor.toMPSTensor`,
-because the Fin-encoded blocking `Kraus.blockTensor` (with `MPOTensor.toMPSTensor_blockTensor`,
-`MPOTensor.toMPSTensor_blockTwo`) is stated on the alphabet `Fin (d * d)`. The bridge is removed
-when the blocking moves to `Kraus.block` (step T.2b of `docs/tensor_type_unification.md`).
 -/
 
 open MPTensor
@@ -153,8 +147,8 @@ namespace MPSTensor
 /-- Rescaling each block by a nonzero scalar does not change whether the word tuples of one
 length span the direct sum: the words of length `L` of `μ_j B_j` are `μ_j^L` times those of
 `B_j`. -/
-theorem wordTupleSpanTop_of_smul {d r : ℕ} {dim : Fin r → ℕ}
-    {B : (j : Fin r) → MPSTensor d (dim j)} {μ : Fin r → ℂ} (hμ : ∀ j, μ j ≠ 0) {L : ℕ}
+theorem wordTupleSpanTop_of_smul {α : Type*} {r : ℕ} {dim : Fin r → ℕ}
+    {B : (j : Fin r) → MPTensor α (Fin (dim j))} {μ : Fin r → ℂ} (hμ : ∀ j, μ j ≠ 0) {L : ℕ}
     (h : WordTupleSpanTop (fun j => fun i => μ j • B j i) L) : WordTupleSpanTop B L := by
   let Φ : ((j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ) →ₗ[ℂ]
       ((j : Fin r) → Matrix (Fin (dim j)) (Fin (dim j)) ℂ) :=
@@ -206,33 +200,20 @@ theorem exists_blockTensor_isMPOBlockLeftInverse {g : ℕ} {D : Fin g → ℕ}
       ∃ K : Matrix (MPSTensor.BlockEntryIndex D) (Fin (Kraus.blockPhysDim p L) ×
           Fin (Kraus.blockPhysDim p L)) ℂ,
         MPSTensor.IsMPOBlockLeftInverse (fun c => blockTensor (T c) L) K := by
-  have hScaled : ∀ c, ∃ ζ : ℂ, ζ ≠ 0 ∧
-      MPTensor.IsNormalTensor (ζ • (T c).toMPSTensor) := by
+  have hScaled : ∀ c, ∃ ζ : ℂ, ζ ≠ 0 ∧ MPTensor.IsNormalTensor (ζ • T c) := by
     intro c
     have : NeZero (D c) := ⟨(hD c).ne'⟩
     obtain ⟨B, ζ, hζ, hGauge, -, -, hB⟩ :=
-      MPSTensor.exists_leftCanonical_normalTensor_scale_of_isNormal
-        ((isNormal_toMPSTensor_iff _).2 (hT c))
+      MPSTensor.exists_leftCanonical_normalTensor_scale_of_isNormal (hT c)
     exact ⟨ζ, hζ, MPTensor.IsNormalTensor.of_gaugeEquiv hB hGauge⟩
   choose scale hscale hNormal using hScaled
-  have hne' : MPSTensor.BlocksNotGaugePhaseEquiv fun c => (T c).toMPSTensor :=
-    hne.reindexPhysical finProdFinEquiv.symm
   obtain ⟨L, hL, hSpan⟩ := MPSTensor.exists_positive_wordTupleSpanTop_of_isNormal hNormal hD
-    (fun j k hjk hdim hGPE => hne' j k hjk hdim
+    (fun j k hjk hdim hGPE => hne j k hjk hdim
       (MPSTensor.gaugePhaseEquiv_of_smul_smul_cast hdim (hscale j) (hscale k) hGPE))
   replace hSpan := MPSTensor.wordTupleSpanTop_of_smul hscale hSpan
-  have hSpan1 := MPSTensor.wordTupleSpanTop_block_one _ hSpan
-  have hSpanBlocked : MPSTensor.WordTupleSpanTop
-      (fun c ↦ (blockTensor (T c) L).toMPSTensor) 1 := by
-    have hFamily : (fun c ↦ (blockTensor (T c) L).toMPSTensor) =
-        fun c ↦ Kraus.reindexPhysical (blockedDoubledIndexEquiv p L)
-          (Kraus.block (T c).toMPSTensor L) :=
-      funext fun c ↦ toMPSTensor_blockTensor (T c)
-    rw [hFamily]
-    exact (MPSTensor.wordTupleSpanTop_reindexPhysical_equiv
-      (blockedDoubledIndexEquiv p L) _ 1).2 hSpan1
   have hSpanPair : MPSTensor.WordTupleSpanTop (fun c ↦ blockTensor (T c) L) 1 :=
-    (MPSTensor.wordTupleSpanTop_reindexPhysical_equiv finProdFinEquiv.symm _ 1).1 hSpanBlocked
+    (MPSTensor.wordTupleSpanTop_reindexPhysical_equiv (blockedPairIndexEquiv p L) _ 1).2
+      (MPSTensor.wordTupleSpanTop_block_one _ hSpan)
   exact ⟨L, hL, fun c ↦ hSpanPair.isInjective_one c, hSpanPair.exists_mpo_block_left_inverse⟩
 
 namespace CompleteZipperFusionFamily

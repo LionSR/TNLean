@@ -27,15 +27,12 @@ simultaneous block inverse at lines 269--277 and blocking at lines 427--431.
 -/
 
 open scoped Matrix BigOperators
-open Kraus (blockTensor)
 
 namespace MPSTensor.IsBiorthogonalDecomposition
 
 /-- Positive physical blocking preserves an exact pairwise decomposition
-over any finite label type, with its rectangular matrices unchanged. 
-**Bridge (T.2b):** the blocked letters are read as words through the doubled-index blocking
-`MPOTensor.blockTensor_apply_eq_kraus_evalWord`; removed when the blocking moves to
-`Kraus.block`. -/
+over any finite label type, with its rectangular matrices unchanged.
+The blocked letters are the words `Kraus.block` reads off the paired blocked index. -/
 theorem blockMPO_fintype {Λ : Type*} [Fintype Λ] {p : ℕ} {D : Λ → ℕ}
     {T : ∀ c, MPOTensor p (D c)} {N : Λ → ℕ} {a b : Λ}
     {V : ∀ c, Fin (N c) → Matrix (Fin (D c)) (Fin (D a * D b)) ℂ}
@@ -49,12 +46,12 @@ theorem blockMPO_fintype {Λ : Type*} [Fintype Λ] {p : ℕ} {D : Λ → ℕ}
         (MPOTensor.blockTensor (T b) L))
       (fun q : (c : Λ) × Fin (N c) ↦ MPOTensor.blockTensor (T q.1) L)
       (fun q ↦ V q.1 q.2) (fun q ↦ W q.1 q.2) :=
-  h.ofWords (fun I ↦ (MPOTensor.blockedPairWord p L (finProdFinEquiv I)).map finProdFinEquiv.symm)
-    (fun I ↦ by simpa using MPOTensor.blockedPairWord_ne_nil hL (finProdFinEquiv I))
+  h.ofWords (fun I ↦ List.ofFn (MPOTensor.blockedPairIndexEquiv p L I))
+    (fun _ ↦ mt List.ofFn_eq_nil_iff.1 hL.ne')
     (fun I ↦ by
       rw [← MPOTensor.blockTensor_mulTensor]
-      exact MPOTensor.blockTensor_apply_eq_kraus_evalWord _ L I)
-    (fun q I ↦ MPOTensor.blockTensor_apply_eq_kraus_evalWord (T q.1) L I)
+      rfl)
+    (fun _ _ ↦ rfl)
 
 end MPSTensor.IsBiorthogonalDecomposition
 

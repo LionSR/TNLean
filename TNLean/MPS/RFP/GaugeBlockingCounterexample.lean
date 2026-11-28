@@ -26,12 +26,6 @@ virtually gauge equivalent to the original tensor with the orientation printed i
 **Scope restriction (one-letter MPS lift):** The counterexample realizes the exact
 source diagram for one physical letter. It does not decide the mixed-state continuation.
 See `docs/paper-gaps/cpsv16_rfp_gauge_pure_equivalence_false.tex`.
-
-**Bridge (T.2b):** The predicate `IsOneLetterRFPViaTSUpToVirtualGauge` still reads an operator
-tensor through `MPOTensor.toMPSTensor`, because the Fin-encoded blocking `Kraus.blockTensor` (with
-`MPOTensor.toMPSTensor_blockTensor`, `MPOTensor.toMPSTensor_blockTwo`) is stated on the alphabet
-`Fin (d * d)`. The bridge is removed when the blocking moves to `Kraus.block` (step T.2b of
-`docs/tensor_type_unification.md`).
 -/
 
 open MPTensor
@@ -51,7 +45,9 @@ direction of the printed diagram, and its symmetry gives the other.
 alphabet to one letter. See
 `docs/paper-gaps/cpsv16_rfp_gauge_pure_equivalence_false.tex`. -/
 def IsOneLetterRFPViaTSUpToVirtualGauge {D : ℕ} (M : MPOTensor 1 D) : Prop :=
-  MPTensor.GaugeEquiv (blockTwo M).toMPSTensor M.toMPSTensor
+  MPTensor.GaugeEquiv
+    (Kraus.reindexPhysical (Equiv.ofUnique (Fin 1 × Fin 1) (Fin 2 → Fin 1 × Fin 1)) (Kraus.block M 2))
+    M
 
 end MPOTensor
 
@@ -357,8 +353,7 @@ theorem isPureOneLetterRFPViaTSUpToVirtualGauge_of_isBlockedGaugePhaseFixedPoint
   refine ⟨doubledVirtualGauge X, ?_⟩
   intro ij
   fin_cases ij
-  simp only [MPOTensor.toMPSTensor, MPOTensor.blockTwo_apply]
-  simp only [Fin.divNat, Fin.modNat]
+  simp only [Kraus.reindexPhysical, Kraus.block, Equiv.ofUnique_apply]
   simp only [doubledTensor, Nat.div_one, Fin.zero_eta, Fin.isValue, Nat.mod_succ,
     Nat.reduceMul, mul_one, Matrix.coe_units_inv,
     Matrix.submatrix_mul_equiv]

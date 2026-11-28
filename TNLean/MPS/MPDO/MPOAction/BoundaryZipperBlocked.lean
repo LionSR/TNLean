@@ -31,16 +31,13 @@ decomposition. See `docs/paper-gaps/bmwshv17_joint_block_left_inverse.tex`.
 -/
 
 open scoped Matrix BigOperators
-open Kraus (blockTensor)
 
 namespace MPSTensor.IsBiorthogonalDecomposition
 
 /-- Blocking both incoming MPOs and all targets preserves their exact
 biorthogonal decomposition with the same analysis and synthesis maps.
-Source: GLM23 Appendix A, `decompopen`, and physical blocking. 
-**Bridge (T.2b):** the blocked letters are read as words through the doubled-index blocking
-`MPOTensor.blockTensor_apply_eq_kraus_evalWord`; removed when the blocking moves to
-`Kraus.block`. -/
+Source: GLM23 Appendix A, `decompopen`, and physical blocking.
+The blocked letters are the words `Kraus.block` reads off the paired blocked index. -/
 theorem blockMPO {p g : ℕ} {D : Fin g → ℕ}
     {T : ∀ c, MPOTensor p (D c)} {N : Fin g → ℕ} {a b : Fin g}
     {V : ∀ c, Fin (N c) → Matrix (Fin (D c)) (Fin (D a * D b)) ℂ}
@@ -54,12 +51,12 @@ theorem blockMPO {p g : ℕ} {D : Fin g → ℕ}
         (MPOTensor.blockTensor (T b) L))
       (fun q : (c : Fin g) × Fin (N c) ↦ MPOTensor.blockTensor (T q.1) L)
       (fun q ↦ V q.1 q.2) (fun q ↦ W q.1 q.2) :=
-  h.ofWords (fun I ↦ (MPOTensor.blockedPairWord p L (finProdFinEquiv I)).map finProdFinEquiv.symm)
-    (fun I ↦ by simpa using MPOTensor.blockedPairWord_ne_nil hL (finProdFinEquiv I))
+  h.ofWords (fun I ↦ List.ofFn (MPOTensor.blockedPairIndexEquiv p L I))
+    (fun _ ↦ mt List.ofFn_eq_nil_iff.1 hL.ne')
     (fun I ↦ by
       rw [← MPOTensor.blockTensor_mulTensor]
-      exact MPOTensor.blockTensor_apply_eq_kraus_evalWord _ L I)
-    (fun q I ↦ MPOTensor.blockTensor_apply_eq_kraus_evalWord (T q.1) L I)
+      rfl)
+    (fun _ _ ↦ rfl)
 
 end MPSTensor.IsBiorthogonalDecomposition
 
