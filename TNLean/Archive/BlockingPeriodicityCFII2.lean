@@ -203,7 +203,7 @@ lemma unitalize_isUnitalKraus_of_fixedPoint
     _ = Sinv * (∑ i : Fin d, B i * Λ * (B i)ᴴ) * Sinv := by
           simp [Finset.mul_sum, Finset.sum_mul, Matrix.mul_assoc]
     _ = Sinv * Kraus.transferMap B Λ * Sinv := by
-          simp [Kraus.transferMap_apply, Matrix.mul_assoc]
+          simp [Matrix.mul_assoc]
     _ = Sinv * Λ * Sinv := by simp [hfix]
     _ = 1 := by simp [hInvΛ]
   )
@@ -726,7 +726,7 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor_CFII
     mulLeftRightLinearEquiv (D := D) S S Sinv Sinv hSSinv hSinvS hSSinv hSinvS
   have hEC_conj : E = Φ.symm.conj (Kraus.transferMap B) := by
     ext X
-    simp [E, C, unitalize, Φ, S, Sinv, Kraus.transferMap_apply, Matrix.mul_assoc,
+    simp [E, C, unitalize, Φ, S, Sinv, Matrix.mul_assoc,
       LinearEquiv.conj_apply_apply]
   -- Similarity between `Kraus.transferMap B` and `Kraus.transferMap A` (unitary conjugation).
   let Ψ : Matrix (Fin D) (Fin D) ℂ ≃ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
@@ -734,7 +734,7 @@ theorem exists_blockTensor_isPrimitive_of_TP_of_isIrreducibleTensor_CFII
   have hEB_conj : Kraus.transferMap B =
       Ψ.symm.conj (Kraus.transferMap A) := by
     ext X
-    simp [B, Ψ, Kraus.transferMap_apply, Matrix.mul_assoc,
+    simp [B, Ψ, Matrix.mul_assoc,
       LinearEquiv.conj_apply_apply]
   have hperA : ∀ μ : ℂ,
       μ ∈ peripheralEigenvalues (Kraus.transferMap A) → μ ^ p = 1 := by
