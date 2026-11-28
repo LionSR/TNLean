@@ -41,8 +41,8 @@ This records the canonical-form construction in which only nonzero summands are 
 does not impose the separate modulus normalization of line 246.
 
 Source: arXiv:1606.00608, lines 217--246, 265--301, and 1135--1148. -/
-structure IsBNTSectorPresentation {D' : ℕ} (A : MPSTensor d D')
-    (P : SectorDecomposition d) : Prop where
+structure IsBNTSectorPresentation {α : Type*} [Fintype α] {D' : ℕ} (A : MPTensor α (Fin D'))
+    (P : SectorDecomposition α) : Prop where
   /-- At least one normal representative occurs.
 
   **Boundary condition (nonzero family):** This retains only the nonemptiness implied by the
@@ -66,7 +66,7 @@ structure IsBNTSectorPresentation {D' : ℕ} (A : MPSTensor d D')
 
 namespace IsBNTSectorPresentation
 
-variable {D' : ℕ} {P : SectorDecomposition d}
+variable {D' : ℕ} {P : SectorDecomposition (Fin d)}
 
 /-- Forgetting the sector data gives the literal CPSV basis-of-normal-tensors predicate.
 
@@ -81,9 +81,18 @@ theorem isCPSVBasisOfNormalTensors (h : IsBNTSectorPresentation A P) :
 /-- Distinct representatives in a presentation are not gauge-phase equivalent.
 
 Source: arXiv:1606.00608, Proposition 2.7, lines 1135--1148. -/
-theorem blocks_not_gaugePhaseEquiv (h : IsBNTSectorPresentation A P) :
-    BlocksNotGaugePhaseEquiv (d := d) P.basis :=
-  h.isCPSVBasisOfNormalTensors.blocks_not_gaugePhaseEquiv
+theorem blocks_not_gaugePhaseEquiv {α : Type*} [Fintype α] {D₀ : ℕ} {A₀ : MPTensor α (Fin D₀)}
+    {Q : SectorDecomposition α} (h : IsBNTSectorPresentation A₀ Q) :
+    BlocksNotGaugePhaseEquiv Q.basis := by
+  rintro j k hjk hdim ⟨X, ζ, -, hConj⟩
+  obtain ⟨N₀, hLI⟩ := h.eventually_li
+  have hN := hLI (N₀ + 1) (by omega)
+  refine (linearIndepOn_pair_iff _ hjk (hN.ne_zero j)).mp (hN.linearIndepOn {j, k})
+    (ζ ^ (N₀ + 1)) ?_
+  rw [← map_smul]
+  congr 1
+  funext σ
+  rw [Pi.smul_apply, smul_eq_mul, mpv_eq_pow_mul_of_gaugePhase _ _ X ζ hConj, mpv_cast_dim hdim]
 
 /-- Transport a presentation along equality of all positive-length matrix-product vectors.
 
@@ -126,23 +135,6 @@ theorem exists_pos_mpvState_ne_zero (h : IsBNTSectorPresentation A P) :
   intro hZero
   exact hCoeffN ((Fintype.linearIndependent_iff.mp (hLI N hN)) _ hZero j)
 
-/-- Multiplying every tensor letter and every copy weight by the same nonzero scalar
-preserves a basis-of-normal-tensors presentation.
-
-Source: arXiv:1606.00608, eq. `II_CF1`, lines 237--244. -/
-theorem smul_left (h : IsBNTSectorPresentation A P) (c : ℂ) (hc : c ≠ 0) :
-    IsBNTSectorPresentation (c • A) (P.scaleWeights c hc) := by
-  refine ⟨h.basisCount_pos, ?_, h.basis_normal, h.eventually_li⟩
-  intro N hN σ
-  calc
-    mpv (c • A) σ = c ^ N * mpv A σ := mpv_smul c A σ
-    _ = c ^ N * mpv P.toTensor σ :=
-      congrArg (fun z : ℂ => c ^ N * z) (h.sameMPV₂Pos N hN σ)
-    _ = mpv (P.scaleWeights c hc).toTensor σ := by
-      change c ^ N * mpv P.toTensor σ =
-        mpv (toTensorFromBlocks (fun k => c * P.flatWeight k) P.flatBasis) σ
-      exact (mpv_toTensorFromBlocks_weight_mul_left c P.flatWeight P.flatBasis σ).symm
-
 /-- Presentations for the same positive-length matrix-product vectors have the same normal
 representatives up to a bijection and gauge phases.
 
@@ -152,7 +144,7 @@ coefficient nonzero.
 Source: arXiv:1606.00608, Proposition 2.7 and Appendix A, lines 1135--1148 and 1182. -/
 theorem equiv_of_sameMPV₂Pos
     {D₁ D₂ : ℕ} {A : MPSTensor d D₁} {B : MPSTensor d D₂}
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (hP : IsBNTSectorPresentation A P)
     (hQ : IsBNTSectorPresentation B Q)
     (hAB : SameMPV₂Pos A B) :
@@ -332,7 +324,7 @@ structure _root_.MPTensor.CPSVCanonicalFormData.BNTRefinement (data : CPSVCanoni
 
   Source: the BNT minimality argument in arXiv:1606.00608, lines 1135--1146. -/
   representativesNotEquiv :
-    BlocksNotGaugePhaseEquiv (d := d)
+    BlocksNotGaugePhaseEquiv (α := Fin d)
       (fun j => data.blocks (data.representativeIndex j))
   /-- The representative family is a basis of normal tensors for the original tensor.
 
@@ -552,7 +544,7 @@ theorem _root_.MPTensor.CPSVCanonicalFormData.exists_bntRefinement
     intro j
     exact data.blocks_normal (repIndex j)
   have hRepresentativesNotEquiv :
-      BlocksNotGaugePhaseEquiv (d := d) (fun j => data.blocks (repIndex j)) :=
+      BlocksNotGaugePhaseEquiv (α := Fin d) (fun j => data.blocks (repIndex j)) :=
     classes.blocks_not_equiv
   have hRepresentativesBNT :
       IsCPSVBasisOfNormalTensors A
@@ -632,7 +624,7 @@ that copy to its representative.
 Source: arXiv:1606.00608, lines 265--301 and Appendix C.3, lines 1843--1858. -/
 noncomputable def
     _root_.MPTensor.CPSVCanonicalFormData.BNTRefinement.representativeSectorDecomposition
-    : SectorDecomposition d where
+    : SectorDecomposition (Fin d) where
   basisCount := data.phaseClasses.g
   basisDim := fun j => data.dim (data.representativeIndex j)
   basis := fun j => data.blocks (data.representativeIndex j)

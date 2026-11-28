@@ -207,17 +207,15 @@ theorem mpoWithBoundary_mul_eq_sum_of_biorthogonalDecomposition
     (M : MPOTensor d D₁) (N : MPOTensor d D₂) (T : ∀ c : ι, MPOTensor d (δ c))
     (V : ∀ c : ι, Matrix (Fin (δ c)) (Fin (D₁ * D₂)) ℂ)
     (W : ∀ c : ι, Matrix (Fin (D₁ * D₂)) (Fin (δ c)) ℂ)
-    (h : MPSTensor.IsBiorthogonalDecomposition (mulTensor M N).toMPSTensor
-      (fun c ↦ (T c).toMPSTensor) V W)
+    (h : MPSTensor.IsBiorthogonalDecomposition (mulTensor M N) T V W)
     (X : Matrix (Fin D₁) (Fin D₁) ℂ) (Y : Matrix (Fin D₂) (Fin D₂) ℂ)
     {L : ℕ} (hL : 0 < L) :
     mpoWithBoundary M X L * mpoWithBoundary N Y L =
       ∑ c : ι, mpoWithBoundary (T c) (V c * productBoundary X Y * W c) L := by
   rw [← mpoWithBoundary_mulTensor]
   ext σ τ
-  have hh := h.mpvWithBoundary (productBoundary X Y) hL
-    (fun k ↦ finProdFinEquiv (σ k, τ k))
-  simpa only [MPSTensor.mpvWithBoundary, evalWord_toMPSTensor_pairConfig,
+  have hh := h.mpvWithBoundary (productBoundary X Y) hL (fun k ↦ (σ k, τ k))
+  simpa only [MPSTensor.mpvWithBoundary, kraus_evalWord_ofFn_pair,
     Matrix.sum_apply, mpoWithBoundary] using hh
 
 /-- Exact action decompositions transport arbitrary boundaries to each target
@@ -249,8 +247,7 @@ theorem isBoundaryClosed_of_biorthogonalDecomposition
     {ι : Type*} [Fintype ι] (T : MPOTensor d D)
     (V : ι → Matrix (Fin D) (Fin (D * D)) ℂ)
     (W : ι → Matrix (Fin (D * D)) (Fin D) ℂ)
-    (h : MPSTensor.IsBiorthogonalDecomposition (mulTensor T T).toMPSTensor
-      (fun _ : ι ↦ T.toMPSTensor) V W) :
+    (h : MPSTensor.IsBiorthogonalDecomposition (mulTensor T T) (fun _ : ι ↦ T) V W) :
     IsBoundaryClosed T := by
   intro X Y
   refine ⟨∑ c : ι, V c * productBoundary X Y * W c, fun L hL ↦ ?_⟩

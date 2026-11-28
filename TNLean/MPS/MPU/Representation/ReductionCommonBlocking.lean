@@ -41,7 +41,7 @@ Fusion tensors and the associator are not defined here.
 ## Main definitions
 
 * `MPOTensor.GroupFamily.productTensor`, `MPOTensor.GroupFamily.targetTensor`:
-  the vectorized tensors $\mathcal U_g\mathcal U_h$ and $\mathcal U_{gh}$.
+  the tensors $\mathcal U_g\mathcal U_h$ and $\mathcal U_{gh}$.
 * `MPOTensor.GroupFamily.ReductionFamily`: one selected reduction for every
   pair.
 * `MPOTensor.GroupFamily.ReductionFamily.nilpotencyLength`: the MGSC18
@@ -80,43 +80,41 @@ universe u
 
 variable {G : Type u} {d : ℕ}
 
-/-- The vectorized product tensor $\mathcal U_g\mathcal U_h$, the source of the
-reduction for the pair `(g, h)`.
+/-- The product tensor $\mathcal U_g\mathcal U_h$ on the pair alphabet, the
+source of the reduction for the pair `(g, h)`.
 
 Source: arXiv:2502.20257, `main.tex` lines 1403--1405. -/
 noncomputable def productTensor (F : GroupFamily G d) (g h : G) :
-    MPSTensor (d * d) (F.bondDim g * F.bondDim h) :=
-  (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor
+    MPOTensor d (F.bondDim g * F.bondDim h) :=
+  mulTensor (F.tensor g) (F.tensor h)
 
 /-- Blocking every tensor by `L` sites blocks the product tensor, up to the
 canonical pairing of the blocked ket and bra words. -/
 theorem productTensor_block (F : GroupFamily G d) (g h : G) (L : ℕ) :
     (F.block L).productTensor g h =
-      Kraus.reindexPhysical (blockedDoubledIndexEquiv d L)
-        (Kraus.blockTensor (F.productTensor g h) L) := by
-  change (mulTensor (MPOTensor.blockTensor (F.tensor g) L)
-    (MPOTensor.blockTensor (F.tensor h) L)).toMPSTensor = _
-  rw [← blockTensor_mulTensor, toMPSTensor_blockTensor]
+      Kraus.reindexPhysical (blockedPairIndexEquiv d L)
+        (Kraus.block (F.productTensor g h) L) := by
+  change mulTensor (MPOTensor.blockTensor (F.tensor g) L)
+    (MPOTensor.blockTensor (F.tensor h) L) = _
+  rw [← blockTensor_mulTensor]
   rfl
 
 variable [Group G]
 
-/-- The vectorized tensor $\mathcal U_{gh}$, the target of the reduction for the
-pair `(g, h)`.
+/-- The tensor $\mathcal U_{gh}$ on the pair alphabet, the target of the
+reduction for the pair `(g, h)`.
 
 Source: arXiv:2502.20257, `main.tex` lines 1403--1405. -/
 def targetTensor (F : GroupFamily G d) (g h : G) :
-    MPSTensor (d * d) (F.bondDim (g * h)) :=
-  (F.tensor (g * h)).toMPSTensor
+    MPOTensor d (F.bondDim (g * h)) :=
+  F.tensor (g * h)
 
 /-- Blocking every tensor by `L` sites blocks the target tensor, up to the
 canonical pairing of the blocked ket and bra words. -/
 theorem targetTensor_block (F : GroupFamily G d) (g h : G) (L : ℕ) :
     (F.block L).targetTensor g h =
-      Kraus.reindexPhysical (blockedDoubledIndexEquiv d L)
-        (Kraus.blockTensor (F.targetTensor g h) L) := by
-  change (MPOTensor.blockTensor (F.tensor (g * h)) L).toMPSTensor = _
-  rw [toMPSTensor_blockTensor]
+      Kraus.reindexPhysical (blockedPairIndexEquiv d L)
+        (Kraus.block (F.targetTensor g h) L) :=
   rfl
 
 /-- One selected rectangular reduction $(V_{g,h},W_{g,h})$ from
@@ -207,7 +205,7 @@ noncomputable def block (R : F.ReductionFamily) (L : ℕ) :
   W := R.W
   isReduction g h := by
     rw [productTensor_block, targetTensor_block]
-    exact ((R.isReduction g h).blockTensor L).reindexPhysical _
+    exact ((R.isReduction g h).block L).reindexPhysical _
 
 /-- After blocking by a positive `L` with $N_0(g,h)\leq L+1$ for every pair,
 one blocked exterior site suffices for every pair.
@@ -223,7 +221,7 @@ theorem block_hasExteriorBufferLength_one (R : F.ReductionFamily)
   change MPSTensor.IsReductionExteriorBufferLength ((F.block L).productTensor g h)
     ((F.block L).targetTensor g h) (R.V g h) (R.W g h) 1
   rw [productTensor_block, targetTensor_block]
-  exact ((R.isReductionExteriorBufferLength_nilpotencyLength hF g h).blockTensor hL
+  exact ((R.isReductionExteriorBufferLength_nilpotencyLength hF g h).block hL
     (by have := hN g h; omega)).reindexPhysical _
 
 section Finite

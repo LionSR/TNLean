@@ -329,7 +329,7 @@ theorem
     isIrreducibleFamily_smul (hμne j) _ (hIrr j)
   have hPLeft : ∀ j, IsLeftCanonical (P j) := fun j =>
     leftCanonical_smul_of_norm_one (μ j) (hμ j) _ (hTP j)
-  have hPDistinct : BlocksNotGaugePhaseEquiv (d := d) P := by
+  have hPDistinct : BlocksNotGaugePhaseEquiv (α := Fin d) P := by
     intro j k hjk hdim hGPE
     apply ref.representativesNotEquiv j k hjk hdim
     apply gaugePhaseEquiv_of_gaugeEquiv_left_right_cast hdim (hGauge j) _ (hGauge k)

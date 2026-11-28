@@ -8,6 +8,7 @@ import TNLean.MPS.FundamentalTheorem.PhysicalSupport.GSNNCHOrthogonalSectors
 import TNLean.MPS.MPDO.CyclicActiveSector.CyclicActiveMarkovDecomposition
 import TNLean.MPS.MPDO.BNTSectors.BNTSectorAnalyticProperties
 import TNLean.MPS.CanonicalForm.SimpleMPO.PhysicalSupportRestriction
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Saturated area law for orthogonal commuting sectors
@@ -296,7 +297,7 @@ theorem
       mpo M N =
         (c : ℂ) • ∑ s : Fin g, (multiplicity s : ℂ) • mpo (K s) N)
     (hMPDO : ∀ s, IsMPDO (K s))
-    (hK : ∀ s, Kraus.IsInjective (K s).toMPSTensor)
+    (hK : ∀ s, Kraus.IsInjective (K s))
     (hZCL : ∀ s, (K s).IsSourceZCL) :
     IsSAL M := by
   apply isSAL_of_proportionalOrthogonalCommutingSectorFamily M K multiplicity
@@ -324,22 +325,22 @@ Proposition `prop4to2`.  This is documented in
 
 Source: CPSV16, Appendix C.2, lines 1660--1665 and Proposition `prop4to2`,
 lines 1801--1808. -/
-theorem isSAL_of_commonWeightAbsorbedBasisMPOTensor_of_orthogonalCommutingSectorFamily
-    (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+theorem isSAL_of_commonWeightAbsorbedBasis_of_orthogonalCommutingSectorFamily
+    (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
+    (hM : MPTensor.SameMPV₂Pos M S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     [Nonempty (Fin S.basisCount)]
     (F : OrthogonalCommutingSectorFamily
-      (fun s ↦ commonWeightAbsorbedBasisMPOTensor S hWeight s))
+      (fun s ↦ S.commonWeightAbsorbedBasis hWeight s))
     (hSectorSAL : ∀ s,
-      IsSAL (commonWeightAbsorbedBasisMPOTensor S hWeight s)) :
+      IsSAL (S.commonWeightAbsorbedBasis hWeight s)) :
     IsSAL M := by
   exact isSAL_of_orthogonalCommutingSectorFamily M
-    (fun s ↦ commonWeightAbsorbedBasisMPOTensor S hWeight s)
+    (fun s ↦ S.commonWeightAbsorbedBasis hWeight s)
     S.copies S.copies_pos F
     (fun _ hN ↦
-      mpo_eq_sum_copies_smul_commonWeightAbsorbedBasisMPOTensor
+      mpo_eq_sum_copies_smul_commonWeightAbsorbedBasis
         M S hM hWeight hN)
     hSectorSAL
 
@@ -364,12 +365,12 @@ statement also retains positivity of each one-site absorbed sector. It assumes
 no spectral normality of those sectors. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem
-    isSAL_of_commonWeightAbsorbedBasisMPOTensor_of_proportionalSectors_of_isSourceZCL
-    (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (d * d))
+    isSAL_of_commonWeightAbsorbedBasis_of_proportionalSectors_of_isSourceZCL
+    (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
     (hTotal : S.totalDim = D)
     (X : (s : Fin S.totalCopies) → GL (Fin (S.flatDim s)) ℂ)
-    (hEq : ∀ i : Fin (d * d),
-      M.toMPSTensor i =
+    (hEq : ∀ i : Fin d × Fin d,
+      M i =
         cast (by rw [hTotal] :
             Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ =
               Matrix (Fin D) (Fin D) ℂ)
@@ -379,36 +380,35 @@ theorem
             (((MPSTensor.globalGaugeOfBlocks X)⁻¹ :
                 GL (Fin S.totalDim) ℂ) :
               Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ)))
-    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hM : MPTensor.SameMPV₂Pos M S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     (hnonNil : ∀ j,
-      ¬ IsNilpotent (doubledPhysTraceTransfer d (S.basis j)))
+      ¬ IsNilpotent (physTraceTransfer (S.basis j)))
     (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
     [Nonempty (Fin S.basisCount)]
     (F : ProportionalOrthogonalCommutingSectorFamily
-      (fun s ↦ commonWeightAbsorbedBasisMPOTensor S hWeight s))
+      (fun s ↦ S.commonWeightAbsorbedBasis hWeight s))
     (hOne : ∀ s,
-      (mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) 1).PosSemidef)
+      (mpo (S.commonWeightAbsorbedBasis hWeight s) 1).PosSemidef)
     (hZCL : IsSourceZCL M) :
     IsSAL M := by
   have hMPDO : ∀ s,
-      IsMPDO (commonWeightAbsorbedBasisMPOTensor S hWeight s) :=
+      IsMPDO (S.commonWeightAbsorbedBasis hWeight s) :=
     F.isMPDO_of_mpo_one_pos hOne
   apply
     isSAL_of_proportionalOrthogonalCommutingSectorFamily_of_sectorwise_isSourceZCL
-      M (fun s ↦ commonWeightAbsorbedBasisMPOTensor S hWeight s)
+      M (fun s ↦ S.commonWeightAbsorbedBasis hWeight s)
       S.copies S.copies_pos F
   · intro N hN
     exact ⟨1, zero_lt_one, by
       simpa using
-        mpo_eq_sum_copies_smul_commonWeightAbsorbedBasisMPOTensor
+        mpo_eq_sum_copies_smul_commonWeightAbsorbedBasis
           M S hM hWeight hN⟩
   · exact hMPDO
+  · exact fun s ↦ commonWeightAbsorbedBasis_isInjective S hWeight hSpan s
   · exact fun s ↦
-      commonWeightAbsorbedBasisMPOTensor_isInjective S hWeight hSpan s
-  · exact fun s ↦
-      commonWeightAbsorbedBasisMPOTensor_isSourceZCL
+      commonWeightAbsorbedBasis_isSourceZCL
         M S hTotal X hEq hZCL hWeight s (hnonNil s)
 
 end MPOTensor

@@ -21,7 +21,7 @@ at source line 1613 and does not construct a quantum Markov decomposition.
 
 ## Main results
 
-* `MPOTensor.reducedBlockState_apply_eq_trace_evalWord_mul_verticalLoop_pow`
+* `MPOTensor.reducedBlockState_apply_eq_trace_evalWord_mul_physTraceTransfer_pow`
 * `MPOTensor.reducedBlockState_succ_succ_eq_succ_of_isSourceZCL`
 * `MPOTensor.reducedBlockState_add_three_eq_succ_of_isSourceZCL`
 
@@ -41,13 +41,13 @@ variable {d D : ℕ}
 word followed by the appropriate power of the physical-trace transfer.
 
 Source: arXiv:1606.00608, Appendix C.2, line 1613. -/
-theorem reducedBlockState_apply_eq_trace_evalWord_mul_verticalLoop_pow
+theorem reducedBlockState_apply_eq_trace_evalWord_mul_physTraceTransfer_pow
     (M : MPOTensor d D) {N L : ℕ} (hL : L ≤ N)
     (u v : Fin L → Fin d) :
     M.reducedBlockState N L hL u v =
       (mpo M N).trace⁻¹ *
         Matrix.trace
-          (M.evalWord (List.ofFn u) (List.ofFn v) * M.verticalLoop ^ (N - L)) := by
+          (M.evalWord (List.ofFn u) (List.ofFn v) * physTraceTransfer M ^ (N - L)) := by
   rw [MPOTensor.reducedBlockState_eq_sum]
   simp only [normalizedMPO, Matrix.smul_apply, smul_eq_mul, mpo_apply, mpoMatrixEntry]
   rw [← Finset.mul_sum]
@@ -67,7 +67,7 @@ theorem reducedBlockState_apply_eq_trace_evalWord_mul_verticalLoop_pow
   simp_rw [heval]
   rw [← Matrix.trace_sum]
   congr 1
-  rw [← Finset.mul_sum, M.sum_evalWord_diag_eq_verticalLoop_pow]
+  rw [← Finset.mul_sum, M.sum_evalWord_diag_eq_physTraceTransfer_pow]
 
 /-- Under source zero correlation length, tracing two sites from length
 `N + 2` gives the same normalized `N`-site marginal as tracing one site from
@@ -82,28 +82,28 @@ theorem reducedBlockState_succ_succ_eq_succ_of_isSourceZCL
     M.reducedBlockState (N + 2) N (by omega) =
       M.reducedBlockState (N + 1) N (by omega) := by
   ext u v
-  rw [reducedBlockState_apply_eq_trace_evalWord_mul_verticalLoop_pow,
-    reducedBlockState_apply_eq_trace_evalWord_mul_verticalLoop_pow]
+  rw [reducedBlockState_apply_eq_trace_evalWord_mul_physTraceTransfer_pow,
+    reducedBlockState_apply_eq_trace_evalWord_mul_physTraceTransfer_pow]
   rw [show N + 2 - N = 2 by omega, show N + 1 - N = 1 by omega, pow_one]
   obtain ⟨hE0, lam, hlam, hsq⟩ := hZCL
-  have hsq' : M.verticalLoop ^ 2 = (lam : ℂ) • M.verticalLoop := by
-    rw [pow_two, verticalLoop_eq_physTraceTransfer, hsq]
+  have hsq' : physTraceTransfer M ^ 2 = (lam : ℂ) • physTraceTransfer M := by
+    rw [pow_two, hsq]
   have hnum :
       Matrix.trace
-          (M.evalWord (List.ofFn u) (List.ofFn v) * M.verticalLoop ^ 2) =
+          (M.evalWord (List.ofFn u) (List.ofFn v) * physTraceTransfer M ^ 2) =
         (lam : ℂ) *
-          Matrix.trace (M.evalWord (List.ofFn u) (List.ofFn v) * M.verticalLoop) := by
+          Matrix.trace (M.evalWord (List.ofFn u) (List.ofFn v) * physTraceTransfer M) := by
     rw [hsq', Matrix.mul_smul, Matrix.trace_smul, smul_eq_mul]
-  have hsplit : M.verticalLoop ^ (N + 2) =
-      M.verticalLoop ^ N * M.verticalLoop ^ 2 := by
+  have hsplit : physTraceTransfer M ^ (N + 2) =
+      physTraceTransfer M ^ N * physTraceTransfer M ^ 2 := by
     rw [pow_add]
-  have hpow : M.verticalLoop ^ (N + 2) =
-      (lam : ℂ) • M.verticalLoop ^ (N + 1) := by
+  have hpow : physTraceTransfer M ^ (N + 2) =
+      (lam : ℂ) • physTraceTransfer M ^ (N + 1) := by
     rw [hsplit, hsq', Matrix.mul_smul, ← pow_succ]
   have htrace : (mpo M (N + 2)).trace =
       (lam : ℂ) * (mpo M (N + 1)).trace := by
-    rw [trace_mpo_eq_trace_verticalLoop_pow,
-      trace_mpo_eq_trace_verticalLoop_pow, hpow, Matrix.trace_smul, smul_eq_mul]
+    rw [trace_mpo_eq_trace_physTraceTransfer_pow,
+      trace_mpo_eq_trace_physTraceTransfer_pow, hpow, Matrix.trace_smul, smul_eq_mul]
   have htr : (mpo M (N + 1)).trace ≠ 0 := by
     exact trace_mpo_ne_zero_of_isSourceZCL M ⟨hE0, lam, hlam, hsq⟩ (by omega)
   have hlamC : (lam : ℂ) ≠ 0 := by

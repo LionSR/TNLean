@@ -7,6 +7,7 @@ import TNLean.MPS.MPDO.Vertical.CPSVRepresentativeGroupedLemmaL
 import TNLean.MPS.MPDO.Vertical.LinearMarkedTensor
 import QICLean.Kraus.NormalCommutant
 import TNLean.MPS.MPDO.Vertical.FigureEightPairwise
+import TNLean.MPS.CanonicalForm.PhysicalReindex
 
 /-!
 # Lemma L in the original bond coordinates of a literal CPSV canonical form
@@ -269,27 +270,42 @@ section IsCPSVCanonicalForm
 open MPTensor.IsCPSVCanonicalForm
 
 /-- Predicate-level form of Lemma L in the original bond coordinates of a literal CPSV canonical
-form. -/
+form, on any finite physical alphabet. -/
 theorem _root_.MPTensor.IsCPSVCanonicalForm.linearMarkedTensor_eq_of_trace_agree
-    (A : MPSTensor d D) (hCanonical : IsCPSVCanonicalForm A)
-    (f g : Fin e → Fin d → ℂ)
-    (hTrace : ∀ (L : ℕ), 0 < L → ∀ (u : Fin e) (w : Fin L → Fin d),
+    {α : Type*} [Fintype α] (A : MPTensor α (Fin D)) (hCanonical : IsCPSVCanonicalForm A)
+    (f g : Fin e → α → ℂ)
+    (hTrace : ∀ (L : ℕ), 0 < L → ∀ (u : Fin e) (w : Fin L → α),
       Matrix.trace (linearMarkedTensor f A u * Kraus.evalWord A (List.ofFn w)) =
         Matrix.trace (linearMarkedTensor g A u * Kraus.evalWord A (List.ofFn w))) :
     linearMarkedTensor f A = linearMarkedTensor g A := by
-  let data := Classical.choice hCanonical
-  let ref := data.bntRefinement
-  exact ref.linearMarkedTensor_eq_of_trace_agree f g hTrace
+  classical
+  let eα := Fintype.equivFin α
+  have hMark : ∀ h : Fin e → α → ℂ, linearMarkedTensor h A =
+      linearMarkedTensor (fun u (z : Fin (Fintype.card α)) ↦ h u (eα.symm z))
+        (Kraus.reindexPhysical eα.symm A) := by
+    intro h
+    rw [linearMarkedTensor_reindexPhysical]
+    simp
+  rw [hMark f, hMark g]
+  let data := Classical.choice (hCanonical.reindexPhysical eα.symm)
+  refine data.bntRefinement.linearMarkedTensor_eq_of_trace_agree _ _ fun L hL u w ↦ ?_
+  rw [← hMark f, ← hMark g, Kraus.evalWord_reindexPhysical, List.map_ofFn]
+  exact hTrace L hL u _
 
 /-- Predicate-level physical first-site Lemma L in the original bond coordinates of a literal
-CPSV canonical form. -/
+CPSV canonical form, on any finite physical alphabet. -/
 theorem _root_.MPTensor.IsCPSVCanonicalForm.insertedTensor_eq_of_firstSiteActionAgree
-    (A : MPSTensor d D) (hCanonical : IsCPSVCanonicalForm A)
-    {Y Z : Matrix (Fin d) (Fin d) ℂ} (hAct : FirstSiteActionAgree A Y Z) :
+    {α : Type*} [Fintype α] (A : MPTensor α (Fin D)) (hCanonical : IsCPSVCanonicalForm A)
+    {Y Z : Matrix α α ℂ} (hAct : FirstSiteActionAgree A Y Z) :
     insertedTensor Y A = insertedTensor Z A := by
-  let data := Classical.choice hCanonical
-  let ref := data.bntRefinement
-  exact ref.insertedTensor_eq_of_firstSiteActionAgree hAct
+  classical
+  let eα := Fintype.equivFin α
+  let data := Classical.choice (hCanonical.reindexPhysical eα.symm)
+  have h := data.bntRefinement.insertedTensor_eq_of_firstSiteActionAgree
+    (hAct.reindexPhysical eα.symm)
+  rw [insertedTensor_reindexPhysical, insertedTensor_reindexPhysical] at h
+  funext i
+  simpa [Kraus.reindexPhysical] using congrFun h (eα i)
 
 end IsCPSVCanonicalForm
 
@@ -322,7 +338,7 @@ similarity equations; it does not construct the representative group or its corn
 
 Source: arXiv:1606.00608, proof of Proposition 4.13, Figures 7--8 and lines 1909--1919. -/
 theorem gramDressing_eq_of_two_grouped_corners
-    (M : MPOTensor d D) (hCanonical : IsCPSVCanonicalForm M.toMPSTensor) (hM : IsMPDO M)
+    (M : MPOTensor d D) (hCanonical : IsCPSVCanonicalForm M) (hM : IsMPDO M)
     (A : MPSTensor (D * D) n)
     (VX VY : Matrix (Fin d) (Fin n) ℂ) (X Y : GL (Fin n) ℂ)
     (cX cY : ℂ) (hcX : (0 : ℂ) < cX) (hcY : (0 : ℂ) < cY)
@@ -338,29 +354,24 @@ theorem gramDressing_eq_of_two_grouped_corners
   let fX := cornerGramCoefficients VX X cX
   let fY := cornerGramCoefficients VY Y cY
   have hTrace : ∀ (L : ℕ), 0 < L → ∀ (u : Fin (n * n))
-      (w : Fin L → Fin (d * d)),
-      Matrix.trace
-          (linearMarkedTensor fX M.toMPSTensor u *
-            Kraus.evalWord M.toMPSTensor (List.ofFn w)) =
-        Matrix.trace
-          (linearMarkedTensor fY M.toMPSTensor u *
-            Kraus.evalWord M.toMPSTensor (List.ofFn w)) := by
+      (w : Fin L → Fin d × Fin d),
+      Matrix.trace (linearMarkedTensor fX M u * Kraus.evalWord M (List.ofFn w)) =
+        Matrix.trace (linearMarkedTensor fY M u * Kraus.evalWord M (List.ofFn w)) := by
     intro L _hL u w
-    rw [show linearMarkedTensor fX M.toMPSTensor u =
+    rw [show linearMarkedTensor fX M u =
         horizontalSlice (gramDressing X A) u.divNat u.modNat by
       exact linearMarkedTensor_cornerGramCoefficients
         A VX X cX hcX hcornerX u]
-    rw [show linearMarkedTensor fY M.toMPSTensor u =
+    rw [show linearMarkedTensor fY M u =
         horizontalSlice (gramDressing Y A) u.divNat u.modNat by
       exact linearMarkedTensor_cornerGramCoefficients
         A VY Y cY hcY hcornerY u]
-    rw [evalWord_toMPSTensor_ofFn]
+    rw [kraus_evalWord_ofFn]
     exact hM.markedChainCoefficient_gramDressing_eq_of_two_corners
       A VX VY X Y cX cY hcX hcY hcornerX hcornerY L
-        u.divNat u.modNat (fun k ↦ (w k).divNat) (fun k ↦ (w k).modNat)
-  have hMarks : linearMarkedTensor fX M.toMPSTensor =
-      linearMarkedTensor fY M.toMPSTensor :=
-    hCanonical.linearMarkedTensor_eq_of_trace_agree M.toMPSTensor fX fY hTrace
+        u.divNat u.modNat (fun k ↦ (w k).1) (fun k ↦ (w k).2)
+  have hMarks : linearMarkedTensor fX M = linearMarkedTensor fY M :=
+    hCanonical.linearMarkedTensor_eq_of_trace_agree M fX fY hTrace
   funext v
   obtain ⟨⟨a, b⟩, rfl⟩ := finProdFinEquiv.surjective v
   ext r s
@@ -384,7 +395,7 @@ similarity equations; it does not construct the representative group or its corn
 Source: arXiv:1606.00608, proof of Proposition 4.13, equation `eq3:proof.IV.12` and lines
 1909--1921. -/
 theorem gram_eq_pos_smul_gram_of_two_grouped_corners
-    (M : MPOTensor d D) (hCanonical : IsCPSVCanonicalForm M.toMPSTensor) (hM : IsMPDO M)
+    (M : MPOTensor d D) (hCanonical : IsCPSVCanonicalForm M) (hM : IsMPDO M)
     (A : MPSTensor (D * D) n) (hA : Kraus.IsNormal A)
     (VX VY : Matrix (Fin d) (Fin n) ℂ) (X Y : GL (Fin n) ℂ)
     (cX cY : ℂ) (hcX : (0 : ℂ) < cX) (hcY : (0 : ℂ) < cY)

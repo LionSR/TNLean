@@ -139,12 +139,12 @@ theorem IsBiorthogonalDecomposition.mulTensor_polarSupportMPO
     {V : ∀ c, Matrix (Fin (δ c)) (Fin (D₁ * D₂)) ℂ}
     {W : ∀ c, Matrix (Fin (D₁ * D₂)) (Fin (δ c)) ℂ}
     {V' : κ → Matrix (Fin D) (Fin (D₂ * D)) ℂ} {W' : κ → Matrix (Fin (D₂ * D)) (Fin D) ℂ}
-    (h : IsBiorthogonalDecomposition (MPOTensor.mulTensor M N).toMPSTensor
-      (fun c => (O c).toMPSTensor) V W)
+    (h : IsBiorthogonalDecomposition (MPOTensor.mulTensor M N)
+      O V W)
     (hN : IsBiorthogonalDecomposition (MPOTensor.actTensor N A) (fun _ : κ => A) V' W') :
     IsBiorthogonalDecomposition
-      (MPOTensor.mulTensor (polarSupportMPO A M) (polarSupportMPO A N)).toMPSTensor
-      (fun c => (polarSupportMPO A (O c)).toMPSTensor) V W :=
+      (MPOTensor.mulTensor (polarSupportMPO A M) (polarSupportMPO A N))
+      (fun c => polarSupportMPO A (O c)) V W :=
   h.mulTensor_changePhysicalBasis _ M N fun β α => by
     rw [Matrix.conjTranspose_conjTranspose]
     exact polarIsoMatrix_mul_physicalSlice_of_isBiorthogonalDecomposition hA hN β α
@@ -299,14 +299,14 @@ variable {r : ℕ} {χ₀ χ₁ : Fin r → ℕ}
   (VA₁ : ∀ a, Fin (m a) → Matrix (Fin D₁) (Fin (χ₁ a * D₁)) ℂ)
   (WA₁ : ∀ a, Fin (m a) → Matrix (Fin (χ₁ a * D₁)) (Fin D₁) ℂ)
   (hF₀ : ∀ a b,
-    IsBiorthogonalDecomposition (MPOTensor.mulTensor (O₀ a) (O₀ b)).toMPSTensor
-      (fun q : (c : Fin r) × Fin (N a b c) ↦ (O₀ q.1).toMPSTensor)
+    IsBiorthogonalDecomposition (MPOTensor.mulTensor (O₀ a) (O₀ b))
+      (fun q : (c : Fin r) × Fin (N a b c) ↦ O₀ q.1)
       (fun q ↦ VF₀ a b q.1 q.2) (fun q ↦ WF₀ a b q.1 q.2))
   (hA₀ : ∀ a, IsBiorthogonalDecomposition (MPOTensor.actTensor (O₀ a) A₀)
     (fun _ : Fin (m a) ↦ A₀) (VA₀ a) (WA₀ a))
   (hF₁ : ∀ a b,
-    IsBiorthogonalDecomposition (MPOTensor.mulTensor (O₁ a) (O₁ b)).toMPSTensor
-      (fun q : (c : Fin r) × Fin (N a b c) ↦ (O₁ q.1).toMPSTensor)
+    IsBiorthogonalDecomposition (MPOTensor.mulTensor (O₁ a) (O₁ b))
+      (fun q : (c : Fin r) × Fin (N a b c) ↦ O₁ q.1)
       (fun q ↦ VF₁ a b q.1 q.2) (fun q ↦ WF₁ a b q.1 q.2))
   (hA₁ : ∀ a, IsBiorthogonalDecomposition (MPOTensor.actTensor (O₁ a) A₁)
     (fun _ : Fin (m a) ↦ A₁) (VA₁ a) (WA₁ a))
@@ -329,10 +329,10 @@ theorem isBiorthogonalDecomposition_arbitraryPhysicalMixedMPO (a b : Fin r)
       (MPOTensor.mulTensor
         (arbitraryPhysicalMixedMPO A₀ A₁ (O₀ a) (O₁ a) (VA₀ a) (VA₁ a) (WA₀ a) (WA₁ a))
         (arbitraryPhysicalMixedMPO A₀ A₁ (O₀ b) (O₁ b) (VA₀ b) (VA₁ b)
-          (WA₀ b) (WA₁ b))).toMPSTensor
+          (WA₀ b) (WA₁ b)))
       (fun q : (c : Fin r) × Fin (N a b c) ↦
         (arbitraryPhysicalMixedMPO A₀ A₁ (O₀ q.1) (O₁ q.1) (VA₀ q.1) (VA₁ q.1)
-          (WA₀ q.1) (WA₁ q.1)).toMPSTensor)
+          (WA₀ q.1) (WA₁ q.1)))
       (fun q ↦ mixedEndpointMPOFusionAnalysis (VF₀ a b q.1 q.2) (VF₁ a b q.1 q.2))
       (fun q ↦ mixedEndpointMPOFusionSynthesis (WF₀ a b q.1 q.2) (WF₁ a b q.1 q.2)) := by
   have hsq := isBiorthogonalDecomposition_mixedEndpointMPO
@@ -345,7 +345,7 @@ theorem isBiorthogonalDecomposition_arbitraryPhysicalMixedMPO (a b : Fin r)
     (isInjective_polarPosTensor hInj₀) (isInjective_polarPosTensor hInj₁) hD₀ hD₁ a b hL
   unfold arbitraryPhysicalMixedMPO
   rw [MPOTensor.mulTensor_changePhysicalBasis _ (commonFixedPointInclusion_isometry _ _ _)]
-  exact hsq.toMPSTensor_changePhysicalBasis _ _
+  exact hsq.changePhysicalBasis _ _
 
 include hF₀ hA₀ hF₁ hA₁ hInj₀ hInj₁ hD₀ hD₁ in
 /-- With equal chosen raw L matrices, the common MPOs of the arbitrary-

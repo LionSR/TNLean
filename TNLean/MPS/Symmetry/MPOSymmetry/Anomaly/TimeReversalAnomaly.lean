@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import QICLean.Algebra.Cohomology.ScalarThreeCocycleTimeReversal
 import TNLean.MPS.CanonicalForm.SimpleMPO.Vectorized
 import TNLean.MPS.FundamentalTheorem.OperatorGroup.Associator
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Time reversal makes the anomaly of a group of matrix product operators real
@@ -72,14 +73,14 @@ open scoped Matrix Kronecker BigOperators
 
 namespace MPSTensor
 
-variable {d D D' m : ℕ}
+variable {α : Type*} {D D' m : ℕ}
 
-private theorem evalWord_append_singleton (K : MPSTensor d D) (u : List (Fin d)) (a : Fin d) :
+private theorem evalWord_append_singleton (K : MPTensor α (Fin D)) (u : List α) (a : α) :
     Kraus.evalWord K (u ++ [a]) = Kraus.evalWord K u * K a := by
   rw [Kraus.evalWord_append, Kraus.evalWord_cons, Kraus.evalWord_nil, Matrix.mul_one]
 
 /-- Word evaluation commutes with entrywise complex conjugation of the letters. -/
-private theorem evalWord_map_starRingEnd (K : MPSTensor d D) (w : List (Fin d)) :
+private theorem evalWord_map_starRingEnd (K : MPTensor α (Fin D)) (w : List α) :
     Kraus.evalWord (fun i ↦ (K i).map (starRingEnd ℂ)) w =
       (Kraus.evalWord K w).map (starRingEnd ℂ) := by
   induction w with
@@ -91,12 +92,13 @@ section IsReduction
 
 open MPTensor.IsReduction
 
-variable {B : MPSTensor d D} {A : MPSTensor d D'}
+variable {B : MPTensor α (Fin D)} {A : MPTensor α (Fin D')}
   {V : Matrix (Fin D') (Fin D) ℂ} {W : Matrix (Fin D) (Fin D') ℂ}
 
 /-- A reduction persists when the letters of both tensors are replaced by the same linear
 combinations `∑_a c_{ia} B^a` and `∑_a c_{ia} A^a`. -/
-theorem _root_.MPTensor.IsReduction.recombine (h : IsReduction B A V W) (c : Fin d → Fin d → ℂ) :
+theorem _root_.MPTensor.IsReduction.recombine [Fintype α] (h : IsReduction B A V W)
+    (c : α → α → ℂ) :
     IsReduction (fun i ↦ ∑ a, c i a • B a) (fun i ↦ ∑ a, c i a • A a) V W := by
   refine ⟨h.mul_eq_one, fun w ↦ ?_⟩
   suffices H : ∀ u, V * (Kraus.evalWord B u *
@@ -125,7 +127,7 @@ theorem _root_.MPTensor.IsReduction.map_starRingEnd (h : IsReduction B A V W) :
     h.evalWord]
 
 /-- A reduction with target letters `A' = Q A Q⁻¹` gives a reduction onto `A`. -/
-theorem _root_.MPTensor.IsReduction.target_gauge {A' : MPSTensor d D'} {V : Matrix (Fin D')
+theorem _root_.MPTensor.IsReduction.target_gauge {A' : MPTensor α (Fin D')} {V : Matrix (Fin D')
     (Fin D) ℂ}
     {W : Matrix (Fin D) (Fin D') ℂ} {P Q : Matrix (Fin D') (Fin D') ℂ}
     (h : IsReduction B A' V W) (hPQ : P * Q = 1) (hA : ∀ i, A' i * Q = Q * A i) :
@@ -144,17 +146,18 @@ section IsDressedProportional
 
 open MPTensor.IsDressedProportional
 
-variable {B : MPSTensor d D} {X Y : Matrix (Fin m) (Fin D) ℂ} {z : ℂ}
+variable {B : MPTensor α (Fin D)} {X Y : Matrix (Fin m) (Fin D) ℂ} {z : ℂ}
 
 /-- Dressed proportionality persists when the letters are replaced by linear combinations
 `∑_a c_{ia} B^a`: a word of the new letters is a combination of words of the old letters of
 the same length. -/
-theorem _root_.MPTensor.IsDressedProportional.recombine (h : IsDressedProportional B X Y z)
-    (c : Fin d → Fin d → ℂ) :
+theorem _root_.MPTensor.IsDressedProportional.recombine [Fintype α]
+    (h : IsDressedProportional B X Y z)
+    (c : α → α → ℂ) :
     IsDressedProportional (fun i ↦ ∑ a, c i a • B a) X Y z := by
   obtain ⟨N, h⟩ := h
   refine ⟨N, fun w hw ↦ ?_⟩
-  suffices H : ∀ u : List (Fin d), N ≤ u.length + w.length →
+  suffices H : ∀ u : List α, N ≤ u.length + w.length →
       X * (Kraus.evalWord B u * Kraus.evalWord (fun i ↦ ∑ a, c i a • B a) w) =
         z • (Y * (Kraus.evalWord B u * Kraus.evalWord (fun i ↦ ∑ a, c i a • B a) w)) by
     simpa using H [] (by simpa using hw)
@@ -220,18 +223,14 @@ theorem mpo_timeReversal (v : Matrix (Fin d) (Fin d) ℂ) (T : MPOTensor d D) (N
     Matrix.conjTranspose_piKronecker]
   rfl
 
-/-- The doubled-index letters of the time-reversed tensor are linear combinations of the
-conjugated doubled-index letters, with the coefficients `v_{ik} (v_{jl})^*` of `v ⊗ v^*`. -/
-theorem toMPSTensor_timeReversal (v : Matrix (Fin d) (Fin d) ℂ) (T : MPOTensor d D) :
-    (timeReversal v T).toMPSTensor = fun p ↦ ∑ q : Fin (d * d),
-      (v p.divNat q.divNat * starRingEnd ℂ (v p.modNat q.modNat)) •
-        (T.toMPSTensor q).map (starRingEnd ℂ) := by
-  funext p
-  rw [← finProdFinEquiv.sum_comp, Fintype.sum_prod_type]
-  simp only [toMPSTensor, timeReversal, pairTwist, Matrix.map_apply, Finset.smul_sum,
-    smul_smul]
-  refine Finset.sum_congr rfl fun k _ ↦ Finset.sum_congr rfl fun l _ ↦ ?_
-  simp
+/-- The letters of the time-reversed tensor are linear combinations of the conjugated letters,
+with the coefficients `v_{ik} (v_{jl})^*` of `v ⊗ v^*` on the pair alphabet. -/
+theorem timeReversal_eq_sum_smul (v : Matrix (Fin d) (Fin d) ℂ) (T : MPOTensor d D) :
+    timeReversal v T = fun p ↦ ∑ q : Fin d × Fin d,
+      (v p.1 q.1 * starRingEnd ℂ (v p.2 q.2)) • (T q).map (starRingEnd ℂ) := by
+  funext ⟨i, j⟩
+  rw [Fintype.sum_prod_type]
+  simp only [timeReversal, pairTwist, Matrix.map_apply, Finset.smul_sum, smul_smul]
 
 /-- **Time reversal commutes with stacking.** For a unitary `v`, the time-reversed tensor of
 the stacked product of two tensors is the stacked product of their time-reversed tensors:
@@ -276,20 +275,20 @@ variable {d D D' m : ℕ}
 boundaries. -/
 theorem _root_.MPTensor.IsReduction.timeReversal {M : MPOTensor d D} {A : MPOTensor d D'}
     {V : Matrix (Fin D') (Fin D) ℂ} {W : Matrix (Fin D) (Fin D') ℂ}
-    (h : IsReduction M.toMPSTensor A.toMPSTensor V W) (v : Matrix (Fin d) (Fin d) ℂ) :
-    IsReduction (MPOTensor.timeReversal v M).toMPSTensor (MPOTensor.timeReversal v A).toMPSTensor
+    (h : IsReduction M A V W) (v : Matrix (Fin d) (Fin d) ℂ) :
+    IsReduction (MPOTensor.timeReversal v M) (MPOTensor.timeReversal v A)
       (V.map (starRingEnd ℂ)) (W.map (starRingEnd ℂ)) := by
-  rw [MPOTensor.toMPSTensor_timeReversal, MPOTensor.toMPSTensor_timeReversal]
+  rw [MPOTensor.timeReversal_eq_sum_smul, MPOTensor.timeReversal_eq_sum_smul]
   exact h.map_starRingEnd.recombine _
 
 /-- A dressed proportionality of a tensor gives one of its time-reversed tensor, with
 conjugated boundaries and conjugated scalar. -/
 theorem _root_.MPTensor.IsDressedProportional.timeReversal {M : MPOTensor d D} {X Y : Matrix (Fin m)
     (Fin D) ℂ}
-    {z : ℂ} (h : IsDressedProportional M.toMPSTensor X Y z) (v : Matrix (Fin d) (Fin d) ℂ) :
-    IsDressedProportional (MPOTensor.timeReversal v M).toMPSTensor (X.map (starRingEnd ℂ))
+    {z : ℂ} (h : IsDressedProportional M X Y z) (v : Matrix (Fin d) (Fin d) ℂ) :
+    IsDressedProportional (MPOTensor.timeReversal v M) (X.map (starRingEnd ℂ))
       (Y.map (starRingEnd ℂ)) (starRingEnd ℂ z) := by
-  rw [MPOTensor.toMPSTensor_timeReversal]
+  rw [MPOTensor.timeReversal_eq_sum_smul]
   exact h.map_starRingEnd.recombine _
 
 end MPSTensor
@@ -453,11 +452,11 @@ noncomputable def gaugeTransport (fd : FusionData (F.withTensor T)) (q : BondGau
   W g h := bondKron (q.P g) (q.P h) * fd.W g h * q.Q (g * h)
   isReduction g h := by
     have h1 := (fd.isReduction g h).of_intertwine
-      (B' := (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor)
+      (B' := mulTensor (F.tensor g) (F.tensor h))
       (P := bondKron (q.P g) (q.P h)) (Q := bondKron (q.Q g) (q.Q h))
       (by rw [bondKron_mul_bondKron, q.Q_mul_P, q.Q_mul_P, bondKron_one])
-      (fun i ↦ mulTensor_mul_bondKron_of_intertwine (q.mul_P g) (q.mul_P h) i.divNat i.modNat)
-    exact h1.target_gauge (q.P_mul_Q _) (fun i ↦ q.intertwine _ _ _)
+      (fun i ↦ mulTensor_mul_bondKron_of_intertwine (q.mul_P g) (q.mul_P h) i.1 i.2)
+    exact h1.target_gauge (q.P_mul_Q _) (fun i ↦ q.intertwine _ i.1 i.2)
 
 variable (fd : FusionData (F.withTensor T)) (q : BondGauge F T)
 
@@ -493,13 +492,13 @@ theorem gaugeTransport_rightV (g h k : G) :
 transported fusion tensors compare by the same scalar as those of the original ones. -/
 theorem isAssociator_gaugeTransport {g h k : G} {z : ℂ} (hz : fd.IsAssociator g h k z) :
     (fd.gaugeTransport q).IsAssociator g h k z := by
-  have hB : ∀ i, (F.tripleTensor g h k).toMPSTensor i *
+  have hB : ∀ i, F.tripleTensor g h k i *
       bondKron (bondKron (q.P g) (q.P h)) (q.P k) =
         bondKron (bondKron (q.P g) (q.P h)) (q.P k) *
-          ((F.withTensor T).tripleTensor g h k).toMPSTensor i := fun i ↦
+          (F.withTensor T).tripleTensor g h k i := fun i ↦
     mulTensor_mul_bondKron_of_intertwine
-      (mulTensor_mul_bondKron_of_intertwine (q.mul_P g) (q.mul_P h)) (q.mul_P k) _ _
-  have h1 := hz.of_intertwine (B' := (F.tripleTensor g h k).toMPSTensor)
+      (mulTensor_mul_bondKron_of_intertwine (q.mul_P g) (q.mul_P h)) (q.mul_P k) i.1 i.2
+  have h1 := hz.of_intertwine (B' := F.tripleTensor g h k)
     (by rw [bondKron_mul_bondKron, bondKron_mul_bondKron, q.P_mul_Q, q.P_mul_Q, q.P_mul_Q,
       bondKron_one, bondKron_one])
     (by rw [bondKron_mul_bondKron, bondKron_mul_bondKron, q.Q_mul_P, q.Q_mul_P, q.Q_mul_P,
@@ -539,8 +538,8 @@ noncomputable def timeReversal (fd : FusionData F) (hv : star v * v = 1) :
   W g h := (fd.W g h).map (starRingEnd ℂ)
   isReduction g h := by
     change MPTensor.IsReduction (mulTensor (MPOTensor.timeReversal v (F.tensor g))
-      (MPOTensor.timeReversal v (F.tensor h))).toMPSTensor
-      (MPOTensor.timeReversal v (F.tensor (g * h))).toMPSTensor _ _
+      (MPOTensor.timeReversal v (F.tensor h)))
+      (MPOTensor.timeReversal v (F.tensor (g * h))) _ _
     rw [mulTensor_timeReversal hv]
     exact (fd.isReduction g h).timeReversal v
 
@@ -600,18 +599,13 @@ theorem nonempty_bondGauge_timeReversal (hF : F.IsNormalRepresentation)
         ∀ i l, MPOTensor.timeReversal v (F.tensor g) (i, l) * Q = Q * F.tensor g (i, l) := by
     intro g
     obtain ⟨P, Q, hred, -⟩ := MPSTensor.exists_isReduction_and_nilpotent_of_isNormal
-      (F.tensor g).toMPSTensor (hF.isNormal g) (F.bondDim_pos g)
-      (MPOTensor.timeReversal v (F.tensor g)).toMPSTensor
-      (sameMPV₂Pos_toMPSTensor_of_mpo_eq (hsame g))
+      (F.tensor g) (hF.isNormal g) (F.bondDim_pos g) (MPOTensor.timeReversal v (F.tensor g))
+      (sameMPV₂Pos_iff_mpo_eq.2 (hsame g))
     have hPQ := hred.mul_eq_one
     have hQP : Q * P = 1 := mul_eq_one_comm.mp hPQ
     refine ⟨P, Q, hPQ, hQP, fun i l ↦ ?_⟩
-    have h1 := hred.evalWord [finProdFinEquiv (i, l)]
-    simp only [Kraus.evalWord_cons, Kraus.evalWord_nil, Matrix.mul_one, toMPSTensor] at h1
-    have e : ((finProdFinEquiv (i, l)).divNat, (finProdFinEquiv (i, l)).modNat) = (i, l) :=
-      finProdFinEquiv.symm_apply_apply (i, l)
-    rw [Prod.mk.injEq] at e
-    rw [e.1, e.2] at h1
+    have h1 := hred.evalWord [(i, l)]
+    simp only [Kraus.evalWord_cons, Kraus.evalWord_nil, Matrix.mul_one] at h1
     calc MPOTensor.timeReversal v (F.tensor g) (i, l) * Q =
         Q * (P * MPOTensor.timeReversal v (F.tensor g) (i, l) * Q) := by
           rw [← Matrix.mul_assoc, ← Matrix.mul_assoc, hQP, Matrix.one_mul]

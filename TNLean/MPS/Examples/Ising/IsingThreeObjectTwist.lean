@@ -8,6 +8,7 @@ import TNLean.MPS.Examples.Ising.IsingFusionAlgebraOneSigma
 import TNLean.MPS.Examples.Ising.IsingFusionAlgebraPsiSigma
 import TNLean.MPS.Examples.Ising.IsingFusionAlgebraSigma
 import TNLean.MPS.Examples.Ising.IsingSectorAction
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # The full three-object Ising bond object
@@ -58,16 +59,16 @@ theorem thetaThree_eq_directSum : thetaThree = MPOTensor.directSum ((5 : ℂ) �
   ext ⟨h, h'⟩ i j
   simp only [thetaThree, thetaThreeZ, complexOfZsqrt2_apply, MPOTensor.directSum,
     Matrix.submatrix_apply, Equiv.trans_apply, Equiv.sumCongr_apply,
-    Pi.smul_apply, Function.uncurry_apply_pair]
+    Pi.smul_apply]
   rcases (finSumFinEquiv (m := 3) (n := 7)).symm i with a | a <;>
     rcases (finSumFinEquiv (m := 3) (n := 7)).symm j with b | b
-  · simp [isingOne, map_ofNat, Function.uncurry_apply_pair]
+  · simp [isingOne, map_ofNat]
   · simp
   · simp
   · simp only [Matrix.fromBlocks_apply₂₂]
     rcases ha : (finSumFinEquiv (m := 3) (n := 4)).symm a with a | a <;>
       rcases hb : (finSumFinEquiv (m := 3) (n := 4)).symm b with b | b <;>
-      simp [ha, hb, isingPsi, isingSigma, map_ofNat, Function.uncurry_apply_pair]
+      simp [ha, hb, isingPsi, isingSigma, map_ofNat]
 
 /-- The full three-object operator fusion (data file §1.4): the hidden `σ` object
 feeds the `1` and `ψ` channels, while the other two objects both feed `σ`. -/
@@ -82,69 +83,72 @@ theorem thetaThree_mpo_mul_isingSigma {L : ℕ} (hL : 0 < L) :
     isingOne_mul_isingSigma hL, isingPsi_mul_isingSigma hL, isingSigma_mul_isingSigma hL]
   rw [← add_assoc, ← add_smul, smul_smul, ← mul_pow, mul_comm (Real.sqrt 2 : ℂ) 2]
 
-/-- The hundred-letter tensor of `Θ₃ ⋆ (√2 Aσ)` (data file §1.4). -/
-noncomputable def isingBondObjectThree : MPSTensor 100 40 :=
-  (MPOTensor.mulTensor thetaThree isingSigma).toMPSTensor
+/-- The stacked tensor of `Θ₃ ⋆ (√2 Aσ)` on the pair alphabet (data file §1.4). -/
+noncomputable def isingBondObjectThree : MPOTensor 10 40 :=
+  MPOTensor.mulTensor thetaThree isingSigma
 
 /-- The four-channel word-trace identity of data file §1.4, at every positive length. -/
-theorem isingBondObjectThree_trace_evalWord (w : List (Fin 100)) (hw : w ≠ []) :
+theorem isingBondObjectThree_trace_evalWord (w : List (Fin 10 × Fin 10)) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord isingBondObjectThree w) =
       ((5 : ℂ) ^ w.length + 3 ^ w.length) *
-          Matrix.trace (Kraus.evalWord isingSigma.toMPSTensor w) +
+          Matrix.trace (Kraus.evalWord isingSigma w) +
         (2 * (Real.sqrt 2 : ℂ)) ^ w.length *
-          (Matrix.trace (Kraus.evalWord isingOne.toMPSTensor w) +
-            Matrix.trace (Kraus.evalWord isingPsi.toMPSTensor w)) := by
-  let p : Fin w.length → Fin 10 × Fin 10 := fun i => finProdFinEquiv.symm (w.get i)
-  have hp : (List.ofFn fun i => finProdFinEquiv ((p i).1, (p i).2)) = w := by
-    simpa only [p, Prod.mk.eta, Equiv.apply_symm_apply] using List.ofFn_get w
+          (Matrix.trace (Kraus.evalWord isingOne w) +
+            Matrix.trace (Kraus.evalWord isingPsi w)) := by
+  let p : Fin w.length → Fin 10 × Fin 10 := w.get
+  have hp : (List.ofFn fun i => ((p i).1, (p i).2)) = w := by
+    simpa only [p, Prod.mk.eta] using List.ofFn_get w
   have h := thetaThree_mpo_mul_isingSigma (List.length_pos_of_ne_nil hw)
   rw [← MPOTensor.mpo_mulTensor] at h
   have he := congrFun (congrFun h (fun i => (p i).1)) (fun i => (p i).2)
   simpa only [isingBondObjectThree, Matrix.add_apply, Matrix.smul_apply, smul_eq_mul,
-    MPOTensor.mpo_apply_toMPSTensor, hp] using he
+    MPOTensor.mpo_apply_eq_trace_kraus_evalWord, hp] using he
 
 /-- Dimensions of the two `σ` slots and the `1, ψ` slots (data file §1.4). -/
 def isingThreeBlockDim : Fin 4 → ℕ := ![4, 4, 3, 3]
 
 /-- The four weighted targets of the three-object fusion (data file §1.4). -/
-noncomputable def isingThreeTargets : (s : Fin 4) → MPSTensor 100 (isingThreeBlockDim s)
-  | 0 => (5 : ℂ) • isingSigma.toMPSTensor
-  | 1 => (3 : ℂ) • isingSigma.toMPSTensor
-  | 2 => (2 * (Real.sqrt 2 : ℂ)) • isingOne.toMPSTensor
-  | 3 => (2 * (Real.sqrt 2 : ℂ)) • isingPsi.toMPSTensor
+noncomputable def isingThreeTargets : (s : Fin 4) → MPOTensor 10 (isingThreeBlockDim s)
+  | 0 => (5 : ℂ) • isingSigma
+  | 1 => (3 : ℂ) • isingSigma
+  | 2 => (2 * (Real.sqrt 2 : ℂ)) • isingOne
+  | 3 => (2 * (Real.sqrt 2 : ℂ)) • isingPsi
 
 /-- Four-block asymmetric compression of the full bond-object product.
 This applies the P5 note, Theorem 7.7, to the word identity of data file §1.4. -/
 theorem isingBondObjectThree_compression_exists :
     Nonempty (MultiBlockCompression isingBondObjectThree Finset.univ isingThreeTargets) := by
-  apply exists_multiBlockCompression_of_isNormal
-  · intro s _
+  have hsmul : ∀ {D : ℕ} {c : ℂ} (A : MPOTensor 10 D), c ≠ 0 → Kraus.IsNormal A →
+      Kraus.IsNormal (c • A) := fun A hc hA => (isNormal_smul_iff hc A).2 hA
+  have hsqrt : (2 * (Real.sqrt 2 : ℂ)) ≠ 0 :=
+    mul_ne_zero (by norm_num) (Complex.ofReal_ne_zero.2 (Real.sqrt_ne_zero'.2 (by norm_num)))
+  have hnormal : ∀ s, Kraus.IsNormal (isingThreeTargets s) := by
+    intro s
     fin_cases s <;> dsimp [isingThreeTargets]
-    · exact (isNormal_smul_iff (by norm_num) _).2 isingSigma_isNormal
-    · exact (isNormal_smul_iff (by norm_num) _).2 isingSigma_isNormal
-    · apply (isNormal_smul_iff _ _).2 isingOne_isNormal
-      exact mul_ne_zero (by norm_num)
-        (Complex.ofReal_ne_zero.2 (Real.sqrt_ne_zero'.2 (by norm_num)))
-    · apply (isNormal_smul_iff _ _).2 isingPsi_isNormal
-      exact mul_ne_zero (by norm_num)
-        (Complex.ofReal_ne_zero.2 (Real.sqrt_ne_zero'.2 (by norm_num)))
-  · intro s _
-    fin_cases s <;> decide
-  · intro w hw
-    have hscale {D : ℕ} (c : ℂ) (A : MPSTensor 100 D) :
+    · exact hsmul _ (by norm_num) isingSigma_isNormal
+    · exact hsmul _ (by norm_num) isingSigma_isNormal
+    · exact hsmul _ hsqrt isingOne_isNormal
+    · exact hsmul _ hsqrt isingPsi_isNormal
+  have htr : ∀ w : List (Fin 10 × Fin 10), w ≠ [] →
+      Matrix.trace (Kraus.evalWord isingBondObjectThree w) =
+        ∑ s ∈ Finset.univ, Matrix.trace (Kraus.evalWord (isingThreeTargets s) w) := by
+    intro w hw
+    have hscale {D : ℕ} (c : ℂ) (A : MPOTensor 10 D) :
         Matrix.trace (Kraus.evalWord (c • A) w) =
           c ^ w.length * Matrix.trace (Kraus.evalWord A w) := by
       rw [show c • A = (fun i => c • A i) from rfl,
         Kraus.evalWord_smul, Matrix.trace_smul, smul_eq_mul]
     rw [isingBondObjectThree_trace_evalWord w hw]
-    simp only [Nat.reduceMul, isingThreeTargets, Fin.sum_univ_succ, Fin.isValue,
+    simp only [isingThreeTargets, Fin.sum_univ_succ, Fin.isValue,
       Fin.succ, Nat.reduceAdd, Fin.coe_ofNat_eq_mod, Nat.zero_mod, Fin.mk_one,
       Fin.reduceFinMk, Finset.univ_unique, Fin.default_eq_zero, Finset.sum_singleton]
     dsimp +instances [isingThreeBlockDim]
-    rw [hscale 5 isingSigma.toMPSTensor, hscale 3 isingSigma.toMPSTensor,
-      hscale (2 * (Real.sqrt 2 : ℂ)) isingOne.toMPSTensor,
-      hscale (2 * (Real.sqrt 2 : ℂ)) isingPsi.toMPSTensor]
+    rw [hscale 5 isingSigma, hscale 3 isingSigma,
+      hscale (2 * (Real.sqrt 2 : ℂ)) isingOne,
+      hscale (2 * (Real.sqrt 2 : ℂ)) isingPsi]
     ring
+  exact exists_multiBlockCompression_of_isNormal Finset.univ isingThreeTargets
+    (fun s _ => hnormal s) (fun s _ => by fin_cases s <;> decide) isingBondObjectThree htr
 
 /-- A four-block compression supplied by the asymmetric compression theorem. -/
 noncomputable def isingThreeCompression :

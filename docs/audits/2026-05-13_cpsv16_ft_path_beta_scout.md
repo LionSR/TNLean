@@ -9,9 +9,9 @@
 Neither of the two architectural variants described in the original scout brief works as stated:
 
 * **Variant (a)** — drop `mu_strict_anti` from `IsCanonicalFormBNT` — has a 32-site blast radius; it breaks the already-closed equal-MPV FT (`fundamentalTheorem_equalMPV_CFBNT_hetero`) and re-opens the multiplicity-recovery gap.
-* **Variant (b)** — adapter `IsCanonicalFormBNT → IsBNTCanonicalFormSD` via `weight = μ / ‖μ‖` — is mathematically unsound for `r ≥ 2`: the assembled tensor with rescaled weights differs from `toTensorFromBlocks μ A` by per-block `‖μ_j‖^N` factors, and these factors cannot be absorbed into a single proportionality scalar.  Concretely, this is the same obstruction that defeated path α.
+* **Variant (b)** — adapter `IsCanonicalFormBNT → IsLeftCanonicalBNTPresentationSD` via `weight = μ / ‖μ‖` — is mathematically unsound for `r ≥ 2`: the assembled tensor with rescaled weights differs from `toTensorFromBlocks μ A` by per-block `‖μ_j‖^N` factors, and these factors cannot be absorbed into a single proportionality scalar.  Concretely, this is the same obstruction that defeated path α.
 
-**Recommended:** **variant (b′)** — extend `IsBNTCanonicalFormSD` to a **two-layer** form (CPSV21 Def 4.2: spectral level `λ_j` × within-sector unit-modulus `ν_{j,q}`); build the thin adapter via `trivialSectorDecomp` keeping `P.toTensor` MPV-equal to `toTensorFromBlocks μ A`.  See below.
+**Recommended:** **variant (b′)** — extend `IsLeftCanonicalBNTPresentationSD` to a **two-layer** form (CPSV21 Def 4.2: spectral level `λ_j` × within-sector unit-modulus `ν_{j,q}`); build the thin adapter via `trivialSectorDecomp` keeping `P.toTensor` MPV-equal to `toTensorFromBlocks μ A`.  See below.
 
 ## Variant (a) — drop `mu_strict_anti`
 
@@ -33,7 +33,7 @@ Even harder: with `r_j > 1` allowed, the SCOPE-restricted same-block-structure e
 
 **Verdict for (a): high-risk, high-effort, low-reversibility.  Rejected.**
 
-## Variant (b) — `IsCanonicalFormBNT → IsBNTCanonicalFormSD` via phase extraction
+## Variant (b) — `IsCanonicalFormBNT → IsLeftCanonicalBNTPresentationSD` via phase extraction
 
 The literal proposal sets `P.sectors.weight j 0 := μ_j / ‖μ_j‖` (unit modulus by construction).  Using `mpv_toTensor_eq_sum_sectors` and `mpv_toTensorFromBlocks_eq_sum`:
 
@@ -49,7 +49,7 @@ Consequence: `EventuallyNonzeroProportionalMPV₂ (toTensorFromBlocks μA A) (to
 
 **Verdict for (b) literal: mathematically unsound for non-dominant blocks.**
 
-## Variant (b′) — two-layer extension of `IsBNTCanonicalFormSD`
+## Variant (b′) — two-layer extension of `IsLeftCanonicalBNTPresentationSD`
 
 Adopt the genuine CPSV21 Def 4.2 structure: keep the assembled tensor as `toTensorFromBlocks μ A`, but expose **two layers** at the type level:
 
@@ -74,8 +74,8 @@ The non-cancellation analytic step in `HNoCancelDischarge.lean` generalizes: aft
 
 ### PR 1 — Two-layer structure + adapter (~250 LoC, low risk)
 
-* Extend `TNLean/MPS/FundamentalTheorem/SectorDecomposition/IsBNTCanonicalFormSD.lean` with the two-layer fields `spectralLevel`, `spectralLevel_ne_zero`, `spectralLevel_strict_anti`, and a factoring witness `weight_factor : ∀ j q, ‖P.sectors.weight j q / spectralLevel j‖ = 1`.
-* Add an adapter `IsCanonicalFormBNT.toIsBNTCanonicalFormSD` in the same file (or a new `TwoLayer/Adapter.lean`) producing a `SectorDecomposition` via `trivialSectorDecomp` together with `SameMPV₂ P.toTensor (toTensorFromBlocks μ A)`.
+* Extend `TNLean/MPS/FundamentalTheorem/SectorDecomposition/IsLeftCanonicalBNTPresentationSD.lean` with the two-layer fields `spectralLevel`, `spectralLevel_ne_zero`, `spectralLevel_strict_anti`, and a factoring witness `weight_factor : ∀ j q, ‖P.sectors.weight j q / spectralLevel j‖ = 1`.
+* Add an adapter `IsCanonicalFormBNT.toIsLeftCanonicalBNTPresentationSD` in the same file (or a new `TwoLayer/Adapter.lean`) producing a `SectorDecomposition` via `trivialSectorDecomp` together with `SameMPV₂ P.toTensor (toTensorFromBlocks μ A)`.
 * No `_CFBNT` sorries closed yet.
 
 ### PR 2 — Generalize `PerBlockProjection.fixed_*_sectorDecomp` to two-layer (~400-600 LoC, medium risk)
@@ -113,7 +113,7 @@ The current `hc_lower` in `HNoCancelDischarge.lean` asks for a *constant* lower 
 
 ### Naming
 
-The existing one-layer stub `IsBNTCanonicalFormSD` in `IsBNTCanonicalFormSD.lean` has no consumers (per `bridge_b_status.md`).  Replace it in-place with the two-layer version; no API break.
+The existing one-layer stub `IsLeftCanonicalBNTPresentationSD` in `IsLeftCanonicalBNTPresentationSD.lean` has no consumers (per `bridge_b_status.md`).  Replace it in-place with the two-layer version; no API break.
 
 ## References
 
@@ -130,16 +130,16 @@ PR 1 of path β has landed on `feat/mps-ft-path-beta-pr1-two-layer`.  This secti
 
 ### Signatures in PR 1
 
-The file `TNLean/MPS/FundamentalTheorem/SectorDecomposition/IsBNTCanonicalFormSD.lean` now exposes:
+The file `TNLean/MPS/FundamentalTheorem/SectorDecomposition/IsLeftCanonicalBNTPresentationSD.lean` now exposes:
 
-* `structure IsBNTCanonicalFormSD (P : SectorDecomposition d) : Prop` with two fields
+* `structure IsLeftCanonicalBNTPresentationSD (P : SectorDecomposition d) : Prop` with two fields
   - `exists_spectralLevel : ∃ lam : Fin P.basisCount → ℂ, (∀ j, lam j ≠ 0) ∧ StrictAnti (fun j => ‖lam j‖) ∧ (∀ j q, ‖P.sectors.weight j q / lam j‖ = 1)`
   - `bnt_data : HasBNTSectorData P`
-* `noncomputable def IsBNTCanonicalFormSD.spectralLevel : IsBNTCanonicalFormSD P → Fin P.basisCount → ℂ` (via `Classical.choose`)
-* `theorem IsBNTCanonicalFormSD.spectralLevel_ne_zero`
-* `theorem IsBNTCanonicalFormSD.spectralLevel_strict_anti`
-* `theorem IsBNTCanonicalFormSD.weight_factor : ‖P.sectors.weight j q / h.spectralLevel j‖ = 1`
-* `theorem IsCanonicalFormBNT.toIsBNTCanonicalFormSD : IsCanonicalFormBNT μ A → ∃ P, IsBNTCanonicalFormSD P ∧ SameMPV₂ P.toTensor (toTensorFromBlocks μ A)`
+* `noncomputable def IsLeftCanonicalBNTPresentationSD.spectralLevel : IsLeftCanonicalBNTPresentationSD P → Fin P.basisCount → ℂ` (via `Classical.choose`)
+* `theorem IsLeftCanonicalBNTPresentationSD.spectralLevel_ne_zero`
+* `theorem IsLeftCanonicalBNTPresentationSD.spectralLevel_strict_anti`
+* `theorem IsLeftCanonicalBNTPresentationSD.weight_factor : ‖P.sectors.weight j q / h.spectralLevel j‖ = 1`
+* `theorem IsCanonicalFormBNT.toIsLeftCanonicalBNTPresentationSD : IsCanonicalFormBNT μ A → ∃ P, IsLeftCanonicalBNTPresentationSD P ∧ SameMPV₂ P.toTensor (toTensorFromBlocks μ A)`
 
 ### Structural decision: `∃`-packaged spectral level
 
@@ -147,7 +147,7 @@ The brief described `spectralLevel` as a direct structure field.  Lean 4 rejects
 
 ### Adapter construction
 
-The adapter `IsCanonicalFormBNT.toIsBNTCanonicalFormSD` uses the existing `trivialSectorDecomp` and `sameMPV₂_trivialSectorDecomp` from `TNLean/MPS/CanonicalForm/BNT/Grouping.lean`, with:
+The adapter `IsCanonicalFormBNT.toIsLeftCanonicalBNTPresentationSD` uses the existing `trivialSectorDecomp` and `sameMPV₂_trivialSectorDecomp` from `TNLean/MPS/CanonicalForm/BNT/Grouping.lean`, with:
 
 * `spectralLevel := μ`,
 * `spectralLevel_ne_zero := hCF.toIsCanonicalForm.mu_ne_zero`,
@@ -159,14 +159,14 @@ No new helper lemmas were needed — `trivialSectorDecomp`, `sameMPV₂_trivialS
 
 ### Naming and file placement decisions
 
-* **Replaced the one-layer stub in place.**  The previous `IsBNTCanonicalFormSD` had fields `unit_modulus` and `bnt_data`; both are gone in the two-layer version.  No consumers needed updates (only `TNLean.lean` registered the module; no callers existed).
-* **No new files.**  The adapter lives in the same file as the structure definition (`IsBNTCanonicalFormSD.lean`), matching the co-location pattern of `IsCanonicalFormBNT.isBNT` in `MPS/CanonicalForm/BNT/Construction.lean`.  `TNLean.lean` already imports `TNLean.MPS.FundamentalTheorem.SectorDecomposition.IsBNTCanonicalFormSD` at line 231; no registration change was needed.
+* **Replaced the one-layer stub in place.**  The previous `IsLeftCanonicalBNTPresentationSD` had fields `unit_modulus` and `bnt_data`; both are gone in the two-layer version.  No consumers needed updates (only `TNLean.lean` registered the module; no callers existed).
+* **No new files.**  The adapter lives in the same file as the structure definition (`IsLeftCanonicalBNTPresentationSD.lean`), matching the co-location pattern of `IsCanonicalFormBNT.isBNT` in `MPS/CanonicalForm/BNT/Construction.lean`.  `TNLean.lean` already imports `TNLean.MPS.FundamentalTheorem.SectorDecomposition.IsLeftCanonicalBNTPresentationSD` at line 231; no registration change was needed.
 
 ### PR 2 pick-up
 
 PR 2 ("Generalize `PerBlockProjection.fixed_*_sectorDecomp` to two-layer") will:
 
-1. Re-state the per-block-projection theorems in `SectorDecomposition/PerBlockProjection.lean` using `IsBNTCanonicalFormSD` (replacing the implicit `unit_modulus` hypothesis with `weight_factor`).
+1. Re-state the per-block-projection theorems in `SectorDecomposition/PerBlockProjection.lean` using `IsLeftCanonicalBNTPresentationSD` (replacing the implicit `unit_modulus` hypothesis with `weight_factor`).
 2. Upgrade `HNoCancelDischarge.lean` to accept the *geometric* lower bound `‖c_N‖ ≥ δ · ‖λ_B^{(k₀)} / λ_A^{(0)}‖^N`, either directly or via the rescaled-scalar substitution `c̃_N := c_N · (λ_B^{(k₀)} / λ_A^{(0)})^N`.
 3. Keep `_CFBNT` callers untouched.  PR 3 then closes the two `_CFBNT` sorries at `Full/NondecayingOverlap/FixedBlockDecay.lean:107, 152` by composing the PR 1 adapter with the PR 2 generalized per-block-projection theorems.
 
@@ -195,22 +195,22 @@ form), so it is the correct structural fix rather than a workaround.
 
 ### What was added
 
-In `TNLean/MPS/FundamentalTheorem/SectorDecomposition/IsBNTCanonicalFormSD.lean`:
+In `TNLean/MPS/FundamentalTheorem/SectorDecomposition/IsLeftCanonicalBNTPresentationSD.lean`:
 
 * The existential `exists_spectralLevel` gained a fourth clause
   `(∀ h : 0 < P.basisCount, ‖lam ⟨0, h⟩‖ = 1)`.  This is vacuous when
   `P.basisCount = 0` and asserts unit modulus of the dominant level
   otherwise, exactly mirroring `IsNormalCanonicalFormBNT.mu_dom_norm_one`
   in `TNLean/MPS/CanonicalForm/BNT/Construction.lean`.
-* A new accessor `IsBNTCanonicalFormSD.spectralLevel_dom_norm_one`
+* A new accessor `IsLeftCanonicalBNTPresentationSD.spectralLevel_dom_norm_one`
   extracts the dominant unit-modulus condition.
-* A new corollary `IsBNTCanonicalFormSD.spectralLevel_norm_le_one`
+* A new corollary `IsLeftCanonicalBNTPresentationSD.spectralLevel_norm_le_one`
   combines the dominant normalization with `spectralLevel_strict_anti`
   to give a uniform bound `‖λ_j‖ ≤ 1`.
 
 ### Adapter choice (Choice B — rescale at adapter level)
 
-The adapter `IsCanonicalFormBNT.toIsBNTCanonicalFormSD` was rewritten
+The adapter `IsCanonicalFormBNT.toIsLeftCanonicalBNTPresentationSD` was rewritten
 to rescale internally.  Three options were considered:
 
 * **Choice A** (require `IsNormalCanonicalFormBNT`): cleaner type
@@ -245,12 +245,12 @@ the SD surface.
 ### Updated adapter signature
 
 ```lean
-theorem IsCanonicalFormBNT.toIsBNTCanonicalFormSD
+theorem IsCanonicalFormBNT.toIsLeftCanonicalBNTPresentationSD
     {r : ℕ} {dim : Fin r → ℕ} [∀ k, NeZero (dim k)]
     {μ : Fin r → ℂ} {A : (k : Fin r) → MPSTensor d (dim k)}
     (hCF : IsCanonicalFormBNT μ A) :
     ∃ P : SectorDecomposition d,
-      IsBNTCanonicalFormSD P ∧
+      IsLeftCanonicalBNTPresentationSD P ∧
       NonzeroProportionalMPV₂ P.toTensor
         (toTensorFromBlocks (d := d) (μ := μ) A)
 ```
@@ -287,7 +287,7 @@ hypotheses**.  Specifically:
 ### Issue addressed
 
 The claude review on commit `ce378a21` flagged a **paper-faithfulness** issue:
-the docstrings in `IsBNTCanonicalFormSD.lean` attributed the structure to
+the docstrings in `IsLeftCanonicalBNTPresentationSD.lean` attributed the structure to
 "CPSV21 Definition 4.2" and "CPSV16 §II" in ways that overstated the paper
 source.  Specifically:
 
@@ -315,7 +315,7 @@ source.  Specifically:
 
 ### Accurate description
 
-`IsBNTCanonicalFormSD` is a **project-specific refinement** of CPSV16
+`IsLeftCanonicalBNTPresentationSD` is a **project-specific refinement** of CPSV16
 `eq:II_ABasicTensors` obtained by:
 1. Grouping equal-modulus blocks into sectors → `SectorDecomposition`.
 2. Extracting a common spectral factor `λ_j` per sector with `StrictAnti`.
@@ -329,7 +329,7 @@ The eventual linear independence `bnt_data` corresponds to CPSV21 Definition 4.3
 
 ### Files changed
 
-* `TNLean/MPS/FundamentalTheorem/SectorDecomposition/IsBNTCanonicalFormSD.lean`
+* `TNLean/MPS/FundamentalTheorem/SectorDecomposition/IsLeftCanonicalBNTPresentationSD.lean`
   — module heading, structure docstring, `spectralLevel` accessor,
   `spectralLevel_dom_norm_one`, `spectralLevel_norm_le_one`, adapter docstring,
   and References section.  **Docstrings only; no Lean source code changed.**
@@ -343,7 +343,7 @@ The eventual linear independence `bnt_data` corresponds to CPSV21 Definition 4.3
 ## PR 2 implementation record (2026-05-13)
 
 PR 2 lands the algebraic skeleton of the two-layer per-block projection
-on the `IsBNTCanonicalFormSD` surface.  The analytic discharge of the
+on the `IsLeftCanonicalBNTPresentationSD` surface.  The analytic discharge of the
 non-cancellation hypothesis in two-layer form is intentionally deferred
 to PR 2.5 / PR 3 — see "Scope adjustment" below.
 
@@ -354,10 +354,10 @@ to PR 2.5 / PR 3 — see "Scope adjustment" below.
   per-block-projection contradictions.  The existing one-layer
   `norm_coeff_le_copies` and `fixed_{right,left}_..._sectorDecomp`
   remain callable; the new declarations sit alongside.  The import bumps
-  to include `IsBNTCanonicalFormSD`.
+  to include `IsLeftCanonicalBNTPresentationSD`.
 * `TNLean/MPS/FundamentalTheorem/SectorDecomposition/HNoCancelDischarge.lean`
   — adds two `_paperFaithful_twoLayer` corollaries on the
-  `IsBNTCanonicalFormSD` surface that retain the abstract `hNoCancel`
+  `IsLeftCanonicalBNTPresentationSD` surface that retain the abstract `hNoCancel`
   hypothesis (no analytic discharge).
 
 ### New declarations
@@ -366,22 +366,22 @@ In `PerBlockProjection.lean`:
 
 * `SectorDecomposition.norm_coeff_le_spectral_pow_mul_copies`
   — geometric coefficient bound: `‖coeff N j‖ ≤ ‖λ_j‖^N · copies j`.
-* `SectorDecomposition.norm_coeff_le_copies_of_IsBNTCanonicalFormSD`
+* `SectorDecomposition.norm_coeff_le_copies_of_IsLeftCanonicalBNTPresentationSD`
   — uniform coefficient bound under dominant normalization:
   `‖coeff N j‖ ≤ copies j`.  Combines the geometric bound with
-  `IsBNTCanonicalFormSD.spectralLevel_norm_le_one` (`‖λ_j‖ ≤ 1`).
+  `IsLeftCanonicalBNTPresentationSD.spectralLevel_norm_le_one` (`‖λ_j‖ ≤ 1`).
 * `fixed_right_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_sectorDecomp_twoLayer`
   — two-layer counterpart of the one-layer
-  `_sectorDecomp` lemma, consuming `IsBNTCanonicalFormSD P` in place of
+  `_sectorDecomp` lemma, consuming `IsLeftCanonicalBNTPresentationSD P` in place of
   `hP_unit`.  The `hNoCancel` hypothesis shape is unchanged.
 * `fixed_left_all_overlaps_decay_false_of_eventuallyNonzeroProportionalMPV₂_sectorDecomp_twoLayer`
-  — symmetric counterpart, consuming `IsBNTCanonicalFormSD Q`.
+  — symmetric counterpart, consuming `IsLeftCanonicalBNTPresentationSD Q`.
 
 In `HNoCancelDischarge.lean`:
 
 * `fixed_right_all_overlaps_decay_false_paperFaithful_twoLayer`
   and `fixed_left_all_overlaps_decay_false_paperFaithful_twoLayer`
-  — corollaries packaging `IsBNTCanonicalFormSD P` + `IsBNTCanonicalFormSD Q`
+  — corollaries packaging `IsLeftCanonicalBNTPresentationSD P` + `IsLeftCanonicalBNTPresentationSD Q`
   + abstract `hNoCancel`.  In contrast to the one-layer
   `_paperFaithful` form, they do **not** discharge `hNoCancel` from
   unit modulus + decay + `c_lower`; the discharge is deferred.
@@ -390,7 +390,7 @@ In `HNoCancelDischarge.lean`:
 
 The original PR 2 plan included a "Commit 2" — generalising
 `mpvOverlap_toTensor_basis_not_tendsto_zero` to a two-layer form on the
-`IsBNTCanonicalFormSD` surface.  On re-examination of the math:
+`IsLeftCanonicalBNTPresentationSD` surface.  On re-examination of the math:
 
 * The one-layer lemma asserts that the assembled-tensor-to-block overlap
   `mpvOverlap Q.toTensor (Q.basis k₀) N` does **not** tend to zero.
@@ -407,11 +407,11 @@ The original PR 2 plan included a "Commit 2" — generalising
   whose cross-overlap analysis introduces ratios `λ_k / λ_{k₀}` that
   blow up for `k < k₀` (rank-wise).  The decay of cross-overlaps would
   have to beat these ratios — a rate-controlled separation that
-  `IsBNTCanonicalFormSD` does not currently supply.
+  `IsLeftCanonicalBNTPresentationSD` does not currently supply.
 
 Conclusion: the two-layer analog of
 `mpvOverlap_toTensor_basis_not_tendsto_zero` cannot be stated
-unconditionally on the `IsBNTCanonicalFormSD` surface.  The cleanest
+unconditionally on the `IsLeftCanonicalBNTPresentationSD` surface.  The cleanest
 path is to keep `hNoCancel` abstract in PR 2 and defer the analytic
 discharge to a follow-up PR that supplies rate-controlled cross-overlap
 hypotheses (or, alternatively, restricts to dominant `k₀`).
@@ -428,7 +428,7 @@ false in` immediately before each declaration).
 
 PR 3 will close the two `_CFBNT` sorries at
 `TNLean/MPS/FundamentalTheorem/Full/NondecayingOverlap/FixedBlockDecay.lean:107, 152`
-by composing the adapter `IsCanonicalFormBNT.toIsBNTCanonicalFormSD`
+by composing the adapter `IsCanonicalFormBNT.toIsLeftCanonicalBNTPresentationSD`
 with the two-layer `_paperFaithful_twoLayer` corollaries from this PR.
 The abstract `hNoCancel` hypothesis still needs an analytic discharge
 on the two-layer surface; this is the genuinely hard analytic content

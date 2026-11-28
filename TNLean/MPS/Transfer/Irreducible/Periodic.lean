@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.Order.ComplexPhasePositivity
 import TNLean.MPS.Transfer.Irreducible.DiagonalFixedPoint
+import TNLean.MPS.Transfer.Irreducible.PhysicalReindexTransport
 import TNLean.MPS.Tensor.Physical.Blocking
 import TNLean.MPS.Tensor.Defs
 import TNLean.MPS.Tensor.Chain.Defs
@@ -36,7 +37,7 @@ open Kraus (wordOfBlock blockTensor)
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {d D : ℕ} {α : Type*} [Fintype α]
 
 /-- `IsSpectrallyPeriodic m A` records a periodic irreducible block before
 trace-preserving normalization: its transfer map is irreducible, has spectral
@@ -47,7 +48,7 @@ The source passes from this spectral form to trace-preserving form by a pure
 similarity transformation.
 
 Source: arXiv:1708.00029, lines 248--261 and 313--332. -/
-structure IsSpectrallyPeriodic (m : ℕ) (A : MPSTensor d D) : Prop where
+structure IsSpectrallyPeriodic (m : ℕ) (A : MPTensor α (Fin D)) : Prop where
   /-- The transfer map has no nontrivial invariant projection, as required for
   each irreducible-form block in arXiv:1708.00029, lines 248--261. -/
   irreducible : Kraus.IsIrreducibleFamily A
@@ -56,25 +57,25 @@ structure IsSpectrallyPeriodic (m : ℕ) (A : MPSTensor d D) : Prop where
   spectral_radius_one :
     spectralRadius ℂ
       ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-        (Kraus.transferMap (ι := Fin d) (n := Fin D) A)) = 1
+        (Kraus.transferMap (ι := α) (n := Fin D) A)) = 1
   /-- The period is positive, as in the periodic-block description of
   arXiv:1708.00029, lines 257--258. -/
   period_pos : 0 < m
   /-- The unit-circle eigenvalues are exactly the `m`-th roots of unity, as in
   arXiv:1708.00029, lines 257--258. -/
   peripheral_eq :
-    peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) A) = {μ : ℂ | μ ^ m = 1}
+    peripheralEigenvalues (Kraus.transferMap (ι := α) (n := Fin D) A) = {μ : ℂ | μ ^ m = 1}
 
 /-- A spectrally periodic block has nonzero bond dimension.
 
 At bond dimension zero its transfer operator acts on the zero-dimensional
 matrix space and therefore has spectral radius zero, contradicting the
 spectral-radius-one normalization of arXiv:1708.00029, lines 248--261. -/
-theorem IsSpectrallyPeriodic.bondDim_ne_zero {m : ℕ} {A : MPSTensor d D}
+theorem IsSpectrallyPeriodic.bondDim_ne_zero {m : ℕ} {A : MPTensor α (Fin D)}
     (hA : IsSpectrallyPeriodic m A) : D ≠ 0 :=
   matrix_dim_ne_zero_of_spectralRadius_eq_one
     ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
-      (Kraus.transferMap (ι := Fin d) (n := Fin D) A))
+      (Kraus.transferMap (ι := α) (n := Fin D) A))
     hA.spectral_radius_one
 
 /-- `IsPeriodic m A` bundles irreducibility, left-canonical normalization,
@@ -82,7 +83,7 @@ peripheral spectrum equal to the `m`-th roots of unity, and positivity of `m`.
 
 This is the periodic analogue of the primitivity conditions in arXiv:1708.00029,
 Section 2.1. -/
-structure IsPeriodic (m : ℕ) (A : MPSTensor d D) : Prop where
+structure IsPeriodic (m : ℕ) (A : MPTensor α (Fin D)) : Prop where
   /-- No nontrivial invariant projection. -/
   irreducible : Kraus.IsIrreducibleFamily A
   /-- Left-canonical normalization. -/
@@ -91,14 +92,14 @@ structure IsPeriodic (m : ℕ) (A : MPSTensor d D) : Prop where
   period_pos : 0 < m
   /-- Peripheral eigenvalues are exactly `m`-th roots of unity. -/
   peripheral_eq :
-    peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) A) = {μ : ℂ | μ ^ m = 1}
+    peripheralEigenvalues (Kraus.transferMap (ι := α) (n := Fin D) A) = {μ : ℂ | μ ^ m = 1}
 
 /-- A positive period has a primitive root in `ℂ`; this is a consequence of
 the period, not an additional periodicity hypothesis.
 
 Existence of this root is automatic over `ℂ` and is therefore not part of the
 periodicity hypotheses in arXiv:1708.00029, Section 2.1. -/
-theorem IsPeriodic.primitiveRoot {m : ℕ} {A : MPSTensor d D}
+theorem IsPeriodic.primitiveRoot {m : ℕ} {A : MPTensor α (Fin D)}
     (hA : IsPeriodic m A) : ∃ ω : ℂ, IsPrimitiveRoot ω m :=
   ⟨Complex.exp (2 * Real.pi * Complex.I / m),
     Complex.isPrimitiveRoot_exp m (Nat.ne_of_gt hA.period_pos)⟩
@@ -109,27 +110,27 @@ Indeed, its prescribed peripheral spectrum contains `1`, whereas an endomorphism
 of the zero-dimensional matrix space has no eigenvalue.
 
 Source: arXiv:1708.00029, lines 248--258. -/
-theorem IsPeriodic.bondDim_ne_zero {m : ℕ} {A : MPSTensor d D}
+theorem IsPeriodic.bondDim_ne_zero {m : ℕ} {A : MPTensor α (Fin D)}
     (hA : IsPeriodic m A) : D ≠ 0 := by
   intro hD
   subst D
   have hOne :
-      (1 : ℂ) ∈ peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin 0) A) := by
+      (1 : ℂ) ∈ peripheralEigenvalues (Kraus.transferMap (ι := α) (n := Fin 0) A) := by
     rw [hA.peripheral_eq]
     simp
   exact hOne.1 (Subsingleton.elim _ _)
 
 /-- Repeated blocks: gauge equivalence up to a unit-modulus phase. -/
-def RepeatedBlocks (A B : MPSTensor d D) : Prop :=
+def RepeatedBlocks (A B : MPTensor α (Fin D)) : Prop :=
   ∃ (ξ : ℂ) (Y : GL (Fin D) ℂ), ‖ξ‖ = 1 ∧
-    ∀ i : Fin d,
+    ∀ i : α,
       A i = ξ • ((Y : Matrix (Fin D) (Fin D) ℂ) * B i *
         (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)))
 
 /-- Equivalent blocks: pure gauge equivalence (phase fixed to `1`). -/
-def EquivalentBlocks (A B : MPSTensor d D) : Prop :=
+def EquivalentBlocks (A B : MPTensor α (Fin D)) : Prop :=
   ∃ Y : GL (Fin D) ℂ,
-    ∀ i : Fin d,
+    ∀ i : α,
       A i = (Y : Matrix (Fin D) (Fin D) ℂ) * B i *
         (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))
 
@@ -183,17 +184,17 @@ def ZGaugeEquiv (m : ℕ) (A B : MPSTensor d D) : Prop :=
           (((Y⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) )
 
 /-- For period `1`, periodicity is equivalent to irreducible + left-canonical + primitive. -/
-theorem IsPeriodic.one_iff_primitive (A : MPSTensor d D) :
+theorem IsPeriodic.one_iff_primitive (A : MPTensor α (Fin D)) :
     IsPeriodic 1 A ↔
       Kraus.IsIrreducibleFamily A ∧
       IsLeftCanonical A ∧
-      IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin D) A) := by
+      IsPrimitive (Kraus.transferMap (ι := α) (n := Fin D) A) := by
   constructor
   · intro h
     refine ⟨h.irreducible, h.leftCanonical, ?_⟩
     rw [IsPrimitive]
     calc
-      peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) A)
+      peripheralEigenvalues (Kraus.transferMap (ι := α) (n := Fin D) A)
           = {μ : ℂ | μ ^ 1 = 1} := h.peripheral_eq
       _ = ({1} : Set ℂ) := by
         ext μ
@@ -203,14 +204,15 @@ theorem IsPeriodic.one_iff_primitive (A : MPSTensor d D) :
     refine ⟨hIrr, hLC, by decide, ?_⟩
     rw [IsPrimitive] at hPrim
     calc
-      peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) A)
+      peripheralEigenvalues (Kraus.transferMap (ι := α) (n := Fin D) A)
           = ({1} : Set ℂ) := hPrim
       _ = {μ : ℂ | μ ^ 1 = 1} := by
         ext μ
         simp
 
+omit [Fintype α] in
 /-- Every equivalent block pair is a repeated block pair. -/
-theorem EquivalentBlocks.to_repeatedBlocks {A B : MPSTensor d D}
+theorem EquivalentBlocks.to_repeatedBlocks {A B : MPTensor α (Fin D)}
     (h : EquivalentBlocks A B) :
     RepeatedBlocks A B := by
   rcases h with ⟨Y, hY⟩
@@ -218,8 +220,9 @@ theorem EquivalentBlocks.to_repeatedBlocks {A B : MPSTensor d D}
   intro i
   simp [hY i]
 
+omit [Fintype α] in
 /-- `EquivalentBlocks` is equivalent to ordinary `GaugeEquiv`. -/
-theorem equivalentBlocks_iff_gaugeEquiv {A B : MPSTensor d D} :
+theorem equivalentBlocks_iff_gaugeEquiv {A B : MPTensor α (Fin D)} :
     EquivalentBlocks A B ↔ GaugeEquiv A B := by
   constructor
   · intro h
@@ -241,8 +244,9 @@ theorem equivalentBlocks_iff_gaugeEquiv {A B : MPSTensor d D} :
         (X : Matrix (Fin D) (Fin D) ℂ))) at hXi
     simpa [Matrix.mul_assoc] using hXi.symm
 
+omit [Fintype α] in
 /-- Symmetry of repeated blocks. -/
-theorem RepeatedBlocks.symm {A B : MPSTensor d D}
+theorem RepeatedBlocks.symm {A B : MPTensor α (Fin D)}
     (h : RepeatedBlocks A B) : RepeatedBlocks B A := by
   rcases h with ⟨ξ, Y, hξ, hY⟩
   have hξ_ne : ξ ≠ 0 := Complex.ne_zero_of_norm_eq_one hξ
@@ -255,8 +259,9 @@ theorem RepeatedBlocks.symm {A B : MPSTensor d D}
   simp [Matrix.mul_assoc, hξ_ne] at hYi
   simpa [Matrix.mul_assoc] using hYi.symm
 
+omit [Fintype α] in
 /-- Transitivity of repeated blocks. -/
-theorem RepeatedBlocks.trans {A B C : MPSTensor d D}
+theorem RepeatedBlocks.trans {A B C : MPTensor α (Fin D)}
     (hAB : RepeatedBlocks A B) (hBC : RepeatedBlocks B C) :
     RepeatedBlocks A C := by
   rcases hAB with ⟨ξ, Y, hξ, hAB⟩
@@ -369,11 +374,11 @@ theorem period_eq_of_setOf_pow_eq_one {m n : ℕ} (hm : 0 < m) (hn : 0 < n)
 The repeated-block premise records the intended application, but the common
 peripheral spectrum is the sufficient hypothesis. -/
 theorem IsPeriodic.period_eq_of_repeatedBlocks
-    {m n : ℕ} {A B : MPSTensor d D}
+    {m n : ℕ} {A B : MPTensor α (Fin D)}
     (hA : IsPeriodic m A) (hB : IsPeriodic n B)
     (_hRep : RepeatedBlocks A B)
-    (hSpec : peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) A) =
-      peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) B)) :
+    (hSpec : peripheralEigenvalues (Kraus.transferMap (ι := α) (n := Fin D) A) =
+      peripheralEigenvalues (Kraus.transferMap (ι := α) (n := Fin D) B)) :
     m = n :=
   period_eq_of_setOf_pow_eq_one hA.period_pos hB.period_pos
     (by rw [← hA.peripheral_eq, ← hB.peripheral_eq]; exact hSpec)
@@ -385,13 +390,65 @@ This is the spectral content of the last clause of arXiv:1708.00029,
 proposition `equal-or-orthogonal-generalized`, lines 602--604: blocks related
 by the repeated-block condition can only have the same period. -/
 theorem IsSpectrallyPeriodic.period_eq_of_peripheralEigenvalues_eq
-    {m n : ℕ} {A B : MPSTensor d D}
+    {m n : ℕ} {A B : MPTensor α (Fin D)}
     (hA : IsSpectrallyPeriodic m A) (hB : IsSpectrallyPeriodic n B)
-    (hSpec : peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) A) =
-      peripheralEigenvalues (Kraus.transferMap (ι := Fin d) (n := Fin D) B)) :
+    (hSpec : peripheralEigenvalues (Kraus.transferMap (ι := α) (n := Fin D) A) =
+      peripheralEigenvalues (Kraus.transferMap (ι := α) (n := Fin D) B)) :
     m = n :=
   period_eq_of_setOf_pow_eq_one hA.period_pos hB.period_pos
     (by rw [← hA.peripheral_eq, ← hB.peripheral_eq]; exact hSpec)
+
+/-! ### Relabelling the physical alphabet -/
+
+section ReindexPhysical
+
+variable {α' : Type*} [Fintype α']
+
+/-- A bijective relabelling of the physical alphabet preserves periodicity, with the same
+period: irreducibility, left-canonical normalization and the transfer map are unchanged.
+
+Source: arXiv:1708.00029, Section 2.1. -/
+theorem IsPeriodic.reindexPhysical {m : ℕ} {A : MPTensor α (Fin D)} (hA : IsPeriodic m A)
+    (e : α' ≃ α) : IsPeriodic m (Kraus.reindexPhysical e A) where
+  irreducible := (Kraus.isIrreducibleFamily_reindexPhysical_equiv e A).2 hA.irreducible
+  leftCanonical := (Kraus.isTP_reindexPhysical_iff e A).2 hA.leftCanonical
+  period_pos := hA.period_pos
+  peripheral_eq := by
+    rw [Kraus.transferMap_reindexPhysical_equiv]
+    exact hA.peripheral_eq
+
+/-- Periodicity is invariant under a bijective relabelling of the physical alphabet.
+
+Source: arXiv:1708.00029, Section 2.1. -/
+theorem isPeriodic_reindexPhysical_iff {m : ℕ} (e : α' ≃ α) (A : MPTensor α (Fin D)) :
+    IsPeriodic m (Kraus.reindexPhysical e A) ↔ IsPeriodic m A := by
+  refine ⟨fun h ↦ ?_, fun h ↦ h.reindexPhysical e⟩
+  have hback : Kraus.reindexPhysical e.symm (Kraus.reindexPhysical e A) = A := by
+    funext i
+    simp [Kraus.reindexPhysical]
+  simpa only [hback] using h.reindexPhysical e.symm
+
+omit [Fintype α] [Fintype α'] in
+/-- Relabelling both tensors by the same bijection of the physical alphabet preserves repeated
+blocks. -/
+theorem RepeatedBlocks.reindexPhysical {A B : MPTensor α (Fin D)} (h : RepeatedBlocks A B)
+    (e : α' ≃ α) : RepeatedBlocks (Kraus.reindexPhysical e A) (Kraus.reindexPhysical e B) := by
+  obtain ⟨ξ, Y, hξ, hY⟩ := h
+  exact ⟨ξ, Y, hξ, fun i ↦ hY (e i)⟩
+
+omit [Fintype α] [Fintype α'] in
+/-- Repeated blocks are invariant under relabelling both tensors by the same bijection of the
+physical alphabet. -/
+theorem repeatedBlocks_reindexPhysical_iff [Finite α] [Finite α'] (e : α' ≃ α)
+    (A B : MPTensor α (Fin D)) :
+    RepeatedBlocks (Kraus.reindexPhysical e A) (Kraus.reindexPhysical e B) ↔
+      RepeatedBlocks A B := by
+  have := Fintype.ofFinite α
+  have := Fintype.ofFinite α'
+  refine ⟨fun ⟨ξ, Y, hξ, hY⟩ ↦ ⟨ξ, Y, hξ, fun i ↦ ?_⟩, fun h ↦ h.reindexPhysical e⟩
+  simpa [Kraus.reindexPhysical] using hY (e.symm i)
+
+end ReindexPhysical
 
 end MPSTensor
 

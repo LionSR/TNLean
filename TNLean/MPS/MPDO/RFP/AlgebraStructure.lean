@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import QICLean.Channel.FixedPoint.Algebra.Algebra
 import TNLean.MPS.Transfer.Irreducible.BlockingViaAdjoint
 import TNLean.MPS.MPDO.RFP.FusionIsometries
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Algebra-structure witnesses for MPDO renormalization fixed points
@@ -192,28 +193,27 @@ end AlgebraStructureData
 one of its positive-definite fixed points.
 
 Concretely, this is the fixed-point `StarSubalgebra` of the adjoint transfer map
-`(transferMap M).adjoint`, constructed using Wolf Theorem 6.12 for the doubled
-MPS tensor `M.toMPSTensor`. -/
+`(transferMap M).adjoint`, constructed using Wolf Theorem 6.12 for the tensor
+`M` on the pair alphabet. -/
 def faithfulFixedPointSupportAlgebra
-    (M : MPOTensor d D) (h_tp : Kraus.IsTP M.toMPSTensor)
+    (M : MPOTensor d D) (h_tp : Kraus.IsTP M)
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : transferMap M ρ = ρ) :
     StarSubalgebra ℂ Mat :=
-  Kraus.fixedPoints_starSubalgebra (K := M.toMPSTensor) h_tp hρ
-    (by simpa [transferMap_eq_toMPSTensor] using hρ_fix)
+  Kraus.fixedPoints_starSubalgebra (K := M) h_tp hρ
+    (show Kraus.map M ρ = ρ by rw [transferMap_eq_kraus_transferMap] at hρ_fix; exact hρ_fix)
 
 /-- Membership in `faithfulFixedPointSupportAlgebra` is fixed-point membership
 for the adjoint MPO transfer map. -/
 theorem mem_faithfulFixedPointSupportAlgebra_iff
-    (M : MPOTensor d D) (h_tp : Kraus.IsTP M.toMPSTensor)
+    (M : MPOTensor d D) (h_tp : Kraus.IsTP M)
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : transferMap M ρ = ρ)
     (X : Mat) :
     X ∈ faithfulFixedPointSupportAlgebra M h_tp hρ hρ_fix ↔
       (transferMap M).adjoint X = X := by
   unfold faithfulFixedPointSupportAlgebra
   rw [Kraus.mem_fixedPoints_starSubalgebra, Kraus.mem_adjointFixedPoints]
-  have hAdj : Kraus.adjointMap M.toMPSTensor X = (transferMap M).adjoint X := by
-    rw [transferMap_eq_toMPSTensor]
-    rw [← Kraus.mapLM_conjTranspose_eq_adjoint]
+  have hAdj : Kraus.adjointMap M X = (transferMap M).adjoint X := by
+    rw [transferMap_eq_kraus_transferMap, ← Kraus.mapLM_conjTranspose_eq_adjoint]
     simp [Kraus.mapLM_apply, Kraus.adjointMap]
   rw [hAdj]
 
@@ -225,7 +225,7 @@ transfer map.
 All support algebras are the same `StarSubalgebra`, multiplication is ordinary
 matrix multiplication, and the inclusion maps are identities. -/
 def stationaryOfFaithfulFixedPoint
-    (M : MPOTensor d D) (h_tp : Kraus.IsTP M.toMPSTensor)
+    (M : MPOTensor d D) (h_tp : Kraus.IsTP M)
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : transferMap M ρ = ρ) :
     AlgebraStructureData d D :=
   let S : StarSubalgebra ℂ Mat := faithfulFixedPointSupportAlgebra M h_tp hρ hρ_fix
@@ -239,7 +239,7 @@ def stationaryOfFaithfulFixedPoint
 satisfying doubled-index ZCL, because all positive blocked transfer maps agree with
 `transferMap M`. -/
 theorem stationaryOfFaithfulFixedPoint_compatible
-    (M : MPOTensor d D) (h_tp : Kraus.IsTP M.toMPSTensor)
+    (M : MPOTensor d D) (h_tp : Kraus.IsTP M)
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : transferMap M ρ = ρ)
     (hZCL : IsZCL M) :
     (stationaryOfFaithfulFixedPoint M h_tp hρ hρ_fix).CompatibleWith M := by
@@ -247,12 +247,9 @@ theorem stationaryOfFaithfulFixedPoint_compatible
   change X ∈ faithfulFixedPointSupportAlgebra M h_tp hρ hρ_fix ↔
     (blockedTransferMap M n).adjoint X = X
   rw [mem_faithfulFixedPointSupportAlgebra_iff (M := M) h_tp hρ hρ_fix X]
-  have hAdj : LinearMap.adjoint ((Kraus.transferMap M.toMPSTensor) ^ n) =
-      LinearMap.adjoint (Kraus.transferMap M.toMPSTensor) := by
-    simpa [blockedTransferMap_eq_pow, transferMap_eq_toMPSTensor] using
-      congrArg LinearMap.adjoint
-        (blockedTransferMap_eq_transferMap_of_isZCL (M := M) hZCL hn)
-  simp [blockedTransferMap_eq_pow, transferMap_eq_toMPSTensor, hAdj]
+  have hPow := blockedTransferMap_eq_transferMap_of_isZCL (M := M) hZCL hn
+  rw [blockedTransferMap_eq_pow] at hPow
+  rw [blockedTransferMap_eq_pow, hPow]
 
 /-- The same stationary tower is compatible whenever the adjoint fixed points of
 all positive blocked transfer maps agree with the adjoint fixed points of the
@@ -260,7 +257,7 @@ original transfer map. This criterion does not assume `IsZCL M`; it isolates
 exactly the stabilization property needed by the current compatibility
 predicate. -/
 theorem stationaryOfFaithfulFixedPoint_compatible_of_adjointFixedPoints_eq
-    (M : MPOTensor d D) (h_tp : Kraus.IsTP M.toMPSTensor)
+    (M : MPOTensor d D) (h_tp : Kraus.IsTP M)
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : transferMap M ρ = ρ)
     (hEq : ∀ n : ℕ, 0 < n → ∀ X : Mat,
       (transferMap M).adjoint X = X ↔ (blockedTransferMap M n).adjoint X = X) :
@@ -300,7 +297,7 @@ an MPDO. Moreover, the conclusion is the blocked fixed-point-algebra predicate
 above, not the full coefficient statement in part (ii). See
 `docs/paper-gaps/cpgsv17_blocked_chi_uniformity.tex`. -/
 theorem hasBlockedAdjointFixedPointAlgebraTower_of_isZCL_of_isTP_of_posDef_fixed
-    {M : MPOTensor d D} (hZCL : IsZCL M) (h_tp : Kraus.IsTP M.toMPSTensor)
+    {M : MPOTensor d D} (hZCL : IsZCL M) (h_tp : Kraus.IsTP M)
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : transferMap M ρ = ρ) :
     HasBlockedAdjointFixedPointAlgebraTower M :=
   ⟨AlgebraStructureData.stationaryOfFaithfulFixedPoint M h_tp hρ hρ_fix,
@@ -312,7 +309,7 @@ fixed-point spaces stabilize across all positive powers. This extracts exactly
 what the present compatibility relation can see, without asserting the
 transfer-retract, equivalently idempotence, conclusion. -/
 theorem hasBlockedAdjointFixedPointAlgebraTower_of_adjointFixedPoints_eq_of_isTP_of_posDef_fixed
-    {M : MPOTensor d D} (h_tp : Kraus.IsTP M.toMPSTensor)
+    {M : MPOTensor d D} (h_tp : Kraus.IsTP M)
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : transferMap M ρ = ρ)
     (hEq : ∀ n : ℕ, 0 < n → ∀ X : Mat,
       (transferMap M).adjoint X = X ↔ (blockedTransferMap M n).adjoint X = X) :
@@ -624,7 +621,7 @@ C.4, lines 2015--2067 of `Papers/1606.00608/MPDO-22-12-17-2.tex`. The cited
 passages do not state this stationary-tower consequence. -/
 theorem stationaryOfFaithfulFixedPoint_compatible_of_hasBlockedAdjointFixedPointAlgebraTower
     {M : MPOTensor d D} (hAlg : HasBlockedAdjointFixedPointAlgebraTower M)
-    (h_tp : Kraus.IsTP M.toMPSTensor)
+    (h_tp : Kraus.IsTP M)
     {ρ : Mat} (hρ : ρ.PosDef) (hρ_fix : transferMap M ρ = ρ) :
     (AlgebraStructureData.stationaryOfFaithfulFixedPoint M h_tp hρ hρ_fix).CompatibleWith M :=
   AlgebraStructureData.stationaryOfFaithfulFixedPoint_compatible_of_adjointFixedPoints_eq

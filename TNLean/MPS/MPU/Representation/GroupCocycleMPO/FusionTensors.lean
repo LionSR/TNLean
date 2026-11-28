@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.Representation.GroupCocycleMPO
 import TNLean.MPS.FundamentalTheorem.OperatorGroup.Associator
+import TNLean.MPS.CanonicalForm.SimpleMPU.TransferMatrix
 
 /-!
 # Group matrix product operators from a three-cocycle: fusion tensors and the inverse cocycle
@@ -171,12 +172,12 @@ Source: arXiv:2203.12563, lines 2224–2225, with the fusion tensors of `ftexam`
 fusion tensors, so the identity holds at every length. -/
 theorem isReduction_fusion {ω : ScalarThreeCochain G} (hω : ScalarThreeCochain.IsCocycle ω)
     (g h : G) :
-    MPTensor.IsReduction (mulTensor (tensor e ω g) (tensor e ω h)).toMPSTensor
-      (tensor e ω (g * h)).toMPSTensor (fusionV e ω g h) (fusionW e ω g h) := by
+    MPTensor.IsReduction (mulTensor (tensor e ω g) (tensor e ω h))
+      (tensor e ω (g * h)) (fusionV e ω g h) (fusionW e ω g h) := by
   refine ⟨fusionV_mul_fusionW ω g h, fun w ↦ ?_⟩
-  have hw := Kraus.evalWord_intertwine (tensor e ω (g * h)).toMPSTensor
-    (mulTensor (tensor e ω g) (tensor e ω h)).toMPSTensor (fusionV e ω g h)
-    (fun ij ↦ (fusionV_mul_mulTensor e hω g h ij.divNat ij.modNat).symm) w
+  have hw := Kraus.evalWord_intertwine (tensor e ω (g * h))
+    (mulTensor (tensor e ω g) (tensor e ω h)) (fusionV e ω g h)
+    (fun ij ↦ (fusionV_mul_mulTensor e hω g h ij.1 ij.2).symm) w
   rw [← hw, Matrix.mul_assoc, fusionV_mul_fusionW, Matrix.mul_one]
 
 variable (e) in
@@ -254,19 +255,14 @@ variable (e) in
 /-- Every tensor `T̂_g` has nonvanishing words of every length: the periodic operator is a
 shift with phases of modulus one. -/
 theorem exists_evalWord_tensor_ne_zero (ω : ScalarThreeCochain G) (g : G) (N : ℕ) :
-    ∃ w : List (Fin (n * n)), N ≤ w.length ∧
-      Kraus.evalWord (tensor e ω g).toMPSTensor w ≠ 0 := by
+    ∃ w : List (Fin n × Fin n), N ≤ w.length ∧ Kraus.evalWord (tensor e ω g) w ≠ 0 := by
   let t : Fin (N + 1) → Fin n := fun _ ↦ e 1
-  let ρ : Fin (N + 1) → Fin (n * n) := fun k ↦ finProdFinEquiv (shift e g (N + 1) t k, t k)
+  let ρ : Fin (N + 1) → Fin n × Fin n := fun k ↦ (shift e g (N + 1) t k, t k)
   refine ⟨List.ofFn ρ, by simp, fun h0 ↦ ?_⟩
-  have hmpv := mpv_toMPSTensor (tensor e ω g) ρ
-  have hdiv : (fun k ↦ (ρ k).divNat) = shift e g (N + 1) t := by
-    funext k
-    simp [ρ]
-  have hmod : (fun k ↦ (ρ k).modNat) = t := by
-    funext k
-    simp [ρ]
-  rw [hdiv, hmod, mpo_tensor_apply] at hmpv
+  have hmpv := mpv_eq_mpo (tensor e ω g) ρ
+  have hfst : (fun k ↦ (ρ k).1) = shift e g (N + 1) t := rfl
+  have hsnd : (fun k ↦ (ρ k).2) = t := rfl
+  rw [hfst, hsnd, mpo_tensor_apply] at hmpv
   simp only [↓reduceIte, MPTensor.mpv, MPTensor.coeff, h0, Matrix.trace_zero] at hmpv
   exact (Units.ne_zero (∏ i, ω g (e.symm (t (i + 1))) ((e.symm (t (i + 1)))⁻¹ * e.symm (t i))))
     (by rw [Units.coe_prod]; exact hmpv.symm)
@@ -300,17 +296,17 @@ theorem fusionData_omega {ω : ScalarThreeCochain G} (hω : ScalarThreeCochain.I
 variable (e) in
 /-- For a normalized cochain, every entry of a letter of `T̂_e` is independent of its row. -/
 theorem tensor_one_apply_row {ω : ScalarThreeCochain G} (hn : ScalarThreeCochain.IsNormalized ω)
-    (ij : Fin (n * n)) (l l' r : Fin n) :
-    (tensor e ω 1).toMPSTensor ij l r = (tensor e ω 1).toMPSTensor ij l' r := by
-  simp [MPOTensor.toMPSTensor, tensor_apply, hn.1]
+    (ij : Fin n × Fin n) (l l' r : Fin n) :
+    tensor e ω 1 ij l r = tensor e ω 1 ij l' r := by
+  obtain ⟨i, j⟩ := ij
+  simp [tensor_apply, hn.1]
 
 variable (e) in
 /-- Every nonempty product of letters of `T̂_e` has equal rows. -/
 theorem evalWord_tensor_one_apply_row {ω : ScalarThreeCochain G}
-    (hn : ScalarThreeCochain.IsNormalized ω) {w : List (Fin (n * n))} (hw : w ≠ [])
+    (hn : ScalarThreeCochain.IsNormalized ω) {w : List (Fin n × Fin n)} (hw : w ≠ [])
     (l l' r : Fin n) :
-    Kraus.evalWord (tensor e ω 1).toMPSTensor w l r =
-      Kraus.evalWord (tensor e ω 1).toMPSTensor w l' r := by
+    Kraus.evalWord (tensor e ω 1) w l r = Kraus.evalWord (tensor e ω 1) w l' r := by
   obtain ⟨i, w, rfl⟩ := List.exists_cons_of_ne_nil hw
   simp only [Kraus.evalWord_cons, Matrix.mul_apply, tensor_one_apply_row e hn i l l']
 
@@ -325,12 +321,12 @@ with bond dimension `|G|`, and states `U_e = 1` (line 2204); the failure of norm
 is not discussed there. -/
 theorem not_isNormal_tensor_one [Nontrivial G] {ω : ScalarThreeCochain G}
     (hn : ScalarThreeCochain.IsNormalized ω) :
-    ¬ Kraus.IsNormal (tensor e ω 1).toMPSTensor := by
+    ¬ Kraus.IsNormal (tensor e ω 1) := by
   obtain ⟨a, b, hab⟩ := exists_pair_ne G
   rintro ⟨N, hN, hinj⟩
   let φ : Matrix (Fin n) (Fin n) ℂ →ₗ[ℂ] ℂ :=
     Matrix.entryLinearMap ℂ ℂ (e a) (e a) - Matrix.entryLinearMap ℂ ℂ (e b) (e a)
-  have hle : Kraus.wordSpan (tensor e ω 1).toMPSTensor N ≤ LinearMap.ker φ := by
+  have hle : Kraus.wordSpan (tensor e ω 1) N ≤ LinearMap.ker φ := by
     rw [Kraus.wordSpan, Submodule.span_le]
     rintro _ ⟨σ, rfl⟩
     have hw : List.ofFn σ ≠ [] := by

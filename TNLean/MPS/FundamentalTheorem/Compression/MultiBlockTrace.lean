@@ -5,6 +5,7 @@ Authors: Sirui Lu
 -/
 import TNLean.MPS.FundamentalTheorem.Compression.MultiBlock
 import TNLean.MPS.Operator.Product.ActionTensor
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # The word-trace converse of multi-block asymmetric compression
@@ -45,8 +46,8 @@ theorem trace_eq_sum_blockDiag' {o : Type*} [Fintype o] {n : o → ℕ}
   simp only [Matrix.trace, Matrix.diag_apply, Matrix.blockDiag'_apply]
   rw [← Finset.univ_sigma_univ, Finset.sum_sigma]
 
-variable {d DB : ℕ} {ι : Type*} [DecidableEq ι] {D : ι → ℕ} {B : MPSTensor d DB}
-  {S : Finset ι} {C : ∀ s, MPSTensor d (D s)}
+variable {α : Type*} {DB : ℕ} {ι : Type*} [DecidableEq ι] {D : ι → ℕ} {B : MPTensor α (Fin DB)}
+  {S : Finset ι} {C : ∀ s, MPTensor α (Fin (D s))}
 
 namespace MultiBlockCompression
 
@@ -62,14 +63,14 @@ theorem trace_conjMatrix (A : Matrix (Fin DB) (Fin DB) ℂ) :
 reproduces the word-trace hypothesis of `exists_multiBlockCompression_of_isNormal`: the trace of
 `B^w` is the sum of the traces of the diagonal blocks of the conjugated word, which are the words
 of the blocks. -/
-theorem trace_evalWord_eq_sum (P : MultiBlockCompression B S C) (w : List (Fin d))
+theorem trace_evalWord_eq_sum (P : MultiBlockCompression B S C) (w : List α)
     (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord B w) = ∑ s ∈ S, Matrix.trace (Kraus.evalWord (C s) w) := by
   classical
   have hconj : Matrix.trace (conjMatrix P.gauge (Kraus.evalWord B w)) =
       Matrix.trace (Kraus.evalWord B w) :=
     P.trace_conjMatrix (Kraus.evalWord B w)
-  set T : Fin d → Matrix (BlockSpace D S P.z) (BlockSpace D S P.z) ℂ :=
+  set T : α → Matrix (BlockSpace D S P.z) (BlockSpace D S P.z) ℂ :=
     fun i => conjMatrix P.gauge (B i) with hTdef
   rw [← hconj, ← evalWord_conjMatrix, trace_eq_sum_blockDiag' (Kraus.evalWord T w),
     Fintype.sum_sum_type]
@@ -86,7 +87,7 @@ theorem trace_evalWord_eq_sum (P : MultiBlockCompression B S C) (w : List (Fin d
     intro t
     rw [Matrix.blockDiag'_evalWord P.ord.injective P.triangular w (Sum.inr t)]
     have ht : (fun i => (T i).blockDiag' (Sum.inr t)) =
-        fun _ : Fin d => (0 : Matrix (Fin 1) (Fin 1) ℂ) :=
+        fun _ : α => (0 : Matrix (Fin 1) (Fin 1) ℂ) :=
       funext fun i => P.unmatched i t
     rw [ht]
     obtain ⟨i, w', rfl⟩ := List.exists_cons_of_ne_nil hw
@@ -97,8 +98,8 @@ theorem trace_evalWord_eq_sum (P : MultiBlockCompression B S C) (w : List (Fin d
 
 /-- **The word-trace converse for weighted blocks.** When the target blocks are rescaled tensors
 `μ_s • A_s`, the word trace of `B` is the weighted sum `∑_s μ_s^{|w|} tr(A_s^w)`. -/
-theorem trace_evalWord_eq_sum_smul {μ : ι → ℂ} {A : ∀ s, MPSTensor d (D s)}
-    (P : MultiBlockCompression B S fun s => μ s • A s) (w : List (Fin d)) (hw : w ≠ []) :
+theorem trace_evalWord_eq_sum_smul {μ : ι → ℂ} {A : ∀ s, MPTensor α (Fin (D s))}
+    (P : MultiBlockCompression B S fun s => μ s • A s) (w : List α) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord B w) =
       ∑ s ∈ S, μ s ^ w.length * Matrix.trace (Kraus.evalWord (A s) w) := by
   rw [P.trace_evalWord_eq_sum w hw]
@@ -108,7 +109,7 @@ theorem trace_evalWord_eq_sum_smul {μ : ι → ℂ} {A : ∀ s, MPSTensor d (D 
 
 /-- The matrix-product-vector form of `trace_evalWord_eq_sum`: for every positive system size,
 the MPV of `B` is the sum of the MPVs of the blocks. -/
-theorem mpv_eq_sum (P : MultiBlockCompression B S C) (N : ℕ) (hN : 0 < N) (σ : Fin N → Fin d) :
+theorem mpv_eq_sum (P : MultiBlockCompression B S C) (N : ℕ) (hN : 0 < N) (σ : Fin N → α) :
     mpv B σ = ∑ s ∈ S, mpv (C s) σ := by
   have hword : List.ofFn σ ≠ [] := by
     intro hzero
@@ -149,23 +150,18 @@ namespace MPOTensor
 variable {d : ℕ} {ι : Type*} [DecidableEq ι]
 
 /-- **A compression of a stacked product is a fusion rule of periodic operators.** If the
-stacked product of `M` and `N` compresses onto the doubled-index views of the operator tensors
-`C s`, then at every positive length the product of the periodic operators of `M` and `N` is the
-sum of the periodic operators of the `C s` (P5 note, Theorem 7.12, converse direction). -/
+stacked product of `M` and `N` compresses onto the operator tensors `C s` over the pair
+alphabet, then at every positive length the product of the periodic operators of `M` and `N` is
+the sum of the periodic operators of the `C s` (P5 note, Theorem 7.12, converse direction). -/
 theorem mpo_mul_eq_sum_of_multiBlockCompression {Dα Dβ : ℕ} {Dγ : ι → ℕ}
     {M : MPOTensor d Dα} {N : MPOTensor d Dβ} {S : Finset ι} {C : ∀ s, MPOTensor d (Dγ s)}
-    (P : MPSTensor.MultiBlockCompression (mulTensor M N).toMPSTensor S
-      fun s => (C s).toMPSTensor) (L : ℕ) (hL : 0 < L) :
+    (P : MPSTensor.MultiBlockCompression (mulTensor M N) S C) (L : ℕ) (hL : 0 < L) :
     mpo M L * mpo N L = ∑ s ∈ S, mpo (C s) L := by
   rw [← mpo_mulTensor]
   ext σ τ
-  have hw : (List.ofFn fun k => finProdFinEquiv (σ k, τ k)) ≠ [] := by
-    simp only [ne_eq, List.ofFn_eq_nil_iff]
-    omega
-  have h := P.trace_evalWord_eq_sum _ hw
-  simp only [evalWord_toMPSTensor_pairConfig] at h
-  rw [Matrix.sum_apply]
-  simpa only [mpo_apply, mpoMatrixEntry] using h
+  rw [Matrix.sum_apply, mpo_apply_eq_trace_kraus_evalWord]
+  simp only [mpo_apply_eq_trace_kraus_evalWord]
+  exact P.trace_evalWord_eq_sum _ (ofFn_pair_ne_nil hL σ τ)
 
 /-- **A compression of an action tensor is an action rule of periodic operators.** If the
 action tensor of `T` on `A` compresses onto the state tensors `C s`, then at every positive

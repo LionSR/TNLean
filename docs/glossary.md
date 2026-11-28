@@ -1335,11 +1335,11 @@ The following notions use different transfer objects and are not interchangeable
 
 - **Declaration:** `MPOTensor.IsZCL (M : MPOTensor d D) : Prop`.
 - **Defined in:** `TNLean/MPS/Operator/DensityOperator/ZCL.lean`.
-- **Meaning:** the doubled-index transfer map is idempotent,
+- **Meaning:** the transfer map of the tensor on the pair alphabet is idempotent,
   $E_M\circ E_M=E_M$.
 - **Sanctioned bridge:**
-  `MPOTensor.isZCL_iff_toMPSTensor_isTransferIdempotent` identifies this with
-  transfer idempotence of the doubled-index MPS tensor `M.toMPSTensor`.
+  `MPOTensor.isZCL_iff_isTransferIdempotent` identifies this with
+  transfer idempotence of `M` read as a tensor on the pair alphabet.
 - **Caveat:** this is not the physical-trace ZCL diagram of CPSV16 Definition
   4.2 and not the physical-map RFP predicate `MPOTensor.IsRFPViaTS`.
 
@@ -2962,11 +2962,11 @@ involve no boundary.
   eigenvalue-one strong form $U\rho=\rho$ and the weak form $[U,\rho]=0$ are
   arXiv:2603.28349, line 362.
 - **Sanctioned bridges:**
-  `MPOTensor.isWeakOnSiteSymmetry_iff_mpvWithBoundary_toMPSTensor` and
-  `MPOTensor.isStrongOnSiteSymmetry_iff_mpvWithBoundary_toMPSTensor`
+  `MPOTensor.isWeakOnSiteSymmetry_iff_mpvWithBoundary` and
+  `MPOTensor.isStrongOnSiteSymmetry_iff_mpvWithBoundary`
   characterize the boundary-weighted vectorized state. At identity boundary,
-  `MPOTensor.isWeakOnSiteSymmetry_iff_isOnSiteSymmetric_toMPSTensor` and
-  `MPOTensor.isStrongOnSiteSymmetry_iff_mpv_toMPSTensor` give ordinary periodic
+  `MPOTensor.isWeakOnSiteSymmetry_iff_isOnSiteSymmetric` and
+  `MPOTensor.isStrongOnSiteSymmetry_iff_mpv` give ordinary periodic
   vector identities; `MPOTensor.exists_isStrongOnSiteSymmetry_iff_of_isNormalTensor`
   characterizes normal periodic local purifications, also at identity boundary.
 - **Caveat:** the eigenvalues `c g L` are arbitrary complex numbers in the

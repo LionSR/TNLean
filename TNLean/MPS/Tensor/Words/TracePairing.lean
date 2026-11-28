@@ -33,7 +33,7 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} {D : ℕ}
 
 /-- **Exact-length two-sided span from block injectivity.**
 
@@ -42,15 +42,15 @@ used in the proof of `Papers/quant-ph_0608197/MPSarchive.tex`,
 Lemma `lem:direct-sum`: if words of length `N` span the full matrix algebra
 and `X` is nonzero, then the span of all products `A_u * X * A_v`, with
 `u` and `v` both of length `N`, is again the full matrix algebra. -/
-theorem span_range_evalWord_mul_nonzero_mul_evalWord_eq_top {A : MPSTensor d D}
+theorem span_range_evalWord_mul_nonzero_mul_evalWord_eq_top {A : MPTensor α (Fin D)}
     {N : ℕ} {X : Matrix (Fin D) (Fin D) ℂ}
     (hA : Kraus.IsNBlkInjective A N) (hX : X ≠ 0) :
     Submodule.span ℂ
-        (Set.range fun uv : (Fin N → Fin d) × (Fin N → Fin d) =>
+        (Set.range fun uv : (Fin N → α) × (Fin N → α) =>
           Kraus.evalWord A (List.ofFn uv.1) * X * Kraus.evalWord A (List.ofFn uv.2)) = ⊤ := by
   classical
   let E : Set (Matrix (Fin D) (Fin D) ℂ) :=
-    Set.range fun σ : Fin N → Fin d => Kraus.evalWord A (List.ofFn σ)
+    Set.range fun σ : Fin N → α => Kraus.evalWord A (List.ofFn σ)
   let sandwich : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ]
       Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ :=
     { toFun := fun R => LinearMap.mulLeft ℂ (R * X)
@@ -100,7 +100,7 @@ theorem span_range_evalWord_mul_nonzero_mul_evalWord_eq_top {A : MPSTensor d D}
       Matrix.span_range_mul_nonzero_mul_eq_top (n := Fin D) hX
     simpa [htop] using hsource_le
   calc Submodule.span ℂ
-        (Set.range fun uv : (Fin N → Fin d) × (Fin N → Fin d) =>
+        (Set.range fun uv : (Fin N → α) × (Fin N → α) =>
           Kraus.evalWord A (List.ofFn uv.1) * X * Kraus.evalWord A (List.ofFn uv.2))
       = Submodule.span ℂ (Set.image2
           (fun R S : Matrix (Fin D) (Fin D) ℂ => sandwich R S) E E) := by
@@ -128,27 +128,27 @@ lemma _root_.MPTensor.SameMPV₂Pos.trace_evalWord {α : Type*} {D₁ D₂ : ℕ
   simpa [mpv, coeff, List.ofFn_get] using h w.length (List.length_pos_of_ne_nil hw) w.get
 
 /-- The linear map `M ↦ (i ↦ trace (M * A i))`. -/
-noncomputable def traceMulRightPi (A : MPSTensor d D) :
-    Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] (Fin d → ℂ) :=
-  LinearMap.pi fun i : Fin d =>
+noncomputable def traceMulRightPi (A : MPTensor α (Fin D)) :
+    Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] (α → ℂ) :=
+  LinearMap.pi fun i : α =>
     (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp (LinearMap.mulRight ℂ (A i))
 
 @[simp]
-lemma traceMulRightPi_apply (A : MPSTensor d D)
-    (M : Matrix (Fin D) (Fin D) ℂ) (i : Fin d) :
+lemma traceMulRightPi_apply (A : MPTensor α (Fin D))
+    (M : Matrix (Fin D) (Fin D) ℂ) (i : α) :
     traceMulRightPi A M i = Matrix.trace (M * A i) := by
   simp [traceMulRightPi, Matrix.traceLinearMap_apply]
 
 /-- If `A` and `B` generate the same MPV family, then
 $\tr(A^i A^j) = \tr(B^i B^j)$ for all $i, j$. -/
-lemma sameMPV_trace_word2 {A B : MPSTensor d D} (hAB : SameMPV A B) (i j : Fin d) :
+lemma sameMPV_trace_word2 {A B : MPTensor α (Fin D)} (hAB : SameMPV A B) (i j : α) :
     Matrix.trace (A i * A j) = Matrix.trace (B i * B j) := by
   simpa [Kraus.evalWord, Matrix.mul_assoc] using hAB.trace_evalWord [i, j]
 
 /-- If `A` is injective, then `traceMulRightPi A` has trivial kernel: the trace pairing
 against an injective family detects zero
 (`Kraus.IsInjective.eq_zero_of_forall_trace_mul_eq_zero`). -/
-theorem traceMulRightPi_ker_eq_bot {A : MPSTensor d D} (hA : Kraus.IsInjective A) :
+theorem traceMulRightPi_ker_eq_bot {A : MPTensor α (Fin D)} (hA : Kraus.IsInjective A) :
     (traceMulRightPi A).ker = ⊥ :=
   LinearMap.ker_eq_bot'.2 fun M hM =>
     hA.eq_zero_of_forall_trace_mul_eq_zero fun i => by simpa using congrFun hM i
@@ -159,7 +159,7 @@ then $\neg(\forall i,\; B^i = 0)$.
 Proof: if $B^i = 0$ for all $i$, then $\tr(A^i) = \tr(B^i) = 0$ for each $i$.
 Since the $A^i$ span the full matrix algebra, the trace functional vanishes
 identically, contradicting $\tr(I_D) = D \neq 0$. -/
-theorem trace_ne_zero_of_injective {B : MPSTensor d D} [NeZero D] {A : MPSTensor d D}
+theorem trace_ne_zero_of_injective {B : MPTensor α (Fin D)} [NeZero D] {A : MPTensor α (Fin D)}
     (hA : Kraus.IsInjective A) (hAB : SameMPV A B) (hBzero : ∀ i, B i = 0) : False := by
   have htr_zero : Matrix.traceLinearMap (Fin D) ℂ ℂ = 0 := by
     apply LinearMap.ext_on_range (v := A) (hv := hA.span_eq_top)

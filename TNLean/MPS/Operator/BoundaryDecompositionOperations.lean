@@ -131,8 +131,7 @@ theorem actTensor_kronId
     {T : MPOTensor d DT} {S : ∀ i, MPOTensor d (D i)}
     {V : ∀ i, Matrix (Fin (D i)) (Fin DT) ℂ}
     {W : ∀ i, Matrix (Fin DT) (Fin (D i)) ℂ}
-    (h : IsBiorthogonalDecomposition T.toMPSTensor
-      (fun i ↦ (S i).toMPSTensor) V W) (B : MPSTensor d DB) :
+    (h : IsBiorthogonalDecomposition T S V W) (B : MPSTensor d DB) :
     IsBiorthogonalDecomposition (MPOTensor.actTensor T B)
       (fun i ↦ MPOTensor.actTensor (S i) B)
       (fun i ↦ MPOTensor.kronId (V i) DB) (fun i ↦ MPOTensor.kronId (W i) DB) := by
@@ -144,8 +143,7 @@ theorem actTensor_kronId
     simp [MPOTensor.kronId]
   · intro a
     have hletter (j : Fin d) : T (a, j) = ∑ i, W i * S i (a, j) * V i := by
-      simpa [MPOTensor.toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
-        MPSTensor.finProdFinEquiv_modNat] using h.letter (finProdFinEquiv (a, j))
+      simpa using h.letter (a, j)
     simp only [MPOTensor.actTensor_apply, MPOTensor.kronId, Matrix.submatrix_mul_equiv]
     simp_rw [Matrix.mul_sum, Matrix.sum_mul, ← Matrix.mul_kronecker_mul,
       Matrix.one_mul, Matrix.mul_one]

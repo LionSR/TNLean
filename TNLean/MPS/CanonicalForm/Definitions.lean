@@ -213,7 +213,7 @@ variable {d D : ℕ} {A : MPSTensor d D}
 
 /-- Every tensor of bond dimension one is irreducible: the only orthogonal
 projections on its one-dimensional bond space are zero and the identity. -/
-theorem isIrreducibleFamily_of_bondDim_one (A : MPSTensor d 1) :
+theorem isIrreducibleFamily_of_bondDim_one {α : Type*} (A : MPTensor α (Fin 1)) :
     Kraus.IsIrreducibleFamily A := by
   rintro ⟨P, ⟨_, hIdem⟩, hP0, hP1, _⟩
   have h00 := congrFun (congrFun hIdem (0 : Fin 1)) (0 : Fin 1)
@@ -235,8 +235,8 @@ theorem isIrreducibleFamily_of_bondDim_one (A : MPSTensor d 1) :
 
 /-- A bond-dimension-one tensor whose transfer map is the identity is a normal
 tensor. -/
-theorem isNormalTensor_of_bondDim_one_of_transferMap_eq_id
-    (A : MPSTensor d 1) (hA : Kraus.transferMap A = LinearMap.id) :
+theorem isNormalTensor_of_bondDim_one_of_transferMap_eq_id {α : Type*} [Fintype α]
+    (A : MPTensor α (Fin 1)) (hA : Kraus.transferMap A = LinearMap.id) :
     IsNormalTensor A := by
   refine ⟨isIrreducibleFamily_of_bondDim_one A, ?_, ?_⟩
   · rw [hA]
@@ -270,12 +270,13 @@ CPSV canonical form, with the retained coordinates equal to the ambient
 coordinates.
 
 Source: arXiv:1606.00608, eq. `II_CF1`, lines 237--244. -/
-noncomputable def _root_.MPTensor.CPSVCanonicalFormData.ofBlocks {r : ℕ} {dim : Fin r → ℕ}
+noncomputable def _root_.MPTensor.CPSVCanonicalFormData.ofBlocks {α : Type*} [Fintype α]
+    {r : ℕ} {dim : Fin r → ℕ}
     (dim_pos : ∀ k, 0 < dim k) (weights : Fin r → ℂ)
     (weights_ne_zero : ∀ k, weights k ≠ 0)
-    (blocks : (k : Fin r) → MPSTensor d (dim k))
+    (blocks : (k : Fin r) → MPTensor α (Fin (dim k)))
     (blocks_normal : ∀ k, IsNormalTensor (blocks k)) :
-    CPSVCanonicalFormData (toTensorFromBlocks (α := Fin d) weights blocks) where
+    CPSVCanonicalFormData (toTensorFromBlocks (α := α) weights blocks) where
   r := r
   dim := dim
   dim_pos := dim_pos
@@ -316,8 +317,8 @@ membership.  The unit weight is required exactly when the ambient tensor is
 nonzero.
 
 Source: arXiv:1606.00608, Section 2.3, line 246. -/
-structure _root_.MPTensor.CPSVCanonicalFormData.IsWeightNormalized
-    (data : CPSVCanonicalFormData A) : Prop where
+structure _root_.MPTensor.CPSVCanonicalFormData.IsWeightNormalized {α : Type*} [Fintype α]
+    {A : MPTensor α (Fin D)} (data : CPSVCanonicalFormData A) : Prop where
   /-- Every retained weight has modulus at most one (CPSV16, line 246). -/
   weight_norm_le_one : ∀ k, ‖data.weights k‖ ≤ 1
   /-- A nonzero ambient tensor has a retained unit-modulus weight (CPSV16, line 246). -/
@@ -333,7 +334,8 @@ This is arXiv:1606.00608, Appendix A, lines 1054--1077.  It extends the exact
 ambient reconstruction in `CPSVCanonicalFormData` by the two blockwise
 normalization conditions: left-canonical form and a diagonal positive-definite
 fixed point of the transfer map. -/
-structure CPSVCanonicalFormIIData (A : MPSTensor d D) extends CPSVCanonicalFormData A where
+structure CPSVCanonicalFormIIData {α : Type*} [Fintype α] (A : MPTensor α (Fin D))
+    extends CPSVCanonicalFormData A where
   /-- Every retained block is left-canonical (CPSV16, Appendix A, eq. `TP`). -/
   blocks_left_canonical : ∀ k, IsLeftCanonical (blocks k)
   /-- Every block has diagonal positive-definite fixed-point data (CPSV16,
@@ -346,14 +348,14 @@ structure CPSVCanonicalFormIIData (A : MPSTensor d D) extends CPSVCanonicalFormD
 reconstructed, blockwise normalized retained-block data.
 
 Source: arXiv:1606.00608, Appendix A, lines 1054--1077. -/
-def IsCPSVCanonicalFormII (A : MPSTensor d D) : Prop :=
+def IsCPSVCanonicalFormII {α : Type*} [Fintype α] (A : MPTensor α (Fin D)) : Prop :=
   Nonempty (CPSVCanonicalFormIIData A)
 
 namespace CPSVCanonicalFormIIData
 
 /-- Canonical-form-II witness data determine the corresponding predicate. -/
-theorem isCPSVCanonicalFormII (data : CPSVCanonicalFormIIData A) :
-    IsCPSVCanonicalFormII A :=
+theorem isCPSVCanonicalFormII {α : Type*} [Fintype α] {A : MPTensor α (Fin D)}
+    (data : CPSVCanonicalFormIIData A) : IsCPSVCanonicalFormII A :=
   ⟨data⟩
 
 end CPSVCanonicalFormIIData
@@ -361,7 +363,8 @@ end CPSVCanonicalFormIIData
 namespace IsCPSVCanonicalFormII
 
 /-- Choose normalized retained-block data from a canonical-form-II predicate. -/
-noncomputable def data (h : IsCPSVCanonicalFormII A) : CPSVCanonicalFormIIData A :=
+noncomputable def data {α : Type*} [Fintype α] {A : MPTensor α (Fin D)}
+    (h : IsCPSVCanonicalFormII A) : CPSVCanonicalFormIIData A :=
   Classical.choice h
 
 end IsCPSVCanonicalFormII
@@ -420,7 +423,8 @@ variable {d D : ℕ}
 already in one-block canonical form II in its given bond coordinates.
 
 Source: arXiv:1606.00608, Appendix A, lines 1054–1077. -/
-noncomputable def CPSVCanonicalFormIIData.ofNormalLeftCanonical {A : MPSTensor d D}
+noncomputable def CPSVCanonicalFormIIData.ofNormalLeftCanonical {α : Type*} [Fintype α]
+    {A : MPTensor α (Fin D)}
     (hNormal : MPTensor.IsNormalTensor A)
     (hLeft : MPTensor.IsLeftCanonical A)
     (ρ : Matrix (Fin D) (Fin D) ℂ) (hρpd : ρ.PosDef) (hρdiag : ρ.IsDiag)

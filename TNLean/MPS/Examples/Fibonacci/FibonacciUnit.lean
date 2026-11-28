@@ -82,40 +82,38 @@ open GoldenInt MPSTensor
 /-! ### The square of the admissibility projector -/
 
 /-- The stacked product tensor of `1 ⊗ 1`, of bond dimension 4 (data file §3.1). -/
-def fibOneOneStack : MPSTensor 4 4 := (MPOTensor.mulTensor fibOne fibOne).toMPSTensor
+def fibOneOneStack : MPOTensor 2 4 := MPOTensor.mulTensor fibOne fibOne
 
 /-- The golden matrices of the stacked product tensor of `1 ⊗ 1`, in the bond order of
 `finProdFinEquiv` (data file §3.1). -/
-def fibOneOneStackGolden : Fin 4 → Matrix (Fin 4) (Fin 4) GoldenInt
-  | 0 =>
+def fibOneOneStackGolden : Fin 2 × Fin 2 → Matrix (Fin 4) (Fin 4) GoldenInt
+  | (0, 0) =>
     !![⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨1, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩]
-  | 1 =>
+  | (0, 1) =>
     !![⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩]
-  | 2 =>
+  | (1, 0) =>
     !![⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩]
-  | 3 =>
+  | (1, 1) =>
     !![⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨1, 0, 0, 0⟩, ⟨1, 0, 0, 0⟩, ⟨1, 0, 0, 0⟩, ⟨1, 0, 0, 0⟩]
 
-theorem fibOneOneStack_eq (a : Fin 4) :
+theorem fibOneOneStack_eq (a : Fin 2 × Fin 2) :
     fibOneOneStack a = complexOfGolden (fibOneOneStackGolden a) := by
-  have h : fibOneOneStack a = complexOfGolden (mulGoldenTensor fibOneGolden fibOneGolden
-      (Fin.divNat (m := 2) (n := 2) a) (Fin.modNat (m := 2) (n := 2) a)) :=
-    mulTensor_complexOfGolden fibOneGolden fibOneGolden _ _
-  have hgolden : ∀ b : Fin 4, mulGoldenTensor fibOneGolden fibOneGolden
-      (Fin.divNat (m := 2) (n := 2) b) (Fin.modNat (m := 2) (n := 2) b) =
-        fibOneOneStackGolden b := by
+  have h : fibOneOneStack a = complexOfGolden (mulGoldenTensor fibOneGolden fibOneGolden a) :=
+    mulTensor_complexOfGolden fibOneGolden fibOneGolden a
+  have hgolden : ∀ b, mulGoldenTensor fibOneGolden fibOneGolden b =
+      fibOneOneStackGolden b := by
     decide +kernel
   rw [h, hgolden]
 
@@ -144,23 +142,23 @@ theorem fibOneOneGaugeInv_mul : fibOneOneGaugeInvGolden * fibOneOneGaugeGolden =
 /-- The letters of the stacked product tensor of `1 ⊗ 1` in the block coordinates: block
 diagonal, with the target block in the leading diagonal block and 2 one-by-one zero blocks
 (data file §3.1). -/
-def fibOneOneConjGolden : Fin 4 → Matrix (Fin 4) (Fin 4) GoldenInt
-  | 0 =>
+def fibOneOneConjGolden : Fin 2 × Fin 2 → Matrix (Fin 4) (Fin 4) GoldenInt
+  | (0, 0) =>
     !![⟨0, 0, 0, 0⟩, ⟨1, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩]
-  | 1 =>
+  | (0, 1) =>
     !![⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩]
-  | 2 =>
+  | (1, 0) =>
     !![⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩]
-  | 3 =>
+  | (1, 1) =>
     !![⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨1, 0, 0, 0⟩, ⟨1, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
@@ -168,26 +166,26 @@ def fibOneOneConjGolden : Fin 4 → Matrix (Fin 4) (Fin 4) GoldenInt
 
 /-- Every letter of the stacked product tensor of `1 ⊗ 1` carries the adapted basis into itself
 block by block. -/
-theorem fibOneOneStack_mul_gaugeInv (i : Fin 4) :
+theorem fibOneOneStack_mul_gaugeInv (i : Fin 2 × Fin 2) :
     fibOneOneStackGolden i * fibOneOneGaugeInvGolden =
       fibOneOneGaugeInvGolden * fibOneOneConjGolden i := by
   revert i
   decide +kernel
 
-private theorem fibOneOne_matched (i : Fin 4) (p q : Fin 2) :
+private theorem fibOneOne_matched (i : Fin 2 × Fin 2) (p q : Fin 2) :
     fibOneOneConjGolden i (unitCoord 2 2 ⟨Sum.inl oneSlotMem, p⟩)
-      (unitCoord 2 2 ⟨Sum.inl oneSlotMem, q⟩) = fibOneGoldenMPS i p q := by
+      (unitCoord 2 2 ⟨Sum.inl oneSlotMem, q⟩) = fibOneGolden i p q := by
   revert i
   revert p q
   decide +kernel
 
-private theorem fibOneOne_unmatched (i : Fin 4) (t : Fin 2) (p q : Fin 1) :
+private theorem fibOneOne_unmatched (i : Fin 2 × Fin 2) (t : Fin 2) (p q : Fin 1) :
     fibOneOneConjGolden i (unitCoord 2 2 ⟨Sum.inr t, p⟩)
       (unitCoord 2 2 ⟨Sum.inr t, q⟩) = 0 := by
   revert i t p q
   decide +kernel
 
-private theorem fibOneOne_offDiagonal (i : Fin 4)
+private theorem fibOneOne_offDiagonal (i : Fin 2 × Fin 2)
     (x y : BlockSpace (fun _ : Unit => 2) oneSlot 2) (h : x.1 ≠ y.1) :
     fibOneOneConjGolden i (unitCoord 2 2 x) (unitCoord 2 2 y) = 0 := by
   revert i x y
@@ -195,11 +193,11 @@ private theorem fibOneOne_offDiagonal (i : Fin 4)
 
 /-- **The multi-block asymmetric compression datum of `1 ⊗ 1`** (P5 note, Theorem 7.7,
 clauses (i)-(iii); data file §3.1): the stacked product compresses onto the single block
-`fibOneMPS` with `z = 2` zero slots. -/
+`fibOne` with `z = 2` zero slots. -/
 def fibOneOne_compression :
-    MultiBlockCompression fibOneOneStack oneSlot (fun _ : Unit => fibOneMPS) :=
+    MultiBlockCompression fibOneOneStack oneSlot (fun _ : Unit => fibOne) :=
   MultiBlockCompression.ofGolden 2 (unitOrd 2) (unitCoord 2 2) fibOneOneStackGolden
-    fibOneOneStack_eq (fun _ => fibOneGoldenMPS) (fun _ a => fibOneMPS_eq a) fibOneOneGaugeGolden
+    fibOneOneStack_eq (fun _ => fibOneGolden) (fun _ _ => rfl) fibOneOneGaugeGolden
     fibOneOneGaugeInvGolden fibOneOneGauge_mul_inv fibOneOneGaugeInv_mul fibOneOneConjGolden
     fibOneOneStack_mul_gaugeInv
     (fun i => MultiBlockCompression.triangular_of_offDiag (fibOneOne_offDiagonal i))
@@ -207,7 +205,8 @@ def fibOneOne_compression :
 
 /-- **The remainder of the compression of `1 ⊗ 1` vanishes**: the extension splits (data file
 §3.1). -/
-theorem fibOneOne_remainder_eq_zero (i : Fin 4) : fibOneOne_compression.remainder i = 0 := by
+theorem fibOneOne_remainder_eq_zero (i : Fin 2 × Fin 2) :
+    fibOneOne_compression.remainder i = 0 := by
   unfold fibOneOne_compression
   exact MultiBlockCompression.remainder_ofRing fibOneOne_offDiagonal i
 
@@ -222,33 +221,33 @@ theorem fibOne_mul_fibOne (L : ℕ) (hL : 0 < L) :
 /-! ### The projector times the `τ` family -/
 
 /-- The stacked product tensor of `1 ⊗ τ`, of bond dimension 6 (data file §3.2). -/
-def fibOneTauStack : MPSTensor 4 6 := (MPOTensor.mulTensor fibOne fibTau).toMPSTensor
+def fibOneTauStack : MPOTensor 2 6 := MPOTensor.mulTensor fibOne fibTau
 
 /-- The golden matrices of the stacked product tensor of `1 ⊗ τ`, in the bond order of
 `finProdFinEquiv` (data file §3.2). -/
-def fibOneTauStackGolden : Fin 4 → Matrix (Fin 6) (Fin 6) GoldenInt
-  | 0 =>
+def fibOneTauStackGolden : Fin 2 × Fin 2 → Matrix (Fin 6) (Fin 6) GoldenInt
+  | (0, 0) =>
     !![⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩]
-  | 1 =>
+  | (0, 1) =>
     !![⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 1, 0⟩, ⟨0, 1, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩]
-  | 2 =>
+  | (1, 0) =>
     !![⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨1, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨1, 0, 0, 0⟩, ⟨1, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨1, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩]
-  | 3 =>
+  | (1, 1) =>
     !![⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
@@ -256,14 +255,12 @@ def fibOneTauStackGolden : Fin 4 → Matrix (Fin 6) (Fin 6) GoldenInt
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨1, 0, 0, 0⟩, ⟨0, 1, 0, 0⟩, ⟨0, 0, -1, 0⟩, ⟨1, 0, 0, 0⟩, ⟨0, 1, 0, 0⟩, ⟨0, 0, -1, 0⟩]
 
-theorem fibOneTauStack_eq (a : Fin 4) :
+theorem fibOneTauStack_eq (a : Fin 2 × Fin 2) :
     fibOneTauStack a = complexOfGolden (fibOneTauStackGolden a) := by
-  have h : fibOneTauStack a = complexOfGolden (mulGoldenTensor fibOneGolden fibTauGolden
-      (Fin.divNat (m := 2) (n := 2) a) (Fin.modNat (m := 2) (n := 2) a)) :=
-    mulTensor_complexOfGolden fibOneGolden fibTauGolden _ _
-  have hgolden : ∀ b : Fin 4, mulGoldenTensor fibOneGolden fibTauGolden
-      (Fin.divNat (m := 2) (n := 2) b) (Fin.modNat (m := 2) (n := 2) b) =
-        fibOneTauStackGolden b := by
+  have h : fibOneTauStack a = complexOfGolden (mulGoldenTensor fibOneGolden fibTauGolden a) :=
+    mulTensor_complexOfGolden fibOneGolden fibTauGolden a
+  have hgolden : ∀ b, mulGoldenTensor fibOneGolden fibTauGolden b =
+      fibOneTauStackGolden b := by
     decide +kernel
   rw [h, hgolden]
 
@@ -296,29 +293,29 @@ theorem fibOneTauGaugeInv_mul : fibOneTauGaugeInvGolden * fibOneTauGaugeGolden =
 /-- The letters of the stacked product tensor of `1 ⊗ τ` in the block coordinates: block
 diagonal, with the target block in the leading diagonal block and 3 one-by-one zero blocks
 (data file §3.2). -/
-def fibOneTauConjGolden : Fin 4 → Matrix (Fin 6) (Fin 6) GoldenInt
-  | 0 =>
+def fibOneTauConjGolden : Fin 2 × Fin 2 → Matrix (Fin 6) (Fin 6) GoldenInt
+  | (0, 0) =>
     !![⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩]
-  | 1 =>
+  | (0, 1) =>
     !![⟨0, 0, 0, 0⟩, ⟨0, 0, 1, 0⟩, ⟨0, 1, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩]
-  | 2 =>
+  | (1, 0) =>
     !![⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨1, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨1, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩]
-  | 3 =>
+  | (1, 1) =>
     !![⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨1, 0, 0, 0⟩, ⟨0, 1, 0, 0⟩, ⟨0, 0, -1, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
@@ -328,26 +325,26 @@ def fibOneTauConjGolden : Fin 4 → Matrix (Fin 6) (Fin 6) GoldenInt
 
 /-- Every letter of the stacked product tensor of `1 ⊗ τ` carries the adapted basis into itself
 block by block. -/
-theorem fibOneTauStack_mul_gaugeInv (i : Fin 4) :
+theorem fibOneTauStack_mul_gaugeInv (i : Fin 2 × Fin 2) :
     fibOneTauStackGolden i * fibOneTauGaugeInvGolden =
       fibOneTauGaugeInvGolden * fibOneTauConjGolden i := by
   revert i
   decide +kernel
 
-private theorem fibOneTau_matched (i : Fin 4) (p q : Fin 3) :
+private theorem fibOneTau_matched (i : Fin 2 × Fin 2) (p q : Fin 3) :
     fibOneTauConjGolden i (unitCoord 3 3 ⟨Sum.inl oneSlotMem, p⟩)
-      (unitCoord 3 3 ⟨Sum.inl oneSlotMem, q⟩) = fibTauGoldenMPS i p q := by
+      (unitCoord 3 3 ⟨Sum.inl oneSlotMem, q⟩) = fibTauGolden i p q := by
   revert i
   revert p q
   decide +kernel
 
-private theorem fibOneTau_unmatched (i : Fin 4) (t : Fin 3) (p q : Fin 1) :
+private theorem fibOneTau_unmatched (i : Fin 2 × Fin 2) (t : Fin 3) (p q : Fin 1) :
     fibOneTauConjGolden i (unitCoord 3 3 ⟨Sum.inr t, p⟩)
       (unitCoord 3 3 ⟨Sum.inr t, q⟩) = 0 := by
   revert i t p q
   decide +kernel
 
-private theorem fibOneTau_offDiagonal (i : Fin 4)
+private theorem fibOneTau_offDiagonal (i : Fin 2 × Fin 2)
     (x y : BlockSpace (fun _ : Unit => 3) oneSlot 3) (h : x.1 ≠ y.1) :
     fibOneTauConjGolden i (unitCoord 3 3 x) (unitCoord 3 3 y) = 0 := by
   revert i x y
@@ -355,11 +352,11 @@ private theorem fibOneTau_offDiagonal (i : Fin 4)
 
 /-- **The multi-block asymmetric compression datum of `1 ⊗ τ`** (P5 note, Theorem 7.7,
 clauses (i)-(iii); data file §3.2): the stacked product compresses onto the single block
-`fibTauMPS` with `z = 3` zero slots. -/
+`fibTau` with `z = 3` zero slots. -/
 def fibOneTau_compression :
-    MultiBlockCompression fibOneTauStack oneSlot (fun _ : Unit => fibTauMPS) :=
+    MultiBlockCompression fibOneTauStack oneSlot (fun _ : Unit => fibTau) :=
   MultiBlockCompression.ofGolden 3 (unitOrd 3) (unitCoord 3 3) fibOneTauStackGolden
-    fibOneTauStack_eq (fun _ => fibTauGoldenMPS) (fun _ a => fibTauMPS_eq a) fibOneTauGaugeGolden
+    fibOneTauStack_eq (fun _ => fibTauGolden) (fun _ _ => rfl) fibOneTauGaugeGolden
     fibOneTauGaugeInvGolden fibOneTauGauge_mul_inv fibOneTauGaugeInv_mul fibOneTauConjGolden
     fibOneTauStack_mul_gaugeInv
     (fun i => MultiBlockCompression.triangular_of_offDiag (fibOneTau_offDiagonal i))
@@ -367,7 +364,8 @@ def fibOneTau_compression :
 
 /-- **The remainder of the compression of `1 ⊗ τ` vanishes**: the extension splits (data file
 §3.2). -/
-theorem fibOneTau_remainder_eq_zero (i : Fin 4) : fibOneTau_compression.remainder i = 0 := by
+theorem fibOneTau_remainder_eq_zero (i : Fin 2 × Fin 2) :
+    fibOneTau_compression.remainder i = 0 := by
   unfold fibOneTau_compression
   exact MultiBlockCompression.remainder_ofRing fibOneTau_offDiagonal i
 
@@ -382,33 +380,33 @@ theorem fibOne_mul_fibTau (L : ℕ) (hL : 0 < L) :
 /-! ### The `τ` family times the projector -/
 
 /-- The stacked product tensor of `τ ⊗ 1`, of bond dimension 6 (data file §3.3). -/
-def fibTauOneStack : MPSTensor 4 6 := (MPOTensor.mulTensor fibTau fibOne).toMPSTensor
+def fibTauOneStack : MPOTensor 2 6 := MPOTensor.mulTensor fibTau fibOne
 
 /-- The golden matrices of the stacked product tensor of `τ ⊗ 1`, in the bond order of
 `finProdFinEquiv` (data file §3.3). -/
-def fibTauOneStackGolden : Fin 4 → Matrix (Fin 6) (Fin 6) GoldenInt
-  | 0 =>
+def fibTauOneStackGolden : Fin 2 × Fin 2 → Matrix (Fin 6) (Fin 6) GoldenInt
+  | (0, 0) =>
     !![⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩]
-  | 1 =>
+  | (0, 1) =>
     !![⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 1, 0⟩, ⟨0, 0, 1, 0⟩, ⟨0, 1, 0, 0⟩, ⟨0, 1, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩]
-  | 2 =>
+  | (1, 0) =>
     !![⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨1, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨1, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩]
-  | 3 =>
+  | (1, 1) =>
     !![⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
@@ -416,14 +414,12 @@ def fibTauOneStackGolden : Fin 4 → Matrix (Fin 6) (Fin 6) GoldenInt
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨1, 0, 0, 0⟩, ⟨1, 0, 0, 0⟩, ⟨0, 1, 0, 0⟩, ⟨0, 1, 0, 0⟩, ⟨0, 0, -1, 0⟩, ⟨0, 0, -1, 0⟩]
 
-theorem fibTauOneStack_eq (a : Fin 4) :
+theorem fibTauOneStack_eq (a : Fin 2 × Fin 2) :
     fibTauOneStack a = complexOfGolden (fibTauOneStackGolden a) := by
-  have h : fibTauOneStack a = complexOfGolden (mulGoldenTensor fibTauGolden fibOneGolden
-      (Fin.divNat (m := 2) (n := 2) a) (Fin.modNat (m := 2) (n := 2) a)) :=
-    mulTensor_complexOfGolden fibTauGolden fibOneGolden _ _
-  have hgolden : ∀ b : Fin 4, mulGoldenTensor fibTauGolden fibOneGolden
-      (Fin.divNat (m := 2) (n := 2) b) (Fin.modNat (m := 2) (n := 2) b) =
-        fibTauOneStackGolden b := by
+  have h : fibTauOneStack a = complexOfGolden (mulGoldenTensor fibTauGolden fibOneGolden a) :=
+    mulTensor_complexOfGolden fibTauGolden fibOneGolden a
+  have hgolden : ∀ b, mulGoldenTensor fibTauGolden fibOneGolden b =
+      fibTauOneStackGolden b := by
     decide +kernel
   rw [h, hgolden]
 
@@ -456,29 +452,29 @@ theorem fibTauOneGaugeInv_mul : fibTauOneGaugeInvGolden * fibTauOneGaugeGolden =
 /-- The letters of the stacked product tensor of `τ ⊗ 1` in the block coordinates: block
 diagonal, with the target block in the leading diagonal block and 3 one-by-one zero blocks
 (data file §3.3). -/
-def fibTauOneConjGolden : Fin 4 → Matrix (Fin 6) (Fin 6) GoldenInt
-  | 0 =>
+def fibTauOneConjGolden : Fin 2 × Fin 2 → Matrix (Fin 6) (Fin 6) GoldenInt
+  | (0, 0) =>
     !![⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩]
-  | 1 =>
+  | (0, 1) =>
     !![⟨0, 0, 0, 0⟩, ⟨0, 0, 1, 0⟩, ⟨0, 1, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩]
-  | 2 =>
+  | (1, 0) =>
     !![⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨1, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨1, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩]
-  | 3 =>
+  | (1, 1) =>
     !![⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
        ⟨1, 0, 0, 0⟩, ⟨0, 1, 0, 0⟩, ⟨0, 0, -1, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩, ⟨0, 0, 0, 0⟩;
@@ -488,26 +484,26 @@ def fibTauOneConjGolden : Fin 4 → Matrix (Fin 6) (Fin 6) GoldenInt
 
 /-- Every letter of the stacked product tensor of `τ ⊗ 1` carries the adapted basis into itself
 block by block. -/
-theorem fibTauOneStack_mul_gaugeInv (i : Fin 4) :
+theorem fibTauOneStack_mul_gaugeInv (i : Fin 2 × Fin 2) :
     fibTauOneStackGolden i * fibTauOneGaugeInvGolden =
       fibTauOneGaugeInvGolden * fibTauOneConjGolden i := by
   revert i
   decide +kernel
 
-private theorem fibTauOne_matched (i : Fin 4) (p q : Fin 3) :
+private theorem fibTauOne_matched (i : Fin 2 × Fin 2) (p q : Fin 3) :
     fibTauOneConjGolden i (unitCoord 3 3 ⟨Sum.inl oneSlotMem, p⟩)
-      (unitCoord 3 3 ⟨Sum.inl oneSlotMem, q⟩) = fibTauGoldenMPS i p q := by
+      (unitCoord 3 3 ⟨Sum.inl oneSlotMem, q⟩) = fibTauGolden i p q := by
   revert i
   revert p q
   decide +kernel
 
-private theorem fibTauOne_unmatched (i : Fin 4) (t : Fin 3) (p q : Fin 1) :
+private theorem fibTauOne_unmatched (i : Fin 2 × Fin 2) (t : Fin 3) (p q : Fin 1) :
     fibTauOneConjGolden i (unitCoord 3 3 ⟨Sum.inr t, p⟩)
       (unitCoord 3 3 ⟨Sum.inr t, q⟩) = 0 := by
   revert i t p q
   decide +kernel
 
-private theorem fibTauOne_offDiagonal (i : Fin 4)
+private theorem fibTauOne_offDiagonal (i : Fin 2 × Fin 2)
     (x y : BlockSpace (fun _ : Unit => 3) oneSlot 3) (h : x.1 ≠ y.1) :
     fibTauOneConjGolden i (unitCoord 3 3 x) (unitCoord 3 3 y) = 0 := by
   revert i x y
@@ -515,11 +511,11 @@ private theorem fibTauOne_offDiagonal (i : Fin 4)
 
 /-- **The multi-block asymmetric compression datum of `τ ⊗ 1`** (P5 note, Theorem 7.7,
 clauses (i)-(iii); data file §3.3): the stacked product compresses onto the single block
-`fibTauMPS` with `z = 3` zero slots. -/
+`fibTau` with `z = 3` zero slots. -/
 def fibTauOne_compression :
-    MultiBlockCompression fibTauOneStack oneSlot (fun _ : Unit => fibTauMPS) :=
+    MultiBlockCompression fibTauOneStack oneSlot (fun _ : Unit => fibTau) :=
   MultiBlockCompression.ofGolden 3 (unitOrd 3) (unitCoord 3 3) fibTauOneStackGolden
-    fibTauOneStack_eq (fun _ => fibTauGoldenMPS) (fun _ a => fibTauMPS_eq a) fibTauOneGaugeGolden
+    fibTauOneStack_eq (fun _ => fibTauGolden) (fun _ _ => rfl) fibTauOneGaugeGolden
     fibTauOneGaugeInvGolden fibTauOneGauge_mul_inv fibTauOneGaugeInv_mul fibTauOneConjGolden
     fibTauOneStack_mul_gaugeInv
     (fun i => MultiBlockCompression.triangular_of_offDiag (fibTauOne_offDiagonal i))
@@ -527,7 +523,8 @@ def fibTauOne_compression :
 
 /-- **The remainder of the compression of `τ ⊗ 1` vanishes**: the extension splits (data file
 §3.3). -/
-theorem fibTauOne_remainder_eq_zero (i : Fin 4) : fibTauOne_compression.remainder i = 0 := by
+theorem fibTauOne_remainder_eq_zero (i : Fin 2 × Fin 2) :
+    fibTauOne_compression.remainder i = 0 := by
   unfold fibTauOne_compression
   exact MultiBlockCompression.remainder_ofRing fibTauOne_offDiagonal i
 

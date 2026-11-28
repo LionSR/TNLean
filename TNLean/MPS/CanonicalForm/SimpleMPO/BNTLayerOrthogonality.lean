@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import QICLean.Analysis.Projection.PosSemidefSupport
 import TNLean.MPS.Tensor.Gauge.FiniteLength
+import TNLean.MPS.Operator.PairAlphabetBridge
 import TNLean.MPS.Operator.Product.PhysicalAdjoint
 import TNLean.MPS.CanonicalForm.SimpleMPO.StackedLayers
 
@@ -43,26 +44,15 @@ one supplied directly by `IsMPDO`; no assertion at length zero is used.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1634--1689. -/
 theorem IsMPDO.sameMPV₂Pos_physicalAdjointTensor {K : MPOTensor d D} (hK : IsMPDO K) :
-    MPTensor.SameMPV₂Pos K.toMPSTensor (physicalAdjointTensor K).toMPSTensor := by
+    MPTensor.SameMPV₂Pos K (physicalAdjointTensor K) := by
   intro N hN ρ
-  let σ : Fin N → Fin d := fun n ↦ (ρ n).divNat
-  let τ : Fin N → Fin d := fun n ↦ (ρ n).modNat
-  have hρ : ρ = fun n ↦ finProdFinEquiv (σ n, τ n) := by
-    funext n
-    exact (finProdFinEquiv.apply_symm_apply (ρ n)).symm
-  calc
-    MPTensor.mpv K.toMPSTensor ρ = mpo K N σ τ := by
-      rw [hρ, MPSTensor.mpv_toMPSTensor_pairConfig]
-    _ = star (mpo K N τ σ) := ((hK N hN).isHermitian.apply σ τ).symm
-    _ = mpo (physicalAdjointTensor K) N σ τ :=
-      (mpo_physicalAdjointTensor K N σ τ).symm
-    _ = MPTensor.mpv (physicalAdjointTensor K).toMPSTensor ρ := by
-      rw [hρ, MPSTensor.mpv_toMPSTensor_pairConfig]
+  rw [mpv_eq_mpo, mpv_eq_mpo, mpo_physicalAdjointTensor]
+  exact ((hK N hN).isHermitian.apply _ _).symm
 
 /-- Since the two tensors have the same bond dimension, the positive-length equality extends
 at length zero by the universal zero-length MPV formula. -/
 theorem IsMPDO.sameMPV_physicalAdjointTensor {K : MPOTensor d D} (hK : IsMPDO K) :
-    MPTensor.SameMPV K.toMPSTensor (physicalAdjointTensor K).toMPSTensor := by
+    MPTensor.SameMPV K (physicalAdjointTensor K) := by
   intro N ρ
   by_cases hN : 0 < N
   · exact hK.sameMPV₂Pos_physicalAdjointTensor N hN ρ
@@ -78,19 +68,18 @@ This is the adjoint-closure step that connects equations `AppKxKy=0` and `PjKiPj
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1634--1639 and 1680--1691. -/
 theorem exists_physicalSlice_conjTranspose_eq_sum_of_isInjective_isMPDO
-    (K : MPOTensor d D) (hInj : Kraus.IsInjective K.toMPSTensor) (hK : IsMPDO K) :
+    (K : MPOTensor d D) (hInj : Kraus.IsInjective K) (hK : IsMPDO K) :
     ∃ X : GL (Fin D) ℂ, ∀ β α : Fin D,
       (physicalSlice K β α)ᴴ =
         ∑ ν : Fin D, ∑ μ : Fin D,
           (X β μ * (X⁻¹ : Matrix (Fin D) (Fin D) ℂ) ν α) • physicalSlice K μ ν := by
-  obtain ⟨X, hX⟩ :=
-    MPSTensor.fundamentalTheorem_singleBlock hInj hK.sameMPV_physicalAdjointTensor
+  obtain ⟨X, hX⟩ := MPSTensor.fundamentalTheorem_singleBlock hInj hK.sameMPV_physicalAdjointTensor
   refine ⟨X, fun β α ↦ ?_⟩
   ext i j
   have hEntry := congrArg
     (fun A : Matrix (Fin D) (Fin D) ℂ ↦ A β α)
-    (hX (finProdFinEquiv (i, j)))
-  simpa [toMPSTensor, physicalAdjointTensor, physicalSlice, Matrix.mul_apply,
+    (hX (i, j))
+  simpa [physicalAdjointTensor, physicalSlice, Matrix.mul_apply,
     Matrix.sum_apply, Pi.smul_apply, smul_eq_mul, Finset.mul_sum, Finset.sum_mul,
     mul_assoc, mul_left_comm, mul_comm] using hEntry
 
@@ -176,7 +165,7 @@ theorem mul_physicalSupportProj_eq_self_of_forall_mul_physicalSlice_eq
 
 /-- Adjoint closure makes the same physical support projection fix every slice on the right. -/
 theorem physicalSlice_mul_physicalSupportProj_of_isInjective_isMPDO
-    (K : MPOTensor d D) (hInj : Kraus.IsInjective K.toMPSTensor) (hK : IsMPDO K)
+    (K : MPOTensor d D) (hInj : Kraus.IsInjective K) (hK : IsMPDO K)
     (β α : Fin D) :
     physicalSlice K β α * physicalSupportProj K = physicalSlice K β α := by
   obtain ⟨_, hAdj⟩ :=
@@ -253,7 +242,7 @@ theorem isBNTLayerOrthogonal_iff_physicalSlice_mul_apply_eq_zero
 column spaces orthogonal. -/
 theorem physicalSliceColumns_conjTranspose_mul_eq_zero
     (K : (x : Fin g) → MPOTensor d (bondDim x))
-    (hInj : ∀ x, Kraus.IsInjective (K x).toMPSTensor)
+    (hInj : ∀ x, Kraus.IsInjective (K x))
     (hMPDO : ∀ x, IsMPDO (K x)) (hOrth : IsBNTLayerOrthogonal K)
     {x y : Fin g} (hxy : x ≠ y) :
     (physicalSliceColumns (K x))ᴴ * physicalSliceColumns (K y) = 0 := by
@@ -286,7 +275,7 @@ Source: arXiv:1606.00608, Appendix C.2, equations `AppKxKy=0` and `PjKiPj`,
 lines 1634--1639 and 1680--1691. -/
 theorem exists_pairwise_orthogonal_twoSided_physicalSupport
     (K : (x : Fin g) → MPOTensor d (bondDim x))
-    (hInj : ∀ x, Kraus.IsInjective (K x).toMPSTensor)
+    (hInj : ∀ x, Kraus.IsInjective (K x))
     (hMPDO : ∀ x, IsMPDO (K x)) (hOrth : IsBNTLayerOrthogonal K) :
     ∃ P : Fin g → Matrix (Fin d) (Fin d) ℂ,
       (∀ x, IsOrthogonalProjection (P x)) ∧

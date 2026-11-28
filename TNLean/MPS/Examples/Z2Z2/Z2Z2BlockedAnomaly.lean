@@ -85,14 +85,18 @@ theorem mpo_symTensor_mul_even (g h : Fin 4) (N : ℕ) (hN : 0 < N) :
     fin_cases g <;> fin_cases h <;> norm_num [fusionSign]
   rw [Nat.mul_comm N 2, pow_mul, hs, one_pow, one_smul]
 
-/-- The blocked tensors are normal. -/
+/-- The blocked tensors are normal.
+
+**Bridge (T.2b):** normality of a blocked tensor is read through the doubled-index view
+(`toMPSTensor_blockTensor`, `MPSTensor.isNormal_blockTensor` on `Fin d`) until the blocking
+lemmas are stated for an arbitrary physical alphabet. -/
 theorem blockedTensor_isNormal (g : Multiplicative (ZMod 2 × ZMod 2)) :
-    Kraus.IsNormal (blockedTensor g).toMPSTensor := by
+    Kraus.IsNormal (blockedTensor g) := by
+  refine (isNormal_toMPSTensor_iff _).1 ?_
   rw [blockedTensor, toMPSTensor_blockTensor]
   refine (isNormal_reindexPhysical_equiv _ _).2 ?_
   apply MPSTensor.isNormal_blockTensor _ 2 (by omega)
-  rw [← symMPS_eq_toMPSTensor]
-  exact symMPS_isNormal _
+  exact (isNormal_toMPSTensor_iff _).2 (symMPS_isNormal _)
 
 /-- The original family becomes an exact normal representation after blocking
 two physical sites; the raw odd-ring family is not asserted to be exact. -/
@@ -135,32 +139,28 @@ theorem raw_odd_square_ne_identity {N : ℕ} (hN : Odd N) :
   have hh := congrArg (fun M ↦ M (fun _ ↦ 0) (fun _ ↦ 0)) h
   norm_num at hh
 
-private abbrev blockedMPS {D : ℕ} (A : MPSTensor 16 D) :=
-  Kraus.reindexPhysical (blockedDoubledIndexEquiv 4 2) (Kraus.blockTensor A 2)
-
 private theorem block_pair_eq {D₁ D₂ : ℕ} (A : MPOTensor 4 D₁) (B : MPOTensor 4 D₂)
-    (C : MPOTensor 4 (D₁ * D₂)) (h : (mulTensor A B).toMPSTensor = C.toMPSTensor) :
-    (mulTensor (MPOTensor.blockTensor A 2) (MPOTensor.blockTensor B 2)).toMPSTensor =
-      (MPOTensor.blockTensor C 2).toMPSTensor := by
-  rw [← blockTensor_mulTensor, toMPSTensor_blockTensor, toMPSTensor_blockTensor, h]
+    (C : MPOTensor 4 (D₁ * D₂)) (h : mulTensor A B = C) :
+    mulTensor (MPOTensor.blockTensor A 2) (MPOTensor.blockTensor B 2) =
+      MPOTensor.blockTensor C 2 := by
+  rw [← blockTensor_mulTensor, h]
 
 private theorem block_reduction {D₁ D₂ D₃ : ℕ} (A : MPOTensor 4 D₁)
-    (B : MPOTensor 4 D₂) (C : MPSTensor 16 D₃)
+    (B : MPOTensor 4 D₂) (C : MPOTensor 4 D₃)
     {V : Matrix (Fin D₃) (Fin (D₁ * D₂)) ℂ}
     {W : Matrix (Fin (D₁ * D₂)) (Fin D₃) ℂ}
-    (h : IsReduction (mulTensor A B).toMPSTensor C V W) :
-    IsReduction (mulTensor (MPOTensor.blockTensor A 2)
-      (MPOTensor.blockTensor B 2)).toMPSTensor (blockedMPS C) V W := by
-  rw [← blockTensor_mulTensor, toMPSTensor_blockTensor]
-  exact (h.blockTensor 2).reindexPhysical _
+    (h : IsReduction (mulTensor A B) C V W) :
+    IsReduction (mulTensor (MPOTensor.blockTensor A 2) (MPOTensor.blockTensor B 2))
+      (MPOTensor.blockTensor C 2) V W := by
+  rw [← blockTensor_mulTensor]
+  exact (h.block 2).reindexPhysical _
 
-private theorem block_neg (A : MPSTensor 16 1) : blockedMPS ((-1 : ℂ) • A) = blockedMPS A := by
+private theorem block_neg (A : MPOTensor 4 1) :
+    MPOTensor.blockTensor ((-1 : ℂ) • A) 2 = MPOTensor.blockTensor A 2 := by
   funext i
-  change Kraus.evalWord (fun j ↦ (-1 : ℂ) • A j)
-      (Kraus.wordOfBlock 16 2 (blockedDoubledIndexEquiv 4 2 i)) = _
-  rw [Kraus.evalWord_smul, Kraus.length_wordOfBlock]
+  simp only [blockTensor_eq_reindexPhysical_block, Kraus.reindexPhysical, Kraus.block_apply]
+  rw [show (-1 : ℂ) • A = fun j ↦ (-1 : ℂ) • A j from rfl, Kraus.evalWord_smul, List.length_ofFn]
   norm_num
-  rfl
 
 /-- Explicit fusion witnesses for the blocked restriction to `{e,x}`. -/
 def blockedXFusionData :
@@ -170,7 +170,7 @@ def blockedXFusionData :
     (block_pair_eq _ _ _ mulTensor_eTensor_eTensor)
     (block_pair_eq _ _ _ (funext eXStacked_eq))
     (block_pair_eq _ _ _ (funext xEStacked_eq))
-    (by rw [toMPSTensor_blockTensor eTensor]; exact block_reduction _ _ _ xX_isReduction)
+    (block_reduction _ _ _ xX_isReduction)
 
 /-- Explicit fusion witnesses for the blocked restriction to `{e,xy}`.
 The original square reduces to `−M_e`; its two-site block reduces to `M_e`. -/
@@ -181,27 +181,24 @@ def blockedXyFusionData :
     (block_pair_eq _ _ _ mulTensor_eTensor_eTensor)
     (block_pair_eq _ _ _ (funext eXyStacked_eq))
     (block_pair_eq _ _ _ (funext xyEStacked_eq))
-    (by
-      rw [toMPSTensor_blockTensor eTensor]
-      change IsReduction _ (blockedMPS eMPS) _ _
-      simpa only [block_neg] using block_reduction _ _ _ xyXy_isReduction)
+    (by simpa only [block_neg] using block_reduction _ _ _ xyXy_isReduction)
 
 -- Only the sixteen raw letters are checked, never the 256 blocked letters.
-private theorem raw_x_tree_letter (a : Fin 16) :
-    kronId xXLeft 2 * (mulTensor (mulTensor xTensor xTensor) xTensor).toMPSTensor a =
+private theorem raw_x_tree_letter (a : Fin 4 × Fin 4) :
+    kronId xXLeft 2 * mulTensor (mulTensor xTensor xTensor) xTensor a =
       (1 : ℂ) • (idKron 2 xXLeft *
-        (mulTensor (mulTensor xTensor xTensor) xTensor).toMPSTensor a) := by
-  rw [show (mulTensor (mulTensor xTensor xTensor) xTensor).toMPSTensor a = _ from
+        mulTensor (mulTensor xTensor xTensor) xTensor a) := by
+  rw [show mulTensor (mulTensor xTensor xTensor) xTensor a = _ from
     triple_complexOfInt xIntTensor a, xXLeft, kronId_complexOfRing, idKron_complexOfRing]
   rw [← complexOfInt_mul, ← complexOfInt_mul, one_smul]
   congr 1
   revert_decide_kernel a
 
-private theorem raw_xy_tree_letter (a : Fin 16) :
-    kronId xyXyLeft 2 * (mulTensor (mulTensor xyTensor xyTensor) xyTensor).toMPSTensor a =
+private theorem raw_xy_tree_letter (a : Fin 4 × Fin 4) :
+    kronId xyXyLeft 2 * mulTensor (mulTensor xyTensor xyTensor) xyTensor a =
       (-1 : ℂ) • (idKron 2 xyXyLeft *
-        (mulTensor (mulTensor xyTensor xyTensor) xyTensor).toMPSTensor a) := by
-  rw [show (mulTensor (mulTensor xyTensor xyTensor) xyTensor).toMPSTensor a = _ from
+        mulTensor (mulTensor xyTensor xyTensor) xyTensor a) := by
+  rw [show mulTensor (mulTensor xyTensor xyTensor) xyTensor a = _ from
     triple_complexOfInt xyIntTensor a, xyXyLeft, kronId_complexOfRing, idKron_complexOfRing]
   rw [← complexOfInt_mul, ← complexOfInt_mul, neg_one_smul, ← complexOfInt_neg]
   congr 1
@@ -209,24 +206,20 @@ private theorem raw_xy_tree_letter (a : Fin 16) :
 
 private theorem block_tree {D m : ℕ} (T : MPOTensor 4 D)
     (L R : Matrix (Fin m) (Fin D) ℂ) (z : ℂ)
-    (h : ∀ a, L * T.toMPSTensor a = z • (R * T.toMPSTensor a)) :
-    IsDressedProportional (MPOTensor.blockTensor T 2).toMPSTensor L R z := by
-  have hw : ∀ w : List (Fin 16), w ≠ [] →
-      L * Kraus.evalWord T.toMPSTensor w = z • (R * Kraus.evalWord T.toMPSTensor w) := by
+    (h : ∀ a, L * T a = z • (R * T a)) :
+    IsDressedProportional (MPOTensor.blockTensor T 2) L R z := by
+  have hw : ∀ w : List (Fin 4 × Fin 4), w ≠ [] →
+      L * Kraus.evalWord T w = z • (R * Kraus.evalWord T w) := by
     intro w hne
     cases w with
     | nil => exact (hne rfl).elim
     | cons a w => rw [Kraus.evalWord_cons, ← Matrix.mul_assoc, h,
         Matrix.smul_mul, Matrix.mul_assoc]
-  rw [toMPSTensor_blockTensor]
   refine ⟨1, fun w hlen ↦ ?_⟩
-  rw [Kraus.evalWord_reindexPhysical, Kraus.evalWord_blockTensor]
+  rw [blockTensor_eq_reindexPhysical_block, Kraus.evalWord_reindexPhysical, Kraus.evalWord_block]
   apply hw
-  intro he
-  have hh := Kraus.length_flattenBlockedWord 16 2
-    (w.map (blockedDoubledIndexEquiv 4 2))
-  rw [he, List.length_nil, List.length_map] at hh
-  omega
+  obtain ⟨a, w, rfl⟩ := List.exists_cons_of_length_pos hlen
+  simp
 
 /-- The blocked `x` fusion trees have associator `+1`.
 Source: arXiv:2203.12563, type-II row, lines 1856–1872. -/
@@ -238,7 +231,7 @@ theorem blockedXFusionData_isAssociator :
     GroupFamily.FusionData.orderTwo_rightV_gen_gen_gen]
   change IsDressedProportional
     (mulTensor (mulTensor (MPOTensor.blockTensor xTensor 2)
-      (MPOTensor.blockTensor xTensor 2)) (MPOTensor.blockTensor xTensor 2)).toMPSTensor _ _ _
+      (MPOTensor.blockTensor xTensor 2)) (MPOTensor.blockTensor xTensor 2)) _ _ _
   rw [← blockTensor_mulTensor, ← blockTensor_mulTensor]
   exact block_tree _ _ _ _ raw_x_tree_letter
 
@@ -252,7 +245,7 @@ theorem blockedXyFusionData_isAssociator :
     GroupFamily.FusionData.orderTwo_rightV_gen_gen_gen]
   change IsDressedProportional
     (mulTensor (mulTensor (MPOTensor.blockTensor xyTensor 2)
-      (MPOTensor.blockTensor xyTensor 2)) (MPOTensor.blockTensor xyTensor 2)).toMPSTensor _ _ _
+      (MPOTensor.blockTensor xyTensor 2)) (MPOTensor.blockTensor xyTensor 2)) _ _ _
   rw [← blockTensor_mulTensor, ← blockTensor_mulTensor]
   exact block_tree _ _ _ _ raw_xy_tree_letter
 

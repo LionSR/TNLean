@@ -58,7 +58,7 @@ therefore every family below (section 5).
 
 | Family | Surviving definition(s) | Removed | Consumers touched | Scriptable |
 |---|---|---|---|---|
-| 1. Bases of normal tensors, canonical forms | basis: `IsCPSVBasisOfNormalTensors`; presentation: `IsBNTSectorPresentation` on `SectorDecomposition`; canonical form: `CPSVCanonicalFormData`/`IsCPSVCanonicalForm` (both renamed without the source tag after the deletions, decision 1.D1); canonical form II; `IsBNTCanonicalForm` restated as the left-canonical gauge of a presentation | 15 (`IsBNT`, `IsNormalCanonicalForm`, `IsNormalCanonicalFormBNT`, the PiAlgebra `IsCanonicalForm`, `PreparedBNTBlocks` and its `IsWeightNormalized`, `MPSTensor.CanonicalForm`, `HasOrderedNonzeroWeights`, five one-field wrappers, and the two weight fields of `IsBNTCanonicalForm`); `BNT/Bridge` deleted, `CanonicalFormBridge` merged | 166 modules / 1116 occurrences (union of all names touched) | wrappers, the `IsBNT` type rewrite, projections and all renames; restatements and constructors by hand |
+| 1. Bases of normal tensors, canonical forms | basis: `IsCPSVBasisOfNormalTensors`; presentation: `IsBNTSectorPresentation` on `SectorDecomposition`; canonical form: `CPSVCanonicalFormData`/`IsCPSVCanonicalForm` (both renamed without the source tag after the deletions, decision 1.D1); canonical form II; `IsLeftCanonicalBNTPresentation` restated as the left-canonical gauge of a presentation | 15 (`IsBNT`, `IsNormalCanonicalForm`, `IsNormalCanonicalFormBNT`, the PiAlgebra `IsCanonicalForm`, `PreparedBNTBlocks` and its `IsWeightNormalized`, `MPSTensor.CanonicalForm`, `HasOrderedNonzeroWeights`, five one-field wrappers, and the two weight fields of `IsLeftCanonicalBNTPresentation`); `BNT/Bridge` deleted, `CanonicalFormBridge` merged | 166 modules / 1116 occurrences (union of all names touched) | wrappers, the `IsBNT` type rewrite, projections and all renames; restatements and constructors by hand |
 | 2. Commuting form of an MPDO | `CommutingForm M extends CommutingBond d` (renames of `EtaLocalStructureData` and `TranslationInvariantBondData`) | 2 (`CommutingFormData`, `HasCommutingForm`) and 17 lemmas; `CommutingFormBridge` deleted | 27 modules, all `MPS/MPDO` | 25 of 27 modules |
 | 3. Mutual information on a chain | QICLean's bipartite mutual information; `mutualInfoChain` stays as a named special case defined by it | 0 predicates; the bridge lemma; `MutualInfoBridge` dissolved | 19 modules use `mutualInfoChain` (all `MPS/MPDO`); 16 edited | tactic-list and import rewrites |
 | 4. Unique ground states | `ManyBody.groundSpace H E₀ = ℂ ∙ Ω ∧ Ω ≠ 0` | 1 (`HasUniqueGroundState`) and its characterization lemma | step 1: 7 modules; step 2: 10 modules | step 1 entirely |
@@ -75,7 +75,7 @@ families, mostly in `MPS/MPDO` and `MPS/ParentHamiltonian`, not subtracted). Fam
 The blueprint entries `thm:cpgsv_multiblock_ft_source` and `thm:cpgsv_equal_case_source` (ch11),
 marked `\leanok`, point to `fundamentalTheorem_proportional_canonicalForm` and
 `fundamentalTheorem_equal_canonicalForm` (`SectorBNT/FundamentalCoord.lean:637, 612`), whose
-hypothesis `IsBNTCanonicalForm` requires left-canonical basis tensors. CPSV16 Theorem 2.10 and
+hypothesis `IsLeftCanonicalBNTPresentation` requires left-canonical basis tensors. CPSV16 Theorem 2.10 and
 Corollary 2.11 have no gauge condition. Under the faithfulness rule these are stricter-hypothesis
 variants; the source statements (T9, T10 of family 1, stated with `sorry`) are on presentations
 with no gauge choice. Until they are proved, the two entries need the scope restriction stated and
@@ -103,7 +103,7 @@ a paper-gap note (decision 1.D4).
   `GSNNCHOrthogonalSectors`) without a semantic dependency: run one script after the other
   family's change has landed.
 - Family 1 changes `IsVerticalCF` and the horizontal MPDO canonical-form predicates (they contain
-  `IsBNT` and `IsBNTCanonicalForm`); `HasHorizontalCFMPVRepresentation` becomes equivalent with no
+  `IsBNT` and `IsLeftCanonicalBNTPresentation`); `HasHorizontalCFMPVRepresentation` becomes equivalent with no
   hypothesis to the existence of a presentation and is left to the MPDO change.
 
 ## Order of application
@@ -137,7 +137,7 @@ a paper-gap note (decision 1.D4).
 
 ## Status after round 3 (2026-11-27)
 
-- **Family 1.** S0–S3 landed in rounds 1–2. S4 and S7: `IsBNTCanonicalForm` is now
+- **Family 1.** S0–S3 landed in rounds 1–2. S4 and S7: `IsLeftCanonicalBNTPresentation` is now
   `IsLeftCanonicalBNTPresentation`, a presentation of `P.toTensor` with left-canonical basis
   tensors (`extends IsBNTSectorPresentation`), without the two line-246 weight fields; the
   module `MPS/Tensor/DirectSum/SectorBNT.lean` became
@@ -211,7 +211,7 @@ PGVWC07 Theorem 4 and CPSV17.
 | canonical form II | `MPSTensor.CPSVCanonicalFormIIData A` / `IsCPSVCanonicalFormII A` |
 | canonical form with irreducible blocks | `MPTensor.MPUCanonicalFormData A` (CPSV17) and its gauge-fixed form `MPSTensor.PGVWC07CanonicalFormData A` (names: D6) |
 | line-246 weight convention for a canonical form | `MPTensor.CPSVCanonicalFormData.IsWeightNormalized` |
-| left-canonical gauge of a presentation (a proof device) | `MPSTensor.IsBNTCanonicalForm P`, restated as a presentation of `P.toTensor` with left-canonical basis (S4; name: D3) |
+| left-canonical gauge of a presentation (a proof device) | `MPSTensor.IsLeftCanonicalBNTPresentation P`, restated as a presentation of `P.toTensor` with left-canonical basis (S4; name: D3) |
 
 ### Inventory
 
@@ -229,7 +229,7 @@ mentions in docstrings count.
 | `SectorDecomposition d` (SharedInfra/SectorDecomposition.lean:143) | data: basis family, copies `>0`, weights `≠0` | CPSV16 281–301 | 107/513 [MPDO 36/145, FundamentalTheorem 23/142, RFP 14/21, Periodic 12/42, Preparation 12/78, CanonicalForm 5/16, SharedInfra 3/67, BNT 2/2] |
 | `HasBNTSectorData P` (same file:759) | `∃ N₀, ∀ N > N₀, LI (mpvState (P.basis j) N)` | CPSV21 1846–1850 | 14/23 |
 | `IsBNTSectorPresentation A P` (CanonicalForm/BNTRefinement.lean:42) | `0 < basisCount`, `SameMPV₂Pos A P.toTensor`, basis normal, `HasBNTSectorData P` | CPSV16 217–246, 265–301, 1135–1148 | 3/18 [MPDO 2/4, CanonicalForm 1/14] |
-| `IsBNTCanonicalForm P` (FundamentalTheorem/SectorBNT/Basic.lean:107) | 8 fields: `basis_dim_pos`, `basis_irreducible`, `basis_left_canonical`, `basis_normalized_self_overlap`, `bnt_data`, `basis_distinct`, `weight_norm_le_one`, `weight_unit_exists` | CPSV16 271–301; CPSV21 1846–1884 | 57/245 [FundamentalTheorem 19/110, MPDO 17/50, RFP 11/42, Preparation 5/26, BNT 2/8, CanonicalForm 1/1, Periodic 1/7, PiAlgebra 1/1] |
+| `IsLeftCanonicalBNTPresentation P` (FundamentalTheorem/SectorBNT/Basic.lean:107) | 8 fields: `basis_dim_pos`, `basis_irreducible`, `basis_left_canonical`, `basis_normalized_self_overlap`, `bnt_data`, `basis_distinct`, `weight_norm_le_one`, `weight_unit_exists` | CPSV16 271–301; CPSV21 1846–1884 | 57/245 [FundamentalTheorem 19/110, MPDO 17/50, RFP 11/42, Preparation 5/26, BNT 2/8, CanonicalForm 1/1, Periodic 1/7, PiAlgebra 1/1] |
 | `PreparedBNTBlocks d` (SectorBNT/Supplier.lean:366), `.IsWeightNormalized` (:389) | weighted family of positive-dimensional, left-canonical, primitive, irreducible blocks, weights `≠0` | none | 3/11 [FundamentalTheorem 3/11] |
 | `RetainedBlockReconstructionData A` (Definitions.lean:190) | `A^i = C† (⊕ μ_k A_k^i) C`, `CC†=1`, `μ_k≠0`, `D_k>0` | CPSV16 214–245; CPSV17 259–265 | 4/10 |
 | `CPSVCanonicalFormData A`, `IsCPSVCanonicalForm A` (Definitions.lean:230, 241) | the above with normal blocks and `∑ D_k ≤ D` | CPSV16 eq. `II_CF1` | 42/181 and 41/120 [MPDO 23/68, ParentHamiltonian 9/25, CanonicalForm 5/20, RFP 4/7 for the latter] |
@@ -244,7 +244,7 @@ mentions in docstrings count.
 | `BlocksNotGaugePhaseEquiv A` (BNT/Separation.lean:25, abbrev) | distinct blocks not gauge-phase equivalent | CPSV16 Prop. 2.7 (ii) | 66/182 |
 | `IsMPUCanonicalBlock`, `MPUCanonicalFormData`, `IsMPUCanonicalForm` (MPU/MPUCanonicalForm.lean:39, 53, 66) | reconstruction with irreducible blocks of transfer spectral radius one (periodic allowed), `∑ D_k = D` | CPSV17 259–267 | 3/7, 3/14, 16/72 (all MPU) |
 | `PGVWC07CanonicalFormData`, `IsPGVWC07CanonicalForm` (CanonicalForm/PGVWC07CanonicalForm.lean:66, 108) | irreducible blocks in unital gauge with diagonal dual fixed point, real weights in `(0,1]`, bond bijection | PGVWC07 Thm 4, lines 742–763 | 7/47, 5/24 |
-| MPDO: `IsHorizontalCF` (MPDO/HorizontalBNT.lean:142), `IsSimpleCanonicalForm` (SimpleTensor.lean:188), `HasHorizontalCFMPVRepresentation` (HorizontalCFMPVRepresentation.lean:63), `HorizontalCFData` (PerCopyHorizontalCF.lean:35), `IsVerticalCF` (VerticalCF.lean:592) | statements about an `MPOTensor`, built from `IsBNTCanonicalForm` (first three) and `IsBNT` (`IsVerticalCF`) | CPSV16 §4, App. C | 24/75, 6/23, 2/3, 4/15, 9/12 (all MPDO) |
+| MPDO: `IsHorizontalCF` (MPDO/HorizontalBNT.lean:142), `IsSimpleCanonicalForm` (SimpleTensor.lean:188), `HasHorizontalCFMPVRepresentation` (HorizontalCFMPVRepresentation.lean:63), `HorizontalCFData` (PerCopyHorizontalCF.lean:35), `IsVerticalCF` (VerticalCF.lean:592) | statements about an `MPOTensor`, built from `IsLeftCanonicalBNTPresentation` (first three) and `IsBNT` (`IsVerticalCF`) | CPSV16 §4, App. C | 24/75, 6/23, 2/3, 4/15, 9/12 (all MPDO) |
 | `IsIsometryCanonicalForm` (RFP/StructuralFull.lean:506), `IsMPUCanonicalFormII` (MPU/CanonicalForm.lean:337) | renormalization-fixed-point isometry form; canonical form II of a matrix product unitary | CPSV16 Lemma charact-NT-pure-RFP; CPSV17 | 5/25; 95/530 |
 
 #### Proved relations at HEAD
@@ -276,14 +276,14 @@ BNTRefinement.lean:72); uniqueness of the basis up to bijection and unit gauge p
 (`IsBNTSectorPresentation.equiv_of_sameMPV₂Pos`, :151); CF data with `0 < r` →
 presentation (`CPSVCanonicalFormData.BNTRefinement.isBNTSectorPresentation`, :761).
 
-Sector canonical form: `IsBNTCanonicalForm → IsBNT` (`IsBNTCanonicalForm.isBNT`,
-Bridge.lean:125); → blockwise `Kraus.IsNormal` (`IsBNTCanonicalForm.basis_isNormal`,
+Sector canonical form: `IsLeftCanonicalBNTPresentation → IsBNT` (`IsLeftCanonicalBNTPresentation.isBNT`,
+Bridge.lean:125); → blockwise `Kraus.IsNormal` (`IsLeftCanonicalBNTPresentation.basis_isNormal`,
 NormalizedSelfOverlap.lean:185); CF data ∧ line-246 ∧ `A ≠ 0` → sector form with
 exact coisometric reconstruction (`CPSVCanonicalFormData.exists_isBNTCanonicalForm_exact`,
 `exists_isBNTCanonicalForm`, SectorBNT/CanonicalFormBridge.lean:145, 276); prepared
 blocks → sector form (`PreparedBNTBlocks.exists_isBNTCanonicalForm_exact`,
 PreparedReconstruction.lean:257; Supplier.lean:408, 512). No implication from
-`IsBNTCanonicalForm` to `IsBNTSectorPresentation` is stated (T5 below supplies it).
+`IsLeftCanonicalBNTPresentation` to `IsBNTSectorPresentation` is stated (T5 below supplies it).
 
 Block families: `IsCanonicalForm` built from primitive injective blocks
 (`IsCanonicalForm.of_peripheral_primitive`, CanonicalFormSepAux.lean:208);
@@ -307,7 +307,7 @@ MPUCanonicalForm.lean:235). No theorem relates `PGVWC07CanonicalFormData` and
 | `IsCPSVBasisOfNormalTensors` | survivor (the source's basis of normal tensors) |
 | `IsBNT` | deleted. Equivalent to the survivor exactly under the hypothesis that every basis tensor has transfer spectral radius one: clause theorem T3, from T1 `IsNormalTensor A ↔ Kraus.IsNormal A ∧ ρ(E_A) = 1`. Both sources' basis consists of normal tensors in the normalized sense (CPSV21 Def. 4.1 asks for a primitive channel), so restating its consumers on the survivor adds no hypothesis absent from the source |
 | `IsBNTSectorPresentation` | survivor (the source's two-layer presentation); characterization T4: nonempty basis, same vectors as `P.toTensor`, and the basis of `P` a basis of normal tensors of `P.toTensor` |
-| `IsBNTCanonicalForm` | different notion, restated to unfold to the survivor (T5): a presentation of `P.toTensor` whose basis tensors are left-canonical, plus the line-246 weight fields. Four of its eight fields are consequences (`basis_dim_pos`, `basis_irreducible`, `basis_normalized_self_overlap` via T2; `basis_distinct` via `blocks_not_gaugePhaseEquiv`). The two weight fields are consumed by no proof at HEAD (only rebuilt after blocking, SectorBNT/Blocking.lean:346); they are dropped. Left-canonicality is a gauge choice that no source statement contains; it stays as the one extra field, used by the overlap estimates of the Fundamental Theorem proof. Name: D3 |
+| `IsLeftCanonicalBNTPresentation` | different notion, restated to unfold to the survivor (T5): a presentation of `P.toTensor` whose basis tensors are left-canonical, plus the line-246 weight fields. Four of its eight fields are consequences (`basis_dim_pos`, `basis_irreducible`, `basis_normalized_self_overlap` via T2; `basis_distinct` via `blocks_not_gaugePhaseEquiv`). The two weight fields are consumed by no proof at HEAD (only rebuilt after blocking, SectorBNT/Blocking.lean:346); they are dropped. Left-canonicality is a gauge choice that no source statement contains; it stays as the one extra field, used by the overlap estimates of the Fundamental Theorem proof. Name: D3 |
 | `HasBNTSectorData` | survivor as the independence clause (it is the clause, not a second notion) |
 | `CPSVCanonicalFormData` / `IsCPSVCanonicalForm` | survivor (rename D1) |
 | `RetainedBlockReconstructionData` | survivor as the shared reconstruction shape of the two canonical-form notions |
@@ -321,7 +321,7 @@ MPUCanonicalForm.lean:235). No theorem relates `PGVWC07CanonicalFormData` and
 | `BlocksNotGaugePhaseEquiv` | survivor |
 | `MPUCanonicalFormData` / `IsMPUCanonicalForm` / `IsMPUCanonicalBlock` | different notion (irreducible, possibly periodic blocks, full support); the name names a source, not the difference (D6) |
 | `PGVWC07CanonicalFormData` / `IsPGVWC07CanonicalForm` | different notion: gauge-fixed form of the previous one with real weights (D6) |
-| MPDO predicates | different notions (statements about an MPO and its doubled tensor, with MPDO conditions); outside this family, but they consume it: `IsVerticalCF` contains `IsBNT` (S2 changes it to the survivor; its suppliers already hold the survivor), `IsHorizontalCF`, `IsSimpleCanonicalForm` and `HasHorizontalCFMPVRepresentation` contain `IsBNTCanonicalForm` and lose the line-246 weight fields with S4. `HasHorizontalCFMPVRepresentation M` is then equivalent with no hypothesis to `∃ P, IsBNTSectorPresentation M.toMPSTensor P` (by the left-canonical gauge lemma in New.lean) and should be deleted by the MPDO change |
+| MPDO predicates | different notions (statements about an MPO and its doubled tensor, with MPDO conditions); outside this family, but they consume it: `IsVerticalCF` contains `IsBNT` (S2 changes it to the survivor; its suppliers already hold the survivor), `IsHorizontalCF`, `IsSimpleCanonicalForm` and `HasHorizontalCFMPVRepresentation` contain `IsLeftCanonicalBNTPresentation` and lose the line-246 weight fields with S4. `HasHorizontalCFMPVRepresentation M` is then equivalent with no hypothesis to `∃ P, IsBNTSectorPresentation M.toMPSTensor P` (by the left-canonical gauge lemma in New.lean) and should be deleted by the MPDO change |
 | `IsIsometryCanonicalForm`, `IsMPUCanonicalFormII` | different notions, outside this family |
 
 #### Faithfulness findings
@@ -329,14 +329,14 @@ MPUCanonicalForm.lean:235). No theorem relates `PGVWC07CanonicalFormData` and
 1. The paper-level Fundamental Theorem entries `thm:cpgsv_multiblock_ft_source`
    (`fundamentalTheorem_proportional_canonicalForm`, SectorBNT/FundamentalCoord.lean:637)
    and `thm:cpgsv_equal_case_source` (`fundamentalTheorem_equal_canonicalForm`, :612),
-   both `\leanok` in ch11, take `IsBNTCanonicalForm` hypotheses, whose definition
+   both `\leanok` in ch11, take `IsLeftCanonicalBNTPresentation` hypotheses, whose definition
    requires left-canonical basis tensors. CPSV16 Theorem 2.10 and Corollary 2.11
    state the result for tensors in canonical form with no gauge condition. Under
    the faithfulness rule these Lean theorems are stricter-hypothesis variants. The
    source-faithful statements are T9 and T10 in New.lean (presentations, no gauge
    choice, no weight convention); the equal-case basis matching is already proved
    on presentations (`IsBNTSectorPresentation.equiv_of_sameMPV₂Pos`).
-2. The line-246 fields of `IsBNTCanonicalForm` are never used, but they force
+2. The line-246 fields of `IsLeftCanonicalBNTPresentation` are never used, but they force
    hypotheses: `CPSVCanonicalFormData.exists_isBNTCanonicalForm(_exact)` take
    `data.IsWeightNormalized`, and `fundamentalTheorem_equal_ambient_canonicalForm`
    (CanonicalFormEqualAmbient.lean:68) takes `hNormA`, `hNormB` only to call them;
@@ -355,10 +355,10 @@ MPUCanonicalForm.lean:235). No theorem relates `PGVWC07CanonicalFormData` and
 | Removed | Replacement |
 |---|---|
 | `IsBNT` | `IsCPSVBasisOfNormalTensors`; T3 for the clause |
-| `IsCPSVBasisOfNormalTensors.isBNT`, `IsBNTCanonicalForm.isBNT`, `IsBNT.of_sameMPV₂Pos` (Bridge.lean:86, 125, 101) | none (translations); `IsBNTSectorPresentation.of_sameMPV₂Pos` and `isCPSVBasisOfNormalTensors` already cover the content |
+| `IsCPSVBasisOfNormalTensors.isBNT`, `IsLeftCanonicalBNTPresentation.isBNT`, `IsBNT.of_sameMPV₂Pos` (Bridge.lean:86, 125, 101) | none (translations); `IsBNTSectorPresentation.of_sameMPV₂Pos` and `isCPSVBasisOfNormalTensors` already cover the content |
 | `isBNT_of_separated_bnt_data`, `IsNormalCanonicalFormBNT.isBNT`, `isBNT_basisDirectSum` (RFP/BNTDirectSumBasis.lean:91) | `exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhaseEquiv`; T7; `isCPSVBasisOfNormalTensors_basisDirectSum` |
 | `IsCPSVBasisOfNormalTensors.blocks_dim_pos` | kept, proof becomes `(hBNT.blocks_normal j).bondDim_ne_zero`, moved to Definitions.lean |
-| `IsBNTCanonicalForm.basis_isNormal` | `(h.basis_normal j).isNormal` (S4, scripted) |
+| `IsLeftCanonicalBNTPresentation.basis_isNormal` | `(h.basis_normal j).isNormal` (S4, scripted) |
 | `IsNormalCanonicalForm`, `.toHasIrreducibleBlocks`, `.toIsLeftCanonicalBlockFamily`, `.ofSeparatedData`, `.overlap_tendsto_one` | T6 clauses; `IsNormalTensor.selfOverlap_tendsto_one` |
 | `IsNormalCanonicalFormBNT`, `.ofSeparatedData` | T7 |
 | `IsCanonicalForm` (PiAlgebra), `.of_peripheral_primitive` | T8 clauses |
@@ -366,10 +366,10 @@ MPUCanonicalForm.lean:235). No theorem relates `PGVWC07CanonicalFormData` and
 | `HasOrderedNonzeroWeights` | `∀ k, μ k ≠ 0`; ordering dropped |
 | `PreparedBNTBlocks`, `.IsWeightNormalized`, `.exists_isBNTCanonicalForm_exact` | `CPSVCanonicalFormData.ofBlocks` with `∀ k, IsLeftCanonical (blocks k)`; the CF supplier |
 | `MPSTensor.CanonicalForm`, `CanonicalForm.toTensor_eq_toTensorFromBlocks`, `fundamentalTheorem_canonicalForm_sameStructure` | `toTensorFromBlocks`; `fundamentalTheorem_multiBlock_global` |
-| fields `basis_dim_pos`, `basis_irreducible`, `basis_normalized_self_overlap`, `basis_distinct` of `IsBNTCanonicalForm` | theorems of the same names (call sites unchanged) |
+| fields `basis_dim_pos`, `basis_irreducible`, `basis_normalized_self_overlap`, `basis_distinct` of `IsLeftCanonicalBNTPresentation` | theorems of the same names (call sites unchanged) |
 | fields `weight_norm_le_one`, `weight_unit_exists`, `bnt_data` | dropped; dropped; `eventually_li` (inherited) |
 
-Restated: `IsBNTCanonicalForm P` as `structure … extends IsBNTSectorPresentation
+Restated: `IsLeftCanonicalBNTPresentation P` as `structure … extends IsBNTSectorPresentation
 P.toTensor P` with `basis_left_canonical` (elaborated as
 `RestatedBNTCanonicalForm` in New.lean). This needs `IsBNTSectorPresentation`
 moved from BNTRefinement.lean down to CanonicalForm/Definitions.lean and
@@ -391,7 +391,7 @@ T10 `ft_sector_data_of_isBNTSectorPresentation`, via
 | Change | Modules / occurrences | How |
 |---|---|---|
 | deletions of §4 (11 predicates and wrappers) | 41 / 363 (union) | S1 scripted for the wrappers; IsBNT type rewrite scripted (S2: 7 files, 9 occ.); the rest by hand (flagged: 10 files, 50 occ. for T6–T8 predicates and `PreparedBNTBlocks`; 5 files, 7 occ. for deleted translations) |
-| restatement of `IsBNTCanonicalForm` | 57 / 245 | field accesses unchanged; scripted `.bnt_data` (5 files, 10 occ.), `basis_isNormal` (6 files, 10 occ.); constructors by hand (12 files, 93 constructor lines flagged) |
+| restatement of `IsLeftCanonicalBNTPresentation` | 57 / 245 | field accesses unchanged; scripted `.bnt_data` (5 files, 10 occ.), `basis_isNormal` (6 files, 10 occ.); constructors by hand (12 files, 93 constructor lines flagged) |
 | renames D1 (S6) | 89 / 508 in Lean; plus blueprint and docs | scripted |
 | rename D3 (S7) | 57 / 245 in Lean | scripted |
 | union of all family names touched | 166 / 1116 | |
@@ -408,10 +408,10 @@ The dry-run of `rewrite.py` (dryrun.txt) gives the per-rule numbers by directory
 | `thm:cpsv_bnt_is_bnt` (ch10_bnt_normal_blocks_and_overlap) | `IsCPSVBasisOfNormalTensors.isBNT` | replaced by the T1/T3 entry; 1 `\uses`, 1 `\ref` |
 | `def:bnt_cpsv` | `IsCPSVBasisOfNormalTensors` | kept (27 `\uses`), tag renamed under D1 |
 | `def:cpsv_bnt_sector_presentation` (ch10_bnt_sector_canonical_form) | `IsBNTSectorPresentation` | kept (6 `\uses`); add T4 |
-| `def:sector_bnt_cf` | `IsBNTCanonicalForm` | restated prose: presentation in left-canonical gauge; 56 `\uses`, 11 `\ref` unchanged |
-| `thm:sector_bnt_cf_is_bnt` | `IsBNTCanonicalForm.isBNT` | removed (0 `\uses`) |
+| `def:sector_bnt_cf` | `IsLeftCanonicalBNTPresentation` | restated prose: presentation in left-canonical gauge; 56 `\uses`, 11 `\ref` unchanged |
+| `thm:sector_bnt_cf_is_bnt` | `IsLeftCanonicalBNTPresentation.isBNT` | removed (0 `\uses`) |
 | entries at ch10_bnt_sector_canonical_form.tex:1102, 1133 | `CPSVCanonicalFormData.exists_isBNTCanonicalForm(_exact)` | statements lose the weight hypothesis |
-| `thm:cpgsv_multiblock_ft_source`, `thm:cpgsv_equal_case_source` (ch11) | FT on `IsBNTCanonicalForm` | finding 1: retarget to T9/T10 when proved (D4) |
+| `thm:cpgsv_multiblock_ft_source`, `thm:cpgsv_equal_case_source` (ch11) | FT on `IsLeftCanonicalBNTPresentation` | finding 1: retarget to T9/T10 when proved (D4) |
 | `def:is_normal_canonical_form`, `def:normal_cf_bnt`, `lem:cf_bnt_is_bnt_split`, `lem:normal_cf_bnt_is_bnt` (ch09_canonical_normal_forms_and_support_auxiliary) | deleted predicates | removed; 2 `\uses`, 4 `\ref` redirected to the T6/T7 entries |
 | `def:is_canonical_form`, `thm:canonical_from_primitive` (ch26_mps_rfp_normal_isometry_canonical_forms) | `IsCanonicalForm` | removed; 3 `\uses`, 3 `\ref` redirected to the T8 entry |
 | `def:canonical_form` (ch02_mps) | `MPSTensor.CanonicalForm` | removed or retagged to `IsCPSVCanonicalForm` (0 `\uses`, 0 `\ref`) |
@@ -425,7 +425,7 @@ The dry-run of `rewrite.py` (dryrun.txt) gives the per-rule numbers by directory
 form": opening sentence replaced by the table of §1; subsections
 "`MPSTensor.CanonicalForm`", "`MPSTensor.IsCanonicalForm`",
 "`MPSTensor.IsNormalCanonicalForm`", "`MPSTensor.IsNormalCanonicalFormBNT`" removed;
-"`MPSTensor.IsBNTCanonicalForm`" rewritten (left-canonical presentation, no weight
+"`MPSTensor.IsLeftCanonicalBNTPresentation`" rewritten (left-canonical presentation, no weight
 fields); "Retained-block reconstruction and literal CPSV canonical form" and
 "`MPTensor.IsMPUCanonicalForm`" renamed under D1/D6; "MPDO canonical-form
 predicates" (`IsVerticalCF` basis clause; `IsSimpleCanonicalForm` unit-weight
@@ -441,7 +441,7 @@ finding 1 and T9/T10), `cpsv16_nncph_ground_state_scope.tex` (IsBNT),
 `rmp_nonperiodic_bnt_comparison_inputs.tex`, `cpsv16_nondominant_per_block_projection.tex`
 (IsNormalCanonicalFormBNT). Rename-only under D1/D3: the other 15 of the 20 notes
 that name `CPSVCanonicalFormData`, `IsCPSVCanonicalForm`, `CPSVCanonicalFormII*`,
-`IsCPSVBasisOfNormalTensors` or `IsBNTCanonicalForm` (`grep -l`; e.g.
+`IsCPSVBasisOfNormalTensors` or `IsLeftCanonicalBNTPresentation` (`grep -l`; e.g.
 `cpgsv17_vertical_cf_grouping.tex`, `cpsv16_rfp_isometry_scope.tex`); S6/S7 cover them. QICLean-hosted notes cited by URL whose subject disappears after S4:
 `cpsv16_unit_weight_rfp_scale_tension`, `cpsv16_global_vs_persector_unit_witness`.
 
@@ -473,7 +473,7 @@ two QICLean paper-gap notes in §4, after S4).
 | S1 | unwrap the five one-field wrappers and `HasOrderedNonzeroWeights` | scripted (`--stage S1`) + hand edits in CanonicalFormSepAux.lean and BNT/Construction.lean | wide: CanonicalFormSepAux has 1,139 downstream modules |
 | S2 | delete `IsBNT`, Bridge.lean; `IsVerticalCF`, `nncph_implies_rfp` on the survivor | scripted type rewrite + 7 flagged sites | wide: BNT/Basic has 1,244 downstream |
 | S3 | delete `IsNormalCanonicalForm`, `IsNormalCanonicalFormBNT`, PiAlgebra `IsCanonicalForm`, `PreparedBNTBlocks`, `MPSTensor.CanonicalForm`; restate their consumers with T6–T8 | by hand, 10 files flagged + Core/MultiBlock, FundamentalTheorem/Multi | wide (Core/MultiBlock 1,640 downstream) |
-| S4 | restate `IsBNTCanonicalForm` (move `IsBNTSectorPresentation` to Definitions.lean); drop weight fields; merge CanonicalFormBridge into BNTRefinement; drop the normalization hypotheses of the CF suppliers and of `fundamentalTheorem_equal_ambient_canonicalForm` | scripted projections + 12 files of constructors by hand | 766 downstream of SectorBNT/Basic |
+| S4 | restate `IsLeftCanonicalBNTPresentation` (move `IsBNTSectorPresentation` to Definitions.lean); drop weight fields; merge CanonicalFormBridge into BNTRefinement; drop the normalization hypotheses of the CF suppliers and of `fundamentalTheorem_equal_ambient_canonicalForm` | scripted projections + 12 files of constructors by hand | 766 downstream of SectorBNT/Basic |
 | S5 | prove T9, T10 (and `exists_restated`); retarget ch11 entries | proofs | small |
 | S6 | renames D1 (after S3, which frees `IsCanonicalForm`); optional S6d for D2 | scripted | wide (Definitions 1,084 downstream) |
 | S7 | rename D3 | scripted | 766 downstream |

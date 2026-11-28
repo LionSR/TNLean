@@ -137,14 +137,6 @@ noncomputable def loopProductState (F : BeigiSectorGraphData A)
   fun s ↦ ∑ t : Fin N → Fin d,
     (∏ n : Fin N, F.unitary (s n) (t n)) * F.loopCyclicProduct l t
 
-/-- The Euclidean-space realization of a positive-loop product state.
-
-Source: Beigi, J. Phys. A 45 (2012) 025306, Section IV. -/
-noncomputable def loopProductStateES (F : BeigiSectorGraphData A)
-    (l : Loop F.edgeWeight) {N : ℕ} [NeZero N] :
-    EuclideanSpace ℂ (Fin N → Fin d) :=
-  (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm (F.loopProductState l)
-
 private theorem edgeProjector_mulVec_loopBondVector
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight) :
     (F.edgeProjector l.1 l.1).mulVec (F.loopBondVector l) =
@@ -392,32 +384,21 @@ theorem loopProductState_ne_zero (F : BeigiSectorGraphData A)
   rw [Matrix.mulVec_mulVec, hWstarW, Matrix.one_mulVec] at hzero'
   exact hzero'
 
-/-- The Euclidean realization of a positive-loop product state is nonzero at
-every positive chain length.
-
-Source: Beigi, J. Phys. A 45 (2012) 025306, Section IV. -/
-theorem loopProductStateES_ne_zero (F : BeigiSectorGraphData A)
-    (l : Loop F.edgeWeight) {N : ℕ} [NeZero N] :
-    F.loopProductStateES (N := N) l ≠ 0 := by
-  exact (WithLp.linearEquiv 2 ℂ (NSiteSpace d N)).symm.injective.ne
-    (F.loopProductState_ne_zero l)
-
-/-- Euclidean positive-loop product states belonging to distinct loops are
+/-- Positive-loop product states belonging to distinct loops are, in the Euclidean space,
 orthogonal at every positive chain length.
 
 Source: Beigi, J. Phys. A 45 (2012) 025306, Section IV. -/
-theorem loopProductStateES_inner_eq_zero_of_ne
+theorem inner_toLp_loopProductState_eq_zero_of_ne
     (F : BeigiSectorGraphData A) {l m : Loop F.edgeWeight}
     {N : ℕ} [NeZero N] (hlm : l ≠ m) :
-    inner ℂ (F.loopProductStateES (N := N) l)
-      (F.loopProductStateES (N := N) m) = 0 := by
+    inner ℂ (WithLp.toLp 2 (F.loopProductState (N := N) l))
+      (WithLp.toLp 2 (F.loopProductState (N := N) m)) = 0 := by
   classical
   let W := (Matrix.piKronecker fun _ : Fin N ↦ F.unitary)
   have hWstarW : Wᴴ * W = 1 := by
     apply Matrix.piKronecker_const_isometry
     simpa only [Matrix.star_eq_conjTranspose] using
       Unitary.star_mul_self_of_mem F.unitary_mem
-  rw [loopProductStateES, loopProductStateES]
   change inner ℂ (WithLp.toLp 2 (F.loopProductState l))
     (WithLp.toLp 2 (F.loopProductState m)) = 0
   rw [F.loopProductState_eq_piKronecker_mulVec l,
@@ -429,19 +410,19 @@ theorem loopProductStateES_inner_eq_zero_of_ne
     Matrix.one_mulVec, dotProduct_comm]
   exact F.loopCyclicProduct_inner_eq_zero_of_ne hlm
 
-/-- The Euclidean positive-loop product states are linearly independent at
+/-- The positive-loop product states are linearly independent in the Euclidean space at
 every positive chain length.
 
 Source: Beigi, J. Phys. A 45 (2012) 025306, Section IV. -/
-theorem loopProductStateES_linearIndependent
+theorem linearIndependent_toLp_loopProductState
     (F : BeigiSectorGraphData A) {N : ℕ} [NeZero N] :
     LinearIndependent ℂ
-      (fun l : Loop F.edgeWeight ↦ F.loopProductStateES (N := N) l) := by
+      (fun l : Loop F.edgeWeight ↦ WithLp.toLp 2 (F.loopProductState (N := N) l)) := by
   apply linearIndependent_of_ne_zero_of_inner_eq_zero
   · intro l
-    exact F.loopProductStateES_ne_zero l
+    simpa using F.loopProductState_ne_zero (N := N) l
   · intro l m hlm
-    exact F.loopProductStateES_inner_eq_zero_of_ne hlm
+    exact F.inner_toLp_loopProductState_eq_zero_of_ne hlm
 
 private theorem groundBondProduct_mulVec_loopProductState
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight)
@@ -519,34 +500,35 @@ theorem loopProductState_mem_groundSpace_hamiltonian_parentRingInteraction
     (F : BeigiSectorGraphData A) (l : Loop F.edgeWeight)
     {N : ℕ} (hN : 2 ≤ N) :
     letI : NeZero N := ⟨by omega⟩
-    F.loopProductStateES l ∈ ManyBody.groundSpace (parentRingInteraction A 2 N).hamiltonian 0 := by
+    WithLp.toLp 2 (F.loopProductState l) ∈
+      ManyBody.groundSpace (parentRingInteraction A 2 N).hamiltonian 0 := by
   let : NeZero N := ⟨by omega⟩
-  rw [loopProductStateES, groundSpace_hamiltonian_parentRingInteraction_eq_map_ker,
+  rw [groundSpace_hamiltonian_parentRingInteraction_eq_map_ker,
     Submodule.mem_map]
   exact ⟨F.loopProductState l, F.loopProductState_mem_ker_parentHamiltonian l hN, rfl⟩
 
 private theorem
-    span_loopProductStateES_eq_groundSpace_hamiltonian_parentRingInteraction_of_finrank_eq
+    span_toLp_loopProductState_eq_groundSpace_of_finrank_eq
     (F : BeigiSectorGraphData A) {N : ℕ} (hN : 2 < N)
     (hfinrank : haveI : NeZero N := ⟨by omega⟩;
       Module.finrank ℂ (ManyBody.groundSpace (parentRingInteraction A 2 N).hamiltonian 0) =
         Fintype.card (Loop F.edgeWeight)) :
     letI : NeZero N := ⟨by omega⟩
     Submodule.span ℂ
-      (Set.range (fun l : Loop F.edgeWeight ↦ F.loopProductStateES l)) =
+      (Set.range (fun l : Loop F.edgeWeight ↦ WithLp.toLp 2 (F.loopProductState l))) =
       ManyBody.groundSpace (parentRingInteraction A 2 N).hamiltonian 0 := by
   let : NeZero N := ⟨by omega⟩
   apply Submodule.eq_of_le_of_finrank_eq
   · rw [Submodule.span_le]
     rintro _ ⟨l, rfl⟩
-    change F.loopProductStateES l ∈
+    change WithLp.toLp 2 (F.loopProductState l) ∈
       ManyBody.groundSpace (parentRingInteraction A 2 N).hamiltonian 0
     exact F.loopProductState_mem_groundSpace_hamiltonian_parentRingInteraction l (by omega)
   · calc
       Module.finrank ℂ (Submodule.span ℂ
-          (Set.range (fun l : Loop F.edgeWeight ↦ F.loopProductStateES l))) =
+          (Set.range (fun l : Loop F.edgeWeight ↦ WithLp.toLp 2 (F.loopProductState l)))) =
           Fintype.card (Loop F.edgeWeight) :=
-        finrank_span_eq_card F.loopProductStateES_linearIndependent
+        finrank_span_eq_card F.linearIndependent_toLp_loopProductState
       _ = Module.finrank ℂ
             (ManyBody.groundSpace (parentRingInteraction A 2 N).hamiltonian 0) := hfinrank.symm
 
@@ -555,16 +537,16 @@ length greater than two the positive-loop product states span the whole parent
 ground space.
 
 Source: Beigi, J. Phys. A 45 (2012) 025306, Sections III--IV. -/
-theorem span_loopProductStateES_eq_groundSpace_hamiltonian_parentRingInteraction
+theorem span_toLp_loopProductState_eq_groundSpace
     (F : BeigiSectorGraphData A)
     (hparent : ∃ c N₀ : ℕ, ∀ M : ℕ, ∀ hM : N₀ < M, haveI : NeZero M := ⟨Nat.ne_zero_of_lt hM⟩;
       Module.finrank ℂ (ManyBody.groundSpace (parentRingInteraction A 2 M).hamiltonian 0) = c)
     {N : ℕ} (hN : 2 < N) :
     letI : NeZero N := ⟨by omega⟩
     Submodule.span ℂ
-      (Set.range (fun l : Loop F.edgeWeight ↦ F.loopProductStateES l)) =
+      (Set.range (fun l : Loop F.edgeWeight ↦ WithLp.toLp 2 (F.loopProductState l))) =
       ManyBody.groundSpace (parentRingInteraction A 2 N).hamiltonian 0 := by
-  exact F.span_loopProductStateES_eq_groundSpace_hamiltonian_parentRingInteraction_of_finrank_eq hN
+  exact F.span_toLp_loopProductState_eq_groundSpace_of_finrank_eq hN
     (F.groundSpace_hamiltonian_parentRingInteraction_finrank_eq_card_loop hparent hN)
 
 /-- In the BNT nearest-neighbor setting, positive-loop product states span the
@@ -572,16 +554,16 @@ whole parent ground space at every length greater than two.
 
 Source: CPSV16, Definition 3.9 and Theorem 3.10, source lines 517--540;
 Beigi, J. Phys. A 45 (2012) 025306, Sections III--IV. -/
-theorem span_loopProductStateES_eq_groundSpace_hamiltonian_parentRingInteraction_of_hasBNTSectorData
-    {P : SectorDecomposition d} (F : BeigiSectorGraphData P.toTensor)
+theorem span_toLp_loopProductState_eq_groundSpace_of_hasBNTSectorData
+    {P : SectorDecomposition (Fin d)} (F : BeigiSectorGraphData P.toTensor)
     (hBNT : HasBNTSectorData P)
     (hNNCPH : HasNNCPHGroundSpaces P.toTensor P.basis)
     {N : ℕ} (hN : 2 < N) :
     letI : NeZero N := ⟨by omega⟩
     Submodule.span ℂ
-      (Set.range (fun l : Loop F.edgeWeight ↦ F.loopProductStateES l)) =
+      (Set.range (fun l : Loop F.edgeWeight ↦ WithLp.toLp 2 (F.loopProductState l))) =
       ManyBody.groundSpace (parentRingInteraction P.toTensor 2 N).hamiltonian 0 := by
-  exact F.span_loopProductStateES_eq_groundSpace_hamiltonian_parentRingInteraction_of_finrank_eq hN
+  exact F.span_toLp_loopProductState_eq_groundSpace_of_finrank_eq hN
     (F.groundSpace_hamiltonian_parentRingInteraction_finrank_eq_card_loop_of_hasBNTSectorData
       hBNT hNNCPH hN)
 

@@ -167,9 +167,8 @@ theorem parityTensor_isMPDO : IsMPDO parityTensor := by
     · simp [hOdd.neg_one_pow]
   · norm_num
 
-private lemma verticalLoop_parityTensor :
-    verticalLoop parityTensor = Matrix.diagonal ![(1 : ℂ), 1, -1] := by
-  rw [verticalLoop_eq_physTraceTransfer]
+private lemma physTraceTransfer_parityTensor :
+    physTraceTransfer parityTensor = Matrix.diagonal ![(1 : ℂ), 1, -1] := by
   ext a b
   fin_cases a <;> fin_cases b <;>
     simp [physTraceTransfer, parityTensor, virtualWeight, Fin.sum_univ_two]
@@ -180,7 +179,7 @@ This is the normalization factor for the counterexample to arXiv:1606.00608,
 Proposition 4.5, lines 801--806. -/
 theorem trace_mpo_parityTensor (N : ℕ) :
     (mpo parityTensor N).trace = 2 + (-1 : ℂ) ^ N := by
-  rw [trace_mpo_eq_trace_verticalLoop_pow, verticalLoop_parityTensor,
+  rw [trace_mpo_eq_trace_physTraceTransfer_pow, physTraceTransfer_parityTensor,
     Matrix.diagonal_pow, Matrix.trace_diagonal]
   simp [Fin.sum_univ_three]
   ring

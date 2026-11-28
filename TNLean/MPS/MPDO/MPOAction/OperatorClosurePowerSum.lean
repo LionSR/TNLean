@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Operator.Product.OperatorProduct
 import TNLean.MPS.FundamentalTheorem.SectorBNT.UnblockedPowerSumCoefficients
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Power-sum coefficients of operator closure
@@ -34,35 +35,28 @@ private theorem mpo_eq_sum_iff_mpv {DB : ℕ} (B : MPOTensor d DB)
     {Γ : Type*} [Fintype Γ] {DM : Γ → ℕ} (M : ∀ γ, MPOTensor d (DM γ))
     (L : ℕ) (c : Γ → ℂ) :
     mpo B L = ∑ γ, c γ • mpo (M γ) L ↔
-      ∀ σ : Fin L → Fin (d * d),
-        mpv B.toMPSTensor σ = ∑ γ, c γ * mpv (M γ).toMPSTensor σ := by
+      ∀ σ : Fin L → Fin d × Fin d, mpv B σ = ∑ γ, c γ * mpv (M γ) σ := by
   constructor
   · intro h σ
-    have he := congrArg (fun A => A (fun k => (σ k).divNat)
-      (fun k => (σ k).modNat)) h
-    simpa only [mpv, coeff, evalWord_toMPSTensor_ofFn, mpo_apply, mpoMatrixEntry,
-      Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul] using he
+    simp only [mpv_eq_mpo, h, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul]
   · intro h
     ext σ τ
-    have he := h (fun k => finProdFinEquiv (σ k, τ k))
-    simpa only [mpv, coeff, evalWord_toMPSTensor_pairConfig, mpo_apply, mpoMatrixEntry,
-      Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul] using he
+    have he := h (fun k => (σ k, τ k))
+    simpa only [mpv_pair, Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul] using he
 
 /-- Operator closure at every positive length yields a unique nonzero-weight
 power-sum expansion for each output tensor. Arbitrary expansion coefficients agree
 with these power sums beyond a positive threshold, and the sum of multiplicities
 times output bond dimensions is at most the product bond dimension.
 
-Normality and separation are imposed on the pair-alphabet MPS views. Separation
+Normality and separation are imposed on the tensors on the pair alphabet. Separation
 excludes every nonzero scalar gauge, not only unit-modulus phases. The weights are
 complex and need not be positive. -/
 theorem exists_operatorProduct_powerSum_coeff_unique
     {Γ : Type*} [Fintype Γ] {DM : Γ → ℕ} (M : ∀ γ, MPOTensor d (DM γ))
-    (hM : ∀ γ, Kraus.IsNormal (M γ).toMPSTensor) (hD : ∀ γ, 0 < DM γ)
+    (hM : ∀ γ, Kraus.IsNormal (M γ)) (hD : ∀ γ, 0 < DM γ)
     (hdistinct : ∀ γ δ : Γ, γ ≠ δ → ∀ h : DM γ = DM δ,
-      ¬ GaugePhaseEquiv
-        (cast (congr_arg (MPSTensor (d * d)) h) (M γ).toMPSTensor)
-        (M δ).toMPSTensor)
+      ¬ GaugePhaseEquiv (cast (congr_arg (MPOTensor d) h) (M γ)) (M δ))
     (a b : Γ)
     (hspan : ∀ L : ℕ, 0 < L → ∃ c : Γ → ℂ,
       mpo (M a) L * mpo (M b) L = ∑ γ, c γ • mpo (M γ) L) :
@@ -82,9 +76,8 @@ theorem exists_operatorProduct_powerSum_coeff_unique
     mpo_eq_sum_iff_mpv (mulTensor (M a) (M b)) M L c
   simp only [mpo_mulTensor] at bridge
   obtain ⟨n, μ, hμ, hexp, ⟨L₀, hL₀, hrig⟩, hbound, huniq⟩ :=
-    MPSTensor.exists_unblocked_powerSum_coeff_unique
-      (mulTensor (M a) (M b)).toMPSTensor (fun γ => (M γ).toMPSTensor)
-      hM hD hdistinct (by
+    MPSTensor.exists_unblocked_powerSum_coeff_unique (mulTensor (M a) (M b)) M hM hD
+      hdistinct (by
         intro L hL
         obtain ⟨c, hc⟩ := hspan L hL
         exact ⟨c, (bridge L c).mp hc⟩)

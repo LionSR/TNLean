@@ -76,7 +76,7 @@ lines 857--865, with equation `StandardForm` and Definition `SF`,
 lines 603--622, and Definition `def:index`, lines 681--688. -/
 theorem IsMPU.exists_joinedIn_standardFormTensorOfGates [NeZero c] [NeZero D]
     {W : MPOTensor c D} (hW : IsMPU W)
-    (hcf : MPTensor.IsMPUCanonicalForm W.toMPSTensor) {m : ℕ} (hm : D * D ≤ m) :
+    (hcf : MPTensor.IsMPUCanonicalForm W) {m : ℕ} (hm : D * D ≤ m) :
     ∃ (ℓ r : ℕ) (_ : NeZero ℓ) (_ : NeZero r)
       (u : Matrix (Fin ℓ × Fin r)
         (Fin (Kraus.blockPhysDim c m) × Fin (Kraus.blockPhysDim c m)) ℂ)
@@ -165,8 +165,8 @@ lines 708--714. -/
 theorem IsMPU.strictlyEquivalent_blockTensor_of_index_eq {c₁ c₂ D₁ D₂ : ℕ}
     [NeZero c₁] [NeZero c₂] [NeZero D₁] [NeZero D₂]
     {W₁ : MPOTensor c₁ D₁} {W₂ : MPOTensor c₂ D₂} (h₁ : IsMPU W₁) (h₂ : IsMPU W₂)
-    (hcf₁ : MPTensor.IsMPUCanonicalForm W₁.toMPSTensor)
-    (hcf₂ : MPTensor.IsMPUCanonicalForm W₂.toMPSTensor)
+    (hcf₁ : MPTensor.IsMPUCanonicalForm W₁)
+    (hcf₂ : MPTensor.IsMPUCanonicalForm W₂)
     (hc : c₁ = c₂) (hidx : h₁.index = h₂.index) {m : ℕ}
     (hm₁ : D₁ * D₁ ≤ m) (hm₂ : D₂ * D₂ ≤ m)
     (hphys : Kraus.blockPhysDim c₁ (2 * m) = Kraus.blockPhysDim c₂ (2 * m)) :
@@ -217,8 +217,8 @@ Definition `def:equivalent-tensors`, lines 716--724. -/
 theorem IsMPU.equivalent_of_index_eq {da db Da Db : ℕ}
     [NeZero da] [NeZero db] [NeZero Da] [NeZero Db]
     {U : MPOTensor da Da} {V : MPOTensor db Db} (hU : IsMPU U) (hV : IsMPU V)
-    (hUcf : MPTensor.IsMPUCanonicalForm U.toMPSTensor)
-    (hVcf : MPTensor.IsMPUCanonicalForm V.toMPSTensor)
+    (hUcf : MPTensor.IsMPUCanonicalForm U)
+    (hVcf : MPTensor.IsMPUCanonicalForm V)
     (h : hU.index = hV.index) : Equivalent U V := by
   set g := Nat.gcd da db with hg
   have hg0 : 0 < g := Nat.gcd_pos_of_pos_left _ (NeZero.pos da)
@@ -271,8 +271,8 @@ Source: arXiv:1703.09188, Theorem `IndexTh` (iv), lines 830--831 and
 theorem IsMPU.equivalent_iff_index_eq {da db Da Db : ℕ}
     [NeZero da] [NeZero db] [NeZero Da] [NeZero Db]
     {U : MPOTensor da Da} {V : MPOTensor db Db} (hU : IsMPU U) (hV : IsMPU V)
-    (hUcf : MPTensor.IsMPUCanonicalForm U.toMPSTensor)
-    (hVcf : MPTensor.IsMPUCanonicalForm V.toMPSTensor) :
+    (hUcf : MPTensor.IsMPUCanonicalForm U)
+    (hVcf : MPTensor.IsMPUCanonicalForm V) :
     Equivalent U V ↔ hU.index = hV.index :=
   ⟨fun h' ↦ h'.index_eq hU hV, hU.equivalent_of_index_eq hV hUcf hVcf⟩
 
@@ -304,8 +304,8 @@ theorem IsMPU.indexTheorem :
       (hMPU x).index = (hMPU y).index) ∧
     (∀ {da db Da Db : ℕ} [NeZero da] [NeZero db] [NeZero Da] [NeZero Db]
       {U : MPOTensor da Da} {V : MPOTensor db Db} (hU : IsMPU U) (hV : IsMPU V),
-      MPTensor.IsMPUCanonicalForm U.toMPSTensor →
-      MPTensor.IsMPUCanonicalForm V.toMPSTensor →
+      MPTensor.IsMPUCanonicalForm U →
+      MPTensor.IsMPUCanonicalForm V →
       (Equivalent U V ↔ hU.index = hV.index)) :=
   ⟨fun hU p hp ↦ hU.index_blockTensor p hp, fun hU hV ↦ hU.index_tensorProduct hV,
     fun hU hV ↦ IsMPU.index_mulTensor hU hV,

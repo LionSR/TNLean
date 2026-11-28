@@ -141,7 +141,7 @@ theorem tripleFusionComparison_finalSector_mul_conjTranspose_eq_one
     (c : BNTLabelCoefficientFamily Λ)
     (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
     (hLI : c.LengthIndependent) {S : ℕ} (hS : 0 < S)
-    (hSel : Fam.HasFinalLabelSelectorWords S)
+    (hSel : MPSTensor.HasBlockSelectorWords Fam.tensor S)
     (α β γ ε : Λ) :
     (Fam.tripleFusionComparison α β γ).submatrix
           (Fam.leftFinalRow α β γ ε) (Fam.rightFinalRow α β γ ε) *
@@ -189,7 +189,7 @@ theorem conjTranspose_mul_tripleFusionComparison_finalSector_eq_one
     (c : BNTLabelCoefficientFamily Λ)
     (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
     (hLI : c.LengthIndependent) {S : ℕ} (hS : 0 < S)
-    (hSel : Fam.HasFinalLabelSelectorWords S)
+    (hSel : MPSTensor.HasBlockSelectorWords Fam.tensor S)
     (α β γ ε : Λ) :
     ((Fam.tripleFusionComparison α β γ).submatrix
           (Fam.leftFinalRow α β γ ε) (Fam.rightFinalRow α β γ ε))ᴴ *
@@ -250,9 +250,9 @@ theorem exists_tripleFusionComparison_finalSector_eq_kronecker_one_and_unitary
     (c : BNTLabelCoefficientFamily Λ)
     (hχ : c.HasPositiveLengthChiTracePowerForm Fam.chi)
     (hLI : c.LengthIndependent) {S : ℕ} (hS : 0 < S)
-    (hSel : Fam.HasFinalLabelSelectorWords S)
+    (hSel : MPSTensor.HasBlockSelectorWords Fam.tensor S)
     (α β γ ε : Λ)
-    (hε : Kraus.IsInjective (Fam.tensor ε).toMPSTensor)
+    (hε : Kraus.IsInjective (Fam.tensor ε))
     (hD : 0 < Fam.bondDim ε) :
     ∃ F : Matrix (Fam.LeftFinalMultiplicity α β γ ε)
         (Fam.RightFinalMultiplicity α β γ ε) ℂ,

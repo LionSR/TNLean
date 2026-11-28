@@ -29,8 +29,8 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor.IsBiorthogonalDecomposition
 
-variable {ι : Type*} [Fintype ι] {d DB : ℕ} {D N : ι → ℕ}
-  {B : MPSTensor d DB} {A : ∀ c, MPSTensor d (D c)}
+variable {ι : Type*} [Fintype ι] {α : Type*} [Fintype α] {DB : ℕ} {D N : ι → ℕ}
+  {B : MPTensor α (Fin DB)} {A : ∀ c, MPTensor α (Fin (D c))}
   {V : ∀ c, Fin (N c) → Matrix (Fin (D c)) (Fin DB) ℂ}
   {W : ∀ c, Fin (N c) → Matrix (Fin DB) (Fin (D c)) ℂ}
 
@@ -48,13 +48,14 @@ def toZipperDecomposition
   V_mul_W_of_ne c μ e ν hne := h.orthogonal ⟨c, μ⟩ ⟨e, ν⟩ hne
   decomp i := by simpa only [Fintype.sum_sigma] using h.letter i
 
+omit [Fintype α] in
 /-- The trace of a nonempty word counts each target block with its
 multiplicity. Source: GLM23 Appendix A, `decompopen` and biorthogonality. -/
 theorem trace_evalWord_eq_sum_multiplicity
     (h : IsBiorthogonalDecomposition B
       (fun q : (c : ι) × Fin (N c) ↦ A q.1)
       (fun q ↦ V q.1 q.2) (fun q ↦ W q.1 q.2))
-    (w : List (Fin d)) (hw : w ≠ []) :
+    (w : List α) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord B w) =
       ∑ c, (N c : ℂ) * Matrix.trace (Kraus.evalWord (A c) w) := by
   have ht := h.trace_mul_evalWord 1 w hw
@@ -63,12 +64,13 @@ theorem trace_evalWord_eq_sum_multiplicity
     ∑ c, ∑ _μ : Fin (N c), Matrix.trace (Kraus.evalWord (A c) w) at ht
   simpa [nsmul_eq_mul] using ht
 
+omit [Fintype α] in
 /-- Positive-dimensional target blocks with one common positive word span
 have uniquely determined multiplicities in any exact biorthogonal
 decomposition of the same tensor. Source: the multiplicity interpretation
 of GLM23 Appendix A, with the derived simultaneous block inverse. -/
-theorem multiplicity_eq_of_wordTupleSpanTop
-    {g : ℕ} {dim N M : Fin g → ℕ} {A : ∀ c, MPSTensor d (dim c)}
+theorem multiplicity_eq_of_wordTupleSpanTop [Finite α]
+    {g : ℕ} {dim N M : Fin g → ℕ} {A : ∀ c, MPTensor α (Fin (dim c))}
     {VN : ∀ c, Fin (N c) → Matrix (Fin (dim c)) (Fin DB) ℂ}
     {WN : ∀ c, Fin (N c) → Matrix (Fin DB) (Fin (dim c)) ℂ}
     {VM : ∀ c, Fin (M c) → Matrix (Fin (dim c)) (Fin DB) ℂ}
@@ -81,6 +83,7 @@ theorem multiplicity_eq_of_wordTupleSpanTop
       (fun q ↦ VM q.1 q.2) (fun q ↦ WM q.1 q.2))
     (hD : ∀ c, 0 < dim c) {L : ℕ} (hL : 0 < L)
     (hSpan : WordTupleSpanTop A L) : N = M := by
+  have := Fintype.ofFinite α
   have hzero := block_matrices_eq_zero_of_wordTupleSpanTop_trace A hSpan
     (fun c ↦ ((N c : ℂ) - (M c : ℂ)) • (1 : Matrix (Fin (dim c)) (Fin (dim c)) ℂ))
     (fun w ↦ by
@@ -96,11 +99,12 @@ theorem multiplicity_eq_of_wordTupleSpanTop
     simpa using he
   exact_mod_cast he'
 
+omit [Fintype α] in
 /-- The source's separated injective block assumptions already determine
 the multiplicities; a simultaneous word span is derived internally.
 Source: GLM23 block assumptions, lines 314--323, and Appendix A. -/
-theorem multiplicity_eq_of_isInjective
-    {g : ℕ} {dim N M : Fin g → ℕ} {A : ∀ c, MPSTensor d (dim c)}
+theorem multiplicity_eq_of_isInjective [Finite α]
+    {g : ℕ} {dim N M : Fin g → ℕ} {A : ∀ c, MPTensor α (Fin (dim c))}
     {VN : ∀ c, Fin (N c) → Matrix (Fin (dim c)) (Fin DB) ℂ}
     {WN : ∀ c, Fin (N c) → Matrix (Fin DB) (Fin (dim c)) ℂ}
     {VM : ∀ c, Fin (M c) → Matrix (Fin (dim c)) (Fin DB) ℂ}
@@ -113,6 +117,7 @@ theorem multiplicity_eq_of_isInjective
       (fun q ↦ VM q.1 q.2) (fun q ↦ WM q.1 q.2))
     (hInj : ∀ c, Kraus.IsInjective (A c)) (hD : ∀ c, 0 < dim c)
     (hne : BlocksNotGaugePhaseEquiv A) : N = M := by
+  have := Fintype.ofFinite α
   obtain ⟨L, hL, hSpan⟩ := exists_positive_wordTupleSpanTop_of_isInjective hInj hD hne
   exact hN.multiplicity_eq_of_wordTupleSpanTop hM hD hL hSpan
 
@@ -124,12 +129,14 @@ namespace MPSTensor
 distinct target blocks. Source: GLM23 Appendix A, the block-separating inverse
 in the proof of orthogonality. -/
 theorem rectangularIntertwiner_eq_zero_of_wordTupleSpanTop
-    {d g : ℕ} {dim : Fin g → ℕ} {A : ∀ c, MPSTensor d (dim c)}
+    {α : Type*} [Finite α] {g : ℕ} {dim : Fin g → ℕ}
+    {A : ∀ c, MPTensor α (Fin (dim c))}
     {L : ℕ} (hSpan : WordTupleSpanTop A L)
     (c e : Fin g) (hce : c ≠ e)
     (X : Matrix (Fin (dim c)) (Fin (dim e)) ℂ)
     (hX : ∀ i, A c i * X = X * A e i) : X = 0 := by
   classical
+  have := Fintype.ofFinite α
   have hall (M : ∀ j, Matrix (Fin (dim j)) (Fin (dim j)) ℂ) :
       M c * X = X * M e := by
     have hM : M ∈ Submodule.span ℂ (Set.range (wordTuple A L)) := by
@@ -150,9 +157,11 @@ theorem rectangularIntertwiner_eq_zero_of_wordTupleSpanTop
 /-- Distinct positive-dimensional target blocks in a simultaneous word span
 cannot be related by an invertible rectangular gauge. -/
 theorem not_isGaugeRelated_of_wordTupleSpanTop
-    {d g : ℕ} {dim : Fin g → ℕ} {A : ∀ c, MPSTensor d (dim c)}
+    {α : Type*} [Finite α] {g : ℕ} {dim : Fin g → ℕ}
+    {A : ∀ c, MPTensor α (Fin (dim c))}
     {L : ℕ} (hSpan : WordTupleSpanTop A L) (hD : ∀ c, 0 < dim c)
     (c e : Fin g) (hce : c ≠ e) : ¬ IsGaugeRelated (A c) (A e) := by
+  have := Fintype.ofFinite α
   rintro ⟨X, Y, hXY, _, hX⟩
   have hzero := rectangularIntertwiner_eq_zero_of_wordTupleSpanTop hSpan c e hce X hX
   have : NeZero (dim c) := ⟨(hD c).ne'⟩
@@ -167,8 +176,8 @@ unique existing zipper gauge on the letter support. All block-separation
 premises are derived from the source's injectivity and scalar-gauge exclusion.
 Source: GLM23, fusion and action gauge freedoms at lines 415--424 and 595--602. -/
 theorem exists_unique_multiplicityGauge_of_isInjective
-    {d DB g : ℕ} {dim N : Fin g → ℕ} {B : MPSTensor d DB}
-    {A : ∀ c, MPSTensor d (dim c)}
+    {α : Type*} [Finite α] {DB g : ℕ} {dim N : Fin g → ℕ} {B : MPTensor α (Fin DB)}
+    {A : ∀ c, MPTensor α (Fin (dim c))}
     {V V' : ∀ c, Fin (N c) → Matrix (Fin (dim c)) (Fin DB) ℂ}
     {W W' : ∀ c, Fin (N c) → Matrix (Fin DB) (Fin (dim c)) ℂ}
     (h : IsBiorthogonalDecomposition B
@@ -184,6 +193,7 @@ theorem exists_unique_multiplicityGauge_of_isInjective
         ∑ ν, (↑(Y c) : Matrix (Fin (N c)) (Fin (N c)) ℂ) μ ν • (V c ν * B i)) ∧
       (∀ c κ i, B i * W' c κ =
         ∑ ν, (↑(Y c)⁻¹ : Matrix (Fin (N c)) (Fin (N c)) ℂ) ν κ • (B i * W c ν)) := by
+  have := Fintype.ofFinite α
   obtain ⟨L, _, hSpan⟩ := exists_positive_wordTupleSpanTop_of_isInjective hInj hD hne
   exact h.toZipperDecomposition.exists_unique_multiplicityGauge h'.toZipperDecomposition
     (fun c ↦ (hInj c).isNormal) hD (not_isGaugeRelated_of_wordTupleSpanTop hSpan hD)

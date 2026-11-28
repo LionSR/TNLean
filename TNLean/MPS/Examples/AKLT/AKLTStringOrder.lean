@@ -151,8 +151,9 @@ private theorem akltBlocked_adjoint_fixes_maximallyMixed :
   classical
   have hleft : ∑ i : Fin (blockPhysDim 3 2),
       (akltBlocked i)ᴴ * akltBlocked i = 1 := by
-    simpa only [akltBlocked, Kraus.IsTP] using
-      Kraus.IsTP.blockTensor (A := akltTensor) aklt_sum_conjTranspose_mul 2
+    simpa only [akltBlocked, Kraus.blockTensor, Kraus.IsTP] using
+      (Kraus.isTP_reindexPhysical_iff (Kraus.decodeBlockEquiv _ _) _).2
+      (Kraus.IsTP.block (A := akltTensor) aklt_sum_conjTranspose_mul 2)
   rw [Kraus.transferMap_apply]
   simp only [Matrix.conjTranspose_conjTranspose, Matrix.mul_smul, Matrix.smul_mul,
     Matrix.mul_one]

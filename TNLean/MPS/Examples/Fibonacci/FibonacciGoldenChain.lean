@@ -138,33 +138,33 @@ def fibOneKernelGolden (a' b' a b : Fin 2) : GoldenInt :=
   if a' = a ∧ b' = b ∧ ¬(a = 0 ∧ b = 0) then 1 else 0
 
 private theorem fibTauGolden_row_eq_zero :
-    ∀ a' a l r, l ≠ fibTauRow a' a → fibTauGolden a' a l r = 0 := by
-  have h : ∀ a' a l r, l ≠ fibTauRow a' a → Matrix.of.symm (fibTauGolden a' a) l r = 0 := by
+    ∀ a' a l r, l ≠ fibTauRow a' a → fibTauGolden (a', a) l r = 0 := by
+  have h : ∀ a' a l r, l ≠ fibTauRow a' a → Matrix.of.symm (fibTauGolden (a', a)) l r = 0 := by
     decide
   exact h
 
 private theorem fibTauGolden_row_eq_fibY :
     ∀ a' a b' b, ¬(b' = 0 ∧ b = 0) →
-      fibTauGolden a' a (fibTauRow a' a) (fibTauRow b' b) = fibYGolden a' b' a b := by
+      fibTauGolden (a', a) (fibTauRow a' a) (fibTauRow b' b) = fibYGolden a' b' a b := by
   decide
 
-private theorem fibTauGolden_zero_zero : ∀ l r, fibTauGolden 0 0 l r = 0 := by
-  have h : ∀ l r, Matrix.of.symm (fibTauGolden 0 0) l r = 0 := by decide
+private theorem fibTauGolden_zero_zero : ∀ l r, fibTauGolden (0, 0) l r = 0 := by
+  have h : ∀ l r, Matrix.of.symm (fibTauGolden (0, 0)) l r = 0 := by decide
   exact h
 
 private theorem fibYGolden_zero_zero : ∀ b' b, fibYGolden 0 b' 0 b = 0 := by decide
 
 private theorem fibOneGolden_row_eq_zero :
-    ∀ a' a l r, l ≠ a → fibOneGolden a' a l r = 0 := by
-  have h : ∀ a' a l r, l ≠ a → Matrix.of.symm (fibOneGolden a' a) l r = 0 := by decide
+    ∀ a' a l r, l ≠ a → fibOneGolden (a', a) l r = 0 := by
+  have h : ∀ a' a l r, l ≠ a → Matrix.of.symm (fibOneGolden (a', a)) l r = 0 := by decide
   exact h
 
 private theorem fibOneGolden_eq_kernel :
-    ∀ a b, fibOneGolden a a a b = fibOneKernelGolden a b a b := by
+    ∀ a b, fibOneGolden (a, a) a b = fibOneKernelGolden a b a b := by
   decide
 
-private theorem fibOneGolden_of_ne : ∀ a' a l r, a' ≠ a → fibOneGolden a' a l r = 0 := by
-  have h : ∀ a' a l r, a' ≠ a → Matrix.of.symm (fibOneGolden a' a) l r = 0 := by decide
+private theorem fibOneGolden_of_ne : ∀ a' a l r, a' ≠ a → fibOneGolden (a', a) l r = 0 := by
+  have h : ∀ a' a l r, a' ≠ a → Matrix.of.symm (fibOneGolden (a', a)) l r = 0 := by decide
   exact h
 
 /-- Two products around the ring agree when their factors agree at every site whose two ends
@@ -190,12 +190,12 @@ theorem mpo_fibTau_eq_neighbourKernel (N : ℕ) [NeZero N] :
   rw [mpo_apply_eq_prod_of_forced_bond fibTau s t (fun n ↦ fibTauRow (s n) (t n)) fun g hg ↦ ?_]
   · refine prod_eq_prod_of_bad (fun n ↦ s n = 0 ∧ t n = 0) (fun n h₀ h₁ ↦ ?_) fun n h₀ ↦ ?_
     · simp only [fibTau, complexOfGolden_apply,
-        fibTauGolden_row_eq_fibY _ _ _ _ h₁, Function.uncurry_apply_pair]
+        fibTauGolden_row_eq_fibY _ _ _ _ h₁]
     · simp only [fibTau, complexOfGolden_apply, h₀.1, h₀.2, fibTauGolden_zero_zero,
-        fibYGolden_zero_zero, map_zero, and_self, Function.uncurry_apply_pair]
+        fibYGolden_zero_zero, map_zero, and_self]
   · obtain ⟨n, hn⟩ := Function.ne_iff.mp hg
     exact ⟨n, by simp only [fibTau, complexOfGolden_apply,
-      fibTauGolden_row_eq_zero _ _ _ _ hn, map_zero, Function.uncurry_apply_pair]⟩
+      fibTauGolden_row_eq_zero _ _ _ _ hn, map_zero]⟩
 
 /-- **The periodic operator of the vacuum block.** Bridge: at every positive length, `O_N(B_1)`
 is the nearest-neighbour product kernel that is diagonal and records whether the configuration
@@ -207,14 +207,13 @@ theorem mpo_fibOne_eq_neighbourKernel (N : ℕ) [NeZero N] :
   rw [mpo_apply_eq_prod_of_forced_bond fibOne s t t fun g hg ↦ ?_]
   · refine prod_eq_prod_of_bad (fun n ↦ s n ≠ t n) (fun n h₀ h₁ ↦ ?_) fun n h₀ ↦ ?_
     · rw [not_not] at h₀ h₁
-      simp only [fibOne, complexOfGolden_apply, h₀, h₁, fibOneGolden_eq_kernel,
-          Function.uncurry_apply_pair]
+      simp only [fibOne, complexOfGolden_apply, h₀, h₁, fibOneGolden_eq_kernel]
     · refine ⟨by simp only [fibOne, complexOfGolden_apply,
-        fibOneGolden_of_ne _ _ _ _ h₀, map_zero, Function.uncurry_apply_pair], ?_⟩
+        fibOneGolden_of_ne _ _ _ _ h₀, map_zero], ?_⟩
       simp [fibOneKernelGolden, h₀]
   · obtain ⟨n, hn⟩ := Function.ne_iff.mp hg
     exact ⟨n, by simp only [fibOne, complexOfGolden_apply,
-      fibOneGolden_row_eq_zero _ _ _ _ hn, map_zero, Function.uncurry_apply_pair]⟩
+      fibOneGolden_row_eq_zero _ _ _ _ hn, map_zero]⟩
 
 /-! ### The local pulling-through relations -/
 

@@ -410,8 +410,8 @@ theorem mixedEndpointActive_edgeFiber_eq_edgeIsometry
     (p : MixedEndpointActiveEdgeSite N)
     (v : mixedEndpointActiveSpace D₀ D₁ (N + 1))
     (ξ : endpointActiveCfg (Fin D₀ ⊕ Fin D₁) D₀ (N + 1)) :
-    cyclicRestrictES (Fin.pos (mixedEndpointActiveEdgeStart p).1) 2
-        (mixedEndpointActiveEdgeStart p).1 (mixedEndpointActivePhysicalCfg ξ)
+    LinearMap.withLpMap 2 (cyclicRestrictₗ (Fin.pos (mixedEndpointActiveEdgeStart p).1) 2
+        (mixedEndpointActiveEdgeStart p).1 (mixedEndpointActivePhysicalCfg ξ))
         (mixedEndpointActiveLinearIsometry D₀ D₁ (N + 1) v) =
       mixedEndpointEdgeLinearIsometry D₀ D₁ (mixedEndpointActiveEdgePosition p)
         (mixedEndpointActiveEdgeFiber p v (mixedEndpointActiveEdgeConfigEquiv D₀ D₁ p ξ).2) := by

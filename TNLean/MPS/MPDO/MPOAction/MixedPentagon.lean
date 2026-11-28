@@ -84,11 +84,11 @@ variable {p r s : ℕ} {χ : Fin r → ℕ} {D : Fin s → ℕ}
   (VA : ∀ a x y, Fin (M a x y) → Matrix (Fin (D y)) (Fin (χ a * D x)) ℂ)
   (WA : ∀ a x y, Fin (M a x y) → Matrix (Fin (χ a * D x)) (Fin (D y)) ℂ)
   (hD : ∀ q, 0 < triangularBondDim χ D q)
-  (hT : ∀ q, Kraus.IsInjective (T q).toMPSTensor)
+  (hT : ∀ q, Kraus.IsInjective (T q))
   (hVW : ∀ a b,
-    MPSTensor.IsBiorthogonalDecomposition (mulTensor (T a) (T b)).toMPSTensor
+    MPSTensor.IsBiorthogonalDecomposition (mulTensor (T a) (T b))
       (fun q : (c : Fin r ⊕ Fin s) × Fin (triangularFusionMultiplicity N M a b c) ↦
-        (T q.1).toMPSTensor)
+        T q.1)
       (fun q ↦ triangularFusionAnalysis VF VA a b q.1 q.2)
       (fun q ↦ triangularFusionSynthesis WF WA a b q.1 q.2))
   (K : Matrix ((c : Fin r ⊕ Fin s) ×
@@ -101,7 +101,8 @@ variable {p r s : ℕ} {χ : Fin r → ℕ} {D : Fin s → ℕ}
         if _ : he ▸ x = x' then if _ : he ▸ y = y' then 1 else 0 else 0
       else 0)
 
-local notation "F" => CompleteZipperFusionFamily.ofBiorthogonal hD hT
+local notation "F" => CompleteZipperFusionFamily.ofBiorthogonal hD
+  (fun q ↦ (hT q))
   (triangularFusionAnalysis VF VA) (triangularFusionSynthesis WF WA) hVW K hK
 
 /-- The auxiliary forward F comparison is literally the original action L
@@ -161,11 +162,11 @@ variable {p r s : ℕ} {χ : Fin r → ℕ} {D : Fin s → ℕ}
   (VA : ∀ a x y, Fin (M a x y) → Matrix (Fin (D y)) (Fin (χ a * D x)) ℂ)
   (WA : ∀ a x y, Fin (M a x y) → Matrix (Fin (χ a * D x)) (Fin (D y)) ℂ)
   (hD : ∀ q, 0 < triangularBondDim χ D q)
-  (hT : ∀ q, Kraus.IsInjective (T q).toMPSTensor)
+  (hT : ∀ q, Kraus.IsInjective (T q))
   (hVW : ∀ a b,
-    MPSTensor.IsBiorthogonalDecomposition (mulTensor (T a) (T b)).toMPSTensor
+    MPSTensor.IsBiorthogonalDecomposition (mulTensor (T a) (T b))
       (fun q : (c : Fin r ⊕ Fin s) × Fin (triangularFusionMultiplicity N M a b c) ↦
-        (T q.1).toMPSTensor)
+        T q.1)
       (fun q ↦ triangularFusionAnalysis VF VA a b q.1 q.2)
       (fun q ↦ triangularFusionSynthesis WF WA a b q.1 q.2))
   (K : Matrix ((c : Fin r ⊕ Fin s) ×
@@ -178,7 +179,8 @@ variable {p r s : ℕ} {χ : Fin r → ℕ} {D : Fin s → ℕ}
         if _ : he ▸ x = x' then if _ : he ▸ y = y' then 1 else 0 else 0
       else 0)
 
-local notation "F" => CompleteZipperFusionFamily.ofBiorthogonal hD hT
+local notation "F" => CompleteZipperFusionFamily.ofBiorthogonal hD
+  (fun q ↦ (hT q))
   (triangularFusionAnalysis VF VA) (triangularFusionSynthesis WF WA) hVW K hK
 
 /-- The operator-only inverse comparison in the auxiliary family is the
@@ -284,18 +286,18 @@ Individual injectivity and scalar-gauge separation derive the common
 blocking needed in its proof; the conclusion uses the unblocked maps. -/
 theorem actionLMatrix_mixed_pentagon
     (O : ∀ a, MPOTensor d (χ a)) (A : ∀ x, MPSTensor d (D x))
-    (hInjO : ∀ a, Kraus.IsInjective (O a).toMPSTensor)
+    (hInjO : ∀ a, Kraus.IsInjective (O a))
     (hInjA : ∀ x, Kraus.IsInjective (A x))
     (hχ : ∀ a, 0 < χ a) (hD : ∀ x, 0 < D x)
-    (hneO : MPSTensor.BlocksNotGaugePhaseEquiv (fun a ↦ (O a).toMPSTensor))
+    (hneO : MPSTensor.BlocksNotGaugePhaseEquiv O)
     (hneA : MPSTensor.BlocksNotGaugePhaseEquiv A)
     (VF : ∀ a b c, Fin (N a b c) → Matrix (Fin (χ c)) (Fin (χ a * χ b)) ℂ)
     (WF : ∀ a b c, Fin (N a b c) → Matrix (Fin (χ a * χ b)) (Fin (χ c)) ℂ)
     (VA : ∀ a x y, Fin (M a x y) → Matrix (Fin (D y)) (Fin (χ a * D x)) ℂ)
     (WA : ∀ a x y, Fin (M a x y) → Matrix (Fin (χ a * D x)) (Fin (D y)) ℂ)
     (hF : ∀ a b,
-      MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b)).toMPSTensor
-        (fun q : (c : Fin r) × Fin (N a b c) ↦ (O q.1).toMPSTensor)
+      MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b))
+        (fun q : (c : Fin r) × Fin (N a b c) ↦ O q.1)
         (fun q ↦ VF a b q.1 q.2) (fun q ↦ WF a b q.1 q.2))
     (hA : ∀ a x,
       MPSTensor.IsBiorthogonalDecomposition (actTensor (O a) (A x))
@@ -332,21 +334,20 @@ theorem IsBoundaryCompatible.exists_exact_mixed_pentagon
     {B : MPSTensor d (∑ x : Fin s, D x)}
     (hClosed : IsBoundaryClosed T) (hCompatible : IsBoundaryCompatible T B)
     (O : ∀ a, MPOTensor d (χ a)) (A : ∀ x, MPSTensor d (D x))
-    (hT : T.toMPSTensor = MPTensor.toTensorFromBlocks (fun _ ↦ 1)
-      (fun a ↦ (O a).toMPSTensor))
+    (hT : T = MPTensor.toTensorFromBlocks (fun _ ↦ 1) O)
     (hB : B = MPTensor.toTensorFromBlocks (fun _ ↦ 1) A)
-    (hInjO : ∀ a, Kraus.IsInjective (O a).toMPSTensor)
+    (hInjO : ∀ a, Kraus.IsInjective (O a))
     (hInjA : ∀ x, Kraus.IsInjective (A x))
     (hχ : ∀ a, 0 < χ a) (hD : ∀ x, 0 < D x)
-    (hneO : MPSTensor.BlocksNotGaugePhaseEquiv (fun a ↦ (O a).toMPSTensor))
+    (hneO : MPSTensor.BlocksNotGaugePhaseEquiv O)
     (hneA : MPSTensor.BlocksNotGaugePhaseEquiv A) :
     ∃ (N : Fin r → Fin r → Fin r → ℕ) (M : Fin r → Fin s → Fin s → ℕ)
       (VF : ∀ a b c, Fin (N a b c) → Matrix (Fin (χ c)) (Fin (χ a * χ b)) ℂ)
       (WF : ∀ a b c, Fin (N a b c) → Matrix (Fin (χ a * χ b)) (Fin (χ c)) ℂ)
       (VA : ∀ a x y, Fin (M a x y) → Matrix (Fin (D y)) (Fin (χ a * D x)) ℂ)
       (WA : ∀ a x y, Fin (M a x y) → Matrix (Fin (χ a * D x)) (Fin (D y)) ℂ),
-      (∀ a b, MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b)).toMPSTensor
-        (fun q : (c : Fin r) × Fin (N a b c) ↦ (O q.1).toMPSTensor)
+      (∀ a b, MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b))
+        (fun q : (c : Fin r) × Fin (N a b c) ↦ O q.1)
         (fun q ↦ VF a b q.1 q.2) (fun q ↦ WF a b q.1 q.2)) ∧
       (∀ a x, MPSTensor.IsBiorthogonalDecomposition (actTensor (O a) (A x))
         (fun q : (y : Fin s) × Fin (M a x y) ↦ A q.1)

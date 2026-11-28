@@ -8,6 +8,7 @@ import QICLean.Analysis.FunctionalCalculus.MatrixSqrt
 import QICLean.Channel.KrausMap.KrausSupportAbsorption
 import QICLean.Kraus.Word
 import TNLean.MPS.Operator.Periodic.OperatorFromWordTrace
+import TNLean.MPS.Operator.PairAlphabet
 import TNLean.MPS.MPU.Index.FactorFreeSandwich
 import TNLean.MPS.MPU.Index.IndexContinuity
 import TNLean.MPS.MPU.Index.IndexOfCanonicalForm
@@ -76,10 +77,9 @@ reduced tensor to the range of the reduced projection). -/
 theorem mpo_rectangularSandwich_of_absorb {m : ℕ}
     (M : MPOTensor n D) (Lf : Matrix (Fin m) (Fin D) ℂ) (Rt : Matrix (Fin D) (Fin m) ℂ)
     (hright : ∀ i j, M (i, j) * (Rt * Lf) = M (i, j)) {N : ℕ} (hN : 0 < N) :
-    mpo (fun ij => Lf * M ij * Rt) N = mpo M N :=
-  mpo_eq_of_trace_evalWord _ M (fun w hw =>
-    Kraus.trace_evalWord_compress_of_right_absorb M.toMPSTensor Lf Rt
-      (fun _ => hright _ _) w hw) N hN
+    mpo (fun ij => Lf * M ij * Rt) N = mpo M N := by
+  exact mpo_eq_of_forall_trace_evalWord (fun w hw ↦
+    Kraus.trace_evalWord_compress_of_right_absorb M Lf Rt (fun ij => hright ij.1 ij.2) w hw) hN
 
 /-- **Canonical form II of a tensor with a rank-one transfer map.** Let `V`
 generate MPU and let its normalized transfer map be `X ↦ tr(L X) R` with
@@ -104,19 +104,25 @@ theorem exists_isMPUCanonicalFormII_of_transferMap_eq_trace_smul [NeZero n]
   have hc : ((Real.sqrt n : ℂ)⁻¹) ≠ 0 :=
     inv_ne_zero (Complex.ofReal_ne_zero.mpr
       (Real.sqrt_pos.mpr (by exact_mod_cast NeZero.pos n)).ne')
-  have hflat : ∀ i j, V.normalizedFlattening (finProdFinEquiv (i, j)) =
-      ((Real.sqrt n : ℂ)⁻¹) • V (i, j) := by
-    intro i j
-    simp only [normalizedFlattening, toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
-      MPSTensor.finProdFinEquiv_modNat]
+  have hflat : ∀ i j, V.normalizedFlattening (i, j) = ((Real.sqrt n : ℂ)⁻¹) • V (i, j) :=
+    fun _ _ ↦ rfl
+  -- The support-absorption lemmas are stated on a `Fin` alphabet: relabel along
+  -- `finProdFinEquiv`.
+  have hT' : ∀ X,
+      Kraus.map (Kraus.reindexPhysical finProdFinEquiv.symm V.normalizedFlattening) X =
+        Matrix.trace (L * X) • R := fun X ↦
+    (congrArg (fun f ↦ f X) (Kraus.transferMap_reindexPhysical_equiv finProdFinEquiv.symm
+      V.normalizedFlattening)).trans (hT X)
   have hVP : ∀ i j, V (i, j) * P = V (i, j) := by
     intro i j
-    have h := Kraus.mul_supportProj_of_map_eq_trace_smul _ hL hT (finProdFinEquiv (i, j))
+    have h := Kraus.mul_supportProj_of_map_eq_trace_smul _ hL hT' (finProdFinEquiv (i, j))
+    simp only [Kraus.reindexPhysical, Equiv.symm_apply_apply] at h
     rw [hflat, Matrix.smul_mul] at h
     exact smul_right_injective _ hc h
   have hQV : ∀ i j, Q * V (i, j) = V (i, j) := by
     intro i j
-    have h := Kraus.supportProj_mul_of_map_eq_trace_smul _ hR hT (finProdFinEquiv (i, j))
+    have h := Kraus.supportProj_mul_of_map_eq_trace_smul _ hR hT' (finProdFinEquiv (i, j))
+    simp only [Kraus.reindexPhysical, Equiv.symm_apply_apply] at h
     rw [hflat, Matrix.mul_smul] at h
     exact smul_right_injective _ hc h
   set T := Matrix.reducedProjection P Q with hTdef
@@ -182,7 +188,7 @@ theorem exists_isMPUCanonicalFormII_of_transferMap_eq_trace_smul [NeZero n]
   -- the normalized transfer map of `B` is `X ↦ tr(X) Λ`
   have hBflat : B.normalizedFlattening = fun ij => Lf * V.normalizedFlattening ij * Rt := by
     funext ij
-    simp only [normalizedFlattening, toMPSTensor, hBdef, Matrix.mul_smul, Matrix.smul_mul]
+    simp only [normalizedFlattening, hBdef, Matrix.mul_smul, Matrix.smul_mul]
   have hRtLRt : Rtᴴ * L * Rt = 1 := by
     rw [hRtdef, Matrix.conjTranspose_mul,
       show (S⁻¹)ᴴ * Jᴴ * L * (J * S⁻¹) = (S⁻¹)ᴴ * (Jᴴ * L * J) * S⁻¹ by
@@ -307,7 +313,10 @@ theorem IsMPU.sourceRanks_blockTensor_eq_factorFreeSandwich [NeZero d]
   have hk0 : 0 < k := lt_of_lt_of_le (Nat.mul_pos (NeZero.pos D) (NeZero.pos D)) hk
   obtain ⟨ρ, Φ, hpair, hE⟩ := hW.exists_transferMatrix_blockTensor_eq_vecMulVec hk
   obtain ⟨L, R, hL, hR, hT⟩ :=
-    Kraus.exists_posSemidef_trace_pair_of_transferMatrix_eq_vecMulVec _ ρ Φ hE hpair
+    Kraus.exists_posSemidef_trace_pair_of_transferMatrix_eq_vecMulVec
+      (Kraus.reindexPhysical finProdFinEquiv.symm (MPOTensor.blockTensor W k).normalizedFlattening)
+      ρ Φ (by rwa [Kraus.transferMap_reindexPhysical_equiv]) hpair
+  rw [Kraus.transferMap_reindexPhysical_equiv] at hT
   obtain ⟨m, B, ⟨hB⟩, hmpoB, hr, hℓ⟩ :=
     exists_isMPUCanonicalFormII_of_transferMap_eq_trace_smul (hW.blockTensor k hk0) hL hR hT
   have hEq : ∀ N, 1 < N → mpo (MPOTensor.blockTensor U k) N = mpo B N := by
@@ -383,8 +392,8 @@ theorem IsMPU.sourceRanks_canonicalForm_blockTensor_const [NeZero d]
     {W : unitInterval → MPOTensor d D} (hW : Continuous W) (hMPU : ∀ x, IsMPU (W x))
     {k : ℕ} (hk : D * D ≤ k) {x y : unitInterval} {Dx Dy : ℕ}
     {Ux : MPOTensor d Dx} {Uy : MPOTensor d Dy}
-    (hUx : IsMPU Ux) (hcfx : MPTensor.IsMPUCanonicalForm Ux.toMPSTensor)
-    (hUy : IsMPU Uy) (hcfy : MPTensor.IsMPUCanonicalForm Uy.toMPSTensor)
+    (hUx : IsMPU Ux) (hcfx : MPTensor.IsMPUCanonicalForm Ux)
+    (hUy : IsMPU Uy) (hcfy : MPTensor.IsMPUCanonicalForm Uy)
     (hx : ∀ N, 0 < N → mpo Ux N = mpo (W x) N)
     (hy : ∀ N, 0 < N → mpo Uy N = mpo (W y) N) :
     r[MPOTensor.blockTensor Ux k] = r[MPOTensor.blockTensor Uy k] ∧

@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.FundamentalTheorem.OperatorGroup.AssociatorCohomology
-import TNLean.MPS.Operator.Periodic.BondOneOperator
+import TNLean.MPS.Operator.Periodic.OperatorCyclicSum
 
 /-!
 # Closed fusion forces an on-site group representation
@@ -59,25 +59,23 @@ variable {d : ℕ}
 /-- The trace is multiplicative on the span of the letters of an injective tensor whose one-
 and two-site operators are the identity. -/
 private theorem trace_mul_eq_of_mpo_eq_one {D : ℕ} {M : MPOTensor d D}
-    (hM : Kraus.IsInjective M.toMPSTensor) (h1 : mpo M 1 = 1) (h2 : mpo M 2 = 1)
+    (hM : Kraus.IsInjective M) (h1 : mpo M 1 = 1) (h2 : mpo M 2 = 1)
     (X Y : Matrix (Fin D) (Fin D) ℂ) : (X * Y).trace = X.trace * Y.trace := by
-  have hlet : ∀ a b, (M.toMPSTensor a * M.toMPSTensor b).trace =
-      (M.toMPSTensor a).trace * (M.toMPSTensor b).trace := by
+  have hlet : ∀ a b, (M a * M b).trace = (M a).trace * (M b).trace := by
     intro a b
     have e1 : ∀ i j, (M (i, j)).trace = if i = j then 1 else 0 := fun i j ↦ by
       have := congrFun (congrFun h1 (fun _ ↦ i)) (fun _ ↦ j)
       simpa [mpoMatrixEntry, Matrix.one_apply, funext_iff] using this
-    have e2 := congrFun (congrFun h2 ![a.divNat, b.divNat]) ![a.modNat, b.modNat]
+    have e2 := congrFun (congrFun h2 ![a.1, b.1]) ![a.2, b.2]
     simp only [mpo_apply, mpoMatrixEntry, List.ofFn_succ, List.ofFn_zero, evalWord_cons,
       evalWord_nil, Matrix.mul_one, Matrix.one_apply, funext_iff, Fin.forall_fin_two] at e2
     simp only [Matrix.cons_val_zero, Matrix.cons_val_one,
       Fin.succ_zero_eq_one] at e2
-    change (M (a.divNat, a.modNat) * M (b.divNat, b.modNat)).trace =
-      (M (a.divNat, a.modNat)).trace * (M (b.divNat, b.modNat)).trace
+    change (M (a.1, a.2) * M (b.1, b.2)).trace = (M (a.1, a.2)).trace * (M (b.1, b.2)).trace
     rw [e2, e1, e1]
-    by_cases hA : a.divNat = a.modNat <;> by_cases hB : b.divNat = b.modNat <;> simp [hA, hB]
+    by_cases hA : a.1 = a.2 <;> by_cases hB : b.1 = b.2 <;> simp [hA, hB]
   have hspan : ∀ Z : Matrix (Fin D) (Fin D) ℂ,
-      Z ∈ Submodule.span ℂ (Set.range M.toMPSTensor) := fun Z ↦ by
+      Z ∈ Submodule.span ℂ (Set.range M) := fun Z ↦ by
     rw [hM.span_eq_top]; exact Submodule.mem_top
   induction hspan Y using Submodule.span_induction with
   | mem y hy =>
@@ -106,7 +104,7 @@ Source: arXiv:2203.12563, line 1213 ("`T_e` has to be the identity matrix"). The
 the fundamental theorem of injective matrix product states; the argument here uses only the
 trace identity `tr(XY) = tr X tr Y` on the full matrix algebra. -/
 theorem bondDim_le_one_of_mpo_eq_one {D : ℕ} {M : MPOTensor d D}
-    (hM : Kraus.IsInjective M.toMPSTensor) (h1 : mpo M 1 = 1) (h2 : mpo M 2 = 1) :
+    (hM : Kraus.IsInjective M) (h1 : mpo M 1 = 1) (h2 : mpo M 2 = 1) :
     D ≤ 1 := by
   by_contra hD
   push Not at hD
@@ -121,7 +119,7 @@ theorem bondDim_le_one_of_mpo_eq_one {D : ℕ} {M : MPOTensor d D}
 
 Source: arXiv:2203.12563, line 1213. -/
 theorem eq_ite_one_of_mpo_eq_one {D : ℕ} {M : MPOTensor d D}
-    (hM : Kraus.IsInjective M.toMPSTensor) (h1 : mpo M 1 = 1) (h2 : mpo M 2 = 1)
+    (hM : Kraus.IsInjective M) (h1 : mpo M 1 = 1) (h2 : mpo M 2 = 1)
     (i j : Fin d) : M (i, j) = if i = j then 1 else 0 := by
   have hsub : Subsingleton (Fin D) :=
     Fin.subsingleton_iff_le_one.2 (bondDim_le_one_of_mpo_eq_one hM h1 h2)
@@ -148,7 +146,7 @@ dimension is at least two.
 Source: arXiv:2203.12563, line 1213 ("we decompose the product of the three MPO tensors
 `T_g T_{g⁻¹} T_g` in two equivalent ways ... we close the two upper virtual indices"). -/
 theorem bondDim_le_one_of_mulTensor_eq_ite {D₁ D₂ : ℕ} {A : MPOTensor d D₁}
-    {B : MPOTensor d D₂} (hA : Kraus.IsInjective A.toMPSTensor)
+    {B : MPOTensor d D₂} (hA : Kraus.IsInjective A)
     {P : Matrix (Fin (D₁ * D₂)) (Fin (D₁ * D₂)) ℂ} {Q : Matrix (Fin (D₂ * D₁)) (Fin (D₂ * D₁)) ℂ}
     (hP : ∀ i k, mulTensor A B (i, k) = if i = k then P else 0)
     (hQ : ∀ i k, mulTensor B A (i, k) = if i = k then Q else 0) (htr : P.trace ≠ 0) :
@@ -189,12 +187,12 @@ theorem bondDim_le_one_of_mulTensor_eq_ite {D₁ D₂ : ℕ} {A : MPOTensor d D�
       P (finProdFinEquiv (a, b)) (finProdFinEquiv (a, b)) * X c c =
         X a a * Q (finProdFinEquiv (b, c)) (finProdFinEquiv (b, c)) := by
     intro X a c b
-    have hX : X ∈ Submodule.span ℂ (Set.range A.toMPSTensor) := by
+    have hX : X ∈ Submodule.span ℂ (Set.range A) := by
       rw [hA.span_eq_top]; exact Submodule.mem_top
     induction hX using Submodule.span_induction with
     | mem x hx =>
         obtain ⟨ik, rfl⟩ := hx
-        exact hlet ik.divNat ik.modNat a c b
+        exact hlet ik.1 ik.2 a c b
     | zero => simp
     | add x y _ _ hx hy => simp only [Matrix.add_apply, mul_add, add_mul, hx, hy]
     | smul z x _ hx =>
@@ -271,21 +269,20 @@ letter by letter: `(T_g T_h)^{ij} = W_{g,h} T_{gh}^{ij} V_{g,h}`.
 Source: arXiv:2203.12563, equation `fusiontensorG`, `Papers/2203.12563/REsubmission.tex`
 lines 641--656, with the fusion tensors of `fusiontensorG2` (lines 1002--1026). -/
 def FusionData.IsClosed (fd : FusionData F) : Prop :=
-  ∀ g h i, (mulTensor (F.tensor g) (F.tensor h)).toMPSTensor i =
-    fd.W g h * (F.tensor (g * h)).toMPSTensor i * fd.V g h
+  ∀ g h i, mulTensor (F.tensor g) (F.tensor h) i = fd.W g h * F.tensor (g * h) i * fd.V g h
 
 /-- Closed fusion in terms of the two physical indices. -/
 theorem FusionData.IsClosed.mulTensor_apply {fd : FusionData F} (hfd : fd.IsClosed)
     (g h : G) (i k : Fin d) :
-    mulTensor (F.tensor g) (F.tensor h) (i, k) = fd.W g h * F.tensor (g * h) (i, k) * fd.V g h := by
-  simpa only [toMPSTensor_finProdFinEquiv] using hfd g h (finProdFinEquiv (i, k))
+    mulTensor (F.tensor g) (F.tensor h) (i, k) = fd.W g h * F.tensor (g * h) (i, k) * fd.V g h :=
+  hfd g h (i, k)
 
 /-- **Every bond dimension is one.** For an injective representation with `U_e = 1` and closed
 fusion, every tensor has bond dimension one.
 
 Source: arXiv:2203.12563, Lemma, `Papers/2203.12563/REsubmission.tex` lines 1211--1213. -/
 theorem bondDim_eq_one_of_closed_fusion
-    (hinj : ∀ g, Kraus.IsInjective (F.tensor g).toMPSTensor)
+    (hinj : ∀ g, Kraus.IsInjective (F.tensor g))
     (hone : ∀ N, 0 < N → mpo (F.tensor 1) N = 1) {fd : FusionData F} (hfd : fd.IsClosed)
     (g : G) : F.bondDim g = 1 := by
   refine le_antisymm ?_ (F.bondDim_pos g)
@@ -312,7 +309,7 @@ The product law is not needed for the on-site conclusion.
 
 Source: arXiv:2203.12563, Lemma, `Papers/2203.12563/REsubmission.tex` lines 1211--1213. -/
 theorem isOnSite_of_closed_fusion
-    (hinj : ∀ g, Kraus.IsInjective (F.tensor g).toMPSTensor)
+    (hinj : ∀ g, Kraus.IsInjective (F.tensor g))
     (hone : ∀ N, 0 < N → mpo (F.tensor 1) N = 1) {fd : FusionData F} (hfd : fd.IsClosed) :
     F.IsOnSite := by
   refine ⟨fun g i j ↦ (F.tensor g (i, j)).trace, fun g N hN σ τ ↦ ?_⟩
@@ -343,7 +340,7 @@ Source: arXiv:2203.12563, Lemma, `Papers/2203.12563/REsubmission.tex` lines 1211
 particular, the MPO representation is characterized by a trivial `3`-cocycle"), with the
 three-cocycle of the fusion tensors of arXiv:2502.20257, `main.tex` lines 1506--1545. -/
 theorem FusionData.isTrivialGaugeClass_omega_of_closed_fusion
-    (hinj : ∀ g, Kraus.IsInjective (F.tensor g).toMPSTensor)
+    (hinj : ∀ g, Kraus.IsInjective (F.tensor g))
     (hone : ∀ N, 0 < N → mpo (F.tensor 1) N = 1)
     (hmul : ∀ g h N, 0 < N →
       mpo (F.tensor g) N * mpo (F.tensor h) N = mpo (F.tensor (g * h)) N)
@@ -404,7 +401,7 @@ Source: arXiv:2203.12563, Lemma, `Papers/2203.12563/REsubmission.tex` lines 1211
 ("In particular, the MPO representation is characterized by a trivial `3`-cocycle"). -/
 theorem anomalyClass_eq_zero_of_closed_fusion {G : Type} [Group G] {F : GroupFamily G d}
     (hF : F.IsNormalRepresentation)
-    (hinj : ∀ g, Kraus.IsInjective (F.tensor g).toMPSTensor)
+    (hinj : ∀ g, Kraus.IsInjective (F.tensor g))
     (hone : ∀ N, 0 < N → mpo (F.tensor 1) N = 1)
     {fd : FusionData F} (hfd : fd.IsClosed) :
     hF.anomalyClass = 0 :=

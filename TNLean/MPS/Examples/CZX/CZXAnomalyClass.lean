@@ -94,9 +94,10 @@ theorem czxGen_pow_two : czxGen ^ 2 = 1 := by decide
 
 /-- The weight `δ_{s t}` of a letter of the pair alphabet is the weight of the letter
 of the bond-one identity tensor. -/
-private theorem pairDelta_eq (a : Fin (2 * 2)) :
-    pairDelta a = if a.divNat = a.modNat then (1 : ℂ) else 0 := by
-  fin_cases a <;> simp [pairDelta, pairDeltaInt, Fin.divNat, Fin.modNat]
+private theorem pairDelta_eq (a : Fin 2 × Fin 2) :
+    pairDelta a = if a.1 = a.2 then (1 : ℂ) else 0 := by
+  unfold pairDelta pairDeltaInt
+  split_ifs <;> simp
 
 /-- The product of two identity tensors is the identity tensor. -/
 private theorem mulTensor_idTensor_idTensor :
@@ -165,21 +166,21 @@ def czxFusionData : czxFamily.FusionData where
     refine Multiplicative.forall_zmod_two (Multiplicative.forall_zmod_two ?_ ?_)
       (Multiplicative.forall_zmod_two ?_ ?_)
     · change MPTensor.IsReduction
-        (mulTensor (MPOTensor.idTensor 2) (MPOTensor.idTensor 2)).toMPSTensor
-        ((MPOTensor.idTensor 2 : MPOTensor 2 (1 * 1))).toMPSTensor 1 1
+        (mulTensor (MPOTensor.idTensor 2) (MPOTensor.idTensor 2))
+        (MPOTensor.idTensor 2 : MPOTensor 2 (1 * 1)) 1 1
       exact MPSTensor.isReduction_one_one_of_eq (by rw [mulTensor_idTensor_idTensor])
     · change MPTensor.IsReduction
-        (mulTensor (MPOTensor.idTensor 2) czxDecoratedTensor).toMPSTensor
-        ((czxDecoratedTensor : MPOTensor 2 (1 * 2))).toMPSTensor 1 1
+        (mulTensor (MPOTensor.idTensor 2) czxDecoratedTensor)
+        (czxDecoratedTensor : MPOTensor 2 (1 * 2)) 1 1
       exact MPSTensor.isReduction_one_one_of_eq (by rw [mulTensor_idTensor_left]; rfl)
     · change MPTensor.IsReduction
-        (mulTensor czxDecoratedTensor (MPOTensor.idTensor 2)).toMPSTensor
-        ((czxDecoratedTensor : MPOTensor 2 (2 * 1))).toMPSTensor 1 1
+        (mulTensor czxDecoratedTensor (MPOTensor.idTensor 2))
+        (czxDecoratedTensor : MPOTensor 2 (2 * 1)) 1 1
       exact MPSTensor.isReduction_one_one_of_eq (by rw [mulTensor_idTensor_right]; rfl)
-    · change MPTensor.IsReduction czxDecoratedSquare (MPOTensor.idTensor 2).toMPSTensor
+    · change MPTensor.IsReduction czxDecoratedSquare (MPOTensor.idTensor 2)
         czxFusionVHat czxFusionV
       refine ⟨czxFusionVHat_mul_czxFusionV, fun w ↦ ?_⟩
-      rw [czxFusion_contract, evalWord_idTensor_toMPSTensor]
+      rw [czxFusion_contract, kraus_evalWord_idTensor]
       congr 3
       funext a
       exact pairDelta_eq a
@@ -249,13 +250,13 @@ theorem czxFusionData_rightV_gen_gen_gen :
 
 private theorem czx_left_pair_int : ∀ i j k l : Fin 2,
     czxAssocLeftInt * czxDecoratedCubeInt i j * czxDecoratedCubeInt k l =
-      czxDecoratedIntTensor i j * czxAssocLeftInt * czxDecoratedCubeInt k l := by
-  decide
+      czxDecoratedIntTensor (i, j) * czxAssocLeftInt * czxDecoratedCubeInt k l := by
+  decide +kernel
 
 private theorem czx_right_pair_int : ∀ i j k l : Fin 2,
     czxRightTreeInt * czxDecoratedCubeInt i j * czxDecoratedCubeInt k l =
-      czxDecoratedIntTensor i j * czxRightTreeInt * czxDecoratedCubeInt k l := by
-  decide
+      czxDecoratedIntTensor (i, j) * czxRightTreeInt * czxDecoratedCubeInt k l := by
+  decide +kernel
 
 private theorem czx_letter_int : ∀ i j : Fin 2,
     czxAssocLeftInt * czxDecoratedCubeInt i j = -(czxRightTreeInt * czxDecoratedCubeInt i j) := by
@@ -263,20 +264,20 @@ private theorem czx_letter_int : ∀ i j : Fin 2,
 
 private theorem czx_pair (L : Matrix (Fin 2) (Fin 8) ℤ)
     (hL : ∀ i j k l : Fin 2, L * czxDecoratedCubeInt i j * czxDecoratedCubeInt k l =
-      czxDecoratedIntTensor i j * L * czxDecoratedCubeInt k l) (a b : Fin 4) :
-    complexOfInt L * czxDecoratedCube.toMPSTensor a * czxDecoratedCube.toMPSTensor b =
-      czxDecoratedTensor.toMPSTensor a * complexOfInt L * czxDecoratedCube.toMPSTensor b := by
-  change complexOfInt L * czxDecoratedCube (_, _) * czxDecoratedCube (_, _) =
-    czxDecoratedTensor (_, _) * complexOfInt L * czxDecoratedCube (_, _)
-  rw [czxDecoratedCube_eq, czxDecoratedCube_eq, czxDecoratedTensor, Function.uncurry_apply_pair,
-      ← complexOfInt_mul,
-    ← complexOfInt_mul, ← complexOfInt_mul, ← complexOfInt_mul, hL]
+      czxDecoratedIntTensor (i, j) * L * czxDecoratedCubeInt k l) (a b : Fin 2 × Fin 2) :
+    complexOfInt L * czxDecoratedCube a * czxDecoratedCube b =
+      czxDecoratedTensor a * complexOfInt L * czxDecoratedCube b := by
+  obtain ⟨i, j⟩ := a
+  obtain ⟨k, l⟩ := b
+  change complexOfInt L * czxDecoratedCube (i, j) * czxDecoratedCube (k, l) =
+    complexOfInt (czxDecoratedIntTensor (i, j)) * complexOfInt L * czxDecoratedCube (k, l)
+  rw [czxDecoratedCube_eq, czxDecoratedCube_eq, ← complexOfInt_mul, ← complexOfInt_mul,
+    ← complexOfInt_mul, ← complexOfInt_mul, hL]
 
-private theorem czx_letter (a : Fin 4) :
-    complexOfInt czxAssocLeftInt * czxDecoratedCube.toMPSTensor a =
-      (-1 : ℂ) • (complexOfInt czxRightTreeInt * czxDecoratedCube.toMPSTensor a) := by
-  change complexOfInt czxAssocLeftInt * czxDecoratedCube (_, _) =
-    (-1 : ℂ) • (complexOfInt czxRightTreeInt * czxDecoratedCube (_, _))
+private theorem czx_letter (a : Fin 2 × Fin 2) :
+    complexOfInt czxAssocLeftInt * czxDecoratedCube a =
+      (-1 : ℂ) • (complexOfInt czxRightTreeInt * czxDecoratedCube a) := by
+  obtain ⟨i, j⟩ := a
   rw [czxDecoratedCube_eq, ← complexOfInt_mul, ← complexOfInt_mul, czx_letter_int,
     complexOfInt_neg, neg_one_smul]
 

@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.FundamentalTheorem.Zipper.BoundaryActionLMatrix
 import TNLean.MPS.Operator.Fusion.BoundaryFusionFMatrix
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Gauge transformations of the multiplicity L and F matrices
@@ -233,29 +234,33 @@ namespace MPSTensor.IsBiorthogonalDecomposition
 
 /-- An analysis map that intertwines an injective target block with the
 source tensor is determined by its products with the letters. -/
-private theorem eq_of_mul_letter_eq {d DB D : ℕ} {B : MPSTensor d DB} {A : MPSTensor d D}
+private theorem eq_of_mul_letter_eq {α : Type*} [Finite α] {DB D : ℕ} {B : MPTensor α (Fin DB)}
+    {A : MPTensor α (Fin D)}
     (hA : Kraus.IsInjective A) {V V' : Matrix (Fin D) (Fin DB) ℂ}
     (hV : ∀ i, V * B i = A i * V) (hV' : ∀ i, V' * B i = A i * V')
     (h : ∀ i, V' * B i = V * B i) : V' = V := by
-  obtain ⟨α, hα⟩ := (Submodule.mem_span_range_iff_exists_fun ℂ).1
+  have := Fintype.ofFinite α
+  obtain ⟨coef, hα⟩ := (Submodule.mem_span_range_iff_exists_fun ℂ).1
     (hA.span_eq_top ▸ Submodule.mem_top : (1 : Matrix (Fin D) (Fin D) ℂ) ∈
       Submodule.span ℂ (Set.range A))
-  calc V' = (∑ i, α i • A i) * V' := by rw [hα, Matrix.one_mul]
-    _ = (∑ i, α i • A i) * V := by
+  calc V' = (∑ i, coef i • A i) * V' := by rw [hα, Matrix.one_mul]
+    _ = (∑ i, coef i • A i) * V := by
       simp only [Matrix.sum_mul, Matrix.smul_mul, ← hV', h, hV]
     _ = V := by rw [hα, Matrix.one_mul]
 
 /-- A synthesis map that intertwines an injective target block with the
 source tensor is determined by its products with the letters. -/
-private theorem eq_of_letter_mul_eq {d DB D : ℕ} {B : MPSTensor d DB} {A : MPSTensor d D}
+private theorem eq_of_letter_mul_eq {α : Type*} [Finite α] {DB D : ℕ} {B : MPTensor α (Fin DB)}
+    {A : MPTensor α (Fin D)}
     (hA : Kraus.IsInjective A) {W W' : Matrix (Fin DB) (Fin D) ℂ}
     (hW : ∀ i, B i * W = W * A i) (hW' : ∀ i, B i * W' = W' * A i)
     (h : ∀ i, B i * W' = B i * W) : W' = W := by
-  obtain ⟨α, hα⟩ := (Submodule.mem_span_range_iff_exists_fun ℂ).1
+  have := Fintype.ofFinite α
+  obtain ⟨coef, hα⟩ := (Submodule.mem_span_range_iff_exists_fun ℂ).1
     (hA.span_eq_top ▸ Submodule.mem_top : (1 : Matrix (Fin D) (Fin D) ℂ) ∈
       Submodule.span ℂ (Set.range A))
-  calc W' = W' * (∑ i, α i • A i) := by rw [hα, Matrix.mul_one]
-    _ = W * (∑ i, α i • A i) := by
+  calc W' = W' * (∑ i, coef i • A i) := by rw [hα, Matrix.mul_one]
+    _ = W * (∑ i, coef i • A i) := by
       simp only [Matrix.mul_sum, Matrix.mul_smul, ← hW', h, hW]
     _ = W := by rw [hα, Matrix.mul_one]
 
@@ -266,9 +271,9 @@ each multiplicity space: `V' = Y V` and `W' = W Y⁻¹`. The letter-support
 relation of the zipper uniqueness theorem holds before multiplication by a
 letter because each target block is injective. Source: GLM23, fusion and
 action gauge freedoms at lines 415--424 and 595--602. -/
-theorem exists_multiplicityGauge_eq_of_isInjective
-    {d DB g : ℕ} {dim N : Fin g → ℕ} {B : MPSTensor d DB}
-    {A : ∀ c, MPSTensor d (dim c)}
+theorem exists_multiplicityGauge_eq_of_isInjective {α : Type*} [Finite α]
+    {DB g : ℕ} {dim N : Fin g → ℕ} {B : MPTensor α (Fin DB)}
+    {A : ∀ c, MPTensor α (Fin (dim c))}
     {V V' : ∀ c, Fin (N c) → Matrix (Fin (dim c)) (Fin DB) ℂ}
     {W W' : ∀ c, Fin (N c) → Matrix (Fin DB) (Fin (dim c)) ℂ}
     (h : IsBiorthogonalDecomposition B
@@ -284,6 +289,7 @@ theorem exists_multiplicityGauge_eq_of_isInjective
         ∑ ν, (↑(Y c) : Matrix (Fin (N c)) (Fin (N c)) ℂ) μ ν • V c ν) ∧
       (∀ c κ, W' c κ =
         ∑ ν, (↑(Y c)⁻¹ : Matrix (Fin (N c)) (Fin (N c)) ℂ) ν κ • W c ν) := by
+  have := Fintype.ofFinite α
   obtain ⟨Y, ⟨hV, hW⟩, -⟩ := h.exists_unique_multiplicityGauge_of_isInjective h' hInj hD hne
   refine ⟨Y, fun c μ ↦ ?_, fun c κ ↦ ?_⟩
   · refine eq_of_mul_letter_eq (hInj c) (fun i ↦ ?_) (fun i ↦ h'.toZipperDecomposition.V_mul c μ i)
@@ -313,22 +319,22 @@ transposed inverses. Source: GLM23, `REsubmission.tex`, lines 415--422 and
 593--605. -/
 theorem exists_actionLMatrix_fusionFMatrix_regauge_of_isInjective
     {O : ∀ a, MPOTensor d (χ a)} {A : ∀ x, MPSTensor d (D x)}
-    (hInjO : ∀ a, Kraus.IsInjective (O a).toMPSTensor)
+    (hInjO : ∀ a, Kraus.IsInjective (O a))
     (hInjA : ∀ x, Kraus.IsInjective (A x))
     (hχ : ∀ a, 0 < χ a) (hD : ∀ x, 0 < D x)
-    (hneO : MPSTensor.BlocksNotGaugePhaseEquiv (fun a ↦ (O a).toMPSTensor))
+    (hneO : MPSTensor.BlocksNotGaugePhaseEquiv O)
     (hneA : MPSTensor.BlocksNotGaugePhaseEquiv A)
     {VF VF' : ∀ a b c, Fin (N a b c) → Matrix (Fin (χ c)) (Fin (χ a * χ b)) ℂ}
     {WF WF' : ∀ a b c, Fin (N a b c) → Matrix (Fin (χ a * χ b)) (Fin (χ c)) ℂ}
     {VA VA' : ∀ a x y, Fin (M a x y) → Matrix (Fin (D y)) (Fin (χ a * D x)) ℂ}
     {WA WA' : ∀ a x y, Fin (M a x y) → Matrix (Fin (χ a * D x)) (Fin (D y)) ℂ}
     (hF : ∀ a b,
-      MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b)).toMPSTensor
-        (fun q : (c : Fin r) × Fin (N a b c) ↦ (O q.1).toMPSTensor)
+      MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b))
+        (fun q : (c : Fin r) × Fin (N a b c) ↦ O q.1)
         (fun q ↦ VF a b q.1 q.2) (fun q ↦ WF a b q.1 q.2))
     (hF' : ∀ a b,
-      MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b)).toMPSTensor
-        (fun q : (c : Fin r) × Fin (N a b c) ↦ (O q.1).toMPSTensor)
+      MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b))
+        (fun q : (c : Fin r) × Fin (N a b c) ↦ O q.1)
         (fun q ↦ VF' a b q.1 q.2) (fun q ↦ WF' a b q.1 q.2))
     (hA : ∀ a x,
       MPSTensor.IsBiorthogonalDecomposition (actTensor (O a) (A x))
@@ -358,7 +364,8 @@ theorem exists_actionLMatrix_fusionFMatrix_regauge_of_isInjective
               (↑(Y a f d)⁻¹ : Matrix (Fin (N a f d)) (Fin (N a f d)) ℂ) sig' sig *
               fusionFMatrix VF WF a b c d ⟨e, mu', nu'⟩ ⟨f, lam', sig'⟩) := by
   choose Y hYV hYW using fun a b ↦
-    (hF a b).exists_multiplicityGauge_eq_of_isInjective (hF' a b) hInjO hχ hneO
+    (hF a b).exists_multiplicityGauge_eq_of_isInjective (hF' a b)
+      (fun a ↦ (hInjO a)) hχ hneO
   choose X hXV hXW using fun a x ↦
     (hA a x).exists_multiplicityGauge_eq_of_isInjective (hA' a x) hInjA hD hneA
   refine ⟨X, Y, fun a b c x y z i j k μ ↦ ?_, fun a b c d e f mu nu lam sig ↦ ?_⟩

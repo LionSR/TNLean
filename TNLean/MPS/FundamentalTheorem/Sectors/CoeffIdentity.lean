@@ -48,7 +48,7 @@ power `ζ^N`, then `ζ` has norm one. This is the self-overlap normalization
 closure used after the equal-MPS lemma of CPSV16 (lines 1080–1097) in the
 non-periodic BNT setting. -/
 theorem IsLeftCanonicalBNTPresentation.norm_phase_of_matched_mpv
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (hP : IsLeftCanonicalBNTPresentation P) (hQ : IsLeftCanonicalBNTPresentation Q)
     {j : Fin P.basisCount} {k : Fin Q.basisCount} {ζ : ℂ}
     (hmpv : ∀ (N : ℕ), 0 < N → ∀ σ : Fin N → Fin d,
@@ -76,7 +76,7 @@ extract a phase `ζ` with `‖ζ‖ = 1` and
 This is CPSV16's Lemma `equalMPS` (lines 1080–1097) plus the normalized
 self-overlap/unit-phase closure used in the non-periodic setting. -/
 private lemma extract_unit_gauge_phase_mpv
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (hP : IsLeftCanonicalBNTPresentation P) (hQ : IsLeftCanonicalBNTPresentation Q)
     {j : Fin P.basisCount} {k : Fin Q.basisCount}
     (h : P.basisDim j = Q.basisDim k)
@@ -96,7 +96,7 @@ private lemma extract_unit_gauge_phase_mpv
 This is the common kernel for equal and proportional MPV families. It substitutes the full
 matched `Q`-basis into the full `P`-basis and compares coefficients using `hP.eventually_li`. -/
 private lemma coeff_identity_via_matched_mpv_phase_scalar
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (hP : IsLeftCanonicalBNTPresentation P)
     (c : ℕ → ℂ)
     (hc_mpv : ∀ᶠ N in atTop, ∀ σ : Fin N → Fin d,
@@ -202,7 +202,7 @@ MPV proof, lines 1187--1188, part of the equal-MPV corollary; the per-block
 gauge matrices are combined afterwards into `X = ⊕_k (𝟙_{r_k} ⊗ X_k)` in
 lines 1189--1192. -/
 theorem coeff_identity_via_matched_mpv_phase
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (hP : IsLeftCanonicalBNTPresentation P)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor)
     (β : Fin Q.basisCount ≃ Fin P.basisCount)
@@ -275,7 +275,7 @@ equal-MPV case, where the global scalar is `1`.  The theorem
 conditional implication rather than a residual step of the proportional
 fundamental theorem. -/
 theorem coeff_identity_via_matched_mpv_phase_proportional
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (hP : IsLeftCanonicalBNTPresentation P)
     (hProp : EventuallyNonzeroProportionalMPV₂ P.toTensor Q.toTensor)
     (β : Fin Q.basisCount ≃ Fin P.basisCount)
@@ -330,7 +330,7 @@ power-sum comparison.  The finite power-sum recovery of copy weights is a
 separate algebraic step, applied after these eventual coefficient identities
 have been obtained. -/
 theorem coeff_identity_via_global_gauge
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (hP : IsLeftCanonicalBNTPresentation P) (hQ : IsLeftCanonicalBNTPresentation Q)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor)
     (β : Fin Q.basisCount ≃ Fin P.basisCount)

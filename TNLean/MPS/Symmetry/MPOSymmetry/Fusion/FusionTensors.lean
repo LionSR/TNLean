@@ -6,6 +6,7 @@ Authors: Sirui Lu
 import TNLean.MPS.Tensor.Reduction.ReductionUniqueness
 import TNLean.MPS.FundamentalTheorem.OperatorProduct.MPOProduct
 import TNLean.MPS.FundamentalTheorem.OperatorProduct.NIMRep
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Fusion tensors and action tensors of matrix product operator algebras
@@ -96,13 +97,15 @@ positive length, with normal tensors `C_c` of positive bond dimension and multip
 
 This is `MPSTensor.exists_multiBlockCompression_of_isNormal` applied to the sigma type of copies;
 no hypothesis relating distinct `C_c` is needed. -/
-theorem exists_multiBlockCompression_sigma_of_isNormal (B : MPSTensor d DB)
-    (C : ∀ c, MPSTensor d (D c)) (N : L → ℕ) (hC : ∀ c, Kraus.IsNormal (C c))
+theorem exists_multiBlockCompression_sigma_of_isNormal {α : Type*} [Finite α]
+    (B : MPTensor α (Fin DB))
+    (C : ∀ c, MPTensor α (Fin (D c))) (N : L → ℕ) (hC : ∀ c, Kraus.IsNormal (C c))
     (hD : ∀ c, 0 < D c)
-    (hmpv : ∀ n : ℕ, 0 < n → ∀ σ : Fin n → Fin d,
+    (hmpv : ∀ n : ℕ, 0 < n → ∀ σ : Fin n → α,
       mpv B σ = ∑ c, (N c : ℂ) * mpv (C c) σ) :
     Nonempty (MultiBlockCompression (D := fun s : Σ c, Fin (N c) => D s.1) B Finset.univ
       fun s => C s.1) := by
+  have := Fintype.ofFinite α
   refine exists_multiBlockCompression_of_isNormal (D := fun s : Σ c, Fin (N c) => D s.1)
     Finset.univ (fun s => C s.1) (fun s _ => hC s.1) (fun s _ => hD s.1) B fun w hw => ?_
   have h := hmpv w.length (List.length_pos_of_ne_nil hw) w.get
@@ -123,18 +126,20 @@ omit [DecidableEq L] in
 These are the relations `W_{ab}^{c,μ} \hat W_{ab}^{d,ν} = δ_{cd} δ_{μν} 1` of arXiv:2203.12563,
 equation `eq:orthoW`, together with the periodic-boundary form of the decomposition, whose
 off-diagonal tails vanish after finitely many sites (lines 1028 and 1131). -/
-theorem exists_multiplicityReductions_of_isNormal (B : MPSTensor d DB)
-    (C : ∀ c, MPSTensor d (D c)) (N : L → ℕ) (hC : ∀ c, Kraus.IsNormal (C c))
+theorem exists_multiplicityReductions_of_isNormal {α : Type*} [Finite α]
+    (B : MPTensor α (Fin DB))
+    (C : ∀ c, MPTensor α (Fin (D c))) (N : L → ℕ) (hC : ∀ c, Kraus.IsNormal (C c))
     (hD : ∀ c, 0 < D c)
-    (hmpv : ∀ n : ℕ, 0 < n → ∀ σ : Fin n → Fin d,
+    (hmpv : ∀ n : ℕ, 0 < n → ∀ σ : Fin n → α,
       mpv B σ = ∑ c, (N c : ℂ) * mpv (C c) σ) :
     ∃ (V : ∀ s : Σ c, Fin (N c), Matrix (Fin (D s.1)) (Fin DB) ℂ)
       (W : ∀ s : Σ c, Fin (N c), Matrix (Fin DB) (Fin (D s.1)) ℂ),
       (∀ s, IsReduction B (C s.1) (V s) (W s)) ∧
         (∀ s t, s ≠ t → V s * W t = 0) ∧
-        ∀ w : List (Fin d), DB ≤ w.length →
+        ∀ w : List α, DB ≤ w.length →
           Kraus.evalWord (fun i => B i - ∑ s, W s * C s.1 i * V s) w = 0 := by
   classical
+  have := Fintype.ofFinite α
   obtain ⟨P⟩ := exists_multiBlockCompression_sigma_of_isNormal B C N hC hD hmpv
   refine ⟨fun s => P.left ⟨s, Finset.mem_univ s⟩, fun s => P.right ⟨s, Finset.mem_univ s⟩,
     fun s => P.isReduction ⟨s, Finset.mem_univ s⟩, fun s t hst => P.left_mul_right_of_ne
@@ -156,7 +161,7 @@ theorem exists_multiplicityReductions_of_isNormal (B : MPSTensor d DB)
 
 section NilpotentBiorthogonalReductions
 
-variable {κ : Type*} [Fintype κ] {δ : κ → ℕ}
+variable {α κ : Type*} [Fintype κ] {δ : κ → ℕ}
 
 /-- **Biorthogonal reductions with a nilpotent remainder** onto a finite family of blocks: maps
 `V s : ℂ^{D_B} → ℂ^{δ s}` and `W s : ℂ^{δ s} → ℂ^{D_B}`, one pair for each block `C s`, such that
@@ -181,8 +186,8 @@ any length $n$" (equation `mpoMPSsten`) and "there is a number $\ell'$ such that
 $\ell'$ tensors, there are no off-diagonal blocks present in the product of the MPO and MPS
 tensors".  The family of blocks indexed by `κ` carries the multiplicity copies of the
 fusion-algebra form of lines 361--391 (`eq:orthoW`) and 459--490 (`eq:orthoV`). -/
-structure NilpotentBiorthogonalReductions (B : MPSTensor d DB) (C : ∀ s : κ, MPSTensor d (δ s))
-    where
+structure NilpotentBiorthogonalReductions (B : MPTensor α (Fin DB))
+    (C : ∀ s : κ, MPTensor α (Fin (δ s))) where
   /-- the compression onto the block `C s` -/
   V : ∀ s, Matrix (Fin (δ s)) (Fin DB) ℂ
   /-- the embedding of the block `C s` -/
@@ -194,13 +199,13 @@ structure NilpotentBiorthogonalReductions (B : MPSTensor d DB) (C : ∀ s : κ, 
   orthogonal : ∀ s t, s ≠ t → V s * W t = 0
   /-- the off-diagonal remainder vanishes after finitely many sites (source lines 1028 and
   1091) -/
-  nilpotent : ∃ ℓ : ℕ, ∀ w : List (Fin d), ℓ ≤ w.length →
+  nilpotent : ∃ ℓ : ℕ, ∀ w : List α, ℓ ≤ w.length →
     Kraus.evalWord (fun i => B i - ∑ s, W s * C s i * V s) w = 0
 
 /-- The full biorthogonality relations `V s W t = δ_{st} 1`, the `n = 0` case of the source
 equation `fusiontensorG2` together with `eq:orthoW`. -/
-theorem NilpotentBiorthogonalReductions.V_mul_W_self {B : MPSTensor d DB}
-    {C : ∀ s : κ, MPSTensor d (δ s)} (F : NilpotentBiorthogonalReductions B C) (s : κ) :
+theorem NilpotentBiorthogonalReductions.V_mul_W_self {B : MPTensor α (Fin DB)}
+    {C : ∀ s : κ, MPTensor α (Fin (δ s))} (F : NilpotentBiorthogonalReductions B C) (s : κ) :
     F.V s * F.W s = 1 :=
   (F.isReduction s).mul_eq_one
 
@@ -237,13 +242,13 @@ section IsReduction
 
 open MPTensor.IsReduction
 
-variable {DA : ℕ} {B : MPSTensor d DB} {A : MPSTensor d DA}
+variable {α : Type*} {DA : ℕ} {B : MPTensor α (Fin DB)} {A : MPTensor α (Fin DA)}
   {V V' : Matrix (Fin DA) (Fin DB) ℂ} {W W' : Matrix (Fin DB) (Fin DA) ℂ}
 
 /-- A residual nilpotency statement for all words of length at least `K` gives the
 exact-length bound of MGSC18, Definition 8, at `K`. -/
 theorem _root_.MPTensor.IsReduction.isReductionResidualNilpotencyBound_of_forall_le {K : ℕ}
-    (h : ∀ w : List (Fin d), K ≤ w.length →
+    (h : ∀ w : List α, K ≤ w.length →
       Kraus.evalWord (fun i => B i - W * A i * V) w = 0) :
     IsReductionResidualNilpotencyBound B A V W K :=
   fun w hw => h w hw.ge
@@ -258,11 +263,11 @@ Source: Molnár--Ge--Schuch--Cirac, arXiv:1706.07329v2, Theorem 22, `cornerprobl
 theorem _root_.MPTensor.IsReduction.exists_boundary_dressed_proportional_of_forall_le
     (h : IsReduction B A V W)
     (h' : IsReduction B A V' W') (hA : Kraus.IsNormal A) {K : ℕ}
-    (hK : ∀ w : List (Fin d), K ≤ w.length →
+    (hK : ∀ w : List α, K ≤ w.length →
       Kraus.evalWord (fun i => B i - W * A i * V) w = 0)
-    (hK' : ∀ w : List (Fin d), K ≤ w.length →
+    (hK' : ∀ w : List α, K ≤ w.length →
       Kraus.evalWord (fun i => B i - W' * A i * V') w = 0) :
-    ∃ z : ℂ, z ≠ 0 ∧ ∀ w : List (Fin d), 2 * K < w.length →
+    ∃ z : ℂ, z ≠ 0 ∧ ∀ w : List α, 2 * K < w.length →
       V * Kraus.evalWord B w = z • (V' * Kraus.evalWord B w) ∧
         Kraus.evalWord B w * W = z⁻¹ • (Kraus.evalWord B w * W') :=
   h.exists_boundary_dressed_proportional h' hA
@@ -296,39 +301,38 @@ conditions (Appendix `ap:proofs`, lines 2305--2313).  Here only the periodic fus
 assumed, and the decomposition holds up to the nilpotent remainder, the off-diagonal tails
 that the paper describes for periodic boundaries at lines 1028 and 1131. -/
 theorem exists_fusionTensors_of_mpo_mul_eq_sum {χ : L → ℕ} (O : ∀ c, MPOTensor d (χ c))
-    (N : L → L → L → ℕ) (hO : ∀ c, Kraus.IsNormal (O c).toMPSTensor) (hχ : ∀ c, 0 < χ c)
+    (N : L → L → L → ℕ) (hO : ∀ c, Kraus.IsNormal (O c)) (hχ : ∀ c, 0 < χ c)
     (a b : L)
     (hfus : ∀ n : ℕ, 0 < n → mpo (O a) n * mpo (O b) n = ∑ c, (N a b c : ℂ) • mpo (O c) n) :
     ∃ (V : ∀ s : Σ c, Fin (N a b c), Matrix (Fin (χ s.1)) (Fin (χ a * χ b)) ℂ)
       (W : ∀ s : Σ c, Fin (N a b c), Matrix (Fin (χ a * χ b)) (Fin (χ s.1)) ℂ),
-      (∀ s, MPTensor.IsReduction (mulTensor (O a) (O b)).toMPSTensor (O s.1).toMPSTensor
-          (V s) (W s)) ∧
+      (∀ s, MPTensor.IsReduction (mulTensor (O a) (O b)) (O s.1) (V s) (W s)) ∧
         (∀ s t, s ≠ t → V s * W t = 0) ∧
-        ∀ w : List (Fin (d * d)), χ a * χ b ≤ w.length →
-          Kraus.evalWord (fun i => (mulTensor (O a) (O b)).toMPSTensor i -
-            ∑ s, W s * (O s.1).toMPSTensor i * V s) w = 0 := by
+        ∀ w : List (Fin d × Fin d), χ a * χ b ≤ w.length →
+          Kraus.evalWord (fun i => mulTensor (O a) (O b) i -
+            ∑ s, W s * O s.1 i * V s) w = 0 := by
   classical
-  refine MPSTensor.exists_multiplicityReductions_of_isNormal _ (fun c => (O c).toMPSTensor)
-    (N a b) hO hχ fun n hn ρ => ?_
-  have h := congrFun (congrFun (hfus n hn) fun k => (ρ k).divNat) fun k => (ρ k).modNat
-  rw [← mpo_mulTensor] at h
-  rw [mpv_toMPSTensor, h, Matrix.sum_apply]
-  exact Finset.sum_congr rfl fun c _ => by rw [Matrix.smul_apply, smul_eq_mul, mpv_toMPSTensor]
+  have hmpv : ∀ n : ℕ, 0 < n → ∀ ρ : Fin n → Fin d × Fin d,
+      MPTensor.mpv (mulTensor (O a) (O b)) ρ = ∑ c, (N a b c : ℂ) * MPTensor.mpv (O c) ρ := by
+    intro n hn ρ
+    rw [mpv_eq_mpo, mpo_mulTensor, hfus n hn, Matrix.sum_apply]
+    refine Finset.sum_congr rfl fun c _ => ?_
+    rw [Matrix.smul_apply, smul_eq_mul, mpv_eq_mpo]
+  exact MPSTensor.exists_multiplicityReductions_of_isNormal _ O (N a b) hO hχ hmpv
 
 /-- **Fusion tensors of a matrix product operator fusion algebra** (arXiv:2203.12563, lines
 361--389): `MPOTensor.exists_fusionTensors_of_mpo_mul_eq_sum` for every pair of labels of an
 algebra whose tensors are normal of positive bond dimension. -/
 theorem IsMPOFusionAlgebra.exists_fusionTensors {χ : L → ℕ} {O : ∀ c, MPOTensor d (χ c)}
     {N : L → L → L → ℕ} (hF : IsMPOFusionAlgebra O N)
-    (hO : ∀ c, Kraus.IsNormal (O c).toMPSTensor) (hχ : ∀ c, 0 < χ c) (a b : L) :
+    (hO : ∀ c, Kraus.IsNormal (O c)) (hχ : ∀ c, 0 < χ c) (a b : L) :
     ∃ (V : ∀ s : Σ c, Fin (N a b c), Matrix (Fin (χ s.1)) (Fin (χ a * χ b)) ℂ)
       (W : ∀ s : Σ c, Fin (N a b c), Matrix (Fin (χ a * χ b)) (Fin (χ s.1)) ℂ),
-      (∀ s, MPTensor.IsReduction (mulTensor (O a) (O b)).toMPSTensor (O s.1).toMPSTensor
-          (V s) (W s)) ∧
+      (∀ s, MPTensor.IsReduction (mulTensor (O a) (O b)) (O s.1) (V s) (W s)) ∧
         (∀ s t, s ≠ t → V s * W t = 0) ∧
-        ∀ w : List (Fin (d * d)), χ a * χ b ≤ w.length →
-          Kraus.evalWord (fun i => (mulTensor (O a) (O b)).toMPSTensor i -
-            ∑ s, W s * (O s.1).toMPSTensor i * V s) w = 0 :=
+        ∀ w : List (Fin d × Fin d), χ a * χ b ≤ w.length →
+          Kraus.evalWord (fun i => mulTensor (O a) (O b) i -
+            ∑ s, W s * O s.1 i * V s) w = 0 :=
   exists_fusionTensors_of_mpo_mul_eq_sum O N hO hχ a b (hF a b)
 
 /-- **Action tensors with multiplicity** (Garre-Rubio--Lootens--Molnár, arXiv:2203.12563,
@@ -366,7 +370,7 @@ tensors that decompose the product of two tensors locally for any length $n$" (e
 concatenation: we denote by $\ell$ the nilpotent length associated to that". -/
 abbrev FusionTensors {χ : L → ℕ} (O : ∀ c, MPOTensor d (χ c)) (N : L → L → L → ℕ) (a b : L) :=
   MPSTensor.NilpotentBiorthogonalReductions (δ := fun s : Σ c, Fin (N a b c) => χ s.1)
-    (mulTensor (O a) (O b)).toMPSTensor fun s => (O s.1).toMPSTensor
+    (mulTensor (O a) (O b)) fun s => O s.1
 
 omit [Fintype L] in
 /-- **Action tensors** of the pair `(a, x)` (arXiv:2203.12563, lines 1062--1091, in the
@@ -386,7 +390,7 @@ algebra of normal tensors of positive bond dimension (arXiv:2203.12563, lines 10
 `MPOTensor.IsMPOFusionAlgebra.exists_fusionTensors`. -/
 theorem IsMPOFusionAlgebra.nonempty_fusionTensors {χ : L → ℕ} {O : ∀ c, MPOTensor d (χ c)}
     {N : L → L → L → ℕ} (hF : IsMPOFusionAlgebra O N)
-    (hO : ∀ c, Kraus.IsNormal (O c).toMPSTensor) (hχ : ∀ c, 0 < χ c) (a b : L) :
+    (hO : ∀ c, Kraus.IsNormal (O c)) (hχ : ∀ c, 0 < χ c) (a b : L) :
     Nonempty (FusionTensors O N a b) := by
   obtain ⟨V, W, hred, horth, hnil⟩ := hF.exists_fusionTensors hO hχ a b
   exact ⟨⟨V, W, hred, horth, ⟨_, hnil⟩⟩⟩
@@ -461,21 +465,18 @@ The source's gauge `W ↦ y W`, `\hat W ↦ y⁻¹ \hat W` is recovered only aft
 periodic setting the fusion tensors are not determined off the support of long words. -/
 theorem exists_boundary_dressed_proportional_of_mpo_mul_eq {χa χb χc : ℕ}
     {Oa : MPOTensor d χa} {Ob : MPOTensor d χb} {Oc : MPOTensor d χc}
-    (hOc : Kraus.IsNormal Oc.toMPSTensor)
+    (hOc : Kraus.IsNormal Oc)
     {V V' : Matrix (Fin χc) (Fin (χa * χb)) ℂ} {W W' : Matrix (Fin (χa * χb)) (Fin χc) ℂ}
-    (h : MPTensor.IsReduction (mulTensor Oa Ob).toMPSTensor Oc.toMPSTensor V W)
-    (h' : MPTensor.IsReduction (mulTensor Oa Ob).toMPSTensor Oc.toMPSTensor V' W') {K : ℕ}
-    (hK : ∀ w : List (Fin (d * d)), K ≤ w.length →
-      Kraus.evalWord (fun i => (mulTensor Oa Ob).toMPSTensor i - W * Oc.toMPSTensor i * V) w =
-        0)
-    (hK' : ∀ w : List (Fin (d * d)), K ≤ w.length →
-      Kraus.evalWord (fun i => (mulTensor Oa Ob).toMPSTensor i - W' * Oc.toMPSTensor i * V') w =
-        0) :
-    ∃ z : ℂ, z ≠ 0 ∧ ∀ w : List (Fin (d * d)), 2 * K < w.length →
-      V * Kraus.evalWord (mulTensor Oa Ob).toMPSTensor w =
-          z • (V' * Kraus.evalWord (mulTensor Oa Ob).toMPSTensor w) ∧
-        Kraus.evalWord (mulTensor Oa Ob).toMPSTensor w * W =
-          z⁻¹ • (Kraus.evalWord (mulTensor Oa Ob).toMPSTensor w * W') :=
+    (h : MPTensor.IsReduction (mulTensor Oa Ob) Oc V W)
+    (h' : MPTensor.IsReduction (mulTensor Oa Ob) Oc V' W') {K : ℕ}
+    (hK : ∀ w : List (Fin d × Fin d), K ≤ w.length →
+      Kraus.evalWord (fun i => mulTensor Oa Ob i - W * Oc i * V) w = 0)
+    (hK' : ∀ w : List (Fin d × Fin d), K ≤ w.length →
+      Kraus.evalWord (fun i => mulTensor Oa Ob i - W' * Oc i * V') w = 0) :
+    ∃ z : ℂ, z ≠ 0 ∧ ∀ w : List (Fin d × Fin d), 2 * K < w.length →
+      V * Kraus.evalWord (mulTensor Oa Ob) w = z • (V' * Kraus.evalWord (mulTensor Oa Ob) w) ∧
+        Kraus.evalWord (mulTensor Oa Ob) w * W =
+          z⁻¹ • (Kraus.evalWord (mulTensor Oa Ob) w * W') :=
   h.exists_boundary_dressed_proportional_of_forall_le h' hOc hK hK'
 
 end MPOTensor

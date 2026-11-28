@@ -462,7 +462,7 @@ end Blocks
 
 namespace IsLeftCanonicalBNTPresentation
 
-variable {P : SectorDecomposition d}
+variable {P : SectorDecomposition (Fin d)}
 
 /-- **Multiplicity-one characterization for the basis of normal tensors.**
 

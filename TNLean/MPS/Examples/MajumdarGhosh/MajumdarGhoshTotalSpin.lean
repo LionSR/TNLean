@@ -125,8 +125,9 @@ def spinThreeHalvesES : Submodule ℂ (EuclideanSpace ℂ (Cfg 2 3)) :=
 
 /-- The total-spin-\(\tfrac32\) subspace is the orthogonal complement of the
 three-site local ground space of `majumdarGhoshTensor`. -/
-theorem spinThreeHalvesES_eq_orthogonal_groundSpaceES :
-    spinThreeHalvesES = (groundSpaceES majumdarGhoshTensor 3)ᗮ := by
+theorem spinThreeHalvesES_eq_orthogonal_map_groundSpace :
+    spinThreeHalvesES = (((groundSpace majumdarGhoshTensor 3).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap))ᗮ := by
   set e := WithLp.linearEquiv 2 ℂ (NSiteSpace 2 3)
   ext v
   rw [spinThreeHalvesES, Submodule.mem_map_equiv, LinearEquiv.symm_symm,
@@ -156,7 +157,7 @@ theorem majumdarGhosh_parentInteraction_eq_spinThreeHalves_starProjection :
       (WithLp.linearEquiv 2 ℂ (NSiteSpace 2 3)).toLinearMap ∘ₗ
         spinThreeHalvesES.starProjection.toLinearMap ∘ₗ
           (WithLp.linearEquiv 2 ℂ (NSiteSpace 2 3)).symm.toLinearMap := by
-  rw [parentInteraction, spinThreeHalvesES_eq_orthogonal_groundSpaceES]
+  rw [parentInteraction, spinThreeHalvesES_eq_orthogonal_map_groundSpace]
 
 end MPSTensor
 

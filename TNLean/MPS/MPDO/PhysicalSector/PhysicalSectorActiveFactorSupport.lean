@@ -8,6 +8,7 @@ import TNLean.MPS.CanonicalForm.SimpleMPO.BNTLayerOrthogonality
 import TNLean.MPS.Operator.PhysicalSector.PhysicalSectorProductRealization
 import TNLean.MPS.Operator.PhysicalSector.PhysicalSectorVirtualSpanning
 import QICLean.Algebra.Combinatorics.FinSumPermutation
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Supports of active physical-sector factors
@@ -140,18 +141,11 @@ Source: arXiv:1606.00608, Appendix C.2, equation `AppUkU=rl`, lines
 1381--1388. -/
 theorem sectorCoordinateTensor_isInjective
     (F : PhysicalSectorFactorization K)
-    (hK : Kraus.IsInjective K.toMPSTensor) :
-    Kraus.IsInjective F.sectorCoordinateTensor.toMPSTensor := by
-  change Submodule.span ℂ (Set.range F.sectorCoordinateTensor.toMPSTensor) = ⊤
+    (hK : Kraus.IsInjective K) :
+    Kraus.IsInjective F.sectorCoordinateTensor := by
+  change Submodule.span ℂ (Set.range F.sectorCoordinateTensor) = ⊤
   rw [← F.sectorCoordinateMatrixFamily_span_eq_top hK]
-  congr 1
-  ext A
-  constructor
-  · rintro ⟨q, rfl⟩
-    exact ⟨(q.divNat, q.modNat), rfl⟩
-  · rintro ⟨⟨i, j⟩, rfl⟩
-    refine ⟨finProdFinEquiv (i, j), ?_⟩
-    simp [MPOTensor.toMPSTensor, sectorCoordinateMatrixFamily]
+  rfl
 
 /-- Positive neighboring operators make the sector-coordinate tensor a
 matrix product density operator.
@@ -174,7 +168,7 @@ Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
 consequence of the injective MPDO factorization stated there. -/
 theorem sectorProductFamily_conjTranspose_mem_span
     (F : PhysicalSectorFactorization K)
-    (hK : Kraus.IsInjective K.toMPSTensor)
+    (hK : Kraus.IsInjective K)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
     (k : Fin F.sectorCount) :
     ∀ q, ∃ c : Fin D × Fin D → ℂ,
@@ -206,7 +200,7 @@ Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
 product-family closure. -/
 theorem leftTensor_conjTranspose_mem_span_of_isActiveSector
     (F : PhysicalSectorFactorization K)
-    (hK : Kraus.IsInjective K.toMPSTensor)
+    (hK : Kraus.IsInjective K)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
     {k : Fin F.sectorCount} (hk : F.IsActiveSector k) :
     ∀ β, ∃ c : Fin D → ℂ,
@@ -257,7 +251,7 @@ Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
 product-family closure. -/
 theorem rightTensor_conjTranspose_mem_span_of_isActiveSector
     (F : PhysicalSectorFactorization K)
-    (hK : Kraus.IsInjective K.toMPSTensor)
+    (hK : Kraus.IsInjective K)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
     {k : Fin F.sectorCount} (hk : F.IsActiveSector k) :
     ∀ α, ∃ c : Fin D → ℂ,
@@ -319,7 +313,7 @@ Source: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
 finite-dimensional normalization of the factors appearing there. -/
 theorem activeSector_factorSupport_twoSided
     (F : PhysicalSectorFactorization K)
-    (hK : Kraus.IsInjective K.toMPSTensor)
+    (hK : Kraus.IsInjective K)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
     {k : Fin F.sectorCount} (hk : F.IsActiveSector k) :
     (∀ β,

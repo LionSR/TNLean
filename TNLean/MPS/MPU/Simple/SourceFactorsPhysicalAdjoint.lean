@@ -41,15 +41,13 @@ in `eq:block-twosites`, lines 1237–1244. -/
 noncomputable def IsMPUCanonicalFormII.reindexPhysical
     {d d' D : ℕ} {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U)
     (e : Fin d' ≃ Fin d) : IsMPUCanonicalFormII (MPOTensor.reindexPhysical e U) := by
-  let ep : Fin (d' * d') ≃ Fin (d * d) :=
-    finProdFinEquiv.symm.trans ((Equiv.prodCongr e e).trans finProdFinEquiv)
+  let ep : Fin d' × Fin d' ≃ Fin d × Fin d := Equiv.prodCongr e e
   have heq : (MPOTensor.reindexPhysical e U).normalizedFlattening =
       Kraus.reindexPhysical ep U.normalizedFlattening := by
     have hd : d' = d := by simpa only [Fintype.card_fin] using Fintype.card_congr e
     subst d'
-    ext i α β
-    simp [normalizedFlattening, MPOTensor.reindexPhysical, Kraus.reindexPhysical,
-      ep, toMPSTensor, Matrix.smul_apply]
+    funext ⟨i, j⟩
+    simp [normalizedFlattening, MPOTensor.reindexPhysical, Kraus.reindexPhysical, ep]
   let data := hU.cfii.reindexPhysical ep
   have hfull : data.toCPSVCanonicalFormData.HasFullSupport := by
     change ∑ k, hU.cfii.toCPSVCanonicalFormData.dim k = D

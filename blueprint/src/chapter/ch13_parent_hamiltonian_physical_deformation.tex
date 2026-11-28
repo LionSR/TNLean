@@ -140,7 +140,7 @@ prescriptions~\cite{gap:cpgsv21_physical_deformation_general_graph}.
         Matrix.IsIsometry.piKronecker,
         MPSTensor.groundSpaceMap_rotatePhysical_rectangular,
         MPSTensor.groundSpace_rotatePhysical_rectangular,
-        MPSTensor.groundSpaceES_rotatePhysical_rectangular}
+        MPSTensor.map_groundSpace_rotatePhysical_rectangular}
     \leanok
     \uses{def:physical_rotation,def:ground_space_map,def:ground_space_es}
     Let $E:\mathbb C^d\to\mathbb C^m$ be a linear map and let
@@ -184,7 +184,7 @@ prescriptions~\cite{gap:cpgsv21_physical_deformation_general_graph}.
 
 \begin{lemma}[Local ground space of the rotated tensor]\label{thm:ground_space_physical_rotation}
     \lean{MPSTensor.groundSpace_rotatePhysical}
-    \lean{MPSTensor.groundSpaceES_rotatePhysical}
+    \lean{MPSTensor.map_groundSpace_rotatePhysical}
     \leanok
     \uses{def:physical_rotation,def:on_site_tensor_pow,def:ground_space_parent,def:ground_space_es}
     For every $\Lambda\in\MN{d}$ and $L\ge0$,

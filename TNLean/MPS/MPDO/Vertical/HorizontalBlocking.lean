@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.CanonicalForm.BNTPresentation.SectorBlocking
 import TNLean.MPS.CanonicalForm.SimpleMPO.HorizontalBNT
 import TNLean.MPS.Operator.Product.PhysicalBlocking
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # BNT-refined horizontal form under two-site blocking
@@ -18,6 +19,11 @@ original virtual gauge.
 This is the blocking fact used when Proposition 4.13 is applied both to an MPO
 tensor and to its two-site blocked tensor in Appendix C.4 of
 arXiv:1606.00608, lines 1951--1956.
+
+**Bridge (T.2b):** This module still reads an operator tensor through `MPOTensor.toMPSTensor`,
+because the Fin-encoded blocking `Kraus.blockTensor` (with `MPOTensor.toMPSTensor_blockTensor`,
+`MPOTensor.toMPSTensor_blockTwo`) is stated on the alphabet `Fin (d * d)`. The bridge is removed
+when the blocking moves to `Kraus.block` (step T.2b of `docs/tensor_type_unification.md`).
 -/
 
 open scoped Matrix BigOperators
@@ -40,32 +46,43 @@ theorem IsHorizontalCF.blockTwo {M : MPOTensor d D}
   classical
   obtain ⟨S, hCF, hTotal, Xcopy, hX⟩ := hHorizontal
   subst D
-  let e := twoSiteDoubledIndexEquiv d
-  let S' := (S.blockTensor 2).reindexPhysical e
+  -- Temporary: `SectorDecomposition.blockTensor` is still stated on `Fin d`, so the pair
+  -- alphabet is relabelled along `finProdFinEquiv` before blocking.
+  let e₀ : Fin (d * d) ≃ Fin d × Fin d := finProdFinEquiv.symm
+  let e : Fin (d * d) × Fin (d * d) ≃ Fin (Kraus.blockPhysDim (d * d) 2) :=
+    finProdFinEquiv.trans (twoSiteDoubledIndexEquiv d)
+  let S₀ := S.reindexPhysical e₀
+  let S' := (S₀.blockTensor 2).reindexPhysical e
   have hCF' : MPSTensor.IsLeftCanonicalBNTPresentation S' :=
     MPSTensor.SectorDecomposition.IsLeftCanonicalBNTPresentation.reindexPhysical
-      (MPSTensor.SectorDecomposition.IsLeftCanonicalBNTPresentation.blockTensor hCF (by omega)) e
+      (MPSTensor.SectorDecomposition.IsLeftCanonicalBNTPresentation.blockTensor
+        (MPSTensor.SectorDecomposition.IsLeftCanonicalBNTPresentation.reindexPhysical hCF e₀)
+        (by omega)) e
   refine ⟨S', hCF', ?_⟩
   refine ⟨by rfl, ?_⟩
-  simp only [S', MPSTensor.SectorDecomposition.reindexPhysical_totalCopies,
+  simp only [S', S₀, MPSTensor.SectorDecomposition.reindexPhysical_totalCopies,
     MPSTensor.SectorDecomposition.blockTensor_totalCopies,
     MPSTensor.SectorDecomposition.reindexPhysical_toTensor,
     Kraus.reindexPhysical]
   rw [← MPSTensor.SectorDecomposition.blockTensor_toTensor]
   refine ⟨Xcopy, ?_⟩
   let X := MPSTensor.globalGaugeOfBlocks Xcopy
-  have hGauge : ∀ i : Fin (d * d),
-      M.toMPSTensor i =
-        (X : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) * S.toTensor i *
+  have hGauge : ∀ k : Fin (d * d),
+      M.toMPSTensor k =
+        (X : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) * Kraus.reindexPhysical e₀ S.toTensor k *
           (((X)⁻¹ : GL (Fin S.totalDim) ℂ) :
-            Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) := by
-    intro i
-    simpa [X] using hX i
+            Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) :=
+    fun k ↦ (hX (e₀ k)).trans (cast_eq _ _)
   intro i
-  rw [toMPSTensor_blockTwo]
+  have hLHS : MPOTensor.blockTwo M i = Kraus.blockTensor M.toMPSTensor 2 (e i) := by
+    have h := congrFun (toMPSTensor_blockTwo M) (finProdFinEquiv i)
+    change MPOTensor.blockTwo M (finProdFinEquiv.symm (finProdFinEquiv i)) =
+      Kraus.blockTensor M.toMPSTensor 2 (e i) at h
+    rwa [Equiv.symm_apply_apply] at h
+  rw [hLHS]
   change Kraus.blockTensor M.toMPSTensor 2 (e i) =
     (X : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) *
-      Kraus.blockTensor S.toTensor 2 (e i) *
+      Kraus.blockTensor (Kraus.reindexPhysical e₀ S.toTensor) 2 (e i) *
         (((X)⁻¹ : GL (Fin S.totalDim) ℂ) :
           Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ)
   exact MPTensor.evalWord_gauge X hGauge

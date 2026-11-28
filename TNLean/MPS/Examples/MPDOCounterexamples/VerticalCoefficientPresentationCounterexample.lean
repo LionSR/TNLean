@@ -8,6 +8,7 @@ import TNLean.MPS.MPDO.Coefficients.LengthIndependentCoefficients
 import TNLean.MPS.Operator.Product.OperatorProduct
 import TNLean.MPS.MPDO.SectorMaps.VerticalSectorCoordinates
 import TNLean.MPS.Transfer.Scaling
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Horizontal equivalence does not determine vertical BNT coefficients
@@ -116,7 +117,7 @@ This project-derived identity uses the gauge relation of CPSV16, lines
 literal horizontal CPSV canonical form for `rightMPO`, as assumed in CPSV16,
 Proposition 4.13 and Theorem 4.14, lines 943--985. -/
 theorem leftMPO_gaugeEquiv_rightMPO :
-    MPTensor.GaugeEquiv leftMPO.toMPSTensor rightMPO.toMPSTensor := by
+    MPTensor.GaugeEquiv leftMPO rightMPO := by
   refine ⟨horizontalGauge, fun _ ↦ ?_⟩
   change rightMatrix =
     (horizontalGauge : Matrix I I ℂ) * leftMatrix *
@@ -146,13 +147,13 @@ cross-presentation assertion.  It uses the gauge mechanism of CPSV16, lines
 187--195, and does not by itself identify the vertical normalizations appearing
 in Proposition 4.13 and Theorem 4.14(ii), lines 943--985. -/
 theorem leftMPO_sameMPV₂Pos_rightMPO :
-    MPTensor.SameMPV₂Pos leftMPO.toMPSTensor rightMPO.toMPSTensor := by
+    MPTensor.SameMPV₂Pos leftMPO rightMPO := by
   intro L hL σ
-  have hσ : σ = fun _ ↦ (0 : Fin (1 * 1)) := by
+  have hσ : σ = fun _ ↦ ((0 : Fin 1), (0 : Fin 1)) := by
     funext n
-    exact Fin.eq_zero (σ n)
+    exact Subsingleton.elim _ _
   subst σ
-  rw [MPSTensor.mpv_const_eq_trace_pow, MPSTensor.mpv_const_eq_trace_pow]
+  simp only [MPTensor.mpv, MPTensor.coeff, List.ofFn_const, Kraus.evalWord_replicate]
   change Matrix.trace (leftMatrix ^ L) = Matrix.trace (rightMatrix ^ L)
   rw [leftMatrix_isIdempotent.pow_eq (Nat.ne_of_gt hL),
     rightMatrix_isIdempotent.pow_eq (Nat.ne_of_gt hL)]
@@ -163,13 +164,13 @@ private theorem leftMPO_mpo_eq_one (N : ℕ) (hN : 0 < N) :
   ext σ τ
   have hστ : σ = τ := Subsingleton.elim _ _
   subst τ
-  rw [← MPSTensor.mpv_toMPSTensor_pairConfig]
+  rw [← MPOTensor.mpv_pair]
   have hconfig :
-      (fun n ↦ finProdFinEquiv (σ n, σ n)) =
-        (fun _ ↦ (0 : Fin (1 * 1))) := by
+      (fun n ↦ (σ n, σ n)) = (fun _ ↦ ((0 : Fin 1), (0 : Fin 1))) := by
     funext n
-    exact Fin.eq_zero _
-  rw [hconfig, MPSTensor.mpv_const_eq_trace_pow]
+    exact Subsingleton.elim _ _
+  rw [hconfig]
+  simp only [MPTensor.mpv, MPTensor.coeff, List.ofFn_const, Kraus.evalWord_replicate]
   have hOne :
       (1 : Matrix (Fin N → Fin 1) (Fin N → Fin 1) ℂ) σ σ = 1 := by
     simp
@@ -183,13 +184,13 @@ private theorem rightMPO_mpo_eq_one (N : ℕ) (hN : 0 < N) :
   ext σ τ
   have hστ : σ = τ := Subsingleton.elim _ _
   subst τ
-  rw [← MPSTensor.mpv_toMPSTensor_pairConfig]
+  rw [← MPOTensor.mpv_pair]
   have hconfig :
-      (fun n ↦ finProdFinEquiv (σ n, σ n)) =
-        (fun _ ↦ (0 : Fin (1 * 1))) := by
+      (fun n ↦ (σ n, σ n)) = (fun _ ↦ ((0 : Fin 1), (0 : Fin 1))) := by
     funext n
-    exact Fin.eq_zero _
-  rw [hconfig, MPSTensor.mpv_const_eq_trace_pow]
+    exact Subsingleton.elim _ _
+  rw [hconfig]
+  simp only [MPTensor.mpv, MPTensor.coeff, List.ofFn_const, Kraus.evalWord_replicate]
   have hOne :
       (1 : Matrix (Fin N → Fin 1) (Fin N → Fin 1) ℂ) σ σ = 1 := by
     simp
@@ -470,10 +471,9 @@ private theorem mpo_verticalBNTMPO_smul
     mpo (verticalBNTMPO (s • A)) L =
       s ^ L • mpo (verticalBNTMPO A) L := by
   ext σ τ
-  simp only [← MPSTensor.mpv_toMPSTensor_pairConfig,
-    verticalBNTMPO_toMPSTensor, Matrix.smul_apply, smul_eq_mul]
-  exact MPSTensor.mpv_smul s A
-    (fun n ↦ finProdFinEquiv (σ n, τ n))
+  rw [Matrix.smul_apply, smul_eq_mul, ← MPOTensor.mpv_pair, ← MPOTensor.mpv_pair,
+    mpv_verticalBNTMPO, mpv_verticalBNTMPO]
+  exact MPSTensor.mpv_smul s A (fun n ↦ finProdFinEquiv (σ n, τ n))
 
 private theorem leftVerticalRepresentative_localProduct :
     mulTensor (verticalBNTMPO leftVerticalRepresentative)
@@ -674,7 +674,7 @@ already give coefficients \(1\) and \(4/5\) at length one.  This project-derived
 counterexample refutes the extra assertion, not CPSV16,
 Proposition 4.13 or Theorem 4.14(ii), lines 943--985. -/
 theorem sameMPV₂Pos_and_no_relabelled_coefficient_equality :
-    MPTensor.SameMPV₂Pos leftMPO.toMPSTensor rightMPO.toMPSTensor ∧
+    MPTensor.SameMPV₂Pos leftMPO rightMPO ∧
       ¬ ∃ e : Fin rightClause.labelCount ≃ Fin leftClause.labelCount,
         ∀ L : ℕ, 0 < L → ∀ α β γ,
           rightClause.coeffs.coeff L α β γ =
@@ -696,7 +696,7 @@ left coefficients are constant and the right coefficients equal \((4/5)^L\).
 This project-derived counterexample refutes the extra assertion, not CPSV16,
 Proposition 4.13 or Theorem 4.14(ii), lines 943--985. -/
 theorem sameMPV₂Pos_and_lengthIndependent_mismatch :
-    MPTensor.SameMPV₂Pos leftMPO.toMPSTensor rightMPO.toMPSTensor ∧
+    MPTensor.SameMPV₂Pos leftMPO rightMPO ∧
       leftClause.coeffs.LengthIndependent ∧
         ¬ rightClause.coeffs.LengthIndependent :=
   ⟨leftMPO_sameMPV₂Pos_rightMPO, leftClause_lengthIndependent,

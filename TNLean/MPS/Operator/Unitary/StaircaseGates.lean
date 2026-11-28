@@ -43,12 +43,11 @@ theorem staircaseMiddle_mul {A B C B' C' B'' C'' E : Type*}
     [DecidableEq A] [DecidableEq E]
     (M : Matrix (B × C) (B' × C') ℂ)
     (N : Matrix (B' × C') (B'' × C'') ℂ) :
-    staircaseMiddle (A := A) (E := E) M * staircaseMiddle N =
+    staircaseMiddle (A := A) (E := E) M * staircaseMiddle (A := A) (E := E) N =
       staircaseMiddle (M * N) := by
   ext ⟨⟨a, b⟩, c, e⟩ ⟨⟨a', b'⟩, c', e'⟩
   simp [staircaseMiddle, Matrix.mul_apply, Fintype.sum_prod_type,
-    Matrix.kroneckerMap_apply, Matrix.one_apply, mul_ite, ite_mul,
-    Finset.sum_ite_irrel]
+    Matrix.kroneckerMap_apply, Matrix.one_apply, mul_ite, ite_mul]
 
 /-- The middle identity layer is the four-leg identity, in the reshuffle of
 arXiv:2502.20257, proof of `cor:mpu`, lines 968–974. -/
@@ -81,8 +80,9 @@ both middle two-site contractions by the same product of tensor letters.
 Source: arXiv:2502.20257, proof of `cor:mpu`, lines 918–968. -/
 theorem sourceWL_kronecker_sourceWR_mul_middle_sourceU
     {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ) :
-    (sourceWL U S ⊗ₖ sourceWR U S) * staircaseMiddle (sourceU U S) =
-      staircaseMiddle (sourceV U S) * (sourceU U S ⊗ₖ sourceU U S) := by
+    (sourceWL U S ⊗ₖ sourceWR U S) * staircaseMiddle (A := Fin d) (E := Fin d) (sourceU U S) =
+      staircaseMiddle (A := Fin ℓ[U]) (E := Fin r[U]) (sourceV U S) *
+        (sourceU U S ⊗ₖ sourceU U S) := by
   classical
   ext ⟨⟨l, i₂⟩, i₃, r⟩ ⟨⟨j₁, j₂⟩, j₃, j₄⟩
   simp only [Matrix.mul_apply, Fintype.sum_prod_type, staircaseMiddle,
@@ -120,11 +120,13 @@ theorem sourceWL_kronecker_sourceWR_eq
     {ρ : Matrix (Fin D) (Fin D) ℂ} (S : SourceFactors U ρ)
     (hu : (sourceU U S).IsCoisometry) :
     sourceWL U S ⊗ₖ sourceWR U S =
-      staircaseMiddle (sourceV U S) * (sourceU U S ⊗ₖ sourceU U S) *
-        staircaseMiddle ((sourceU U S)ᴴ) := by
+      staircaseMiddle (A := Fin ℓ[U]) (E := Fin r[U]) (sourceV U S) *
+        (sourceU U S ⊗ₖ sourceU U S) *
+          staircaseMiddle (A := Fin d) (E := Fin d) ((sourceU U S)ᴴ) := by
   calc
-    _ = ((sourceWL U S ⊗ₖ sourceWR U S) * staircaseMiddle (sourceU U S)) *
-        staircaseMiddle ((sourceU U S)ᴴ) := by
+    _ = ((sourceWL U S ⊗ₖ sourceWR U S) *
+          staircaseMiddle (A := Fin d) (E := Fin d) (sourceU U S)) *
+        staircaseMiddle (A := Fin d) (E := Fin d) ((sourceU U S)ᴴ) := by
       rw [Matrix.mul_assoc, staircaseMiddle_mul, hu, staircaseMiddle_one,
         Matrix.mul_one]
     _ = _ := by rw [sourceWL_kronecker_sourceWR_mul_middle_sourceU U S]

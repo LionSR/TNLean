@@ -24,8 +24,8 @@ networks, following arXiv:1606.00608, lines 736–741.
 * `MPOTensor.isSourceZCL_of_physTraceTransfer_sq`: literal idempotence of the
   physical-trace transfer gives the up-to-scalar relation.
 * `MPOTensor.IsZCL`: the MPO transfer map is idempotent.
-* `MPOTensor.isZCL_iff_toMPSTensor_isTransferIdempotent`: this condition is equivalent to the
-  pure-state RFP condition for the doubled-index MPS tensor.
+* `MPOTensor.isZCL_iff_isTransferIdempotent`: this condition is equivalent to the
+  pure-state RFP condition for the tensor on the pair alphabet.
 
 ## References
 
@@ -63,11 +63,11 @@ def IsZCL (M : MPOTensor d D) : Prop :=
   transferMap M ∘ₗ transferMap M = transferMap M
 
 /-- ZCL for an MPO tensor is equivalent to the pure-state RFP condition for
-the doubled-index MPS tensor `M.toMPSTensor`. Both statements assert
-idempotence of the same transfer map. -/
-theorem isZCL_iff_toMPSTensor_isTransferIdempotent (M : MPOTensor d D) :
-    IsZCL M ↔ MPSTensor.IsTransferIdempotent (M.toMPSTensor) := by
-  rw [IsZCL, MPSTensor.IsTransferIdempotent, transferMap_eq_toMPSTensor]
+the tensor `M` on the pair alphabet. Both statements assert idempotence of the
+same transfer map. -/
+theorem isZCL_iff_isTransferIdempotent (M : MPOTensor d D) :
+    IsZCL M ↔ MPSTensor.IsTransferIdempotent M := by
+  rw [IsZCL, MPSTensor.IsTransferIdempotent, transferMap_eq_kraus_transferMap]
 
 /-- The **physical-trace transfer** `𝒯_M = ∑_i M^{ii}` of an MPO tensor: the
 single bond matrix obtained by closing the ket and bra physical legs of one

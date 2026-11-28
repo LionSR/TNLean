@@ -7,6 +7,7 @@ import TNLean.MPS.Operator.PhysicalSector.NeighboringPreparation
 import TNLean.MPS.MPDO.PhysicalSector.PhysicalSectorActiveRestriction
 import TNLean.MPS.CanonicalForm.SimpleMPO.PhysicalIsometricEmbedding
 import TNLean.MPS.MPDO.PhysicalSector.PhysicalSupportRestrictionComparison
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Neighboring operators after active physical restriction
@@ -162,7 +163,7 @@ Source context: arXiv:1606.00608, Appendix C.2, equations `AppUkU=rl` and
 source argument. -/
 theorem neighboringOperator_factorSupport_twoSided
     (F : PhysicalSectorFactorization K)
-    (hK : Kraus.IsInjective K.toMPSTensor)
+    (hK : Kraus.IsInjective K)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
     {k h : Fin F.sectorCount} (hk : F.IsActiveSector k)
     (hh : F.IsActiveSector h) :
@@ -214,7 +215,7 @@ factor-support absorption. This compressed trace identity is an auxiliary
 construction absent from CPSV16. -/
 theorem compressedNeighboringOperator_trace
     (F : PhysicalSectorFactorization K) (A : ActiveFactorSupportData F)
-    (hK : Kraus.IsInjective K.toMPSTensor)
+    (hK : Kraus.IsInjective K)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
     {k h : Fin F.sectorCount} (hk : F.IsActiveSector k)
     (hh : F.IsActiveSector h) :
@@ -498,7 +499,7 @@ preserves the trace condition in Theorem 4.9(iv), equation `tralktrrk`, lines
 864--889. -/
 theorem activeRestrictedPhysicalSectorFactorization_neighboringOperator_trace
     (F : PhysicalSectorFactorization K) (A : ActiveFactorSupportData F)
-    (hK : Kraus.IsInjective K.toMPSTensor)
+    (hK : Kraus.IsInjective K)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
     (j l : Fin F.activeSectorCount) :
     ((F.activeRestrictedPhysicalSectorFactorization A).neighboringOperator
@@ -521,7 +522,7 @@ printed in Theorem 4.9(iv), equations `tralktrrk` and `PsiPhi`, lines 864--889.
 -/
 noncomputable def activeRestrictedPhysicalSectorFactorization_neighboringTraceFactorization
     (F : PhysicalSectorFactorization K) (A : ActiveFactorSupportData F)
-    (hK : Kraus.IsInjective K.toMPSTensor)
+    (hK : Kraus.IsInjective K)
     (H : NeighboringTraceFactorization F) :
     NeighboringTraceFactorization
       (F.activeRestrictedPhysicalSectorFactorization A) where
@@ -571,19 +572,18 @@ role is to test the representativewise conclusion of Theorem 4.9(iv), lines
 1680--1691 and 1733--1770. -/
 theorem exists_neighboringTraceFactorization_of_changePhysicalBasis_of_isometry
     (V : Matrix (Fin e) (Fin d) ℂ) (hV : Vᴴ * V = 1)
-    (hK : Kraus.IsInjective K.toMPSTensor)
+    (hK : Kraus.IsInjective K)
     (hFull : physicalSupportProj K = 1)
     (hEmbedded : ∃ F : PhysicalSectorFactorization (changePhysicalBasis V K),
       Nonempty F.NeighboringTraceFactorization) :
     ∃ F : PhysicalSectorFactorization K,
       Nonempty F.NeighboringTraceFactorization := by
   let M := changePhysicalBasis V K
-  have hM : Kraus.IsInjective M.toMPSTensor := by
-    exact (isInjective_toMPSTensor_changePhysicalBasis_iff V hV K).2 hK
+  have hM : Kraus.IsInjective M := (isInjective_changePhysicalBasis_iff V hV K).2 hK
   have hRestrict : changePhysicalBasis Vᴴ M = K := by
     change changePhysicalBasis Vᴴ (changePhysicalBasis V K) = K
     rw [changePhysicalBasis_changePhysicalBasis, hV]
-    ext i j β α
+    ext i β α
     simp [changePhysicalBasis, physicalSlice]
   let explicitRestriction : PhysicalSupportRestrictionData
       (physicalSupportProj M) M :=

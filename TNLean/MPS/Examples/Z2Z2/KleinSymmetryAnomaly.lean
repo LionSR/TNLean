@@ -8,7 +8,7 @@ import QICLean.Algebra.Cohomology.LSymbol
 import QICLean.Algebra.Cohomology.ScalarThreeCocycleGroupCohomology
 import TNLean.MPS.Examples.CZX.CZXAnomalyClass
 import TNLean.MPS.Examples.Z2Z2.KleinSymmetry
-import TNLean.MPS.Operator.Periodic.BondOneOperator
+import TNLean.MPS.Operator.Periodic.OperatorCyclicSum
 import TNLean.MPS.FundamentalTheorem.OperatorGroup.AssociatorComap
 import TNLean.MPS.FundamentalTheorem.OperatorGroup.AssociatorOrderTwo
 import TNLean.MPS.FundamentalTheorem.OperatorGroup.AssociatorToolkit
@@ -53,7 +53,7 @@ namespace KleinSymmetry
 
 /-- The diagonal tensor is normal: flipping the input permutes its word alphabet.
 Source: arXiv:2203.12563, line 1884. -/
-theorem tensorA_isNormal : Kraus.IsNormal tensorA.toMPSTensor := by
+theorem tensorA_isNormal : Kraus.IsNormal tensorA := by
   obtain ⟨n, hn, h⟩ := czxDecoratedMPS_isNormal
   refine ⟨n, hn, ?_⟩
   apply top_unique
@@ -61,7 +61,7 @@ theorem tensorA_isNormal : Kraus.IsNormal tensorA.toMPSTensor := by
   apply Submodule.span_le.mpr
   rintro _ ⟨w, rfl⟩
   apply Submodule.subset_span
-  refine ⟨fun i ↦ finProdFinEquiv ((w i).divNat, (w i).modNat.rev), ?_⟩
+  refine ⟨fun i ↦ ((w i).1, (w i).2.rev), ?_⟩
   simp only [MPSTensor.evalWord_ofFn_eq_prod]
   congr 1
   congr 1
@@ -178,7 +178,11 @@ def aHom : Multiplicative (ZMod 2) →* Multiplicative (ZMod 2 × ZMod 2) :=
   AddMonoidHom.toMultiplicative (AddMonoidHom.inl (ZMod 2) (ZMod 2))
 
 /-- The integer letters of the diagonal tensor `A` of `U_a` (arXiv:2203.12563, line 1884). -/
-def tensorAInt (i j : Fin 2) : Matrix (Fin 2) (Fin 2) ℤ := czxDecoratedIntTensor i j.rev
+def tensorAInt (ij : Fin 2 × Fin 2) : Matrix (Fin 2) (Fin 2) ℤ :=
+  czxDecoratedIntTensor (ij.1, ij.2.rev)
+
+private theorem tensorA_eq_complexOfInt : tensorA = fun ij ↦ complexOfInt (tensorAInt ij) :=
+  funext fun ⟨_, _⟩ ↦ rfl
 
 /-- On `{e, a}` the tensors are the identity tensor and the diagonal tensor. -/
 theorem printedFamily_comap_aHom :
@@ -202,29 +206,29 @@ def aFusionVInt : Matrix (Fin 1) (Fin (2 * 2)) ℤ := !![1, 0, 0, 0]
 def aFusionWInt : Matrix (Fin (2 * 2)) (Fin 1) ℤ := !![1; 0; 0; 1]
 
 /-- The integer weights `δ_{s t}` of the letters of the identity tensor. -/
-def pairDeltaOneInt (a : Fin (2 * 2)) : Matrix (Fin 1) (Fin 1) ℤ :=
-  if a.divNat = a.modNat then 1 else 0
+def pairDeltaOneInt (a : Fin 2 × Fin 2) : Matrix (Fin 1) (Fin 1) ℤ :=
+  if a.1 = a.2 then 1 else 0
 
-private theorem idTensor_toMPSTensor_eq (a : Fin (2 * 2)) :
-    (idTensor 2).toMPSTensor a = complexOfInt (pairDeltaOneInt a) := by
-  rw [idTensor_toMPSTensor, pairDeltaOneInt]
+private theorem idTensor_eq_complexOfInt (a : Fin 2 × Fin 2) :
+    idTensor 2 a = complexOfInt (pairDeltaOneInt a) := by
+  rw [idTensor_apply_eq_smul, pairDeltaOneInt]
   split_ifs <;> simp [complexOfInt_one, complexOfInt_zero]
 
-private theorem mulTensor_tensorA_tensorA (a : Fin (2 * 2)) :
-    (mulTensor tensorA tensorA).toMPSTensor a =
-      complexOfInt (mulTensorR tensorAInt tensorAInt a.divNat a.modNat) :=
-  mulTensor_complexOfRing _ tensorAInt tensorAInt _ _
+private theorem mulTensor_tensorA_tensorA (a : Fin 2 × Fin 2) :
+    mulTensor tensorA tensorA a = complexOfInt (mulTensorR tensorAInt tensorAInt a) := by
+  rw [tensorA_eq_complexOfInt]
+  exact mulTensor_complexOfRing _ tensorAInt tensorAInt a
 
 /-- **Fusion tensors of two copies of the diagonal tensor**: `⟨00|` and `|00⟩ + |11⟩` reduce
 the stacked square of `A` to the identity tensor. -/
 theorem tensorA_isReduction :
-    MPTensor.IsReduction (mulTensor tensorA tensorA).toMPSTensor (idTensor 2).toMPSTensor
+    MPTensor.IsReduction (mulTensor tensorA tensorA) (idTensor 2)
       (complexOfInt aFusionVInt) (complexOfInt aFusionWInt) := by
   refine MPTensor.IsReduction.of_local_compression ?_ (fun i ↦ ?_) (fun i j ↦ ?_)
   · rw [← complexOfInt_mul, ← complexOfInt_one]
     congr 1
     decide
-  · rw [mulTensor_tensorA_tensorA, idTensor_toMPSTensor_eq, ← complexOfInt_mul,
+  · rw [mulTensor_tensorA_tensorA, idTensor_eq_complexOfInt, ← complexOfInt_mul,
       ← complexOfInt_mul]
     congr 1
     revert i
@@ -243,12 +247,8 @@ def aFusionData : (GroupFamily.orderTwoFamily (idTensor 2) tensorA).FusionData :
     (by rw [mulTensor_idTensor_right]; rfl) tensorA_isReduction
 
 /-- The integer letters of the triple product of `A`. -/
-def tensorACubeInt (a : Fin (2 * 2)) : Matrix (Fin (2 * 2 * 2)) (Fin (2 * 2 * 2)) ℤ :=
-  mulTensorR (mulTensorR tensorAInt tensorAInt) tensorAInt a.divNat a.modNat
-
-/-- The integer letters of `A` over the pair alphabet. -/
-def tensorAIntMPS (a : Fin (2 * 2)) : Matrix (Fin 2) (Fin 2) ℤ :=
-  tensorAInt a.divNat a.modNat
+def tensorACubeInt (a : Fin 2 × Fin 2) : Matrix (Fin (2 * 2 * 2)) (Fin (2 * 2 * 2)) ℤ :=
+  mulTensorR (mulTensorR tensorAInt tensorAInt) tensorAInt a
 
 /-- **The associator of three copies of `a` is `+1`**: with the fusion tensors of
 `aFusionData`, the two fusion trees agree against every nonempty word of the triple product.
@@ -263,18 +263,19 @@ theorem aFusionData_isAssociator :
     GroupFamily.FusionData.orderTwo_rightV_gen_gen_gen, kronId_complexOfRing,
     idKron_complexOfRing]
   have h2 : mulTensor tensorA tensorA =
-      Function.uncurry fun i j ↦ complexOfInt (mulTensorR tensorAInt tensorAInt i j) :=
-    funext fun p ↦ mulTensor_complexOfRing _ tensorAInt tensorAInt p.1 p.2
-  have hT : (GroupFamily.tripleTensor (GroupFamily.orderTwoFamily (idTensor 2) tensorA)
+      fun ij ↦ complexOfInt (mulTensorR tensorAInt tensorAInt ij) :=
+    funext mulTensor_tensorA_tensorA
+  have hT : GroupFamily.tripleTensor (GroupFamily.orderTwoFamily (idTensor 2) tensorA)
       GroupFamily.orderTwoGen GroupFamily.orderTwoGen
-      GroupFamily.orderTwoGen).toMPSTensor = fun a ↦ complexOfInt (tensorACubeInt a) := by
+      GroupFamily.orderTwoGen = fun a ↦ complexOfInt (tensorACubeInt a) := by
     funext a
-    change mulTensor (mulTensor tensorA tensorA) tensorA (a.divNat, a.modNat) = _
-    rw [h2]
-    exact mulTensor_complexOfRing _ _ tensorAInt _ _
+    change mulTensor (mulTensor tensorA tensorA) tensorA a = _
+    rw [h2, tensorA_eq_complexOfInt]
+    exact mulTensor_complexOfRing _ _ tensorAInt a
   rw [hT]
-  refine MPSTensor.isDressedProportional_complexOfInt_of_mem (A := tensorAIntMPS)
-    [(tensorACubeInt 0, tensorAIntMPS 0), (tensorACubeInt 3, tensorAIntMPS 3), (0, 0)]
+  refine MPSTensor.isDressedProportional_complexOfInt_of_mem (A := tensorAInt)
+    [(tensorACubeInt (0, 0), tensorAInt (0, 0)), (tensorACubeInt (1, 1), tensorAInt (1, 1)),
+      (0, 0)]
     (by decide +kernel) ?_ ?_ ?_ <;>
     decide +kernel
 
@@ -291,27 +292,27 @@ def bLabelTensor : Fin 2 → MPOTensor 2 1
   | ⟨n + 2, h⟩ => absurd h (by omega)
 
 /-- The integer letters of the bond-one tensor `δ_{s, t ⊕ c}`. -/
-def shiftDeltaInt (c : Fin 2) (i j : Fin 2) : Matrix (Fin 1) (Fin 1) ℤ :=
-  if i = j + c then 1 else 0
+def shiftDeltaInt (c : Fin 2) (ij : Fin 2 × Fin 2) : Matrix (Fin 1) (Fin 1) ℤ :=
+  if ij.1 = ij.2 + c then 1 else 0
 
 private theorem bLabelTensor_eq (c : Fin 2) :
-    bLabelTensor c = Function.uncurry fun i j ↦ complexOfInt (shiftDeltaInt c i j) := by
+    bLabelTensor c = fun ij ↦ complexOfInt (shiftDeltaInt c ij) := by
   funext ⟨i, j⟩
   fin_cases c <;> fin_cases i <;> fin_cases j <;>
     simp [bLabelTensor, tensorB, idTensor, shiftDeltaInt, complexOfInt_one, complexOfInt_zero]
 
 private theorem bLabelTensor_mul_of {c d e : Fin 2}
-    (h : ∀ a : Fin (2 * 2), mulTensorR (shiftDeltaInt c) (shiftDeltaInt d) a.divNat a.modNat =
-      shiftDeltaInt e a.divNat a.modNat) :
-    (mulTensor (bLabelTensor c) (bLabelTensor d)).toMPSTensor = (bLabelTensor e).toMPSTensor := by
+    (h : ∀ a : Fin 2 × Fin 2, mulTensorR (shiftDeltaInt c) (shiftDeltaInt d) a =
+      shiftDeltaInt e a) :
+    mulTensor (bLabelTensor c) (bLabelTensor d) = bLabelTensor e := by
   funext a
   rw [bLabelTensor_eq, bLabelTensor_eq, bLabelTensor_eq]
-  exact (mulTensor_complexOfRing _ _ _ _ _).trans (congrArg complexOfInt (h a))
+  exact (mulTensor_complexOfRing _ _ _ _).trans (congrArg complexOfInt (h a))
 
 /-- The bond-one tensors of `{e, b}` multiply as the group. -/
 theorem bLabelTensor_mul (g h : Multiplicative (ZMod 2)) :
-    (mulTensor (bLabelTensor g.toAdd) (bLabelTensor h.toAdd)).toMPSTensor =
-      (bLabelTensor (g * h).toAdd).toMPSTensor := by
+    mulTensor (bLabelTensor g.toAdd) (bLabelTensor h.toAdd) =
+      bLabelTensor (g * h).toAdd := by
   revert g h
   refine Multiplicative.forall_zmod_two (Multiplicative.forall_zmod_two ?_ ?_)
     (Multiplicative.forall_zmod_two ?_ ?_)

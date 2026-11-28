@@ -61,27 +61,26 @@ open MPSTensor
 
 /-- The integer matrices of the double-layer tensor `∑_m T^{s m} ⊗ T^{m t}` in the pair
 alphabet, with the letters `(0,0), (0,1), (1,0), (1,1)` in this order. -/
-def czxDecoratedSquareInt : Fin 4 → Matrix (Fin 4) (Fin 4) ℤ
-  | 0 => !![0, -1, 0, 0; 0, 1, 0, 0; 0, -1, 0, 0; 0, 1, 0, 0]
-  | 1 => 0
-  | 2 => 0
-  | 3 => !![0, 0, -1, 0; 0, 0, -1, 0; 0, 0, 1, 0; 0, 0, 1, 0]
+def czxDecoratedSquareInt : Fin 2 × Fin 2 → Matrix (Fin 4) (Fin 4) ℤ
+  | (0, 0) => !![0, -1, 0, 0; 0, 1, 0, 0; 0, -1, 0, 0; 0, 1, 0, 0]
+  | (0, 1) => 0
+  | (1, 0) => 0
+  | (1, 1) => !![0, 0, -1, 0; 0, 0, -1, 0; 0, 0, 1, 0; 0, 0, 1, 0]
 
-/-- The double-layer tensor of the decorated CZX operator, in the pair-alphabet view.
+/-- The double-layer tensor of the decorated CZX operator.
 
 Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 426–477 (the two stacked layers
 on the left of `eq:Ured`). -/
-def czxDecoratedSquare : MPSTensor 4 4 :=
-  (MPOTensor.mulTensor czxDecoratedTensor czxDecoratedTensor).toMPSTensor
+def czxDecoratedSquare : MPOTensor 2 4 :=
+  MPOTensor.mulTensor czxDecoratedTensor czxDecoratedTensor
 
-theorem czxDecoratedSquare_eq (a : Fin 4) :
+theorem czxDecoratedSquare_eq (a : Fin 2 × Fin 2) :
     czxDecoratedSquare a = complexOfInt (czxDecoratedSquareInt a) := by
-  have h : czxDecoratedSquare a = complexOfInt (mulIntTensor czxDecoratedIntTensor
-      czxDecoratedIntTensor (Fin.divNat (m := 2) (n := 2) a) (Fin.modNat (m := 2) (n := 2) a)) :=
-    mulTensor_complexOfRing _ czxDecoratedIntTensor czxDecoratedIntTensor _ _
-  have hint : ∀ b : Fin 4, mulIntTensor czxDecoratedIntTensor czxDecoratedIntTensor
-      (Fin.divNat (m := 2) (n := 2) b) (Fin.modNat (m := 2) (n := 2) b) =
-        czxDecoratedSquareInt b := by
+  have h : czxDecoratedSquare a =
+      complexOfInt (mulIntTensor czxDecoratedIntTensor czxDecoratedIntTensor a) :=
+    mulTensor_complexOfRing _ czxDecoratedIntTensor czxDecoratedIntTensor a
+  have hint : ∀ b, mulIntTensor czxDecoratedIntTensor czxDecoratedIntTensor b =
+      czxDecoratedSquareInt b := by
     decide
   rw [h, hint]
 
@@ -104,18 +103,18 @@ Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 1225–1232. -/
 def czxFusionVHat : Matrix (Fin 1) (Fin 4) ℂ := complexOfInt czxFusionVHatInt
 
 /-- The integer weights `δ_{s t}` of the letters `(s, t)` of the pair alphabet. -/
-def pairDeltaInt : Fin 4 → ℤ := ![1, 0, 0, 1]
+def pairDeltaInt (a : Fin 2 × Fin 2) : ℤ := if a.1 = a.2 then 1 else 0
 
 /-- The weight `δ_{s t}` of the letter `(s, t)`: the identity operator on one site. -/
-def pairDelta (a : Fin 4) : ℂ := pairDeltaInt a
+def pairDelta (a : Fin 2 × Fin 2) : ℂ := pairDeltaInt a
 
-private theorem czxDecoratedSquareInt_mul (a b : Fin 4) :
+private theorem czxDecoratedSquareInt_mul (a b : Fin 2 × Fin 2) :
     czxDecoratedSquareInt a * czxDecoratedSquareInt b =
       czxDecoratedSquareInt a * czxFusionVInt * czxFusionVHatInt * czxDecoratedSquareInt b := by
   revert a b
   decide
 
-private theorem czxFusionInt_contract_letter (a : Fin 4) :
+private theorem czxFusionInt_contract_letter (a : Fin 2 × Fin 2) :
     czxFusionVHatInt * czxDecoratedSquareInt a * czxFusionVInt = pairDeltaInt a • 1 := by
   revert a
   decide
@@ -132,7 +131,7 @@ theorem czxFusionVHat_mul_czxFusionV : czxFusionVHat * czxFusionV = 1 := by
 tensors, `S^a S^b = S^a V V̂ S^b`. This is the first equation of `eq:Ured` with no intermediate
 site, a case the source does not state: its first equation has `m + 1 ≥ 1` intermediate sites
 (`Papers/2405.00439/MPU-DW.tex` lines 426–446, overbrace at line 429). -/
-theorem czxDecoratedSquare_mul (a b : Fin 4) :
+theorem czxDecoratedSquare_mul (a b : Fin 2 × Fin 2) :
     czxDecoratedSquare a * czxDecoratedSquare b =
       czxDecoratedSquare a * czxFusionV * czxFusionVHat * czxDecoratedSquare b := by
   rw [czxDecoratedSquare_eq, czxDecoratedSquare_eq, czxFusionV, czxFusionVHat,
@@ -140,7 +139,7 @@ theorem czxDecoratedSquare_mul (a b : Fin 4) :
     czxDecoratedSquareInt_mul]
 
 /-- The case of one site of the second equation of `eq:Ured`: `V̂ S^{(s,t)} V = δ_{s t}`. -/
-theorem czxFusion_contract_letter (a : Fin 4) :
+theorem czxFusion_contract_letter (a : Fin 2 × Fin 2) :
     czxFusionVHat * czxDecoratedSquare a * czxFusionV = pairDelta a • 1 := by
   rw [czxDecoratedSquare_eq, czxFusionV, czxFusionVHat, ← complexOfInt_mul, ← complexOfInt_mul,
     czxFusionInt_contract_letter, complexOfInt_zsmul, complexOfInt_one, pairDelta]
@@ -151,7 +150,7 @@ for every `m ≥ 0`.
 
 Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 455–477 (overbrace `m` at
 line 457), with the fusion tensors of lines 1225–1244. -/
-theorem czxFusion_contract (w : List (Fin 4)) :
+theorem czxFusion_contract (w : List (Fin 2 × Fin 2)) :
     czxFusionVHat * Kraus.evalWord czxDecoratedSquare w * czxFusionV =
       (w.map pairDelta).prod • 1 := by
   induction w with
@@ -177,7 +176,7 @@ The source prints the cases `k = m + 1` with `m ≥ 0`; the case `k = 0` is a st
 
 Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 426–446 (overbrace `m + 1` at
 line 429), with the fusion tensors of lines 1225–1244. -/
-theorem czxFusion_split (a b : Fin 4) (w : List (Fin 4)) :
+theorem czxFusion_split (a b : Fin 2 × Fin 2) (w : List (Fin 2 × Fin 2)) :
     Kraus.evalWord czxDecoratedSquare (a :: (w ++ [b])) =
       (w.map pairDelta).prod •
         (czxDecoratedSquare a * czxFusionV * czxFusionVHat * czxDecoratedSquare b) := by
@@ -215,15 +214,15 @@ def czxDecoratedCube : MPOTensor 2 (2 * 2 * 2) :=
 /-- The integer matrices of the triple-layer tensor. -/
 def czxDecoratedCubeInt (i j : Fin 2) : Matrix (Fin (2 * 2 * 2)) (Fin (2 * 2 * 2)) ℤ :=
   mulIntTensor (mulIntTensor czxDecoratedIntTensor czxDecoratedIntTensor) czxDecoratedIntTensor
-    i j
+    (i, j)
 
 theorem czxDecoratedCube_eq (i j : Fin 2) :
     czxDecoratedCube (i, j) = complexOfInt (czxDecoratedCubeInt i j) := by
-  have h2 : MPOTensor.mulTensor czxDecoratedTensor czxDecoratedTensor = Function.uncurry fun i j =>
-      complexOfInt (mulIntTensor czxDecoratedIntTensor czxDecoratedIntTensor i j) :=
-    funext fun p => mulTensor_complexOfRing _ czxDecoratedIntTensor czxDecoratedIntTensor p.1 p.2
+  have h2 : MPOTensor.mulTensor czxDecoratedTensor czxDecoratedTensor = fun ij =>
+      complexOfInt (mulIntTensor czxDecoratedIntTensor czxDecoratedIntTensor ij) :=
+    funext fun p => mulTensor_complexOfRing _ czxDecoratedIntTensor czxDecoratedIntTensor p
   rw [czxDecoratedCube, h2]
-  exact mulTensor_complexOfRing _ _ czxDecoratedIntTensor i j
+  exact mulTensor_complexOfRing _ _ czxDecoratedIntTensor (i, j)
 
 /-- The integer matrix of `V̂ ⊗ 1`. -/
 def czxAssocLeftInt : Matrix (Fin 2) (Fin (2 * 2 * 2)) ℤ :=
@@ -266,8 +265,8 @@ theorem czxAssocRight_eq : czxAssocRight = complexOfInt czxAssocRightInt := by
 private theorem czxDecorated_associator_int : ∀ i₀ j₀ i₁ j₁ i₂ j₂ : Fin 2,
     czxAssocLeftInt * czxDecoratedCubeInt i₀ j₀ * czxDecoratedCubeInt i₁ j₁ *
         czxDecoratedCubeInt i₂ j₂ * czxAssocRightInt =
-      -(czxDecoratedIntTensor i₀ j₀ * czxDecoratedIntTensor i₁ j₁ *
-        czxDecoratedIntTensor i₂ j₂) := by
+      -(czxDecoratedIntTensor (i₀, j₀) * czxDecoratedIntTensor (i₁, j₁) *
+        czxDecoratedIntTensor (i₂, j₂)) := by
   decide
 
 /-- **The anomaly of the decorated CZX operator is `ω = -1`** (`eq:Uanomal` on three sites):
@@ -285,8 +284,7 @@ theorem czxDecorated_associator_eq_neg_one (i₀ j₀ i₁ j₁ i₂ j₂ : Fin 
         czxDecoratedTensor (i₂, j₂)) := by
   rw [czxAssocLeft_eq, czxAssocRight_eq, czxDecoratedCube_eq, czxDecoratedCube_eq,
     czxDecoratedCube_eq, neg_one_smul]
-  simp only [czxDecoratedTensor, ← complexOfInt_mul, ← complexOfInt_neg,
-      Function.uncurry_apply_pair]
+  simp only [czxDecoratedTensor, ← complexOfInt_mul, ← complexOfInt_neg]
   rw [czxDecorated_associator_int]
 
 end CZXCompression

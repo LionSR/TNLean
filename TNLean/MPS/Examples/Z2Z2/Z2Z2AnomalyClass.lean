@@ -92,16 +92,18 @@ namespace Z2Z2Condensation
 
 /-- The integer letters of the dressed tensor of `x`: the letter of `M_x` with input label `i`
 multiplied by `(−1)^{i₂}`. -/
-def kxIntTensor (o i : Fin 4) : Matrix (Fin 2) (Fin 2) ℤ := (-1) ^ (i.val % 2) • xIntTensor o i
+def kxIntTensor (oi : Fin 4 × Fin 4) : Matrix (Fin 2) (Fin 2) ℤ :=
+  (-1) ^ (oi.2.val % 2) • xIntTensor oi
 
 /-- The integer letters of the dressed tensor of `xy`. -/
-def kxyIntTensor (o i : Fin 4) : Matrix (Fin 2) (Fin 2) ℤ := (-1) ^ (i.val % 2) • xyIntTensor o i
+def kxyIntTensor (oi : Fin 4 × Fin 4) : Matrix (Fin 2) (Fin 2) ℤ :=
+  (-1) ^ (oi.2.val % 2) • xyIntTensor oi
 
 /-- The dressed tensor of `x` from its integer letters. -/
-def kxTensor : MPOTensor 4 2 := Function.uncurry fun o i ↦ complexOfInt (kxIntTensor o i)
+def kxTensor : MPOTensor 4 2 := fun oi ↦ complexOfInt (kxIntTensor oi)
 
 /-- The dressed tensor of `xy` from its integer letters. -/
-def kxyTensor : MPOTensor 4 2 := Function.uncurry fun o i ↦ complexOfInt (kxyIntTensor o i)
+def kxyTensor : MPOTensor 4 2 := fun oi ↦ complexOfInt (kxyIntTensor oi)
 
 private theorem secondZSign_eq (g : Multiplicative (ZMod 2 × ZMod 2)) (i : Fin 4) :
     secondZSign g i = (((-1 : ℤ) ^ ((Multiplicative.toAdd g).1.val * (i.val % 2)) : ℤ) : ℂ) := by
@@ -126,7 +128,7 @@ theorem kleinTensor_x : kleinTensor (Multiplicative.ofAdd (1, 0)) = kxTensor := 
   funext ⟨o, i⟩
   rw [kleinTensor, hs]
   change secondZSign (Multiplicative.ofAdd ((1, 0) : ZMod 2 × ZMod 2)) i •
-      complexOfInt (xIntTensor o i) = complexOfInt ((-1) ^ (i.val % 2) • xIntTensor o i)
+      complexOfInt (xIntTensor (o, i)) = complexOfInt ((-1) ^ (i.val % 2) • xIntTensor (o, i))
   rw [complexOfInt_zsmul, secondZSign_eq]
   norm_num [ZMod.val_one]
 
@@ -137,7 +139,7 @@ theorem kleinTensor_xy : kleinTensor (Multiplicative.ofAdd (1, 1)) = kxyTensor :
   funext ⟨o, i⟩
   rw [kleinTensor, hs]
   change secondZSign (Multiplicative.ofAdd ((1, 1) : ZMod 2 × ZMod 2)) i •
-      complexOfInt (xyIntTensor o i) = complexOfInt ((-1) ^ (i.val % 2) • xyIntTensor o i)
+      complexOfInt (xyIntTensor (o, i)) = complexOfInt ((-1) ^ (i.val % 2) • xyIntTensor (o, i))
   rw [complexOfInt_zsmul, secondZSign_eq]
   norm_num [ZMod.val_one]
 
@@ -177,75 +179,75 @@ private theorem comap_eq_orderTwoFamily
 
 /-! ### The integer data of the two nontrivial blocks -/
 
-private theorem eKx_int (b : Fin (4 * 4)) :
-    stackedInt eIntTensor kxIntTensor b = kxIntTensor b.divNat b.modNat := by
+private theorem eKx_int (b : Fin 4 × Fin 4) :
+    mulTensorR eIntTensor kxIntTensor b = kxIntTensor b := by
   revert_decide_kernel b
 
-private theorem kxE_int (b : Fin (4 * 4)) :
-    stackedInt kxIntTensor eIntTensor b = kxIntTensor b.divNat b.modNat := by
+private theorem kxE_int (b : Fin 4 × Fin 4) :
+    mulTensorR kxIntTensor eIntTensor b = kxIntTensor b := by
   revert_decide_kernel b
 
-private theorem kxKx_int (b : Fin (4 * 4)) : stackedInt kxIntTensor kxIntTensor b = xXInt b := by
+private theorem kxKx_int (b : Fin 4 × Fin 4) :
+    mulTensorR kxIntTensor kxIntTensor b = xXInt b := by
   revert_decide_kernel b
 
-private theorem eKxy_int (b : Fin (4 * 4)) :
-    stackedInt eIntTensor kxyIntTensor b = kxyIntTensor b.divNat b.modNat := by
+private theorem eKxy_int (b : Fin 4 × Fin 4) :
+    mulTensorR eIntTensor kxyIntTensor b = kxyIntTensor b := by
   revert_decide_kernel b
 
-private theorem kxyE_int (b : Fin (4 * 4)) :
-    stackedInt kxyIntTensor eIntTensor b = kxyIntTensor b.divNat b.modNat := by
+private theorem kxyE_int (b : Fin 4 × Fin 4) :
+    mulTensorR kxyIntTensor eIntTensor b = kxyIntTensor b := by
   revert_decide_kernel b
 
-private theorem kxyKxy_int (b : Fin (4 * 4)) :
-    stackedInt kxyIntTensor kxyIntTensor b = -xyXyInt b := by
+private theorem kxyKxy_int (b : Fin 4 × Fin 4) :
+    mulTensorR kxyIntTensor kxyIntTensor b = -xyXyInt b := by
   revert_decide_kernel b
 
 /-- Stacking `M_e` with the dressed tensor of `x` gives that tensor. -/
 theorem mulTensor_eTensor_kxTensor :
-    (mulTensor eTensor kxTensor).toMPSTensor = kxTensor.toMPSTensor := by
+    mulTensor eTensor kxTensor = kxTensor := by
   funext a
-  rw [show (mulTensor eTensor kxTensor).toMPSTensor a = _ from
-    toMPSTensor_mulTensor_complexOfInt eIntTensor kxIntTensor a, eKx_int]
+  rw [show mulTensor eTensor kxTensor a = _ from
+    mulTensor_complexOfRing _ eIntTensor kxIntTensor a, eKx_int]
   rfl
 
 /-- Stacking the dressed tensor of `x` with `M_e` gives that tensor. -/
 theorem mulTensor_kxTensor_eTensor :
-    (mulTensor kxTensor eTensor).toMPSTensor = kxTensor.toMPSTensor := by
+    mulTensor kxTensor eTensor = kxTensor := by
   funext a
-  rw [show (mulTensor kxTensor eTensor).toMPSTensor a = _ from
-    toMPSTensor_mulTensor_complexOfInt kxIntTensor eIntTensor a, kxE_int]
+  rw [show mulTensor kxTensor eTensor a = _ from
+    mulTensor_complexOfRing _ kxIntTensor eIntTensor a, kxE_int]
   rfl
 
 /-- Stacking `M_e` with the dressed tensor of `xy` gives that tensor. -/
 theorem mulTensor_eTensor_kxyTensor :
-    (mulTensor eTensor kxyTensor).toMPSTensor = kxyTensor.toMPSTensor := by
+    mulTensor eTensor kxyTensor = kxyTensor := by
   funext a
-  rw [show (mulTensor eTensor kxyTensor).toMPSTensor a = _ from
-    toMPSTensor_mulTensor_complexOfInt eIntTensor kxyIntTensor a, eKxy_int]
+  rw [show mulTensor eTensor kxyTensor a = _ from
+    mulTensor_complexOfRing _ eIntTensor kxyIntTensor a, eKxy_int]
   rfl
 
 /-- Stacking the dressed tensor of `xy` with `M_e` gives that tensor. -/
 theorem mulTensor_kxyTensor_eTensor :
-    (mulTensor kxyTensor eTensor).toMPSTensor = kxyTensor.toMPSTensor := by
+    mulTensor kxyTensor eTensor = kxyTensor := by
   funext a
-  rw [show (mulTensor kxyTensor eTensor).toMPSTensor a = _ from
-    toMPSTensor_mulTensor_complexOfInt kxyIntTensor eIntTensor a, kxyE_int]
+  rw [show mulTensor kxyTensor eTensor a = _ from
+    mulTensor_complexOfRing _ kxyIntTensor eIntTensor a, kxyE_int]
   rfl
 
 /-- Stacking `M_e` with itself gives `M_e`. -/
 theorem mulTensor_eTensor_eTensor :
-    (mulTensor eTensor eTensor).toMPSTensor = eTensor.toMPSTensor :=
+    mulTensor eTensor eTensor = eTensor :=
   funext eEStacked_eq
 
 /-- **The square of the dressed tensor of `x` is the square of `M_x`**, so the compression
 witnesses of the block `(x, x)` are fusion tensors onto `M_e`. -/
 theorem kx_isReduction :
-    MPTensor.IsReduction (mulTensor kxTensor kxTensor).toMPSTensor eTensor.toMPSTensor xXLeft
-      xXRight := by
-  have h : (mulTensor kxTensor kxTensor).toMPSTensor = xXStacked := by
+    MPTensor.IsReduction (mulTensor kxTensor kxTensor) eTensor xXLeft xXRight := by
+  have h : mulTensor kxTensor kxTensor = xXStacked := by
     funext a
     rw [xXStacked_eq, ← kxKx_int]
-    exact toMPSTensor_mulTensor_complexOfInt kxIntTensor kxIntTensor a
+    exact mulTensor_complexOfRing _ kxIntTensor kxIntTensor a
   rw [h]
   exact xX_isReduction
 
@@ -253,17 +255,16 @@ theorem kx_isReduction :
 compression witnesses of the block `(xy, xy)` are fusion tensors onto `M_e`: the sign cancels
 the weight `−1` of the target of that block. -/
 theorem kxy_isReduction :
-    MPTensor.IsReduction (mulTensor kxyTensor kxyTensor).toMPSTensor eTensor.toMPSTensor
-      xyXyLeft xyXyRight := by
-  have h : (mulTensor kxyTensor kxyTensor).toMPSTensor = fun i ↦ (-1 : ℂ) • xyXyStacked i := by
+    MPTensor.IsReduction (mulTensor kxyTensor kxyTensor) eTensor xyXyLeft xyXyRight := by
+  have h : mulTensor kxyTensor kxyTensor = fun i ↦ (-1 : ℂ) • xyXyStacked i := by
     funext a
-    rw [xyXyStacked_eq, show (mulTensor kxyTensor kxyTensor).toMPSTensor a = _
-      from toMPSTensor_mulTensor_complexOfInt kxyIntTensor kxyIntTensor a, kxyKxy_int,
-      complexOfInt_neg, neg_one_smul]
+    rw [xyXyStacked_eq, show mulTensor kxyTensor kxyTensor a = _
+      from mulTensor_complexOfRing _ kxyIntTensor kxyIntTensor a, kxyKxy_int,
+      ← complexOfInt, complexOfInt_neg, neg_one_smul]
   rw [h]
   convert xyXy_isReduction.smul (-1) using 1
   funext i
-  simp [eMPS]
+  simp [eTensor]
 
 /-- The restriction of the dressed family to `{e, x}`. -/
 def xFusionData : (GroupFamily.orderTwoFamily eTensor kxTensor).FusionData :=
@@ -305,54 +306,40 @@ def columnInt (k : Fin (2 * 2 * 2)) (v : Fin (2 * 2 * 2) → ℤ) :
 
 /-- The integer letters of the triple product of the dressed tensor of `x`, bond ordered
 ((first, second), third). -/
-def kxCubeInt : Fin 16 → Matrix (Fin (2 * 2 * 2)) (Fin (2 * 2 * 2)) ℤ
-  | 2 => columnInt 0 ![1, 1, 1, 1, 1, 1, 1, 1]
-  | 7 => columnInt 7 ![-1, 1, 1, -1, 1, -1, -1, 1]
-  | 8 => columnInt 0 ![1, 1, 1, 1, 1, 1, 1, 1]
-  | 13 => columnInt 7 ![-1, 1, 1, -1, 1, -1, -1, 1]
+def kxCubeInt : Fin 4 × Fin 4 → Matrix (Fin (2 * 2 * 2)) (Fin (2 * 2 * 2)) ℤ
+  | (0, 2) => columnInt 0 ![1, 1, 1, 1, 1, 1, 1, 1]
+  | (1, 3) => columnInt 7 ![-1, 1, 1, -1, 1, -1, -1, 1]
+  | (2, 0) => columnInt 0 ![1, 1, 1, 1, 1, 1, 1, 1]
+  | (3, 1) => columnInt 7 ![-1, 1, 1, -1, 1, -1, -1, 1]
   | _ => 0
 
 /-- The integer letters of the triple product of the dressed tensor of `xy`. -/
-def kxyCubeInt : Fin 16 → Matrix (Fin (2 * 2 * 2)) (Fin (2 * 2 * 2)) ℤ
-  | 3 => columnInt 5 ![1, -1, 1, -1, -1, 1, -1, 1]
-  | 6 => columnInt 2 ![-1, -1, 1, 1, -1, -1, 1, 1]
-  | 9 => columnInt 5 ![1, -1, 1, -1, -1, 1, -1, 1]
-  | 12 => columnInt 2 ![-1, -1, 1, 1, -1, -1, 1, 1]
+def kxyCubeInt : Fin 4 × Fin 4 → Matrix (Fin (2 * 2 * 2)) (Fin (2 * 2 * 2)) ℤ
+  | (0, 3) => columnInt 5 ![1, -1, 1, -1, -1, 1, -1, 1]
+  | (1, 2) => columnInt 2 ![-1, -1, 1, 1, -1, -1, 1, 1]
+  | (2, 1) => columnInt 5 ![1, -1, 1, -1, -1, 1, -1, 1]
+  | (3, 0) => columnInt 2 ![-1, -1, 1, 1, -1, -1, 1, 1]
   | _ => 0
 
-private theorem kxCube_int (a : Fin 16) :
-    mulIntTensor (mulIntTensor kxIntTensor kxIntTensor) kxIntTensor (@Fin.divNat 4 4 a)
-      (@Fin.modNat 4 4 a) = kxCubeInt a := by
+private theorem kxCube_int (a : Fin 4 × Fin 4) :
+    mulIntTensor (mulIntTensor kxIntTensor kxIntTensor) kxIntTensor a = kxCubeInt a := by
   revert_decide_kernel a
 
-private theorem kxyCube_int (a : Fin 16) :
-    mulIntTensor (mulIntTensor kxyIntTensor kxyIntTensor) kxyIntTensor (@Fin.divNat 4 4 a)
-      (@Fin.modNat 4 4 a) = kxyCubeInt a := by
+private theorem kxyCube_int (a : Fin 4 × Fin 4) :
+    mulIntTensor (mulIntTensor kxyIntTensor kxyIntTensor) kxyIntTensor a = kxyCubeInt a := by
   revert_decide_kernel a
 
 /-- The triple product of an integer tensor is the image of its integer triple product. -/
-theorem triple_complexOfInt (M : Fin 4 → Fin 4 → Matrix (Fin 2) (Fin 2) ℤ)
-    (a : Fin 16) :
-    (mulTensor (mulTensor (Function.uncurry fun o i ↦ complexOfInt (M o i))
-        (Function.uncurry fun o i ↦ complexOfInt (M o i)))
-        (Function.uncurry fun o i ↦ complexOfInt (M o i))).toMPSTensor a =
-      complexOfInt (mulIntTensor (mulIntTensor M M) M (@Fin.divNat 4 4 a)
-        (@Fin.modNat 4 4 a)) := by
-  have h2 : mulTensor (Function.uncurry fun o i ↦ complexOfInt (M o i))
-      (Function.uncurry fun o i ↦ complexOfInt (M o i)) =
-      Function.uncurry fun o i ↦ complexOfInt (mulIntTensor M M o i) :=
-    funext fun p ↦ mulTensor_complexOfRing _ M M p.1 p.2
-  change mulTensor _ _ (@Fin.divNat 4 4 a, @Fin.modNat 4 4 a) = _
+theorem triple_complexOfInt (M : Fin 4 × Fin 4 → Matrix (Fin 2) (Fin 2) ℤ)
+    (a : Fin 4 × Fin 4) :
+    mulTensor (mulTensor (fun oi ↦ complexOfInt (M oi)) (fun oi ↦ complexOfInt (M oi)))
+        (fun oi ↦ complexOfInt (M oi)) a =
+      complexOfInt (mulIntTensor (mulIntTensor M M) M a) := by
+  have h2 : mulTensor (fun oi ↦ complexOfInt (M oi)) (fun oi ↦ complexOfInt (M oi)) =
+      fun oi ↦ complexOfInt (mulIntTensor M M oi) :=
+    funext fun p ↦ mulTensor_complexOfRing _ M M p
   rw [h2]
-  exact mulTensor_complexOfRing _ _ M _ _
-
-/-- The integer letters of the dressed tensor of `x` over the pair alphabet. -/
-def kxIntMPS (a : Fin 16) : Matrix (Fin 2) (Fin 2) ℤ :=
-  kxIntTensor (@Fin.divNat 4 4 a) (@Fin.modNat 4 4 a)
-
-/-- The integer letters of the dressed tensor of `xy` over the pair alphabet. -/
-def kxyIntMPS (a : Fin 16) : Matrix (Fin 2) (Fin 2) ℤ :=
-  kxyIntTensor (@Fin.divNat 4 4 a) (@Fin.modNat 4 4 a)
+  exact mulTensor_complexOfRing _ _ M a
 
 /-- **The associator of three copies of `x` is `+1`**: with the fusion tensors of
 `xFusionData`, the two fusion trees agree against every nonempty word of the triple product.
@@ -368,14 +355,15 @@ theorem xFusionData_isAssociator_gen_gen_gen :
     idKron_complexOfRing]
   have hT : (GroupFamily.tripleTensor (GroupFamily.orderTwoFamily eTensor kxTensor)
       GroupFamily.orderTwoGen GroupFamily.orderTwoGen
-      GroupFamily.orderTwoGen).toMPSTensor =
+      GroupFamily.orderTwoGen) =
       fun a ↦ complexOfInt (kxCubeInt a) := by
     funext a
     rw [← kxCube_int]
     exact triple_complexOfInt kxIntTensor a
   rw [hT]
-  refine MPSTensor.isDressedProportional_complexOfInt_of_mem (A := kxIntMPS)
-    [(kxCubeInt 2, kxIntMPS 2), (kxCubeInt 7, kxIntMPS 7), (0, 0)] (by decide +kernel) ?_ ?_ ?_ <;>
+  refine MPSTensor.isDressedProportional_complexOfInt_of_mem (A := kxIntTensor)
+    [(kxCubeInt (0, 2), kxIntTensor (0, 2)), (kxCubeInt (1, 3), kxIntTensor (1, 3)), (0, 0)]
+    (by decide +kernel) ?_ ?_ ?_ <;>
     decide +kernel
 
 /-- **The associator of three copies of `xy` is `−1`**.
@@ -391,14 +379,15 @@ theorem xyFusionData_isAssociator_gen_gen_gen :
     idKron_complexOfRing]
   have hT : (GroupFamily.tripleTensor (GroupFamily.orderTwoFamily eTensor kxyTensor)
       GroupFamily.orderTwoGen GroupFamily.orderTwoGen
-      GroupFamily.orderTwoGen).toMPSTensor =
+      GroupFamily.orderTwoGen) =
       fun a ↦ complexOfInt (kxyCubeInt a) := by
     funext a
     rw [← kxyCube_int]
     exact triple_complexOfInt kxyIntTensor a
   rw [hT]
-  refine MPSTensor.isDressedProportional_complexOfInt_of_mem (A := kxyIntMPS)
-    [(kxyCubeInt 3, kxyIntMPS 3), (kxyCubeInt 6, kxyIntMPS 6), (0, 0)] (by decide +kernel)
+  refine MPSTensor.isDressedProportional_complexOfInt_of_mem (A := kxyIntTensor)
+    [(kxyCubeInt (0, 3), kxyIntTensor (0, 3)), (kxyCubeInt (1, 2), kxyIntTensor (1, 2)), (0, 0)]
+    (by decide +kernel)
     ?_ ?_ ?_ <;>
     decide +kernel
 

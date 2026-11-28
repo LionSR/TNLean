@@ -36,7 +36,7 @@ namespace MPSTensor
 
 noncomputable section
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {d D : ℕ}
 
 /-! ### Transfer map preservation under rotation -/
 
@@ -45,7 +45,7 @@ variable {d D : ℕ}
 
 This follows from unitary freedom of the Kraus representation (Theorem 2.1(4),
 Wolf *Quantum Channels & Operations*). -/
-theorem transferMap_rotatePhysical (A : MPSTensor d D) (u : Matrix (Fin d) (Fin d) ℂ)
+theorem transferMap_rotatePhysical [DecidableEq α] (A : MPTensor α (Fin D)) (u : Matrix α α ℂ)
     (hu : u * uᴴ = 1) :
     Kraus.transferMap (rotatePhysical u A) = Kraus.transferMap A := by
   ext X : 1
@@ -54,16 +54,16 @@ theorem transferMap_rotatePhysical (A : MPSTensor d D) (u : Matrix (Fin d) (Fin 
 
 /-- A common unitary rotation of the physical index leaves the rectangular
 mixed transfer map unchanged. -/
-theorem mixedMapLM_rotatePhysical {D₁ D₂ : ℕ}
-    (A : MPSTensor d D₁) (B : MPSTensor d D₂)
-    (u : Matrix (Fin d) (Fin d) ℂ) (hu : u * uᴴ = 1) :
+theorem mixedMapLM_rotatePhysical [DecidableEq α] {D₁ D₂ : ℕ}
+    (A : MPTensor α (Fin D₁)) (B : MPTensor α (Fin D₂))
+    (u : Matrix α α ℂ) (hu : u * uᴴ = 1) :
     Kraus.mixedMapLM (rotatePhysical u A) (rotatePhysical u B) =
       Kraus.mixedMapLM A B := by
   ext X : 1
   simp only [Kraus.mixedMapLM_apply, rotatePhysical_apply]
   have hu' : uᴴ * u = 1 := mul_eq_one_comm.mp hu
-  have hU : ∀ j k : Fin d,
-      ∑ i : Fin d, starRingEnd ℂ (u i j) * u i k = if j = k then 1 else 0 := by
+  have hU : ∀ j k : α,
+      ∑ i : α, starRingEnd ℂ (u i j) * u i k = if j = k then 1 else 0 := by
     intro j k
     exact Matrix.sum_star_mul_eq_ite_of_conjTranspose_mul_eq_one u hu' j k
   have star_eq : ∀ (c : ℂ), star c = starRingEnd ℂ c := fun _ => rfl
@@ -73,8 +73,8 @@ theorem mixedMapLM_rotatePhysical {D₁ D₂ : ℕ}
   apply Finset.sum_congr rfl
   intro j _
   rw [Finset.sum_comm]
-  have factor : ∀ k : Fin d,
-      ∑ i : Fin d, (u i j * starRingEnd ℂ (u i k)) •
+  have factor : ∀ k : α,
+      ∑ i : α, (u i j * starRingEnd ℂ (u i k)) •
           (A j * X * (B k)ᴴ) =
         (if k = j then (1 : ℂ) else 0) • (A j * X * (B k)ᴴ) := by
     intro k
@@ -82,9 +82,9 @@ theorem mixedMapLM_rotatePhysical {D₁ D₂ : ℕ}
     convert congrArg (fun c : ℂ => c • (A j * X * (B k)ᴴ)) (hU k j) using 1
     simp [mul_comm]
   have hExpand :
-      (∑ k : Fin d, ∑ i : Fin d,
+      (∑ k : α, ∑ i : α,
         u i j • A j * X * starRingEnd ℂ (u i k) • (B k)ᴴ) =
-      ∑ k : Fin d, ∑ i : Fin d,
+      ∑ k : α, ∑ i : α,
         (u i j * starRingEnd ℂ (u i k)) • (A j * X * (B k)ᴴ) := by
     refine Finset.sum_congr₂ fun k _ i _ ↦ ?_
     ext a b
@@ -99,20 +99,21 @@ theorem mixedMapLM_rotatePhysical {D₁ D₂ : ℕ}
 /-- Left-canonical normalization is preserved by unitary rotation of the physical
 index. The proof mirrors `kraus_same_map_of_unitary_combination` for the adjoint
 channel: expand, swap sums, apply orthogonality, collapse. -/
-theorem isLeftCanonical_rotatePhysical (A : MPSTensor d D) (u : Matrix (Fin d) (Fin d) ℂ)
+theorem isLeftCanonical_rotatePhysical [DecidableEq α]
+    (A : MPTensor α (Fin D)) (u : Matrix α α ℂ)
     (hu : u * uᴴ = 1) (hA : IsLeftCanonical A) :
     IsLeftCanonical (rotatePhysical u A) := by
   unfold IsLeftCanonical Kraus.IsTP at *
   simp only [rotatePhysical_apply]
   have hu' : uᴴ * u = 1 := mul_eq_one_comm.mp hu
-  have hU : ∀ j k : Fin d,
-      ∑ i : Fin d, starRingEnd ℂ (u i j) * u i k = if j = k then 1 else 0 := by
+  have hU : ∀ j k : α,
+      ∑ i : α, starRingEnd ℂ (u i j) * u i k = if j = k then 1 else 0 := by
     intro j k
     exact Matrix.sum_star_mul_eq_ite_of_conjTranspose_mul_eq_one u hu' j k
   have star_eq : ∀ (c : ℂ), star c = starRingEnd ℂ c := fun _ => rfl
   -- Suffices: show the expanded sum equals ∑_j A_j† A_j
-  suffices h : ∑ i : Fin d, (∑ j : Fin d, u i j • A j)ᴴ * (∑ k : Fin d, u i k • A k) =
-      ∑ j : Fin d, (A j)ᴴ * A j by rw [h, hA]
+  suffices h : ∑ i : α, (∑ j : α, u i j • A j)ᴴ * (∑ k : α, u i k • A k) =
+      ∑ j : α, (A j)ᴴ * A j by rw [h, hA]
   -- Expand to triple sum: ∑_i ∑_j ∑_k (conj u_{ij} * u_{ik}) • (A_j† * A_k)
   simp_rw [Matrix.conjTranspose_sum, Matrix.conjTranspose_smul, star_eq,
     Matrix.sum_mul, Matrix.mul_sum, smul_mul_assoc, mul_smul_comm, smul_smul]
@@ -120,8 +121,8 @@ theorem isLeftCanonical_rotatePhysical (A : MPSTensor d D) (u : Matrix (Fin d) (
   rw [Finset.sum_comm]
   apply Finset.sum_congr rfl; intro j _
   rw [Finset.sum_comm]
-  have factor : ∀ y : Fin d,
-      ∑ x : Fin d, ((starRingEnd ℂ) (u x j) * u x y) • ((A j)ᴴ * A y) =
+  have factor : ∀ y : α,
+      ∑ x : α, ((starRingEnd ℂ) (u x j) * u x y) • ((A j)ᴴ * A y) =
       (if j = y then (1 : ℂ) else 0) • ((A j)ᴴ * A y) := by
     intro y; rw [← Finset.sum_smul, hU j y]
   simp only [factor, ite_smul, one_smul, zero_smul]
@@ -135,7 +136,8 @@ If `P` were a nontrivial invariant projection for `rotatePhysical u A`, then
 multiplying the invariance condition by `conj(u_{ik})` and summing over `i`
 yields `(1-P) A_k P = 0` via the orthogonality `uᴴ u = 1`, so `P` would also
 be invariant for `A`, contradicting irreducibility. -/
-theorem isIrreducibleFamily_rotatePhysical (A : MPSTensor d D) (u : Matrix (Fin d) (Fin d) ℂ)
+theorem isIrreducibleFamily_rotatePhysical [DecidableEq α]
+    (A : MPTensor α (Fin D)) (u : Matrix α α ℂ)
     (hu : u * uᴴ = 1) (hA : Kraus.IsIrreducibleFamily A) :
     Kraus.IsIrreducibleFamily (rotatePhysical u A) := by
   intro ⟨P, hProj, hNe0, hNe1, hInv⟩
@@ -143,28 +145,28 @@ theorem isIrreducibleFamily_rotatePhysical (A : MPSTensor d D) (u : Matrix (Fin 
   refine ⟨P, hProj, hNe0, hNe1, ?_⟩
   intro k
   have hu' : uᴴ * u = 1 := mul_eq_one_comm.mp hu
-  have hU : ∀ j k : Fin d,
-      ∑ i : Fin d, starRingEnd ℂ (u i j) * u i k = if j = k then 1 else 0 := by
+  have hU : ∀ j k : α,
+      ∑ i : α, starRingEnd ℂ (u i j) * u i k = if j = k then 1 else 0 := by
     intro j k
     exact Matrix.sum_star_mul_eq_ite_of_conjTranspose_mul_eq_one u hu' j k
   -- Distribute (1-P)*_*P through the sum in the invariance condition
-  have hInv' : ∀ i : Fin d, ∑ j : Fin d, u i j • ((1 - P) * A j * P) = 0 := by
+  have hInv' : ∀ i : α, ∑ j : α, u i j • ((1 - P) * A j * P) = 0 := by
     intro i
     have hi := hInv i
     simp only [rotatePhysical_apply] at hi
-    rw [show (1 - P) * (∑ j : Fin d, u i j • A j) * P =
-        ∑ j : Fin d, u i j • ((1 - P) * A j * P) from by
+    rw [show (1 - P) * (∑ j : α, u i j • A j) * P =
+        ∑ j : α, u i j • ((1 - P) * A j * P) from by
       simp_rw [Matrix.mul_sum, Matrix.sum_mul, mul_smul_comm, smul_mul_assoc]] at hi
     exact hi
   -- Express (1-P) A_k P via orthogonality as a weighted sum that vanishes
   calc (1 - P) * A k * P
-      = ∑ j : Fin d, (if k = j then (1 : ℂ) else 0) • ((1 - P) * A j * P) := by
+      = ∑ j : α, (if k = j then (1 : ℂ) else 0) • ((1 - P) * A j * P) := by
         simp [ite_smul, Finset.mem_univ]
-    _ = ∑ j : Fin d, (∑ i : Fin d, (starRingEnd ℂ) (u i k) * u i j) •
+    _ = ∑ j : α, (∑ i : α, (starRingEnd ℂ) (u i k) * u i j) •
           ((1 - P) * A j * P) := by
         apply Finset.sum_congr rfl; intro j _; congr 1; exact (hU k j).symm
-    _ = ∑ i : Fin d, (starRingEnd ℂ) (u i k) •
-          (∑ j : Fin d, u i j • ((1 - P) * A j * P)) := by
+    _ = ∑ i : α, (starRingEnd ℂ) (u i k) •
+          (∑ j : α, u i j • ((1 - P) * A j * P)) := by
         simp only [Finset.sum_smul, smul_smul, Finset.smul_sum]; exact Finset.sum_comm
     _ = 0 := by simp_rw [hInv', smul_zero, Finset.sum_const_zero]
 
@@ -173,7 +175,8 @@ theorem isIrreducibleFamily_rotatePhysical (A : MPSTensor d D) (u : Matrix (Fin 
 /-- `IsPeriodic m A` is preserved by unitary rotation: the transfer map (hence
 its peripheral spectrum) is unchanged, left-canonical is preserved, and
 irreducibility is preserved. -/
-theorem isPeriodic_rotatePhysical (m : ℕ) (A : MPSTensor d D) (u : Matrix (Fin d) (Fin d) ℂ)
+theorem isPeriodic_rotatePhysical [DecidableEq α] (m : ℕ) (A : MPTensor α (Fin D))
+    (u : Matrix α α ℂ)
     (hu : u * uᴴ = 1) (hA : IsPeriodic m A) :
     IsPeriodic m (rotatePhysical u A) where
   irreducible := isIrreducibleFamily_rotatePhysical A u hu hA.irreducible
@@ -246,10 +249,10 @@ theorem sameMPV₂_rotatePhysical {D₁ D₂ : ℕ} (M : Matrix (Fin d) (Fin d) 
 This follows from linearity of `blockDiagonal'` and `smul` through finite
 sums. -/
 theorem rotatePhysical_toTensorFromBlocks {r : ℕ} {dim : Fin r → ℕ}
-    (M : Matrix (Fin d) (Fin d) ℂ) (μ : Fin r → ℂ)
-    (A : (k : Fin r) → MPSTensor d (dim k)) :
-    rotatePhysical M (toTensorFromBlocks (α := Fin d) μ A) =
-    toTensorFromBlocks (α := Fin d) μ (fun k => rotatePhysical M (A k)) := by
+    (M : Matrix α α ℂ) (μ : Fin r → ℂ)
+    (A : (k : Fin r) → MPTensor α (Fin (dim k))) :
+    rotatePhysical M (toTensorFromBlocks (α := α) μ A) =
+    toTensorFromBlocks (α := α) μ (fun k => rotatePhysical M (A k)) := by
   funext i; ext a b
   simp only [rotatePhysical_apply, toTensorFromBlocks, Matrix.sum_apply,
     Matrix.smul_apply, Matrix.reindex_apply, Matrix.submatrix_apply,

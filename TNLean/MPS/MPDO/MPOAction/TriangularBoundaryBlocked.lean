@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.MPDO.MPOAction.TriangularBoundaryDecomposition
 import TNLean.MPS.MPDO.MPOAction.TriangularPaddingGauge
 import TNLean.MPS.MPDO.MPOAction.BoundaryZipperBlocked
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # A common positive blocking for triangular fusion and action families
@@ -31,25 +32,29 @@ open Kraus (blockTensor)
 namespace MPSTensor.IsBiorthogonalDecomposition
 
 /-- Positive physical blocking preserves an exact pairwise decomposition
-over any finite label type, with its rectangular matrices unchanged. -/
+over any finite label type, with its rectangular matrices unchanged. 
+**Bridge (T.2b):** the blocked letters are read as words through the doubled-index blocking
+`MPOTensor.blockTensor_apply_eq_kraus_evalWord`; removed when the blocking moves to
+`Kraus.block`. -/
 theorem blockMPO_fintype {Λ : Type*} [Fintype Λ] {p : ℕ} {D : Λ → ℕ}
     {T : ∀ c, MPOTensor p (D c)} {N : Λ → ℕ} {a b : Λ}
     {V : ∀ c, Fin (N c) → Matrix (Fin (D c)) (Fin (D a * D b)) ℂ}
     {W : ∀ c, Fin (N c) → Matrix (Fin (D a * D b)) (Fin (D c)) ℂ}
-    (h : IsBiorthogonalDecomposition (MPOTensor.mulTensor (T a) (T b)).toMPSTensor
-      (fun q : (c : Λ) × Fin (N c) ↦ (T q.1).toMPSTensor)
+    (h : IsBiorthogonalDecomposition (MPOTensor.mulTensor (T a) (T b))
+      (fun q : (c : Λ) × Fin (N c) ↦ T q.1)
       (fun q ↦ V q.1 q.2) (fun q ↦ W q.1 q.2))
     {L : ℕ} (hL : 0 < L) :
     IsBiorthogonalDecomposition
       (MPOTensor.mulTensor (MPOTensor.blockTensor (T a) L)
-        (MPOTensor.blockTensor (T b) L)).toMPSTensor
-      (fun q : (c : Λ) × Fin (N c) ↦ (MPOTensor.blockTensor (T q.1) L).toMPSTensor)
+        (MPOTensor.blockTensor (T b) L))
+      (fun q : (c : Λ) × Fin (N c) ↦ MPOTensor.blockTensor (T q.1) L)
       (fun q ↦ V q.1 q.2) (fun q ↦ W q.1 q.2) :=
-  h.ofWords (MPOTensor.blockedPairWord p L) (MPOTensor.blockedPairWord_ne_nil hL)
+  h.ofWords (fun I ↦ (MPOTensor.blockedPairWord p L (finProdFinEquiv I)).map finProdFinEquiv.symm)
+    (fun I ↦ by simpa using MPOTensor.blockedPairWord_ne_nil hL (finProdFinEquiv I))
     (fun I ↦ by
       rw [← MPOTensor.blockTensor_mulTensor]
-      exact MPOTensor.toMPSTensor_blockTensor_apply _ L I)
-    (fun q I ↦ MPOTensor.toMPSTensor_blockTensor_apply (T q.1) L I)
+      exact MPOTensor.blockTensor_apply_eq_kraus_evalWord _ L I)
+    (fun q I ↦ MPOTensor.blockTensor_apply_eq_kraus_evalWord (T q.1) L I)
 
 end MPSTensor.IsBiorthogonalDecomposition
 
@@ -60,11 +65,10 @@ coordinates. Only its row label is transported by the given equivalence. -/
 theorem exists_blockTensor_leftInverse_of_labelEquiv
     {Λ : Type*} [DecidableEq Λ] {p g : ℕ} {D : Λ → ℕ}
     (e : Λ ≃ Fin g) (T : ∀ c, MPOTensor p (D c))
-    (hT : ∀ c, Kraus.IsNormal (T c).toMPSTensor) (hD : ∀ c, 0 < D c)
+    (hT : ∀ c, Kraus.IsNormal (T c)) (hD : ∀ c, 0 < D c)
     (hne : ∀ a b : Λ, a ≠ b → ∀ h : D a = D b,
-      ¬ MPTensor.GaugePhaseEquiv
-        (cast (congrArg (MPSTensor (p * p)) h) (T a).toMPSTensor) (T b).toMPSTensor) :
-    ∃ L : ℕ, 0 < L ∧ (∀ c, Kraus.IsInjective (blockTensor (T c) L).toMPSTensor) ∧
+      ¬ MPTensor.GaugePhaseEquiv (cast (congrArg (MPOTensor p) h) (T a)) (T b)) :
+    ∃ L : ℕ, 0 < L ∧ (∀ c, Kraus.IsInjective (blockTensor (T c) L)) ∧
       ∃ K : Matrix ((c : Λ) × (Fin (D c) × Fin (D c)))
           (Fin (Kraus.blockPhysDim p L) × Fin (Kraus.blockPhysDim p L)) ℂ,
         ∀ (a b : Λ) (x y : Fin (D a)) (x' y' : Fin (D b)),
@@ -74,7 +78,8 @@ theorem exists_blockTensor_leftInverse_of_labelEquiv
             else 0 := by
   classical
   obtain ⟨L, hL, hInj, K, hK⟩ := exists_blockTensor_isMPOBlockLeftInverse
-    (fun c ↦ T (e.symm c)) (fun c ↦ hT (e.symm c)) (fun c ↦ hD (e.symm c))
+    (fun c ↦ T (e.symm c)) (fun c ↦ (hT (e.symm c)))
+    (fun c ↦ hD (e.symm c))
     (fun a b hab hdim ↦ hne (e.symm a) (e.symm b) (e.symm.injective.ne hab) hdim)
   let Krow : ∀ c : Λ, Matrix (Fin (D c) × Fin (D c))
       (Fin (Kraus.blockPhysDim p L) × Fin (Kraus.blockPhysDim p L)) ℂ :=
@@ -86,7 +91,7 @@ theorem exists_blockTensor_leftInverse_of_labelEquiv
   refine ⟨L, hL, ?_, (fun q ↦ Krow q.1 q.2), ?_⟩
   · intro c
     obtain ⟨j, rfl⟩ := e.symm.surjective c
-    exact hInj j
+    exact (hInj j)
   · intro a b
     obtain ⟨j, rfl⟩ := e.symm.surjective a
     obtain ⟨k, rfl⟩ := e.symm.surjective b
@@ -104,20 +109,17 @@ theorem exists_blockTensor_leftInverse_of_labelEquiv
 private theorem gaugePhaseEquiv_of_operatorPhysicalPadding_cast
     {d D₁ D₂ : ℕ} (hD : D₁ = D₂) {O : MPOTensor d D₁} {P : MPOTensor d D₂}
     (h : MPTensor.GaugePhaseEquiv
-      (cast (congrArg (MPSTensor ((d + 1) * (d + 1))) hD)
-        (operatorPhysicalPadding O).toMPSTensor)
-      (operatorPhysicalPadding P).toMPSTensor) :
-    MPTensor.GaugePhaseEquiv
-      (cast (congrArg (MPSTensor (d * d)) hD) O.toMPSTensor) P.toMPSTensor := by
+      (cast (congrArg (MPOTensor (d + 1)) hD) (operatorPhysicalPadding O))
+      (operatorPhysicalPadding P)) :
+    MPTensor.GaugePhaseEquiv (cast (congrArg (MPOTensor d) hD) O) P := by
   subst D₂
   exact gaugePhaseEquiv_of_operatorPhysicalPadding h
 
 private theorem gaugePhaseEquiv_of_statePhysicalPadding_cast
     {d D₁ D₂ : ℕ} (hD : D₁ = D₂) {A : MPSTensor d D₁} {B : MPSTensor d D₂}
     (h : MPTensor.GaugePhaseEquiv
-      (cast (congrArg (MPSTensor ((d + 1) * (d + 1))) hD)
-        (statePhysicalPadding A).toMPSTensor)
-      (statePhysicalPadding B).toMPSTensor) :
+      (cast (congrArg (MPOTensor (d + 1)) hD) (statePhysicalPadding A))
+      (statePhysicalPadding B)) :
     MPTensor.GaugePhaseEquiv (cast (congrArg (MPSTensor d) hD) A) B := by
   subst D₂
   exact gaugePhaseEquiv_of_statePhysicalPadding h
@@ -126,28 +128,26 @@ private theorem not_gaugePhaseEquiv_operatorPhysicalPadding_statePhysicalPadding
     {d D₁ D₂ : ℕ} (hDim : D₁ = D₂) (O : MPOTensor d D₁) {A : MPSTensor d D₂}
     (hD : 0 < D₂) (hA : Kraus.IsInjective A) :
     ¬ MPTensor.GaugePhaseEquiv
-      (cast (congrArg (MPSTensor ((d + 1) * (d + 1))) hDim)
-        (operatorPhysicalPadding O).toMPSTensor)
-      (statePhysicalPadding A).toMPSTensor := by
+      (cast (congrArg (MPOTensor (d + 1)) hDim) (operatorPhysicalPadding O))
+      (statePhysicalPadding A) := by
   subst D₂
   exact not_gaugePhaseEquiv_operatorPhysicalPadding_statePhysicalPadding O hD hA
 
 private theorem not_gaugePhaseEquiv_statePhysicalPadding_operatorPhysicalPadding_cast
     {d D₁ D₂ : ℕ} (hDim : D₁ = D₂) (A : MPSTensor d D₁) {O : MPOTensor d D₂}
-    (hD : 0 < D₂) (hO : Kraus.IsInjective O.toMPSTensor) :
+    (hD : 0 < D₂) (hO : Kraus.IsInjective O) :
     ¬ MPTensor.GaugePhaseEquiv
-      (cast (congrArg (MPSTensor ((d + 1) * (d + 1))) hDim)
-        (statePhysicalPadding A).toMPSTensor)
-      (operatorPhysicalPadding O).toMPSTensor := by
+      (cast (congrArg (MPOTensor (d + 1)) hDim) (statePhysicalPadding A))
+      (operatorPhysicalPadding O) := by
   subst D₂
   exact not_gaugePhaseEquiv_statePhysicalPadding_operatorPhysicalPadding A hD hO
 
 variable {d r s : ℕ} {χ : Fin r → ℕ} {D : Fin s → ℕ}
   (O : ∀ a, MPOTensor d (χ a)) (A : ∀ x, MPSTensor d (D x))
-  (hInjO : ∀ a, Kraus.IsInjective (O a).toMPSTensor)
+  (hInjO : ∀ a, Kraus.IsInjective (O a))
   (hInjA : ∀ x, Kraus.IsInjective (A x))
   (hχ : ∀ a, 0 < χ a) (hD : ∀ x, 0 < D x)
-  (hneO : MPSTensor.BlocksNotGaugePhaseEquiv (fun a ↦ (O a).toMPSTensor))
+  (hneO : MPSTensor.BlocksNotGaugePhaseEquiv O)
   (hneA : MPSTensor.BlocksNotGaugePhaseEquiv A)
 
 include hInjO hInjA hχ hD hneO hneA in
@@ -155,8 +155,8 @@ private theorem triangularTensor_separated
     (a b : Fin r ⊕ Fin s) (hab : a ≠ b)
     (hDim : triangularBondDim χ D a = triangularBondDim χ D b) :
     ¬ MPTensor.GaugePhaseEquiv
-      (cast (congrArg (MPSTensor ((d + 1) * (d + 1))) hDim)
-        (triangularTensor O A a).toMPSTensor) (triangularTensor O A b).toMPSTensor := by
+      (cast (congrArg (MPOTensor (d + 1)) hDim) (triangularTensor O A a))
+      (triangularTensor O A b) := by
   cases a with
   | inl a =>
     cases b with
@@ -183,7 +183,7 @@ derive one common positive blocking and a simultaneous inverse for the
 disjoint-union family. Cross-kind separation follows from physical support. -/
 theorem exists_triangular_blockTensor_leftInverse :
     ∃ L : ℕ, 0 < L ∧
-      (∀ c, Kraus.IsInjective (blockTensor (triangularTensor O A c) L).toMPSTensor) ∧
+      (∀ c, Kraus.IsInjective (blockTensor (triangularTensor O A c) L)) ∧
       ∃ K : Matrix ((c : Fin r ⊕ Fin s) ×
           (Fin (triangularBondDim χ D c) × Fin (triangularBondDim χ D c)))
           (Fin (Kraus.blockPhysDim (d + 1) L) ×
@@ -222,8 +222,8 @@ variable {N : Fin r → Fin r → Fin r → ℕ} {M : Fin r → Fin s → Fin s 
   (VA : ∀ a x y, Fin (M a x y) → Matrix (Fin (D y)) (Fin (χ a * D x)) ℂ)
   (WA : ∀ a x y, Fin (M a x y) → Matrix (Fin (χ a * D x)) (Fin (D y)) ℂ)
   (hF : ∀ a b,
-    MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b)).toMPSTensor
-      (fun q : (c : Fin r) × Fin (N a b c) ↦ (O q.1).toMPSTensor)
+    MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b))
+      (fun q : (c : Fin r) × Fin (N a b c) ↦ O q.1)
       (fun q ↦ VF a b q.1 q.2) (fun q ↦ WF a b q.1 q.2))
   (hAct : ∀ a x,
     MPSTensor.IsBiorthogonalDecomposition (actTensor (O a) (A x))
@@ -246,7 +246,7 @@ the disjoint union, and its matrices are the original rectangular maps. -/
     (fun c ↦ by
       cases c with
       | inl a => exact hχ a
-      | inr x => exact hD x) hspec.2.1
+      | inr x => exact hD x) (fun c ↦ (hspec.2.1 c))
     (triangularFusionAnalysis VF VA) (triangularFusionSynthesis WF WA)
     (fun a b ↦ (isBiorthogonalDecomposition_triangularTensor VF WF VA WA O A hF hAct
       a b).blockMPO_fintype hspec.1)

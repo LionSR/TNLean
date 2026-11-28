@@ -45,64 +45,64 @@ def isingRho : Fin 10 → Fin 3 := ![0, 1, 2, 0, 1, 2, 0, 1, 2, 2]
 
 /-- The tensor `A_1` over `ℤ√2`, on the site space `P_1 = [(1,1), (ψ,ψ), (σ,σ)]`: every letter
 is a matrix unit (data file §1.1). -/
-def isingOneZ : Fin 10 → Fin 10 → Matrix (Fin 3) (Fin 3) (ℤ√2)
-  | 0, 0 => Matrix.single 0 0 1
-  | 1, 1 => Matrix.single 0 1 1
-  | 2, 2 => Matrix.single 0 2 1
-  | 3, 3 => Matrix.single 1 1 1
-  | 4, 4 => Matrix.single 1 0 1
-  | 5, 5 => Matrix.single 1 2 1
-  | 6, 6 => Matrix.single 2 2 1
-  | 7, 7 => Matrix.single 2 2 1
-  | 8, 8 => Matrix.single 2 0 1
-  | 9, 9 => Matrix.single 2 1 1
-  | _, _ => 0
+def isingOneZ : Fin 10 × Fin 10 → Matrix (Fin 3) (Fin 3) (ℤ√2)
+  | (0, 0) => Matrix.single 0 0 1
+  | (1, 1) => Matrix.single 0 1 1
+  | (2, 2) => Matrix.single 0 2 1
+  | (3, 3) => Matrix.single 1 1 1
+  | (4, 4) => Matrix.single 1 0 1
+  | (5, 5) => Matrix.single 1 2 1
+  | (6, 6) => Matrix.single 2 2 1
+  | (7, 7) => Matrix.single 2 2 1
+  | (8, 8) => Matrix.single 2 0 1
+  | (9, 9) => Matrix.single 2 1 1
+  | _ => 0
 
 /-- The tensor `A_ψ` over `ℤ√2`, on the site space `P_ψ = [(1,ψ), (ψ,1), (σ,σ)]`: every letter
 is a signed matrix unit, the sign at the letter `((σ,ψ,σ), (σ,ψ,σ))` being the F-symbol
 `[F^{ψσψ}_σ] = -1` (data file §1.1). -/
-def isingPsiZ : Fin 10 → Fin 10 → Matrix (Fin 3) (Fin 3) (ℤ√2)
-  | 0, 3 => Matrix.single 1 1 1
-  | 1, 4 => Matrix.single 1 0 1
-  | 2, 5 => Matrix.single 1 2 1
-  | 3, 0 => Matrix.single 0 0 1
-  | 4, 1 => Matrix.single 0 1 1
-  | 5, 2 => Matrix.single 0 2 1
-  | 6, 6 => Matrix.single 2 2 1
-  | 7, 7 => Matrix.single 2 2 (-1)
-  | 8, 9 => Matrix.single 2 1 1
-  | 9, 8 => Matrix.single 2 0 1
-  | _, _ => 0
+def isingPsiZ : Fin 10 × Fin 10 → Matrix (Fin 3) (Fin 3) (ℤ√2)
+  | (0, 3) => Matrix.single 1 1 1
+  | (1, 4) => Matrix.single 1 0 1
+  | (2, 5) => Matrix.single 1 2 1
+  | (3, 0) => Matrix.single 0 0 1
+  | (4, 1) => Matrix.single 0 1 1
+  | (5, 2) => Matrix.single 0 2 1
+  | (6, 6) => Matrix.single 2 2 1
+  | (7, 7) => Matrix.single 2 2 (-1)
+  | (8, 9) => Matrix.single 2 1 1
+  | (9, 8) => Matrix.single 2 0 1
+  | _ => 0
 
 /-- The tensor `√2 A_σ` over `ℤ√2`, on the site space
 `P_σ = [(1,σ), (ψ,σ), (σ,1), (σ,ψ)]`: every letter is a matrix unit scaled by `±1` or `±√2`,
 the entries `±1` being the rescaled F-symbols `±1/√2` of the `σσσ` fusion (data file §1.1). -/
-def isingSigmaZ : Fin 10 → Fin 10 → Matrix (Fin 4) (Fin 4) (ℤ√2)
-  | 0, 6 => Matrix.single 2 2 sqrtd
-  | 1, 7 => Matrix.single 2 3 sqrtd
-  | 2, 8 => Matrix.single 2 0 1
-  | 2, 9 => Matrix.single 2 1 1
-  | 3, 6 => Matrix.single 3 3 sqrtd
-  | 4, 7 => Matrix.single 3 2 sqrtd
-  | 5, 8 => Matrix.single 3 0 1
-  | 5, 9 => Matrix.single 3 1 (-1)
-  | 6, 0 => Matrix.single 0 0 sqrtd
-  | 6, 3 => Matrix.single 1 1 sqrtd
-  | 7, 1 => Matrix.single 0 1 sqrtd
-  | 7, 4 => Matrix.single 1 0 sqrtd
-  | 8, 2 => Matrix.single 0 2 sqrtd
-  | 8, 5 => Matrix.single 1 2 sqrtd
-  | 9, 2 => Matrix.single 0 3 sqrtd
-  | 9, 5 => Matrix.single 1 3 (-sqrtd)
-  | _, _ => 0
+def isingSigmaZ : Fin 10 × Fin 10 → Matrix (Fin 4) (Fin 4) (ℤ√2)
+  | (0, 6) => Matrix.single 2 2 sqrtd
+  | (1, 7) => Matrix.single 2 3 sqrtd
+  | (2, 8) => Matrix.single 2 0 1
+  | (2, 9) => Matrix.single 2 1 1
+  | (3, 6) => Matrix.single 3 3 sqrtd
+  | (4, 7) => Matrix.single 3 2 sqrtd
+  | (5, 8) => Matrix.single 3 0 1
+  | (5, 9) => Matrix.single 3 1 (-1)
+  | (6, 0) => Matrix.single 0 0 sqrtd
+  | (6, 3) => Matrix.single 1 1 sqrtd
+  | (7, 1) => Matrix.single 0 1 sqrtd
+  | (7, 4) => Matrix.single 1 0 sqrtd
+  | (8, 2) => Matrix.single 0 2 sqrtd
+  | (8, 5) => Matrix.single 1 2 sqrtd
+  | (9, 2) => Matrix.single 0 3 sqrtd
+  | (9, 5) => Matrix.single 1 3 (-sqrtd)
+  | _ => 0
 
 /-- The tensor `A_1` as a matrix product operator tensor. -/
 noncomputable def isingOne : MPOTensor 10 3 :=
-    Function.uncurry fun h h' => complexOfZsqrt2 (isingOneZ h h')
+    fun hh => complexOfZsqrt2 (isingOneZ hh)
 
 /-- The tensor `A_ψ` as a matrix product operator tensor. -/
 noncomputable def isingPsi : MPOTensor 10 3 :=
-    Function.uncurry fun h h' => complexOfZsqrt2 (isingPsiZ h h')
+    fun hh => complexOfZsqrt2 (isingPsiZ hh)
 
 /-- The tensor `√2 A_σ` as a matrix product operator tensor.
 
@@ -117,38 +117,39 @@ therefore `(√2)⁻ᴸ` times the periodic operator of `isingSigma`. Documented
 `docs/paper-gaps/bmwshv17_ising_boundary_tensor_normalization.tex`.
 -/
 noncomputable def isingSigma : MPOTensor 10 4 :=
-  Function.uncurry fun h h' => complexOfZsqrt2 (isingSigmaZ h h')
+  fun hh => complexOfZsqrt2 (isingSigmaZ hh)
 
 theorem isingOneZ_eq_zero_of_rho_ne :
-    ∀ h h' : Fin 10, isingRho h ≠ isingRho h' → isingOneZ h h' = 0 := by
+    ∀ h h' : Fin 10, isingRho h ≠ isingRho h' → isingOneZ (h, h') = 0 := by
   decide +kernel
 
 theorem isingPsiZ_eq_zero_of_rho_ne :
-    ∀ h h' : Fin 10, isingRho h ≠ isingRho h' → isingPsiZ h h' = 0 := by
+    ∀ h h' : Fin 10, isingRho h ≠ isingRho h' → isingPsiZ (h, h') = 0 := by
   decide +kernel
 
 theorem isingSigmaZ_eq_zero_of_rho_ne :
-    ∀ h h' : Fin 10, isingRho h ≠ isingRho h' → isingSigmaZ h h' = 0 := by
+    ∀ h h' : Fin 10, isingRho h ≠ isingRho h' → isingSigmaZ (h, h') = 0 := by
   decide +kernel
 
 /-! ### Normality of the three tensors
 
 Each tensor realises every matrix unit of its bond algebra as a nonzero multiple of one of its
 letters (data file §1.1, check 1b), so it is normal at blocking length one. The pair-alphabet
-letter of the pair `(h, h')` is `10 h + h'`.
+letter of the pair `(h, h')` is that pair.
 -/
 
 /-- The letter of `A_1` realising each matrix unit of the three-by-three bond algebra. -/
-def isingOneUnitLetter : Fin 3 → Fin 3 → Fin 100 :=
-  ![![0, 11, 22], ![44, 33, 55], ![88, 99, 66]]
+def isingOneUnitLetter : Fin 3 → Fin 3 → Fin 10 × Fin 10 :=
+  ![![(0, 0), (1, 1), (2, 2)], ![(4, 4), (3, 3), (5, 5)], ![(8, 8), (9, 9), (6, 6)]]
 
 /-- The letter of `A_ψ` realising each matrix unit of the three-by-three bond algebra. -/
-def isingPsiUnitLetter : Fin 3 → Fin 3 → Fin 100 :=
-  ![![30, 41, 52], ![14, 3, 25], ![98, 89, 66]]
+def isingPsiUnitLetter : Fin 3 → Fin 3 → Fin 10 × Fin 10 :=
+  ![![(3, 0), (4, 1), (5, 2)], ![(1, 4), (0, 3), (2, 5)], ![(9, 8), (8, 9), (6, 6)]]
 
 /-- The letter of `√2 A_σ` realising each matrix unit of the four-by-four bond algebra. -/
-def isingSigmaUnitLetter : Fin 4 → Fin 4 → Fin 100 :=
-  ![![60, 71, 82, 92], ![74, 63, 85, 95], ![28, 29, 6, 17], ![58, 59, 47, 36]]
+def isingSigmaUnitLetter : Fin 4 → Fin 4 → Fin 10 × Fin 10 :=
+  ![![(6, 0), (7, 1), (8, 2), (9, 2)], ![(7, 4), (6, 3), (8, 5), (9, 5)],
+    ![(2, 8), (2, 9), (0, 6), (1, 7)], ![(5, 8), (5, 9), (4, 7), (3, 6)]]
 
 /-- The nonzero factor relating that letter of `√2 A_σ` to its matrix unit. -/
 def isingSigmaUnitCoef : Fin 4 → Fin 4 → ℤ√2 :=
@@ -156,44 +157,35 @@ def isingSigmaUnitCoef : Fin 4 → Fin 4 → ℤ√2 :=
     ![1, -1, sqrtd, sqrtd]]
 
 private theorem isingOneZ_unit (x y : Fin 3) :
-    isingOneZ (Fin.divNat (m := 10) (n := 10) (isingOneUnitLetter x y))
-      (Fin.modNat (m := 10) (n := 10) (isingOneUnitLetter x y)) =
-      (1 : ℤ√2) • Matrix.single x y 1 := by
+    isingOneZ (isingOneUnitLetter x y) = (1 : ℤ√2) • Matrix.single x y 1 := by
   revert x y
   decide +kernel
 
 private theorem isingPsiZ_unit (x y : Fin 3) :
-    isingPsiZ (Fin.divNat (m := 10) (n := 10) (isingPsiUnitLetter x y))
-      (Fin.modNat (m := 10) (n := 10) (isingPsiUnitLetter x y)) =
-      (1 : ℤ√2) • Matrix.single x y 1 := by
+    isingPsiZ (isingPsiUnitLetter x y) = (1 : ℤ√2) • Matrix.single x y 1 := by
   revert x y
   decide +kernel
 
 private theorem isingSigmaZ_unit (x y : Fin 4) :
-    isingSigmaZ (Fin.divNat (m := 10) (n := 10) (isingSigmaUnitLetter x y))
-      (Fin.modNat (m := 10) (n := 10) (isingSigmaUnitLetter x y)) =
-      isingSigmaUnitCoef x y • Matrix.single x y 1 := by
+    isingSigmaZ (isingSigmaUnitLetter x y) = isingSigmaUnitCoef x y • Matrix.single x y 1 := by
   revert x y
   decide +kernel
 
 /-- **`A_1` is normal at blocking length one** (data file §1.1, check 1b). -/
-theorem isingOne_isNormal : Kraus.IsNormal isingOne.toMPSTensor :=
-  isNormal_of_single_eq_smul_zsqrt2 (fun a => isingOneZ (Fin.divNat (m := 10) (n := 10) a)
-      (Fin.modNat (m := 10) (n := 10) a)) (fun _ => rfl)
+theorem isingOne_isNormal : Kraus.IsNormal isingOne :=
+  isNormal_of_single_eq_smul_zsqrt2 isingOneZ (fun _ => rfl)
     isingOneUnitLetter (fun _ _ => 1) (fun _ _ => one_ne_zero) isingOneZ_unit
 
 /-- **`A_ψ` is normal at blocking length one** (data file §1.1, check 1b). -/
-theorem isingPsi_isNormal : Kraus.IsNormal isingPsi.toMPSTensor :=
-  isNormal_of_single_eq_smul_zsqrt2 (fun a => isingPsiZ (Fin.divNat (m := 10) (n := 10) a)
-      (Fin.modNat (m := 10) (n := 10) a)) (fun _ => rfl)
+theorem isingPsi_isNormal : Kraus.IsNormal isingPsi :=
+  isNormal_of_single_eq_smul_zsqrt2 isingPsiZ (fun _ => rfl)
     isingPsiUnitLetter (fun _ _ => 1) (fun _ _ => one_ne_zero) isingPsiZ_unit
 
 /-- **`√2 A_σ` is normal at blocking length one**: its sixteen nonzero letters are scaled
 matrix units covering every position of the four-by-four matrix algebra (data file §1.1,
 check 1b). -/
-theorem isingSigma_isNormal : Kraus.IsNormal isingSigma.toMPSTensor :=
-  isNormal_of_single_eq_smul_zsqrt2 (fun a => isingSigmaZ (Fin.divNat (m := 10) (n := 10) a)
-      (Fin.modNat (m := 10) (n := 10) a)) (fun _ => rfl)
+theorem isingSigma_isNormal : Kraus.IsNormal isingSigma :=
+  isNormal_of_single_eq_smul_zsqrt2 isingSigmaZ (fun _ => rfl)
     isingSigmaUnitLetter isingSigmaUnitCoef (by decide) isingSigmaZ_unit
 
 end IsingTwist

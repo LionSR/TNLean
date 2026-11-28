@@ -5,6 +5,8 @@ Authors: Sirui Lu
 -/
 import TNLean.MPS.Tensor.Words.CyclicTrace
 import TNLean.MPS.Operator.Defs
+import QICLean.Kraus.Injectivity
+import QICLean.Algebra.Matrix.MatrixSingleSpan
 
 /-!
 # Entries of a periodic operator as a sum over bond configurations
@@ -17,6 +19,11 @@ This is the way the periodic operators of monomial tensors, such as the CZX matr
 unitaries, are computed.
 
 ## Main results
+
+* `MPOTensor.mpo_apply_of_bondOne`: the periodic operator of a bond-one tensor is the product
+  of its one-site entries.
+* `MPOTensor.isNormal_of_bondOne`: a bond-one tensor one of whose one-site matrices is the
+  scalar `1` is normal.
 
 * `MPOTensor.mpo_apply_eq_sum_cyclic`: the entry as a sum over closed bond configurations.
 * `MPOTensor.mpo_apply_eq_prod_of_forced_bond`: the entry as the product along the unique
@@ -38,11 +45,9 @@ of the products of the tensor entries around the chain. -/
 theorem mpo_apply_eq_sum_cyclic (M : MPOTensor d D) (s t : Fin N → Fin d) :
     mpo M N s t = ∑ g : Fin N → Fin D, ∏ n : Fin N, M (s n, t n) (g n) (g (n + 1)) := by
   rw [mpo_apply, mpoMatrixEntry, evalWord_ofFn]
-  have h := MPSTensor.trace_evalWord_eq_sum_cyclic M.toMPSTensor
-    (fun n ↦ finProdFinEquiv (s n, t n))
+  have h := MPSTensor.trace_evalWord_eq_sum_cyclic M (fun n ↦ (s n, t n))
   rw [MPSTensor.evalWord_ofFn_eq_prod] at h
-  simpa only [toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
-    MPSTensor.finProdFinEquiv_modNat] using h
+  exact h
 
 /-- **A periodic entry along a forced bond configuration.** If every closed bond configuration
 other than `g₀` meets a vanishing tensor entry, then the entry of the periodic operator at
@@ -95,5 +100,26 @@ theorem mpo_apply_of_forced_left_bond {M : MPOTensor d D} {π : Fin d → Fin d}
       exact Finset.prod_eq_zero (Finset.mem_univ n) (by rw [hM, ite_eq_right fun h ↦ hn h.1])
   · obtain ⟨n, hn⟩ := Function.ne_iff.mp hg
     exact ⟨n, by rw [hM, ite_eq_right fun h ↦ hn h.2]⟩
+
+/-! ### Bond dimension one -/
+
+/-- The periodic operator of a bond-one tensor is the tensor product of its one-site
+matrices. This is the bond-one case of `MPOTensor.mpo_apply_eq_prod_of_forced_bond`: there is
+only one closed bond configuration, so no other configuration has to vanish. -/
+theorem mpo_apply_of_bondOne {N : ℕ} [NeZero N] {d : ℕ} (M : MPOTensor d 1)
+    (σ τ : Fin N → Fin d) :
+    M.mpo N σ τ = ∏ k, M (σ k, τ k) 0 0 := by
+  rw [mpo_apply_eq_prod_of_forced_bond M σ τ 0 fun g hg ↦ absurd (Subsingleton.elim g 0) hg]
+  rfl
+
+/-- A bond-one tensor one of whose one-site matrices is the scalar `1` is normal: that
+matrix already spans the one-by-one matrices. -/
+theorem isNormal_of_bondOne {d : ℕ} (M : MPOTensor d 1) (i j : Fin d) (h : M (i, j) 0 0 = 1) :
+    Kraus.IsNormal M := by
+  refine Kraus.IsInjective.isNormal (Submodule.eq_top_of_forall_single_mem _ fun p q => ?_)
+  refine Submodule.subset_span ⟨(i, j), ?_⟩
+  ext a b
+  rw [Subsingleton.elim a 0, Subsingleton.elim b 0, Subsingleton.elim p 0,
+    Subsingleton.elim q 0, h, Matrix.single_apply_same]
 
 end MPOTensor

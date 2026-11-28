@@ -159,8 +159,7 @@ theorem normalizedDiagonal_doubleLayerTensor [NeZero d] (U : MPOTensor d D) :
     normalizedFlattening, Kraus.transferMap_apply, transferMatrix,
     Matrix.submatrix_apply, Matrix.smul_apply, Matrix.sum_apply,
     physicalAdjointTensor_apply, Matrix.kronecker_apply,
-    Equiv.symm_apply_apply, Matrix.one_apply, smul_eq_mul,
-    MPOTensor.toMPSTensor]
+    Equiv.symm_apply_apply, Matrix.one_apply, smul_eq_mul]
   simp only [Matrix.mul_apply, Matrix.conjTranspose_apply, Matrix.single,
     Matrix.of_apply, ite_and, Finset.mul_sum, Finset.sum_mul]
   simp only [RCLike.star_def, ite_mul, one_mul, zero_mul, mul_ite, mul_zero,
@@ -170,9 +169,6 @@ theorem normalizedDiagonal_doubleLayerTensor [NeZero d] (U : MPOTensor d D) :
   let g : Fin d × Fin d → ℂ := fun x ↦
     ((Real.sqrt d : ℂ)⁻¹) * U (x.1, x.2) p₂ q₂ *
       (((Real.sqrt d : ℂ)⁻¹) * (starRingEnd ℂ) (U (x.1, x.2) p₁ q₁))
-  let f : Fin (d * d) → ℂ := fun x ↦
-    ((Real.sqrt d : ℂ)⁻¹) * U (x.divNat, x.modNat) p₂ q₂ *
-      (((Real.sqrt d : ℂ)⁻¹) * (starRingEnd ℂ) (U (x.divNat, x.modNat) p₁ q₁))
   calc
     (∑ i : Fin d, ∑ j : Fin d,
         (d : ℂ)⁻¹ * ((starRingEnd ℂ) (U (j, i) p₁ q₁) * U (j, i) p₂ q₂)) =
@@ -183,16 +179,6 @@ theorem normalizedDiagonal_doubleLayerTensor [NeZero d] (U : MPOTensor d D) :
       simp only [g]
       rw [← hnorm]
       ring
-    _ = ∑ x : Fin (d * d), f x := by
-      exact Fintype.sum_equiv finProdFinEquiv g f (by
-        intro x
-        have hx := finProdFinEquiv.symm_apply_apply x
-        have hx₁ := congrArg Prod.fst hx
-        have hx₂ := congrArg Prod.snd hx
-        change (finProdFinEquiv x).divNat = x.1 at hx₁
-        change (finProdFinEquiv x).modNat = x.2 at hx₂
-        simp only [g, f]
-        rw [hx₁, hx₂])
     _ = _ := rfl
 
 /-- The exact normalized diagonal after blocking is the corresponding power of

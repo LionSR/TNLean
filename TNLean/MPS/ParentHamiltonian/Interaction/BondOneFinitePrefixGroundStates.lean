@@ -51,7 +51,8 @@ normal bond-one branch. In particular it covers the entire finite prefix.
 Source: SPWC10, Theorem 5 proof, lines 873--880, product-branch specialization. -/
 theorem exists_cyclic_ground_of_normal_bondOne_local_kernel
     (h : Matrix (Cfg d L) (Cfg d L) ℂ) (B : MPSTensor d 1)
-    (hB : Kraus.IsNormal B) (hker : groundSpaceES B L ≤ LinearMap.ker (Matrix.toEuclideanLin h))
+    (hB : Kraus.IsNormal B) (hker : ((groundSpace B L).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap) ≤ LinearMap.ker (Matrix.toEuclideanLin h))
     (M : ℕ) (hM : 0 < M) (hLM : L ≤ M) :
     haveI : NeZero M := ⟨by omega⟩;
     ∃ ψ : MPVSpace d M, ψ ≠ 0 ∧
@@ -59,7 +60,7 @@ theorem exists_cyclic_ground_of_normal_bondOne_local_kernel
       ∀ (s : Fin M) (σ : Fin M → Fin d), ψ (fun k ↦ σ (k + s)) = ψ σ := by
   have : NeZero M := ⟨by omega⟩
   exact ⟨mpvState B M, mpvState_ne_zero_of_normal_bondOne B hB M hM,
-    toEuclideanLin_hamiltonian_translationInvariant_mpvState_eq_zero_of_groundSpaceES_le_ker
+    toEuclideanLin_hamiltonian_translationInvariant_mpvState_eq_zero_of_map_groundSpace_le_ker
       B h hker hLM,
     mpvState_cyclic_invariant B⟩
 
@@ -73,7 +74,8 @@ theorem uniform_bondOne_ground_family_translationInvariant_of_normal_local_kerne
       Module.finrank ℂ (LinearMap.ker (Matrix.toEuclideanLin
       (ManyBody.Interaction.translationInvariant M h).hamiltonian)) = 1)
     (B : MPSTensor d 1) (hB : Kraus.IsNormal B)
-    (hker : groundSpaceES B L ≤ LinearMap.ker (Matrix.toEuclideanLin h)) :
+    (hker : ((groundSpace B L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ≤ LinearMap.ker
+        (Matrix.toEuclideanLin h)) :
     ∀ M (hM : 0 < M), L ≤ M → haveI : NeZero M := ⟨by omega⟩; mpvState B M ≠ 0 ∧
       LinearMap.ker (Matrix.toEuclideanLin
         (ManyBody.Interaction.translationInvariant M h).hamiltonian) = ℂ ∙ mpvState B M := by
@@ -81,7 +83,7 @@ theorem uniform_bondOne_ground_family_translationInvariant_of_normal_local_kerne
   have : NeZero M := ⟨by omega⟩
   have hnonzero := mpvState_ne_zero_of_normal_bondOne B hB M hM
   have hzero :=
-    toEuclideanLin_hamiltonian_translationInvariant_mpvState_eq_zero_of_groundSpaceES_le_ker
+    toEuclideanLin_hamiltonian_translationInvariant_mpvState_eq_zero_of_map_groundSpace_le_ker
       B h hker hLM
   exact ⟨hnonzero, eq_span_singleton_of_mem_of_finrank_eq_one (hUnique M hLM) hzero hnonzero⟩
 

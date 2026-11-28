@@ -107,24 +107,32 @@ theorem IsMPU.tensorPhysicalId {U : MPOTensor d D} (hU : IsMPU U)
     Matrix.one_mul, Matrix.one_kronecker_one]
 
 
-/-! ## Normalized doubled-index tensor -/
+/-! ## Normalized tensor with a diagonal ancilla -/
 
-/-- Lift a doubled-index MPS tensor by a normalized diagonal ancilla alphabet.
-Only letters \((a,a)\) are nonzero, and each is scaled by \(1/\sqrt{x}\).
+/-- Regroup a pair of letters of a product alphabet `Fin (d * e)` into the pair of first factors
+and the pair of second factors. -/
+def pairProdEquiv (d e : ℕ) :
+    Fin (d * e) × Fin (d * e) ≃ (Fin d × Fin d) × (Fin e × Fin e) :=
+  (Equiv.prodCongr finProdFinEquiv.symm finProdFinEquiv.symm).trans
+    (Equiv.prodProdProdComm (Fin d) (Fin e) (Fin d) (Fin e))
 
-The physical alphabet is ordered as \(((i,j),(a,b))\). -/
-noncomputable def normalizedDiagonalLift (A : MPSTensor (d * d) D) (x : ℕ) :
-    MPSTensor ((d * d) * (x * x)) D := fun k ↦
-  let pq := finProdFinEquiv.symm k
-  let ab := finProdFinEquiv.symm pq.2
-  if ab.1 = ab.2 then ((Real.sqrt x : ℂ)⁻¹) • A pq.1 else 0
+/-- Coordinate formula for `pairProdEquiv`. -/
+@[simp] theorem pairProdEquiv_apply (i j : Fin d) (a b : Fin x) :
+    pairProdEquiv d x (finProdFinEquiv (i, a), finProdFinEquiv (j, b)) = ((i, j), (a, b)) := by
+  simp [pairProdEquiv]
+
+/-- Lift a tensor by a normalized diagonal ancilla alphabet: the letter `(i, (a, b))` is
+`A i / √x` when `a = b` and zero otherwise. -/
+noncomputable def normalizedDiagonalLift {α : Type*} (A : MPTensor α (Fin D)) (x : ℕ) :
+    MPTensor (α × (Fin x × Fin x)) (Fin D) := fun p ↦
+  if p.2.1 = p.2.2 then ((Real.sqrt x : ℂ)⁻¹) • A p.1 else 0
 
 /-- Coordinate formula for the normalized diagonal lift. -/
-@[simp] theorem normalizedDiagonalLift_apply (A : MPSTensor (d * d) D) (x : ℕ)
-    (ij : Fin (d * d)) (a b : Fin x) :
-    normalizedDiagonalLift A x (finProdFinEquiv (ij, finProdFinEquiv (a, b))) =
-      if a = b then ((Real.sqrt x : ℂ)⁻¹) • A ij else 0 := by
-  simp [normalizedDiagonalLift]
+@[simp] theorem normalizedDiagonalLift_apply {α : Type*} (A : MPTensor α (Fin D)) (x : ℕ)
+    (i : α) (a b : Fin x) :
+    normalizedDiagonalLift A x (i, (a, b)) =
+      if a = b then ((Real.sqrt x : ℂ)⁻¹) • A i else 0 :=
+  rfl
 
 /-- The `x` copies of the squared normalization `1 / √x` sum to one. -/
 private theorem natCast_mul_sqrt_inv_mul_sqrt_inv {x : ℕ} (hx : 0 < x) :
@@ -135,22 +143,22 @@ private theorem natCast_mul_sqrt_inv_mul_sqrt_inv {x : ℕ} (hx : 0 < x) :
   simpa [mul_assoc] using hscale
 
 /-- A nonempty normalized diagonal ancilla leaves the transfer map unchanged. -/
-theorem transferMap_normalizedDiagonalLift (A : MPSTensor (d * d) D)
+theorem transferMap_normalizedDiagonalLift {α : Type*} [Fintype α] (A : MPTensor α (Fin D))
     (x : ℕ) (hx : 0 < x) :
     Kraus.transferMap (normalizedDiagonalLift A x) = Kraus.transferMap A := by
   classical
   apply LinearMap.ext
   intro X
   simp only [Kraus.transferMap_apply]
-  rw [← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]
+  rw [Fintype.sum_prod_type]
   apply Finset.sum_congr rfl
-  intro ij _
-  rw [← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]
+  intro i _
+  rw [Fintype.sum_prod_type]
   have hinner (a : Fin x) :
       (∑ b : Fin x,
-        normalizedDiagonalLift A x (finProdFinEquiv (ij, finProdFinEquiv (a, b))) * X *
-          (normalizedDiagonalLift A x (finProdFinEquiv (ij, finProdFinEquiv (a, b))))ᴴ) =
-        ((Real.sqrt x : ℂ)⁻¹ * (Real.sqrt x : ℂ)⁻¹) • (A ij * X * (A ij)ᴴ) := by
+        normalizedDiagonalLift A x (i, (a, b)) * X *
+          (normalizedDiagonalLift A x (i, (a, b)))ᴴ) =
+        ((Real.sqrt x : ℂ)⁻¹ * (Real.sqrt x : ℂ)⁻¹) • (A i * X * (A i)ᴴ) := by
     rw [Finset.sum_eq_single a]
     · simp [normalizedDiagonalLift_apply, Matrix.conjTranspose_smul,
         RCLike.star_def, Complex.conj_ofReal, smul_smul]
@@ -164,8 +172,8 @@ theorem transferMap_normalizedDiagonalLift (A : MPSTensor (d * d) D)
   rw [natCast_mul_sqrt_inv_mul_sqrt_inv hx, one_smul]
 
 /-- A nonempty normalized diagonal lift preserves tensor irreducibility. -/
-theorem isIrreducibleFamily_normalizedDiagonalLift
-    (A : MPSTensor (d * d) D) (x : ℕ) (hx : 0 < x)
+theorem isIrreducibleFamily_normalizedDiagonalLift {α : Type*}
+    (A : MPTensor α (Fin D)) (x : ℕ) (hx : 0 < x)
     (hA : Kraus.IsIrreducibleFamily A) :
     Kraus.IsIrreducibleFamily (normalizedDiagonalLift A x) := by
   classical
@@ -173,9 +181,9 @@ theorem isIrreducibleFamily_normalizedDiagonalLift
   apply hA
   rcases hInv with ⟨P, hP, hP0, hP1, hLower⟩
   refine ⟨P, hP, hP0, hP1, ?_⟩
-  intro ij
+  intro i
   let a : Fin x := ⟨0, hx⟩
-  have h := hLower (finProdFinEquiv (ij, finProdFinEquiv (a, a)))
+  have h := hLower (i, (a, a))
   simp only [normalizedDiagonalLift_apply] at h
   have hsqrt : ((Real.sqrt x : ℂ)⁻¹) ≠ 0 := by
     exact inv_ne_zero (by exact_mod_cast Real.sqrt_ne_zero'.2 (by exact_mod_cast hx))
@@ -183,8 +191,8 @@ theorem isIrreducibleFamily_normalizedDiagonalLift
   simpa [Matrix.mul_assoc] using h
 
 /-- A nonempty normalized diagonal lift preserves normal tensors. -/
-theorem isNormalTensor_normalizedDiagonalLift
-    {A : MPSTensor (d * d) D} (hA : MPTensor.IsNormalTensor A)
+theorem isNormalTensor_normalizedDiagonalLift {α : Type*} [Fintype α]
+    {A : MPTensor α (Fin D)} (hA : MPTensor.IsNormalTensor A)
     (x : ℕ) (hx : 0 < x) :
     MPTensor.IsNormalTensor (normalizedDiagonalLift A x) := by
   refine ⟨isIrreducibleFamily_normalizedDiagonalLift A x hx hA.no_invariant_proj, ?_, ?_⟩
@@ -194,20 +202,18 @@ theorem isNormalTensor_normalizedDiagonalLift
     exact hA.primitive_transfer
 
 /-- A nonempty normalized diagonal lift preserves left-canonical normalization. -/
-theorem leftCanonical_normalizedDiagonalLift
-    (A : MPSTensor (d * d) D) (x : ℕ) (hx : 0 < x)
+theorem leftCanonical_normalizedDiagonalLift {α : Type*} [Fintype α]
+    (A : MPTensor α (Fin D)) (x : ℕ) (hx : 0 < x)
     (hA : MPTensor.IsLeftCanonical A) :
     MPTensor.IsLeftCanonical (normalizedDiagonalLift A x) := by
   classical
-  rw [MPTensor.IsLeftCanonical, Kraus.IsTP, ← Equiv.sum_comp finProdFinEquiv,
-    Fintype.sum_prod_type]
-  apply Eq.trans (Finset.sum_congr rfl fun ij _ ↦ ?_) hA
-  rw [← Equiv.sum_comp finProdFinEquiv, Fintype.sum_prod_type]
+  rw [MPTensor.IsLeftCanonical, Kraus.IsTP, Fintype.sum_prod_type]
+  apply Eq.trans (Finset.sum_congr rfl fun i _ ↦ ?_) hA
+  rw [Fintype.sum_prod_type]
   have hinner (a : Fin x) :
       (∑ b : Fin x,
-        (normalizedDiagonalLift A x (finProdFinEquiv (ij, finProdFinEquiv (a, b))))ᴴ *
-          normalizedDiagonalLift A x (finProdFinEquiv (ij, finProdFinEquiv (a, b)))) =
-        ((Real.sqrt x : ℂ)⁻¹ * (Real.sqrt x : ℂ)⁻¹) • ((A ij)ᴴ * A ij) := by
+        (normalizedDiagonalLift A x (i, (a, b)))ᴴ * normalizedDiagonalLift A x (i, (a, b))) =
+        ((Real.sqrt x : ℂ)⁻¹ * (Real.sqrt x : ℂ)⁻¹) • ((A i)ᴴ * A i) := by
     rw [Finset.sum_eq_single a]
     · simp [normalizedDiagonalLift_apply, Matrix.conjTranspose_smul,
         RCLike.star_def, Complex.conj_ofReal, smul_smul]
@@ -219,39 +225,32 @@ theorem leftCanonical_normalizedDiagonalLift
     Finset.card_univ, Fintype.card_fin, ← Nat.cast_smul_eq_nsmul ℂ, smul_smul]
   rw [natCast_mul_sqrt_inv_mul_sqrt_inv hx, one_smul]
 
-/-- The normalized flattening after identity-ancilla attachment is the normalized
-original flattening with a diagonal ancilla, in the explicit doubled-index shuffle.
+/-- The normalized tensor after identity-ancilla attachment is the normalized original tensor
+with a diagonal ancilla, after regrouping the letters by `pairProdEquiv`.
 
 Source: arXiv:1703.09188, lines 706--724, together with equation `eq:transfer-op`,
 lines 336--340. -/
 theorem normalizedFlattening_tensorPhysicalId (U : MPOTensor d D)
     (x : ℕ) (_hx : 0 < x) :
     (tensorPhysicalId U x).normalizedFlattening =
-      Kraus.reindexPhysical (finDoubledProdEquiv d x)
+      Kraus.reindexPhysical (pairProdEquiv d x)
         (normalizedDiagonalLift U.normalizedFlattening x) := by
-  funext k
-  rcases finProdFinEquiv.surjective k with ⟨⟨ia, jb⟩, rfl⟩
+  funext ⟨ia, jb⟩
   rcases finProdFinEquiv.surjective ia with ⟨⟨i, a⟩, rfl⟩
   rcases finProdFinEquiv.surjective jb with ⟨⟨j, b⟩, rfl⟩
-  rw [show (tensorPhysicalId U x).normalizedFlattening
-      (finProdFinEquiv (finProdFinEquiv (i, a), finProdFinEquiv (j, b))) =
-        ((Real.sqrt (d * x) : ℂ)⁻¹) •
-          tensorPhysicalId U x (finProdFinEquiv (i, a), finProdFinEquiv (j, b)) by
-      simp [normalizedFlattening, MPOTensor.toMPSTensor]]
-  rw [show Kraus.reindexPhysical (finDoubledProdEquiv d x)
-      (normalizedDiagonalLift U.normalizedFlattening x)
-      (finProdFinEquiv (finProdFinEquiv (i, a), finProdFinEquiv (j, b))) =
-        normalizedDiagonalLift U.normalizedFlattening x
-          (finProdFinEquiv (finProdFinEquiv (i, j), finProdFinEquiv (a, b))) by
-      simp [Kraus.reindexPhysical]]
   ext β α
-  simp only [Matrix.smul_apply]
-  rw [tensorPhysicalId_apply, normalizedDiagonalLift_apply,
+  rw [show Kraus.reindexPhysical (pairProdEquiv d x)
+      (normalizedDiagonalLift U.normalizedFlattening x)
+      (finProdFinEquiv (i, a), finProdFinEquiv (j, b)) =
+        normalizedDiagonalLift U.normalizedFlattening x ((i, j), (a, b)) by
+      simp [Kraus.reindexPhysical]]
+  simp only [normalizedFlattening, Matrix.smul_apply]
+  rw [tensorPhysicalId_apply, normalizedDiagonalLift_apply, Nat.cast_mul,
     Real.sqrt_mul (by positivity)]
   push_cast
   rw [mul_inv]
   by_cases hab : a = b
-  · simp [hab, normalizedFlattening, MPOTensor.toMPSTensor, Matrix.smul_apply,
+  · simp [hab, normalizedFlattening, Matrix.smul_apply,
       mul_assoc, mul_comm]
   · simp [hab]
 
@@ -261,8 +260,8 @@ The retained dimensions, weights, ambient coisometry, and fixed-point matrices a
 physical letters are enlarged, so this does not identify source cuts or compact-SVD factors.
 
 Source: arXiv:1703.09188, lines 706--724; CFII is used as in lines 271--281. -/
-noncomputable def normalizedDiagonalLiftCFIIData
-    {A : MPSTensor (d * d) D} (data : MPSTensor.CPSVCanonicalFormIIData A)
+noncomputable def normalizedDiagonalLiftCFIIData {α : Type*} [Fintype α]
+    {A : MPTensor α (Fin D)} (data : MPSTensor.CPSVCanonicalFormIIData A)
     (x : ℕ) (hx : 0 < x) :
     MPSTensor.CPSVCanonicalFormIIData (normalizedDiagonalLift A x) where
   r := data.r
@@ -277,9 +276,7 @@ noncomputable def normalizedDiagonalLiftCFIIData
   ambient_coisometry := data.ambient_coisometry
   coisometric := data.coisometric
   reconstruct := by
-    intro q
-    rcases finProdFinEquiv.surjective q with ⟨⟨ij, ab⟩, rfl⟩
-    rcases finProdFinEquiv.surjective ab with ⟨⟨a, b⟩, rfl⟩
+    rintro ⟨ij, a, b⟩
     by_cases hab : a = b
     · subst b
       simp only [normalizedDiagonalLift_apply]
@@ -309,8 +306,8 @@ noncomputable def normalizedDiagonalLiftCFIIData
       exact hΛfix⟩
 
 /-- Full support is unchanged by the normalized diagonal lift. -/
-theorem hasFullSupport_normalizedDiagonalLiftCFIIData
-    {A : MPSTensor (d * d) D} (data : MPSTensor.CPSVCanonicalFormIIData A)
+theorem hasFullSupport_normalizedDiagonalLiftCFIIData {α : Type*} [Fintype α]
+    {A : MPTensor α (Fin D)} (data : MPSTensor.CPSVCanonicalFormIIData A)
     (hfull : data.toCPSVCanonicalFormData.HasFullSupport)
     (x : ℕ) (hx : 0 < x) :
     (normalizedDiagonalLiftCFIIData data x hx).toCPSVCanonicalFormData.HasFullSupport := by
@@ -320,9 +317,9 @@ theorem hasFullSupport_normalizedDiagonalLiftCFIIData
 /-- Construct canonical-form-II data for the normalized flattening after attaching a nonempty
 physical identity ancilla.
 
-The construction first uses the normalized diagonal lift and then the explicit doubled-physical
-shuffle. It preserves virtual canonical data, but makes no claim that source cuts, ranks, or chosen
-compact-SVD factors are unchanged.
+The construction first uses the normalized diagonal lift and then regroups the letters by
+`pairProdEquiv`. It preserves virtual canonical data, but makes no claim that source cuts, ranks, or
+chosen compact-SVD factors are unchanged.
 
 Source: arXiv:1703.09188, lines 706--724; CFII is used as in lines 271--281. -/
 noncomputable def tensorPhysicalIdCFIIData (U : MPOTensor d D)
@@ -331,7 +328,7 @@ noncomputable def tensorPhysicalIdCFIIData (U : MPOTensor d D)
     MPSTensor.CPSVCanonicalFormIIData (tensorPhysicalId U x).normalizedFlattening :=
   (normalizedFlattening_tensorPhysicalId U x hx).symm ▸
     (normalizedDiagonalLiftCFIIData data x hx).reindexPhysical
-      (finDoubledProdEquiv d x)
+      (pairProdEquiv d x)
 
 /-- Full support is preserved by physical identity-ancilla attachment.
 
@@ -346,10 +343,10 @@ theorem hasFullSupport_tensorPhysicalIdCFIIData (U : MPOTensor d D)
   let lifted := normalizedDiagonalLiftCFIIData data x hx
   have hlift : lifted.toCPSVCanonicalFormData.HasFullSupport :=
     hasFullSupport_normalizedDiagonalLiftCFIIData data hfull x hx
-  let shuffled := lifted.reindexPhysical (finDoubledProdEquiv d x)
+  let shuffled := lifted.reindexPhysical (pairProdEquiv d x)
   have hshuffle : shuffled.toCPSVCanonicalFormData.HasFullSupport :=
     MPTensor.CPSVCanonicalFormData.hasFullSupport_reindexPhysical
-      lifted.toCPSVCanonicalFormData hlift (finDoubledProdEquiv d x)
+      lifted.toCPSVCanonicalFormData hlift (pairProdEquiv d x)
   exact shuffled.hasFullSupport_cast hshuffle
     (normalizedFlattening_tensorPhysicalId U x hx)
 

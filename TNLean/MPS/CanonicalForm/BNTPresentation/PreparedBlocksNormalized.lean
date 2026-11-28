@@ -216,7 +216,7 @@ theorem exists_isLeftCanonicalBNTPresentation_afterBlocking_pos_normalized
     {d D : ℕ} (A : MPSTensor d D)
     (hNZ : ∃ N : ℕ, 0 < N ∧ ∃ σ : Fin N → Fin d, mpv A σ ≠ 0) :
     ∃ p : ℕ, 0 < p ∧ ∃ m : ℝ, 0 < m ∧
-      ∃ P : SectorDecomposition (blockPhysDim d p),
+      ∃ P : SectorDecomposition (Fin (blockPhysDim d p)),
         IsLeftCanonicalBNTPresentation P ∧
         (∀ j q, ‖P.weight j q‖ ≤ 1) ∧ (∃ j q, ‖P.weight j q‖ = 1) ∧
         ∀ N : ℕ, 0 < N → ∀ σ : Fin N → Fin (blockPhysDim d p),

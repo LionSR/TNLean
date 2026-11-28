@@ -262,7 +262,7 @@ private theorem canonical_index_eq_logb_of_isMPUSimple {U : MPOTensor d D}
 
 private theorem exists_cfii_simple_same_sourceRanks [NeZero d]
     {U : MPOTensor d D} (hU : IsMPU U)
-    (hI : Kraus.IsInjective U.toMPSTensor) (hS : IsMPUSimple U) :
+    (hI : Kraus.IsInjective U) (hS : IsMPUSimple U) :
     ∃ V : MPOTensor d D, ∃ _hV : IsMPUCanonicalFormII V,
       IsMPUSimple V ∧ r[V] = r[U] ∧ ℓ[V] = ℓ[U] ∧
         ∀ N : ℕ, 0 < N → mpo V N = mpo U N := by
@@ -288,7 +288,7 @@ tensor. Source: CPSV17, Theorem `ThmFund1`, lines 562--573; FBC25,
 arXiv:2502.20257, lines 1403--1407 and 1547. -/
 theorem IsMPU.rightRank_mul_leftRank_of_isInjective_of_isMPUSimple [NeZero d]
     {U : MPOTensor d D} (hU : IsMPU U)
-    (hI : Kraus.IsInjective U.toMPSTensor) (hS : IsMPUSimple U) :
+    (hI : Kraus.IsInjective U) (hS : IsMPUSimple U) :
     r[U] * ℓ[U] = d ^ 2 := by
   obtain ⟨V, hV, hS', hR, hL, _⟩ := exists_cfii_simple_same_sourceRanks hU hI hS
   have hprod := (hV.isMPUSimple_tfae.out 1 2).mp hS'
@@ -301,7 +301,7 @@ CPSV17, Definition `def:index` and Proposition `index-well-defined`,
 lines 681--704; FBC25, arXiv:2502.20257, line 1547. -/
 theorem IsMPU.index_eq_logb_of_isInjective_of_isMPUSimple [NeZero d] [NeZero D]
     {U : MPOTensor d D} (hU : IsMPU U)
-    (hI : Kraus.IsInjective U.toMPSTensor) (hS : IsMPUSimple U) :
+    (hI : Kraus.IsInjective U) (hS : IsMPUSimple U) :
     hU.index = (1 / 2 : ℝ) * (Real.logb 2 r[U] - Real.logb 2 ℓ[U]) := by
   obtain ⟨V, hV, hS', hR, hL, hMpo⟩ := exists_cfii_simple_same_sourceRanks hU hI hS
   rw [hU.index_eq_canonical_representative hV hMpo,

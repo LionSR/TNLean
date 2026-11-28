@@ -444,7 +444,7 @@ theorem not_approximationError_le_overlappingBlockTensor {lam₂ : ℂ} {γ : �
 /-- The canonical form of arXiv:2307.01696, eq. (S2), of `overlappingBlockTensor`: the basis of
 the two one-dimensional normal blocks `A_1 = (1, 0)` and `A_2 = (3/5, 4/5)`, each of
 multiplicity one with weight `μ_{j,1} = 1`. -/
-noncomputable abbrev overlappingBlockSector : SectorDecomposition 2 where
+noncomputable abbrev overlappingBlockSector : SectorDecomposition (Fin 2) where
   basisCount := 2
   basisDim := fun _ => 1
   basis := overlappingBlockBasis

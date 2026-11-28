@@ -850,7 +850,7 @@ Lemma~\ref{thm:mpdo_triple_fusion_comparison_final_sector_kronecker}.
 
 \begin{definition}[Common word selectors for the final labels]%
     \label{def:mpdo_final_label_selector_words}
-    \lean{MPOTensor.BNTFusionIsometryFamily.HasFinalLabelSelectorWords}
+    \lean{MPSTensor.HasBlockSelectorWords}
     \leanok
     As the finite-word form of the simultaneous inverse relation
     $B_d^+B_{d'}=\delta_{d,d'}1$ used in the fixed-channel argument of
@@ -900,8 +900,6 @@ Lemma~\ref{thm:mpdo_triple_fusion_comparison_final_sector_kronecker}.
 
 \begin{lemma}[Pair fusion completeness from a BNT]%
     \label{thm:mpdo_pair_fusion_bnt_completeness}
-    \lean{MPOTensor.BNTFusionIsometryFamily.%
-        hasFinalLabelSelectorWords_of_hasBlockSelectorWords}
     \lean{MPOTensor.BNTFusionIsometryFamily.%
         fusionIsometry_mul_conjTranspose_eq_one_of_bnt_of_lengthIndependent}
     \leanok

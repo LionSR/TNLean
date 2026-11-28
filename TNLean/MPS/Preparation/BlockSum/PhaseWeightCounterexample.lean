@@ -262,7 +262,7 @@ theorem not_approximationError_le_phaseBlockTensor {lam₂ : ℂ} (h0 : 0 < ‖l
 /-- The canonical form of arXiv:2307.01696, eq. (S2), of `phaseBlockTensor μ` for `μ ≠ 0`: the
 basis of the two one-dimensional normal blocks `A_1 = (1, 0)` and `A_2 = (0, 1)`, each of
 multiplicity one, with weights `μ_{1,1} = 1` and `μ_{2,1} = μ`. -/
-abbrev phaseBlockSector {μ : ℂ} (hμ : μ ≠ 0) : SectorDecomposition 2 :=
+abbrev phaseBlockSector {μ : ℂ} (hμ : μ ≠ 0) : SectorDecomposition (Fin 2) :=
   repeatedBlockBasisSector (fun _ => 1) (fun _ => Nat.one_pos) (phaseBlockWeight μ)
     (fun j _ => by
       fin_cases j

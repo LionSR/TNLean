@@ -297,10 +297,9 @@
     \label{thm:mpdo_twisted_dimer_horizontal_cf}
     \lean{MPOTensor.TwistedDimer.normalizedBlock}
     \lean{MPOTensor.TwistedDimer.normalizedBlock_apply}
-    \lean{MPOTensor.TwistedDimer.toMPSTensor_apply_finProdFinEquiv}
     \lean{MPOTensor.TwistedDimer.coef_flag_zero_ne_zero}
-    \lean{MPOTensor.TwistedDimer.block_toMPSTensor_isInjective}
-    \lean{MPOTensor.TwistedDimer.normalizedBlock_toMPSTensor_isInjective}
+    \lean{MPOTensor.TwistedDimer.block_isInjective}
+    \lean{MPOTensor.TwistedDimer.normalizedBlock_isInjective}
     \lean{MPOTensor.TwistedDimer.star_coef}
     \lean{MPOTensor.TwistedDimer.conjTranspose_mul_self_normalizedBlock}
     \lean{MPOTensor.TwistedDimer.rightBitEquiv}
@@ -317,9 +316,9 @@
     \lean{MPOTensor.TwistedDimer.ambientCoisometry_mul_conjTranspose}
     \lean{MPOTensor.TwistedDimer.conjTranspose_mul_mul_ambientCoisometry}
     \lean{MPOTensor.TwistedDimer.finSigmaFinEquiv_symm_retainedBondEquiv_symm}
-    \lean{MPOTensor.TwistedDimer.toMPSTensor_T_reconstruct}
+    \lean{MPOTensor.TwistedDimer.T_reconstruct}
     \lean{MPOTensor.TwistedDimer.canonicalFormData}
-    \lean{MPOTensor.TwistedDimer.T_toMPSTensor_isCPSVCanonicalForm}
+    \lean{MPOTensor.TwistedDimer.T_isCPSVCanonicalForm}
     \leanok
     \uses{def:mpdo_twisted_dimer_tensor,def:cpsv_canonical_form,def:nt_cpsv,def:left_canonical_tensor}
     Let $B_0$, $B_1$ denote the two horizontal blocks of the twisted quantum
@@ -385,7 +384,7 @@
     \lean{MPOTensor.TwistedDimer.blockedCanonicalFormData}
     \lean{MPOTensor.TwistedDimer.blockedCanonicalFormData_blocks}
     \lean{MPOTensor.TwistedDimer.%
-        doubledPhysTraceTransfer_blockedCanonicalFormData_blocks_one}
+        physTraceTransfer_blockedCanonicalFormData_blocks_one}
     \lean{MPOTensor.TwistedDimer.T_not_isSimple}
     \leanok
     \uses{def:mpdo_simple_tensor,def:mpdo_twisted_dimer_tensor}
@@ -396,7 +395,7 @@
     has nilpotent physical-trace transfer.
 \end{lemma}
 \begin{proof}\leanok
-    \uses{thm:mpdo_twisted_dimer_horizontal_cf,thm:cpsv_literal_canonical_form_positive_blocking,thm:cpsv_physical_reindexing,thm:mpdo_blocking_doubled_index,thm:cpsv_canonical_form_bnt_refinement,thm:cpsv_representative_sector_decomposition,thm:mpdo_bnt_nonnilpotency_independent,thm:mpdo_doubled_phys_trace_nilpotent_gauge_phase,lem:mpdo_doubled_phys_trace_transfer_to_mps,lem:mpdo_phys_trace_transfer_blocking}
+    \uses{thm:mpdo_twisted_dimer_horizontal_cf,thm:cpsv_literal_canonical_form_positive_blocking,thm:cpsv_physical_reindexing,thm:mpdo_blocking_doubled_index,thm:cpsv_canonical_form_bnt_refinement,thm:cpsv_representative_sector_decomposition,thm:mpdo_bnt_nonnilpotency_independent,thm:mpdo_phys_trace_nilpotent_gauge_phase,lem:mpdo_phys_trace_transfer_blocking}
     Fix $L>0$ and a presentation $P$. Blocking the canonical form of
     Lemma~\ref{thm:mpdo_twisted_dimer_horizontal_cf} by $L$ sites
     (Lemma~\ref{thm:cpsv_literal_canonical_form_positive_blocking}) and
@@ -413,9 +412,8 @@
     every retained block is related to the representative of its phase class
     by a similarity transformation and a phase.
     The blocked $\widehat B_1$ has vanishing physical-trace
-    transfer by Lemma~\ref{lem:mpdo_phys_trace_transfer_blocking} together
-    with Lemma~\ref{lem:mpdo_doubled_phys_trace_transfer_to_mps}, so by
-    Lemma~\ref{thm:mpdo_doubled_phys_trace_nilpotent_gauge_phase} the
+    transfer by Lemma~\ref{lem:mpdo_phys_trace_transfer_blocking}, so by
+    Lemma~\ref{thm:mpdo_phys_trace_nilpotent_gauge_phase} the
     representative of its phase class has nilpotent physical-trace transfer.
     Lemma~\ref{thm:mpdo_bnt_nonnilpotency_independent} transfers this to
     $P$.
@@ -626,7 +624,6 @@
 
 \begin{lemma}[Doubled-index matrices and their rank-one factorization]
     \label{lem:mpdo_bnt_label_rescaling_stable_doubled_letter_factorization}
-    \lean{MPOTensor.RescalingStableLengthDependentRFP.toMPSTensor_R_apply}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.R_eq_vecMulVec}
     \leanok
     \uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence}
@@ -653,7 +650,7 @@
 \begin{lemma}[Rank-one form of the dimer transfer map]
     \label{lem:mpdo_bnt_label_rescaling_stable_transfer_rank_one}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
-        transferMap_R_toMPSTensor_eq}
+        transferMap_R_eq}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.cFun_fixedDiag}
     \leanok
     \uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence}
@@ -688,7 +685,7 @@
 \begin{lemma}[One-site transfer quasi-idempotence of the dimer tensor]
     \label{lem:mpdo_bnt_label_rescaling_stable_transfer_quasi_idempotent}
     \lean{MPOTensor.RescalingStableLengthDependentRFP.%
-        transferMap_R_toMPSTensor_idem}
+        transferMap_R_idem}
     \leanok
     \uses{thm:mpdo_bnt_label_rescaling_stable_length_dependence}
     The transfer map of the dimer tensor $R$ satisfies

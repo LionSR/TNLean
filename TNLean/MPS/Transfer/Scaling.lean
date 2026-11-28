@@ -25,7 +25,8 @@ namespace MPSTensor
 variable {d D : ℕ}
 
 /-- Scaling an MPS tensor by `c` scales the transfer map by `c * star c`. -/
-theorem transferMap_smul (c : ℂ) (A : MPSTensor d D) (X : Matrix (Fin D) (Fin D) ℂ) :
+theorem transferMap_smul (c : ℂ) {α : Type*} [Fintype α] (A : MPTensor α (Fin D))
+    (X : Matrix (Fin D) (Fin D) ℂ) :
     Kraus.transferMap (fun i => c • A i) X = (c * starRingEnd ℂ c) • Kraus.transferMap A X := by
   simp only [Kraus.transferMap_apply, Matrix.conjTranspose_smul]
   simp_rw [smul_mul_assoc, mul_smul_comm, smul_smul, ← Finset.smul_sum]
@@ -158,12 +159,13 @@ theorem phase_norm_one {μ : ℂ} (hμ : μ ≠ 0) :
 
 /-- Multiplying every block weight by the same scalar multiplies length-`N`
 MPV coefficients by `c ^ N`. -/
-theorem mpv_toTensorFromBlocks_weight_mul_left {r : ℕ} {dim : Fin r → ℕ}
-    (c : ℂ) (μ : Fin r → ℂ)
-    (A : (k : Fin r) → MPSTensor d (dim k))
-    {N : ℕ} (σ : Fin N → Fin d) :
-    mpv (toTensorFromBlocks (α := Fin d) (μ := fun k => c * μ k) A) σ =
-      c ^ N * mpv (toTensorFromBlocks (α := Fin d) (μ := μ) A) σ := by
+theorem mpv_toTensorFromBlocks_weight_mul_left {α : Type*} [Finite α] {r : ℕ}
+    {dim : Fin r → ℕ} (c : ℂ) (μ : Fin r → ℂ)
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
+    {N : ℕ} (σ : Fin N → α) :
+    mpv (toTensorFromBlocks (μ := fun k => c * μ k) A) σ =
+      c ^ N * mpv (toTensorFromBlocks (μ := μ) A) σ := by
+  have := Fintype.ofFinite α
   rw [mpv_toTensorFromBlocks_eq_sum, mpv_toTensorFromBlocks_eq_sum]
   rw [Finset.mul_sum]
   refine Finset.sum_congr rfl fun k _ => ?_

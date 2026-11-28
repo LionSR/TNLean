@@ -292,7 +292,7 @@ private theorem spinPairEquiv_apply {d k : ℕ} (z : Fin k → Fin d × Fin d)
     omega
   simp [spinPairEquiv, twoSiteChainConfigEquiv, twoSitePairConfigEquiv,
     Kraus.blockedConfigEquiv, twoSiteBlockEquiv, Equiv.arrowCongr,
-    Equiv.curry, hr]
+    Kraus.blockConfigEquiv_apply, Function.comp_apply, hr]
 
 private theorem spinPairEquiv_even {d k : ℕ} (z : Fin k → Fin d × Fin d) (a : Fin k) :
     spinPairEquiv d k z ⟨2 * a.val, by have := a.isLt; omega⟩ = (z a).1 := by

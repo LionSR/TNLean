@@ -32,7 +32,7 @@ cyclic convention `CZ_{1,1} = Z` at `N = 1`; the gate product itself is not form
 
 * `CZYCompression.czyIntTensor`, `CZYCompression.czyTensor`: the bond-two tensor `A_1`.
 * `CZYCompression.czySquareInt`, `CZYCompression.czySquare`: the stacked bond-four tensor
-  `Ã_0` in the pair-alphabet view.
+  `Ã_0`.
 
 ## Main results
 
@@ -59,14 +59,14 @@ open MPSTensor
 
 /-- The integer tensor `A_1` of the CZY symmetry: `A_1^{01} = [[1,1],[0,0]]`,
 `A_1^{10} = [[0,0],[-1,1]]`, and zero otherwise (arXiv:2509.03600, main.tex lines 203–218). -/
-def czyIntTensor : Fin 2 → Fin 2 → Matrix (Fin 2) (Fin 2) ℤ
-  | 0, 1 => !![1, 1; 0, 0]
-  | 1, 0 => !![0, 0; -1, 1]
-  | _, _ => 0
+def czyIntTensor : Fin 2 × Fin 2 → Matrix (Fin 2) (Fin 2) ℤ
+  | (0, 1) => !![1, 1; 0, 0]
+  | (1, 0) => !![0, 0; -1, 1]
+  | _ => 0
 
 /-- The CZY tensor `A_1` as a matrix product operator tensor (arXiv:2509.03600, main.tex
 lines 203–218). -/
-def czyTensor : MPOTensor 2 2 := Function.uncurry fun i j => complexOfInt (czyIntTensor i j)
+def czyTensor : MPOTensor 2 2 := fun ij => complexOfInt (czyIntTensor ij)
 
 /-- The bond-two coordinates of `A_1`: the output `i` is the flip of the input `j`, the
 incoming bond is forced to be `i`, and the outgoing bond `r` contributes `(-1)^{i (1 - r)}`. -/
@@ -91,22 +91,19 @@ theorem mpo_czyTensor_apply {N : ℕ} [NeZero N] (s t : Fin N → Fin 2) :
 dimension four, in the pair-alphabet order `(0,0), (0,1), (1,0), (1,1)`: the letter `(0,0)` is
 `A_1^{01} ⊗ A_1^{10}`, the letter `(1,1)` is `A_1^{10} ⊗ A_1^{01}`, and the mixed letters vanish
 (arXiv:2509.03600, main.tex lines 219–223). -/
-def czySquareInt : Fin 4 → Matrix (Fin 4) (Fin 4) ℤ
-  | 0 => !![0, 0, 0, 0; -1, 1, -1, 1; 0, 0, 0, 0; 0, 0, 0, 0]
-  | 1 => 0
-  | 2 => 0
-  | 3 => !![0, 0, 0, 0; 0, 0, 0, 0; -1, -1, 1, 1; 0, 0, 0, 0]
+def czySquareInt : Fin 2 × Fin 2 → Matrix (Fin 4) (Fin 4) ℤ
+  | (0, 0) => !![0, 0, 0, 0; -1, 1, -1, 1; 0, 0, 0, 0; 0, 0, 0, 0]
+  | (0, 1) => 0
+  | (1, 0) => 0
+  | (1, 1) => !![0, 0, 0, 0; 0, 0, 0, 0; -1, -1, 1, 1; 0, 0, 0, 0]
 
-/-- The stacked tensor `Ã_0` in the pair-alphabet view (arXiv:2509.03600, main.tex
-lines 219–223). -/
-def czySquare : MPSTensor 4 4 := (MPOTensor.mulTensor czyTensor czyTensor).toMPSTensor
+/-- The stacked tensor `Ã_0` (arXiv:2509.03600, main.tex lines 219–223). -/
+def czySquare : MPOTensor 2 4 := MPOTensor.mulTensor czyTensor czyTensor
 
-theorem czySquare_eq (a : Fin 4) : czySquare a = complexOfInt (czySquareInt a) := by
-  have h : czySquare a = complexOfInt (mulIntTensor czyIntTensor czyIntTensor
-      (Fin.divNat (m := 2) (n := 2) a) (Fin.modNat (m := 2) (n := 2) a)) :=
-    mulTensor_complexOfRing _ czyIntTensor czyIntTensor _ _
-  have hint : ∀ b : Fin 4, mulIntTensor czyIntTensor czyIntTensor
-      (Fin.divNat (m := 2) (n := 2) b) (Fin.modNat (m := 2) (n := 2) b) = czySquareInt b := by
+theorem czySquare_eq (a : Fin 2 × Fin 2) : czySquare a = complexOfInt (czySquareInt a) := by
+  have h : czySquare a = complexOfInt (mulIntTensor czyIntTensor czyIntTensor a) :=
+    mulTensor_complexOfRing _ czyIntTensor czyIntTensor a
+  have hint : ∀ b, mulIntTensor czyIntTensor czyIntTensor b = czySquareInt b := by
     decide
   rw [h, hint]
 

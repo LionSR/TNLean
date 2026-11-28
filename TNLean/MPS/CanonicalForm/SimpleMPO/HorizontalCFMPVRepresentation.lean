@@ -9,7 +9,7 @@ import TNLean.MPS.CanonicalForm.BlockSeparation.PostBlockedRepresentativeSpan
 # MPV representation associated with horizontal canonical form
 
 The literal horizontal canonical form of an MPO includes a bond-space gauge
-which identifies its doubled-index letters with repeated weighted copies of a
+which identifies its pair-alphabet letters with repeated weighted copies of a
 minimal basis of normal tensors.  This file records only the resulting equality
 of positive-length MPV families.  Thus it does not include the literal gauge
 data of arXiv:1606.00608, equation `eq:II_ABasicTensors`, lines 283--297.
@@ -41,7 +41,7 @@ trace-separation argument; no per-copy separation hypothesis is imposed.
   two first-site identities with a common left action give equality of the
   other two insertions on every BNT representative.
 * `MPOTensor.basis_opposite_insert_eq_of_rotated_mpo_entries`: the preceding
-  statement for the three doubled-index contractions of Proposition 4.13.
+  statement for the three pair-alphabet contractions of Proposition 4.13.
 -/
 
 open scoped Matrix BigOperators
@@ -52,7 +52,7 @@ variable {d D : ℕ}
 
 /-- MPV-level representation associated with a horizontal canonical form.
 
-The doubled-index tensor is represented by a minimal basis of normal tensors
+The tensor on the pair alphabet is represented by a minimal basis of normal tensors
 with nonzero weighted copies.  Copies over the same representative are grouped
 by the coefficients \(\sum_q\mu_{j,q}^N\), as in arXiv:1606.00608,
 equation `decBSV`, lines 298--301.
@@ -61,14 +61,14 @@ This predicate asserts equality of positive-length MPV families.  It does not
 include the literal bond-space gauge of equation `eq:II_ABasicTensors`,
 lines 283--297. -/
 def HasHorizontalCFMPVRepresentation (M : MPOTensor d D) : Prop :=
-  ∃ P : MPSTensor.SectorDecomposition (d * d),
-    MPSTensor.IsLeftCanonicalBNTPresentation P ∧ MPTensor.SameMPV₂Pos M.toMPSTensor P.toTensor
+  ∃ P : MPSTensor.SectorDecomposition (Fin d × Fin d),
+    MPSTensor.IsLeftCanonicalBNTPresentation P ∧ MPTensor.SameMPV₂Pos M P.toTensor
 
 end MPOTensor
 
 namespace MPSTensor.IsLeftCanonicalBNTPresentation
 
-variable {d : ℕ} {P : SectorDecomposition d}
+variable {α : Type*} [Fintype α] {P : SectorDecomposition α}
 
 /-- If two first-site identities have the same left action, then the other two
 insertions agree on every basis-of-normal-tensors representative.
@@ -79,7 +79,7 @@ to both identities and gives the conclusion without separating repeated
 copies.  Source: arXiv:1606.00608, Appendix C.3, Lemma L, lines 1835--1858. -/
 theorem insertedTensor_basis_eq_of_two_firstSiteActionAgree
     (hCF : IsLeftCanonicalBNTPresentation P)
-    {Yleft Ycorner Yright : Matrix (Fin d) (Fin d) ℂ}
+    {Yleft Ycorner Yright : Matrix α α ℂ}
     (hInv : FirstSiteActionAgree P.toTensor Yleft Ycorner)
     (hPos : FirstSiteActionAgree P.toTensor Yleft Yright) :
     ∀ j, insertedTensor Yright (P.basis j) = insertedTensor Ycorner (P.basis j) := by
@@ -95,7 +95,7 @@ variable {d D : ℕ}
 /-- The three first-site contractions in Proposition 4.13 agree on every
 basis-of-normal-tensors representative.
 
-Let \(Y_L,Y_C,Y_R\) denote the doubled-index matrices representing
+Let \(Y_L,Y_C,Y_R\) denote the pair-alphabet matrices representing
 \(PH^{(N)}\), \(PH^{(N)}P\), and \(H^{(N)}P\), respectively.  If the first
 contraction agrees with each of the other two at every length, then
 \(Y_RA_j=Y_CA_j\) for every minimal representative \(A_j\) in the BNT MPV
@@ -104,25 +104,25 @@ representation.
 Source: arXiv:1606.00608, Proposition 4.13, lines 1873--1887, using the
 representative-grouped Lemma L at Appendix C.3, lines 1835--1858. -/
 theorem basis_opposite_insert_eq_of_rotated_mpo_entries
-    (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (d * d))
+    (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
     (hCF : MPSTensor.IsLeftCanonicalBNTPresentation S)
-    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (hM : MPTensor.SameMPV₂Pos M S.toTensor)
     (P : Matrix (Fin d) (Fin d) ℂ)
-    (hInv : ∀ (N : ℕ) (ρ : Fin (N + 1) → Fin (d * d)),
-      (∑ i : Fin d, P (ρ 0).divNat i *
-        mpo M (N + 1) (Fin.cons i (fun n ↦ (ρ (Fin.succ n)).divNat))
-          (Fin.cons (ρ 0).modNat (fun n ↦ (ρ (Fin.succ n)).modNat)) =
-      ∑ i : Fin d, ∑ j : Fin d, P (ρ 0).divNat i *
-        mpo M (N + 1) (Fin.cons i (fun n ↦ (ρ (Fin.succ n)).divNat))
-          (Fin.cons j (fun n ↦ (ρ (Fin.succ n)).modNat)) * P j (ρ 0).modNat))
-    (hComm : ∀ (N : ℕ) (ρ : Fin (N + 1) → Fin (d * d)),
-      (∑ i : Fin d, P (ρ 0).divNat i *
-        mpo M (N + 1) (Fin.cons i (fun n ↦ (ρ (Fin.succ n)).divNat))
-          (Fin.cons (ρ 0).modNat (fun n ↦ (ρ (Fin.succ n)).modNat)) =
+    (hInv : ∀ (N : ℕ) (ρ : Fin (N + 1) → Fin d × Fin d),
+      (∑ i : Fin d, P (ρ 0).1 i *
+        mpo M (N + 1) (Fin.cons i (fun n ↦ (ρ (Fin.succ n)).1))
+          (Fin.cons (ρ 0).2 (fun n ↦ (ρ (Fin.succ n)).2)) =
+      ∑ i : Fin d, ∑ j : Fin d, P (ρ 0).1 i *
+        mpo M (N + 1) (Fin.cons i (fun n ↦ (ρ (Fin.succ n)).1))
+          (Fin.cons j (fun n ↦ (ρ (Fin.succ n)).2)) * P j (ρ 0).2))
+    (hComm : ∀ (N : ℕ) (ρ : Fin (N + 1) → Fin d × Fin d),
+      (∑ i : Fin d, P (ρ 0).1 i *
+        mpo M (N + 1) (Fin.cons i (fun n ↦ (ρ (Fin.succ n)).1))
+          (Fin.cons (ρ 0).2 (fun n ↦ (ρ (Fin.succ n)).2)) =
       ∑ j : Fin d,
         mpo M (N + 1)
-          (Fin.cons (ρ 0).divNat (fun n ↦ (ρ (Fin.succ n)).divNat))
-          (Fin.cons j (fun n ↦ (ρ (Fin.succ n)).modNat)) * P j (ρ 0).modNat)) :
+          (Fin.cons (ρ 0).1 (fun n ↦ (ρ (Fin.succ n)).1))
+          (Fin.cons j (fun n ↦ (ρ (Fin.succ n)).2)) * P j (ρ 0).2)) :
     ∀ k, MPSTensor.insertedTensor (MPSTensor.braRightAction P) (S.basis k) =
       MPSTensor.insertedTensor (MPSTensor.ketLeftBraRightAction P) (S.basis k) := by
   exact hCF.insertedTensor_basis_eq_of_two_firstSiteActionAgree

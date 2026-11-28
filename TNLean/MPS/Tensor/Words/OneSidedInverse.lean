@@ -83,20 +83,21 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
+omit [Fintype α] in
 /-- The two-letter products through any nonzero insertion span the full
 matrix algebra. Source: arXiv:2203.12563, Section 5, line 1690. -/
 theorem span_range_insertedLetters_eq_top
-    (A : MPSTensor d D) (hA : Kraus.IsInjective A)
+    (A : MPTensor α (Fin D)) (hA : Kraus.IsInjective A)
     (W : Matrix (Fin D) (Fin D) ℂ) (hW : W ≠ 0) :
-    Submodule.span ℂ (Set.range fun ij : Fin d × Fin d => A ij.1 * W * A ij.2) = ⊤ := by
+    Submodule.span ℂ (Set.range fun ij : α × α => A ij.1 * W * A ij.2) = ⊤ := by
   have hspan := span_range_evalWord_mul_nonzero_mul_evalWord_eq_top
     (Kraus.isNBlkInjective_one_of_isInjective hA) hW
   have hrange :
-      Set.range (fun uv : (Fin 1 → Fin d) × (Fin 1 → Fin d) =>
+      Set.range (fun uv : (Fin 1 → α) × (Fin 1 → α) =>
         Kraus.evalWord A (List.ofFn uv.1) * W * Kraus.evalWord A (List.ofFn uv.2)) =
-      Set.range (fun ij : Fin d × Fin d => A ij.1 * W * A ij.2) := by
+      Set.range (fun ij : α × α => A ij.1 * W * A ij.2) := by
     ext M
     constructor
     · rintro ⟨⟨u, v⟩, rfl⟩
@@ -110,13 +111,13 @@ matrices \(R_j\) with \(\sum_j R_j W A^j=I\). This follows from the actual
 full two-sided span, not from an assumed inverse of \(W\).
 Source: arXiv:2203.12563, Section 5, lines 1690–1692. -/
 theorem exists_leftInverse_insertedLetters
-    (A : MPSTensor d D) (hA : Kraus.IsInjective A)
+    (A : MPTensor α (Fin D)) (hA : Kraus.IsInjective A)
     (W : Matrix (Fin D) (Fin D) ℂ) (hW : W ≠ 0) :
-    ∃ R : Fin d → Matrix (Fin D) (Fin D) ℂ, ∑ j, R j * W * A j = 1 := by
+    ∃ R : α → Matrix (Fin D) (Fin D) ℂ, ∑ j, R j * W * A j = 1 := by
   classical
   have hsurj :=
     (span_range_eq_top_iff_surjective_fintypeLinearCombination ℂ
-      (fun ij : Fin d × Fin d => A ij.1 * W * A ij.2)).mp
+      (fun ij : α × α => A ij.1 * W * A ij.2)).mp
       (span_range_insertedLetters_eq_top A hA W hW)
   obtain ⟨c, hc⟩ := hsurj 1
   have hc' : ∑ i, ∑ j, c (i, j) • (A i * W * A j) = 1 := by
@@ -148,19 +149,21 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
+omit [Fintype α] in
 /-- If `A` is injective and `A`, `B` generate the same MPV family,
 then there exists a unique linear map $T : \MN{D} \to \MN{D}$
 satisfying $T(A^i) = B^i$ for all $i$. -/
-theorem linearExtension_exists_unique {A B : MPSTensor d D}
+theorem linearExtension_exists_unique [Finite α] {A B : MPTensor α (Fin D)}
     (hA : Kraus.IsInjective A) (hAB : SameMPV A B) :
     ∃! T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ,
-      (∀ i : Fin d, T (A i) = B i) := by
+      (∀ i : α, T (A i) = B i) := by
   classical
+  have := Fintype.ofFinite α
   -- Shorthand for the key linear maps.
-  let ΦA := traceMulRightPi (d := d) (D := D) A
-  let ΦB := traceMulRightPi (d := d) (D := D) B
+  let ΦA := traceMulRightPi (D := D) A
+  let ΦB := traceMulRightPi (D := D) B
   let lcA := Fintype.linearCombination ℂ A
   let lcB := Fintype.linearCombination ℂ B
   have hSurj_lcA : Function.Surjective lcA :=
@@ -184,7 +187,7 @@ theorem linearExtension_exists_unique {A B : MPSTensor d D}
   -- Choose a left inverse `g` of `ΦB`.
   obtain ⟨g, hg⟩ := ΦB.exists_leftInverse_of_injective hKerΦB
   let T := g.comp ΦA
-  have hT : ∀ i : Fin d, T (A i) = B i := by
+  have hT : ∀ i : α, T (A i) = B i := by
     intro i
     have hΦ : ΦA (A i) = ΦB (B i) := by
       ext j; change traceMulRightPi A (A i) j = traceMulRightPi B (B i) j
@@ -194,18 +197,19 @@ theorem linearExtension_exists_unique {A B : MPSTensor d D}
   refine ⟨T, hT, fun T' hT' =>
     LinearMap.ext_on_range (hv := hA.span_eq_top) fun i => by simp [hT' i, hT i]⟩
 
+omit [Fintype α] in
 /-- If `A` is injective, `A` and `B` generate the same MPV family, and
 $T : \MN{D} \to \MN{D}$ is the linear map satisfying $T(A^i) = B^i$ for all $i$,
 then $T(MN) = T(M) T(N)$ for all $M, N \in \MN{D}$. -/
-theorem linearExtension_mul {A B : MPSTensor d D}
+theorem linearExtension_mul {A B : MPTensor α (Fin D)}
     (hA : Kraus.IsInjective A) (hAB : SameMPV A B)
     {T : Matrix (Fin D) (Fin D) ℂ →ₗ[ℂ] Matrix (Fin D) (Fin D) ℂ}
-    (hT : ∀ i : Fin d, T (A i) = B i) :
+    (hT : ∀ i : α, T (A i) = B i) :
     ∀ M N : Matrix (Fin D) (Fin D) ℂ, T (M * N) = T M * T N := by
   classical
-  let ΦA := traceMulRightPi (d := d) (D := D) A
-  let ΦB := traceMulRightPi (d := d) (D := D) B
-  have htr3 : ∀ i j k : Fin d,
+  let ΦA := traceMulRightPi (D := D) A
+  let ΦB := traceMulRightPi (D := D) B
+  have htr3 : ∀ i j k : α,
       Matrix.trace (A i * A j * A k) = Matrix.trace (B i * B j * B k) := fun i j k =>
     by simpa [Kraus.evalWord, Matrix.mul_assoc] using hAB.trace_evalWord [i, j, k]
   have hΦComp : (ΦB ∘ₗ T) = ΦA :=
@@ -216,7 +220,7 @@ theorem linearExtension_mul {A B : MPSTensor d D}
     simpa [hΦComp] using LinearMap.range_comp_le_range T ΦB
   have hΦB_inj : Function.Injective ΦB :=
     LinearMap.ker_eq_bot.1 (ker_bot_of_range_le ΦA ΦB (traceMulRightPi_ker_eq_bot hA) hRangeLe)
-  have hMul_gen : ∀ i j : Fin d, T (A i * A j) = B i * B j := by
+  have hMul_gen : ∀ i j : α, T (A i * A j) = B i * B j := by
     intro i j; apply hΦB_inj; ext k
     have h1 : ΦB (T (A i * A j)) k = ΦA (A i * A j) k := by
       simpa using congrArg (· k) (congrArg (· (A i * A j)) hΦComp)
@@ -255,13 +259,13 @@ open scoped Matrix
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} {D : ℕ}
 
 /-- Internal insertion trace agreement implies equality of the mixed products
 `A₂ j * A₁ i = B₂ j * B₁ i` for all physical indices. -/
   lemma internal_products_eq
-    (A₁ A₂ B₁ B₂ : MPSTensor d D)
-    (hInt : ∀ (X : Matrix (Fin D) (Fin D) ℂ) (i j : Fin d),
+    (A₁ A₂ B₁ B₂ : MPTensor α (Fin D))
+    (hInt : ∀ (X : Matrix (Fin D) (Fin D) ℂ) (i j : α),
       Matrix.trace (A₁ i * X * A₂ j) = Matrix.trace (B₁ i * X * B₂ j)) :
     ∀ i j, A₂ j * A₁ i = B₂ j * B₁ i := by
   intro i j
@@ -283,8 +287,8 @@ variable {d D : ℕ}
 /-- External insertion trace agreement implies equality of the mixed products
 `A₁ i * A₂ j = B₁ i * B₂ j` for all physical indices. -/
   lemma external_products_eq
-    (A₁ A₂ B₁ B₂ : MPSTensor d D)
-    (hExt : ∀ (Y : Matrix (Fin D) (Fin D) ℂ) (i j : Fin d),
+    (A₁ A₂ B₁ B₂ : MPTensor α (Fin D))
+    (hExt : ∀ (Y : Matrix (Fin D) (Fin D) ℂ) (i j : α),
       Matrix.trace (A₂ j * Y * A₁ i) = Matrix.trace (B₂ j * Y * B₁ i)) :
     ∀ i j, A₁ i * A₂ j = B₁ i * B₂ j := by
   intro i j
@@ -305,17 +309,18 @@ variable {d D : ℕ}
 
 /-- Lemma 2 of arXiv:1804.04964 (2-site case): two injective tensor pairs that
 agree under all virtual insertions on both bonds are proportional. -/
-theorem tensor_proportional
-    (A₁ A₂ B₁ B₂ : MPSTensor d D)
+theorem tensor_proportional [Finite α]
+    (A₁ A₂ B₁ B₂ : MPTensor α (Fin D))
     (hD : 0 < D)
     (hA₁ : Kraus.IsInjective A₁) (hA₂ : Kraus.IsInjective A₂)
     (hB₁ : Kraus.IsInjective B₁) (hB₂ : Kraus.IsInjective B₂)
-    (hInt : ∀ (X : Matrix (Fin D) (Fin D) ℂ) (i j : Fin d),
+    (hInt : ∀ (X : Matrix (Fin D) (Fin D) ℂ) (i j : α),
       Matrix.trace (A₁ i * X * A₂ j) = Matrix.trace (B₁ i * X * B₂ j))
-    (hExt : ∀ (Y : Matrix (Fin D) (Fin D) ℂ) (i j : Fin d),
+    (hExt : ∀ (Y : Matrix (Fin D) (Fin D) ℂ) (i j : α),
       Matrix.trace (A₂ j * Y * A₁ i) = Matrix.trace (B₂ j * Y * B₁ i)) :
     ∃ (lambda_ : ℂ), lambda_ ≠ 0 ∧
       (∀ i, A₁ i = lambda_ • B₁ i) ∧ (∀ j, A₂ j = lambda_⁻¹ • B₂ j) := by
+  have := Fintype.ofFinite α
   -- Step 1: From trace conditions, derive matrix product equalities.
   have hProdL : ∀ i j, A₂ j * A₁ i = B₂ j * B₁ i :=
     internal_products_eq A₁ A₂ B₁ B₂ hInt

@@ -58,14 +58,14 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} {D : ℕ}
 
 /-! ### The involution index `X X* = ±1` -/
 
 /-- Core of the index lemmas: if applying a symmetry twice returns
 `Aⁱ = c (X X*)† Aⁱ (X X*)` for a unitary `X` and a normal tensor `A`, then
 `X X* = ±1`. -/
-theorem mul_map_star_eq_one_or_neg_one_of_twice [NeZero D] {A : MPSTensor d D}
+theorem mul_map_star_eq_one_or_neg_one_of_twice [NeZero D] {A : MPTensor α (Fin D)}
     (hA : Kraus.IsNormal A) (X : Matrix.unitaryGroup (Fin D) ℂ) {c : ℂ}
     (h : ∀ i, A i = c • (((X : Matrix (Fin D) (Fin D) ℂ) *
       (X : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ))ᴴ * A i *
@@ -118,10 +118,10 @@ private lemma conjTranspose_mul_map_star (M : Matrix (Fin D) (Fin D) ℂ) :
   rw [Matrix.conjTranspose_mul]; congr 1
 
 /-- Applying the antiunitary twist `Bⁱ ↦ ∑ⱼ Pᵢⱼ B*ʲ` twice is the linear twist by `P P*`. -/
-private lemma antiunitaryTwist_twice (A : MPSTensor d D) (P : Matrix (Fin d) (Fin d) ℂ)
-    (i : Fin d) :
-    ∑ j : Fin d, P i j • (∑ k : Fin d, P j k • (A k).map (starRingEnd ℂ)).map (starRingEnd ℂ) =
-      ∑ k : Fin d, (P * P.map (starRingEnd ℂ)) i k • A k := by
+private lemma antiunitaryTwist_twice [Fintype α] (A : MPTensor α (Fin D)) (P : Matrix α α ℂ)
+    (i : α) :
+    ∑ j : α, P i j • (∑ k : α, P j k • (A k).map (starRingEnd ℂ)).map (starRingEnd ℂ) =
+      ∑ k : α, (P * P.map (starRingEnd ℂ)) i k • A k := by
   ext a b
   simp only [Matrix.sum_apply, Matrix.smul_apply, Matrix.map_apply, smul_eq_mul, map_sum,
     map_mul, Complex.conj_conj, Matrix.mul_apply, Finset.mul_sum, Finset.sum_mul]
@@ -131,9 +131,10 @@ private lemma antiunitaryTwist_twice (A : MPSTensor d D) (P : Matrix (Fin d) (Fi
 
 /-- If `P P* = 1`, applying the antiunitary twist `Bⁱ ↦ ∑ⱼ Pᵢⱼ B*ʲ` twice is the
 identity. -/
-private lemma antiunitaryTwist_twice_of_mul_map_star_eq_one (A : MPSTensor d D)
-    {P : Matrix (Fin d) (Fin d) ℂ} (hP : P * P.map (starRingEnd ℂ) = 1) (i : Fin d) :
-    ∑ j : Fin d, P i j • (∑ k : Fin d, P j k • (A k).map (starRingEnd ℂ)).map (starRingEnd ℂ) =
+private lemma antiunitaryTwist_twice_of_mul_map_star_eq_one [Fintype α] [DecidableEq α]
+    (A : MPTensor α (Fin D))
+    {P : Matrix α α ℂ} (hP : P * P.map (starRingEnd ℂ) = 1) (i : α) :
+    ∑ j : α, P i j • (∑ k : α, P j k • (A k).map (starRingEnd ℂ)).map (starRingEnd ℂ) =
       A i := by
   have h1 := antiunitaryTwist_twice A P i
   rw [hP] at h1
@@ -143,11 +144,11 @@ private lemma antiunitaryTwist_twice_of_mul_map_star_eq_one (A : MPSTensor d D)
 
 /-- The antiunitary twist of a transformed family: if `Bʲ = ζ M Aʲ N`, then
 `∑ⱼ Pᵢⱼ B*ʲ = ζ* M* (∑ⱼ Pᵢⱼ A*ʲ) N*`. -/
-private lemma antiunitaryTwist_smul_mul_mul (A : MPSTensor d D) (P : Matrix (Fin d) (Fin d) ℂ)
-    (M N : Matrix (Fin D) (Fin D) ℂ) (ζ : ℂ) (i : Fin d) :
-    ∑ j : Fin d, P i j • (ζ • (M * A j * N)).map (starRingEnd ℂ) =
+private lemma antiunitaryTwist_smul_mul_mul [Fintype α] (A : MPTensor α (Fin D)) (P : Matrix α α ℂ)
+    (M N : Matrix (Fin D) (Fin D) ℂ) (ζ : ℂ) (i : α) :
+    ∑ j : α, P i j • (ζ • (M * A j * N)).map (starRingEnd ℂ) =
       starRingEnd ℂ ζ • (M.map (starRingEnd ℂ) *
-        (∑ j : Fin d, P i j • (A j).map (starRingEnd ℂ)) * N.map (starRingEnd ℂ)) := by
+        (∑ j : α, P i j • (A j).map (starRingEnd ℂ)) * N.map (starRingEnd ℂ)) := by
   simp only [map_conj_smul_mul_mul, Finset.mul_sum, Finset.sum_mul, Finset.smul_sum,
     Matrix.mul_smul, Matrix.smul_mul, smul_smul, mul_comm]
 
@@ -159,17 +160,18 @@ lines 1116–1117 and 1120): time reversal acts on an MPS tensor as
 `∑ⱼ Pᵢⱼ A*ʲ = e^{iφ} X† Aⁱ X` "this is only possible for `X X* = ±1`".  Here
 `P P* = 1`, so that time reversal squares to the identity on the site, and `X` is
 unitary. -/
-theorem mul_map_star_eq_one_or_neg_one_of_timeReversal_gauge [NeZero D] {A : MPSTensor d D}
-    (hA : Kraus.IsNormal A) {P : Matrix (Fin d) (Fin d) ℂ}
+theorem mul_map_star_eq_one_or_neg_one_of_timeReversal_gauge [Fintype α] [DecidableEq α] [NeZero D]
+    {A : MPTensor α (Fin D)}
+    (hA : Kraus.IsNormal A) {P : Matrix α α ℂ}
     (hP : P * P.map (starRingEnd ℂ) = 1) (X : Matrix.unitaryGroup (Fin D) ℂ) {ζ : ℂ}
-    (h : ∀ i, ∑ j : Fin d, P i j • (A j).map (starRingEnd ℂ) =
+    (h : ∀ i, ∑ j : α, P i j • (A j).map (starRingEnd ℂ) =
       ζ • ((X : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * X)) :
     (X : Matrix (Fin D) (Fin D) ℂ) * (X : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) = 1 ∨
       (X : Matrix (Fin D) (Fin D) ℂ) * (X : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) = -1 := by
   refine mul_map_star_eq_one_or_neg_one_of_twice hA X (c := starRingEnd ℂ ζ * ζ) fun i => ?_
-  calc A i = ∑ j : Fin d, P i j • (∑ k : Fin d, P j k • (A k).map (starRingEnd ℂ)).map
+  calc A i = ∑ j : α, P i j • (∑ k : α, P j k • (A k).map (starRingEnd ℂ)).map
         (starRingEnd ℂ) := (antiunitaryTwist_twice_of_mul_map_star_eq_one A hP i).symm
-    _ = ∑ j : Fin d, P i j • (ζ • ((X : Matrix (Fin D) (Fin D) ℂ)ᴴ * A j * X)).map
+    _ = ∑ j : α, P i j • (ζ • ((X : Matrix (Fin D) (Fin D) ℂ)ᴴ * A j * X)).map
         (starRingEnd ℂ) := Finset.sum_congr rfl fun j _ => by rw [h j]
     _ = starRingEnd ℂ ζ • (((X : Matrix (Fin D) (Fin D) ℂ)ᴴ).map (starRingEnd ℂ) *
         (ζ • ((X : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * X)) *
@@ -184,7 +186,7 @@ Two unitary gauges related to the same normal tensor by `ζ X† Aⁱ X = ζ' X'
 with `ζ ≠ 0`, have the same involution index `X X* = X' X*'`.  Source:
 arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex` line 1117), where
 `±1` is called a topological index. -/
-theorem mul_map_star_eq_of_gauges [NeZero D] {A : MPSTensor d D} (hA : Kraus.IsNormal A)
+theorem mul_map_star_eq_of_gauges [NeZero D] {A : MPTensor α (Fin D)} (hA : Kraus.IsNormal A)
     (X X' : Matrix.unitaryGroup (Fin D) ℂ) {ζ ζ' : ℂ} (hζ : ζ ≠ 0)
     (h : ∀ i, ζ • ((X : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * X) =
       ζ' • ((X' : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * X')) :
@@ -202,7 +204,7 @@ Source: arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex`
 line 1120): reflection acts on an MPS tensor by transposition, and for a normal
 tensor with `(Aⁱ)ᵀ = e^{iφ} X† Aⁱ X` the argument of the time-reversal case gives
 `X X* = ±1`.  Here `X` is unitary. -/
-theorem mul_map_star_eq_one_or_neg_one_of_reflection_gauge [NeZero D] {A : MPSTensor d D}
+theorem mul_map_star_eq_one_or_neg_one_of_reflection_gauge [NeZero D] {A : MPTensor α (Fin D)}
     (hA : Kraus.IsNormal A) (X : Matrix.unitaryGroup (Fin D) ℂ) {ζ : ℂ}
     (h : ∀ i, (A i)ᵀ = ζ • ((X : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * X)) :
     (X : Matrix (Fin D) (Fin D) ℂ) * (X : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) = 1 ∨
@@ -230,7 +232,7 @@ theorem mul_map_star_eq_one_or_neg_one_of_reflection_gauge [NeZero D] {A : MPSTe
 
 /-- A normal tensor of positive bond dimension admits no vanishing gauge phase:
 `A*ⁱ = 0 · X† Aⁱ X` (or `(Aⁱ)ᵀ = 0`) would make every letter zero. -/
-private lemma ne_zero_of_map_eq_smul [NeZero D] {A : MPSTensor d D} (hA : Kraus.IsNormal A)
+private lemma ne_zero_of_map_eq_smul [NeZero D] {A : MPTensor α (Fin D)} (hA : Kraus.IsNormal A)
     (f : Matrix (Fin D) (Fin D) ℂ → Matrix (Fin D) (Fin D) ℂ) (hf : ∀ M, f M = 0 → M = 0)
     {X : Matrix (Fin D) (Fin D) ℂ} {ζ : ℂ} (h : ∀ i, f (A i) = ζ • (Xᴴ * A i * X)) : ζ ≠ 0 := by
   rintro rfl
@@ -240,12 +242,13 @@ private lemma ne_zero_of_map_eq_smul [NeZero D] {A : MPSTensor d D} (hA : Kraus.
 /-- **The time-reversal index does not depend on the unitary gauge.**
 Source: arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex`
 line 1117): "`±1` is a topological index". -/
-theorem mul_map_star_eq_of_timeReversal_gauges [NeZero D] {A : MPSTensor d D}
-    (hA : Kraus.IsNormal A) {P : Matrix (Fin d) (Fin d) ℂ}
+theorem mul_map_star_eq_of_timeReversal_gauges [Fintype α] [DecidableEq α] [NeZero D]
+    {A : MPTensor α (Fin D)}
+    (hA : Kraus.IsNormal A) {P : Matrix α α ℂ}
     (hP : P * P.map (starRingEnd ℂ) = 1) (X X' : Matrix.unitaryGroup (Fin D) ℂ) {ζ ζ' : ℂ}
-    (h : ∀ i, ∑ j : Fin d, P i j • (A j).map (starRingEnd ℂ) =
+    (h : ∀ i, ∑ j : α, P i j • (A j).map (starRingEnd ℂ) =
       ζ • ((X : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * X))
-    (h' : ∀ i, ∑ j : Fin d, P i j • (A j).map (starRingEnd ℂ) =
+    (h' : ∀ i, ∑ j : α, P i j • (A j).map (starRingEnd ℂ) =
       ζ' • ((X' : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * X')) :
     (X : Matrix (Fin D) (Fin D) ℂ) * (X : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) =
       (X' : Matrix (Fin D) (Fin D) ℂ) * (X' : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) := by
@@ -259,7 +262,7 @@ theorem mul_map_star_eq_of_timeReversal_gauges [NeZero D] {A : MPSTensor d D}
 /-- **The reflection index does not depend on the unitary gauge.**
 Source: arXiv:2011.12127, §III.A (`Papers/2011.12127/TN-Review-main.tex`
 lines 1117–1120). -/
-theorem mul_map_star_eq_of_reflection_gauges [NeZero D] {A : MPSTensor d D}
+theorem mul_map_star_eq_of_reflection_gauges [NeZero D] {A : MPTensor α (Fin D)}
     (hA : Kraus.IsNormal A) (X X' : Matrix.unitaryGroup (Fin D) ℂ) {ζ ζ' : ℂ}
     (h : ∀ i, (A i)ᵀ = ζ • ((X : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * X))
     (h' : ∀ i, (A i)ᵀ = ζ' • ((X' : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * X')) :
@@ -279,10 +282,11 @@ line 1117) and §III.C, paragraph "Kramers theorem and Lieb-Schultz-Mattis"
 twice gives `-Aⁱ = |ζ|² (X X*)⁻¹ Aⁱ (X X*)`, which eq. `eq:XAX=B` rules out.  So no
 normal tensor of positive bond dimension admits a gauge `X` and a scalar `ζ` with
 `∑ⱼ Pᵢⱼ A*ʲ = ζ X⁻¹ Aⁱ X`. -/
-theorem not_timeReversal_gauge_of_mul_map_star_eq_neg_one [NeZero D] {A : MPSTensor d D}
-    (hA : Kraus.IsNormal A) {P : Matrix (Fin d) (Fin d) ℂ}
+theorem not_timeReversal_gauge_of_mul_map_star_eq_neg_one [Fintype α] [DecidableEq α] [NeZero D]
+    {A : MPTensor α (Fin D)}
+    (hA : Kraus.IsNormal A) {P : Matrix α α ℂ}
     (hP : P * P.map (starRingEnd ℂ) = -1) (X : GL (Fin D) ℂ) (ζ : ℂ)
-    (h : ∀ i, ∑ j : Fin d, P i j • (A j).map (starRingEnd ℂ) =
+    (h : ∀ i, ∑ j : α, P i j • (A j).map (starRingEnd ℂ) =
       ζ • (((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) * A i * X)) : False := by
   let Xb : GL (Fin D) ℂ := Matrix.GeneralLinearGroup.map (starRingEnd ℂ) X
   have hXb : (Xb : Matrix (Fin D) (Fin D) ℂ) = (X : Matrix (Fin D) (Fin D) ℂ).map (starRingEnd ℂ) :=

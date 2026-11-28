@@ -72,17 +72,16 @@ output.
 Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 1164–1180: at input `j` the
 Pauli `X` gives `x = 1 - j`, the left bond `l` contributes `H_{l x} = (-1)^{l x}`, the right
 bond carries `x`, and the Pauli `Z` gives the output `x` with the sign `(-1)^x`. -/
-def czxDecoratedIntTensor : Fin 2 → Fin 2 → Matrix (Fin 2) (Fin 2) ℤ
-  | 0, 1 => !![1, 0; 1, 0]
-  | 1, 0 => !![0, -1; 0, 1]
-  | _, _ => 0
+def czxDecoratedIntTensor : Fin 2 × Fin 2 → Matrix (Fin 2) (Fin 2) ℤ
+  | (0, 1) => !![1, 0; 1, 0]
+  | (1, 0) => !![0, -1; 0, 1]
+  | _ => 0
 
 /-- The decorated CZX tensor as a matrix product operator tensor, the first physical index
 being the output.
 
 Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` lines 1164–1180. -/
-def czxDecoratedTensor : MPOTensor 2 2 :=
-    Function.uncurry fun i j => complexOfInt (czxDecoratedIntTensor i j)
+def czxDecoratedTensor : MPOTensor 2 2 := fun ij => complexOfInt (czxDecoratedIntTensor ij)
 
 /-- The entries of the decorated tensor: the output `i` is the flip of the input `j`, the
 outgoing bond carries `i`, and the incoming bond `l` contributes `(-1)^{l i}`, times the sign
@@ -115,42 +114,16 @@ theorem decoratedSiteTensor_eq_smul_reviewCZXTensor (i j : Fin 2) :
 
 /-! ### Normality -/
 
-private theorem czxDecoratedMPS_one :
-    czxDecoratedTensor.toMPSTensor 1 = complexOfInt !![1, 0; 1, 0] := rfl
-
-private theorem czxDecoratedMPS_two :
-    czxDecoratedTensor.toMPSTensor 2 = complexOfInt !![0, -1; 0, 1] := rfl
-
-/-- Each matrix unit is a half-sum or a half-difference of two length-two words. -/
-private theorem czxDecorated_single (i j : Fin 2) :
-    ∃ a b c e : Fin 4, ∃ u v : ℂ, Matrix.single i j (1 : ℂ) =
-      u • (czxDecoratedTensor.toMPSTensor a * czxDecoratedTensor.toMPSTensor b) +
-        v • (czxDecoratedTensor.toMPSTensor c * czxDecoratedTensor.toMPSTensor e) := by
-  fin_cases i <;> fin_cases j
-  · refine ⟨1, 1, 2, 1, 1 / 2, -1 / 2, ?_⟩
-    rw [czxDecoratedMPS_one, czxDecoratedMPS_two, ← complexOfInt_mul, ← complexOfInt_mul]
-    ext a b
-    fin_cases a <;> fin_cases b <;> norm_num [Matrix.single_apply, complexOfInt, Matrix.mul_apply]
-  · refine ⟨1, 2, 2, 2, -1 / 2, -1 / 2, ?_⟩
-    rw [czxDecoratedMPS_one, czxDecoratedMPS_two, ← complexOfInt_mul, ← complexOfInt_mul]
-    ext a b
-    fin_cases a <;> fin_cases b <;> norm_num [Matrix.single_apply, complexOfInt, Matrix.mul_apply]
-  · refine ⟨1, 1, 2, 1, 1 / 2, 1 / 2, ?_⟩
-    rw [czxDecoratedMPS_one, czxDecoratedMPS_two, ← complexOfInt_mul, ← complexOfInt_mul]
-    ext a b
-    fin_cases a <;> fin_cases b <;> norm_num [Matrix.single_apply, complexOfInt, Matrix.mul_apply]
-  · refine ⟨2, 2, 1, 2, 1 / 2, -1 / 2, ?_⟩
-    rw [czxDecoratedMPS_one, czxDecoratedMPS_two, ← complexOfInt_mul, ← complexOfInt_mul]
-    ext a b
-    fin_cases a <;> fin_cases b <;> norm_num [Matrix.single_apply, complexOfInt, Matrix.mul_apply]
-
 /-- **The decorated CZX tensor is normal**: its length-two words span the full two-by-two
 matrix algebra. This is the source's statement that the tensor "becomes injective when blocking
 two sites".
 
 Source: arXiv:2405.00439, `Papers/2405.00439/MPU-DW.tex` line 1181. -/
-theorem czxDecoratedMPS_isNormal : Kraus.IsNormal czxDecoratedTensor.toMPSTensor :=
-  MPSTensor.isNormal_of_single_eq_two_words _ czxDecorated_single
+theorem czxDecoratedMPS_isNormal : Kraus.IsNormal czxDecoratedTensor :=
+  isNormal_of_complexOfRing_smul_single (Int.castRingHom ℂ) czxDecoratedIntTensor (fun _ => rfl)
+    (by norm_num : 0 < 2) (fun _ j k => ![![(0, 1), (1, 0)] k, ![(0, 1), (1, 0)] j])
+    (fun i j => ![(-1) ^ (j : ℕ), (-1) ^ (i + 1 : ℕ)])
+    (c := 2) (by norm_num) (by decide)
 
 /-! ### The periodic operator -/
 

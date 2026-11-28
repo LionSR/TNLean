@@ -31,7 +31,6 @@ verifications to decidable identities between integer matrices.
 
 ## Main definitions
 
-* `MPSTensor.stackedInt`: the integer letters of a stacked product over the pair alphabet.
 * `MPSTensor.MultiBlockCompression.ofConjMatrix`, `MPSTensor.MultiBlockCompression.ofConjInt`,
   `MPSTensor.MultiBlockCompression.ofEq`: the datum of a conjugate tensor.
 * `MPSTensor.MultiBlockCompression.ofScalarFlagFour`: the datum of a four-dimensional tensor
@@ -61,31 +60,7 @@ open scoped Matrix
 
 namespace MPSTensor
 
-variable {d : ℕ}
-
-/-! ### Stacked products over the pair alphabet -/
-
-section Stacked
-
-variable {D₁ D₂ : ℕ}
-
-/-- The integer letters of the stacked product of two integer matrix product operator tensors,
-read over the pair alphabet `Fin (d * d)`, letter `a = d o + i`. -/
-def stackedInt (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) ℤ)
-    (N : Fin d → Fin d → Matrix (Fin D₂) (Fin D₂) ℤ) (a : Fin (d * d)) :
-    Matrix (Fin (D₁ * D₂)) (Fin (D₁ * D₂)) ℤ :=
-  mulIntTensor M N a.divNat a.modNat
-
-/-- The pair-alphabet view of the stacked product of two integer tensors is the coercion of
-`stackedInt`. -/
-theorem toMPSTensor_mulTensor_complexOfInt (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) ℤ)
-    (N : Fin d → Fin d → Matrix (Fin D₂) (Fin D₂) ℤ) (a : Fin (d * d)) :
-    (MPOTensor.mulTensor (Function.uncurry fun i j => complexOfInt (M i j))
-      (Function.uncurry fun i j => complexOfInt (N i j))).toMPSTensor a =
-          complexOfInt (stackedInt M N a) :=
-  mulTensor_complexOfRing _ M N _ _
-
-end Stacked
+variable {α : Type*}
 
 /-! ### Conjugate tensors -/
 
@@ -116,7 +91,7 @@ def oneSlotOrdZero : BlockIndex oneSlot 0 ≃ Fin 1 where
 
 namespace MultiBlockCompression
 
-variable {D : ℕ} {B C : MPSTensor d D}
+variable {D : ℕ} {B C : MPTensor α (Fin D)}
 
 /-- **A conjugate tensor is a one-slot compression datum with no zero slots.** If
 `G * B i * Ginv = C i` for an invertible `G` with inverse `Ginv`, then `B` compresses onto the
@@ -130,7 +105,7 @@ noncomputable def ofConjMatrix (G Ginv : Matrix (Fin D) (Fin D) ℂ) (hG : G * G
 
 /-- The integer form of `ofConjMatrix`: all matrices are entrywise coercions of integer
 matrices, and the conjugation identity is an identity between integer matrices. -/
-noncomputable def ofConjInt (BInt CInt : Fin d → Matrix (Fin D) (Fin D) ℤ)
+noncomputable def ofConjInt (BInt CInt : α → Matrix (Fin D) (Fin D) ℤ)
     (hB : ∀ i, B i = complexOfInt (BInt i)) (hC : ∀ i, C i = complexOfInt (CInt i))
     (G Ginv : Matrix (Fin D) (Fin D) ℤ) (hG : G * Ginv = 1) (hG' : Ginv * G = 1)
     (h : ∀ i, G * BInt i * Ginv = CInt i) :
@@ -174,7 +149,7 @@ theorem remainder_ofEq (h : ∀ i, B i = C i) : (ofEq h).remainder = 0 :=
     fun i => by rw [Matrix.one_mul, Matrix.mul_one, h]
 
 /-- The remainder of an integer conjugate datum vanishes. -/
-theorem remainder_ofConjInt (BInt CInt : Fin d → Matrix (Fin D) (Fin D) ℤ)
+theorem remainder_ofConjInt (BInt CInt : α → Matrix (Fin D) (Fin D) ℤ)
     (hB : ∀ i, B i = complexOfInt (BInt i)) (hC : ∀ i, C i = complexOfInt (CInt i))
     (G Ginv : Matrix (Fin D) (Fin D) ℤ) (hG : G * Ginv = 1) (hG' : Ginv * G = 1)
     (h : ∀ i, G * BInt i * Ginv = CInt i) :
@@ -186,12 +161,12 @@ end MultiBlockCompression
 
 namespace MultiBlockCompression
 
-variable {DB DC : ℕ} {B : MPSTensor d DB} {C : MPSTensor d DC}
+variable {DB DC : ℕ} {B : MPTensor α (Fin DB)} {C : MPTensor α (Fin DC)}
 
 /-- The word traces of a one-slot datum: the trace of every nonempty word of `B` is the trace
 of the corresponding word of the target. -/
 theorem trace_evalWord_oneSlot (P : MultiBlockCompression B oneSlot (fun _ : Unit => C))
-    (w : List (Fin d)) (hw : w ≠ []) :
+    (w : List α) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord B w) = Matrix.trace (Kraus.evalWord C w) := by
   have := P.trace_evalWord_eq_sum w hw
   rwa [Finset.sum_singleton] at this
@@ -199,7 +174,7 @@ theorem trace_evalWord_oneSlot (P : MultiBlockCompression B oneSlot (fun _ : Uni
 /-- The word traces of a weighted one-slot datum: the trace of every nonempty word of `B` is
 the corresponding power of the weight times the trace of the word of the unweighted target. -/
 theorem trace_evalWord_oneSlot_smul {c : ℂ}
-    (P : MultiBlockCompression B oneSlot (fun _ : Unit => c • C)) (w : List (Fin d))
+    (P : MultiBlockCompression B oneSlot (fun _ : Unit => c • C)) (w : List α)
     (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord B w) = c ^ w.length * Matrix.trace (Kraus.evalWord C w) := by
   rw [P.trace_evalWord_oneSlot w hw, show c • C = fun i => c • C i from rfl,
@@ -237,22 +212,22 @@ def scalarFlagTau : BlockSpace (fun _ : Unit => 1) oneSlot 3 ≃ Fin 4 where
 
 namespace MultiBlockCompression
 
-variable {B : MPSTensor d 4} {c : MPSTensor d 1}
+variable {B : MPTensor α (Fin 4)} {c : MPTensor α (Fin 1)}
 
 /-- **A four-dimensional tensor with a one-dimensional target and three zero slots.** The
 integer gauge `G` with inverse `Ginv` conjugates every letter to `conjInt i`, which is block
 upper triangular for `scalarFlagOrd`, carries the scalar target at the third coordinate, and
 vanishes on the other three diagonal entries (P5 note, Theorem 7.7(i)–(iii)). -/
-noncomputable def ofScalarFlagFour (BInt : Fin d → Matrix (Fin 4) (Fin 4) ℤ)
-    (cInt : Fin d → Matrix (Fin 1) (Fin 1) ℤ)
+noncomputable def ofScalarFlagFour (BInt : α → Matrix (Fin 4) (Fin 4) ℤ)
+    (cInt : α → Matrix (Fin 1) (Fin 1) ℤ)
     (hB : ∀ i, B i = complexOfInt (BInt i)) (hc : ∀ i, c i = complexOfInt (cInt i))
     (G Ginv : Matrix (Fin 4) (Fin 4) ℤ) (hG : G * Ginv = 1) (hG' : Ginv * G = 1)
-    (conjInt : Fin d → Matrix (Fin 4) (Fin 4) ℤ) (hconj : ∀ i, G * BInt i * Ginv = conjInt i)
-    (htri : ∀ (i : Fin d) (x y : BlockSpace (fun _ : Unit => 1) oneSlot 3),
+    (conjInt : α → Matrix (Fin 4) (Fin 4) ℤ) (hconj : ∀ i, G * BInt i * Ginv = conjInt i)
+    (htri : ∀ (i : α) (x y : BlockSpace (fun _ : Unit => 1) oneSlot 3),
       scalarFlagOrd y.1 < scalarFlagOrd x.1 → conjInt i (scalarFlagTau x) (scalarFlagTau y) = 0)
     (htarget : ∀ i, conjInt i (scalarFlagTau ⟨Sum.inl oneSlotMem, 0⟩)
       (scalarFlagTau ⟨Sum.inl oneSlotMem, 0⟩) = cInt i 0 0)
-    (hzero : ∀ (i : Fin d) (t : Fin 3),
+    (hzero : ∀ (i : α) (t : Fin 3),
       conjInt i (scalarFlagTau ⟨Sum.inr t, 0⟩) (scalarFlagTau ⟨Sum.inr t, 0⟩) = 0) :
     MultiBlockCompression B oneSlot (fun _ : Unit => c) :=
   ofRing (Int.castRingHom ℂ) scalarFlagOrd scalarFlagTau
@@ -269,15 +244,15 @@ noncomputable def ofScalarFlagFour (BInt : Fin d → Matrix (Fin 4) (Fin 4) ℤ)
       obtain rfl : q = 0 := Subsingleton.elim q 0
       exact hzero i t
 
-variable (BInt : Fin d → Matrix (Fin 4) (Fin 4) ℤ) (cInt : Fin d → Matrix (Fin 1) (Fin 1) ℤ)
+variable (BInt : α → Matrix (Fin 4) (Fin 4) ℤ) (cInt : α → Matrix (Fin 1) (Fin 1) ℤ)
   (hB : ∀ i, B i = complexOfInt (BInt i)) (hc : ∀ i, c i = complexOfInt (cInt i))
   (G Ginv : Matrix (Fin 4) (Fin 4) ℤ) (hG : G * Ginv = 1) (hG' : Ginv * G = 1)
-  (conjInt : Fin d → Matrix (Fin 4) (Fin 4) ℤ) (hconj : ∀ i, G * BInt i * Ginv = conjInt i)
-  (htri : ∀ (i : Fin d) (x y : BlockSpace (fun _ : Unit => 1) oneSlot 3),
+  (conjInt : α → Matrix (Fin 4) (Fin 4) ℤ) (hconj : ∀ i, G * BInt i * Ginv = conjInt i)
+  (htri : ∀ (i : α) (x y : BlockSpace (fun _ : Unit => 1) oneSlot 3),
     scalarFlagOrd y.1 < scalarFlagOrd x.1 → conjInt i (scalarFlagTau x) (scalarFlagTau y) = 0)
   (htarget : ∀ i, conjInt i (scalarFlagTau ⟨Sum.inl oneSlotMem, 0⟩)
     (scalarFlagTau ⟨Sum.inl oneSlotMem, 0⟩) = cInt i 0 0)
-  (hzero : ∀ (i : Fin d) (t : Fin 3),
+  (hzero : ∀ (i : α) (t : Fin 3),
     conjInt i (scalarFlagTau ⟨Sum.inr t, 0⟩) (scalarFlagTau ⟨Sum.inr t, 0⟩) = 0)
 
 /-- The compression out of the bond space of a four-step scalar-flag datum is the third row of
@@ -309,9 +284,9 @@ end MultiBlockCompression
 /-- **Normality at blocking length two from an integer certificate.** If every matrix unit is,
 up to the common nonzero integer factor `m`, an integer combination of the length-two words
 `A (a k) * A (b k)`, then the length-two words span the full matrix algebra. -/
-theorem isNBlkInjective_two_of_int {D K : ℕ} {A : MPSTensor d D}
-    (AInt : Fin d → Matrix (Fin D) (Fin D) ℤ) (hA : ∀ i, A i = complexOfInt (AInt i))
-    (a b : Fin K → Fin d) (T : Fin D → Fin D → Fin K → ℤ) (m : ℤ) (hm : m ≠ 0)
+theorem isNBlkInjective_two_of_int {D K : ℕ} {A : MPTensor α (Fin D)}
+    (AInt : α → Matrix (Fin D) (Fin D) ℤ) (hA : ∀ i, A i = complexOfInt (AInt i))
+    (a b : Fin K → α) (T : Fin D → Fin D → Fin K → ℤ) (m : ℤ) (hm : m ≠ 0)
     (h : ∀ x y, ∑ k, T x y k • (AInt (a k) * AInt (b k)) = m • Matrix.single x y 1) :
     Kraus.IsNBlkInjective A 2 := by
   rw [Kraus.IsNBlkInjective]
@@ -354,10 +329,10 @@ theorem eq_zero_of_complexOfInt_mulVec_eq_zero {D : ℕ} (K K' : Matrix (Fin D) 
 /-- **No nonzero right sitewise intertwiner, from an integer certificate.** If the rows `r k` of
 the letters `ℓ k` of the sitewise system `B i *ᵥ v = c i • v` form an integer matrix with an
 integer left inverse up to a nonzero factor, the only solution is `v = 0`. -/
-theorem right_intertwiner_eq_zero_of_int {D : ℕ} {B : MPSTensor d D} {c : MPSTensor d 1}
-    (BInt : Fin d → Matrix (Fin D) (Fin D) ℤ) (cInt : Fin d → Matrix (Fin 1) (Fin 1) ℤ)
+theorem right_intertwiner_eq_zero_of_int {D : ℕ} {B : MPTensor α (Fin D)} {c : MPTensor α (Fin 1)}
+    (BInt : α → Matrix (Fin D) (Fin D) ℤ) (cInt : α → Matrix (Fin 1) (Fin 1) ℤ)
     (hB : ∀ i, B i = complexOfInt (BInt i)) (hc : ∀ i, c i = complexOfInt (cInt i))
-    (ℓ : Fin D → Fin d) (r : Fin D → Fin D) (K' : Matrix (Fin D) (Fin D) ℤ) (m : ℤ)
+    (ℓ : Fin D → α) (r : Fin D → Fin D) (K' : Matrix (Fin D) (Fin D) ℤ) (m : ℤ)
     (hm : m ≠ 0)
     (hK : K' * Matrix.of (fun k j => BInt (ℓ k) (r k) j - if r k = j then cInt (ℓ k) 0 0 else 0)
       = m • 1)
@@ -374,10 +349,10 @@ theorem right_intertwiner_eq_zero_of_int {D : ℕ} {B : MPSTensor d D} {c : MPST
 /-- **No nonzero left sitewise intertwiner, from an integer certificate.** If the columns `q k`
 of the letters `ℓ k` of the sitewise system `u ᵥ* B i = c i • u` form an integer matrix with
 an integer left inverse up to a nonzero factor, the only solution is `u = 0`. -/
-theorem left_intertwiner_eq_zero_of_int {D : ℕ} {B : MPSTensor d D} {c : MPSTensor d 1}
-    (BInt : Fin d → Matrix (Fin D) (Fin D) ℤ) (cInt : Fin d → Matrix (Fin 1) (Fin 1) ℤ)
+theorem left_intertwiner_eq_zero_of_int {D : ℕ} {B : MPTensor α (Fin D)} {c : MPTensor α (Fin 1)}
+    (BInt : α → Matrix (Fin D) (Fin D) ℤ) (cInt : α → Matrix (Fin 1) (Fin 1) ℤ)
     (hB : ∀ i, B i = complexOfInt (BInt i)) (hc : ∀ i, c i = complexOfInt (cInt i))
-    (ℓ : Fin D → Fin d) (q : Fin D → Fin D) (K' : Matrix (Fin D) (Fin D) ℤ) (m : ℤ)
+    (ℓ : Fin D → α) (q : Fin D → Fin D) (K' : Matrix (Fin D) (Fin D) ℤ) (m : ℤ)
     (hm : m ≠ 0)
     (hK : K' * Matrix.of (fun k p => BInt (ℓ k) p (q k) - if p = q k then cInt (ℓ k) 0 0 else 0)
       = m • 1)

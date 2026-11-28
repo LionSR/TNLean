@@ -40,28 +40,32 @@ variable {d DA DB : ℕ}
 /-- Gauge and nonzero phase rescaling preserve the open-boundary MPS space
 at every length. Source: arXiv:1606.00608, Theorem thm1, gauge relation;
 Nachtergaele, arXiv:cond-mat/9410110, equations (3.1)--(3.2b). -/
-theorem _root_.MPTensor.GaugePhaseEquiv.groundSpaceES_eq {A B : MPSTensor d DA}
-    (h : GaugePhaseEquiv A B) (N : ℕ) : groundSpaceES A N = groundSpaceES B N := by
+theorem _root_.MPTensor.GaugePhaseEquiv.map_groundSpace_eq {A B : MPSTensor d DA}
+    (h : GaugePhaseEquiv A B) (N : ℕ) : ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap) = ((groundSpace B N).map
+            (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   obtain ⟨X, ζ, hζ, hX⟩ := h
   let C : MPSTensor d DA := fun i =>
     (X : Matrix (Fin DA) (Fin DA) ℂ) * A i *
       ((X⁻¹ : GL (Fin DA) ℂ) : Matrix (Fin DA) (Fin DA) ℂ)
   have hC : GaugeEquiv A C := ⟨X, fun _ => rfl⟩
   have hB : B = ζ • C := funext hX
-  simp only [groundSpaceES, hB, groundSpace_smul_eq C ζ hζ, ← hC.groundSpace_eq N]
+  simp only [hB, groundSpace_smul_eq C ζ hζ, ← hC.groundSpace_eq N]
 /-- For normalized normal tensors, phase-related periodic vector families
 have exactly the same open-boundary spaces. The fundamental theorem supplies
 the dimension equality and gauge transformation first.
 Source: arXiv:1606.00608, Proposition prop:char-BNT and Theorem thm1. -/
-theorem MPVBlockPhaseEquiv.groundSpaceES_eq_of_isNormalTensor
+theorem MPVBlockPhaseEquiv.map_groundSpace_eq_of_isNormalTensor
     {A : MPSTensor d DA} {B : MPSTensor d DB}
     (hA : IsNormalTensor A) (hB : IsNormalTensor B)
-    (h : MPVBlockPhaseEquiv A B) (N : ℕ) : groundSpaceES A N = groundSpaceES B N := by
+    (h : MPVBlockPhaseEquiv A B) (N : ℕ) : ((groundSpace A N).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap) = ((groundSpace B N).map
+            (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   have : NeZero DA := ⟨hA.bondDim_ne_zero⟩
   have : NeZero DB := ⟨hB.bondDim_ne_zero⟩
   obtain ⟨e, he⟩ := h.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor hA hB
   cases e
-  exact he.groundSpaceES_eq N
+  exact he.map_groundSpace_eq N
 variable {r : ℕ} {dim : Fin r → ℕ}
 
 /-- A phase-class representative family of normalized normal tensors preserves
@@ -69,23 +73,26 @@ the entire joint open-boundary MPS space at every length. Nonzero coefficients
 can be absorbed into the boundary matrices.
 Source: arXiv:1606.00608, Proposition prop:char-BNT and Theorem thm1;
 Nachtergaele, arXiv:cond-mat/9410110, Lemma commutation (ii). -/
-theorem MPVPhaseClassData.groundSpaceES_toTensorFromBlocks_eq_representatives
+theorem MPVPhaseClassData.map_groundSpace_toTensorFromBlocks_eq_representatives
     [∀ j, NeZero (dim j)] (A : ∀ j, MPSTensor d (dim j))
     (classes : MPVPhaseClassData A) (hNormal : ∀ j, IsNormalTensor (A j))
     (μ : Fin r → ℂ) (hμ : ∀ j, μ j ≠ 0) (N : ℕ) :
-    groundSpaceES (toTensorFromBlocks μ A) N =
-      groundSpaceES (toTensorFromBlocks (fun _ => 1) (fun k => A (classes.repr k))) N := by
-  rw [groundSpaceES_toTensorFromBlocks_eq_iSup μ A hμ,
-    groundSpaceES_toTensorFromBlocks_eq_iSup (fun _ => 1)
+    ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) =
+      ((groundSpace (toTensorFromBlocks (fun _ => 1) (fun k => A (classes.repr k))) N).map
+          (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
+  rw [map_groundSpace_toTensorFromBlocks_eq_iSup μ A hμ,
+    map_groundSpace_toTensorFromBlocks_eq_iSup (fun _ => 1)
       (fun k => A (classes.repr k)) (fun _ => one_ne_zero)]
   apply le_antisymm
   · refine iSup_le fun j => ?_
     obtain ⟨k, q, rfl⟩ := classes.exists_enum_eq j
-    have hGS := MPVBlockPhaseEquiv.groundSpaceES_eq_of_isNormalTensor
+    have hGS := MPVBlockPhaseEquiv.map_groundSpace_eq_of_isNormalTensor
       (hNormal (classes.repr k)) (hNormal (classes.enum k q)) (classes.enum_phase k q) N
     rw [← hGS]
-    exact le_iSup (fun j => groundSpaceES (A (classes.repr j)) N) k
-  · exact iSup_le fun k => le_iSup (fun j => groundSpaceES (A j) N) (classes.repr k)
+    exact le_iSup (fun j => ((groundSpace (A (classes.repr j)) N).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap)) k
+  · exact iSup_le fun k => le_iSup (fun j => ((groundSpace (A j) N).map (WithLp.linearEquiv 2 ℂ
+      _).symm.toLinearMap)) (classes.repr k)
 /-- A finite primitive family admits a literal subfamily of pairwise
 inequivalent representatives with inherited faithful fixed points, a gauge
 cover of every original sector, and exact joint support at all lengths.
@@ -103,8 +110,10 @@ theorem exists_primitive_sector_representatives [∀ j, NeZero (dim j)]
       BlocksNotGaugePhaseEquiv (fun k => A (sel k)) ∧
       (∀ j, ∃ k, ∃ e : dim (sel k) = dim j,
         GaugePhaseEquiv (e ▸ A (sel k)) (A j)) ∧
-      ∀ N, groundSpaceES (toTensorFromBlocks μ A) N =
-        groundSpaceES (toTensorFromBlocks (fun _ => 1) (fun k => A (sel k))) N := by
+      ∀ N, ((groundSpace (toTensorFromBlocks μ A) N).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap) =
+        ((groundSpace (toTensorFromBlocks (fun _ => 1) (fun k => A (sel k))) N).map
+            (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   let classes := mpvPhaseClassData A
   have hNormal : ∀ j, IsNormalTensor (A j) := fun j =>
     isNormalTensor_of_isNormal_leftCanonical (A j)
@@ -119,7 +128,7 @@ theorem exists_primitive_sector_representatives [∀ j, NeZero (dim j)]
   refine ⟨classes.g, classes.repr, hinj, (fun k => NeZero.pos _),
     (fun k => hP (classes.repr k)), (fun k => hρ (classes.repr k)),
     classes.blocks_not_equiv, ?_,
-    classes.groundSpaceES_toTensorFromBlocks_eq_representatives A hNormal μ hμ⟩
+    classes.map_groundSpace_toTensorFromBlocks_eq_representatives A hNormal μ hμ⟩
   intro j
   obtain ⟨k, q, rfl⟩ := classes.exists_enum_eq j
   obtain ⟨e, he⟩ := MPVBlockPhaseEquiv.dim_eq_and_gaugePhaseEquiv_of_isNormalTensor

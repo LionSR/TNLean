@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Operator.Boundary.BoundaryClosedness
 import TNLean.MPS.Operator.Boundary.BoundaryRepresentation
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Representations from boundary closedness and compatibility
@@ -62,13 +63,13 @@ namespace MPOTensor
 
 variable {d D r : ℕ} {dim : Fin r → ℕ}
 
-/-- The arbitrary-boundary doubled-index vector is the corresponding
-operator coefficient. -/
-theorem mpvWithBoundary_toMPSTensor (T : MPOTensor d D)
-    (X : Matrix (Fin D) (Fin D) ℂ) {L : ℕ} (w : Fin L → Fin (d * d)) :
-    MPSTensor.mpvWithBoundary T.toMPSTensor X w =
-      mpoWithBoundary T X L (fun k ↦ (w k).divNat) (fun k ↦ (w k).modNat) := by
-  simp only [MPSTensor.mpvWithBoundary, mpoWithBoundary, evalWord_toMPSTensor_ofFn]
+/-- The arbitrary-boundary vector of an operator tensor on the pair alphabet is the
+corresponding operator coefficient. -/
+theorem mpvWithBoundary_eq_mpoWithBoundary (T : MPOTensor d D)
+    (X : Matrix (Fin D) (Fin D) ℂ) {L : ℕ} (w : Fin L → Fin d × Fin d) :
+    MPSTensor.mpvWithBoundary T X w =
+      mpoWithBoundary T X L (fun k ↦ (w k).1) (fun k ↦ (w k).2) := by
+  simp only [MPSTensor.mpvWithBoundary, mpoWithBoundary, kraus_evalWord_ofFn]
 
 /-- Closedness with one boundary for all lengths induces a representation
 of the target block matrix algebra on the stacked bond space. Its letter
@@ -78,19 +79,19 @@ The representation need not preserve the ambient identity. Splitting it
 into biorthogonal multiplicity blocks is a further algebraic step. -/
 theorem IsBoundaryClosed.exists_boundaryRepresentation
     {T : MPOTensor d (∑ c : Fin r, dim c)} (hT : IsBoundaryClosed T)
-    (A : (c : Fin r) → MPSTensor (d * d) (dim c))
-    (hBlocks : T.toMPSTensor = MPTensor.toTensorFromBlocks (fun _ ↦ 1) A)
+    (A : (c : Fin r) → MPOTensor d (dim c))
+    (hBlocks : T = MPTensor.toTensorFromBlocks (fun _ ↦ 1) A)
     {L : ℕ} (hL : 0 < L) (hSpan : MPSTensor.WordTupleSpanTop A L) :
     ∃ ρ : ((c : Fin r) → Matrix (Fin (dim c)) (Fin (dim c)) ℂ) →ₙₐ[ℂ]
       Matrix (Fin ((∑ c : Fin r, dim c) * (∑ c : Fin r, dim c)))
         (Fin ((∑ c : Fin r, dim c) * (∑ c : Fin r, dim c))) ℂ,
-      ∀ i : Fin (d * d), ρ (fun c ↦ A c i) = (mulTensor T T).toMPSTensor i := by
+      ∀ i : Fin d × Fin d, ρ (fun c ↦ A c i) = mulTensor T T i := by
   obtain ⟨b, hb⟩ := (isBoundaryClosed_iff_exists_linearMap T).mp hT
   apply MPSTensor.exists_boundaryRepresentation_of_boundaryMap
-    (mulTensor T T).toMPSTensor A b ?_ hL hSpan
+    (mulTensor T T) A b ?_ hL hSpan
   intro n hn X w
-  rw [← hBlocks, mpvWithBoundary_toMPSTensor, mpvWithBoundary_toMPSTensor]
-  exact congrArg (fun M ↦ M (fun k ↦ (w k).divNat) (fun k ↦ (w k).modNat))
+  rw [← hBlocks, mpvWithBoundary_eq_mpoWithBoundary, mpvWithBoundary_eq_mpoWithBoundary]
+  exact congrArg (fun M ↦ M (fun k ↦ (w k).1) (fun k ↦ (w k).2))
     (hb n hn X)
 
 /-- Arbitrary-boundary compatibility induces a representation of the state

@@ -189,14 +189,10 @@ private theorem single_eq_tensor_combination (i j : Fin 2) :
 /-- The once-blocked CZX tensor is injective, as asserted immediately before
 arXiv:2502.20257, `eq:MPU_CZX` (lines 4505–4547). Its four nonzero physical
 letters span all bond matrix units by half-sums and half-differences. -/
-theorem tensor_isInjective : Kraus.IsInjective tensor.toMPSTensor := by
+theorem tensor_isInjective : Kraus.IsInjective tensor := by
   rw [Kraus.IsInjective]
-  let S := Submodule.span ℂ (Set.range tensor.toMPSTensor)
-  have hletter (i j : Fin 4) : tensor (i, j) ∈ S := by
-    apply Submodule.subset_span
-    exact ⟨finProdFinEquiv (i, j), by
-      simp only [toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
-        MPSTensor.finProdFinEquiv_modNat]⟩
+  let S := Submodule.span ℂ (Set.range tensor)
+  have hletter (i j : Fin 4) : tensor (i, j) ∈ S := Submodule.subset_span ⟨(i, j), rfl⟩
   have hunit (i j : Fin 2) : Matrix.single i j (1 : ℂ) ∈ S := by
     rw [single_eq_tensor_combination]
     exact S.add_mem (S.smul_mem _ (hletter _ _)) (S.smul_mem _ (hletter _ _))

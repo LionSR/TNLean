@@ -74,7 +74,7 @@ private lemma exists_conj_cast_of_conj_cast_of_gaugeEquiv {n m : ℕ} (h : n = m
 
 /-- Gauging every basis tensor of a sector decomposition gauges its assembled tensor by a
 block-diagonal similarity (arXiv:1606.00608, lines 281--301). -/
-private lemma gaugeEquiv_toTensor_withBasis (P : SectorDecomposition d)
+private lemma gaugeEquiv_toTensor_withBasis (P : SectorDecomposition (Fin d))
     {B : (j : Fin P.basisCount) → MPSTensor d (P.basisDim j)}
     (hB : ∀ j, GaugeEquiv (P.basis j) (B j)) :
     GaugeEquiv P.toTensor (P.withBasis B).toTensor := by
@@ -92,7 +92,7 @@ elements, and after a bijection `β` every basis tensor of `Q` is a phase of uni
 a gauge transform of the matched basis tensor of `P`. -/
 theorem fundamentalTheorem_proportional_of_isBNTSectorPresentation
     {D₁ D₂ : ℕ} {A : MPSTensor d D₁} {B : MPSTensor d D₂}
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (hP : IsBNTSectorPresentation A P) (hQ : IsBNTSectorPresentation B Q)
     (hProp : EventuallyNonzeroProportionalMPV₂ A B) :
     ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
@@ -129,7 +129,7 @@ no gauge condition on the basis tensors and no normalization of the copy weights
 assembled tensors generate the same matrix product vectors at every positive length, they have
 the same bond dimension and are related by one global similarity. -/
 theorem fundamentalTheorem_equal_of_isBNTSectorPresentation
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (hP : IsBNTSectorPresentation P.toTensor P) (hQ : IsBNTSectorPresentation Q.toTensor Q)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
     ∃ (hTotal : P.totalDim = Q.totalDim) (Y : GL (Fin Q.totalDim) ℂ),
@@ -160,7 +160,7 @@ there are unit-modulus phases `ζ_k` and copy bijections `τ_k` with
 `ν_{k,q} = ζ_k⁻¹ μ_{β(k),τ_k(q)}`. -/
 theorem ft_sector_data_of_isBNTSectorPresentation
     {D₁ D₂ : ℕ} {A : MPSTensor d D₁} {B : MPSTensor d D₂}
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (hP : IsBNTSectorPresentation A P) (hQ : IsBNTSectorPresentation B Q)
     (hEqual : SameMPV₂Pos A B) :
     ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount),

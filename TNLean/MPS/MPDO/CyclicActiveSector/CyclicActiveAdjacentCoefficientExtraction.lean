@@ -895,7 +895,7 @@ coefficient identity preceding the rank-one conclusion of Proposition
 the selected tensor. See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem exists_normalized_selectedFixedProduct_cyclicActiveSectorTraceMatrix_pow_two_eq_pow_three
-    (hK : Kraus.IsInjective K.toMPSTensor) (data : CommutingForm K)
+    (hK : Kraus.IsInjective K) (data : CommutingForm K)
     (hZCL : K.IsSourceZCL) :
     let F :=
       data.fixedProductTensorDataPhysicalSectorFactorization

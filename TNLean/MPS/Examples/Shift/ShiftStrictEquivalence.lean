@@ -180,7 +180,7 @@ theorem shiftExampleU₃_eq_bondConj (d : ℕ) :
 Source: arXiv:1703.09188, eq. (58), lines 1980--2001, and canonical form, lines 259--267;
 chapter Example 7.9. -/
 theorem shiftExampleU₂_isMPUCanonicalForm (d : ℕ) [NeZero d] :
-    MPTensor.IsMPUCanonicalForm (shiftExampleU₂ d).toMPSTensor := by
+    MPTensor.IsMPUCanonicalForm (shiftExampleU₂ d) := by
   obtain ⟨h, -⟩ := rightShiftTensor_exists_canonicalFormII d
   exact (h.physicalAdjointTensor.tensorProduct h).isMPUCanonicalForm
 
@@ -189,7 +189,7 @@ theorem shiftExampleU₂_isMPUCanonicalForm (d : ℕ) [NeZero d] :
 Source: arXiv:1703.09188, eq. (58), lines 1980--2001, and canonical form, lines 259--267;
 chapter Example 7.9. -/
 theorem shiftExampleU₃_isMPUCanonicalForm (d : ℕ) [NeZero d] :
-    MPTensor.IsMPUCanonicalForm (shiftExampleU₃ d).toMPSTensor := by
+    MPTensor.IsMPUCanonicalForm (shiftExampleU₃ d) := by
   obtain ⟨h, -⟩ := rightShiftTensor_exists_canonicalFormII d
   exact (h.tensorProduct h.physicalAdjointTensor).isMPUCanonicalForm
 

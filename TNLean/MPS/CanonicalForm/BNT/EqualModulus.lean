@@ -61,7 +61,7 @@ Paper anchors:
   `|μ_k| ≤ 1` with at least one of modulus 1.
 * CPSV21 lines 1905–1908 — the unital gauge is optional.
 -/
-structure HasEqualModulusWeightLayer (P : SectorDecomposition d) where
+structure HasEqualModulusWeightLayer (P : SectorDecomposition (Fin d)) where
   /-- The spectral level `λ_j`, one complex scalar per basis block. -/
   spectral_level : Fin P.basisCount → ℂ
   /-- The spectral level is everywhere nonzero. -/

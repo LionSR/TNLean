@@ -49,7 +49,7 @@ Source: arXiv:1606.00608, normal-tensor definition at lines 233--235. -/
 theorem _root_.MPTensor.IsNormalTensor.reindexPhysical {β : Type*} [Fintype β] [DecidableEq β]
     {A : MPTensor α₂ β} (hA : IsNormalTensor A) (e : α₁ ≃ α₂) :
     IsNormalTensor (Kraus.reindexPhysical e A) := by
-  refine ⟨(isIrreducibleFamily_reindexPhysical_equiv e A).2 hA.no_invariant_proj, ?_, ?_⟩
+  refine ⟨(Kraus.isIrreducibleFamily_reindexPhysical_equiv e A).2 hA.no_invariant_proj, ?_, ?_⟩
   · rw [Kraus.transferMap_reindexPhysical_equiv e A]
     exact hA.spectral_radius_one
   · exact (isPrimitive_transferMap_reindexPhysical_equiv e A).2 hA.primitive_transfer
@@ -94,8 +94,8 @@ transfer map unchanged. In particular, any separately supplied trace normalizati
 
 Source: arXiv:1606.00608, Appendix A, equations `TP` and `Lambda`,
 lines 1054--1077. -/
-noncomputable def reindexPhysical {A : MPSTensor d₂ D}
-    (data : CPSVCanonicalFormIIData A) (e : Fin d₁ ≃ Fin d₂) :
+noncomputable def reindexPhysical {A : MPTensor α₂ (Fin D)}
+    (data : CPSVCanonicalFormIIData A) (e : α₁ ≃ α₂) :
     CPSVCanonicalFormIIData (Kraus.reindexPhysical e A) where
   toCPSVCanonicalFormData := data.toCPSVCanonicalFormData.reindexPhysical e
   blocks_left_canonical := fun k ↦

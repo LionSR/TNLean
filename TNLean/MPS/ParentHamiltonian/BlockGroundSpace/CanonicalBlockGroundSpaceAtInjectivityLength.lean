@@ -433,7 +433,7 @@ theorem _root_.MPTensor.IsCPSVCanonicalForm.exists_bnt_hasParentHamiltonianGroun
   have hNormal : ∀ j, IsNormalTensor (C j) := hCBNT.blocks_normal
   have hIrr : ∀ k, Kraus.IsIrreducibleFamily (C k) :=
     fun j => (hNormal j).no_invariant_proj
-  have hBlocks : BlocksNotGaugePhaseEquiv (d := d) C :=
+  have hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) C :=
     hCBNT.blocks_not_gaugePhaseEquiv
   have hBlk : ∀ j, Kraus.IsNBlkInjective (C j) (D ^ 4) := fun j =>
     (hNormal j).isNBlkInjective_of_bondDim_le (hDimLe j)

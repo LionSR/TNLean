@@ -8,6 +8,8 @@ import QICLean.Algebra.Matrix.MatrixSingleSpan
 import TNLean.MPS.CanonicalForm.Definitions
 import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge
 import TNLean.MPS.Examples.Dimer.TwistedDimerMPDO
+import TNLean.MPS.Operator.PairAlphabetBridge
+import TNLean.MPS.CanonicalForm.PhysicalReindex
 
 /-!
 # The horizontal canonical form of the twisted quantum dimer
@@ -29,13 +31,13 @@ presentation, and non-simplicity of the tensor are treated in
 
 ## Main results
 
-* `normalizedBlock_toMPSTensor_isInjective` — the letters of each rescaled
+* `normalizedBlock_isInjective` — the letters of each rescaled
   block span the full bond matrix algebra;
 * `normalizedBlock_isLeftCanonical` — the ket-against-bra letters of each
   rescaled block resolve the identity;
 * `normalizedBlock_isNormalTensor` — each rescaled block is a normal tensor;
-* `canonicalFormData` — the literal canonical-form data of the doubled-index
-  tensor with the two rescaled blocks and the weight $5/8$;
+* `canonicalFormData` — the literal canonical-form data of the twisted dimer on the pair
+  alphabet, with the two rescaled blocks and the weight $5/8$;
 * `physTraceTransfer_normalizedBlock_one` — the rescaled block $k = 1$ has
   vanishing physical-trace transfer.
 
@@ -68,12 +70,6 @@ lemma normalizedBlock_apply (k : Fin 2) (i j : Fin 8) :
         ((8 / 5 : ℂ) * coef k i j) := by
   simp [normalizedBlock, block]
 
-/-- The doubled-index letter at `finProdFinEquiv (i, j)` is the MPO letter at `(i, j)`. -/
-lemma toMPSTensor_apply_finProdFinEquiv {d D : ℕ} (M : MPOTensor d D) (i j : Fin d) :
-    M.toMPSTensor (finProdFinEquiv (i, j)) = M (i, j) := by
-  unfold MPOTensor.toMPSTensor
-  rw [MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
-
 /-- At flag value zero every coefficient of a block is nonzero: it is one of
 $\tfrac14$ and $\tfrac3{16}$. -/
 lemma coef_flag_zero_ne_zero (k p q p' q' : Fin 2) :
@@ -84,8 +80,8 @@ lemma coef_flag_zero_ne_zero (k p q p' q' : Fin 2) :
 /-- **The letters of a horizontal block span the bond matrix algebra.** The
 matrix unit at the bond pair $((p,p'),(q,q'))$ is a nonzero multiple of the
 letter at the physical pair $((p,q,0),(p',q',0))$. -/
-theorem block_toMPSTensor_isInjective (k : Fin 2) :
-    Kraus.IsInjective (block k).toMPSTensor := by
+theorem block_isInjective (k : Fin 2) :
+    Kraus.IsInjective (block k) := by
   refine Submodule.eq_top_of_forall_single_mem _ fun a b => ?_
   obtain ⟨p, p', rfl⟩ : ∃ p p', a = finProdFinEquiv (p, p') :=
     ⟨((finProdFinEquiv (m := 2) (n := 2)).symm a).1,
@@ -94,9 +90,8 @@ theorem block_toMPSTensor_isInjective (k : Fin 2) :
     ⟨((finProdFinEquiv (m := 2) (n := 2)).symm b).1,
       ((finProdFinEquiv (m := 2) (n := 2)).symm b).2, by simp⟩
   have hmem : block k (physIdx p q 0, physIdx p' q' 0) ∈
-      Submodule.span ℂ (Set.range (block k).toMPSTensor) := by
-    rw [← toMPSTensor_apply_finProdFinEquiv (block k)]
-    exact Submodule.subset_span ⟨_, rfl⟩
+      Submodule.span ℂ (Set.range (block k)) :=
+    Submodule.subset_span ⟨_, rfl⟩
   have hblock : block k (physIdx p q 0, physIdx p' q' 0) =
       coef k (physIdx p q 0) (physIdx p' q' 0) •
         Matrix.single (finProdFinEquiv (p, p')) (finProdFinEquiv (q, q')) (1 : ℂ) := by
@@ -105,11 +100,11 @@ theorem block_toMPSTensor_isInjective (k : Fin 2) :
   exact (Submodule.smul_mem_iff _ (coef_flag_zero_ne_zero k p q p' q')).mp hmem
 
 /-- The letters of a rescaled block span the bond matrix algebra. -/
-theorem normalizedBlock_toMPSTensor_isInjective (k : Fin 2) :
-    Kraus.IsInjective (normalizedBlock k).toMPSTensor := by
-  have h : (normalizedBlock k).toMPSTensor = fun v => (8 / 5 : ℂ) • (block k).toMPSTensor v := rfl
+theorem normalizedBlock_isInjective (k : Fin 2) :
+    Kraus.IsInjective (normalizedBlock k) := by
+  have h : normalizedBlock k = fun v => (8 / 5 : ℂ) • block k v := rfl
   rw [h]
-  exact (block_toMPSTensor_isInjective k).smul (by norm_num)
+  exact (block_isInjective k).smul (by norm_num)
 
 /-! ### The ket-against-bra letters resolve the identity -/
 
@@ -157,18 +152,16 @@ Grouping the letters by the right bits of their two physical indices, the
 matrix units at $((r,r'),(r,r'))$ carry the coefficient sum of
 `sum_normalizedCoef_sq`. -/
 theorem normalizedBlock_isLeftCanonical (k : Fin 2) :
-    MPTensor.IsLeftCanonical (normalizedBlock k).toMPSTensor := by
+    MPTensor.IsLeftCanonical (normalizedBlock k) := by
   let c : Fin 8 → Fin 8 → ℂ := fun i j => ((8 / 5 : ℂ) * coef k i j) ^ 2
   have hterm : ∀ i j : Fin 8,
-      ((normalizedBlock k).toMPSTensor (finProdFinEquiv (i, j)))ᴴ *
-        (normalizedBlock k).toMPSTensor (finProdFinEquiv (i, j)) =
+      (normalizedBlock k (i, j))ᴴ * normalizedBlock k (i, j) =
       Matrix.single (finProdFinEquiv (bitR i, bitR j)) (finProdFinEquiv (bitR i, bitR j))
         (c i j) := by
     intro i j
-    rw [toMPSTensor_apply_finProdFinEquiv, conjTranspose_mul_self_normalizedBlock]
-  change ∑ v : Fin (8 * 8),
-    ((normalizedBlock k).toMPSTensor v)ᴴ * (normalizedBlock k).toMPSTensor v = 1
-  rw [← (finProdFinEquiv : Fin 8 × Fin 8 ≃ Fin (8 * 8)).sum_comp, Fintype.sum_prod_type]
+    rw [conjTranspose_mul_self_normalizedBlock]
+  change ∑ v : Fin 8 × Fin 8, (normalizedBlock k v)ᴴ * normalizedBlock k v = 1
+  rw [Fintype.sum_prod_type]
   simp only [hterm]
   rw [← rightBitEquiv.sum_comp, Fintype.sum_prod_type]
   have hrow : ∀ (r : Fin 2) (x : Fin 2 × Fin 2),
@@ -207,9 +200,9 @@ theorem normalizedBlock_isLeftCanonical (k : Fin 2) :
 arXiv:1606.00608, lines 224--235: its letters span the bond matrix algebra and
 its ket-against-bra letters resolve the identity. -/
 theorem normalizedBlock_isNormalTensor (k : Fin 2) :
-    MPTensor.IsNormalTensor (normalizedBlock k).toMPSTensor :=
-  MPSTensor.isNormalTensor_of_isNormal_leftCanonical _
-    (normalizedBlock_toMPSTensor_isInjective k).isNormal (normalizedBlock_isLeftCanonical k)
+    MPTensor.IsNormalTensor (normalizedBlock k) := by
+  exact MPSTensor.isNormalTensor_of_isNormal_leftCanonical (normalizedBlock k)
+    (normalizedBlock_isInjective k).isNormal (normalizedBlock_isLeftCanonical k)
 
 /-- The physical-trace transfer of the rescaled block $k = 1$ vanishes, as it
 does for the displayed block (`physTraceTransfer_block_one`). -/
@@ -269,15 +262,15 @@ lemma finSigmaFinEquiv_symm_retainedBondEquiv_symm (p p' k : Fin 2) :
       ⟨k, finProdFinEquiv (p, p')⟩ := by
   simp [retainedBondEquiv, blockBondEquiv]
 
-/-- **Reconstruction of the doubled-index tensor** from the weighted direct
+/-- **Reconstruction of the twisted dimer** from the weighted direct
 sum of the two rescaled blocks: the bond matrix at the bond pair
 $((p,p',k),(q,q',k'))$ is the block-`k` entry when $k = k'$ and zero
 otherwise, exactly as in `T_apply_blocks`. -/
-theorem toMPSTensor_T_reconstruct (i : Fin (8 * 8)) :
-    T.toMPSTensor i =
+theorem T_reconstruct (i : Fin 8 × Fin 8) :
+    T i =
       ambientCoisometryᴴ *
-        MPTensor.toTensorFromBlocks (α := Fin (8 * 8)) (fun _ : Fin 2 => (5 / 8 : ℂ))
-          (fun k => (normalizedBlock k).toMPSTensor) i *
+        MPTensor.toTensorFromBlocks (α := Fin 8 × Fin 8) (fun _ : Fin 2 => (5 / 8 : ℂ))
+          (fun k => normalizedBlock k) i *
         ambientCoisometry := by
   rw [conjTranspose_mul_mul_ambientCoisometry]
   ext b b'
@@ -285,39 +278,38 @@ theorem toMPSTensor_T_reconstruct (i : Fin (8 * 8)) :
   obtain ⟨q, q', k', rfl⟩ := exists_eq_physIdx b'
   simp only [MPTensor.toTensorFromBlocks, Matrix.reindex_apply, Matrix.submatrix_apply,
     finSigmaFinEquiv_symm_retainedBondEquiv_symm]
-  change T (i.divNat, i.modNat) (physIdx p p' k) (physIdx q q' k') = _
   rw [T_apply_blocks]
   by_cases hk : k = k'
   · subst hk
     rw [ite_eq_left rfl, Matrix.blockDiagonal'_apply_eq]
-    simp only [Matrix.smul_apply, smul_eq_mul, MPOTensor.toMPSTensor, normalizedBlock]
+    simp only [Matrix.smul_apply, smul_eq_mul, normalizedBlock]
     ring
   · rw [ite_eq_right hk, Matrix.blockDiagonal'_apply_ne _ _ _ hk]
 
-/-- **The literal canonical form of the doubled-index twisted dimer.** Two
+/-- **The literal canonical form of the twisted dimer.** Two
 retained normal blocks of bond dimension four, namely the rescaled horizontal
 blocks, both with weight $5/8$, and the bond permutation `ambientCoisometry`.
 
 Source: arXiv:1606.00608, Section 2.3, lines 214--245 and eq. `II_CF1`
 (project example). -/
-def canonicalFormData : MPTensor.CPSVCanonicalFormData T.toMPSTensor where
+def canonicalFormData : MPTensor.CPSVCanonicalFormData T where
   r := 2
   dim := fun _ => 4
   dim_pos := fun _ => by norm_num
   weights := fun _ => (5 / 8 : ℂ)
   weights_ne_zero := fun _ => by norm_num
-  blocks := fun k => (normalizedBlock k).toMPSTensor
+  blocks := fun k => normalizedBlock k
   blocks_normal := normalizedBlock_isNormalTensor
   total_dim_le := by simp
   ambient_coisometry := ambientCoisometry
   coisometric := ambientCoisometry_mul_conjTranspose
-  reconstruct := toMPSTensor_T_reconstruct
+  reconstruct := T_reconstruct
 
-/-- The doubled-index twisted dimer is in literal canonical form.
+/-- The twisted dimer, a tensor on the pair alphabet, is in literal canonical form.
 
 Source: arXiv:1606.00608, Section 2.3, lines 214--245 and eq. `II_CF1`
 (project example). -/
-theorem T_toMPSTensor_isCPSVCanonicalForm : MPTensor.IsCPSVCanonicalForm T.toMPSTensor :=
+theorem T_isCPSVCanonicalForm : MPTensor.IsCPSVCanonicalForm T :=
   ⟨canonicalFormData⟩
 
 end MPOTensor.TwistedDimer

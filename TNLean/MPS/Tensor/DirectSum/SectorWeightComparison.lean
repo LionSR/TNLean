@@ -49,7 +49,7 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d : ℕ}
+variable {α : Type*}
 
 /-! ## Coefficient comparison from BNT linear independence -/
 
@@ -112,7 +112,7 @@ zero, where the sum is the positive number of copies in the sector.
 
 This is the common-period coefficient input in the proof of arXiv:1708.00029,
 theorem `thm:bd`, line 631. -/
-lemma coeff_mul_not_eventually_zero (P : SectorDecomposition d)
+lemma coeff_mul_not_eventually_zero (P : SectorDecomposition α)
     (p : ℕ) (hp : 0 < p) (j : Fin P.basisCount) :
     ¬ (∀ᶠ N in Filter.atTop, P.coeff (p * N) j = 0) := by
   classical

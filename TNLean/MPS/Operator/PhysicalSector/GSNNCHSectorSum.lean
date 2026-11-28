@@ -320,7 +320,7 @@ through the inactive-sector repair; see
 Source: arXiv:1606.00608, Appendix C.2, Proposition C.8 (source label 3to4),
 lines 1569--1594, and Definition 4.8, lines 829--850. -/
 theorem isGSNNCH_of_isInjective_of_isSAL (K : MPOTensor d D)
-    (hK : Kraus.IsInjective K.toMPSTensor) (hSAL : IsSAL K) : IsGSNNCH K := by
+    (hK : Kraus.IsInjective K) (hSAL : IsSAL K) : IsGSNNCH K := by
   obtain ⟨data⟩ := nonempty_commutingForm_of_isSAL K hK hSAL
   refine isGSNNCH_of_hasGSNNCHForm data.hasGSNNCHForm fun N hN => ?_
   obtain ⟨hMpdo, htr, -⟩ := hSAL

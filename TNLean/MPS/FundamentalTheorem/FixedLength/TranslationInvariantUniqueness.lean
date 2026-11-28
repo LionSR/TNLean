@@ -93,22 +93,23 @@ word of `B`, and block injectivity leaves no nontrivial invariant subspace.
 This is the use of the single-block property of `B` in the proof of Theorem 7
 of PGVWC07 (arXiv:quant-ph/0608197, MPSarchive.tex lines 1105-1108), which the
 source attributes to the proposition on condition C1. -/
-theorem isUnit_of_intertwines_of_isNBlkInjective [NeZero D] {B C : MPSTensor d D}
+theorem isUnit_of_intertwines_of_isNBlkInjective [NeZero D] {α : Type*} [Finite α]
+    {B C : MPTensor α (Fin D)}
     {L : ℕ} (hB : Kraus.IsNBlkInjective B L) {R : Matrix (Fin D) (Fin D) ℂ} {x : ℂ}
     (hR : R ≠ 0) (hx : x ≠ 0) (hrel : ∀ i, R * C i = x⁻¹ • (B i * R)) :
     IsUnit R := by
   classical
-  have hInj : Kraus.IsInjective (Kraus.blockTensor B L) :=
-    (Kraus.isNBlkInjective_iff_blockTensor_isInjective B L).mp hB
-  have hAct : Matrix.IsIrreducibleAction (Kraus.blockTensor B L) :=
+  have := Fintype.ofFinite α
+  have hAct : Matrix.IsIrreducibleAction (Kraus.block B L) :=
     Kraus.isIrreducibleAction_of_isIrreducibleFamily _
       (Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM _
-        (Kraus.injective_implies_irreducibleCP _ hInj))
+        (Kraus.injective_implies_irreducibleCP _
+          ((Kraus.isNBlkInjective_iff_isInjective_block B L).mp hB)))
   let Wr : Submodule ℂ (Fin D → ℂ) := LinearMap.range (Matrix.toLin' R)
   have hBR : ∀ i, B i * R = x • (R * C i) := by
     intro i
     rw [hrel i, smul_smul, mul_inv_cancel₀ hx, one_smul]
-  have hword : ∀ w : List (Fin d), ∀ v ∈ Wr, (Kraus.evalWord B w).mulVec v ∈ Wr := by
+  have hword : ∀ w : List α, ∀ v ∈ Wr, (Kraus.evalWord B w).mulVec v ∈ Wr := by
     intro w
     induction w with
     | nil => intro v hv; simpa using hv
@@ -120,8 +121,8 @@ theorem isUnit_of_intertwines_of_isNBlkInjective [NeZero D] {B C : MPSTensor d D
       refine ⟨x • (C i).mulVec u, ?_⟩
       simp only [Matrix.toLin'_apply, Matrix.mulVec_smul, Matrix.mulVec_mulVec, hBR i,
         Matrix.smul_mulVec]
-  have hinv : Matrix.IsInvariantSubmodule (Kraus.blockTensor B L) Wr :=
-    fun I v hv => hword _ v hv
+  have hinv : Matrix.IsInvariantSubmodule (Kraus.block B L) Wr :=
+    fun I v hv => hword (List.ofFn I) v hv
   rcases hAct Wr hinv with hbot | htop
   · exfalso
     apply hR
@@ -149,7 +150,8 @@ lines 1097-1108 is then the unitary-gauge theorem
 printed proof uses the dual fixed point `Λ` of `B` for `|x| = 1` and the
 single-block property of `B` for `R R† = 1`; here both are consequences of
 condition C1 through the Perron--Frobenius theory of irreducible maps. -/
-theorem exists_unitaryConj_of_intertwines_of_isNBlkInjective {B C : MPSTensor d D} {L₀ : ℕ}
+theorem exists_unitaryConj_of_intertwines_of_isNBlkInjective {α : Type*} [Fintype α]
+    {B C : MPTensor α (Fin D)} {L₀ : ℕ}
     (hB_unital : ∑ i, B i * (B i)ᴴ = 1)
     (hC_unital : ∑ i, C i * (C i)ᴴ = 1)
     (hC1 : Kraus.IsNBlkInjective B L₀)
@@ -171,8 +173,8 @@ theorem exists_unitaryConj_of_intertwines_of_isNBlkInjective {B C : MPSTensor d 
     rw [← smul_mul_assoc, ← hBR i, Matrix.mul_assoc, Matrix.mul_nonsing_inv R hRdet,
       Matrix.mul_one]
   -- Pass to the conjugate-transposed families, which are left-canonical.
-  let Ba : MPSTensor d D := fun i => (B i)ᴴ
-  let Ca : MPSTensor d D := fun i => (C i)ᴴ
+  let Ba : MPTensor α (Fin D) := fun i => (B i)ᴴ
+  let Ca : MPTensor α (Fin D) := fun i => (C i)ᴴ
   have hBa_left : IsLeftCanonical Ba := by
     change ∑ i, (Ba i)ᴴ * Ba i = 1
     simpa [Ba] using hB_unital
@@ -181,16 +183,15 @@ theorem exists_unitaryConj_of_intertwines_of_isNBlkInjective {B C : MPSTensor d 
     simpa [Ca] using hC_unital
   -- Irreducibility of `B` and `C` from condition C1.
   have hBact : Matrix.IsIrreducibleAction B := by
-    have hInj : Kraus.IsInjective (Kraus.blockTensor B L₀) :=
-      (Kraus.isNBlkInjective_iff_blockTensor_isInjective B L₀).mp hC1
-    have hAct : Matrix.IsIrreducibleAction (Kraus.blockTensor B L₀) :=
+    have hAct : Matrix.IsIrreducibleAction (Kraus.block B L₀) :=
       Kraus.isIrreducibleAction_of_isIrreducibleFamily _
         (Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM _
-          (Kraus.injective_implies_irreducibleCP _ hInj))
+          (Kraus.injective_implies_irreducibleCP _
+            ((Kraus.isNBlkInjective_iff_isInjective_block B L₀).mp hC1)))
     intro Wr hinv
     refine hAct Wr fun I v hv => ?_
-    change (Kraus.evalWord B (Kraus.wordOfBlock d L₀ I)).mulVec v ∈ Wr
-    generalize Kraus.wordOfBlock d L₀ I = w
+    change (Kraus.evalWord B (List.ofFn I)).mulVec v ∈ Wr
+    generalize List.ofFn I = w
     induction w with
     | nil => simpa using hv
     | cons i w ih =>

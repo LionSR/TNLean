@@ -72,12 +72,12 @@ theorem parentInteraction_pvbs_two_apply (μ : ℝ) (v : NSiteSpace 2 2) (σ : C
     if τ 0 = 0 then (if τ 1 = 0 then 0 else z)
     else if τ 1 = 0 then -(μ : ℂ) * z else v ![1, 1]
   let e := WithLp.linearEquiv 2 ℂ (NSiteSpace 2 2)
-  let G := groundSpaceES (pvbsTensor (μ : ℂ)) 2
+  let G := ((groundSpace (pvbsTensor (μ : ℂ)) 2).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)
   have hwperp : e.symm w ∈ Gᗮ := by
     rw [Submodule.mem_orthogonal]
     intro u hu
     have hu' : e u ∈ groundSpace (pvbsTensor (μ : ℂ)) 2 :=
-      (mem_groundSpaceES_iff _ _ u).mp hu
+      (mem_map_groundSpace_iff _ _ u).mp hu
     obtain ⟨a, b, hab⟩ := (mem_groundSpace_pvbsTensor_iff (μ : ℂ) 2 (e u)).mp hu'
     rw [← e.symm_apply_apply u, inner_withLpLinearEquiv_symm, hab]
     simp only [sum_cfg_two, Fin.sum_univ_two]
@@ -85,7 +85,7 @@ theorem parentInteraction_pvbs_two_apply (μ : ℝ) (v : NSiteSpace 2 2) (σ : C
       Fin.tail, map_mul]
     ring
   have hwground : e.symm v - e.symm w ∈ G := by
-    rw [mem_groundSpaceES_iff]
+    rw [mem_map_groundSpace_iff]
     change v - w ∈ groundSpace (pvbsTensor (μ : ℂ)) 2
     apply (mem_groundSpace_pvbs_two_iff (μ : ℂ) _).mpr
     constructor

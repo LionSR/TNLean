@@ -43,14 +43,13 @@
 
 \begin{definition}[Single-site vertical loops]
     \label{def:mpdo_vertical_loops}
-    \lean{MPOTensor.verticalLoop}
     \lean{MPOTensor.verticalLoopWith}
     \lean{MPOTensor.representativeLoop}
     \lean{MPOTensor.representativeLoop_cast}
     \lean{MPOTensor.verticalLoopWith_apply_eq_trace_mul_verticalTensor}
     \lean{MPOTensor.verticalLoopWith_one}
-    \lean{MPOTensor.verticalLoop_ketLeftMul}
-    \lean{MPOTensor.verticalLoop_braRightMul}
+    \lean{MPOTensor.physTraceTransfer_ketLeftMul}
+    \lean{MPOTensor.physTraceTransfer_braRightMul}
     \lean{MPOTensor.sectorCompression}
     \lean{MPOTensor.sectorCompression_def}
     \lean{MPOTensor.blockChainTrace}
@@ -78,8 +77,8 @@
 
 \begin{lemma}[The trace of the density operator is a chain of loops]
     \label{lem:mpdo_trace_loop_chain}
-    \lean{MPOTensor.sum_evalWord_diag_eq_verticalLoop_pow}
-    \lean{MPOTensor.trace_mpo_eq_trace_verticalLoop_pow}
+    \lean{MPOTensor.sum_evalWord_diag_eq_physTraceTransfer_pow}
+    \lean{MPOTensor.trace_mpo_eq_trace_physTraceTransfer_pow}
     \leanok
     \uses{def:mpo_family,def:mpdo_vertical_loops}
     Summing the diagonal word evaluations of an MPO tensor over all

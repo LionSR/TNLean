@@ -55,8 +55,8 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor.IsBiorthogonalDecomposition
 
-variable {ι : Type*} [Fintype ι] {d D : ℕ} {δ : ι → ℕ}
-  {B : MPSTensor d D} {A : ∀ c : ι, MPSTensor d (δ c)}
+variable {ι : Type*} [Fintype ι] {α : Type*} {D : ℕ} {δ : ι → ℕ}
+  {B : MPTensor α (Fin D)} {A : ∀ c : ι, MPTensor α (Fin (δ c))}
   {V : ∀ c : ι, Matrix (Fin (δ c)) (Fin D) ℂ}
   {W : ∀ c : ι, Matrix (Fin D) (Fin (δ c)) ℂ}
 
@@ -117,8 +117,8 @@ variable {O : ∀ a, MPOTensor d (χ a)} {A : ∀ x : Fin 1, MPSTensor d (D x)}
   (VA : ∀ a x y, Fin (M a x y) → Matrix (Fin (D y)) (Fin (χ a * D x)) ℂ)
   (WA : ∀ a x y, Fin (M a x y) → Matrix (Fin (χ a * D x)) (Fin (D y)) ℂ)
   (hF : ∀ a b,
-    MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b)).toMPSTensor
-      (fun q : (c : Fin r) × Fin (N a b c) ↦ (O q.1).toMPSTensor)
+    MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b))
+      (fun q : (c : Fin r) × Fin (N a b c) ↦ O q.1)
       (fun q ↦ VF a b q.1 q.2) (fun q ↦ WF a b q.1 q.2))
   (hA : ∀ a x,
     MPSTensor.IsBiorthogonalDecomposition (actTensor (O a) (A x))
@@ -206,8 +206,8 @@ Source: GLM23, lines 615--626. The orientation of the multiplicity indices
 of `F` is the corrected one of `docs/paper-gaps/glm23_multiplicity_l_indices.tex`;
 there the source's labels `μ, ν` and `χ, η` of this display are exchanged. -/
 theorem fusionFMatrix_eq_singleBlockLambda
-    (hInjO : ∀ a, Kraus.IsInjective (O a).toMPSTensor) (hχ : ∀ a, 0 < χ a)
-    (hneO : MPSTensor.BlocksNotGaugePhaseEquiv (fun a ↦ (O a).toMPSTensor))
+    (hInjO : ∀ a, Kraus.IsInjective (O a)) (hχ : ∀ a, 0 < χ a)
+    (hneO : MPSTensor.BlocksNotGaugePhaseEquiv O)
     (a b c d e f : Fin r) (η : Fin (N a b d)) (χ' : Fin (N d c e))
     (μ : Fin (N b c f)) (ν : Fin (N a f e)) :
     fusionFMatrix VF WF a b c e ⟨d, η, χ'⟩ ⟨f, μ, ν⟩ =
@@ -254,12 +254,12 @@ gives exact fusion maps all of whose F coefficients equal one. Source:
 GLM23, lines 626--630: "the F-symbols of the MPO belong to the trivial
 class, i.e. they are gauge equivalent to 1". -/
 theorem exists_fusionFMatrix_eq_one_of_singleBlock
-    (hInjO : ∀ a, Kraus.IsInjective (O a).toMPSTensor) (hχ : ∀ a, 0 < χ a)
-    (hneO : MPSTensor.BlocksNotGaugePhaseEquiv (fun a ↦ (O a).toMPSTensor)) :
+    (hInjO : ∀ a, Kraus.IsInjective (O a)) (hχ : ∀ a, 0 < χ a)
+    (hneO : MPSTensor.BlocksNotGaugePhaseEquiv O) :
     ∃ (VF' : ∀ a b c, Fin (N a b c) → Matrix (Fin (χ c)) (Fin (χ a * χ b)) ℂ)
       (WF' : ∀ a b c, Fin (N a b c) → Matrix (Fin (χ a * χ b)) (Fin (χ c)) ℂ),
-      (∀ a b, MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b)).toMPSTensor
-        (fun q : (c : Fin r) × Fin (N a b c) ↦ (O q.1).toMPSTensor)
+      (∀ a b, MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b))
+        (fun q : (c : Fin r) × Fin (N a b c) ↦ O q.1)
         (fun q ↦ VF' a b q.1 q.2) (fun q ↦ WF' a b q.1 q.2)) ∧
       ∀ a b c e p q, fusionFMatrix VF' WF' a b c e p q = 1 := by
   classical

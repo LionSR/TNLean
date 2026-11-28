@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Operator.PhysicalSector.InverseMapPhysicalSectorFactorization
 import TNLean.MPS.Operator.PhysicalSector.PhysicalSectorChainDecomposition
 import TNLean.MPS.Operator.Simple.SectorEtaPositivity
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Positive cyclic sector products from saturation of the area law
@@ -48,11 +49,12 @@ Source: arXiv:1606.00608, Appendix C.2, Lemma C.4 (`propSN`), lines
 1406--1450. -/
 theorem
     exists_physicalSectorFactorization_with_cyclicNeighboringProduct_posSemidef_of_isSAL
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hSAL : IsSAL K) :
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K) (hSAL : IsSAL K) :
     ∃ F : PhysicalSectorFactorization K,
       ∀ {N : ℕ} [NeZero N] (k : Fin N → Fin F.sectorCount),
         (F.cyclicNeighboringProduct k).PosSemidef := by
-  obtain ⟨F⟩ := nonempty_physicalSectorFactorization_of_isSAL K hK hSAL
+  obtain ⟨F⟩ := nonempty_physicalSectorFactorization_of_isSAL K
+    hK hSAL
   refine ⟨F, ?_⟩
   intro N _ k
   rw [← F.mpo_submatrix_sector_eq_cyclicNeighboringProduct k]

@@ -103,25 +103,25 @@ open MPOTensor.TwistedDimer (bitF)
 
 /-! ### The letter identity -/
 
-private theorem dimerZeroOne_letter_int_even : ∀ a : Fin 64,
-    bitF (Fin.divNat (m := 8) (n := 8) a) = 0 →
-      bitF (Fin.modNat (m := 8) (n := 8) a) = 0 →
-        (2 : ℤ) • dimerStackEven 0 1 (Fin.divNat (m := 8) (n := 8) a)
-            (Fin.modNat (m := 8) (n := 8) a) =
+private theorem dimerZeroOne_letter_int_even : ∀ a : Fin 8 × Fin 8,
+    bitF a.1 = 0 →
+      bitF a.2 = 0 →
+        (2 : ℤ) • dimerStackEven 0 1 a.1
+            a.2 =
           ∑ s, dimerCoefInt s • pairBlockInt (dimerBlockInt 0 1) s a := by
   decide +kernel
 
-private theorem dimerZeroOne_letter_int_odd : ∀ a : Fin 64,
-    bitF (Fin.divNat (m := 8) (n := 8) a) = 1 →
-      bitF (Fin.modNat (m := 8) (n := 8) a) = 1 →
-        (2 : ℤ) • dimerStackOdd 0 1 (Fin.divNat (m := 8) (n := 8) a)
-            (Fin.modNat (m := 8) (n := 8) a) =
+private theorem dimerZeroOne_letter_int_odd : ∀ a : Fin 8 × Fin 8,
+    bitF a.1 = 1 →
+      bitF a.2 = 1 →
+        (2 : ℤ) • dimerStackOdd 0 1 a.1
+            a.2 =
           ∑ s, dimerCoefInt s • pairBlockInt (dimerBlockInt 0 1) s a := by
   decide +kernel
 
 /-- **The integer letter identity of the fusion of the zero sector with the one sector**
 (`p6_examples_compression_data.md`, §1.3). -/
-theorem dimerZeroOne_letter_int (a : Fin 64) :
+theorem dimerZeroOne_letter_int (a : Fin 8 × Fin 8) :
     (2 : ℤ) • dimerStackedInt 0 1 a =
       ∑ s, dimerCoefInt s • pairBlockInt (dimerBlockInt 0 1) s a :=
   dimer_letter_int_of_halves 0 1 dimerZeroOne_letter_int_even dimerZeroOne_letter_int_odd a
@@ -135,7 +135,7 @@ open MPSTensor
 /-- **The integer letter identity of every pair of sectors** (`p6_examples_compression_data.md`,
 §1.3): by the sign rule the pair `(f, f')` reduces to the pair `(0, f + f')`, whose two cases are
 checked exhaustively. -/
-theorem dimerFusion_letter_int (f f' : Fin 2) (a : Fin 64) :
+theorem dimerFusion_letter_int (f f' : Fin 2) (a : Fin 8 × Fin 8) :
     (2 : ℤ) • dimerStackedInt f f' a =
       ∑ s, dimerCoefInt s • pairBlockInt (dimerBlockInt f f') s a := by
   rw [dimerStackedInt_eq_add, dimerBlockInt_eq_add]
@@ -162,10 +162,10 @@ theorem dimerFusion_remainder (f f' : Fin 2) : (dimerFusionCompression f f').rem
 `tr((M_f M_{f'})^w) = (7/16)^{|w|} tr(M_{f+f'}^w) + (1/16)^{|w|} tr(M_{f+f'+1}^w)`, the fusion
 rule `eq:p6-r44-z2-fusion` of the strategy note (`thm:p6-r44-z2`(v)) read on word traces at
 `x = 7/8` (`p6_examples_compression_data.md`, §1.4). -/
-theorem dimerFusion_trace_evalWord (f f' : Fin 2) (w : List (Fin 64)) (hw : w ≠ []) :
+theorem dimerFusion_trace_evalWord (f f' : Fin 2) (w : List (Fin 8 × Fin 8)) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord (dimerStacked f f') w) =
-      (7 / 16 : ℂ) ^ w.length * Matrix.trace (Kraus.evalWord (dimerTarget (f + f')) w) +
-        (1 / 16 : ℂ) ^ w.length * Matrix.trace (Kraus.evalWord (dimerTarget (f + f' + 1)) w) :=
+      (7 / 16 : ℂ) ^ w.length * Matrix.trace (Kraus.evalWord (dimerM (f + f')) w) +
+        (1 / 16 : ℂ) ^ w.length * Matrix.trace (Kraus.evalWord (dimerM (f + f' + 1)) w) :=
   dimer_trace_evalWord_of_compression f f' (dimerFusionCompression f f') w hw
 
 /-- **Biorthogonal compression onto each fusion channel of every fusion** (P5 note,
@@ -183,7 +183,7 @@ theorem dimerFusion_left_mul_right_of_ne (f f' : Fin 2) {s t : {s // s ∈ pairS
 
 /-- **The sitewise right intertwiner of each channel of every fusion**:
 `B^a V_s = V_s (μ_s M_s^a)` (`p6_examples_compression_data.md`, §1.3). -/
-theorem dimerFusion_mul_right_eq_right_mul (f f' : Fin 2) (a : Fin 64)
+theorem dimerFusion_mul_right_eq_right_mul (f f' : Fin 2) (a : Fin 8 × Fin 8)
     (s : {s // s ∈ pairSlots}) :
     dimerStacked f f' a * (dimerFusionCompression f f').right s =
       (dimerFusionCompression f f').right s * (dimerWeights s.1 • dimerBlocks f f' s.1) a :=
@@ -191,7 +191,7 @@ theorem dimerFusion_mul_right_eq_right_mul (f f' : Fin 2) (a : Fin 64)
 
 /-- **The sitewise left intertwiner of each channel of every fusion**:
 `W_s B^a = (μ_s M_s^a) W_s`. -/
-theorem dimerFusion_left_mul_eq_mul_left (f f' : Fin 2) (a : Fin 64)
+theorem dimerFusion_left_mul_eq_mul_left (f f' : Fin 2) (a : Fin 8 × Fin 8)
     (s : {s // s ∈ pairSlots}) :
     (dimerFusionCompression f f').left s * dimerStacked f f' a =
       (dimerWeights s.1 • dimerBlocks f f' s.1) a * (dimerFusionCompression f f').left s :=

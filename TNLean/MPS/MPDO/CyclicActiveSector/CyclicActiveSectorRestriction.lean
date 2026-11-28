@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Operator.PhysicalSector.PhysicalSectorChainDecomposition
 import TNLean.MPS.MPDO.PhysicalSector.ActiveSectorTraceMatrixZCL
 import QICLean.Algebra.PerronFrobenius.Idempotent
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Cyclic-active physical sectors
@@ -242,7 +243,7 @@ Source: arXiv:1606.00608, Appendix C.2, Lemma `propSN`, lines 1451--1471.
 nonzero cyclic support; it does not assert primitivity of the unreduced trace
 matrix.  See `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem sectorVirtualMatrix_eq_zero_of_not_isCyclicActiveSector
-    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K.toMPSTensor)
+    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K)
     (k : Fin F.sectorCount) (hk : ¬F.IsCyclicActiveSector k)
     (x y : F.SectorIndex k) :
     F.sectorVirtualMatrix k x y = 0 := by
@@ -264,7 +265,7 @@ Source: arXiv:1606.00608, Appendix C.2, equations `formK`, `etarl`, and
 implements the restricted repair; it is not the SAL decomposition in
 `propSN`.  See `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 noncomputable def cyclicActiveLeftRestriction
-    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K.toMPSTensor) :
+    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K) :
     PhysicalSectorFactorization K where
   sectorCount := F.sectorCount
   leftDim := F.leftDim
@@ -298,7 +299,7 @@ zero.
 Source: arXiv:1606.00608, Appendix C.2, equations `formK` and `etarl`, lines
 1434--1450. -/
 @[simp] theorem cyclicActiveLeftRestriction_leftTensor
-    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K.toMPSTensor)
+    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K)
     (k : Fin F.sectorCount) (beta : Fin D) :
     (F.cyclicActiveLeftRestriction hK).leftTensor k beta =
       if F.IsCyclicActiveSector k then F.leftTensor k beta else 0 := rfl
@@ -308,7 +309,7 @@ Source: arXiv:1606.00608, Appendix C.2, equations `formK` and `etarl`, lines
 Source: arXiv:1606.00608, Appendix C.2, equations `formK` and `etarl`, lines
 1434--1450. -/
 @[simp] theorem cyclicActiveLeftRestriction_rightTensor
-    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K.toMPSTensor)
+    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K)
     (k : Fin F.sectorCount) (alpha : Fin D) :
     (F.cyclicActiveLeftRestriction hK).rightTensor k alpha =
       F.rightTensor k alpha := rfl
@@ -319,7 +320,7 @@ cyclic-active and kills every other target column.
 Source: arXiv:1606.00608, Appendix C.2, equations `etarl` and `Tkn`, lines
 1441--1482. -/
 theorem cyclicActiveLeftRestriction_neighboringOperator
-    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K.toMPSTensor)
+    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K)
     (k h : Fin F.sectorCount) :
     (F.cyclicActiveLeftRestriction hK).neighboringOperator k h =
       if F.IsCyclicActiveSector h then F.neighboringOperator k h else 0 := by
@@ -340,7 +341,7 @@ theorem cyclicActiveLeftRestriction_neighboringOperator
     simp
 
 private noncomputable def cyclicActiveLeftRestriction_activeSectorEquiv
-    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K.toMPSTensor) :
+    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K) :
     (F.cyclicActiveLeftRestriction hK).ActiveSector F.cyclicActiveWeight ≃
       F.CyclicActiveSector where
   toFun k := ⟨k.1, k.2⟩
@@ -353,7 +354,7 @@ the original restricted trace matrix.
 
 Source: arXiv:1606.00608, Appendix C.2, equation `Tkn`, lines 1480--1482. -/
 theorem reindex_cyclicActiveLeftRestriction_activeSectorTraceMatrix
-    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K.toMPSTensor) :
+    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K) :
     Matrix.reindex (F.cyclicActiveLeftRestriction_activeSectorEquiv hK)
       (F.cyclicActiveLeftRestriction_activeSectorEquiv hK)
       ((F.cyclicActiveLeftRestriction hK).activeSectorTraceMatrix
@@ -366,7 +367,7 @@ theorem reindex_cyclicActiveLeftRestriction_activeSectorTraceMatrix
   rfl
 
 private theorem cyclicActiveLeftRestriction_leftTensor_eq_zero_of_weight_eq_zero
-    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K.toMPSTensor)
+    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K)
     (k : Fin F.sectorCount) (hk : F.cyclicActiveWeight k = 0)
     (beta : Fin D) :
     (F.cyclicActiveLeftRestriction hK).leftTensor k beta = 0 := by
@@ -376,7 +377,7 @@ private theorem cyclicActiveLeftRestriction_leftTensor_eq_zero_of_weight_eq_zero
   exact (F.cyclicActiveWeight_ne_zero_iff k).2 hactive hk
 
 private theorem cyclicActiveLeftRestriction_neighboringOperator_posSemidef
-    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K.toMPSTensor)
+    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
     (k h : Fin F.sectorCount) :
     ((F.cyclicActiveLeftRestriction hK).neighboringOperator k h).PosSemidef := by
@@ -398,7 +399,7 @@ the restricted matrix.  It neither invokes SAL nor identifies this matrix
 with the full matrix of `propSN`.  See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem cyclicActiveSectorTraceMatrix_normalized_relations_of_isSourceZCL
-    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K.toMPSTensor)
+    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
     (hZCL : K.IsSourceZCL) :
     ∃ lam : ℝ, 0 < lam ∧
@@ -464,7 +465,7 @@ Source: arXiv:1606.00608, Appendix C.2, Lemma `propSN`, lines 1451--1471.
 replaces the SAL-dependent sector selection in `propSN`.  See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem cyclicActiveSectorOneSiteMatrixFamily_span_eq_top
-    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K.toMPSTensor) :
+    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K) :
     Submodule.span ℂ
       (Set.range (F.activeSectorOneSiteMatrixFamily F.cyclicActiveWeight)) = ⊤ := by
   apply F.activeSectorOneSiteMatrixFamily_span_eq_top F.cyclicActiveWeight
@@ -483,7 +484,7 @@ Source: arXiv:1606.00608, Appendix C.2, Lemma `propSN`, lines 1451--1471.
 restricted support, without the SAL hypothesis of `propSN`.  See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem nonempty_cyclicActiveSector
-    (F : PhysicalSectorFactorization K) [NeZero D] (hK : Kraus.IsInjective K.toMPSTensor) :
+    (F : PhysicalSectorFactorization K) [NeZero D] (hK : Kraus.IsInjective K) :
     Nonempty F.CyclicActiveSector := by
   classical
   have hspan := F.sectorVirtualMatrixFamily_span_eq_top hK
@@ -528,7 +529,7 @@ Source: arXiv:1606.00608, Appendix C.2, Lemma `propSN`, lines 1451--1471.
 on the restricted support and replaces the paper's blocking assertion.  See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem exists_cyclicActive_two_edge_return
-    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K.toMPSTensor)
+    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K)
     {k h : F.CyclicActiveSector}
     (hkh : F.neighboringOperator k h ≠ 0) :
     ∃ j : F.CyclicActiveSector,
@@ -552,7 +553,7 @@ Source: arXiv:1606.00608, Appendix C.2, Lemma `propSN`, lines 1451--1471.
 for the restricted trace matrix, without the SAL hypothesis of `propSN`.  See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem cyclicActiveSectorTraceMatrix_isIrreducible
-    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K.toMPSTensor)
+    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef) :
     Matrix.IsIrreducible F.cyclicActiveSectorTraceMatrix :=
   F.activeSectorTraceMatrix_isIrreducible F.cyclicActiveWeight hpos
@@ -567,7 +568,7 @@ Source: arXiv:1606.00608, Appendix C.2, Lemma `propSN`, lines 1451--1471.
 restricted trace matrix.  See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem cyclicActiveSectorTraceMatrix_pow_two_diag_pos
-    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K.toMPSTensor)
+    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
     (k : F.CyclicActiveSector) :
     0 < (F.cyclicActiveSectorTraceMatrix ^ 2) k k :=
@@ -583,7 +584,7 @@ Source: arXiv:1606.00608, Appendix C.2, Lemma `propSN`, lines 1451--1471.
 restricted trace matrix and replaces the paper's blocking assertion.  See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem cyclicActiveSectorTraceMatrix_pow_three_diag_pos
-    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K.toMPSTensor)
+    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
     (k : F.CyclicActiveSector) :
     0 < (F.cyclicActiveSectorTraceMatrix ^ 3) k k :=
@@ -608,7 +609,7 @@ deleting sectors absent from nonzero cyclic products.  It is not the
 SAL-dependent full-matrix assertion of `propSN`.  See
 `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem cyclicActiveSectorTraceMatrix_isPrimitive
-    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K.toMPSTensor)
+    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef) :
     Matrix.IsPrimitive F.cyclicActiveSectorTraceMatrix :=
   (F.cyclicActiveSectorTraceMatrix_isIrreducible hK hpos)
@@ -626,7 +627,7 @@ Source: arXiv:1606.00608, Appendix C.2, equations `SALZCL`, lines
 the square of the restricted trace matrix, not the one-step full matrix in
 the printed proof.  See `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem cyclicActiveSectorTraceMatrix_rank_pow_two_eq_one
-    (F : PhysicalSectorFactorization K) [NeZero D] (hK : Kraus.IsInjective K.toMPSTensor)
+    (F : PhysicalSectorFactorization K) [NeZero D] (hK : Kraus.IsInjective K)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
     (hpow : F.cyclicActiveSectorTraceMatrix ^ 2 =
       F.cyclicActiveSectorTraceMatrix ^ 3) :
@@ -646,7 +647,7 @@ Source: arXiv:1606.00608, Appendix C.2, equations `SALZCL`, lines
 the square of the restricted trace matrix, not the one-step full matrix in
 the printed proof.  See `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem normalized_cyclicActiveSectorTraceMatrix_rank_pow_two_eq_one
-    (F : PhysicalSectorFactorization K) [NeZero D] (hK : Kraus.IsInjective K.toMPSTensor)
+    (F : PhysicalSectorFactorization K) [NeZero D] (hK : Kraus.IsInjective K)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
     {lam : ℝ} (hlam : 0 < lam)
     (hpow : (lam⁻¹ • F.cyclicActiveSectorTraceMatrix) ^ 2 =
@@ -673,7 +674,7 @@ of the restricted trace matrix.  This does not identify that square with the
 one-step matrix printed at source line 1613 or with the unreduced Beigi
 matrix.  See `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem exists_normalized_cyclicActiveSectorTraceMatrix_pos_factorization_of_isSourceZCL
-    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K.toMPSTensor)
+    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
     (hZCL : K.IsSourceZCL) :
     ∃ lam : ℝ, 0 < lam ∧
@@ -714,7 +715,7 @@ coefficient, whereas this theorem proves rank one for the square of the
 restricted coefficient.  The additional marginal replacement remains open.
 See `docs/paper-gaps/cpsv16_commuting_form_to_sal.tex`. -/
 theorem exists_normalized_cyclicActiveSectorTraceMatrix_rank_pow_two_eq_one_of_isSourceZCL
-    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K.toMPSTensor)
+    (F : PhysicalSectorFactorization K) (hK : Kraus.IsInjective K)
     (hpos : ∀ k h, (F.neighboringOperator k h).PosSemidef)
     (hZCL : K.IsSourceZCL) :
     ∃ lam : ℝ, 0 < lam ∧

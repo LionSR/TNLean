@@ -236,15 +236,31 @@ direct sum of the blocks and the zero slots
 `thm:p5-local-adjoint-closure`). The hypothesis here asks only that the conjugate transpose of
 every generator lie in the generated algebra, which is equivalent to the closure of the whole
 generated algebra under conjugate transposition used in the source. -/
-theorem exists_multiBlockCompression_remainder_eq_zero_of_star (S : Finset ι)
-    (C : ∀ s, MPSTensor d (D s)) (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s)
-    (B : MPSTensor d DB)
-    (htr : ∀ w : List (Fin d), w ≠ [] →
+theorem exists_multiBlockCompression_remainder_eq_zero_of_star {α : Type*} [Finite α]
+    (S : Finset ι) (C : ∀ s, MPTensor α (Fin (D s))) (hC : ∀ s ∈ S, Kraus.IsNormal (C s))
+    (hD : ∀ s ∈ S, 0 < D s) (B : MPTensor α (Fin DB))
+    (htr : ∀ w : List α, w ≠ [] →
       Matrix.trace (Kraus.evalWord B w) = ∑ s ∈ S, Matrix.trace (Kraus.evalWord (C s) w))
     (hstar : ∀ i, (B i)ᴴ ∈ Algebra.adjoin ℂ (Set.range B)) :
     ∃ P : MultiBlockCompression B S C, P.remainder = 0 := by
-  have := B.isSemisimpleModule_wordModule_of_conjTranspose_mem_adjoin hstar
-  exact exists_multiBlockCompression_remainder_eq_zero_of_isSemisimpleModule S C hC hD B htr
+  classical
+  have := Fintype.ofFinite α
+  let e := Fintype.equivFin α
+  have hrange : Set.range (Kraus.reindexPhysical e.symm B) = Set.range B :=
+    e.symm.surjective.range_comp B
+  have hstar' : ∀ j, (Kraus.reindexPhysical e.symm B j)ᴴ ∈
+      Algebra.adjoin ℂ (Set.range (Kraus.reindexPhysical e.symm B)) := fun j => by
+    rw [hrange]; exact hstar (e.symm j)
+  have := MPSTensor.isSemisimpleModule_wordModule_of_conjTranspose_mem_adjoin
+    (Kraus.reindexPhysical e.symm B) hstar'
+  obtain ⟨Q, hQ⟩ := exists_multiBlockCompression_remainder_eq_zero_of_isSemisimpleModule S
+    (fun s => Kraus.reindexPhysical e.symm (C s))
+    (fun s hs => (isNormal_reindexPhysical_equiv e.symm (C s)).2 (hC s hs)) hD
+    (Kraus.reindexPhysical e.symm B) fun w hw => by
+      simpa only [Kraus.evalWord_reindexPhysical] using
+        htr (w.map e.symm) (by simpa using hw)
+  exact ⟨Q.ofReindexPhysical e, funext fun i => by
+    rw [MultiBlockCompression.remainder_ofReindexPhysical, hQ]; rfl⟩
 
 omit [DecidableEq ι] in
 /-- **Sitewise fusion tensors from star closure**. When the virtual algebra of the source is
@@ -255,18 +271,20 @@ fusion tensors of Garre-Rubio, Lootens and Molnar (arXiv:2203.12563); the biorth
 family is the conclusion of
 `Notes/OpenProblemsTN/strategies/final_resolution/p5_local_zipper_hypotheses.tex`,
 `thm:p5-local-adjoint-closure`. -/
-theorem exists_fusionTensors_of_star (S : Finset ι) (C : ∀ s, MPSTensor d (D s))
-    (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s) (B : MPSTensor d DB)
-    (htr : ∀ w : List (Fin d), w ≠ [] →
+theorem exists_fusionTensors_of_star {α : Type*} [Finite α] (S : Finset ι)
+    (C : ∀ s, MPTensor α (Fin (D s)))
+    (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s) (B : MPTensor α (Fin DB))
+    (htr : ∀ w : List α, w ≠ [] →
       Matrix.trace (Kraus.evalWord B w) = ∑ s ∈ S, Matrix.trace (Kraus.evalWord (C s) w))
     (hstar : ∀ i, (B i)ᴴ ∈ Algebra.adjoin ℂ (Set.range B)) :
     ∃ (left : ∀ s : {s // s ∈ S}, Matrix (Fin (D s.1)) (Fin DB) ℂ)
       (right : ∀ s : {s // s ∈ S}, Matrix (Fin DB) (Fin (D s.1)) ℂ),
       (∀ s, MPTensor.IsReduction B (C s.1) (left s) (right s)) ∧
-      (∀ (i : Fin d) (s : {s // s ∈ S}), B i * right s = right s * C s.1 i) ∧
-      (∀ (i : Fin d) (s : {s // s ∈ S}), left s * B i = C s.1 i * left s) ∧
+      (∀ (i : α) (s : {s // s ∈ S}), B i * right s = right s * C s.1 i) ∧
+      (∀ (i : α) (s : {s // s ∈ S}), left s * B i = C s.1 i * left s) ∧
       (∀ s t : {s // s ∈ S}, s ≠ t → left s * right t = 0) := by
   classical
+  have := Fintype.ofFinite α
   obtain ⟨P, hP⟩ :=
     exists_multiBlockCompression_remainder_eq_zero_of_star S C hC hD B htr hstar
   exact ⟨P.left, P.right, P.isReduction, fun i s => P.mul_right_eq_right_mul hP i s,
@@ -277,7 +295,7 @@ bond dimension admits no nonzero sitewise right intertwiner `B^i X = X C_s^i`, t
 remainder of every multi-block compression of the source is nonzero: a vanishing remainder
 would make the compression pair of `s` such an intertwiner with `W_s V_s = 1`. -/
 theorem MultiBlockCompression.remainder_ne_zero_of_forall_right_intertwiner_eq_zero
-    {B : MPSTensor d DB} {S : Finset ι} {C : ∀ s, MPSTensor d (D s)}
+    {α : Type*} {B : MPTensor α (Fin DB)} {S : Finset ι} {C : ∀ s, MPTensor α (Fin (D s))}
     (P : MultiBlockCompression B S C) (s : {s // s ∈ S}) (hD : 0 < D s.1)
     (hno : ∀ X : Matrix (Fin DB) (Fin (D s.1)) ℂ, (∀ i, B i * X = X * C s.1 i) → X = 0) :
     P.remainder ≠ 0 := by
@@ -294,15 +312,16 @@ with the source, then the virtual algebra of the source is not closed under conj
 transposition. This is the algebraic trace of an anomalous symmetry: the compression exists at
 the level of words but never site by site (P5 note, the remark "Exact algebraic zipper
 criterion" of `Notes/OpenProblemsTN/problems/p5_asymmetric_fundamental_theorem.tex`). -/
-theorem not_forall_conjTranspose_mem_adjoin_of_forall_right_intertwiner_eq_zero (S : Finset ι)
-    (C : ∀ s, MPSTensor d (D s)) (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s)
-    (B : MPSTensor d DB)
-    (htr : ∀ w : List (Fin d), w ≠ [] →
+theorem not_forall_conjTranspose_mem_adjoin_of_forall_right_intertwiner_eq_zero
+    {α : Type*} [Finite α] (S : Finset ι) (C : ∀ s, MPTensor α (Fin (D s)))
+    (hC : ∀ s ∈ S, Kraus.IsNormal (C s)) (hD : ∀ s ∈ S, 0 < D s) (B : MPTensor α (Fin DB))
+    (htr : ∀ w : List α, w ≠ [] →
       Matrix.trace (Kraus.evalWord B w) = ∑ s ∈ S, Matrix.trace (Kraus.evalWord (C s) w))
     (s : {s // s ∈ S})
     (hno : ∀ X : Matrix (Fin DB) (Fin (D s.1)) ℂ, (∀ i, B i * X = X * C s.1 i) → X = 0) :
     ¬ ∀ i, (B i)ᴴ ∈ Algebra.adjoin ℂ (Set.range B) := by
   classical
+  have := Fintype.ofFinite α
   intro hstar
   obtain ⟨P, hP⟩ :=
     exists_multiBlockCompression_remainder_eq_zero_of_star S C hC hD B htr hstar

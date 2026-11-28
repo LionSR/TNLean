@@ -59,7 +59,7 @@ CPSV16 lines 287–301 and CPSV21 lines 1864–1884 specify the BNT sector
 coefficient as the raw power sum `∑_q (μ_{j,q})^N` over the copies of
 the `j`-th basis block.  In our formalisation `P.coeff N j` is exactly
 this sum, so the identity is by `rfl` after unfolding the abbreviations. -/
-lemma coeff_eq_sum_weight_pow (P : SectorDecomposition d)
+lemma coeff_eq_sum_weight_pow {α : Type*} (P : SectorDecomposition α)
     (N : ℕ) (j : Fin P.basisCount) :
     P.coeff N j = ∑ q : Fin (P.copies j), (P.weight j q) ^ N := rfl
 
@@ -67,7 +67,7 @@ end SectorDecomposition
 
 namespace IsLeftCanonicalBNTPresentation
 
-variable {P Q : SectorDecomposition d}
+variable {P Q : SectorDecomposition (Fin d)}
 
 /-- **Cross-overlap between distinct basis blocks decays.**
 

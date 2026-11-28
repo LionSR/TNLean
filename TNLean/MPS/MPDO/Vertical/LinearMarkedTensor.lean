@@ -57,17 +57,27 @@ the physical letters.
 For coefficients `f u z`, the marked letter indexed by `u` is
 `sum_z f u z • A z`.  This is the class of marks induced by a linear map on
 the physical index in arXiv:1606.00608, Appendix C.3, lines 1835--1858. -/
-noncomputable def linearMarkedTensor
-    (f : Fin e → Fin d → ℂ) (A : MPSTensor d D) : MPSTensor e D :=
-  fun u ↦ ∑ z : Fin d, f u z • A z
+noncomputable def linearMarkedTensor {α β : Type*} [Fintype α]
+    (f : Fin e → α → ℂ) (A : MPTensor α β) : MPTensor (Fin e) β :=
+  fun u ↦ ∑ z : α, f u z • A z
+
+/-- Linear marking of a physically relabelled tensor is linear marking of the original tensor
+with the relabelled coefficients. -/
+theorem linearMarkedTensor_reindexPhysical {α α' β : Type*} [Fintype α] [Fintype α']
+    (e' : α' ≃ α) (f : Fin e → α' → ℂ) (A : MPTensor α β) :
+    linearMarkedTensor f (Kraus.reindexPhysical e' A) =
+      linearMarkedTensor (fun u z ↦ f u (e'.symm z)) A := by
+  funext u
+  simp only [linearMarkedTensor, Kraus.reindexPhysical]
+  exact (Finset.sum_congr rfl fun x _ ↦ by simp).trans (e'.sum_comp fun z ↦ f u (e'.symm z) • A z)
 
 /-- Linear marking commutes with a weighted block-diagonal direct sum.
 
 This is the direct-sum expansion used for the physical first-site marks in
 arXiv:1606.00608, Appendix C.3, lines 1842--1858. -/
-theorem linearMarkedTensor_toTensorFromBlocks {r : ℕ} {dim : Fin r → ℕ}
-    (f : Fin e → Fin d → ℂ) (μ : Fin r → ℂ)
-    (A : (k : Fin r) → MPSTensor d (dim k)) :
+theorem linearMarkedTensor_toTensorFromBlocks {α : Type*} [Fintype α] {r : ℕ} {dim : Fin r → ℕ}
+    (f : Fin e → α → ℂ) (μ : Fin r → ℂ)
+    (A : (k : Fin r) → MPTensor α (Fin (dim k))) :
     linearMarkedTensor f (toTensorFromBlocks μ A) =
       toTensorFromBlocks μ (fun k ↦ linearMarkedTensor f (A k)) := by
   classical
@@ -106,7 +116,7 @@ the corresponding marks on its minimal representatives.
 This is the representative-grouped form of the first-site decomposition in
 arXiv:1606.00608, Appendix C.3, lines 1842--1858. -/
 theorem linearMarkedTensor_toTensor_eq_markedTensor
-    (S : SectorDecomposition d) (f : Fin e → Fin d → ℂ) :
+    {α : Type*} [Fintype α] (S : SectorDecomposition α) (f : Fin e → α → ℂ) :
     linearMarkedTensor f S.toTensor =
       S.markedTensor (fun j ↦ linearMarkedTensor f (S.basis j)) := by
   rw [S.toTensor_eq_toTensorFromBlocks_flat,
@@ -119,9 +129,9 @@ end SectorDecomposition
 
 This is the virtual-gauge transport of the physical first-site mark used in
 arXiv:1606.00608, Proposition 4.13, lines 1909--1919. -/
-theorem linearMarkedTensor_gauge {A B : MPSTensor d D}
-    (f : Fin e → Fin d → ℂ) (X : GL (Fin D) ℂ)
-    (hX : ∀ z : Fin d,
+theorem linearMarkedTensor_gauge {α : Type*} [Fintype α] {A B : MPTensor α (Fin D)}
+    (f : Fin e → α → ℂ) (X : GL (Fin D) ℂ)
+    (hX : ∀ z : α,
       B z = (X : Matrix (Fin D) (Fin D) ℂ) * A z *
         (((X)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ)) :
     ∀ u : Fin e,
@@ -148,12 +158,12 @@ letter unchanged.
 This is the gauge-invariant contraction used when the literal block gauge of
 the horizontal canonical form is removed in arXiv:1606.00608,
 Proposition 4.13, lines 1909--1919. -/
-theorem trace_linearMarkedTensor_mul_evalWord_gauge {A B : MPSTensor d D}
-    (f : Fin e → Fin d → ℂ) (X : GL (Fin D) ℂ)
-    (hX : ∀ z : Fin d,
+theorem trace_linearMarkedTensor_mul_evalWord_gauge {α : Type*} [Fintype α]
+    {A B : MPTensor α (Fin D)} (f : Fin e → α → ℂ) (X : GL (Fin D) ℂ)
+    (hX : ∀ z : α,
       B z = (X : Matrix (Fin D) (Fin D) ℂ) * A z *
         (((X)⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))
-    (u : Fin e) (w : List (Fin d)) :
+    (u : Fin e) (w : List α) :
     Matrix.trace (linearMarkedTensor f B u * Kraus.evalWord B w) =
       Matrix.trace (linearMarkedTensor f A u * Kraus.evalWord A w) := by
   rw [linearMarkedTensor_gauge f X hX u, evalWord_gauge X hX]
@@ -193,21 +203,18 @@ canonical form needed by Proposition 4.13; see
 `docs/paper-gaps/cpgsv17_vertical_cf_grouping.tex`. -/
 theorem linearMarkedTensor_eq_of_trace_agree
     (M : MPOTensor d D) (hHorizontal : M.IsHorizontalCF)
-    (f g : Fin e → Fin (d * d) → ℂ)
-    (hTrace : ∀ (L : ℕ), 0 < L → ∀ (u : Fin e) (w : Fin L → Fin (d * d)),
+    (f g : Fin e → Fin d × Fin d → ℂ)
+    (hTrace : ∀ (L : ℕ), 0 < L → ∀ (u : Fin e) (w : Fin L → Fin d × Fin d),
       Matrix.trace
-          (MPSTensor.linearMarkedTensor f M.toMPSTensor u *
-            Kraus.evalWord M.toMPSTensor (List.ofFn w)) =
+          (MPSTensor.linearMarkedTensor f M u * Kraus.evalWord M (List.ofFn w)) =
         Matrix.trace
-          (MPSTensor.linearMarkedTensor g M.toMPSTensor u *
-            Kraus.evalWord M.toMPSTensor (List.ofFn w))) :
-    MPSTensor.linearMarkedTensor f M.toMPSTensor =
-      MPSTensor.linearMarkedTensor g M.toMPSTensor := by
+          (MPSTensor.linearMarkedTensor g M u * Kraus.evalWord M (List.ofFn w))) :
+    MPSTensor.linearMarkedTensor f M = MPSTensor.linearMarkedTensor g M := by
   classical
   obtain ⟨S, hCF, hTotal, Xcopy, hX⟩ := hHorizontal
   subst D
   let X := MPSTensor.globalGaugeOfBlocks Xcopy
-  have hX' : ∀ z : Fin (d * d), M.toMPSTensor z =
+  have hX' : ∀ z : Fin d × Fin d, M z =
       (X : Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) * S.toTensor z *
         (((X)⁻¹ : GL (Fin S.totalDim) ℂ) :
           Matrix (Fin S.totalDim) (Fin S.totalDim) ℂ) := by

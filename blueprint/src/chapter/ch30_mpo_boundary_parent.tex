@@ -119,12 +119,12 @@ each local term $h_L^{(i)}$ acts on a cyclic window of length $L\leq N$.
 
 \begin{lemma}[Local commutation from an adjoint-closed range]
     \label{thm:glm_boundary_parent_local}
-    \lean{MPOTensor.IsBoundaryCompatible.groundSpaceES_mem_invtSubmodule,
-        MPOTensor.IsBoundaryCompatible.groundSpaceES_invariant_boundaryStarAlgebra,
+    \lean{MPOTensor.IsBoundaryCompatible.map_groundSpace_mem_invtSubmodule,
+        MPOTensor.IsBoundaryCompatible.map_groundSpace_invariant_boundaryStarAlgebra,
         MPOTensor.IsBoundaryCompatible.parentInteraction_mpoWithBoundary_mulVec,
         MPOTensor.IsBoundaryCompatible.parentInteraction_commute_mpoWithBoundary,
         MPOTensor.IsBoundaryCompatible.parentInteraction_matrix_commute_mpoWithBoundary,
-        MPOTensor.IsBoundaryCompatible.groundSpaceES_starProjection_commute_mpoWithBoundary}
+        MPOTensor.IsBoundaryCompatible.map_groundSpace_starProjection_commute_mpoWithBoundary}
     \leanok
     \uses{def:glm_boundary_closedness,def:mpdo_commuting_boundary,def:parent_interaction}
     Suppose $T$ and $A$ are compatible in the length-independent sense of
@@ -186,8 +186,8 @@ each local term $h_L^{(i)}$ acts on a cyclic window of length $L\leq N$.
     \lean{MPOTensor.IsBoundaryCompatible.mpoWithBoundary_mulVec_eq_of_one_length_eq_one,
         MPOTensor.IsBoundaryCompatible.mpoWithBoundary_mulVec_eq_of_one_site_eq_one,
         MPOTensor.IsBoundaryCompatible.mulVec_eq_of_mem_groundSpace_of_one_length_eq_one,
-        MPOTensor.IsBoundaryCompatible.toEuclideanLin_comp_groundSpaceES_starProjection,
-        MPOTensor.IsBoundaryCompatible.toEuclideanLin_comp_groundSpaceES_starProjection_of_one_site}
+        MPOTensor.IsBoundaryCompatible.toEuclideanLin_comp_map_groundSpace_starProjection,
+        MPOTensor.IsBoundaryCompatible.toEuclideanLin_comp_map_groundSpace_starProjection_of_one_site}
     \leanok
     \uses{def:glm_boundary_closedness,def:l_blk_injective,def:ground_space_map,def:parent_interaction}
     Suppose $T$ and $A$ are length-independently compatible, $L_0>0$,
@@ -268,7 +268,7 @@ each local term $h_L^{(i)}$ acts on a cyclic window of length $L\leq N$.
 \begin{definition}[Direct sums and summand boundary projections]
     \label{def:glm_boundary_block_sum}
     \lean{MPOTensor.blockSum, MPOTensor.blockBoundarySelector,
-        MPOTensor.blockSum_toMPSTensor}
+        MPOTensor.blockSum_eq_toTensorFromBlocks}
     \leanok
     \uses{def:mpo_to_mps,def:block_diagonal_tensor}
     For operator tensors $T_a$ of bond dimensions $\chi_a$, indexed by
@@ -356,9 +356,9 @@ each local term $h_L^{(i)}$ acts on a cyclic window of length $L\leq N$.
 
 \begin{lemma}[Normalized boundary averages of the support]
     \label{thm:glm_boundary_projection_average}
-    \lean{MPOTensor.IsBoundaryCompatible.sum_mpoWithBoundary_groundSpaceES_starProjection,
+    \lean{MPOTensor.IsBoundaryCompatible.sum_mpoWithBoundary_map_groundSpace_starProjection,
         MPOTensor.IsBoundaryCompatible.sum_mpoWithBoundary_toEuclideanLin_toMatrix'_parentInteraction,
-        MPOTensor.IsBoundaryCompatible.one_sub_sum_mpoWithBoundary_groundSpaceES_starProjection}
+        MPOTensor.IsBoundaryCompatible.one_sub_sum_mpoWithBoundary_map_groundSpace_starProjection}
     \leanok
     \uses{def:glm_boundary_closedness,def:l_blk_injective,def:parent_interaction}
     Suppose $T$ and $A$ are length-independently compatible, $L_0,n>0$,
@@ -402,7 +402,7 @@ each local term $h_L^{(i)}$ acts on a cyclic window of length $L\leq N$.
 
 \begin{lemma}[Nonzero ambient complement of the averaged support]
     \label{thm:glm_boundary_average_nonzero}
-    \lean{MPOTensor.IsBoundaryCompatible.one_sub_sum_mpoWithBoundary_groundSpaceES_starProjection_ne_zero}
+    \lean{MPOTensor.IsBoundaryCompatible.one_sub_sum_mpoWithBoundary_map_groundSpace_starProjection_ne_zero}
     \leanok
     \uses{thm:glm_boundary_projection_average}
     Under the hypotheses of

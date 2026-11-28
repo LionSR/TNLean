@@ -3362,8 +3362,9 @@ three-plaquette output measurement, and the routed reunion measurement.
 
 ### stacked-letter lookup-table identification by kernel decision — promoted
 - **Pattern:** identify the pair-alphabet stacked-letter function of two
-  integer tensors, `stackedInt A B`, with an explicit sixteen-entry lookup
-  table `C`, for a private `Fin 16`-indexed theorem `stackedInt A B b = C b`,
+  integer tensors, `mulIntTensor A B`, with an explicit sixteen-entry lookup
+  table `C`, for a private theorem `mulIntTensor A B b = C b` indexed by the
+  pair alphabet `Fin 4 × Fin 4`,
   by reverting the index and deciding the resulting closed proposition by
   kernel reduction:
 
@@ -4516,7 +4517,7 @@ no additional helper is proposed.
   `TNLean/MPS/CanonicalForm/SimpleMPO/Simple.lean:IsSimpleCanonicalForm.isSimple` and
   `TNLean/MPS/Examples/Dimer/TwistedDimerBondSimple.lean` (2026-10-02).
 - **Abstraction:** the bond-factor proof uses private generic identities
-  `blockTensor_one_toMPSTensor` and
+  `blockTensor_one_doubled_eq_reindexPhysical` and
   `doubledPhysTraceTransfer_reindex_singleBlock`. At a third occurrence,
   move the equivalence and identities to the physical-blocking API and
   refactor the existing simplicity proof.
@@ -5398,9 +5399,10 @@ spectral split → block extraction → MPV calculation → strict bounds
   `TNLean/MPS/MPDO/Entropy/NormalizedMPOProportionality.lean`,
   `TNLean/MPS/CanonicalForm/SimpleMPO/BNTLayerOrthogonality.lean`,
   `TNLean/MPS/MPDO/CommutingForm/FixedBondProductTensor.lean` (recorded 2026-09-17).
-- **Abstraction:** `MPOTensor.mpv_toMPSTensor` in
-  `TNLean/MPS/FundamentalTheorem/OperatorProduct/MPOProduct.lean`, which states the identity for an
-  arbitrary pair configuration and needs no auxiliary equality of configurations.
+- **Abstraction:** `MPOTensor.mpv_eq_mpo` in `TNLean/MPS/Operator/PairAlphabet.lean`, which
+  states the identity on the pair alphabet itself; at a doubled-index site, rewrite first with
+  `MPOTensor.mpv_toMPSTensor_eq`. The earlier `MPOTensor.mpv_toMPSTensor` was removed with the
+  pair-alphabet restatement.
 
 ### canonical form of normalized one-dimensional blocks — candidate
 - **Pattern:** certify `IsLeftCanonicalBNTPresentation` for a `SectorDecomposition` whose blocks are

@@ -98,13 +98,13 @@ private theorem groupedFusionCoisometry_coisometry
 private theorem groupedFusionCoisometry_fusion
     (hMult : ∀ α, 0 < mult α) (α β : Fin g) (ab : Fin (D * D)) :
     groupedFusionCoisometry O hMult α β *
-        (mulTensor (verticalBNTMPO (B α))
-          (verticalBNTMPO (B β))).toMPSTensor ab *
+        (Kraus.reindexPhysical finProdFinEquiv.symm (mulTensor (verticalBNTMPO (B α))
+          (verticalBNTMPO (B β)))) ab *
         (groupedFusionCoisometry O hMult α β)ᴴ =
       Matrix.blockDiagonal' fun γ =>
         (chi O hMult).matrix α β γ ⊗ₖ B γ ab := by
-  let T := (mulTensor (verticalBNTMPO (B α))
-    (verticalBNTMPO (B β))).toMPSTensor
+  let T := (Kraus.reindexPhysical finProdFinEquiv.symm (mulTensor (verticalBNTMPO (B α))
+    (verticalBNTMPO (B β))))
   have hsigma := Matrix.sigmaBlockRow_conjugation T
     (fun k v ↦ O.coefficient (distinguishedPair hMult α β) k •
       B (O.label (distinguishedPair hMult α β) k) v)
@@ -161,14 +161,14 @@ private theorem groupedFusionCoisometry_fusion
 
 private theorem groupedFusionCoisometry_reconstruction
     (hMult : ∀ α, 0 < mult α) (α β : Fin g) (ab : Fin (D * D)) :
-    (mulTensor (verticalBNTMPO (B α))
-        (verticalBNTMPO (B β))).toMPSTensor ab =
+    (Kraus.reindexPhysical finProdFinEquiv.symm (mulTensor (verticalBNTMPO (B α))
+        (verticalBNTMPO (B β)))) ab =
       (groupedFusionCoisometry O hMult α β)ᴴ *
         (Matrix.blockDiagonal' fun γ =>
           (chi O hMult).matrix α β γ ⊗ₖ B γ ab) *
         groupedFusionCoisometry O hMult α β := by
-  let T := (mulTensor (verticalBNTMPO (B α))
-    (verticalBNTMPO (B β))).toMPSTensor
+  let T := (Kraus.reindexPhysical finProdFinEquiv.symm (mulTensor (verticalBNTMPO (B α))
+    (verticalBNTMPO (B β))))
   have hsigma := Matrix.sigmaBlockRow_reconstruction T
     (fun k v ↦ O.coefficient (distinguishedPair hMult α β) k •
       B (O.label (distinguishedPair hMult α β) k) v)
@@ -243,12 +243,12 @@ noncomputable def toBNTFusionCoisometryFamily
   coisometry := groupedFusionCoisometry_coisometry O hMult
   fusion := by
     intro α β i j
-    simpa only [toMPSTensor, verticalBNTMPO_apply,
+    simpa only [Kraus.reindexPhysical, Equiv.symm_apply_apply, verticalBNTMPO_apply,
       MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat] using
       groupedFusionCoisometry_fusion O hMult α β (finProdFinEquiv (i, j))
   reconstruction := by
     intro α β i j
-    simpa only [toMPSTensor, verticalBNTMPO_apply,
+    simpa only [Kraus.reindexPhysical, Equiv.symm_apply_apply, verticalBNTMPO_apply,
       MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat] using
       groupedFusionCoisometry_reconstruction O hMult α β
         (finProdFinEquiv (i, j))

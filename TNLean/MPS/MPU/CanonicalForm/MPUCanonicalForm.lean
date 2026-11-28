@@ -30,6 +30,8 @@ dimension. See `docs/paper-gaps/mpu_canonical_form_nonzero_weights.tex` and
 * `MPTensor.IsMPUCanonicalBlock`: irreducibility and transfer spectral radius one.
 * `MPTensor.MPUCanonicalFormData`: a weighted retained-block reconstruction.
 * `MPTensor.IsMPUCanonicalForm`: existence of such reconstruction data.
+* `MPTensor.isMPUCanonicalForm_reindexPhysical_iff`: the canonical form is invariant under a
+  bijective relabelling of the physical alphabet.
 * `MPOTensor.exists_canonicalFormII_positiveGauge`,
   `MPOTensor.IsMPU.exists_gauge_isMPUCanonicalFormII_of_isMPUCanonicalForm`: positive gauges and
   canonical representatives of normal MPUs.
@@ -40,7 +42,7 @@ An MPU tensor in canonical form II is in canonical form. Canonical form II
 writes the normalized flattening `d^{-1/2} U` as a weighted retained-block
 reconstruction with normal blocks; a normal block is irreducible and has
 transfer spectral radius one, so the same blocks, with weights multiplied by
-`d^{1/2}`, give canonical-form data for the flattening of `U` itself.
+`d^{1/2}`, give canonical-form data for `U` itself on the pair alphabet.
 
 ### Main results
 
@@ -99,6 +101,56 @@ Source: arXiv:1703.09188, lines 259--267. -/
 def IsMPUCanonicalForm {α : Type u} [Fintype α] {D : ℕ} (A : MPTensor α (Fin D)) : Prop :=
   Nonempty (MPUCanonicalFormData A)
 
+/-- Relabel the physical alphabet in MPU canonical-form data. The retained dimensions, weights
+and ambient coisometry are unchanged; each block is relabelled, which leaves its
+irreducibility and its transfer map unchanged.
+
+Source: arXiv:1703.09188, lines 259--267. -/
+noncomputable def MPUCanonicalFormData.reindexPhysical {α₁ α₂ : Type*} [Fintype α₁]
+    [Fintype α₂] {D : ℕ} {A : MPTensor α₂ (Fin D)} (data : MPUCanonicalFormData A)
+    (e : α₁ ≃ α₂) : MPUCanonicalFormData (Kraus.reindexPhysical e A) where
+  r := data.r
+  dim := data.dim
+  dim_pos := data.dim_pos
+  weights := data.weights
+  weights_ne_zero := data.weights_ne_zero
+  blocks := fun k ↦ Kraus.reindexPhysical e (data.blocks k)
+  blocks_canonical := fun k ↦
+    ⟨(Kraus.isIrreducibleFamily_reindexPhysical_equiv e _).2
+        (data.blocks_canonical k).irreducible, by
+      rw [Kraus.transferMap_reindexPhysical_equiv]
+      exact (data.blocks_canonical k).spectral_radius_one⟩
+  total_dim_eq := data.total_dim_eq
+  ambient_coisometry := data.ambient_coisometry
+  coisometric := data.coisometric
+  reconstruct := by
+    intro i
+    simpa [Kraus.reindexPhysical, toTensorFromBlocks] using data.reconstruct (e i)
+
+/-- Relabelling along an equivalence and back recovers the tensor. -/
+theorem reindexPhysical_reindexPhysical_symm {α₁ α₂ : Type*} {D : ℕ} (e : α₁ ≃ α₂)
+    (A : MPTensor α₂ (Fin D)) :
+    Kraus.reindexPhysical e.symm (Kraus.reindexPhysical e A) = A := by
+  funext i
+  simp [Kraus.reindexPhysical]
+
+/-- Relabelling back along an equivalence and then forward recovers the tensor. -/
+theorem reindexPhysical_symm_reindexPhysical {α₁ α₂ : Type*} {D : ℕ} (e : α₁ ≃ α₂)
+    (A : MPTensor α₁ (Fin D)) :
+    Kraus.reindexPhysical e (Kraus.reindexPhysical e.symm A) = A := by
+  funext i
+  simp [Kraus.reindexPhysical]
+
+/-- A bijective relabelling of the physical alphabet preserves the MPU canonical form.
+
+Source: arXiv:1703.09188, lines 259--267. -/
+theorem isMPUCanonicalForm_reindexPhysical_iff {α₁ α₂ : Type*} [Fintype α₁] [Fintype α₂]
+    {D : ℕ} {A : MPTensor α₂ (Fin D)} (e : α₁ ≃ α₂) :
+    IsMPUCanonicalForm (Kraus.reindexPhysical e A) ↔ IsMPUCanonicalForm A := by
+  refine ⟨fun ⟨data⟩ ↦ ?_, fun ⟨data⟩ ↦ ⟨data.reindexPhysical e⟩⟩
+  rw [← reindexPhysical_reindexPhysical_symm e A]
+  exact ⟨data.reindexPhysical e.symm⟩
+
 end MPTensor
 
 namespace MPSTensor
@@ -113,8 +165,8 @@ variable {A : MPSTensor d D}
 and their spectral normalization unchanged.
 
 Source: arXiv:1703.09188, canonical-form definition, lines 259--265. -/
-noncomputable def _root_.MPTensor.MPUCanonicalFormData.smul (data : MPUCanonicalFormData A) (c : ℂ)
-    (hc : c ≠ 0) :
+noncomputable def _root_.MPTensor.MPUCanonicalFormData.smul {α : Type*} [Fintype α]
+    {A : MPTensor α (Fin D)} (data : MPUCanonicalFormData A) (c : ℂ) (hc : c ≠ 0) :
     MPUCanonicalFormData (fun i => c • A i) where
   r := data.r
   dim := data.dim
@@ -266,9 +318,13 @@ theorem IsMPU.isNormalTensor_normalizedFlattening_of_normalized_mpuCanonicalForm
     [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U)
     (hcf : MPTensor.IsMPUCanonicalForm U.normalizedFlattening) :
     MPTensor.IsNormalTensor U.normalizedFlattening := by
-  let data := Classical.choice hcf
-  exact data.isNormalTensor_of_shifted_transfer_trace
-    (fun N hN => hU.trace_transferMatrix_normalizedFlattening_pow_eq_one hN)
+  have hcf' := (MPTensor.isMPUCanonicalForm_reindexPhysical_iff
+    (A := U.normalizedFlattening) finProdFinEquiv.symm).2 hcf
+  have hA := ((Classical.choice hcf').isNormalTensor_of_shifted_transfer_trace fun N hN => by
+    rw [Kraus.transferMap_reindexPhysical_equiv]
+    exact hU.trace_transferMatrix_normalizedFlattening_pow_eq_one hN).reindexPhysical
+      finProdFinEquiv
+  rwa [MPTensor.reindexPhysical_symm_reindexPhysical] at hA
 
 /-- The normalized tensor of an MPU in canonical form is normal. The
 canonical form is assumed for the original local tensor, as in the source;
@@ -277,15 +333,13 @@ normalization multiplies each nonzero block weight by $d^{-1/2}$.
 Source: arXiv:1703.09188, Proposition `prop:normal-tensor`, lines 344--354. -/
 theorem IsMPU.isNormalTensor_normalizedFlattening_of_mpuCanonicalForm
     [NeZero d] [NeZero D] {U : MPOTensor d D} (hU : IsMPU U)
-    (hcf : MPTensor.IsMPUCanonicalForm U.toMPSTensor) :
+    (hcf : MPTensor.IsMPUCanonicalForm U) :
     MPTensor.IsNormalTensor U.normalizedFlattening := by
   have hd : (0 : ℝ) < d := by exact_mod_cast NeZero.pos d
   have hscale : ((Real.sqrt d : ℂ)⁻¹) ≠ 0 :=
     inv_ne_zero (Complex.ofReal_ne_zero.mpr (Real.sqrt_pos.mpr hd).ne')
-  have hcfNormalized : MPTensor.IsMPUCanonicalForm U.normalizedFlattening := by
-    change Nonempty (MPTensor.MPUCanonicalFormData
-      (fun ij => ((Real.sqrt d : ℂ)⁻¹) • U.toMPSTensor ij))
-    exact ⟨(Classical.choice hcf).smul _ hscale⟩
+  have hcfNormalized : MPTensor.IsMPUCanonicalForm U.normalizedFlattening :=
+    ⟨(Classical.choice hcf).smul _ hscale⟩
   exact hU.isNormalTensor_normalizedFlattening_of_normalized_mpuCanonicalForm
     hcfNormalized
 
@@ -320,20 +374,18 @@ noncomputable def normalizedFlatteningCanonicalFormData {U : MPOTensor d D}
 
 /-- An MPU tensor in canonical form II is in canonical form: the normal blocks of
 the normalized flattening `d^{-1/2} U`, with weights multiplied by `d^{1/2}`,
-reconstruct the flattening of `U`.
+reconstruct `U` on the pair alphabet.
 
 Source: arXiv:1703.09188, canonical form, lines 259--267, and canonical form II,
 lines 269--281 and 344--356. -/
 theorem isMPUCanonicalForm [NeZero d] {U : MPOTensor d D}
-    (hU : IsMPUCanonicalFormII U) : MPTensor.IsMPUCanonicalForm U.toMPSTensor := by
+    (hU : IsMPUCanonicalFormII U) : MPTensor.IsMPUCanonicalForm U := by
   have hc : (Real.sqrt d : ℂ) ≠ 0 := by
     have hd : (0 : ℝ) < d := by exact_mod_cast Nat.pos_of_ne_zero (NeZero.ne d)
     exact_mod_cast (Real.sqrt_pos.mpr hd).ne'
-  have hU' : (fun i => (Real.sqrt d : ℂ) • U.normalizedFlattening i) = U.toMPSTensor := by
-    funext i
-    simp only [normalizedFlattening, smul_smul, mul_inv_cancel₀ hc, one_smul]
-  rw [← hU']
-  exact ⟨hU.normalizedFlatteningCanonicalFormData.smul _ hc⟩
+  have h := hU.normalizedFlatteningCanonicalFormData.smul _ hc
+  rw [sqrt_smul_normalizedFlattening] at h
+  exact ⟨h⟩
 
 end IsMPUCanonicalFormII
 
@@ -401,8 +453,7 @@ private theorem normalizedFlattening_conj {d D : ℕ}
     MPOTensor.normalizedFlattening (fun ij ↦ X * U ij * Y : MPOTensor d D) =
       fun ij ↦ X * U.normalizedFlattening ij * Y := by
   funext ij
-  simp only [MPOTensor.normalizedFlattening, MPOTensor.toMPSTensor,
-    Matrix.mul_smul, Matrix.smul_mul]
+  simp only [MPOTensor.normalizedFlattening, Matrix.mul_smul, Matrix.smul_mul]
 
 /-- Unitary bond conjugation preserves every periodic operator. -/
 private theorem unitary_conj_mpo_eq {d D : ℕ}
@@ -456,18 +507,18 @@ private theorem unitary_conj_normal {r D : ℕ} (A : MPSTensor r D)
 
 Source: arXiv:1703.09188, canonical form II, lines 269–281, and the
 canonical-gauge step of Proposition IV.5, lines 798–804. -/
-private theorem positive_gauge_exists_diagonal_fixedPoint
-    (U : MPOTensor d D) (hNormal : MPTensor.IsNormalTensor U.normalizedFlattening)
+private theorem positive_gauge_exists_diagonal_fixedPoint {n : ℕ}
+    (A₀ : MPSTensor n D) (hNormal : MPTensor.IsNormalTensor A₀)
     (L : Matrix (Fin D) (Fin D) ℂ) (hL : L.PosDef)
-    (hfix : Kraus.mapLM (fun i ↦ (U.normalizedFlattening i)ᴴ) L = L) :
-    let A := Kraus.tpGauge U.normalizedFlattening L
+    (hfix : Kraus.mapLM (fun i ↦ (A₀ i)ᴴ) L = L) :
+    let A := Kraus.tpGauge A₀ L
     ∃ (V : Matrix.unitaryGroup (Fin D) ℂ) (ρ : Matrix (Fin D) (Fin D) ℂ),
-      let B : MPSTensor (d * d) D := fun i ↦
+      let B : MPSTensor n D := fun i ↦
         (V : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * (V : Matrix (Fin D) (Fin D) ℂ)
       MPTensor.SameMPV₂ A B ∧ ρ.PosDef ∧ ρ.IsDiag ∧ Matrix.trace ρ = 1 ∧
         MPTensor.IsLeftCanonical B ∧ Kraus.transferMap B ρ = ρ := by
-  have hNormalTP : MPTensor.IsNormalTensor (Kraus.tpGauge U.normalizedFlattening L) :=
-    hNormal.of_gaugeEquiv (MPSTensor.gaugeEquiv_tpGauge U.normalizedFlattening L hL).symm
+  have hNormalTP : MPTensor.IsNormalTensor (Kraus.tpGauge A₀ L) :=
+    hNormal.of_gaugeEquiv (MPSTensor.gaugeEquiv_tpGauge A₀ L hL).symm
   obtain ⟨V, Λ, hSame, hΛ, hdiag, hTP, hΛfix⟩ :=
     MPSTensor.exists_CFII_data_of_TP_of_isIrreducibleFamily _
       (Kraus.tpGauge_isTP_of_map_conjTranspose_fixedPoint _ L hL hfix)
@@ -520,8 +571,14 @@ theorem exists_canonicalFormII_positiveGauge
         (∀ N, MPOTensor.mpo B N = MPOTensor.mpo U N) ∧
         MPOTensor.rightRank B = MPOTensor.rightRank U ∧
         MPOTensor.leftRank B = MPOTensor.leftRank U := by
-  obtain ⟨V, ρ, hSame, hρ, hdiag, hρtr, hLeft, hfix⟩ :=
-    positive_gauge_exists_diagonal_fixedPoint U hNormal L hL hfix
+  let e : Fin (d * d) ≃ Fin d × Fin d := finProdFinEquiv.symm
+  let A₀ : MPSTensor (d * d) D := Kraus.reindexPhysical e U.normalizedFlattening
+  have hNormal₀ : MPTensor.IsNormalTensor A₀ := hNormal.reindexPhysical e
+  have hfix₀ : Kraus.mapLM (fun i ↦ (A₀ i)ᴴ) L = L :=
+    (congrArg (· L) (Kraus.transferMap_reindexPhysical_equiv e
+      (fun ij ↦ (U.normalizedFlattening ij)ᴴ))).trans hfix
+  obtain ⟨V, ρ, -, hρ, hdiag, hρtr, hLeft, hfixρ⟩ :=
+    positive_gauge_exists_diagonal_fixedPoint A₀ hNormal₀ L hL hfix₀
   have hnorm : MPOTensor.normalizedFlattening
       (fun ij ↦ (V : Matrix (Fin D) (Fin D) ℂ)ᴴ *
         (CFC.sqrt L * U ij * (CFC.sqrt L)⁻¹) * (V : Matrix (Fin D) (Fin D) ℂ) :
@@ -529,20 +586,49 @@ theorem exists_canonicalFormII_positiveGauge
       fun ij ↦ (V : Matrix (Fin D) (Fin D) ℂ)ᴴ *
         Kraus.tpGauge U.normalizedFlattening L ij * (V : Matrix (Fin D) (Fin D) ℂ) :=
     (normalizedFlattening_conj _ _ _).trans
-      (congrArg (fun A : MPSTensor (d * d) D ↦ fun ij ↦
+      (congrArg (fun A : MPOTensor d D ↦ fun ij ↦
         (V : Matrix (Fin D) (Fin D) ℂ)ᴴ * A ij * (V : Matrix (Fin D) (Fin D) ℂ))
         (normalizedFlattening_conj U (CFC.sqrt L) (CFC.sqrt L)⁻¹))
+  have hBe : Kraus.reindexPhysical e (MPOTensor.normalizedFlattening
+      (fun ij ↦ (V : Matrix (Fin D) (Fin D) ℂ)ᴴ *
+        (CFC.sqrt L * U ij * (CFC.sqrt L)⁻¹) * (V : Matrix (Fin D) (Fin D) ℂ) :
+          MPOTensor d D)) =
+      fun i ↦ (V : Matrix (Fin D) (Fin D) ℂ)ᴴ * Kraus.tpGauge A₀ L i *
+        (V : Matrix (Fin D) (Fin D) ℂ) := by
+    rw [hnorm]
+    rfl
+  have hNormalB' : MPTensor.IsNormalTensor (Kraus.reindexPhysical e (MPOTensor.normalizedFlattening
+      (fun ij ↦ (V : Matrix (Fin D) (Fin D) ℂ)ᴴ *
+        (CFC.sqrt L * U ij * (CFC.sqrt L)⁻¹) * (V : Matrix (Fin D) (Fin D) ℂ) :
+          MPOTensor d D))) := by
+    rw [hBe]
+    exact unitary_conj_normal _
+      (hNormal₀.of_gaugeEquiv (MPSTensor.gaugeEquiv_tpGauge A₀ L hL).symm) V
+  have hNormalB := hNormalB'.reindexPhysical e.symm
+  rw [MPTensor.reindexPhysical_reindexPhysical_symm] at hNormalB
+  have hLeftB : MPTensor.IsLeftCanonical (MPOTensor.normalizedFlattening
+      (fun ij ↦ (V : Matrix (Fin D) (Fin D) ℂ)ᴴ *
+        (CFC.sqrt L * U ij * (CFC.sqrt L)⁻¹) * (V : Matrix (Fin D) (Fin D) ℂ) :
+          MPOTensor d D)) :=
+    (Kraus.isTP_reindexPhysical_iff e _).1 (by rw [hBe]; exact hLeft)
+  have hfixB : Kraus.transferMap (MPOTensor.normalizedFlattening
+      (fun ij ↦ (V : Matrix (Fin D) (Fin D) ℂ)ᴴ *
+        (CFC.sqrt L * U ij * (CFC.sqrt L)⁻¹) * (V : Matrix (Fin D) (Fin D) ℂ) :
+          MPOTensor d D)) ρ = ρ := by
+    have h : Kraus.transferMap (Kraus.reindexPhysical e (MPOTensor.normalizedFlattening
+      (fun ij ↦ (V : Matrix (Fin D) (Fin D) ℂ)ᴴ *
+        (CFC.sqrt L * U ij * (CFC.sqrt L)⁻¹) * (V : Matrix (Fin D) (Fin D) ℂ) :
+          MPOTensor d D))) ρ = ρ := by
+      rw [hBe]
+      exact hfixρ
+    rwa [Kraus.transferMap_reindexPhysical_equiv] at h
   have hEq (N : ℕ) : MPOTensor.mpo
       (fun ij ↦ (V : Matrix (Fin D) (Fin D) ℂ)ᴴ *
         (CFC.sqrt L * U ij * (CFC.sqrt L)⁻¹) * (V : Matrix (Fin D) (Fin D) ℂ)) N =
       MPOTensor.mpo U N :=
     (unitary_conj_mpo_eq _ V N).trans (positive_gauge_mpo_eq U L hL N)
   exact ⟨V, ⟨canonicalFormII_of_normal_leftCanonical _
-    (fun N hN ↦ (hEq N).symm ▸ hU N hN)
-    (hnorm.symm ▸ unitary_conj_normal _
-      (hNormal.of_gaugeEquiv (MPSTensor.gaugeEquiv_tpGauge U.normalizedFlattening L hL).symm)
-      V)
-    (hnorm.symm ▸ hLeft) ρ hρ hdiag hρtr (hnorm.symm ▸ hfix)⟩,
+    (fun N hN ↦ (hEq N).symm ▸ hU N hN) hNormalB hLeftB ρ hρ hdiag hρtr hfixB⟩,
     hEq, source_ranks_canonical_gauge U L hL V⟩
 
 end MPOTensor
@@ -566,12 +652,15 @@ canonical form II taken without loss of generality); the chapter's Lemma "Canoni
 similarity". The proof follows the left-canonical gauge `σ^{1/2} A σ^{-1/2}` of the normal tensor
 `A = d^{-1/2} U` by a unitary diagonalization of its fixed point. -/
 theorem IsMPU.exists_gauge_isMPUCanonicalFormII_of_isMPUCanonicalForm [NeZero d] [NeZero D]
-    {U : MPOTensor d D} (hU : IsMPU U) (hcf : MPTensor.IsMPUCanonicalForm U.toMPSTensor) :
+    {U : MPOTensor d D} (hU : IsMPU U) (hcf : MPTensor.IsMPUCanonicalForm U) :
     ∃ X : GL (Fin D) ℂ, Nonempty (IsMPUCanonicalFormII (virtualSandwich
       (X : Matrix (Fin D) (Fin D) ℂ) U ((X⁻¹ : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ))) := by
   have hNormal := hU.isNormalTensor_normalizedFlattening_of_mpuCanonicalForm hcf
-  obtain ⟨σ, hσ, hσfix, -⟩ := hNormal.exists_tpGauge
-  obtain ⟨V, hV, -⟩ := exists_canonicalFormII_positiveGauge U hU hNormal σ hσ hσfix
+  obtain ⟨σ, hσ, hσfix, -⟩ := (hNormal.reindexPhysical finProdFinEquiv.symm).exists_tpGauge
+  have hσfix' : Kraus.mapLM (fun i ↦ (U.normalizedFlattening i)ᴴ) σ = σ :=
+    (congrArg (· σ) (Kraus.transferMap_reindexPhysical_equiv finProdFinEquiv.symm
+      (fun ij ↦ (U.normalizedFlattening ij)ᴴ))).symm.trans hσfix
+  obtain ⟨V, hV, -⟩ := exists_canonicalFormII_positiveGauge U hU hNormal σ hσ hσfix'
   let S : GL (Fin D) ℂ := Matrix.nonsingInvUnit (CFC.sqrt σ) hσ.isUnit_det_cfc_sqrt
   have hX : (((MPSTensor.unitaryGL V)⁻¹ * S : GL (Fin D) ℂ) : Matrix (Fin D) (Fin D) ℂ) =
       (V : Matrix (Fin D) (Fin D) ℂ)ᴴ * CFC.sqrt σ := rfl

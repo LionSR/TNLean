@@ -41,27 +41,39 @@ The unscaled conclusion printed in Proposition 20 is false for unrestricted
 open MPTensor
 
 open scoped Matrix BigOperators
-open Kraus (blockTensor isNBlkInjective_iff_blockTensor_isInjective)
 
 namespace MPSTensor
 
-variable {d D_A D_B : ℕ}
+variable {α : Type*} [Fintype α] {D_A D_B : ℕ}
 
+omit [Fintype α] in
 /-- Source-faithful assembly after choosing a positive blocking at which the
 target is injective.  The arbitrary unblocked tail in the open contraction is
 what returns the final relation to the original physical scale.
 
 Source: arXiv:1706.07329v2, proof of Proposition 20,
 `cornerproblem.tex` lines 3815--3938. -/
-private theorem exists_isReduction_of_blockTensor_isInjective_of_sameMPV₂Pos
-    [NeZero D_A] (A : MPSTensor d D_A) (B : MPSTensor d D_B)
+private theorem sameMPV₂Pos_block (A : MPTensor α (Fin D_A)) (B : MPTensor α (Fin D_B))
+    (hSame : SameMPV₂Pos B A) (p : ℕ) (hp : 0 < p) :
+    SameMPV₂Pos (Kraus.block B p) (Kraus.block A p) := by
+  intro N hN σ
+  simp only [mpv_eq, coeff_eq, Kraus.evalWord_block]
+  refine hSame.trace_evalWord _ (List.ne_nil_of_length_pos ?_)
+  simp only [List.length_flatMap, List.map_ofFn, List.length_ofFn, Function.comp_def,
+    List.sum_ofFn, Finset.sum_const, Finset.card_univ, Fintype.card_fin, smul_eq_mul]
+  exact Nat.mul_pos hN hp
+
+omit [Fintype α] in
+private theorem exists_isReduction_of_block_isInjective_of_sameMPV₂Pos [Finite α]
+    [NeZero D_A] (A : MPTensor α (Fin D_A)) (B : MPTensor α (Fin D_B))
     (hSame : SameMPV₂Pos B A) (p : ℕ) (hp : 0 < p)
-    (hA : Kraus.IsInjective (blockTensor (d := d) (n := Fin D_A) A p)) :
+    (hA : Kraus.IsInjective (Kraus.block A p)) :
     ∃ (V : Matrix (Fin D_A) (Fin D_B) ℂ)
       (W : Matrix (Fin D_B) (Fin D_A) ℂ), IsReduction B A V W := by
   classical
-  let Aₚ := blockTensor (d := d) (n := Fin D_A) A p
-  let Bₚ := blockTensor (d := d) (n := Fin D_B) B p
+  have := Fintype.ofFinite α
+  let Aₚ := Kraus.block A p
+  let Bₚ := Kraus.block B p
   let C := coefficientDualInverse Aₚ hA
   let K := reductionCrossMatrix Bₚ C
   let f : Module.End ℂ (Fin D_B × Fin D_A → ℂ) := Matrix.toLin' K
@@ -71,7 +83,7 @@ private theorem exists_isReduction_of_blockTensor_isInjective_of_sameMPV₂Pos
   have hNS : Commute N S :=
     Algebra.commute_of_mem_adjoin_singleton_of_commute hSmem hfN.symm
   have hSameBlock : SameMPV₂Pos Bₚ Aₚ := by
-    exact sameMPV₂Pos_blockTensor B A hSame p hp
+    exact sameMPV₂Pos_block A B hSame p hp
   have hTraceS (k : ℕ) (hk : 0 < k) :
       LinearMap.trace ℂ _ (S ^ k) = (D_A : ℂ) ^ k := by
     calc
@@ -165,7 +177,7 @@ private theorem exists_isReduction_of_blockTensor_isInjective_of_sameMPV₂Pos
   intro w
   ext a' a
   have hopen :=
-    reductionOpenBoundaryMatrixContraction_blockTensor_of_sameMPV₂Pos
+    reductionOpenBoundaryMatrixContraction_block_of_sameMPV₂Pos
       A B hSame p hp hA J hJ w a' a
   rw [reductionOpenBoundaryMatrixContraction_eq_cross_sum] at hopen
   have hleft :
@@ -191,20 +203,23 @@ private theorem exists_isReduction_of_blockTensor_isInjective_of_sameMPV₂Pos
   rw [hleft] at hopen
   exact mul_left_cancel₀ (pow_ne_zero _ hDA) hopen
 
+omit [Fintype α] in
 /-- An injective target with the same positive-length matrix product vectors as
 a possibly larger-bond source admits a rectangular reduction from the source.
 
 This is the injective-target specialization of arXiv:1706.07329v2,
 Proposition 20; see `cornerproblem.tex` lines 3815--3938. -/
-theorem exists_isReduction_of_isInjective_of_sameMPV₂Pos [NeZero D_A]
-    (A : MPSTensor d D_A) (B : MPSTensor d D_B)
+theorem exists_isReduction_of_isInjective_of_sameMPV₂Pos [Finite α] [NeZero D_A]
+    (A : MPTensor α (Fin D_A)) (B : MPTensor α (Fin D_B))
     (hA : Kraus.IsInjective A) (hSame : SameMPV₂Pos B A) :
     ∃ (V : Matrix (Fin D_A) (Fin D_B) ℂ)
       (W : Matrix (Fin D_B) (Fin D_A) ℂ), IsReduction B A V W := by
-  apply exists_isReduction_of_blockTensor_isInjective_of_sameMPV₂Pos A B hSame 1 (by omega)
-  exact (isNBlkInjective_iff_blockTensor_isInjective A 1).mp
+  have := Fintype.ofFinite α
+  apply exists_isReduction_of_block_isInjective_of_sameMPV₂Pos A B hSame 1 (by omega)
+  exact (Kraus.isNBlkInjective_iff_isInjective_block A 1).mp
     (Kraus.isNBlkInjective_one_of_isInjective hA)
 
+omit [Fintype α] in
 /-- A normal target with the same positive-length matrix product vectors as a
 possibly larger-bond source admits a rectangular reduction from the source.
 Normality is used only to choose a positive injective blocking; the padded open
@@ -212,20 +227,22 @@ contraction then proves the relation for every original-scale word.
 
 This is the equality case of arXiv:1706.07329v2, Proposition 20,
 `cornerproblem.tex` lines 3815--3938. -/
-theorem exists_isReduction_of_isNormal_of_sameMPV₂Pos [NeZero D_A]
-    (A : MPSTensor d D_A) (B : MPSTensor d D_B)
+theorem exists_isReduction_of_isNormal_of_sameMPV₂Pos [Finite α] [NeZero D_A]
+    (A : MPTensor α (Fin D_A)) (B : MPTensor α (Fin D_B))
     (hA : Kraus.IsNormal A) (hSame : SameMPV₂Pos B A) :
     ∃ (V : Matrix (Fin D_A) (Fin D_B) ℂ)
       (W : Matrix (Fin D_B) (Fin D_A) ℂ), IsReduction B A V W := by
+  have := Fintype.ofFinite α
   obtain ⟨p, hp, hAp⟩ := hA
-  apply exists_isReduction_of_blockTensor_isInjective_of_sameMPV₂Pos A B hSame p hp
-  exact (isNBlkInjective_iff_blockTensor_isInjective A p).mp hAp
+  apply exists_isReduction_of_block_isInjective_of_sameMPV₂Pos A B hSame p hp
+  exact (Kraus.isNBlkInjective_iff_isInjective_block A p).mp hAp
 
+omit [Fintype α] in
 /-- Rescaling a proportionally equal source by the inverse scalar gives exact
 positive-length MPV equality. -/
 private theorem sameMPV₂Pos_inv_smul_of_mpv_eq_pow_mul
-    (A : MPSTensor d D_A) (B : MPSTensor d D_B) (c : ℂ) (hc : c ≠ 0)
-    (hmpv : ∀ (N : ℕ), 0 < N → ∀ σ : Fin N → Fin d,
+    (A : MPTensor α (Fin D_A)) (B : MPTensor α (Fin D_B)) (c : ℂ) (hc : c ≠ 0)
+    (hmpv : ∀ (N : ℕ), 0 < N → ∀ σ : Fin N → α,
       mpv B σ = c ^ N * mpv A σ) :
     SameMPV₂Pos (fun i => c⁻¹ • B i) A := by
   intro N hN σ
@@ -236,6 +253,7 @@ private theorem sameMPV₂Pos_inv_smul_of_mpv_eq_pow_mul
     _ = c⁻¹ ^ N * (c ^ N * mpv A σ) := by rw [hmpv N hN σ]
     _ = mpv A σ := by rw [← mul_assoc, ← mul_pow]; simp [hc]
 
+omit [Fintype α] in
 /-- An injective target and a source whose positive-length MPVs are `c ^ N`
 times the target MPVs admit a reduction to the target scaled by nonzero `c`.
 Only the arbitrary source is first rescaled by `c⁻¹`; the equality-case theorem
@@ -246,14 +264,15 @@ relation `eq:mgsc18_reduction_proportionality_corrected_word_relation`, derived
 from `cornerproblem.tex` lines 3124--3133 and 3815--3938.  The correction is
 recorded in `docs/paper-gaps/mgsc18_reduction_proportionality_scalar.tex`,
 lines 96--120. -/
-theorem exists_isReduction_smul_of_isInjective_of_mpv_eq_pow_mul [NeZero D_A]
-    (A : MPSTensor d D_A) (B : MPSTensor d D_B) (c : ℂ)
+theorem exists_isReduction_smul_of_isInjective_of_mpv_eq_pow_mul [Finite α] [NeZero D_A]
+    (A : MPTensor α (Fin D_A)) (B : MPTensor α (Fin D_B)) (c : ℂ)
     (hA : Kraus.IsInjective A) (hc : c ≠ 0)
-    (hmpv : ∀ (N : ℕ), 0 < N → ∀ σ : Fin N → Fin d,
+    (hmpv : ∀ (N : ℕ), 0 < N → ∀ σ : Fin N → α,
       mpv B σ = c ^ N * mpv A σ) :
     ∃ (V : Matrix (Fin D_A) (Fin D_B) ℂ)
       (W : Matrix (Fin D_B) (Fin D_A) ℂ),
         IsReduction B (fun i => c • A i) V W := by
+  have := Fintype.ofFinite α
   have hSame := sameMPV₂Pos_inv_smul_of_mpv_eq_pow_mul A B c hc hmpv
   obtain ⟨V, W, hReduction⟩ :=
     exists_isReduction_of_isInjective_of_sameMPV₂Pos
@@ -261,6 +280,7 @@ theorem exists_isReduction_smul_of_isInjective_of_mpv_eq_pow_mul [NeZero D_A]
   refine ⟨V, W, ?_⟩
   simpa [smul_smul, hc] using hReduction.smul c
 
+omit [Fintype α] in
 /-- A normal target and a source whose positive-length MPVs are `c ^ N` times
 the target MPVs admit a reduction to the target scaled by nonzero `c`.
 Consequently, `IsReduction.evalWord_smul_target` gives exactly
@@ -270,14 +290,15 @@ This is the corrected nonzero-scalar form of MGSC18 Proposition 20,
 `eq:mgsc18_reduction_proportionality_corrected_word_relation`; see
 `cornerproblem.tex` lines 3124--3133 and 3815--3938 and
 `docs/paper-gaps/mgsc18_reduction_proportionality_scalar.tex`, lines 96--120. -/
-theorem exists_isReduction_smul_of_isNormal_of_mpv_eq_pow_mul [NeZero D_A]
-    (A : MPSTensor d D_A) (B : MPSTensor d D_B) (c : ℂ)
+theorem exists_isReduction_smul_of_isNormal_of_mpv_eq_pow_mul [Finite α] [NeZero D_A]
+    (A : MPTensor α (Fin D_A)) (B : MPTensor α (Fin D_B)) (c : ℂ)
     (hA : Kraus.IsNormal A) (hc : c ≠ 0)
-    (hmpv : ∀ (N : ℕ), 0 < N → ∀ σ : Fin N → Fin d,
+    (hmpv : ∀ (N : ℕ), 0 < N → ∀ σ : Fin N → α,
       mpv B σ = c ^ N * mpv A σ) :
     ∃ (V : Matrix (Fin D_A) (Fin D_B) ℂ)
       (W : Matrix (Fin D_B) (Fin D_A) ℂ),
         IsReduction B (fun i => c • A i) V W := by
+  have := Fintype.ofFinite α
   have hSame := sameMPV₂Pos_inv_smul_of_mpv_eq_pow_mul A B c hc hmpv
   obtain ⟨V, W, hReduction⟩ :=
     exists_isReduction_of_isNormal_of_sameMPV₂Pos

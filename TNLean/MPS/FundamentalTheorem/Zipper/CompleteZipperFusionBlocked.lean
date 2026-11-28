@@ -61,6 +61,12 @@ resulting simultaneous span transfers back at the same length.
 This is the common-blocking step in Garre-Rubio, Lootens and Molnár,
 arXiv:2203.12563v3, Appendix A, using the block-injectivity theorem of
 arXiv:1606.00608, lines 317--345.
+
+**Bridge (T.2b):** The proof of `exists_positive_wordTupleSpanTop_of_isInjective` and
+`toMPSTensor_blockTensor_apply` still reads an operator tensor through `MPOTensor.toMPSTensor`,
+because the Fin-encoded blocking `Kraus.blockTensor` (with `MPOTensor.toMPSTensor_blockTensor`,
+`MPOTensor.toMPSTensor_blockTwo`) is stated on the alphabet `Fin (d * d)`. The bridge is removed
+when the blocking moves to `Kraus.block` (step T.2b of `docs/tensor_type_unification.md`).
 -/
 
 open MPTensor
@@ -75,16 +81,16 @@ open Kraus (blockTensor)
 
 namespace MPSTensor.MultiBlockCompression
 
-variable {ι : Type*} [DecidableEq ι] {d d' DB : ℕ} {D : ι → ℕ} {S : Finset ι}
+variable {ι : Type*} [DecidableEq ι] {α α' : Type*} {DB : ℕ} {D : ι → ℕ} {S : Finset ι}
 
 /-- The evaluation of a nonempty word in the zero family vanishes. -/
 private theorem evalWord_zero_of_ne_nil {n : Type*} [Fintype n] [DecidableEq n]
-    {w : List (Fin d)} (hw : w ≠ []) :
+    {w : List α} (hw : w ≠ []) :
     Kraus.evalWord (fun _ => (0 : Matrix n n ℂ)) w = 0 := by
   obtain ⟨i, w, rfl⟩ := List.exists_cons_of_ne_nil hw
   simp [Kraus.evalWord]
 
-variable {B : MPSTensor d DB} {C : ∀ s, MPSTensor d (D s)}
+variable {B : MPTensor α (Fin DB)} {C : ∀ s, MPTensor α (Fin (D s))}
 
 /-- **Transport of a compression along words.** If every letter of `B'` is the evaluation of a
 fixed nonempty word `u j` in the letters of `B`, and every letter of `C' s` is the evaluation of
@@ -92,9 +98,9 @@ the same word in the letters of `C s`, then a multi-block compression of `B` ont
 `C s` gives one of `B'` onto the tensors `C' s`, with the same change of coordinates.
 
 Blocking is the case where `u j` runs over the words of a fixed positive length. -/
-noncomputable def ofWords (P : MultiBlockCompression B S C) (u : Fin d' → List (Fin d))
-    (hu : ∀ j, u j ≠ []) {B' : MPSTensor d' DB} (hB' : ∀ j, B' j = Kraus.evalWord B (u j))
-    {C' : ∀ s, MPSTensor d' (D s)} (hC' : ∀ s j, C' s j = Kraus.evalWord (C s) (u j)) :
+noncomputable def ofWords (P : MultiBlockCompression B S C) (u : α' → List α)
+    (hu : ∀ j, u j ≠ []) {B' : MPTensor α' (Fin DB)} (hB' : ∀ j, B' j = Kraus.evalWord B (u j))
+    {C' : ∀ s, MPTensor α' (Fin (D s))} (hC' : ∀ s j, C' s j = Kraus.evalWord (C s) (u j)) :
     MultiBlockCompression B' S C' where
   z := P.z
   ord := P.ord
@@ -113,7 +119,7 @@ noncomputable def ofWords (P : MultiBlockCompression B S C) (u : Fin d' → List
 
 /-- A vanishing remainder means that every letter is block diagonal in the block coordinates. -/
 theorem conjMatrix_eq_blockDiagonal'_of_remainder_eq_zero (P : MultiBlockCompression B S C)
-    (hP : P.remainder = 0) (i : Fin d) :
+    (hP : P.remainder = 0) (i : α) :
     conjMatrix P.gauge (B i) =
       Matrix.blockDiagonal' (conjMatrix P.gauge (B i)).blockDiag' := by
   have h := P.conjMatrix_remainder i
@@ -123,8 +129,8 @@ theorem conjMatrix_eq_blockDiagonal'_of_remainder_eq_zero (P : MultiBlockCompres
 /-- **A split compression stays split along words.** The remainder of `ofWords` vanishes when
 the remainder of the original compression does. -/
 theorem remainder_ofWords_eq_zero (P : MultiBlockCompression B S C) (hP : P.remainder = 0)
-    (u : Fin d' → List (Fin d)) (hu : ∀ j, u j ≠ []) {B' : MPSTensor d' DB}
-    (hB' : ∀ j, B' j = Kraus.evalWord B (u j)) {C' : ∀ s, MPSTensor d' (D s)}
+    (u : α' → List α) (hu : ∀ j, u j ≠ []) {B' : MPTensor α' (Fin DB)}
+    (hB' : ∀ j, B' j = Kraus.evalWord B (u j)) {C' : ∀ s, MPTensor α' (Fin (D s))}
     (hC' : ∀ s j, C' s j = Kraus.evalWord (C s) (u j)) :
     (P.ofWords u hu hB' hC').remainder = 0 := by
   funext j
@@ -174,6 +180,16 @@ theorem wordTupleSpanTop_of_smul {d r : ℕ} {dim : Fin r → ℕ}
   obtain ⟨Y, hY, hYX⟩ := (Submodule.mem_map).1 (h ▸ Submodule.mem_top : Φ X ∈ _)
   exact hΦ hYX ▸ hY
 
+/-- A bijective relabelling of the physical alphabet preserves pairwise scalar-gauge
+separation of a block family. -/
+theorem BlocksNotGaugePhaseEquiv.reindexPhysical {α α' : Type*} {r : ℕ} {dim : Fin r → ℕ}
+    {A : (k : Fin r) → MPTensor α (Fin (dim k))} (hA : BlocksNotGaugePhaseEquiv A)
+    (e : α' ≃ α) : BlocksNotGaugePhaseEquiv fun k ↦ Kraus.reindexPhysical e (A k) := by
+  intro j k hjk h hG
+  apply hA j k hjk h
+  rw [← gaugePhaseEquiv_reindexPhysical_equiv e, reindexPhysical_cast_dim e h]
+  exact hG
+
 end MPSTensor
 
 namespace MPOTensor
@@ -201,8 +217,21 @@ theorem toMPSTensor_blockTensor_apply {D : ℕ} (M : MPOTensor p D) (L : ℕ)
     (blockTensor M L).toMPSTensor I = Kraus.evalWord M.toMPSTensor (blockedPairWord p L I) :=
   congrFun (toMPSTensor_blockTensor M) I
 
-/-- **Simultaneous left inverse after blocking.** Let `T_1, …, T_g` be MPO tensors whose
-doubled-alphabet tensors are normal, of positive bond dimension, and pairwise not gauge
+/-- A letter of a blocked MPO tensor is the evaluation of its paired word on the pair alphabet.
+
+**Bridge (T.2b):** the paired word is read through the doubled-index blocking
+`blockedPairWord`; removed when the blocking moves to `Kraus.block`. -/
+theorem blockTensor_apply_eq_kraus_evalWord {D : ℕ} (M : MPOTensor p D) (L : ℕ)
+    (I : Fin (Kraus.blockPhysDim p L) × Fin (Kraus.blockPhysDim p L)) :
+    blockTensor M L I =
+      Kraus.evalWord M ((blockedPairWord p L (finProdFinEquiv I)).map finProdFinEquiv.symm) := by
+  have hI := toMPSTensor_blockTensor_apply M L (finProdFinEquiv I)
+  rw [evalWord_toMPSTensor] at hI
+  have hI' : blockTensor M L (finProdFinEquiv.symm (finProdFinEquiv I)) = _ := hI
+  rwa [Equiv.symm_apply_apply] at hI'
+
+/-- **Simultaneous left inverse after blocking.** Let `T_1, …, T_g` be MPO tensors that are
+normal on the pair alphabet, of positive bond dimension, and pairwise not gauge
 equivalent up to a nonzero scalar.  Then there is a positive blocking length `L` at which the
 blocked tensors are injective and have a simultaneous left inverse: one matrix `K` with
 `∑_{ik} K_{(c,x,y),(i,k)} (T_d^{[L]})^{ik}_{x'y'} = δ_{cd} δ_{xx'} δ_{yy'}`.
@@ -215,10 +244,10 @@ hypothesis is needed, since `T` and `-T` have no simultaneous left inverse at an
 Source: the joint span is `MPSTensor.exists_positive_wordTupleSpanTop_of_isNormal`,
 arXiv:1606.00608, lines 317--345. -/
 theorem exists_blockTensor_isMPOBlockLeftInverse {g : ℕ} {D : Fin g → ℕ}
-    (T : ∀ c, MPOTensor p (D c)) (hT : ∀ c, Kraus.IsNormal (T c).toMPSTensor)
+    (T : ∀ c, MPOTensor p (D c)) (hT : ∀ c, Kraus.IsNormal (T c))
     (hD : ∀ c, 0 < D c)
-    (hne : MPSTensor.BlocksNotGaugePhaseEquiv (d := p * p) fun c => (T c).toMPSTensor) :
-    ∃ L : ℕ, 0 < L ∧ (∀ c, Kraus.IsInjective (blockTensor (T c) L).toMPSTensor) ∧
+    (hne : MPSTensor.BlocksNotGaugePhaseEquiv T) :
+    ∃ L : ℕ, 0 < L ∧ (∀ c, Kraus.IsInjective (blockTensor (T c) L)) ∧
       ∃ K : Matrix (MPSTensor.BlockEntryIndex D) (Fin (Kraus.blockPhysDim p L) ×
           Fin (Kraus.blockPhysDim p L)) ℂ,
         MPSTensor.IsMPOBlockLeftInverse (fun c => blockTensor (T c) L) K := by
@@ -227,11 +256,14 @@ theorem exists_blockTensor_isMPOBlockLeftInverse {g : ℕ} {D : Fin g → ℕ}
     intro c
     have : NeZero (D c) := ⟨(hD c).ne'⟩
     obtain ⟨B, ζ, hζ, hGauge, -, -, hB⟩ :=
-      MPSTensor.exists_leftCanonical_normalTensor_scale_of_isNormal (hT c)
+      MPSTensor.exists_leftCanonical_normalTensor_scale_of_isNormal
+        ((isNormal_toMPSTensor_iff _).2 (hT c))
     exact ⟨ζ, hζ, MPTensor.IsNormalTensor.of_gaugeEquiv hB hGauge⟩
   choose scale hscale hNormal using hScaled
+  have hne' : MPSTensor.BlocksNotGaugePhaseEquiv fun c => (T c).toMPSTensor :=
+    hne.reindexPhysical finProdFinEquiv.symm
   obtain ⟨L, hL, hSpan⟩ := MPSTensor.exists_positive_wordTupleSpanTop_of_isNormal hNormal hD
-    (fun j k hjk hdim hGPE => hne j k hjk hdim
+    (fun j k hjk hdim hGPE => hne' j k hjk hdim
       (MPSTensor.gaugePhaseEquiv_of_smul_smul_cast hdim (hscale j) (hscale k) hGPE))
   replace hSpan := MPSTensor.wordTupleSpanTop_of_smul hscale hSpan
   have hSpan1 := MPSTensor.wordTupleSpanTop_blockTensor_one _ hSpan
@@ -244,8 +276,9 @@ theorem exists_blockTensor_isMPOBlockLeftInverse {g : ℕ} {D : Fin g → ℕ}
     rw [hFamily]
     exact (MPSTensor.wordTupleSpanTop_reindexPhysical_equiv
       (blockedDoubledIndexEquiv p L) _ 1).2 hSpan1
-  exact ⟨L, hL, fun c ↦ hSpanBlocked.isInjective_one c,
-    hSpanBlocked.exists_mpo_block_left_inverse⟩
+  have hSpanPair : MPSTensor.WordTupleSpanTop (fun c ↦ blockTensor (T c) L) 1 :=
+    (MPSTensor.wordTupleSpanTop_reindexPhysical_equiv finProdFinEquiv.symm _ 1).1 hSpanBlocked
+  exact ⟨L, hL, fun c ↦ hSpanPair.isInjective_one c, hSpanPair.exists_mpo_block_left_inverse⟩
 
 namespace CompleteZipperFusionFamily
 
@@ -261,11 +294,12 @@ fusion tensors, which are independent of the blocking) and lines 427--431 (commo
 noncomputable def PairCompression.blockTensor {a b : Fin g} (P : PairCompression T N a b)
     {L : ℕ} (hL : 0 < L) :
     PairCompression (fun c => MPOTensor.blockTensor (T c) L) N a b :=
-  P.ofWords (blockedPairWord p L) (blockedPairWord_ne_nil hL)
+  P.ofWords (fun I => (blockedPairWord p L (finProdFinEquiv I)).map finProdFinEquiv.symm)
+    (fun I => by simpa using blockedPairWord_ne_nil hL (finProdFinEquiv I))
     (fun I => by
       rw [← blockTensor_mulTensor]
-      exact toMPSTensor_blockTensor_apply _ L I)
-    (fun s I => toMPSTensor_blockTensor_apply (T s.1) L I)
+      exact blockTensor_apply_eq_kraus_evalWord _ L I)
+    (fun s I => blockTensor_apply_eq_kraus_evalWord (T s.1) L I)
 
 theorem PairCompression.remainder_blockTensor_eq_zero {a b : Fin g}
     (P : PairCompression T N a b) (hP : P.remainder = 0) {L : ℕ} (hL : 0 < L) :
@@ -275,12 +309,12 @@ theorem PairCompression.remainder_blockTensor_eq_zero {a b : Fin g}
 /-- A positive blocking length at which the blocks are injective and have a simultaneous left
 inverse, chosen by `MPOTensor.exists_blockTensor_isMPOBlockLeftInverse`. -/
 noncomputable def jointBlockLength (T : ∀ c, MPOTensor p (D c))
-    (hT : ∀ c, Kraus.IsNormal (T c).toMPSTensor) (hD : ∀ c, 0 < D c)
-    (hne : MPSTensor.BlocksNotGaugePhaseEquiv (d := p * p) fun c => (T c).toMPSTensor) : ℕ :=
+    (hT : ∀ c, Kraus.IsNormal (T c)) (hD : ∀ c, 0 < D c)
+    (hne : MPSTensor.BlocksNotGaugePhaseEquiv T) : ℕ :=
   (exists_blockTensor_isMPOBlockLeftInverse T hT hD hne).choose
 
 theorem jointBlockLength_pos (T : ∀ c, MPOTensor p (D c))
-    (hT : ∀ c, Kraus.IsNormal (T c).toMPSTensor) (hD : ∀ c, 0 < D c) (hne) :
+    (hT : ∀ c, Kraus.IsNormal (T c)) (hD : ∀ c, 0 < D c) (hne) :
     0 < jointBlockLength T hT hD hne :=
   (exists_blockTensor_isMPOBlockLeftInverse T hT hD hne).choose_spec.1
 
@@ -298,9 +332,9 @@ one-site statement of line 269 is false in general, and the pairwise inequivalen
 to a nonzero scalar.  Documented in `docs/paper-gaps/bmwshv17_joint_block_left_inverse.tex`.
 
 Source: arXiv:1511.08090, `AnyonsPEPS.tex`, lines 156--200 and 269--277. -/
-noncomputable def ofCompressionBlocked (hT : ∀ c, Kraus.IsNormal (T c).toMPSTensor)
+noncomputable def ofCompressionBlocked (hT : ∀ c, Kraus.IsNormal (T c))
     (hD : ∀ c, 0 < D c)
-    (hne : MPSTensor.BlocksNotGaugePhaseEquiv (d := p * p) fun c => (T c).toMPSTensor)
+    (hne : MPSTensor.BlocksNotGaugePhaseEquiv T)
     (P : ∀ a b, PairCompression T N a b) (hP : ∀ a b, (P a b).remainder = 0) :
     CompleteZipperFusionFamily (Fin g)
       (Kraus.blockPhysDim p (jointBlockLength T hT hD hne)) :=
@@ -311,7 +345,7 @@ noncomputable def ofCompressionBlocked (hT : ∀ c, Kraus.IsNormal (T c).toMPSTe
     hspec.2.2.choose hspec.2.2.choose_spec
 
 /-- The tensors of `ofCompressionBlocked` are the blocked tensors. -/
-theorem ofCompressionBlocked_tensor (hT : ∀ c, Kraus.IsNormal (T c).toMPSTensor)
+theorem ofCompressionBlocked_tensor (hT : ∀ c, Kraus.IsNormal (T c))
     (hD : ∀ c, 0 < D c) (hne) (P : ∀ a b, PairCompression T N a b)
     (hP : ∀ a b, (P a b).remainder = 0) (c : Fin g) :
     (ofCompressionBlocked hT hD hne P hP).tensor c =
@@ -319,7 +353,7 @@ theorem ofCompressionBlocked_tensor (hT : ∀ c, Kraus.IsNormal (T c).toMPSTenso
 
 /-- The fusion tensor `X^c_{ab,μ}` of `ofCompressionBlocked` is the compression map `V_{(c,μ)}`
 of the unblocked compression of `O_a O_b`. -/
-theorem ofCompressionBlocked_fusionTensor (hT : ∀ c, Kraus.IsNormal (T c).toMPSTensor)
+theorem ofCompressionBlocked_fusionTensor (hT : ∀ c, Kraus.IsNormal (T c))
     (hD : ∀ c, 0 < D c) (hne) (P : ∀ a b, PairCompression T N a b)
     (hP : ∀ a b, (P a b).remainder = 0) (a b c : Fin g) (μ : Fin (N a b c))
     (x : Fin (D a) × Fin (D b)) (z : Fin (D c)) :
@@ -329,7 +363,7 @@ theorem ofCompressionBlocked_fusionTensor (hT : ∀ c, Kraus.IsNormal (T c).toMP
 /-- The left inverse `X^{c+}_{ab,μ}` of `ofCompressionBlocked` is the compression map
 `W_{(c,μ)}` of the unblocked compression of `O_a O_b`. -/
 theorem ofCompressionBlocked_fusionTensorLeftInverse
-    (hT : ∀ c, Kraus.IsNormal (T c).toMPSTensor) (hD : ∀ c, 0 < D c) (hne)
+    (hT : ∀ c, Kraus.IsNormal (T c)) (hD : ∀ c, 0 < D c) (hne)
     (P : ∀ a b, PairCompression T N a b) (hP : ∀ a b, (P a b).remainder = 0) (a b c : Fin g)
     (μ : Fin (N a b c)) (z : Fin (D c)) (x : Fin (D a) × Fin (D b)) :
     (ofCompressionBlocked hT hD hne P hP).fusionTensorLeftInverse a b c μ z x =
@@ -347,26 +381,24 @@ built for the blocked tensors.  Documented in
 
 Source: arXiv:1511.08090, `AnyonsPEPS.tex`, lines 156--200 and 269--277; arXiv:2203.12563,
 `REsubmission.tex`, lines 361--362 (the fusion rules). -/
-noncomputable def ofStarBlocked (hT : ∀ c, Kraus.IsNormal (T c).toMPSTensor)
+noncomputable def ofStarBlocked (hT : ∀ c, Kraus.IsNormal (T c))
     (hD : ∀ c, 0 < D c)
-    (hne : MPSTensor.BlocksNotGaugePhaseEquiv (d := p * p) fun c => (T c).toMPSTensor)
-    (htr : ∀ a b, ∀ w : List (Fin (p * p)), w ≠ [] →
-      Matrix.trace (Kraus.evalWord (mulTensor (T a) (T b)).toMPSTensor w) =
+    (hne : MPSTensor.BlocksNotGaugePhaseEquiv T)
+    (htr : ∀ a b, ∀ w : List (Fin p × Fin p), w ≠ [] →
+      Matrix.trace (Kraus.evalWord (mulTensor (T a) (T b)) w) =
         ∑ s : (c : Fin g) × Fin (N a b c),
-          Matrix.trace (Kraus.evalWord (T s.1).toMPSTensor w))
-    (hstar : ∀ a b, ∀ i, ((mulTensor (T a) (T b)).toMPSTensor i)ᴴ ∈
-      Algebra.adjoin ℂ (Set.range (mulTensor (T a) (T b)).toMPSTensor)) :
+          Matrix.trace (Kraus.evalWord (T s.1) w))
+    (hstar : ∀ a b, ∀ i, (mulTensor (T a) (T b) i)ᴴ ∈
+      Algebra.adjoin ℂ (Set.range (mulTensor (T a) (T b)))) :
     CompleteZipperFusionFamily (Fin g)
       (Kraus.blockPhysDim p (jointBlockLength T hT hD hne)) :=
-  ofCompressionBlocked hT hD hne
-    (fun a b => (MPSTensor.exists_multiBlockCompression_remainder_eq_zero_of_star
+  let hsplit : ∀ a b, ∃ P : PairCompression T N a b, P.remainder = 0 := fun a b =>
+    MPSTensor.exists_multiBlockCompression_remainder_eq_zero_of_star
       (D := fun s : (c : Fin g) × Fin (N a b c) => D s.1) Finset.univ
-      (fun s : (c : Fin g) × Fin (N a b c) => (T s.1).toMPSTensor)
-      (fun s _ => hT s.1) (fun s _ => hD s.1) _ (htr a b) (hstar a b)).choose)
-    (fun a b => (MPSTensor.exists_multiBlockCompression_remainder_eq_zero_of_star
-      (D := fun s : (c : Fin g) × Fin (N a b c) => D s.1) Finset.univ
-      (fun s : (c : Fin g) × Fin (N a b c) => (T s.1).toMPSTensor)
-      (fun s _ => hT s.1) (fun s _ => hD s.1) _ (htr a b) (hstar a b)).choose_spec)
+      (fun s : (c : Fin g) × Fin (N a b c) => T s.1) (fun s _ => hT s.1) (fun s _ => hD s.1) _
+      (htr a b) (hstar a b)
+  ofCompressionBlocked hT hD hne (fun a b => (hsplit a b).choose)
+    (fun a b => (hsplit a b).choose_spec)
 
 end CompleteZipperFusionFamily
 
@@ -381,11 +413,11 @@ namespace MPSTensor
 /-- Individually injective, pairwise gauge-phase-inequivalent blocks have a
 common positive simultaneous spanning length, without a spectral-radius-one
 assumption on any original block. -/
-theorem exists_positive_wordTupleSpanTop_of_isInjective
+private theorem exists_positive_wordTupleSpanTop_of_isInjective_fin
     {d g : ℕ} {dim : Fin g → ℕ}
     {B : (j : Fin g) → MPSTensor d (dim j)}
     (hInj : ∀ j, Kraus.IsInjective (B j)) (hdimPos : ∀ j, 0 < dim j)
-    (hDistinct : BlocksNotGaugePhaseEquiv (d := d) B) :
+    (hDistinct : BlocksNotGaugePhaseEquiv (α := Fin d) B) :
     ∃ L : ℕ, 0 < L ∧ WordTupleSpanTop B L := by
   have hScaled : ∀ j, ∃ ζ : ℂ, ζ ≠ 0 ∧ IsNormalTensor (ζ • B j) := by
     intro j
@@ -398,6 +430,23 @@ theorem exists_positive_wordTupleSpanTop_of_isInjective
     (fun j k hjk hdim hGPE => hDistinct j k hjk hdim
       (gaugePhaseEquiv_of_smul_smul_cast hdim (hscale j) (hscale k) hGPE))
   exact ⟨L, hL, wordTupleSpanTop_of_smul hscale hSpan⟩
+
+/-- Individually injective, pairwise gauge-phase-inequivalent blocks over any finite physical
+alphabet have a common positive simultaneous spanning length, without a spectral-radius-one
+assumption on any original block. -/
+theorem exists_positive_wordTupleSpanTop_of_isInjective
+    {α : Type*} [Finite α] {g : ℕ} {dim : Fin g → ℕ}
+    {B : (j : Fin g) → MPTensor α (Fin (dim j))}
+    (hInj : ∀ j, Kraus.IsInjective (B j)) (hdimPos : ∀ j, 0 < dim j)
+    (hDistinct : BlocksNotGaugePhaseEquiv B) :
+    ∃ L : ℕ, 0 < L ∧ WordTupleSpanTop B L := by
+  have := Fintype.ofFinite α
+  let e := (Fintype.equivFin α).symm
+  obtain ⟨L, hL, hSpan⟩ := exists_positive_wordTupleSpanTop_of_isInjective_fin
+    (B := fun j ↦ Kraus.reindexPhysical e (B j))
+    (fun j ↦ (isInjective_reindexPhysical_equiv e (B j)).2 (hInj j)) hdimPos
+    (hDistinct.reindexPhysical e)
+  exact ⟨L, hL, (wordTupleSpanTop_reindexPhysical_equiv e B L).1 hSpan⟩
 
 end MPSTensor
 
@@ -434,17 +483,16 @@ theorem IsBoundaryClosed.exists_blockFusionDecomposition_of_isInjective
     {d r : ℕ} {dim : Fin r → ℕ}
     {T : MPOTensor d (∑ c : Fin r, dim c)} (hT : IsBoundaryClosed T)
     (A : (c : Fin r) → MPOTensor d (dim c))
-    (hBlocks : T.toMPSTensor = MPTensor.toTensorFromBlocks (fun _ ↦ 1)
-      (fun c ↦ (A c).toMPSTensor))
-    (hInj : ∀ c, Kraus.IsInjective (A c).toMPSTensor)
+    (hBlocks : T = MPTensor.toTensorFromBlocks (fun _ ↦ 1) A)
+    (hInj : ∀ c, Kraus.IsInjective (A c))
     (hDim : ∀ c, 0 < dim c)
-    (hDistinct : MPSTensor.BlocksNotGaugePhaseEquiv (fun c ↦ (A c).toMPSTensor))
+    (hDistinct : MPSTensor.BlocksNotGaugePhaseEquiv A)
     (a b : Fin r) :
     ∃ (m : Fin r → ℕ)
       (V : ∀ c, Fin (m c) → Matrix (Fin (dim c)) (Fin (dim a * dim b)) ℂ)
       (W : ∀ c, Fin (m c) → Matrix (Fin (dim a * dim b)) (Fin (dim c)) ℂ),
-      MPSTensor.IsBiorthogonalDecomposition (mulTensor (A a) (A b)).toMPSTensor
-        (fun q : (c : Fin r) × Fin (m c) ↦ (A q.1).toMPSTensor)
+      MPSTensor.IsBiorthogonalDecomposition (mulTensor (A a) (A b))
+        (fun q : (c : Fin r) × Fin (m c) ↦ A q.1)
         (fun q ↦ V q.1 q.2) (fun q ↦ W q.1 q.2) := by
   obtain ⟨L, hL, hSpan⟩ :=
     MPSTensor.exists_positive_wordTupleSpanTop_of_isInjective hInj hDim hDistinct
@@ -460,8 +508,7 @@ theorem IsBoundaryCompatible.exists_blockActionDecomposition_of_isInjective
     {A : MPSTensor d (∑ c : Fin s, dim c)} (h : IsBoundaryCompatible T A)
     (S : (a : Fin r) → MPOTensor d (opDim a))
     (B : (c : Fin s) → MPSTensor d (dim c))
-    (hT : T.toMPSTensor = MPTensor.toTensorFromBlocks (fun _ ↦ 1)
-      (fun a ↦ (S a).toMPSTensor))
+    (hT : T = MPTensor.toTensorFromBlocks (fun _ ↦ 1) S)
     (hA : A = MPTensor.toTensorFromBlocks (fun _ ↦ 1) B)
     (hInj : ∀ c, Kraus.IsInjective (B c)) (hDim : ∀ c, 0 < dim c)
     (hDistinct : MPSTensor.BlocksNotGaugePhaseEquiv B)

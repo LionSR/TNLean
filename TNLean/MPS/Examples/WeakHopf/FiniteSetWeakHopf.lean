@@ -195,7 +195,6 @@ theorem weakHopfAverage_eq_sum (φ : (Fin m → ℂ) →ₐ[ℂ] Matrix (Fin d) 
         Matrix.toEuclideanLin ((weakHopfRepresentation φ hφ).rep n (Pi.single k 1)) :=
   (weakHopfRepresentation φ hφ).weakHopfAverage_eq_sum (integralRepr φ hφ) P
 
-attribute [local instance] MPSTensor.groundSpaceES_hasOrthogonalProjection
 
 /-- The pinching by the represented idempotents fixes the support projection
 of an MPS compatible with the MPO and injective after blocking, at every
@@ -206,9 +205,11 @@ theorem sum_rep_single_mul_starProjection_mul (φ : (Fin m → ℂ) →ₐ[ℂ] 
     (h : IsBoundaryCompatible (weakHopfRepresentation φ hφ).tensor A)
     (hInj : Kraus.IsNBlkInjective A L) (hn : 0 < n) :
     ∑ k, Matrix.toEuclideanLin ((weakHopfRepresentation φ hφ).rep n (Pi.single k 1)) *
-        (MPSTensor.groundSpaceES A n).starProjection.toLinearMap *
+        (((MPSTensor.groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap)).starProjection.toLinearMap *
         Matrix.toEuclideanLin ((weakHopfRepresentation φ hφ).rep n (Pi.single k 1)) =
-      (MPSTensor.groundSpaceES A n).starProjection.toLinearMap := by
+      (((MPSTensor.groundSpace A n).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap)).starProjection.toLinearMap := by
   rw [← weakHopfAverage_eq_sum]
   exact (weakHopfRepresentation φ hφ).weakHopfAverage_starProjection h hInj hn
 

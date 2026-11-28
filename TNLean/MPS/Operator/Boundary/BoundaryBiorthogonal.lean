@@ -114,20 +114,20 @@ inverses. Source: GLM23, `fusiontensors`, `eq:orthoW`, and Appendix A.
 The target blocks need only span simultaneously at one positive length. -/
 theorem IsBoundaryClosed.exists_biorthogonalDecomposition
     {T : MPOTensor d (∑ c : Fin r, dim c)} (hT : IsBoundaryClosed T)
-    (A : (c : Fin r) → MPSTensor (d * d) (dim c))
-    (hBlocks : T.toMPSTensor = MPTensor.toTensorFromBlocks (fun _ ↦ 1) A)
+    (A : (c : Fin r) → MPOTensor d (dim c))
+    (hBlocks : T = MPTensor.toTensorFromBlocks (fun _ ↦ 1) A)
     {L : ℕ} (hL : 0 < L) (hSpan : MPSTensor.WordTupleSpanTop A L) :
     ∃ (m : Fin r → ℕ)
       (V : ∀ c, Fin (m c) → Matrix (Fin (dim c))
         (Fin ((∑ c : Fin r, dim c) * (∑ c : Fin r, dim c))) ℂ)
       (W : ∀ c, Fin (m c) → Matrix
         (Fin ((∑ c : Fin r, dim c) * (∑ c : Fin r, dim c))) (Fin (dim c)) ℂ),
-      MPSTensor.IsBiorthogonalDecomposition (mulTensor T T).toMPSTensor
+      MPSTensor.IsBiorthogonalDecomposition (mulTensor T T)
         (fun q : (c : Fin r) × Fin (m c) ↦ A q.1)
         (fun q ↦ V q.1 q.2) (fun q ↦ W q.1 q.2) := by
   obtain ⟨ρ, hρ⟩ := hT.exists_boundaryRepresentation A hBlocks hL hSpan
   exact MPSTensor.exists_biorthogonalDecomposition_of_nonUnitalAlgHom
-    (mulTensor T T).toMPSTensor A ρ hρ
+    (mulTensor T T) A ρ hρ
 
 /-- Arbitrary-boundary compatibility gives exact action tensors and their
 biorthogonal left inverses. Source: GLM23, `fusiontensors2`, `eq:orthoV`,

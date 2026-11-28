@@ -107,37 +107,35 @@ open MPSTensor
 
 /-- **The translation tensor is normal.** Its four letters are already the four matrix units of
 `M_2(ℂ)` (construction note, §1.2). -/
-theorem shiftMPS_isNormal : Kraus.IsNormal shiftTensor.toMPSTensor :=
-  isNormal_of_complexOfRing_letter_eq_smul_single (Int.castRingHom ℂ) shiftIntMPS one_ne_zero
-    (fun a => by rw [shiftMPS_eq, one_smul]) ![![0, 2], ![1, 3]] (fun _ _ => 1)
+theorem shiftMPS_isNormal : Kraus.IsNormal shiftTensor :=
+  isNormal_of_complexOfRing_letter_eq_smul_single (Int.castRingHom ℂ) shiftIntTensor one_ne_zero
+    (fun a => (one_smul ℂ _).symm) ![![(0, 0), (1, 0)], ![(0, 1), (1, 1)]] (fun _ _ => 1)
     (fun _ _ => by simp) (by decide)
 
 /-- **The flipped-translation tensor is normal.** Its four letters are already the four matrix
 units of `M_2(ℂ)` (construction note, §1.2). -/
-theorem flipShiftMPS_isNormal : Kraus.IsNormal flipShiftTensor.toMPSTensor :=
-  isNormal_of_complexOfRing_letter_eq_smul_single (Int.castRingHom ℂ) flipShiftIntMPS one_ne_zero
-    (fun a => by rw [flipShiftMPS_eq, one_smul]) ![![2, 0], ![3, 1]] (fun _ _ => 1)
+theorem flipShiftMPS_isNormal : Kraus.IsNormal flipShiftTensor :=
+  isNormal_of_complexOfRing_letter_eq_smul_single (Int.castRingHom ℂ) flipShiftIntTensor one_ne_zero
+    (fun a => (one_smul ℂ _).symm) ![![(1, 0), (0, 0)], ![(1, 1), (0, 1)]] (fun _ _ => 1)
     (fun _ _ => by simp) (by decide)
 
 /-! ### The stacked tensor of the square of the duality -/
 
 /-- The integer entries of the stacked product tensor `B^{s's} = ∑_m W^{s'm} ⊗ W^{ms}` of bond
 dimension four (construction note, §1.3). -/
-def kwSquareInt : Fin 4 → Matrix (Fin 4) (Fin 4) ℤ
-  | 0 => !![1, 1, 1, 1; 0, 0, 0, 0; 1, -1, 1, -1; 0, 0, 0, 0]
-  | 1 => !![0, 0, 0, 0; 1, 1, 1, 1; 0, 0, 0, 0; -1, 1, -1, 1]
-  | 2 => !![1, 1, -1, -1; 0, 0, 0, 0; -1, 1, 1, -1; 0, 0, 0, 0]
-  | 3 => !![0, 0, 0, 0; 1, 1, -1, -1; 0, 0, 0, 0; 1, -1, -1, 1]
+def kwSquareInt : Fin 2 × Fin 2 → Matrix (Fin 4) (Fin 4) ℤ
+  | (0, 0) => !![1, 1, 1, 1; 0, 0, 0, 0; 1, -1, 1, -1; 0, 0, 0, 0]
+  | (0, 1) => !![0, 0, 0, 0; 1, 1, 1, 1; 0, 0, 0, 0; -1, 1, -1, 1]
+  | (1, 0) => !![1, 1, -1, -1; 0, 0, 0, 0; -1, 1, 1, -1; 0, 0, 0, 0]
+  | (1, 1) => !![0, 0, 0, 0; 1, 1, -1, -1; 0, 0, 0, 0; 1, -1, -1, 1]
 
 /-- The stacked product tensor of `Dtilde^2`, of bond dimension four (construction note, §1.3). -/
-def kwSquare : MPSTensor 4 4 := (MPOTensor.mulTensor kwTensor kwTensor).toMPSTensor
+def kwSquare : MPOTensor 2 4 := MPOTensor.mulTensor kwTensor kwTensor
 
-theorem kwSquare_eq (a : Fin 4) : kwSquare a = complexOfInt (kwSquareInt a) := by
-  have h : kwSquare a = complexOfInt (mulIntTensor kwIntTensor kwIntTensor
-      (Fin.divNat (m := 2) (n := 2) a) (Fin.modNat (m := 2) (n := 2) a)) :=
-    mulTensor_complexOfRing _ kwIntTensor kwIntTensor _ _
-  have hint : ∀ b : Fin 4, mulIntTensor kwIntTensor kwIntTensor
-      (Fin.divNat (m := 2) (n := 2) b) (Fin.modNat (m := 2) (n := 2) b) = kwSquareInt b := by
+theorem kwSquare_eq (a : Fin 2 × Fin 2) : kwSquare a = complexOfInt (kwSquareInt a) := by
+  have h : kwSquare a = complexOfInt (mulIntTensor kwIntTensor kwIntTensor a) :=
+    mulTensor_complexOfRing _ kwIntTensor kwIntTensor a
+  have hint : ∀ b, mulIntTensor kwIntTensor kwIntTensor b = kwSquareInt b := by
     decide
   rw [h, hint]
 
@@ -151,9 +149,9 @@ abbrev kwSquareBlockDim : Fin 2 → ℕ := fun _ => 2
 
 /-- The two target blocks: twice the translation tensor, and twice the flipped-translation
 tensor (construction note, §1.3: `C_1 = 2T`, `C_2 = 2ηT`). -/
-def kwSquareTargets : (s : Fin 2) → MPSTensor 4 (kwSquareBlockDim s)
-  | 0 => (2 : ℂ) • shiftTensor.toMPSTensor
-  | 1 => (2 : ℂ) • flipShiftTensor.toMPSTensor
+def kwSquareTargets : (s : Fin 2) → MPOTensor 2 (kwSquareBlockDim s)
+  | 0 => (2 : ℂ) • shiftTensor
+  | 1 => (2 : ℂ) • flipShiftTensor
 
 private theorem complexOfInt_two_smul {m n : Type*} (M : Matrix m n ℤ) :
     complexOfInt ((2 : ℤ) • M) = (2 : ℂ) • complexOfInt M := by
@@ -161,18 +159,16 @@ private theorem complexOfInt_two_smul {m n : Type*} (M : Matrix m n ℤ) :
 
 /-- The integer entries of the two target blocks. -/
 def kwSquareTargetsInt :
-    (s : Fin 2) → Fin 4 → Matrix (Fin (kwSquareBlockDim s)) (Fin (kwSquareBlockDim s)) ℤ
-  | 0 => fun a => (2 : ℤ) • shiftIntMPS a
-  | 1 => fun a => (2 : ℤ) • flipShiftIntMPS a
+    (s : Fin 2) → Fin 2 × Fin 2 → Matrix (Fin (kwSquareBlockDim s)) (Fin (kwSquareBlockDim s)) ℤ
+  | 0 => fun a => (2 : ℤ) • shiftIntTensor a
+  | 1 => fun a => (2 : ℤ) • flipShiftIntTensor a
 
-theorem kwSquareTargets_eq (s : Fin 2) (a : Fin 4) :
+theorem kwSquareTargets_eq (s : Fin 2) (a : Fin 2 × Fin 2) :
     kwSquareTargets s a = complexOfInt (kwSquareTargetsInt s a) := by
   fin_cases s
-  · change (2 : ℂ) • shiftTensor.toMPSTensor a = _
-    rw [shiftMPS_eq]
+  · change (2 : ℂ) • complexOfInt (shiftIntTensor a) = _
     exact (complexOfInt_two_smul _).symm
-  · change (2 : ℂ) • flipShiftTensor.toMPSTensor a = _
-    rw [flipShiftMPS_eq]
+  · change (2 : ℂ) • complexOfInt (flipShiftIntTensor a) = _
     exact (complexOfInt_two_smul _).symm
 
 /-- The change of bond coordinates of the note: `2G` is integral and `G^{-1}` is integral
@@ -251,31 +247,31 @@ def kwSquareGauge : (Fin 4 → ℂ) ≃ₗ[ℂ] (BlockSpace kwSquareBlockDim kwS
 is divided out (construction note, §1.3: `G B G^{-1} = diag(2T, 2ηT)`, doubled here
 since `kwSquareGaugeInt`
 is `2G`). -/
-def kwSquareConjRawInt : Fin 4 → Matrix (Fin 4) (Fin 4) ℤ
-  | 0 => !![4, 0, 0, 0; 0, 0, 0, 0; 0, 0, 0, 4; 0, 0, 0, 0]
-  | 1 => !![0, 0, 0, 0; 4, 0, 0, 0; 0, 0, 0, 0; 0, 0, 0, 4]
-  | 2 => !![0, 4, 0, 0; 0, 0, 0, 0; 0, 0, 4, 0; 0, 0, 0, 0]
-  | 3 => !![0, 0, 0, 0; 0, 4, 0, 0; 0, 0, 0, 0; 0, 0, 4, 0]
+def kwSquareConjRawInt : Fin 2 × Fin 2 → Matrix (Fin 4) (Fin 4) ℤ
+  | (0, 0) => !![4, 0, 0, 0; 0, 0, 0, 0; 0, 0, 0, 4; 0, 0, 0, 0]
+  | (0, 1) => !![0, 0, 0, 0; 4, 0, 0, 0; 0, 0, 0, 0; 0, 0, 0, 4]
+  | (1, 0) => !![0, 4, 0, 0; 0, 0, 0, 0; 0, 0, 4, 0; 0, 0, 0, 0]
+  | (1, 1) => !![0, 0, 0, 0; 0, 4, 0, 0; 0, 0, 0, 0; 0, 0, 4, 0]
 
-theorem kwSquareConj_raw_int (a : Fin 4) :
+theorem kwSquareConj_raw_int (a : Fin 2 × Fin 2) :
     kwSquareGaugeInt * kwSquareInt a * kwSquareGaugeInvInt = kwSquareConjRawInt a := by
   revert a
   decide
 
 /-- The letters of the compression in the block coordinates: block diagonal, with the two
 target blocks `2T` and `2ηT` (construction note, §1.3). -/
-def kwSquareConjInt : Fin 4 → Matrix (Fin 4) (Fin 4) ℤ
-  | 0 => !![2, 0, 0, 0; 0, 0, 0, 0; 0, 0, 0, 2; 0, 0, 0, 0]
-  | 1 => !![0, 0, 0, 0; 2, 0, 0, 0; 0, 0, 0, 0; 0, 0, 0, 2]
-  | 2 => !![0, 2, 0, 0; 0, 0, 0, 0; 0, 0, 2, 0; 0, 0, 0, 0]
-  | 3 => !![0, 0, 0, 0; 0, 2, 0, 0; 0, 0, 0, 0; 0, 0, 2, 0]
+def kwSquareConjInt : Fin 2 × Fin 2 → Matrix (Fin 4) (Fin 4) ℤ
+  | (0, 0) => !![2, 0, 0, 0; 0, 0, 0, 0; 0, 0, 0, 2; 0, 0, 0, 0]
+  | (0, 1) => !![0, 0, 0, 0; 2, 0, 0, 0; 0, 0, 0, 0; 0, 0, 0, 2]
+  | (1, 0) => !![0, 2, 0, 0; 0, 0, 0, 0; 0, 0, 2, 0; 0, 0, 0, 0]
+  | (1, 1) => !![0, 0, 0, 0; 0, 2, 0, 0; 0, 0, 0, 0; 0, 0, 2, 0]
 
-theorem kwSquareConjRawInt_eq_two_smul (a : Fin 4) :
+theorem kwSquareConjRawInt_eq_two_smul (a : Fin 2 × Fin 2) :
     kwSquareConjRawInt a = (2 : ℤ) • kwSquareConjInt a := by
   revert a
   decide
 
-theorem kwSquare_conjTarget (a : Fin 4) :
+theorem kwSquare_conjTarget (a : Fin 2 × Fin 2) :
     kwSquareGaugeMat * complexOfInt (kwSquareInt a) * kwSquareGaugeInvMat =
       complexOfInt (kwSquareConjInt a) := by
   have hraw : kwSquareGaugeMat * complexOfInt (kwSquareInt a) * kwSquareGaugeInvMat =
@@ -285,20 +281,21 @@ theorem kwSquare_conjTarget (a : Fin 4) :
   rw [hraw, kwSquareConjRawInt_eq_two_smul, complexOfInt_two_smul, smul_smul,
     show (1 / 2 : ℂ) * 2 = 1 by norm_num, one_smul]
 
-theorem kwSquare_conjMatrix (a : Fin 4) :
+theorem kwSquare_conjMatrix (a : Fin 2 × Fin 2) :
     conjMatrix kwSquareGauge (kwSquare a) =
       (complexOfInt (kwSquareConjInt a)).submatrix kwSquareTau kwSquareTau := by
   rw [kwSquareGauge, conjMatrix_gaugeOfMatrix, kwSquare_eq, kwSquare_conjTarget]
 
 /-! ### The compression datum -/
 
-private theorem kwSquare_offDiag_int (a : Fin 4)
+private theorem kwSquare_offDiag_int (a : Fin 2 × Fin 2)
     (x y : BlockSpace kwSquareBlockDim kwSquareSlots 0) (h : x.1 ≠ y.1) :
     kwSquareConjInt a (kwSquareTau x) (kwSquareTau y) = 0 := by
   revert a x y
   decide
 
-private theorem kwSquare_matched_int (a : Fin 4) (s : Fin 2) (p q : Fin (kwSquareBlockDim s)) :
+private theorem kwSquare_matched_int (a : Fin 2 × Fin 2) (s : Fin 2)
+    (p q : Fin (kwSquareBlockDim s)) :
     kwSquareConjInt a (kwSquareTau ⟨Sum.inl ⟨s, Finset.mem_univ s⟩, p⟩)
         (kwSquareTau ⟨Sum.inl ⟨s, Finset.mem_univ s⟩, q⟩) = kwSquareTargetsInt s a p q := by
   revert a
@@ -318,23 +315,23 @@ def kwSquare_compression : MultiBlockCompression kwSquare kwSquareSlots kwSquare
 
 /-- **The word-trace identity `D~² = 2^L (1 + η) T`** at the level of traces
 (construction note, §1.3). -/
-theorem kwSquare_trace_evalWord (w : List (Fin 4)) (hw : w ≠ []) :
+theorem kwSquare_trace_evalWord (w : List (Fin 2 × Fin 2)) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord kwSquare w) =
-      (2 : ℂ) ^ w.length * (Matrix.trace (Kraus.evalWord shiftTensor.toMPSTensor w) +
-        Matrix.trace (Kraus.evalWord flipShiftTensor.toMPSTensor w)) := by
+      (2 : ℂ) ^ w.length * (Matrix.trace (Kraus.evalWord shiftTensor w) +
+        Matrix.trace (Kraus.evalWord flipShiftTensor w)) := by
   have h := kwSquare_compression.trace_evalWord_eq_sum w hw
   rw [show kwSquareSlots = Finset.univ from rfl, Fin.sum_univ_two] at h
-  have hweighted : ∀ T : MPSTensor 4 2,
+  have hweighted : ∀ T : MPOTensor 2 2,
       Matrix.trace (Kraus.evalWord (fun i => (2 : ℂ) • T i) w) =
         (2 : ℂ) ^ w.length * Matrix.trace (Kraus.evalWord T w) := by
     intro T
     rw [Kraus.evalWord_smul, Matrix.trace_smul, smul_eq_mul]
   have h0 : Matrix.trace (Kraus.evalWord (kwSquareTargets 0) w) =
-      (2 : ℂ) ^ w.length * Matrix.trace (Kraus.evalWord shiftTensor.toMPSTensor w) :=
-    hweighted shiftTensor.toMPSTensor
+      (2 : ℂ) ^ w.length * Matrix.trace (Kraus.evalWord shiftTensor w) :=
+    hweighted shiftTensor
   have h1 : Matrix.trace (Kraus.evalWord (kwSquareTargets 1) w) =
-      (2 : ℂ) ^ w.length * Matrix.trace (Kraus.evalWord flipShiftTensor.toMPSTensor w) :=
-    hweighted flipShiftTensor.toMPSTensor
+      (2 : ℂ) ^ w.length * Matrix.trace (Kraus.evalWord flipShiftTensor w) :=
+    hweighted flipShiftTensor
   rw [h, h0, h1]
   ring
 
@@ -413,56 +410,56 @@ theorem kwSquareRight1_eq :
 /-- **The remainder of the compression vanishes identically.** The extension is fully split:
 the stacked tensor is gauge equivalent to the direct sum of `2T` and `2ηT` (construction
 note, §1.3). -/
-theorem kwSquare_remainder_eq_zero (a : Fin 4) : kwSquare_compression.remainder a = 0 := by
+theorem kwSquare_remainder_eq_zero (a : Fin 2 × Fin 2) : kwSquare_compression.remainder a = 0 := by
   unfold kwSquare_compression
   exact MultiBlockCompression.remainder_ofRing kwSquare_offDiag_int a
 
 /-! ### The sitewise intertwiners (the split case) -/
 
-private theorem kwSquare_mul_right0_int (a : Fin 4) :
+private theorem kwSquare_mul_right0_int (a : Fin 2 × Fin 2) :
     kwSquareInt a * kwSquareRight0Int = kwSquareRight0Int * kwSquareTargetsInt 0 a := by
   revert a
   decide
 
-private theorem kwSquare_mul_right1_int (a : Fin 4) :
+private theorem kwSquare_mul_right1_int (a : Fin 2 × Fin 2) :
     kwSquareInt a * kwSquareRight1Int = kwSquareRight1Int * kwSquareTargetsInt 1 a := by
   revert a
   decide
 
-private theorem left0_mul_kwSquare_int (a : Fin 4) :
+private theorem left0_mul_kwSquare_int (a : Fin 2 × Fin 2) :
     kwSquareLeft0Int * kwSquareInt a = kwSquareTargetsInt 0 a * kwSquareLeft0Int := by
   revert a
   decide
 
-private theorem left1_mul_kwSquare_int (a : Fin 4) :
+private theorem left1_mul_kwSquare_int (a : Fin 2 × Fin 2) :
     kwSquareLeft1Int * kwSquareInt a = kwSquareTargetsInt 1 a * kwSquareLeft1Int := by
   revert a
   decide
 
 /-- **The right sitewise intertwiner for the translation block** (construction note, §1.3):
 `B^{s's} V_1 = V_1 (2T)^{s's}`. -/
-theorem kwSquare_mul_right0_eq (a : Fin 4) :
+theorem kwSquare_mul_right0_eq (a : Fin 2 × Fin 2) :
     kwSquare a * kwSquareRight0 = kwSquareRight0 * kwSquareTargets 0 a := by
   rw [kwSquareTargets_eq, kwSquareRight0, kwSquare_eq, ← complexOfInt_mul, ← complexOfInt_mul,
     kwSquare_mul_right0_int]
 
 /-- **The right sitewise intertwiner for the flipped-translation block** (construction note, §1.3):
 `B^{s's} V_2 = V_2 (2ηT)^{s's}`. -/
-theorem kwSquare_mul_right1_eq (a : Fin 4) :
+theorem kwSquare_mul_right1_eq (a : Fin 2 × Fin 2) :
     kwSquare a * kwSquareRight1 = kwSquareRight1 * kwSquareTargets 1 a := by
   rw [kwSquareTargets_eq, kwSquareRight1, kwSquare_eq, ← complexOfInt_mul, ← complexOfInt_mul,
     kwSquare_mul_right1_int]
 
 /-- **The left sitewise intertwiner for the translation block** (construction note, §1.3):
 `W_1 B^{s's} = (2T)^{s's} W_1`. -/
-theorem left0_mul_kwSquare_eq (a : Fin 4) :
+theorem left0_mul_kwSquare_eq (a : Fin 2 × Fin 2) :
     kwSquareLeft0 * kwSquare a = kwSquareTargets 0 a * kwSquareLeft0 := by
   rw [kwSquareTargets_eq, kwSquareLeft0, kwSquare_eq, Matrix.smul_mul, Matrix.mul_smul,
     ← complexOfInt_mul, ← complexOfInt_mul, left0_mul_kwSquare_int]
 
 /-- **The left sitewise intertwiner for the flipped-translation block** (construction note, §1.3):
 `W_2 B^{s's} = (2ηT)^{s's} W_2`. -/
-theorem left1_mul_kwSquare_eq (a : Fin 4) :
+theorem left1_mul_kwSquare_eq (a : Fin 2 × Fin 2) :
     kwSquareLeft1 * kwSquare a = kwSquareTargets 1 a * kwSquareLeft1 := by
   rw [kwSquareTargets_eq, kwSquareLeft1, kwSquare_eq, Matrix.smul_mul, Matrix.mul_smul,
     ← complexOfInt_mul, ← complexOfInt_mul, left1_mul_kwSquare_int]

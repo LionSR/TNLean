@@ -18,7 +18,7 @@ General facts used when the anomaly three-cochain of
 matrix product operators, such as the decorated CZX representation of `ℤ₂` or
 the phase-decorated shift representation of `ℤ₃`.
 
-* The bond-one identity tensor `MPOTensor.idTensor d` is normal, its doubled-index
+* The bond-one identity tensor `MPOTensor.idTensor d` is normal, its pair-alphabet
   words are scalar multiples of the identity, and stacking it with a tensor `M`
   on either side gives `M` back up to the canonical identification of the bond
   spaces `Fin (1 * D)` and `Fin (D * 1)` with `Fin D`.
@@ -50,7 +50,7 @@ open scoped Matrix Kronecker
 
 namespace MPSTensor
 
-variable {d D m k : ℕ}
+variable {α : Type*} {D m k : ℕ}
 
 /-- **Dressed identities from local identities.** Let two left boundaries `L` and
 `R` of a tensor `T` both intertwine two letters with a tensor `A`,
@@ -62,10 +62,10 @@ For the two fusion trees of a triple product, `A` is the tensor of the product o
 the three group elements, and the conclusion is the dressed identity that
 characterizes the anomaly three-cochain (arXiv:2502.20257, display preceding
 `eq:3-cocycle`, `main.tex` lines 1506--1535). -/
-theorem mul_evalWord_eq_smul_of_forall_mul_mul {T : MPSTensor d D} {A : MPSTensor d m}
+theorem mul_evalWord_eq_smul_of_forall_mul_mul {T : MPTensor α (Fin D)} {A : MPTensor α (Fin m)}
     {L R : Matrix (Fin m) (Fin D) ℂ} {z : ℂ}
     (hL : ∀ a b, L * T a * T b = A a * L * T b) (hR : ∀ a b, R * T a * T b = A a * R * T b)
-    (h1 : ∀ a, L * T a = z • (R * T a)) (w : List (Fin d)) (hw : w ≠ []) :
+    (h1 : ∀ a, L * T a = z • (R * T a)) (w : List α) (hw : w ≠ []) :
     L * Kraus.evalWord T w = z • (R * Kraus.evalWord T w) := by
   induction w with
   | nil => exact absurd rfl hw
@@ -85,8 +85,8 @@ theorem mul_evalWord_eq_smul_of_forall_mul_mul {T : MPSTensor d D} {A : MPSTenso
             _ = _ := by simp only [Kraus.evalWord_cons, Matrix.mul_assoc]
 
 /-- The dressed-proportionality form of `mul_evalWord_eq_smul_of_forall_mul_mul`. -/
-theorem _root_.MPTensor.IsDressedProportional.of_forall_mul_mul {T : MPSTensor d D}
-    {A : MPSTensor d m}
+theorem _root_.MPTensor.IsDressedProportional.of_forall_mul_mul {T : MPTensor α (Fin D)}
+    {A : MPTensor α (Fin m)}
     {L R : Matrix (Fin m) (Fin D) ℂ} {z : ℂ}
     (hL : ∀ a b, L * T a * T b = A a * L * T b) (hR : ∀ a b, R * T a * T b = A a * R * T b)
     (h1 : ∀ a, L * T a = z • (R * T a)) : IsDressedProportional T L R z :=
@@ -94,7 +94,7 @@ theorem _root_.MPTensor.IsDressedProportional.of_forall_mul_mul {T : MPSTensor d
     (List.ne_nil_of_length_pos hw)⟩
 
 /-- A tensor reduces onto an equal tensor through the identity matrices. -/
-theorem isReduction_one_one_of_eq {B A : MPSTensor d D} (h : B = A) :
+theorem isReduction_one_one_of_eq {B A : MPTensor α (Fin D)} (h : B = A) :
     IsReduction B A 1 1 := by
   subst h
   exact ⟨Matrix.one_mul 1, fun w ↦ by rw [Matrix.one_mul, Matrix.mul_one]⟩
@@ -183,35 +183,36 @@ variable {d D : ℕ}
 
 /-! ### The bond-one identity tensor -/
 
-/-- The doubled-index letters of the identity tensor: the letter `(i, j)` is `δ_{ij}`
+/-- The letters of the identity tensor on the pair alphabet: the letter `(i, j)` is `δ_{ij}`
 times the identity. -/
-theorem idTensor_toMPSTensor (a : Fin (d * d)) :
-    (idTensor d).toMPSTensor a = (if a.divNat = a.modNat then (1 : ℂ) else 0) • 1 := by
+theorem idTensor_apply_eq_smul (a : Fin d × Fin d) :
+    idTensor d a = (if a.1 = a.2 then (1 : ℂ) else 0) • 1 := by
+  obtain ⟨i, j⟩ := a
   ext r c
-  simp only [toMPSTensor, idTensor, Matrix.smul_apply, smul_eq_mul]
+  simp only [idTensor, Matrix.smul_apply, smul_eq_mul]
   split_ifs <;> simp
 
-/-- Doubled-index words of the identity tensor are the product of the weights
+/-- Words of the identity tensor on the pair alphabet are the product of the weights
 `δ_{ij}` of their letters times the identity. -/
-theorem evalWord_idTensor_toMPSTensor (w : List (Fin (d * d))) :
-    Kraus.evalWord (idTensor d).toMPSTensor w =
-      (w.map fun a ↦ if a.divNat = a.modNat then (1 : ℂ) else 0).prod • 1 := by
+theorem kraus_evalWord_idTensor (w : List (Fin d × Fin d)) :
+    Kraus.evalWord (idTensor d) w =
+      (w.map fun a ↦ if a.1 = a.2 then (1 : ℂ) else 0).prod • 1 := by
   induction w with
   | nil => simp
   | cons a w ih =>
-      rw [Kraus.evalWord_cons, ih, idTensor_toMPSTensor, smul_mul_smul_comm, Matrix.one_mul]
+      rw [Kraus.evalWord_cons, ih, idTensor_apply_eq_smul, smul_mul_smul_comm, Matrix.one_mul]
       simp
 
 /-- The bond-one identity tensor on a nonempty physical alphabet is normal: its
 letter `(0, 0)` is the identity, which spans the one-by-one matrices. -/
-theorem idTensor_isNormal [NeZero d] : Kraus.IsNormal (idTensor d).toMPSTensor := by
+theorem idTensor_isNormal [NeZero d] : Kraus.IsNormal (idTensor d) := by
   refine ⟨1, one_pos, Submodule.eq_top_of_forall_single_mem _ fun i j ↦ ?_⟩
   have hij : Matrix.single i j (1 : ℂ) = 1 := by
     ext r c
     simp [Subsingleton.elim i r, Subsingleton.elim j c, Subsingleton.elim r c, Matrix.one_apply]
   rw [hij]
-  refine Submodule.subset_span ⟨fun _ ↦ finProdFinEquiv (0, 0), ?_⟩
-  simp [idTensor_toMPSTensor]
+  refine Submodule.subset_span ⟨fun _ ↦ ((0 : Fin d), (0 : Fin d)), ?_⟩
+  simp [idTensor_apply_eq_smul]
 
 /-- Stacking the identity tensor on the left of `M` gives `M`, up to the canonical
 identification of `Fin (1 * D)` with `Fin D`. -/
@@ -255,7 +256,7 @@ end MPOTensor
 
 namespace MPSTensor
 
-variable {d D m : ℕ}
+variable {α : Type*} {D m : ℕ}
 
 /-- **Dressed identities from integer identities.** Let `T`, `A`, `L` and `R` be integer
 matrices, let `z = ±1`, and suppose that `L` intertwines two letters of `T` with `A`,
@@ -266,8 +267,8 @@ For explicit tensors these are finitely many identities decided over `ℤ`.
 
 Source: arXiv:2502.20257, display preceding `eq:3-cocycle`, `main.tex` lines 1506--1535, for
 the dressed identity defining the anomaly three-cochain. -/
-theorem isDressedProportional_complexOfInt {T : Fin d → Matrix (Fin D) (Fin D) ℤ}
-    {A : Fin d → Matrix (Fin m) (Fin m) ℤ} {L R : Matrix (Fin m) (Fin D) ℤ} {z : ℤ}
+theorem isDressedProportional_complexOfInt {T : α → Matrix (Fin D) (Fin D) ℤ}
+    {A : α → Matrix (Fin m) (Fin m) ℤ} {L R : Matrix (Fin m) (Fin D) ℤ} {z : ℤ}
     (hz : z * z = 1) (hL : ∀ a b, L * T a * T b = A a * L * T b)
     (h1 : ∀ a, L * T a = z • (R * T a)) :
     IsDressedProportional (fun a ↦ complexOfInt (T a)) (complexOfInt L) (complexOfInt R) z := by
@@ -287,8 +288,8 @@ theorem isDressedProportional_complexOfInt {T : Fin d → Matrix (Fin D) (Fin D)
 every letter of `T` comes with its letter of `A` from a list `S`, the identities need only be
 checked for the members of `S`. For explicit tensors with few distinct letters this reduces the
 number of decided identities. -/
-theorem isDressedProportional_complexOfInt_of_mem {T : Fin d → Matrix (Fin D) (Fin D) ℤ}
-    {A : Fin d → Matrix (Fin m) (Fin m) ℤ} {L R : Matrix (Fin m) (Fin D) ℤ} {z : ℤ}
+theorem isDressedProportional_complexOfInt_of_mem {T : α → Matrix (Fin D) (Fin D) ℤ}
+    {A : α → Matrix (Fin m) (Fin m) ℤ} {L R : Matrix (Fin m) (Fin D) ℤ} {z : ℤ}
     (S : List (Matrix (Fin D) (Fin D) ℤ × Matrix (Fin m) (Fin m) ℤ))
     (hS : ∀ a, (T a, A a) ∈ S) (hz : z * z = 1)
     (hL : ∀ p ∈ S, ∀ q ∈ S, L * p.1 * q.1 = p.2 * L * q.1)
@@ -313,7 +314,7 @@ abbrev ofBondOne (T : G → MPOTensor d 1) : GroupFamily G d where
 /-- **Fusion tensors of a bond-one family**: all fusion tensors are the one-by-one identity
 when the stacked product of `T g` and `T h` is the tensor `T (g * h)`. -/
 def FusionData.ofBondOne (T : G → MPOTensor d 1)
-    (hT : ∀ g h, (mulTensor (T g) (T h)).toMPSTensor = (T (g * h)).toMPSTensor) :
+    (hT : ∀ g h, mulTensor (T g) (T h) = T (g * h)) :
     (ofBondOne T).FusionData where
   V _ _ := (1 : Matrix (Fin 1) (Fin 1) ℂ)
   W _ _ := (1 : Matrix (Fin 1) (Fin 1) ℂ)
@@ -344,7 +345,7 @@ are the one-by-one identity.
 
 Source: arXiv:2502.20257, display preceding `eq:3-cocycle`, `main.tex` lines 1506--1535. -/
 theorem FusionData.omega_ofBondOne {T : G → MPOTensor d 1}
-    {hT : ∀ g h, (mulTensor (T g) (T h)).toMPSTensor = (T (g * h)).toMPSTensor}
+    {hT : ∀ g h, mulTensor (T g) (T h) = T (g * h)}
     (hF : (GroupFamily.ofBondOne T).IsNormalRepresentation) :
     (FusionData.ofBondOne T hT).omega = 1 := by
   funext g h k

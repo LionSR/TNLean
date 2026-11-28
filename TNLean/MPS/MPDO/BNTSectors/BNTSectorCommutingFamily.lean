@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.FundamentalTheorem.PhysicalSupport.GSNNCHOrthogonalSectors
 import TNLean.MPS.FundamentalTheorem.PhysicalSupport.PhysicalSupportProductTransport
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Commuting products on the BNT physical sectors
@@ -85,7 +86,7 @@ theorem nonempty_orthogonalCommutingSectorFamily_of_twoSidedPhysicalSlice
     (P : Fin g → Matrix (Fin d) (Fin d) ℂ)
     (hP : ∀ s, IsOrthogonalProjection (P s))
     (hPorth : ∀ {s t}, s ≠ t → P s * P t = 0)
-    (hInjective : ∀ s, Kraus.IsInjective (K s).toMPSTensor)
+    (hInjective : ∀ s, Kraus.IsInjective (K s))
     (hSupport : ∀ s β α,
       P s * physicalSlice (K s) β α = physicalSlice (K s) β α ∧
         physicalSlice (K s) β α * P s = physicalSlice (K s) β α)
@@ -93,7 +94,8 @@ theorem nonempty_orthogonalCommutingSectorFamily_of_twoSidedPhysicalSlice
       (PhysicalSectorFactorization.changePhysicalBasis
         (Matrix.conjTranspose
           ((physicalSupportRestrictionDataOfTwoSidedPhysicalSlice
-            (P s) (K s) (hP s) (hInjective s) (hSupport s)).inclusion))
+            (P s) (K s) (hP s) (hInjective s)
+              (hSupport s)).inclusion))
         (K s)))
     (hη : ∀ s k h, ((G s).neighboringOperator k h).PosSemidef) :
     Nonempty (OrthogonalCommutingSectorFamily K) := by
@@ -110,7 +112,7 @@ pairwise orthogonal BNT projectors.
 The hypotheses preceding `hSectorSAL` are precisely the data selecting the
 BNT physical projectors. The sectorwise SAL hypothesis is established from
 the simple-MPDO hypotheses in
-`commonWeightAbsorbedBasisMPOTensor_isSAL_of_sameMPV₂Pos`.
+`commonWeightAbsorbedBasis_isSAL_of_sameMPV₂Pos`.
 
 This constructs the sector family used in the later GSNNCH direct sum.
 
@@ -119,7 +121,7 @@ theorem assumes more than the five blockwise identities printed in CPSV16
 Appendix C.2, Proposition `prop3to4`, lines 1786--1796.  See
 `docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
 theorem nonempty_orthogonalCommutingSectorFamily_of_bntSectorSAL
-    (S : MPSTensor.SectorDecomposition (d * d))
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     {R : (s : Fin S.basisCount) →
@@ -127,24 +129,24 @@ theorem nonempty_orthogonalCommutingSectorFamily_of_bntSectorSAL
     {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
     {C : Matrix (MPSTensor.BlockEntryIndex S.basisDim) (Fin d × Fin d) ℂ}
     (hC : MPSTensor.IsMPOBlockLeftInverse
-      (fun j ↦ S.basisMPOTensor j) C)
-    (hρ : IsThreeSiteFamilyClosure (fun j ↦ S.basisMPOTensor j) R ρ)
+      (fun j ↦ S.basis j) C)
+    (hρ : IsThreeSiteFamilyClosure (fun j ↦ S.basis j) R ρ)
     (hη : EtaStructure ρ) (hR : ∀ s : Fin S.basisCount, R s ≠ 0)
     (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
     (hSectorSAL : ∀ s : Fin S.basisCount,
-      IsSAL (commonWeightAbsorbedBasisMPOTensor S hWeight s)) :
+      IsSAL (S.commonWeightAbsorbedBasis hWeight s)) :
     Nonempty (OrthogonalCommutingSectorFamily
-      (fun s ↦ commonWeightAbsorbedBasisMPOTensor S hWeight s)) := by
+      (fun s ↦ S.commonWeightAbsorbedBasis hWeight s)) := by
   classical
   let restriction : (s : Fin S.basisCount) →
       PhysicalSupportRestrictionData
         (bntSectorProjection hC hρ hη hR s)
-        (commonWeightAbsorbedBasisMPOTensor S hWeight s) :=
+        (S.commonWeightAbsorbedBasis hWeight s) :=
     fun s ↦ Classical.choice
       (nonempty_physicalSupportRestrictionData_commonWeightAbsorbedBasis
         S hWeight hC hρ hη hR hSpan s)
   let data : (s : Fin S.basisCount) → CommutingForm
-      (commonWeightAbsorbedBasisMPOTensor S hWeight s) :=
+      (S.commonWeightAbsorbedBasis hWeight s) :=
     fun s ↦ Classical.choose
       ((restriction s).exists_commutingForm_lifted_supported
         (hSectorSAL s))
@@ -154,7 +156,7 @@ theorem nonempty_orthogonalCommutingSectorFamily_of_bntSectorSAL
           twoSiteSectorProjection (bntSectorProjection hC hρ hη hR s) =
             (data s).bond ∧
         ∀ N (hN : 2 ≤ N),
-          mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) N =
+          mpo (S.commonWeightAbsorbedBasis hWeight s) N =
             (data s).product hN :=
     fun s ↦ Classical.choose_spec
       ((restriction s).exists_commutingForm_lifted_supported
@@ -182,8 +184,8 @@ than the five blockwise identities printed in CPSV16 Appendix C.2,
 Proposition `prop3to4`, lines 1786--1796.  See
 `docs/paper-gaps/cpsv16_gsnnch_sector_decomposition.tex`. -/
 theorem hasGSNNCHForm_of_bntSectorSAL
-    (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (M : MPOTensor d D) (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
+    (hM : MPTensor.SameMPV₂Pos M S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     {R : (s : Fin S.basisCount) →
@@ -191,17 +193,17 @@ theorem hasGSNNCHForm_of_bntSectorSAL
     {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
     {C : Matrix (MPSTensor.BlockEntryIndex S.basisDim) (Fin d × Fin d) ℂ}
     (hC : MPSTensor.IsMPOBlockLeftInverse
-      (fun j ↦ S.basisMPOTensor j) C)
-    (hρ : IsThreeSiteFamilyClosure (fun j ↦ S.basisMPOTensor j) R ρ)
+      (fun j ↦ S.basis j) C)
+    (hρ : IsThreeSiteFamilyClosure (fun j ↦ S.basis j) R ρ)
     (hη : EtaStructure ρ) (hR : ∀ s : Fin S.basisCount, R s ≠ 0)
     (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
     (hSectorSAL : ∀ s : Fin S.basisCount,
-      IsSAL (commonWeightAbsorbedBasisMPOTensor S hWeight s)) :
+      IsSAL (S.commonWeightAbsorbedBasis hWeight s)) :
     HasGSNNCHForm M := by
   obtain ⟨F⟩ :=
     nonempty_orthogonalCommutingSectorFamily_of_bntSectorSAL
       S hWeight hC hρ hη hR hSpan hSectorSAL
-  exact hasGSNNCHForm_of_commonWeightAbsorbedBasisMPOTensor
+  exact hasGSNNCHForm_of_commonWeightAbsorbedBasis
     M S hM hWeight F
 
 end MPOTensor

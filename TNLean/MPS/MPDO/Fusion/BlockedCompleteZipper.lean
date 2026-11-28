@@ -28,6 +28,11 @@ The common block length is strictly positive.
 * arXiv:1511.08090, fusion tensors and zipper equations at lines 161--200,
   simultaneous inverse at lines 269--277, and common blocking at lines
   427--431.
+
+**Bridge (T.2c):** The basis-of-normal-tensors hypothesis of this module still reads an operator
+tensor through `MPOTensor.toMPSTensor`, because the vertical canonical form and the basis of normal
+tensors are stated on the vertical alphabet `Fin (D * D)`. The bridge is removed when the vertical
+alphabet moves to `Fin D × Fin D` (step T.2c of `docs/tensor_type_unification.md`).
 -/
 
 open scoped Matrix BigOperators Kronecker
@@ -244,7 +249,8 @@ theorem exists_blocked_completeZipperFusionFamily
   classical
   obtain ⟨L, hL, hSpan, hInjective, hFusion⟩ :=
     Fam.exists_positive_block_with_injective_fusion hBNT c hχ hLI
-  obtain ⟨C, hC⟩ := hSpan.exists_mpo_block_left_inverse
+  obtain ⟨C, hC⟩ := ((MPSTensor.wordTupleSpanTop_reindexPhysical_equiv finProdFinEquiv.symm
+    (fun γ ↦ blockTensor (Fam.tensor γ) L) 1).1 hSpan).exists_mpo_block_left_inverse
   have hCoisometry : ∀ α β : Fin g,
       Fam.fusionIsometry α β * (Fam.fusionIsometry α β)ᴴ = 1 :=
     fun α β ↦
@@ -255,7 +261,7 @@ theorem exists_blocked_completeZipperFusionFamily
     { bondDim := Fam.bondDim
       bondDim_pos := hBNT.blocks_dim_pos
       tensor := fun γ ↦ blockTensor (Fam.tensor γ) L
-      tensor_injective := hInjective
+      tensor_injective := fun γ ↦ (hInjective γ)
       fusionMultiplicity := Fam.chi.dim
       fusionSynthesis := Fam.blockedFusionSynthesis
       fusionAnalysis := Fam.blockedFusionAnalysis

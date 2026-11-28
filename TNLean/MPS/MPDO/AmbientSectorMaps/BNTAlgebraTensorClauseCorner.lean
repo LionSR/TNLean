@@ -397,9 +397,9 @@ theorem exists_identity_physical_letter_coefficients
     (S : TwoSiteExactSectorGauge H) (γ : Fin H.labelCount) :
     ∃ fId : Fin (S.decomposition.bondDim (S.relabel γ) *
           S.decomposition.bondDim (S.relabel γ)) →
-        Fin ((d * d) * (d * d)) → ℂ,
+        Fin (d * d) × Fin (d * d) → ℂ,
       ∀ u,
-        MPSTensor.linearMarkedTensor fId (blockTwo M).toMPSTensor u =
+        MPSTensor.linearMarkedTensor fId (blockTwo M) u =
           horizontalSlice
             (gramDressing
               (1 : GL (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ)

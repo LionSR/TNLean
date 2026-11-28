@@ -315,7 +315,7 @@ Source: arXiv:1606.00608, lines 543--555. -/
 theorem AppendixBStructuralData.parentInteraction_eq_coreTensor {A : MPSTensor d D}
     (hStruct : AppendixBStructuralData A) (L : ℕ) :
     parentInteraction A L = parentInteraction hStruct.coreTensor L := by
-  simp [parentInteraction, groundSpaceES, hStruct.groundSpace_eq_coreTensor L]
+  simp [parentInteraction, hStruct.groundSpace_eq_coreTensor L]
 
 /-- The two-site Appendix B basic-vector support for the core tensor.
 

@@ -57,9 +57,9 @@ open MPSTensor Zsqrtd
 the trivial sector is block diagonal with the prescribed blocks. -/
 theorem conjSector_eq_blockDiagonal_of_rho_zero :
     ∀ h h' : Fin 10, isingRho h = 0 → isingRho h' = 0 →
-      conjSector 0 h h' = Matrix.blockDiagonal' (isingBlockZ (isingSigmaZ h h')) := by
+      conjSector 0 h h' = Matrix.blockDiagonal' (isingBlockZ (isingSigmaZ (h, h'))) := by
   have key : ∀ h h' : Fin 10, isingRho h = 0 → isingRho h' = 0 →
-      conjBlockwise h h' = Matrix.blockDiagonal' (isingBlockZ (isingSigmaZ h h')) := by
+      conjBlockwise h h' = Matrix.blockDiagonal' (isingBlockZ (isingSigmaZ (h, h'))) := by
     decide +kernel
   exact fun h h' hh hh' => (conjSector_eq_conjBlockwise hh h').trans (key h h' hh hh')
 

@@ -7,9 +7,9 @@
 
 ## Executive summary
 
-The non-dominant `_CFBNT` sorries at `Full/NondecayingOverlap/FixedBlockDecay.lean:107, 152` are **not** dischargeable on the two-layer `IsBNTCanonicalFormSD` surface using the per-block-projection skeleton alone.  After tracing through the natural strategies:
+The non-dominant `_CFBNT` sorries at `Full/NondecayingOverlap/FixedBlockDecay.lean:107, 152` are **not** dischargeable on the two-layer `IsLeftCanonicalBNTPresentationSD` surface using the per-block-projection skeleton alone.  After tracing through the natural strategies:
 
-* **Strategy A (factor out `λ_A^{(0)}`, mirroring dominant block):** runs the dominant-block proof verbatim with `b_0` replaced by `k₀`.  The renormalized RHS factor `(μ_B^{(k_0)})^{-N} · \langle V_N(B), V_N(B_{k_0})\rangle` is a sum over `k` whose `k < k_0` (more-dominant) terms contain the factor `(μ_B^{(k)} / μ_B^{(k_0)})^N`, which **grows geometrically**.  For the sum to tend to a nonzero limit, the cross-overlap `\langle V_N(B_k), V_N(B_{k_0})\rangle` must decay at rate `o((μ_B^{(k_0)} / μ_B^{(k)})^N)`.  The qualitative `cross_overlap_tendsto_zero` available from `IsCanonicalFormBNT` / `IsBNTCanonicalFormSD` does **not** quantify this rate.
+* **Strategy A (factor out `λ_A^{(0)}`, mirroring dominant block):** runs the dominant-block proof verbatim with `b_0` replaced by `k₀`.  The renormalized RHS factor `(μ_B^{(k_0)})^{-N} · \langle V_N(B), V_N(B_{k_0})\rangle` is a sum over `k` whose `k < k_0` (more-dominant) terms contain the factor `(μ_B^{(k)} / μ_B^{(k_0)})^N`, which **grows geometrically**.  For the sum to tend to a nonzero limit, the cross-overlap `\langle V_N(B_k), V_N(B_{k_0})\rangle` must decay at rate `o((μ_B^{(k_0)} / μ_B^{(k)})^N)`.  The qualitative `cross_overlap_tendsto_zero` available from `IsCanonicalFormBNT` / `IsLeftCanonicalBNTPresentationSD` does **not** quantify this rate.
 * **Strategy B (factor out `λ_B^{(k_0)}`, renormalise the assembled overlap):** equivalent to Strategy A after rewriting; same obstruction.
 * **Strategy C (use Lem1 combined-family LI directly):** already ruled out by the LI scout (execution `e0a5ec0f6a31`); the `{V(A_j)} ∪ {V(B_k)}` combined family is generically dependent in the FT regime.
 
@@ -127,14 +127,14 @@ The second condition (rate vs. weight ratio) is the non-trivial one: it requires
 
 Three options, in increasing order of difficulty:
 
-### Option 1: Strengthen `IsBNTCanonicalFormSD` with a rate field
+### Option 1: Strengthen `IsLeftCanonicalBNTPresentationSD` with a rate field
 
-Add a hypothesis to `IsBNTCanonicalFormSD` declaring the rate-quantified cross-overlap decay as an additional structural input.  This is the **least invasive** option:
+Add a hypothesis to `IsLeftCanonicalBNTPresentationSD` declaring the rate-quantified cross-overlap decay as an additional structural input.  This is the **least invasive** option:
 
 * Adds `crossOverlap_rate_decay : ∀ j k, j ≠ k → ∃ C η, η < 1 ∧ η · |μ_j / μ_k| < 1 ∧ ∀ N, ‖overlap(basis j, basis k) N‖ ≤ C η^N`.
 * Discharge the two `_CFBNT` sorries on the strengthened structure.
 * Document the new field as an "analytic strengthening" matching CPSV21 Definition 4.3.
-* **Cost:** the adapter `IsCanonicalFormBNT.toIsBNTCanonicalFormSD` no longer goes through unconditionally — it would require an additional input derived from the BNT spectral gap.  This pushes the rate-quantification gap to a new paper-gap module (`docs/paper-gaps/cpsv16_bnt_rate_quantification.tex`).
+* **Cost:** the adapter `IsCanonicalFormBNT.toIsLeftCanonicalBNTPresentationSD` no longer goes through unconditionally — it would require an additional input derived from the BNT spectral gap.  This pushes the rate-quantification gap to a new paper-gap module (`docs/paper-gaps/cpsv16_bnt_rate_quantification.tex`).
 
 ### Option 2: Prove the rate-quantified decay from spectral gap
 
@@ -152,17 +152,17 @@ Re-read CPSV16 lines 1170--1192 carefully and replicate the paper's actual argum
 
 **Adopt Option 1** for the immediate next step:
 
-1. Strengthen `IsBNTCanonicalFormSD` with a `crossOverlap_rate_decay` field.
+1. Strengthen `IsLeftCanonicalBNTPresentationSD` with a `crossOverlap_rate_decay` field.
 2. Implement the analytic discharge of `hNoCancel` for non-dominant `k_0` on the strengthened structure (~300-500 LoC of analytic Lean).
 3. Document the new structural hypothesis as a paper-gap (`docs/paper-gaps/cpsv16_bnt_rate_quantification.tex`).
-4. Adjust the `IsCanonicalFormBNT.toIsBNTCanonicalFormSD` adapter to expose the rate-quantification gap as an additional input (or split into two adapter variants).
+4. Adjust the `IsCanonicalFormBNT.toIsLeftCanonicalBNTPresentationSD` adapter to expose the rate-quantification gap as an additional input (or split into two adapter variants).
 
 This option closes the two `_CFBNT` sorries under an honest hypothesis matching CPSV21 Definition 4.3's intent, and isolates the remaining gap (Option 2) as a separate analytic obligation that can be addressed independently in the future.
 
 ## Open caveats
 
 * The rate-quantified decay is not the only analytic input needed.  The renormalised self-overlap limit `(μ_B^{(k_0)})^{-N} \cdot \langle V_N(B_{k_0}), V_N(B_{k_0})\rangle \to ?` also needs justification for non-dominant `k_0`; it is the within-sector unit-modulus power sum that this memo's analysis assumes converges to a nonzero limit by `unitModulus_power_sum_not_tendsto_zero`.
-* The scalar `c_N` lower bound on the rescaled SD surface, after the adapter `IsCanonicalFormBNT.toIsBNTCanonicalFormSD`, comes from the dominant-adjusted scalar `exists_dominant_adjusted_scalar_tendsto_norm_one_of_eventuallyNonzeroProportionalMPV₂_CFBNT`.  Under the dominant normalisation `\|λ_0\| = 1`, this scalar is bounded below by a constant on the rescaled surface (the geometric problem dissolves, as recorded in path β scout PR 1.5).  This is **independent** of the rate-quantification issue and does not require Option 1.
+* The scalar `c_N` lower bound on the rescaled SD surface, after the adapter `IsCanonicalFormBNT.toIsLeftCanonicalBNTPresentationSD`, comes from the dominant-adjusted scalar `exists_dominant_adjusted_scalar_tendsto_norm_one_of_eventuallyNonzeroProportionalMPV₂_CFBNT`.  Under the dominant normalisation `\|λ_0\| = 1`, this scalar is bounded below by a constant on the rescaled surface (the geometric problem dissolves, as recorded in path β scout PR 1.5).  This is **independent** of the rate-quantification issue and does not require Option 1.
 
 ## References
 

@@ -46,8 +46,9 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor.SectorDecomposition
 
-variable {d e : ℕ}
+variable {α : Type*} [Fintype α] {e : ℕ}
 
+omit [Fintype α] in
 /-- At one separating tail length, a nonzero grouped coefficient identifies
 an arbitrary marked letter on the chosen representative.
 
@@ -62,10 +63,10 @@ arXiv:1606.00608, Appendix C.3, lines 1848--1858.  The source states the
 physical-insertion case; the unrestricted marked matrices here are an
 auxiliary consequence of the same calculation. -/
 theorem markedTensor_basis_eq_of_trace_agree_of_coeff_ne_zero
-    (P : SectorDecomposition d)
+    (P : SectorDecomposition α)
     (C E : (j : Fin P.basisCount) → MPSTensor e (P.basisDim j))
     {L : ℕ} (hSpan : P.RepresentativeWordTupleSpanAt L)
-    (hTrace : ∀ (s : Fin e) (w : Fin L → Fin d),
+    (hTrace : ∀ (s : Fin e) (w : Fin L → α),
       Matrix.trace (P.markedTensor C s * Kraus.evalWord P.toTensor (List.ofFn w)) =
         Matrix.trace (P.markedTensor E s * Kraus.evalWord P.toTensor (List.ofFn w)))
     (j₀ : Fin P.basisCount) (hcoeff : P.coeff (L + 1) j₀ ≠ 0) :
@@ -102,6 +103,7 @@ theorem markedTensor_basis_eq_of_trace_agree_of_coeff_ne_zero
     (smul_eq_zero.mp hj).resolve_left hcoeff
   exact sub_eq_zero.mp hdiff
 
+omit [Fintype α] in
 /-- Equality of closed marked chains at every positive tail length identifies the marked tensor on
 every representative under eventual representative word-tuple separation.
 
@@ -113,15 +115,16 @@ This is the algebraic extension of arXiv:1606.00608, Appendix C.3,
 lines 1835--1858.  The source states the physical-insertion case; the
 unrestricted marked matrices here are an auxiliary consequence of its
 trace-separation proof. -/
-theorem markedTensor_basis_eq_of_trace_agree
-    (P : SectorDecomposition d)
+theorem markedTensor_basis_eq_of_trace_agree [Finite α]
+    (P : SectorDecomposition α)
     (C E : (j : Fin P.basisCount) → MPSTensor e (P.basisDim j))
     (hSpan : P.EventuallyRepresentativeWordTupleSpan)
-    (hTrace : ∀ (L : ℕ), 0 < L → ∀ (s : Fin e) (w : Fin L → Fin d),
+    (hTrace : ∀ (L : ℕ), 0 < L → ∀ (s : Fin e) (w : Fin L → α),
       Matrix.trace (P.markedTensor C s * Kraus.evalWord P.toTensor (List.ofFn w)) =
         Matrix.trace (P.markedTensor E s * Kraus.evalWord P.toTensor (List.ofFn w))) :
     ∀ j, C j = E j := by
   classical
+  have := Fintype.ofFinite α
   obtain ⟨L₀, hSpan⟩ := hSpan
   intro j
   let M := L₀ + 2
@@ -151,7 +154,7 @@ end MPSTensor.SectorDecomposition
 
 namespace MPSTensor.IsLeftCanonicalBNTPresentation
 
-variable {d e : ℕ} {P : SectorDecomposition d}
+variable {α : Type*} [Fintype α] {e : ℕ} {P : SectorDecomposition α}
 
 /-- Equality of closed marked chains at every positive tail length identifies
 arbitrary marked letters on every representative of a BNT canonical form.
@@ -167,7 +170,7 @@ are an auxiliary algebraic extension. -/
 theorem markedTensor_basis_eq_of_trace_agree
     (hCF : IsLeftCanonicalBNTPresentation P)
     (C E : (j : Fin P.basisCount) → MPSTensor e (P.basisDim j))
-    (hTrace : ∀ (L : ℕ), 0 < L → ∀ (s : Fin e) (w : Fin L → Fin d),
+    (hTrace : ∀ (L : ℕ), 0 < L → ∀ (s : Fin e) (w : Fin L → α),
       Matrix.trace (P.markedTensor C s * Kraus.evalWord P.toTensor (List.ofFn w)) =
         Matrix.trace (P.markedTensor E s * Kraus.evalWord P.toTensor (List.ofFn w))) :
     ∀ j, C j = E j := by

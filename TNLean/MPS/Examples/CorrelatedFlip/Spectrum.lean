@@ -348,7 +348,7 @@ private theorem mpo_four_eq_bellDiagonal :
     (sum_bondWeight_mul (fun t ↦ VFour σ t * VFour τ t)).symm
 
 private theorem trace_mpo_four : (mpo M 4).trace = 1 := by
-  rw [trace_mpo_eq_trace_verticalLoop_pow, verticalLoop_eq_physTraceTransfer,
+  rw [trace_mpo_eq_trace_physTraceTransfer_pow,
     physTraceTransfer_M]
   have hp : traceProjector ^ 4 = traceProjector := by
     calc
@@ -363,7 +363,7 @@ private theorem reduced_four_eq_bellDiagonal :
       (Matrix.diagonal fun t =>
         (CPSVExample410CorrelatedFlip.bondWeight t : ℂ)) := by
   ext σ τ
-  rw [reducedBlockState_apply_eq_trace_evalWord_mul_verticalLoop_pow,
+  rw [reducedBlockState_apply_eq_trace_evalWord_mul_physTraceTransfer_pow,
     trace_mpo_four]
   simp only [inv_one, one_mul, Nat.sub_self, pow_zero, Matrix.mul_one]
   change mpo M 4 σ τ = _

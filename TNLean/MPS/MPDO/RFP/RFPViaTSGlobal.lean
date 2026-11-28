@@ -288,12 +288,12 @@ theorem trace_mpo_ne_zero_of_isHorizontalCF_isMPDO_isRFPViaTS
     intro hTrace
     exact hMpo
       ((Matrix.PosSemidef.trace_eq_zero_iff (hMPDO (L + 1) (by omega))).mp hTrace)
-  have hLoopIdempotent : IsIdempotentElem (verticalLoop M) := by
-    rw [isIdempotentElem_iff, verticalLoop_eq_physTraceTransfer]
+  have hLoopIdempotent : IsIdempotentElem (physTraceTransfer M) := by
+    rw [isIdempotentElem_iff]
     exact physTraceTransfer_sq_of_isRFPViaTS M hRFP
   intro N hN
-  rw [trace_mpo_eq_trace_verticalLoop_pow, hLoopIdempotent.pow_eq hN.ne']
-  rw [trace_mpo_eq_trace_verticalLoop_pow,
+  rw [trace_mpo_eq_trace_physTraceTransfer_pow, hLoopIdempotent.pow_eq hN.ne']
+  rw [trace_mpo_eq_trace_physTraceTransfer_pow,
     hLoopIdempotent.pow_eq (Nat.succ_ne_zero L)] at hSeedTrace
   exact hSeedTrace
 

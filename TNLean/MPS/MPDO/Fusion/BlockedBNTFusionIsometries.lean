@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.MPDO.Fusion.BNTFusionIsometries
 import TNLean.MPS.Operator.Product.PhysicalBlocking
 import TNLean.MPS.CanonicalForm.BlockSeparation.SimultaneousBlocking
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Blocking the length-independent BNT fusion isometries
@@ -24,6 +25,17 @@ coisometry, which is not an assumption of Theorem IV.13.
 * arXiv:1606.00608, BNT definition and blocking, lines 271--274 and 317--345.
 * arXiv:1606.00608, equation `Ualphabeta`, lines 986--993.
 * arXiv:1606.00608, length independence, lines 995--1010.
+
+**Bridge (T.2b):** The blocked word span of this module still reads an operator tensor through
+`MPOTensor.toMPSTensor`, because the Fin-encoded blocking `Kraus.blockTensor` (with
+`MPOTensor.toMPSTensor_blockTensor`, `MPOTensor.toMPSTensor_blockTwo`) is stated on the alphabet
+`Fin (d * d)`. The bridge is removed when the blocking moves to `Kraus.block` (step T.2b of
+`docs/tensor_type_unification.md`).
+
+**Bridge (T.2c):** The basis-of-normal-tensors hypothesis of this module still reads an operator
+tensor through `MPOTensor.toMPSTensor`, because the vertical canonical form and the basis of normal
+tensors are stated on the vertical alphabet `Fin (D * D)`. The bridge is removed when the vertical
+alphabet moves to `Fin D × Fin D` (step T.2c of `docs/tensor_type_unification.md`).
 -/
 
 open scoped Matrix BigOperators ComplexOrder Kronecker
@@ -211,8 +223,7 @@ theorem exists_positive_block_with_injective_fusion
     ∃ L : ℕ, 0 < L ∧
       MPSTensor.WordTupleSpanTop
         (fun γ ↦ (blockTensor (Fam.tensor γ) L).toMPSTensor) 1 ∧
-      (∀ γ, Kraus.IsInjective
-        (blockTensor (Fam.tensor γ) L).toMPSTensor) ∧
+      (∀ γ, Kraus.IsInjective (blockTensor (Fam.tensor γ) L)) ∧
       ∀ (α β : Fin g) (I J : Fin (Kraus.blockPhysDim p L)),
         (Fam.fusionIsometry α β *
               mulTensor (blockTensor (Fam.tensor α) L)
@@ -249,7 +260,8 @@ theorem exists_positive_block_with_injective_fusion
       (fun γ ↦ (blockTensor (Fam.tensor γ) L).toMPSTensor) 1 := by
     rw [hFamily]
     exact hReindexed
-  refine ⟨L, hL, hSpanBlocked, fun γ ↦ hSpanBlocked.isInjective_one γ, ?_⟩
+  refine ⟨L, hL, hSpanBlocked,
+    fun γ ↦ (isInjective_toMPSTensor_iff _).1 (hSpanBlocked.isInjective_one γ), ?_⟩
   intro α β I J
   exact ⟨Fam.blocked_fusion_of_lengthIndependent c hχ hLI hL α β I J,
     Fam.fusionIsometry_mul_blocked_mulTensor_of_lengthIndependent c hχ hLI hL α β I J,

@@ -60,10 +60,10 @@ density matrix in a Hayashi sector.
 Source: arXiv:1606.00608, Appendix C.2, equation `Qketc`, lines 1415--1428. -/
 noncomputable def hayashiInverseLeft {d D : ℕ}
     {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hη : EtaStructure ρ)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K) (hη : EtaStructure ρ)
     (α β : Fin D) (k : Fin hη.m) (l l' : Fin (hη.dL k)) : ℂ :=
   ∑ i : Fin d, ∑ j : Fin d,
-    inverseTensor K hK (finProdFinEquiv (i, j)) α β *
+    inverseTensor K hK (i, j) α β *
       hη.ρ_left k (i, l) (j, l')
 
 /-- The right outer factor obtained by applying the inverse tensor to the right
@@ -72,10 +72,10 @@ density matrix in a Hayashi sector.
 Source: arXiv:1606.00608, Appendix C.2, equation `Qketc`, lines 1415--1428. -/
 noncomputable def hayashiInverseRight {d D : ℕ}
     {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hη : EtaStructure ρ)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K) (hη : EtaStructure ρ)
     (α β : Fin D) (k : Fin hη.m) (r r' : Fin (hη.dR k)) : ℂ :=
   ∑ i : Fin d, ∑ j : Fin d,
-    inverseTensor K hK (finProdFinEquiv (i, j)) α β *
+    inverseTensor K hK (i, j) α β *
       hη.ρ_right k (r, i) (r', j)
 
 /-- Expanding a three-site closure identifies its contraction against the two
@@ -83,35 +83,23 @@ outer inverse tensors with the corresponding three-site inverse-map
 contraction. This is the contraction used in arXiv:1606.00608, Appendix C.2,
 lines 1421--1430. -/
 private lemma sum_inverseTensor_threeSiteClosure_eq {d D : ℕ}
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K)
     (R : Matrix (Fin D) (Fin D) ℂ)
     (ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ)
     (hρ : IsThreeSiteClosure K R ρ) (α₁ β₁ α₃ β₃ : Fin D) (i₂ j₂ : Fin d) :
     (∑ i₁ : Fin d, ∑ j₁ : Fin d, ∑ i₃ : Fin d, ∑ j₃ : Fin d,
-      inverseTensor K hK (finProdFinEquiv (i₁, j₁)) α₁ β₁ *
-        inverseTensor K hK (finProdFinEquiv (i₃, j₃)) α₃ β₃ *
+      inverseTensor K hK (i₁, j₁) α₁ β₁ *
+        inverseTensor K hK (i₃, j₃) α₃ β₃ *
           ρ (i₁, i₂, i₃) (j₁, j₂, j₃)) =
       inverseMapThreeSiteContraction K hK R α₁ β₁ α₃ β₃
-        (finProdFinEquiv (i₂, j₂)) := by
+        (i₂, j₂) := by
   rw [inverseMapThreeSiteContraction]
-  simp_rw [← Equiv.sum_comp finProdFinEquiv
-    (fun p ↦ ∑ p₃,
-      inverseTensor K hK p α₁ β₁ * inverseTensor K hK p₃ α₃ β₃ *
-        Matrix.trace (K.toMPSTensor p * K.toMPSTensor (finProdFinEquiv (i₂, j₂)) *
-          K.toMPSTensor p₃ * R))]
-  simp_rw [← Equiv.sum_comp finProdFinEquiv
-    (fun p ↦
-      inverseTensor K hK (finProdFinEquiv _) α₁ β₁ *
-        inverseTensor K hK p α₃ β₃ *
-        Matrix.trace (K.toMPSTensor (finProdFinEquiv _) *
-          K.toMPSTensor (finProdFinEquiv (i₂, j₂)) * K.toMPSTensor p * R))]
   simp_rw [Fintype.sum_prod_type]
   congr 1 with i₁
   congr 1 with j₁
   congr 1 with i₃
   congr 1 with j₃
   rw [hρ i₁ i₂ i₃ j₁ j₂ j₃]
-  simp [MPOTensor.toMPSTensor]
 
 /-- The cyclic permutation of six indices given by
 \((a,b,c,d,e,f) \mapsto (c,d,e,f,a,b)\). -/
@@ -141,22 +129,22 @@ the entry printed in the source display.  The correction is recorded in
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1422--1434. -/
 theorem inverseMap_threeSite_closure_collapse {d D : ℕ}
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K)
     (R : Matrix (Fin D) (Fin D) ℂ)
     (ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ)
     (hρ : IsThreeSiteClosure K R ρ) (α₁ β₁ α₃ β₃ : Fin D) (i₂ j₂ : Fin d) :
     ∑ i₁ : Fin d, ∑ j₁ : Fin d, ∑ i₃ : Fin d, ∑ j₃ : Fin d,
-      inverseTensor K hK (finProdFinEquiv (i₁, j₁)) α₁ β₁ *
-        inverseTensor K hK (finProdFinEquiv (i₃, j₃)) α₃ β₃ *
+      inverseTensor K hK (i₁, j₁) α₁ β₁ *
+        inverseTensor K hK (i₃, j₃) α₃ β₃ *
         ρ (i₁, i₂, i₃) (j₁, j₂, j₃) =
       K (i₂, j₂) β₁ α₃ * R β₃ α₁ := by
   calc
     _ = inverseMapThreeSiteContraction K hK R α₁ β₁ α₃ β₃
-        (finProdFinEquiv (i₂, j₂)) :=
+        (i₂, j₂) :=
       sum_inverseTensor_threeSiteClosure_eq K hK R ρ hρ α₁ β₁ α₃ β₃ i₂ j₂
     _ = _ := by
-      simpa [MPOTensor.toMPSTensor] using inverseMapThreeSiteContraction_eq
-        K hK R α₁ β₁ α₃ β₃ (finProdFinEquiv (i₂, j₂))
+      simpa using inverseMapThreeSiteContraction_eq
+        K hK R α₁ β₁ α₃ β₃ (i₂, j₂)
 
 /-- **Expansion of the conjugated physical slice against a closure.** For any
 matrix $U$ on the middle site, one tail entry times an entry of the conjugated
@@ -172,23 +160,23 @@ the entry printed in the source display.  The correction is recorded in
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1422--1434. -/
 theorem inverseMap_conj_physicalSlice_expansion {d D : ℕ}
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K)
     (R : Matrix (Fin D) (Fin D) ℂ)
     (ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ)
     (hρ : IsThreeSiteClosure K R ρ) (α₁ β₁ α₃ β₃ : Fin D)
     (U : Matrix (Fin d) (Fin d) ℂ) (b b' : Fin d) :
     R β₃ α₁ * (U * physicalSlice K β₁ α₃ * Uᴴ) b b'
       = ∑ i₁ : Fin d, ∑ j₁ : Fin d, ∑ i₃ : Fin d, ∑ j₃ : Fin d,
-          inverseTensor K hK (finProdFinEquiv (i₁, j₁)) α₁ β₁ *
-            inverseTensor K hK (finProdFinEquiv (i₃, j₃)) α₃ β₃ *
+          inverseTensor K hK (i₁, j₁) α₁ β₁ *
+            inverseTensor K hK (i₃, j₃) α₃ β₃ *
             (∑ i₂ : Fin d, ∑ j₂ : Fin d,
               U b i₂ * ρ (i₁, i₂, i₃) (j₁, j₂, j₃) *
                 (starRingEnd ℂ) (U b' j₂)) := by
   classical
   let A : Fin d → Fin d → ℂ := fun i j ↦
-    inverseTensor K hK (finProdFinEquiv (i, j)) α₁ β₁
+    inverseTensor K hK (i, j) α₁ β₁
   let B : Fin d → Fin d → ℂ := fun i j ↦
-    inverseTensor K hK (finProdFinEquiv (i, j)) α₃ β₃
+    inverseTensor K hK (i, j) α₃ β₃
   have hcollapse (i₂ j₂ : Fin d) :
       ∑ i₁ : Fin d, ∑ j₁ : Fin d, ∑ i₃ : Fin d, ∑ j₃ : Fin d,
         A i₁ j₁ * B i₃ j₃ * ρ (i₁, i₂, i₃) (j₁, j₂, j₃) =
@@ -290,7 +278,7 @@ the entry printed in the source display.  The correction is recorded in
 
 Source: arXiv:1606.00608, Appendix C.2, equation `Qketc` and lines 1415--1438. -/
 theorem inverseMap_hayashi_sector_comparison {d D : ℕ}
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K)
     (R : Matrix (Fin D) (Fin D) ℂ)
     (ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ)
     (hρ : IsThreeSiteClosure K R ρ) (hη : EtaStructure ρ)
@@ -320,14 +308,14 @@ theorem inverseMap_hayashi_sector_comparison {d D : ℕ}
   simp_rw [hsector]
   simp only [hayashiInverseLeft, hayashiInverseRight]
   rw [show (hη.p k : ℂ) *
-      (∑ i₁, ∑ j₁, inverseTensor K hK (finProdFinEquiv (i₁, j₁)) α₁ β₁ *
+      (∑ i₁, ∑ j₁, inverseTensor K hK (i₁, j₁) α₁ β₁ *
         hη.ρ_left k (i₁, l) (j₁, l')) *
-      (∑ i₃, ∑ j₃, inverseTensor K hK (finProdFinEquiv (i₃, j₃)) α₃ β₃ *
+      (∑ i₃, ∑ j₃, inverseTensor K hK (i₃, j₃) α₃ β₃ *
         hη.ρ_right k (r, i₃) (r', j₃)) =
     (hη.p k : ℂ) *
-      (∑ i₃, ∑ j₃, inverseTensor K hK (finProdFinEquiv (i₃, j₃)) α₃ β₃ *
+      (∑ i₃, ∑ j₃, inverseTensor K hK (i₃, j₃) α₃ β₃ *
         hη.ρ_right k (r, i₃) (r', j₃)) *
-      (∑ i₁, ∑ j₁, inverseTensor K hK (finProdFinEquiv (i₁, j₁)) α₁ β₁ *
+      (∑ i₁, ∑ j₁, inverseTensor K hK (i₁, j₁) α₁ β₁ *
         hη.ρ_left k (i₁, l) (j₁, l')) by ring]
   rw [Finset.mul_sum]
   refine Finset.sum_congr rfl fun i₁ _ => ?_

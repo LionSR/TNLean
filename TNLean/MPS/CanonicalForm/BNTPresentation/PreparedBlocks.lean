@@ -381,7 +381,7 @@ theorem isLeftCanonicalBNTPresentation_collapsedBntSectorDecomp_of_tp_primitive_
   have : ∀ k, NeZero (dim k) := fun k => ⟨(hDim k).ne'⟩
   set classes := mpvPhaseClassData (d := d) blocks with hclasses
   set P := collapsedBntSectorDecomp (d := d) μ blocks hμne with hP
-  have hBNT : HasBNTSectorData (d := d) P :=
+  have hBNT : HasBNTSectorData P :=
     collapsedBntSectorDecomp_hasBNT (d := d) μ blocks hTP hIrr hPrim hμne
   -- `P.basis j` is definitionally `blocks (classes.repr j)`.
   have h_normal : ∀ j : Fin P.basisCount, IsNormalTensor (P.basis j) := fun j =>
@@ -409,7 +409,7 @@ theorem exists_isLeftCanonicalBNTPresentation_of_tp_primitive_irr_blocks
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (blocks k))
     (hμne : ∀ k, μ k ≠ 0)
     (hr : 0 < r) :
-    ∃ P : SectorDecomposition d,
+    ∃ P : SectorDecomposition (Fin d),
       SameMPV₂Pos P.toTensor (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) ∧
       IsLeftCanonicalBNTPresentation P := by
   let P := collapsedBntSectorDecomp (d := d) μ blocks hμne
@@ -432,7 +432,7 @@ theorem exists_isLeftCanonicalBNTPresentation_of_tp_primitive_irr_blocks_and_tot
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (blocks k))
     (hμne : ∀ k, μ k ≠ 0)
     (hr : 0 < r) :
-    ∃ P : SectorDecomposition d,
+    ∃ P : SectorDecomposition (Fin d),
       SameMPV₂Pos P.toTensor (toTensorFromBlocks (α := Fin d) (μ := μ) blocks) ∧
       IsLeftCanonicalBNTPresentation P ∧ P.totalDim = ∑ k : Fin r, dim k := by
   let P := collapsedBntSectorDecomp (d := d) μ blocks hμne
@@ -562,7 +562,7 @@ theorem exists_prepared_BNT_blocks_afterBlocking_pos
     change Kraus.IsIrreducibleFamily
       (flattenedIteratedBlockTensor (d := d) (p := p₀) (D := dimA k)
         (blocksA k) L)
-    exact (isIrreducibleFamily_reindexPhysical_equiv
+    exact (Kraus.isIrreducibleFamily_reindexPhysical_equiv
       (directIteratedBlockEquiv d p₀ L)
       (blockTensor (d := blockPhysDim d p₀) (n := Fin (dimA k)) (blocksA k) L)).mpr
         hIrrBlocked

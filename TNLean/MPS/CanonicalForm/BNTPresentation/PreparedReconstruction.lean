@@ -68,7 +68,7 @@ theorem exists_isLeftCanonicalBNTPresentation_exact_of_tp_primitive_irr_blocks
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (blocks k))
     (hμne : ∀ k, μ k ≠ 0)
     (hr : 0 < r) :
-    ∃ P : SectorDecomposition d,
+    ∃ P : SectorDecomposition (Fin d),
       IsLeftCanonicalBNTPresentation P ∧ P.totalDim = ∑ k : Fin r, dim k ∧
       ∃ e : Fin P.totalDim ≃ Fin (∑ k : Fin r, dim k),
       ∃ X : GL (Fin P.totalDim) ℂ, ∀ i,
@@ -420,7 +420,7 @@ lines 1831--1885. -/
 theorem _root_.MPTensor.CPSVCanonicalFormData.exists_isLeftCanonicalBNTPresentation_exact
     (data : CPSVCanonicalFormData A)
     (hA : A ≠ 0) :
-    ∃ P : SectorDecomposition d,
+    ∃ P : SectorDecomposition (Fin d),
       IsLeftCanonicalBNTPresentation P ∧
       P.totalDim = ∑ k, data.dim k ∧
       ∃ U : Matrix (Fin P.totalDim) (Fin D) ℂ, U * Uᴴ = 1 ∧
@@ -539,7 +539,7 @@ Source: arXiv:2011.12127, lines 1831--1885; arXiv:1606.00608, lines 237--301 and
 theorem _root_.MPTensor.CPSVCanonicalFormData.exists_isLeftCanonicalBNTPresentation
     (data : CPSVCanonicalFormData A)
     (hA : A ≠ 0) :
-    ∃ P : SectorDecomposition d,
+    ∃ P : SectorDecomposition (Fin d),
       IsLeftCanonicalBNTPresentation P ∧
       SameMPV₂Pos A P.toTensor ∧
       P.totalDim = ∑ k, data.dim k := by

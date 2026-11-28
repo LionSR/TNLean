@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: TNLean contributors
 -/
 import TNLean.MPS.Operator.Simple.SectorFactorization
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Closed sector tensors and the physical-trace transfer
@@ -99,7 +100,7 @@ theorem physTraceTransfer_eq_sum_closedSector
 section InverseMapSectorTensors
 
 variable {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
-variable (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hη : EtaStructure ρ)
+variable (K : MPOTensor d D) (hK : Kraus.IsInjective K) (hη : EtaStructure ρ)
 variable (R : Matrix (Fin D) (Fin D) ℂ) (hρ : IsThreeSiteClosure K R ρ)
 variable (α₁ β₃ : Fin D) (hm : R β₃ α₁ ≠ 0)
 
@@ -214,7 +215,8 @@ theorem closedSectorTraceMatrix_normalized_relations
   let Q : Matrix (Fin hη.m) (Fin D) ℂ :=
     fun k α ↦ closedSectorR K hK hη β₃ k α
   have hS : closedSectorPairingOperator
-      (sectorTensorL K hK hη R α₁ β₃) (sectorTensorR K hK hη β₃) = L * Q := by
+      (sectorTensorL K hK hη R α₁ β₃)
+      (sectorTensorR K hK hη β₃) = L * Q := by
     ext β α
     simp only [closedSectorPairingOperator, Matrix.sum_apply, Matrix.vecMulVec_apply]
     exact (Matrix.mul_apply (M := L) (N := Q) (i := β) (k := α)).symm

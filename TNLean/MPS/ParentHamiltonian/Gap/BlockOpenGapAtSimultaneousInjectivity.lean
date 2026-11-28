@@ -55,7 +55,7 @@ theorem exists_parentChainInteraction_toTensorFromBlocks_gap_subsequence_of_word
   let T := toTensorFromBlocks (α := Fin d) (μ := μ) B
   have hKernel : ∀ L N : ℕ, S + 1 ≤ L → L ≤ N →
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction T L N).hamiltonian) =
-          groundSpaceES T N :=
+          ((groundSpace T N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) :=
     fun L N hSL hLN ↦
       ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_of_wordTupleSpanTop
         μ B hμ hS hSpanB hSL hLN

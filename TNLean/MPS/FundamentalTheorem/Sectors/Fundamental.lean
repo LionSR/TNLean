@@ -84,7 +84,7 @@ statement lines 1167--1170 and the Appendix MPV proof line 1182.  The
 coefficient comparison that constructs this copy-weight matching is the
 remaining source-faithful input before the proportional global-gauge theorem
 can be obtained without an explicit coefficient-identity hypothesis. -/
-structure SectorBNTCopyWeightMatching {P Q : SectorDecomposition d}
+structure SectorBNTCopyWeightMatching {P Q : SectorDecomposition (Fin d)}
     (β : Fin Q.basisCount ≃ Fin P.basisCount)
     (ζ : Fin Q.basisCount → ℂ) where
   /-- Copy permutation inside each matched sector. -/
@@ -107,7 +107,7 @@ sector by sector, the copy permutation and the pointwise identity
 This constructs the copy-weight matching established in CPSV16 Appendix MPV
 proof, line 1188, using the finite power-sum lemma from lines 1155--1163. -/
 noncomputable def SectorBNTCopyWeightMatching.of_coeff_identity
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (β : Fin Q.basisCount ≃ Fin P.basisCount)
     (ζ : Fin Q.basisCount → ℂ)
     (hζ_ne : ∀ k : Fin Q.basisCount, ζ k ≠ 0)
@@ -153,7 +153,7 @@ appearing in the coordinate-level direct sum
 It is the Lean counterpart of the reindexing implicit in CPSV16 Appendix MPV
 proof, lines 1189–1192, before forming the global gauge
 `⊕_k (𝟙_{r_k} ⊗ X_k)`. -/
-noncomputable def matched_p_weight {P Q : SectorDecomposition d}
+noncomputable def matched_p_weight {P Q : SectorDecomposition (Fin d)}
     (β : Fin Q.basisCount ≃ Fin P.basisCount)
     (τ : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k))) :
     Fin Q.totalCopies → ℂ :=
@@ -165,7 +165,7 @@ noncomputable def matched_p_weight {P Q : SectorDecomposition d}
 
 The output is indexed by `Fin Q.totalCopies`, with each copy `(k,q)` carrying the
 cast of `P.basis (β k)` to the matched `Q.basisDim k`. -/
-noncomputable def matched_p_basis {P Q : SectorDecomposition d}
+noncomputable def matched_p_basis {P Q : SectorDecomposition (Fin d)}
     (β : Fin Q.basisCount ≃ Fin P.basisCount)
     (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k) :
     (s : Fin Q.totalCopies) → MPSTensor d (Q.flatDim s) := fun s => by
@@ -185,7 +185,7 @@ This is the pure assembly part of CPSV16 Appendix MPV proof, lines 1189–1192.
 It does not prove the coefficient comparison that supplies the weight
 identities. -/
 theorem sector_bnt_global_gauge_of_matched_weights
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (β : Fin Q.basisCount ≃ Fin P.basisCount)
     (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
     (τ : (k : Fin Q.basisCount) → Fin (Q.copies k) ≃ Fin (P.copies (β k)))
@@ -295,7 +295,7 @@ weight identities supplied by `SectorBNTCopyWeightMatching`.
 It is the pure algebraic assembly of CPSV16 Appendix MPV proof, lines
 1189--1192, after the line-1188 copy-weight comparison has been supplied. -/
 theorem sector_bnt_global_gauge_of_copy_weight_matching
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (β : Fin Q.basisCount ≃ Fin P.basisCount)
     (hDim : ∀ k : Fin Q.basisCount, P.basisDim (β k) = Q.basisDim k)
     (ζ : Fin Q.basisCount → ℂ)
@@ -341,7 +341,7 @@ The theorem therefore separates the two mathematical ingredients:
 The proportional sector matching used here is supplied by the exact matcher, so
 no per-sector unit-modulus copy-weight hypothesis is required. -/
 theorem ft_sector_bnt_proportional_global_gauge_of_copy_weight_matching
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (hP : IsLeftCanonicalBNTPresentation P) (hQ : IsLeftCanonicalBNTPresentation Q)
     (hProp : EventuallyNonzeroProportionalMPV₂ P.toTensor Q.toTensor) :
     ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
@@ -396,7 +396,7 @@ source theorem.
 The proportional sector matching used here is supplied by the exact matcher, so
 no per-sector unit-modulus copy-weight hypothesis is required. -/
 theorem ft_sector_bnt_proportional_global_gauge_of_coeff_identity
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (hP : IsLeftCanonicalBNTPresentation P) (hQ : IsLeftCanonicalBNTPresentation Q)
     (hProp : EventuallyNonzeroProportionalMPV₂ P.toTensor Q.toTensor) :
     ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
@@ -453,7 +453,7 @@ copy permutations and weight identities.
 
 Source: CPSV16, Appendix MPV proof, lines 1187–1192. -/
 theorem ft_sector_bnt_equal_matched_copy_weight_witnesses
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (hP : IsLeftCanonicalBNTPresentation P) (hQ : IsLeftCanonicalBNTPresentation Q)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
     ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
@@ -526,7 +526,7 @@ gauge phase and permuting the copies.
 
 Source: CPSV16, §II.C lines 354–361 and Appendix MPV proof, lines 1182–1188. -/
 theorem ft_sector_bnt_equal_sector_data
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (hP : IsLeftCanonicalBNTPresentation P) (hQ : IsLeftCanonicalBNTPresentation Q)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
     ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount),
@@ -575,7 +575,7 @@ Appendix MPV proof witness rather than an opaque existential.
 
 Source: CPSV16, Appendix MPV proof, lines 1189–1192. -/
 theorem ft_sector_bnt_equal_global_gauge
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (hP : IsLeftCanonicalBNTPresentation P) (hQ : IsLeftCanonicalBNTPresentation Q)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
     ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
@@ -660,7 +660,7 @@ is needed for this refinement.
 
 Source: Cirac et al., arXiv:1606.00608, Corollary A.6, lines 1197–1199. -/
 theorem ft_sector_bnt_proportional_unitary_sector_match_witnesses
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (hP : IsLeftCanonicalBNTPresentation P) (hQ : IsLeftCanonicalBNTPresentation Q)
     (hProp : EventuallyNonzeroProportionalMPV₂ P.toTensor Q.toTensor) :
     ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
@@ -716,7 +716,7 @@ global gauge in matched flattened coordinates.
 Source: arXiv:1606.00608, Corollary A.6 and Appendix MPV proof,
 lines 1182--1199. -/
 theorem ft_sector_bnt_equal_unitary_global_gauge_witnesses
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (hP : IsLeftCanonicalBNTPresentation P) (hQ : IsLeftCanonicalBNTPresentation Q)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
     ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)

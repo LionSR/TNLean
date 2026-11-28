@@ -38,8 +38,8 @@ namespace MPSTensor
 This is the two-layer tensor associated with `halvedDecomp scalarUnitTensor`
 from CPSV16 equation `eq:II_ABasicTensors` (lines 271--301). -/
 noncomputable def halvedWeightTensor : MPSTensor 1
-    (SectorBNT.Examples.halvedDecomp scalarUnitTensor).totalDim :=
-  (SectorBNT.Examples.halvedDecomp scalarUnitTensor).toTensor
+    (SectorBNT.Examples.halvedDecomp (scalarUnitTensor (α := Fin 1))).totalDim :=
+  (SectorBNT.Examples.halvedDecomp (scalarUnitTensor (α := Fin 1))).toTensor
 
 /-- The counterexample tensor is literally the canonical assembly of its
 raw-weight BNT decomposition, not merely an equivalent MPV family.
@@ -47,7 +47,7 @@ raw-weight BNT decomposition, not merely an equivalent MPV family.
 This records the canonical-form premise of CPSV16, Theorem 3.8. -/
 theorem halvedWeightTensor_eq_halvedDecomp_toTensor :
     halvedWeightTensor =
-      (SectorBNT.Examples.halvedDecomp scalarUnitTensor).toTensor := rfl
+      (SectorBNT.Examples.halvedDecomp (scalarUnitTensor (α := Fin 1))).toTensor := rfl
 
 private lemma scalarUnitTensor_mpv {N : ℕ} (σ : Fin N → Fin 1) :
     mpv scalarUnitTensor σ = 1 := by
@@ -60,7 +60,7 @@ implication in CPSV16, Theorem `TheoremZCLPure` (lines 1248--1251). -/
 theorem halvedWeightTensor_mpv {N : ℕ} (σ : Fin N → Fin 1) :
     mpv halvedWeightTensor σ = 1 + (1 / 2 : ℂ) ^ N := by
   rw [halvedWeightTensor]
-  rw [(SectorBNT.Examples.halvedDecomp scalarUnitTensor).mpv_toTensor_eq_sum_sectors]
+  rw [(SectorBNT.Examples.halvedDecomp (scalarUnitTensor (α := Fin 1))).mpv_toTensor_eq_sum_sectors]
   rw [Fin.sum_univ_one, Fin.sum_univ_two]
   rw [scalarUnitTensor_mpv]
   simp only [mul_one]
@@ -99,7 +99,8 @@ private theorem isPhysicalCID_one {D : ℕ} (A : MPSTensor 1 D) :
 /-- The raw-weight decomposition of `halvedWeightTensor` is a presentation of its
 assembled tensor in left-canonical gauge (arXiv:1606.00608, lines 281--301). -/
 theorem halvedWeightTensor_isLeftCanonicalBNTPresentation :
-    IsLeftCanonicalBNTPresentation (SectorBNT.Examples.halvedDecomp scalarUnitTensor) := by
+    IsLeftCanonicalBNTPresentation
+      (SectorBNT.Examples.halvedDecomp (scalarUnitTensor (α := Fin 1))) := by
   refine ⟨⟨Nat.one_pos, fun _ _ _ => rfl, fun _ => scalarUnitTensor_isNormalTensor, ?_⟩, ?_⟩
   · refine ⟨0, ?_⟩
     intro N hN
@@ -108,7 +109,7 @@ theorem halvedWeightTensor_isLeftCanonicalBNTPresentation :
     have h := congrArg
       (fun v : MPVSpace 1 N => v (fun _ : Fin N => (0 : Fin 1))) hzero
     have : (1 : ℂ) = 0 := by
-      simp [mpvState_apply, mpv, scalarUnitTensor_evalWord, Matrix.trace] at h
+      simp [mpv, scalarUnitTensor_evalWord, Matrix.trace] at h
     exact one_ne_zero this
   · intro j
     simp [IsLeftCanonical, Kraus.IsTP, scalarUnitTensor]
@@ -117,7 +118,7 @@ theorem halvedWeightTensor_isLeftCanonicalBNTPresentation :
 decomposition `halvedDecomp scalarUnitTensor` at every length. -/
 theorem halvedWeightTensor_sameMPV₂_halvedDecomp :
     SameMPV₂ halvedWeightTensor
-      (SectorBNT.Examples.halvedDecomp scalarUnitTensor).toTensor :=
+      (SectorBNT.Examples.halvedDecomp (scalarUnitTensor (α := Fin 1))).toTensor :=
   fun _ _ => rfl
 
 private theorem halvedWeightTensor_isCPSVBasisOfNormalTensors :
@@ -151,7 +152,7 @@ private theorem halvedWeightTensor_no_blocking_coefficient :
     ¬ ∃ v : ℂ,
       halvedWeightTensor 0 * halvedWeightTensor 0 = v • halvedWeightTensor 0 := by
   rintro ⟨v, hv⟩
-  let P := SectorBNT.Examples.halvedDecomp scalarUnitTensor
+  let P := SectorBNT.Examples.halvedDecomp (scalarUnitTensor (α := Fin 1))
   let B : (s : Fin P.totalCopies) →
       Matrix (Fin (P.flatDim s)) (Fin (P.flatDim s)) ℂ :=
     fun s => (P.flatWeight s) • (P.flatBasis s 0)
@@ -243,11 +244,12 @@ conditions, but it is not a renormalization fixed point.  The source proof's
 inference at lines 1248--1251 misses the eigenvalues introduced by raw copy
 weights. -/
 theorem halvedWeightTensor_counterexample_to_unrestricted_zcl_iff_rfp :
-    IsLeftCanonicalBNTPresentation (SectorBNT.Examples.halvedDecomp scalarUnitTensor) ∧
+    IsLeftCanonicalBNTPresentation
+      (SectorBNT.Examples.halvedDecomp (scalarUnitTensor (α := Fin 1))) ∧
       halvedWeightTensor =
-        (SectorBNT.Examples.halvedDecomp scalarUnitTensor).toTensor ∧
+        (SectorBNT.Examples.halvedDecomp (scalarUnitTensor (α := Fin 1))).toTensor ∧
       SameMPV₂ halvedWeightTensor
-        (SectorBNT.Examples.halvedDecomp scalarUnitTensor).toTensor ∧
+        (SectorBNT.Examples.halvedDecomp (scalarUnitTensor (α := Fin 1))).toTensor ∧
       IsPhysicalBNTZCL halvedWeightTensor (fun _ : Fin 1 => scalarUnitTensor) ∧
       ¬ IsTransferIdempotent halvedWeightTensor :=
   ⟨halvedWeightTensor_isLeftCanonicalBNTPresentation,

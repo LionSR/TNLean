@@ -35,16 +35,16 @@ private lemma norm_invSqrtTwo : ‖invSqrtTwo‖ = (Real.sqrt 2)⁻¹ := by
 
 /-- The first normal representative, supported on doubled symbols `(0,0)` and `(1,1)`,
 which are indices `0` and `4` under `finProdFinEquiv`. -/
-noncomputable def firstBasisTensor : MPSTensor (3 * 3) 1 :=
+private noncomputable def firstBasisTensor : MPSTensor (3 * 3) 1 :=
   fun i ↦ if i = 0 ∨ i = 4 then Matrix.of fun _ _ ↦ invSqrtTwo else 0
 
 /-- The second normal representative, supported only on doubled symbol `(2,2)`,
 which is index `8` under `finProdFinEquiv`. -/
-noncomputable def secondBasisTensor : MPSTensor (3 * 3) 1 :=
+private noncomputable def secondBasisTensor : MPSTensor (3 * 3) 1 :=
   fun i ↦ if i = 8 then 1 else 0
 
 /-- The two bond-one representatives on disjoint doubled physical supports. -/
-noncomputable def basis (s : Fin 2) : MPSTensor (3 * 3) 1 :=
+private noncomputable def basisFin (s : Fin 2) : MPSTensor (3 * 3) 1 :=
   if s = 0 then firstBasisTensor else secondBasisTensor
 
 /-- The global CPSV weights $(1/\sqrt2,1)$. -/
@@ -64,10 +64,10 @@ private lemma weight_globally_normalized :
   · exact ⟨1, by simp [weight]⟩
 
 /-- The source-faithful two-sector decomposition, with one copy per representative. -/
-noncomputable def sectors : MPSTensor.SectorDecomposition (3 * 3) where
+private noncomputable def sectorsFin : MPSTensor.SectorDecomposition (Fin (3 * 3)) where
   basisCount := 2
   basisDim := fun _ ↦ 1
-  basis := basis
+  basis := basisFin
   sectors :=
     { copies := fun _ ↦ 1
       copies_pos := fun _ ↦ by omega
@@ -76,20 +76,11 @@ noncomputable def sectors : MPSTensor.SectorDecomposition (3 * 3) where
         intro s q
         fin_cases s <;> simp [weight, invSqrtTwo_ne_zero] }
 
-/-- Copy independence is automatic because every representative has one copy. -/
-lemma weights_copy_independent :
-    ∀ (s : Fin sectors.basisCount) (q q' : Fin (sectors.copies s)),
-      sectors.weight s q = sectors.weight s q' := by
-  intro s q q'
-  fin_cases q
-  fin_cases q'
-  rfl
-
 /-- The two normal representatives have disjoint doubled-physical support. -/
-lemma basis_disjoint_support :
-    ∀ i, basis 0 i ≠ 0 → basis 1 i = 0 := by
+private lemma basisFin_disjoint_support :
+    ∀ i, basisFin 0 i ≠ 0 → basisFin 1 i = 0 := by
   intro i
-  fin_cases i <;> simp [basis, firstBasisTensor, secondBasisTensor]
+  fin_cases i <;> simp [basisFin, firstBasisTensor, secondBasisTensor]
 
 private lemma firstBasis_transferMap :
     Kraus.transferMap firstBasisTensor = LinearMap.id := by
@@ -122,7 +113,7 @@ private lemma secondBasis_transferMap :
 
 Source: arXiv:1606.00608, the normal representatives in the BNT decomposition
 `eq:II_ABasicTensors`, lines 271--301. -/
-lemma basis_isNormalTensor (s : Fin 2) : MPTensor.IsNormalTensor (basis s) := by
+private lemma basisFin_isNormalTensor (s : Fin 2) : MPTensor.IsNormalTensor (basisFin s) := by
   fin_cases s
   · exact MPSTensor.isNormalTensor_of_bondDim_one_of_transferMap_eq_id
       _ firstBasis_transferMap
@@ -135,23 +126,23 @@ and `8`.
 
 Source: arXiv:1606.00608, the distinct normal representatives in the BNT
 decomposition `eq:II_ABasicTensors`, lines 271--301. -/
-private theorem basis_not_gaugePhaseEquiv :
-    MPSTensor.BlocksNotGaugePhaseEquiv (d := 3 * 3) basis := by
+private theorem basisFin_not_gaugePhaseEquiv :
+    MPSTensor.BlocksNotGaugePhaseEquiv (α := Fin (3 * 3)) basisFin := by
   intro j k hjk hdim
   fin_cases j <;> fin_cases k
   · exact absurd rfl hjk
-  · change ¬ MPTensor.GaugePhaseEquiv (basis 0) (basis 1)
+  · change ¬ MPTensor.GaugePhaseEquiv (basisFin 0) (basisFin 1)
     rintro ⟨X, ζ, hζ, hX⟩
     have h := congrFun (congrFun (hX 8) 0) 0
-    simp only [basis, Fin.isValue, one_ne_zero, ↓reduceIte, secondBasisTensor,
+    simp only [basisFin, Fin.isValue, one_ne_zero, ↓reduceIte, secondBasisTensor,
       Nat.reduceMul, Matrix.one_apply_eq, firstBasisTensor, Fin.reduceEq,
       or_self, mul_zero, Matrix.coe_units_inv, Matrix.inv_subsingleton,
       Ring.inverse_eq_inv', zero_mul, Matrix.smul_apply, Matrix.zero_apply,
       smul_eq_mul] at h
-  · change ¬ MPTensor.GaugePhaseEquiv (basis 1) (basis 0)
+  · change ¬ MPTensor.GaugePhaseEquiv (basisFin 1) (basisFin 0)
     rintro ⟨X, ζ, hζ, hX⟩
     have h := congrFun (congrFun (hX 0) 0) 0
-    simp only [basis, Fin.isValue, ↓reduceIte, firstBasisTensor, Nat.reduceMul,
+    simp only [basisFin, Fin.isValue, ↓reduceIte, firstBasisTensor, Nat.reduceMul,
       Fin.reduceEq, or_false, Matrix.of_apply, one_ne_zero, secondBasisTensor,
       mul_zero, Matrix.coe_units_inv, Matrix.inv_subsingleton,
       Ring.inverse_eq_inv', zero_mul, Matrix.smul_apply, Matrix.zero_apply,
@@ -160,20 +151,20 @@ private theorem basis_not_gaugePhaseEquiv :
   · exact absurd rfl hjk
 
 /-- The two representatives with weights $(1/\sqrt 2,1)$ form a
-basis-of-normal-tensors decomposition in left-canonical gauge; the weights
+basisFin-of-normal-tensors decomposition in left-canonical gauge; the weights
 satisfy the normalization of line 246 (`weight_globally_normalized`). Each
 representative occurs once, so equality of weights within a fixed representative
 is vacuous and does not equate these two displayed weights.
 
 Source: arXiv:1606.00608, canonical-form normalization at lines 224--246 and
 the BNT decomposition `eq:II_ABasicTensors`, lines 271--301. -/
-theorem sectors_isLeftCanonicalBNTPresentation :
-    MPSTensor.IsLeftCanonicalBNTPresentation sectors := by
-  refine ⟨⟨by simp [sectors], fun _ _ _ => rfl, basis_isNormalTensor, ?_⟩, ?_⟩
+private theorem sectorsFin_isLeftCanonicalBNTPresentation :
+    MPSTensor.IsLeftCanonicalBNTPresentation sectorsFin := by
+  refine ⟨⟨by simp [sectorsFin], fun _ _ _ => rfl, basisFin_isNormalTensor, ?_⟩, ?_⟩
   · rw [MPSTensor.HasBNTSectorData]
-    simpa [sectors] using
+    exact
       (MPSTensor.exists_eventually_linearIndependent_of_normalTensor_blocks_not_gaugePhaseEquiv
-        basis basis_isNormalTensor basis_not_gaugePhaseEquiv)
+        basisFin basisFin_isNormalTensor basisFin_not_gaugePhaseEquiv)
   · intro s
     fin_cases s
     · change MPTensor.IsLeftCanonical firstBasisTensor
@@ -208,39 +199,98 @@ direct sum.
 
 Source: arXiv:1606.00608, Definition `defnbi` of biCF, lines 317--326; the
 condition is used in the Case-II argument in Appendix C.2, lines 1628--1633. -/
-theorem sectors_wordTupleSpanTop_one :
-    MPSTensor.WordTupleSpanTop sectors.basis 1 := by
-  change MPSTensor.WordTupleSpanTop basis 1
+private theorem sectorsFin_wordTupleSpanTop_one :
+    MPSTensor.WordTupleSpanTop sectorsFin.basis 1 := by
+  change MPSTensor.WordTupleSpanTop basisFin 1
   unfold MPSTensor.WordTupleSpanTop
   apply top_unique
   intro Y hY
   let w₀ : Fin 1 → Fin (3 * 3) := fun _ ↦ 0
   let w₁ : Fin 1 → Fin (3 * 3) := fun _ ↦ 8
-  have hw₀ : MPSTensor.wordTuple basis 1 w₀ ∈
-      Submodule.span ℂ (Set.range (MPSTensor.wordTuple basis 1)) :=
+  have hw₀ : MPSTensor.wordTuple basisFin 1 w₀ ∈
+      Submodule.span ℂ (Set.range (MPSTensor.wordTuple basisFin 1)) :=
     Submodule.subset_span (Set.mem_range_self w₀)
-  have hw₁ : MPSTensor.wordTuple basis 1 w₁ ∈
-      Submodule.span ℂ (Set.range (MPSTensor.wordTuple basis 1)) :=
+  have hw₁ : MPSTensor.wordTuple basisFin 1 w₁ ∈
+      Submodule.span ℂ (Set.range (MPSTensor.wordTuple basisFin 1)) :=
     Submodule.subset_span (Set.mem_range_self w₁)
   have hEq : Y =
-      (Y 0 0 0 * invSqrtTwo⁻¹) • MPSTensor.wordTuple basis 1 w₀ +
-        Y 1 0 0 • MPSTensor.wordTuple basis 1 w₁ := by
+      (Y 0 0 0 * invSqrtTwo⁻¹) • MPSTensor.wordTuple basisFin 1 w₀ +
+        Y 1 0 0 • MPSTensor.wordTuple basisFin 1 w₁ := by
     funext s
     fin_cases s <;> ext a b <;> fin_cases a <;> fin_cases b
-    · simp [MPSTensor.wordTuple, w₀, w₁, basis, firstBasisTensor,
+    · simp [MPSTensor.wordTuple, w₀, w₁, basisFin, firstBasisTensor,
         invSqrtTwo_ne_zero]
-    · simp [MPSTensor.wordTuple, w₀, w₁, basis, secondBasisTensor]
+    · simp [MPSTensor.wordTuple, w₀, w₁, basisFin, secondBasisTensor]
   rw [hEq]
   exact Submodule.add_mem _
     (Submodule.smul_mem _ _ hw₀) (Submodule.smul_mem _ _ hw₁)
 
+/-! ### The decomposition on the pair alphabet
+
+The representatives above are written on the alphabet `Fin (3 * 3)`, where their entries are
+decided letter by letter.  The public data are their relabellings to the pair alphabet
+`Fin 3 × Fin 3` along `finProdFinEquiv`. -/
+
+/-- The two bond-one representatives on disjoint physical supports, on the pair alphabet:
+the first is supported on `(0,0)` and `(1,1)`, the second on `(2,2)`. -/
+noncomputable def basis (s : Fin 2) : MPOTensor 3 1 :=
+  Kraus.reindexPhysical finProdFinEquiv (basisFin s)
+
+/-- The source-faithful two-sector decomposition, with one copy per representative. -/
+noncomputable def sectors : MPSTensor.SectorDecomposition (Fin 3 × Fin 3) :=
+  sectorsFin.reindexPhysical finProdFinEquiv
+
+/-- Copy independence is automatic because every representative has one copy. -/
+lemma weights_copy_independent :
+    ∀ (s : Fin sectors.basisCount) (q q' : Fin (sectors.copies s)),
+      sectors.weight s q = sectors.weight s q' := by
+  intro s q q'
+  fin_cases q
+  fin_cases q'
+  rfl
+
+/-- The two normal representatives have disjoint physical support. -/
+lemma basis_disjoint_support :
+    ∀ i, basis 0 i ≠ 0 → basis 1 i = 0 :=
+  fun i ↦ basisFin_disjoint_support (finProdFinEquiv i)
+
+/-- Each of the two displayed bond-one representatives is a normal tensor.
+
+Source: arXiv:1606.00608, the normal representatives in the BNT decomposition
+`eq:II_ABasicTensors`, lines 271--301. -/
+lemma basis_isNormalTensor (s : Fin 2) : MPTensor.IsNormalTensor (basis s) :=
+  (basisFin_isNormalTensor s).reindexPhysical finProdFinEquiv
+
+/-- The two representatives with weights $(1/\sqrt 2,1)$ form a basis-of-normal-tensors
+decomposition in left-canonical gauge; the weights satisfy the normalization of line 246
+(`weight_globally_normalized`).
+
+Source: arXiv:1606.00608, canonical-form normalization at lines 224--246 and
+the BNT decomposition `eq:II_ABasicTensors`, lines 271--301. -/
+theorem sectors_isLeftCanonicalBNTPresentation :
+    MPSTensor.IsLeftCanonicalBNTPresentation sectors :=
+  MPSTensor.SectorDecomposition.IsLeftCanonicalBNTPresentation.reindexPhysical
+    sectorsFin_isLeftCanonicalBNTPresentation finProdFinEquiv
+
+/-- The letters `(0,0)` and `(2,2)` independently span the two bond-one
+representatives, so their simultaneous one-letter tuple span is the entire
+direct sum.
+
+Source: arXiv:1606.00608, Definition `defnbi` of biCF, lines 317--326; the
+condition is used in the Case-II argument in Appendix C.2, lines 1628--1633. -/
+theorem sectors_wordTupleSpanTop_one :
+    MPSTensor.WordTupleSpanTop sectors.basis 1 :=
+  (MPSTensor.wordTupleSpanTop_reindexPhysical_equiv finProdFinEquiv basisFin 1).2
+    sectorsFin_wordTupleSpanTop_one
+
 /-- The first representative after common-weight absorption.
 Source: arXiv:1606.00608, lines 1646--1665. -/
-noncomputable def firstAbsorbed : MPSTensor (3 * 3) 1 :=
+noncomputable def firstAbsorbed : MPOTensor 3 1 :=
   fun i ↦ invSqrtTwo • basis 0 i
 
 private lemma firstAbsorbed_eq :
-    firstAbsorbed = fun i ↦ invSqrtTwo • firstBasisTensor i := by
+    firstAbsorbed =
+      Kraus.reindexPhysical finProdFinEquiv fun i ↦ invSqrtTwo • firstBasisTensor i := by
   rfl
 
 /-- The first absorbed representative has transfer spectral radius exactly $1/2$.
@@ -249,7 +299,8 @@ theorem spectralRadius_transferMap_firstAbsorbed :
     spectralRadius ℂ
         ((Module.End.toContinuousLinearMap (Matrix (Fin 1) (Fin 1) ℂ))
           (Kraus.transferMap firstAbsorbed)) = (2 : ENNReal)⁻¹ := by
-  rw [firstAbsorbed_eq, MPSTensor.spectralRadius_transferMap_smul
+  rw [firstAbsorbed_eq, Kraus.transferMap_reindexPhysical_equiv,
+    MPSTensor.spectralRadius_transferMap_smul
     invSqrtTwo invSqrtTwo_ne_zero firstBasisTensor]
   rw [(MPSTensor.isNormalTensor_of_bondDim_one_of_transferMap_eq_id
     firstBasisTensor firstBasis_transferMap).spectral_radius_one]
@@ -362,31 +413,32 @@ Source: arXiv:1606.00608, the BNT decomposition
 lemma ambient_eq_weighted_basis_blocks (i j : Fin 3) :
     ambient (i, j) = Matrix.diagonal fun s : Fin 2 ↦
       if s = 0 then
-        (invSqrtTwo • basis 0 (finProdFinEquiv (i, j))) 0 0
-      else (basis 1 (finProdFinEquiv (i, j))) 0 0 := by
+        (invSqrtTwo • basis 0 (i, j)) 0 0
+      else (basis 1 (i, j)) 0 0 := by
   ext s t
   fin_cases i <;> fin_cases j <;> fin_cases s <;> fin_cases t <;>
-    simp [ambient, basis, firstBasisTensor, secondBasisTensor,
+    simp [ambient, basis, basisFin, Kraus.reindexPhysical, firstBasisTensor,
+      secondBasisTensor,
       invSqrtTwo_mul_self, Matrix.smul_apply, finProdFinEquiv]
 
 /-- Evaluation of the assembled decomposition in its two flattened bond
 coordinates.
 Source: arXiv:1606.00608, canonical-form assembly in equation `Eq19`, lines
 304--308. -/
-private theorem sectors_toTensor_apply
+private theorem sectorsFin_toTensor_apply
     (p : Fin (3 * 3)) (a b : Fin 2) :
-    sectors.toTensor p a b =
+    sectorsFin.toTensor p a b =
       (Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv
-        (Matrix.blockDiagonal' fun k : Fin 2 => weight k • basis k p)) a b := by
-  have hflat (k : Fin 2) : sectors.flatIndexEquiv.symm k =
-      ⟨k, ⟨0, sectors.copies_pos k⟩⟩ := by
+        (Matrix.blockDiagonal' fun k : Fin 2 => weight k • basisFin k p)) a b := by
+  have hflat (k : Fin 2) : sectorsFin.flatIndexEquiv.symm k =
+      ⟨k, ⟨0, sectorsFin.copies_pos k⟩⟩ := by
     change (finSigmaFinEquiv : (Σ _s : Fin 2, Fin 1) ≃ Fin 2).symm k = ⟨k, 0⟩
     fin_cases k <;> rfl
   simp only [MPSTensor.SectorDecomposition.toTensor,
     MPTensor.toTensorFromBlocks]
   have hBlocks :
-      (fun k => sectors.flatWeight k • sectors.flatBasis k p) =
-        fun k : Fin 2 => weight k • basis k p := by
+      (fun k => sectorsFin.flatWeight k • sectorsFin.flatBasis k p) =
+        fun k : Fin 2 => weight k • basisFin k p := by
     funext k
     unfold MPSTensor.SectorDecomposition.flatWeight
       MPSTensor.SectorDecomposition.flatBasis
@@ -399,34 +451,29 @@ private theorem sectors_toTensor_apply
 bond-one representatives.
 Source: arXiv:1606.00608, the BNT display `eq:II_ABasicTensors` and its
 canonical-form assembly `Eq19`, lines 271--308. -/
-private theorem sectors_toTensor_eq_diagonal (p : Fin (3 * 3)) :
-    sectors.toTensor p = Matrix.diagonal fun s : Fin 2 =>
-      if s = 0 then (invSqrtTwo • basis 0 p) 0 0 else (basis 1 p) 0 0 := by
+private theorem sectorsFin_toTensor_eq_diagonal (p : Fin (3 * 3)) :
+    sectorsFin.toTensor p = Matrix.diagonal fun s : Fin 2 =>
+      if s = 0 then (invSqrtTwo • basisFin 0 p) 0 0 else (basisFin 1 p) 0 0 := by
   let e : (Σ _s : Fin 2, Fin 1) ≃ Fin 2 := finSigmaFinEquiv
   have hsymm (s : Fin 2) : e.symm s = ⟨s, 0⟩ := by
     fin_cases s <;> rfl
-  change (fun a : Fin 2 => fun b : Fin 2 => sectors.toTensor p a b) = _
+  change (fun a : Fin 2 => fun b : Fin 2 => sectorsFin.toTensor p a b) = _
   funext a b
-  rw [sectors_toTensor_apply]
+  rw [sectorsFin_toTensor_apply]
   change (Matrix.reindex e e (Matrix.blockDiagonal' fun k : Fin 2 =>
-      weight k • basis k p)) a b = _
+      weight k • basisFin k p)) a b = _
   simp only [Matrix.reindex_apply, Matrix.submatrix_apply, hsymm]
   fin_cases a <;> fin_cases b <;>
     simp [Matrix.blockDiagonal'_apply, weight]
 
-/-- The doubled-index ambient tensor is exactly the source canonical-form
-assembly, not merely an MPO with the same periodic contractions.
+/-- The ambient tensor is exactly the source canonical-form assembly, not merely an MPO with the
+same periodic contractions.
 Source: arXiv:1606.00608, canonical form at lines 237--246 and equations
 `eq:II_ABasicTensors` and `Eq19`, lines 271--308. -/
-theorem ambient_toMPSTensor_eq_sectors_toTensor :
-    ambient.toMPSTensor = sectors.toTensor := by
-  funext p
-  rw [← finProdFinEquiv.apply_symm_apply p]
-  obtain ⟨i, j⟩ := finProdFinEquiv.symm p
-  change ambient ((finProdFinEquiv (i, j)).divNat, (finProdFinEquiv (i, j)).modNat) = _
-  rw [MPSTensor.finProdFinEquiv_divNat i j,
-    MPSTensor.finProdFinEquiv_modNat i j]
-  rw [sectors_toTensor_eq_diagonal]
+theorem ambient_eq_sectors_toTensor : ambient = sectors.toTensor := by
+  funext ⟨i, j⟩
+  change ambient (i, j) = sectorsFin.toTensor (finProdFinEquiv (i, j))
+  rw [sectorsFin_toTensor_eq_diagonal]
   exact ambient_eq_weighted_basis_blocks i j
 
 /-- The ambient MPO is in BNT-refined horizontal form, with the
@@ -444,66 +491,65 @@ theorem ambient_isHorizontalCF : MPOTensor.IsHorizontalCF ambient := by
     rw [show X = 1 by rfl]
     simp
   intro p
-  rw [ambient_toMPSTensor_eq_sectors_toTensor]
+  rw [ambient_eq_sectors_toTensor]
   simp only [hGauge, Units.val_one, inv_one, one_mul, mul_one]
   exact (cast_eq _ _).symm
 
-/-- The doubled physical-trace transfer of the first normal representative is
+/-- The physical-trace transfer of the first normal representative is
 the nonzero scalar $2/\sqrt 2$ on its one-dimensional bond space.
 Source: arXiv:1606.00608, the transfer matrices $\mathcal B_k$ in Definition
 4.7, lines 815--822. -/
-private theorem doubledPhysTraceTransfer_firstBasisTensor :
-    doubledPhysTraceTransfer 3 firstBasisTensor =
+private theorem physTraceTransfer_basis_zero :
+    physTraceTransfer (basis 0) =
       (2 * invSqrtTwo) • (1 : Matrix (Fin 1) (Fin 1) ℂ) := by
   ext a b
   fin_cases a
   fin_cases b
-  simp [doubledPhysTraceTransfer, firstBasisTensor, Fin.sum_univ_succ,
-    Matrix.smul_apply, finProdFinEquiv]
+  simp [physTraceTransfer, basis, basisFin, Kraus.reindexPhysical, firstBasisTensor,
+    Fin.sum_univ_succ, Matrix.smul_apply, finProdFinEquiv]
   ring
 
-/-- The doubled physical-trace transfer of the second normal representative
+/-- The physical-trace transfer of the second normal representative
 is the identity on its one-dimensional bond space.
 Source: arXiv:1606.00608, the transfer matrices $\mathcal B_k$ in Definition
 4.7, lines 815--822. -/
-private theorem doubledPhysTraceTransfer_secondBasisTensor :
-    doubledPhysTraceTransfer 3 secondBasisTensor =
-      (1 : Matrix (Fin 1) (Fin 1) ℂ) := by
+private theorem physTraceTransfer_basis_one :
+    physTraceTransfer (basis 1) = (1 : Matrix (Fin 1) (Fin 1) ℂ) := by
   ext a b
   fin_cases a
   fin_cases b
-  simp [doubledPhysTraceTransfer, secondBasisTensor, Fin.sum_univ_succ,
-    finProdFinEquiv]
+  simp [physTraceTransfer, basis, basisFin, Kraus.reindexPhysical, secondBasisTensor,
+    Fin.sum_univ_succ, finProdFinEquiv]
 
 /-- Neither displayed BNT representative has nilpotent physical-trace
 transfer. This proves only the representative-level nonnilpotency clause and
 does not assert simple canonical form, simplicity, the MPDO property, or SAL.
 Source: arXiv:1606.00608, Definition 4.7, lines 815--822. -/
-theorem sectors_basis_doubledPhysTraceTransfer_not_isNilpotent
+theorem sectors_basis_physTraceTransfer_not_isNilpotent
     (j : Fin sectors.basisCount) :
-    ¬ IsNilpotent (doubledPhysTraceTransfer 3 (sectors.basis j)) := by
+    ¬ IsNilpotent (physTraceTransfer (sectors.basis j)) := by
   change Fin 2 at j
-  change ¬ IsNilpotent (doubledPhysTraceTransfer 3 (basis j))
+  change ¬ IsNilpotent (physTraceTransfer (basis j))
   fin_cases j
-  · change ¬ IsNilpotent (doubledPhysTraceTransfer 3 firstBasisTensor)
-    rw [doubledPhysTraceTransfer_firstBasisTensor]
+  · change ¬ IsNilpotent (physTraceTransfer (basis 0))
+    rw [physTraceTransfer_basis_zero]
     intro hnil
     have htrace := Matrix.isNilpotent_trace_of_isNilpotent hnil
     apply invSqrtTwo_ne_zero
     simpa [Matrix.trace] using htrace.eq_zero
-  · change ¬ IsNilpotent (doubledPhysTraceTransfer 3 secondBasisTensor)
-    rw [doubledPhysTraceTransfer_secondBasisTensor]
+  · change ¬ IsNilpotent (physTraceTransfer (basis 1))
+    rw [physTraceTransfer_basis_one]
     exact not_isNilpotent_one
 
 /-- The ambient tensor has the displayed simple canonical form: it generates
 positive periodic operators, its two normal BNT representatives have
 nonnilpotent physical-trace transfer, and their weighted direct sum is exactly
-the ambient doubled-index tensor.
+the ambient tensor.
 Source: arXiv:1606.00608, canonical form at lines 224--246, simplicity at
 lines 815--822, and the Case-II standing hypothesis at line 1628. -/
 theorem ambient_isSimpleCanonicalForm : IsSimpleCanonicalForm ambient := by
   refine ⟨ambient_isMPDO, sectors, sectors_isLeftCanonicalBNTPresentation,
-    sectors_basis_doubledPhysTraceTransfer_not_isNilpotent, ?_⟩
+    sectors_basis_physTraceTransfer_not_isNilpotent, ?_⟩
   have hTotal : sectors.totalDim = 2 := by
     change (∑ _ : Fin 2, 1) = 2
     simp
@@ -515,7 +561,7 @@ theorem ambient_isSimpleCanonicalForm : IsSimpleCanonicalForm ambient := by
     rw [show X = 1 by rfl]
     simp
   intro p
-  rw [ambient_toMPSTensor_eq_sectors_toTensor]
+  rw [ambient_eq_sectors_toTensor]
   simp only [hGauge, Units.val_one, inv_one, one_mul, mul_one]
   exact (cast_eq _ _).symm
 
@@ -532,8 +578,7 @@ For positive lengths this is the normalization factor implicit in the MPDO
 and SAL standing assumptions of arXiv:1606.00608, lines 623--630, 811--815,
 and 1628. -/
 theorem trace_mpo_ambient (N : ℕ) : Matrix.trace (mpo ambient N) = 2 := by
-  rw [trace_mpo_eq_trace_verticalLoop_pow,
-    verticalLoop_eq_physTraceTransfer, physTraceTransfer_ambient, one_pow]
+  rw [trace_mpo_eq_trace_physTraceTransfer_pow, physTraceTransfer_ambient, one_pow]
   simp [Matrix.trace]
 
 /-- The trace used to normalize every positive-length ambient MPDO is strictly positive.
@@ -840,8 +885,8 @@ theorem printed_absorbed_normality_step_is_false :
       (∀ i, basis 0 i ≠ 0 → basis 1 i = 0) ∧
       (∀ i j, ambient (i, j) = Matrix.diagonal fun s : Fin 2 ↦
         if s = 0 then
-          (invSqrtTwo • basis 0 (finProdFinEquiv (i, j))) 0 0
-        else (basis 1 (finProdFinEquiv (i, j))) 0 0) ∧
+          (invSqrtTwo • basis 0 (i, j)) 0 0
+        else (basis 1 (i, j)) 0 0) ∧
       physTraceTransfer ambient * physTraceTransfer ambient =
         physTraceTransfer ambient ∧
       spectralRadius ℂ
@@ -875,7 +920,7 @@ theorem
       IsSimpleCanonicalForm ambient ∧
       MPSTensor.IsLeftCanonicalBNTPresentation sectors ∧
       MPSTensor.WordTupleSpanTop sectors.basis 1 ∧
-      ambient.toMPSTensor = sectors.toTensor ∧
+      ambient = sectors.toTensor ∧
       (∀ (s : Fin sectors.basisCount)
           (q q' : Fin (sectors.copies s)),
         sectors.weight s q = sectors.weight s q') ∧
@@ -892,7 +937,7 @@ theorem
   exact ⟨ambient_isMPDO, fun N _hN => trace_mpo_ambient_pos N,
     ambient_isSAL, ambient_isSimpleCanonicalForm,
     sectors_isLeftCanonicalBNTPresentation, sectors_wordTupleSpanTop_one,
-    ambient_toMPSTensor_eq_sectors_toTensor, weights_copy_independent,
+    ambient_eq_sectors_toTensor, weights_copy_independent,
     rfl, rfl, weight_globally_normalized.1, weight_globally_normalized.2,
     basis_isNormalTensor, basis_disjoint_support, ambient_literal_physTrace_ZCL,
     spectralRadius_transferMap_firstAbsorbed,

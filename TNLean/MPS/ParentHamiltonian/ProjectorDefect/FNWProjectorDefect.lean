@@ -335,12 +335,12 @@ private theorem fnwGlobalPhysicalReverseES_map_boundaryRange
     letI : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
     (fnwBoundaryRange ρ hρ A ((ℓ + m) + r)).map
         (fnwGlobalPhysicalReverseES d ℓ m r).toLinearEquiv.toLinearMap =
-      groundSpaceES A (r + m + ℓ) := by
+      ((groundSpace A (r + m + ℓ)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   let : NormedAddCommGroup Mat := Matrix.toMatrixNormedAddCommGroup ρ hρ
   ext x
   constructor
   · rintro ⟨v, ⟨B, rfl⟩, rfl⟩
-    rw [mem_groundSpaceES_iff]
+    rw [mem_map_groundSpace_iff]
     change (WithLp.linearEquiv 2 ℂ (NSiteSpace d (r + m + ℓ)))
       (fnwGlobalPhysicalReverseES d ℓ m r
         (fnwBoundaryMapCLM ρ hρ A ((ℓ + m) + r) B)) ∈
@@ -350,7 +350,7 @@ private theorem fnwGlobalPhysicalReverseES_map_boundaryRange
       LinearEquiv.apply_symm_apply]
     exact LinearMap.mem_range_self (groundSpaceMap A (r + m + ℓ)) B
   · intro hx
-    rw [mem_groundSpaceES_iff] at hx
+    rw [mem_map_groundSpace_iff] at hx
     obtain ⟨B, hB⟩ := hx
     refine ⟨fnwBoundaryMapCLM ρ hρ A ((ℓ + m) + r) B, ⟨B, rfl⟩, ?_⟩
     change fnwGlobalPhysicalReverseES d ℓ m r
@@ -371,7 +371,8 @@ private theorem norm_fnwOverlapRange_projector_defect_eq_wholeIncrement
         (fnwBoundaryRange ρ hρ A ((ℓ + m) + r)).starProjection‖ =
       ‖(reassocTailBoundaryMapES A r m ℓ).range.starProjection ∘L
           (leftBoundaryMapES A (r + m) ℓ).range.starProjection -
-        (groundSpaceES A (r + m + ℓ)).starProjection‖ := by
+        ((groundSpace A (r + m + ℓ)).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection‖ := by
   weighted_matrix_instances ρ hρ
   let E := fnwGlobalPhysicalReverseES d ℓ m r
   let U := LinearMap.range (fnwLeftOverlapMap ρ hρ A ℓ m r)
@@ -384,14 +385,16 @@ private theorem norm_fnwOverlapRange_projector_defect_eq_wholeIncrement
   have hV : V.map E.toLinearEquiv.toLinearMap =
       (leftBoundaryMapES A (r + m) ℓ).range :=
     fnwGlobalPhysicalReverseES_map_rightOverlapRange ρ hρ A ℓ m r
-  have hW : W.map E.toLinearEquiv.toLinearMap = groundSpaceES A (r + m + ℓ) :=
+  have hW : W.map E.toLinearEquiv.toLinearMap = ((groundSpace A (r + m + ℓ)).map (WithLp.linearEquiv
+      2 ℂ _).symm.toLinearMap) :=
     fnwGlobalPhysicalReverseES_map_boundaryRange ρ hρ A ℓ m r
   have hconj :
       E.toContinuousLinearEquiv.toContinuousLinearMap.comp
         (X.comp E.symm.toContinuousLinearEquiv.toContinuousLinearMap) =
       (reassocTailBoundaryMapES A r m ℓ).range.starProjection ∘L
           (leftBoundaryMapES A (r + m) ℓ).range.starProjection -
-        (groundSpaceES A (r + m + ℓ)).starProjection := by
+        ((groundSpace A (r + m + ℓ)).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection := by
     apply ContinuousLinearMap.ext
     intro v
     simp only [ContinuousLinearMap.comp_apply, X, sub_apply]
@@ -404,7 +407,8 @@ private theorem norm_fnwOverlapRange_projector_defect_eq_wholeIncrement
     have hVp' : (leftBoundaryMapES A (r + m) ℓ).range.starProjection v =
         E (V.starProjection (E.symm v)) := by
       simpa only [hV] using hVp
-    have hWp' : (groundSpaceES A (r + m + ℓ)).starProjection v =
+    have hWp' : ((groundSpace A (r + m + ℓ)).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap).starProjection v =
         E (W.starProjection (E.symm v)) := by
       simpa only [hW] using hWp
     rw [hVp', hWp', map_sub]
@@ -449,7 +453,8 @@ theorem wholeIncrement_groundProjection_defect_le_fnw [NeZero D]
     (r ℓ : ℕ) (_hℓ : 0 < ℓ) :
     ‖(reassocTailBoundaryMapES A r m ℓ).range.starProjection ∘L
           (leftBoundaryMapES A (r + m) ℓ).range.starProjection -
-        (groundSpaceES A (r + m + ℓ)).starProjection‖ ≤
+        ((groundSpace A (r + m + ℓ)).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection‖ ≤
       fnwMixingQuantity ρ hρ A htr m /
           fnwLowerBoundaryConstant ρ hρ A m +
         fnwMixingQuantity ρ hρ A htr m ^ 2 /
@@ -470,7 +475,8 @@ theorem wholeIncrement_groundProjection_defect_le_fnw_factored [NeZero D]
     (r ℓ : ℕ) (hℓ : 0 < ℓ) :
     ‖(reassocTailBoundaryMapES A r m ℓ).range.starProjection ∘L
           (leftBoundaryMapES A (r + m) ℓ).range.starProjection -
-        (groundSpaceES A (r + m + ℓ)).starProjection‖ ≤
+        ((groundSpace A (r + m + ℓ)).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection‖ ≤
       fnwMixingQuantity ρ hρ A htr m *
           (1 + fnwMixingQuantity ρ hρ A htr m) /
         fnwLowerBoundaryConstant ρ hρ A m := by
@@ -505,7 +511,8 @@ theorem exists_wholeIncrement_groundProjection_defect_le_fnw
       ∀ m : ℕ, L ≤ m → ∀ r ℓ : ℕ, 0 < ℓ →
       ‖(reassocTailBoundaryMapES A r m ℓ).range.starProjection ∘L
             (leftBoundaryMapES A (r + m) ℓ).range.starProjection -
-          (groundSpaceES A (r + m + ℓ)).starProjection‖ ≤
+          ((groundSpace A (r + m + ℓ)).map (WithLp.linearEquiv 2 ℂ
+              _).symm.toLinearMap).starProjection‖ ≤
         fnwMixingQuantity ρ hρ A htr m /
             fnwLowerBoundaryConstant ρ hρ A m +
           fnwMixingQuantity ρ hρ A htr m ^ 2 /

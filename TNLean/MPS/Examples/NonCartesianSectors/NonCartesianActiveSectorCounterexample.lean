@@ -8,6 +8,8 @@ import QICLean.Channel.KrausMap.KrausGauge
 import TNLean.MPS.Examples.NonCartesianSectors.NonCartesianActiveSectorObstruction
 import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge
 import TNLean.MPS.Transfer.Primitivity.Equivalence
+import TNLean.MPS.CanonicalForm.PhysicalReindex
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Normalization of the rank-one neighboring-trace obstruction
@@ -52,21 +54,15 @@ private def normalizingCoefficientWitness : Matrix (Fin 2) (Fin 2) ℂ :=
 /-- The exact value of the candidate's adjoint transfer map on the test
 matrix. -/
 private lemma adjointMap_normalizingCoefficientWitness :
-    Kraus.adjointMap tensor.toMPSTensor normalizingCoefficientWitness =
+    Kraus.adjointMap tensor normalizingCoefficientWitness =
       !![75 / 8, 9 / 40; 9 / 40, 303 / 5000] := by
   have hletter (p q : Fin 4) :
-      tensor.toMPSTensor (finProdFinEquiv (p, q)) =
-        if p = q then sectorMatrix p else 0 := by
-    change tensor ((finProdFinEquiv (p, q)).divNat, (finProdFinEquiv (p, q)).modNat) = _
-    rw [MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
-    rfl
+      tensor (p, q) = if p = q then sectorMatrix p else 0 := rfl
   have hadj :
-      Kraus.adjointMap tensor.toMPSTensor normalizingCoefficientWitness =
+      Kraus.adjointMap tensor normalizingCoefficientWitness =
         ∑ k : Fin 4,
           (sectorMatrix k)ᴴ * normalizingCoefficientWitness * sectorMatrix k := by
-    rw [Kraus.adjointMap_apply]
-    rw [← Equiv.sum_comp (finProdFinEquiv : Fin 4 × Fin 4 ≃ Fin (4 * 4))]
-    rw [Fintype.sum_prod_type]
+    rw [Kraus.adjointMap_apply, Fintype.sum_prod_type]
     simp_rw [hletter]
     simp [Fin.sum_univ_four]
   rw [hadj]
@@ -100,10 +96,10 @@ Its `Uᴴ D U` factorization has diagonal entries `85 / 8` and
 `19861 / 21250`, hence determinant `19861 / 2000`. -/
 private lemma normalizingCoefficientWitness_sub_adjointMap_posDef :
     (normalizingCoefficientWitness -
-      Kraus.adjointMap tensor.toMPSTensor normalizingCoefficientWitness).PosDef := by
+      Kraus.adjointMap tensor normalizingCoefficientWitness).PosDef := by
   have hFactorization :
       normalizingCoefficientWitness -
-          Kraus.adjointMap tensor.toMPSTensor normalizingCoefficientWitness =
+          Kraus.adjointMap tensor normalizingCoefficientWitness =
         normalizingCoefficientGapFactorᴴ * normalizingCoefficientGapDiagonal *
           normalizingCoefficientGapFactor := by
     rw [adjointMap_normalizingCoefficientWitness]
@@ -157,7 +153,7 @@ that one of all its sector coefficients has modulus one. -/
 lemma transferMap_posDef_eigenvalue_lt_one
     {rho : Matrix (Fin 2) (Fin 2) ℂ} {r : ℝ}
     (hrho : rho.PosDef)
-    (hEig : Kraus.transferMap tensor.toMPSTensor rho = (r : ℂ) • rho) :
+    (hEig : Kraus.transferMap tensor rho = (r : ℂ) • rho) :
     r < 1 := by
   have hrho_ne : rho ≠ 0 := (Matrix.PosDef.isUnit hrho).ne_zero
   have htracePos :
@@ -167,35 +163,35 @@ lemma transferMap_posDef_eigenvalue_lt_one
   have hgapPos :
       0 < Matrix.trace
         ((normalizingCoefficientWitness -
-          Kraus.adjointMap tensor.toMPSTensor normalizingCoefficientWitness) *
+          Kraus.adjointMap tensor normalizingCoefficientWitness) *
             rho) :=
     normalizingCoefficientWitness_sub_adjointMap_posDef.trace_mul_pos_of_posSemidef_of_ne_zero
       hrho.posSemidef hrho_ne
   have hEigMap :
-      Kraus.map tensor.toMPSTensor rho = (r : ℂ) • rho := by
+      Kraus.map tensor rho = (r : ℂ) • rho := by
     rw [← Kraus.mapLM_apply]
     exact hEig
   have hgapTrace :
       Matrix.trace
           ((normalizingCoefficientWitness -
-            Kraus.adjointMap tensor.toMPSTensor normalizingCoefficientWitness) *
+            Kraus.adjointMap tensor normalizingCoefficientWitness) *
               rho) =
         (((1 - r : ℝ) : ℂ) *
           Matrix.trace (normalizingCoefficientWitness * rho)) := by
     calc
       Matrix.trace
           ((normalizingCoefficientWitness -
-            Kraus.adjointMap tensor.toMPSTensor normalizingCoefficientWitness) *
+            Kraus.adjointMap tensor normalizingCoefficientWitness) *
               rho) =
           Matrix.trace (normalizingCoefficientWitness * rho) -
             Matrix.trace
-              (Kraus.adjointMap tensor.toMPSTensor
+              (Kraus.adjointMap tensor
                 normalizingCoefficientWitness * rho) := by
               rw [Matrix.sub_mul, Matrix.trace_sub]
       _ = Matrix.trace (normalizingCoefficientWitness * rho) -
             Matrix.trace
               (normalizingCoefficientWitness *
-                Kraus.map tensor.toMPSTensor rho) := by
+                Kraus.map tensor rho) := by
               rw [Kraus.trace_mul_map_eq_trace_adjointMap_mul]
       _ = Matrix.trace (normalizingCoefficientWitness * rho) -
             Matrix.trace
@@ -225,19 +221,16 @@ as an immediate consequence of the candidate's strict estimate. -/
 lemma transferMap_posDef_eigenvalue_le_one
     {rho : Matrix (Fin 2) (Fin 2) ℂ} {r : ℝ}
     (hrho : rho.PosDef)
-    (hEig : Kraus.transferMap tensor.toMPSTensor rho = (r : ℂ) • rho) :
+    (hEig : Kraus.transferMap tensor rho = (r : ℂ) • rho) :
     r ≤ 1 :=
   (transferMap_posDef_eigenvalue_lt_one hrho hEig).le
 
-/-- The associated MPS tensor has a nonzero letter. -/
-lemma exists_toMPSTensor_apply_ne_zero :
-    ∃ i, tensor.toMPSTensor i ≠ 0 := by
-  refine ⟨finProdFinEquiv ((0 : Fin 4), (0 : Fin 4)), ?_⟩
+/-- The candidate tensor has a nonzero letter. -/
+lemma exists_apply_ne_zero : ∃ i, tensor i ≠ 0 := by
+  refine ⟨((0 : Fin 4), (0 : Fin 4)), ?_⟩
   intro hzero
   have hentry := congrFun (congrFun hzero (0 : Fin 2)) (0 : Fin 2)
-  norm_num [MPOTensor.toMPSTensor, tensor, sectorMatrix, leftPairing,
-    rightPairing, MPSTensor.finProdFinEquiv_divNat,
-    MPSTensor.finProdFinEquiv_modNat] at hentry
+  norm_num [tensor, sectorMatrix, leftPairing, rightPairing] at hentry
 
 /-- The candidate is a nonzero scalar multiple of a normal tensor whose
 Perron-gauged representative is injective and left-canonical.
@@ -248,22 +241,20 @@ after scalar normalization, the already-constructed Perron gauge gives the
 representative `B`. The exact test-matrix estimate above gives
 `0 < |μ| < 1`. -/
 private theorem exists_scalar_and_leftCanonical_normalTensor_representations :
-    ∃ (A : MPOTensor 4 2) (mu : ℂ) (B : MPSTensor (4 * 4) 2),
+    ∃ (A : MPOTensor 4 2) (mu : ℂ) (B : MPOTensor 4 2),
       mu ≠ 0 ∧ ‖mu‖ < 1 ∧ tensor = mu • A ∧
-        MPTensor.GaugeEquiv A.toMPSTensor B ∧
+        MPTensor.IsNormalTensor A ∧
         Kraus.IsInjective B ∧ MPTensor.IsLeftCanonical B ∧
         MPTensor.IsNormalTensor B ∧
-        MPTensor.GaugeEquiv tensor.toMPSTensor (mu • B) := by
+        MPTensor.GaugeEquiv tensor (mu • B) := by
   let _ : NeZero 2 := ⟨by omega⟩
-  have hNormal : Kraus.IsNormal tensor.toMPSTensor :=
-    Kraus.IsInjective.isNormal tensor_isInjective
-  have hIrr : Kraus.IsIrreducibleFamily tensor.toMPSTensor :=
-    MPSTensor.isIrreducibleFamily_of_isNormal tensor.toMPSTensor hNormal
+  have hIrr : Kraus.IsIrreducibleFamily tensor :=
+    Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM _
+      (Kraus.injective_implies_irreducibleCP _ tensor_isInjective)
   obtain ⟨rho, r, hrho, hr, hEig⟩ :=
-    MPSTensor.exists_posDef_transferMap_eigenvector_of_irreducible tensor.toMPSTensor
-      hIrr exists_toMPSTensor_apply_ne_zero
-  have hr_lt_one : r < 1 :=
-    transferMap_posDef_eigenvalue_lt_one hrho hEig
+    MPSTensor.exists_posDef_transferMap_eigenvector_of_irreducible tensor hIrr
+      exists_apply_ne_zero
+  have hr_lt_one : r < 1 := transferMap_posDef_eigenvalue_lt_one hrho hEig
   let mu : ℂ := ((Real.sqrt r : ℝ) : ℂ)
   have hmu : mu ≠ 0 :=
     Complex.ofReal_ne_zero.mpr (Real.sqrt_pos.mpr hr).ne'
@@ -277,74 +268,58 @@ private theorem exists_scalar_and_leftCanonical_normalTensor_representations :
     ext ⟨i, j⟩ beta alpha
     change tensor (i, j) beta alpha = mu * (mu⁻¹ * tensor (i, j) beta alpha)
     rw [← mul_assoc, mul_inv_cancel₀ hmu, one_mul]
-  have hAinj : Kraus.IsInjective A.toMPSTensor := by
-    exact tensor_isInjective.smul (inv_ne_zero hmu)
-  have hANormal : Kraus.IsNormal A.toMPSTensor :=
-    Kraus.IsInjective.isNormal hAinj
-  have hAIrr : Kraus.IsIrreducibleFamily A.toMPSTensor :=
-    MPSTensor.isIrreducibleFamily_of_isNormal A.toMPSTensor hANormal
+  have hAinj : Kraus.IsInjective A := tensor_isInjective.smul (inv_ne_zero hmu)
+  have hANormal : Kraus.IsNormal A := hAinj.isNormal
+  have hAIrr : Kraus.IsIrreducibleFamily A :=
+    Kraus.isIrreducibleFamily_of_isIrreducibleMap_mapLM _
+      (Kraus.injective_implies_irreducibleCP _ hAinj)
   have hmumu : mu⁻¹ * starRingEnd ℂ mu⁻¹ = (r : ℂ)⁻¹ := by
     change (((Real.sqrt r : ℝ) : ℂ))⁻¹ *
         starRingEnd ℂ (((Real.sqrt r : ℝ) : ℂ))⁻¹ = (r : ℂ)⁻¹
     rw [map_inv₀, Complex.conj_ofReal, ← mul_inv, ← Complex.ofReal_mul,
       Real.mul_self_sqrt hr.le]
-  have hmap :
-      Kraus.transferMap A.toMPSTensor =
-        (r : ℂ)⁻¹ • Kraus.transferMap tensor.toMPSTensor := by
+  have hmap : Kraus.transferMap A = (r : ℂ)⁻¹ • Kraus.transferMap tensor := by
     apply LinearMap.ext
     intro X
-    change Kraus.transferMap (fun i ↦ mu⁻¹ • tensor.toMPSTensor i) X =
-      (r : ℂ)⁻¹ • Kraus.transferMap tensor.toMPSTensor X
+    change Kraus.transferMap (fun i ↦ mu⁻¹ • tensor i) X =
+      (r : ℂ)⁻¹ • Kraus.transferMap tensor X
     rw [MPSTensor.transferMap_smul, hmumu]
   have hr_ne : (r : ℂ) ≠ 0 := by exact_mod_cast hr.ne'
-  have hfix : Kraus.transferMap A.toMPSTensor rho = rho := by
+  have hfix : Kraus.transferMap A rho = rho := by
     rw [hmap, LinearMap.smul_apply, hEig, smul_smul,
       inv_mul_cancel₀ hr_ne, one_smul]
   have hRadius :
       spectralRadius ℂ
           ((Module.End.toContinuousLinearMap (Matrix (Fin 2) (Fin 2) ℂ))
-            (Kraus.transferMap A.toMPSTensor)) = 1 := by
+            (Kraus.transferMap A)) = 1 := by
     simpa using
       (spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
-        (Kraus.transferMap A.toMPSTensor)
-        (Kraus.transferMap_isCPMap A.toMPSTensor)
-        (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily
-          A.toMPSTensor hAIrr)
+        (Kraus.transferMap A) (Kraus.transferMap_isCPMap A)
+        (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hAIrr)
         rho 1 hrho (by norm_num) (by simpa using hfix))
-  obtain ⟨sigma, hsigma, hsigmaFix, hLeft, hGauge, hGaugeIrr⟩ :=
+  obtain ⟨sigma, _, _, hLeft, hGauge, _⟩ :=
     MPSTensor.exists_tpGauge_of_irreducible_spectralRadius_one hAIrr hRadius
-  have hGaugeNormal :
-      Kraus.IsNormal (Kraus.tpGauge A.toMPSTensor sigma) :=
-    MPTensor.isNormal_of_gaugeEquiv hANormal hGauge
-  have hGaugeNormalTensor :
-      MPTensor.IsNormalTensor (Kraus.tpGauge A.toMPSTensor sigma) :=
-    MPSTensor.isNormalTensor_of_isNormal_leftCanonical _ hGaugeNormal hLeft
-  have hGaugeInjective :
-      Kraus.IsInjective (Kraus.tpGauge A.toMPSTensor sigma) :=
-    MPTensor.isInjective_of_gaugeEquiv hAinj hGauge
-  have hTensorGauge :
-      MPTensor.GaugeEquiv tensor.toMPSTensor
-        (mu • Kraus.tpGauge A.toMPSTensor sigma) := by
+  have hGaugeNormalTensor : MPTensor.IsNormalTensor (Kraus.tpGauge A sigma) :=
+    MPSTensor.isNormalTensor_of_isNormal_leftCanonical _
+      (MPTensor.isNormal_of_gaugeEquiv hANormal hGauge) hLeft
+  have hTensorGauge : MPTensor.GaugeEquiv tensor (mu • Kraus.tpGauge A sigma) := by
     obtain ⟨X, hX⟩ := hGauge
     refine ⟨X, fun i ↦ ?_⟩
-    have hrecoverMPS := congrFun (congrArg MPOTensor.toMPSTensor hrecover) i
-    change mu • Kraus.tpGauge A.toMPSTensor sigma i =
-      X * tensor.toMPSTensor i * X⁻¹
-    rw [hX i, hrecoverMPS]
-    change mu • (X * A.toMPSTensor i * X⁻¹) =
-      X * (mu • A.toMPSTensor i) * X⁻¹
+    change mu • Kraus.tpGauge A sigma i = X * tensor i * X⁻¹
+    rw [hX i, show tensor i = mu • A i from congrFun hrecover i]
     simp only [Matrix.mul_smul, Matrix.smul_mul]
-  exact ⟨A, mu, Kraus.tpGauge A.toMPSTensor sigma, hmu, hmu_norm,
-    hrecover, hGauge, hGaugeInjective, hLeft, hGaugeNormalTensor, hTensorGauge⟩
+  exact ⟨A, mu, Kraus.tpGauge A sigma, hmu, hmu_norm, hrecover,
+    hGaugeNormalTensor.of_gaugeEquiv hGauge, MPTensor.isInjective_of_gaugeEquiv hAinj hGauge,
+    hLeft, hGaugeNormalTensor, hTensorGauge⟩
 
 /-- The candidate has an injective, left-canonical normal representative with
 a nonzero coefficient of norm strictly below one and the required gauge
 relation after scalar absorption. -/
 theorem exists_leftCanonical_normalTensor_scalar_representation :
-    ∃ (mu : ℂ) (B : MPSTensor (4 * 4) 2),
+    ∃ (mu : ℂ) (B : MPOTensor 4 2),
       mu ≠ 0 ∧ ‖mu‖ < 1 ∧ Kraus.IsInjective B ∧
         MPTensor.IsLeftCanonical B ∧ MPTensor.IsNormalTensor B ∧
-        MPTensor.GaugeEquiv tensor.toMPSTensor (mu • B) := by
+        MPTensor.GaugeEquiv tensor (mu • B) := by
   obtain ⟨_, mu, B, hmu, hmuNorm, _, _, hBInj, hBLeft, hBNormal,
       hTensorGauge⟩ :=
     exists_scalar_and_leftCanonical_normalTensor_representations
@@ -357,10 +332,10 @@ representative construction. -/
 theorem exists_normalTensor_scalar_representation :
     ∃ (A : MPOTensor 4 2) (mu : ℂ),
       mu ≠ 0 ∧ ‖mu‖ < 1 ∧ tensor = mu • A ∧
-        A.toMPSTensor.IsNormalTensor := by
-  obtain ⟨A, mu, _, hmu, hmuNorm, hrecover, hGauge, _, _, hBNormal, _⟩ :=
+        MPTensor.IsNormalTensor A := by
+  obtain ⟨A, mu, _, hmu, hmuNorm, hrecover, hANormal, _⟩ :=
     exists_scalar_and_leftCanonical_normalTensor_representations
-  exact ⟨A, mu, hmu, hmuNorm, hrecover, hBNormal.of_gaugeEquiv hGauge⟩
+  exact ⟨A, mu, hmu, hmuNorm, hrecover, hANormal⟩
 
 /-- Counterexample to the low-level implication asserting that injectivity,
 SAL, literal physical-trace idempotence, and being a nonzero scalar multiple
@@ -375,8 +350,8 @@ implication `(ii) ⇒ (iv)`. See
 <https://sirui-lu.com/QICLean/paper-gaps/cpsv16_unit_weight_rfp_scale_tension.pdf>. -/
 theorem full_lowLevel_counterexample :
     ∃ (K A : MPOTensor 4 2) (mu : ℂ),
-      mu ≠ 0 ∧ ‖mu‖ < 1 ∧ K = mu • A ∧ A.toMPSTensor.IsNormalTensor ∧
-      Kraus.IsInjective K.toMPSTensor ∧ K.IsSAL ∧
+      mu ≠ 0 ∧ ‖mu‖ < 1 ∧ K = mu • A ∧ MPTensor.IsNormalTensor A ∧
+      Kraus.IsInjective K ∧ K.IsSAL ∧
       physTraceTransfer K * physTraceTransfer K = physTraceTransfer K ∧
       (¬∃ F : PhysicalSectorFactorization K,
         Nonempty F.NeighboringTraceFactorization) := by

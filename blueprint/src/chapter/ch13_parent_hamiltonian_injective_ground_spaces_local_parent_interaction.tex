@@ -268,18 +268,18 @@ The sources also allow any positive local interaction with this kernel; the
 orthogonal projector is the canonical representative used here.
 
 \begin{definition}[Local ground space under the canonical \texorpdfstring{$\ell^2$}{l2} identification]\label{def:ground_space_es}
-    \lean{MPSTensor.groundSpaceES}
     \leanok
     \uses{def:nsite_space_parent,def:ground_space_parent}
     Let $\iota_L\colon(\Fin{d}^{L}\to\C)\simeq\ell^2(\Fin{d}^{L})$ be the
     canonical computational-basis identification. The local ground space under
     this $\ell^2$ identification is
     $G_L^{\mathrm{ES}}(A):=\iota_L(G_L(A))
-        \subseteq\ell^2(\Fin{d}^{L})$.
+        \subseteq\ell^2(\Fin{d}^{L})$, the image of $G_L(A)$ and not a
+    separate space.
 \end{definition}
 
 \begin{lemma}[Membership under the canonical \texorpdfstring{$\ell^2$}{l2} identification]\label{lem:mem_ground_space_es}
-    \lean{MPSTensor.mem_groundSpaceES_iff}
+    \lean{MPSTensor.mem_map_groundSpace_iff}
     \leanok
     \uses{def:ground_space_es,def:ground_space_parent}
     For $v\in\ell^2(\Fin{d}^{L})$, one has $v\in G_L^{\mathrm{ES}}(A)$ if and
@@ -332,11 +332,11 @@ orthogonal projector is the canonical representative used here.
 
 \begin{lemma}[Boundary map on a matrix unit]
     \label{thm:ground_space_map_es_single}
-    \lean{MPSTensor.groundSpaceMapES_single}
+    \lean{Matrix.frobeniusEquivEuclidean_single}
     \leanok
     \uses{def:ground_space_map_es}
     Let $e_{(b,a)}$ denote the Frobenius coordinate vector representing the
-    virtual matrix unit $E_{ab}$.  Then
+    virtual matrix unit $E_{ab}$, that is, $U(E_{ab})=e_{(b,a)}$.  Then
     $\Gamma_L^{\mathrm{ES}}(e_{(b,a)})=\iota_L(\Gamma_L(E_{ab}))$.
 \end{lemma}
 
@@ -369,7 +369,6 @@ orthogonal projector is the canonical representative used here.
 
 \begin{lemma}[Hilbert-space boundary-map injectivity]
     \label{thm:ground_space_map_es_injective_block}
-    \lean{MPSTensor.groundSpaceMapES_injective_of_isNBlkInjective}
     \leanok
     \uses{def:ground_space_map_es,def:l_blk_injective}
     If $A$ is $L$-block injective, then
@@ -388,7 +387,6 @@ orthogonal projector is the canonical representative used here.
 
 \begin{lemma}[Long-length Hilbert-space boundary-map injectivity]
     \label{thm:ground_space_map_es_injective_block_of_le}
-    \lean{MPSTensor.groundSpaceMapES_injective_of_isNBlkInjective_of_le}
     \leanok
     \uses{def:ground_space_map_es,def:l_blk_injective}
     Suppose that $L_0>0$, that $A$ is $L_0$-block injective, and that
@@ -3074,7 +3072,7 @@ quantitative inverse bounds for the limiting metric $\mathscr R(P_\rho)$.
 
 \begin{lemma}[Physical ground-space inverse-Gram projector formula]
     \label{thm:ground_space_es_projection_inverse_gram}
-    \lean{MPSTensor.groundSpaceES_starProjection_eq_groundSpaceMapES_comp_inverseGram_comp_adjoint}
+    \lean{MPSTensor.map_groundSpace_starProjection_eq_groundSpaceMapES_comp_inverseGram_comp_adjoint}
     \leanok
     \uses{def:ground_space_es,def:ground_space_map_es,def:inverse_gram,thm:ground_space_map_es_injective_block_of_le}
     Suppose that $L_0>0$, that $A$ is $L_0$-block injective, and that

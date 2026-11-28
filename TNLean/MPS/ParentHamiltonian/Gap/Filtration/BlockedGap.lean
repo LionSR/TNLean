@@ -89,7 +89,7 @@ private theorem blockedThreeConfigLinearIsometryEquiv_tailBoundaryMapES
   suffices (fun k : Fin (2 * p) => σ ⟨k.val % p + p * (1 + k.val / p), by
       rw [hindex]
       omega⟩) ≍ fun k : Fin (p + p) => σ (k.addNat p) by
-    simpa [Kraus.blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry,
+    simpa [Kraus.blockedConfigEquiv, Kraus.blockConfigEquiv, Equiv.arrowCongr, Equiv.curry,
       decodeBlockEquiv_apply, Function.comp_def, finProdFinEquiv]
   apply (Fin.heq_fun_iff (by omega)).2
   intro k
@@ -122,7 +122,7 @@ private theorem blockedThreeConfigLinearIsometryEquiv_leftBoundaryMapES
     suffices (fun k : Fin (2 * p) => σ ⟨k.val % p + p * (k.val / p), by
         rw [Nat.mod_add_div]
         omega⟩) ≍ fun k : Fin (p + p) => σ (Fin.castAdd p k) by
-      simpa [Kraus.blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry,
+      simpa [Kraus.blockedConfigEquiv, Kraus.blockConfigEquiv, Equiv.arrowCongr, Equiv.curry,
         decodeBlockEquiv_apply, Function.comp_def, finProdFinEquiv]
     apply (Fin.heq_fun_iff (by omega)).2
     intro k
@@ -141,7 +141,8 @@ private theorem blockedThreeConfigLinearIsometryEquiv_leftBoundaryMapES
         (fun k => (decodeBlockEquiv d p).symm
           (Function.curry (fun ij => σ (Fin.natAdd (p + p) ij.2)) k), b, a) by
     simpa [blockSpectatorLinearIsometryEquiv, boundaryFamilyEquiv_apply_apply,
-      Kraus.blockedConfigEquiv, Equiv.arrowCongr, Equiv.curry, Function.comp_def,
+      Kraus.blockedConfigEquiv, Kraus.blockConfigEquiv, Equiv.arrowCongr, Equiv.curry,
+      Function.comp_def,
       finProdFinEquiv]
   apply congrArg x.1
   congr 1
@@ -196,11 +197,11 @@ private theorem map_range_eq_range_of_intertwine {M N P Q : Type*}
 
 /-- The full three-block ground space maps exactly to the original-site ground
 space in the common coordinates. -/
-private theorem groundSpaceES_three_blockTensor_map
+private theorem map_groundSpace_three_blockTensor_map
     (A : MPSTensor d D) (p : ℕ) :
-    (groundSpaceES (blockTensor A p) 3).map
+    ((groundSpace (blockTensor A p) 3).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map
         (blockedThreeConfigLinearIsometryEquiv d p).toLinearEquiv.toLinearMap =
-      groundSpaceES A (p + p + p) := by
+      ((groundSpace A (p + p + p)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   rw [← range_groundSpaceMapES, ← range_groundSpaceMapES]
   exact map_range_eq_range_of_intertwine _ _ _ (LinearEquiv.refl ℂ _)
     (blockedThreeConfigLinearIsometryEquiv_groundSpaceMapES A p)
@@ -240,14 +241,16 @@ theorem blockTensor_threeSite_openChain_defect_norm_eq
     [NeZero d] (A : MPSTensor d D) (p : ℕ) :
     ‖openChainTailGroundProjectionES (blockTensor A p) 1 2 ∘L
           openChainLeftGroundProjectionES (blockTensor A p) 2 -
-        (groundSpaceES (blockTensor A p) 3).starProjection‖ =
+        ((groundSpace (blockTensor A p) 3).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection‖ =
       ‖(reassocTailBoundaryMapES A p p p).range.starProjection ∘L
             (leftBoundaryMapES A (p + p) p).range.starProjection -
-          (groundSpaceES A (p + p + p)).starProjection‖ := by
+          ((groundSpace A (p + p + p)).map (WithLp.linearEquiv 2 ℂ
+              _).symm.toLinearMap).starProjection‖ := by
   let U := blockedThreeConfigLinearIsometryEquiv d p
   let T := openChainTailGroundSpaceES (blockTensor A p) 1 2
   let L := openChainLeftGroundSpaceES (blockTensor A p) 2
-  let G := groundSpaceES (blockTensor A p) 3
+  let G := ((groundSpace (blockTensor A p) 3).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap)
   let X := T.starProjection ∘L L.starProjection - G.starProjection
   have hT : T.map U.toLinearEquiv.toLinearMap =
       (reassocTailBoundaryMapES A p p p).range :=
@@ -255,14 +258,16 @@ theorem blockTensor_threeSite_openChain_defect_norm_eq
   have hL : L.map U.toLinearEquiv.toLinearMap =
       (leftBoundaryMapES A (p + p) p).range :=
     openChainLeftGroundSpaceES_blockTensor_map A p
-  have hG : G.map U.toLinearEquiv.toLinearMap = groundSpaceES A (p + p + p) :=
-    groundSpaceES_three_blockTensor_map A p
+  have hG : G.map U.toLinearEquiv.toLinearMap = ((groundSpace A (p + p + p)).map (WithLp.linearEquiv
+      2 ℂ _).symm.toLinearMap) :=
+    map_groundSpace_three_blockTensor_map A p
   have hconj :
       U.toContinuousLinearEquiv.toContinuousLinearMap.comp
         (X.comp U.symm.toContinuousLinearEquiv.toContinuousLinearMap) =
       (reassocTailBoundaryMapES A p p p).range.starProjection ∘L
           (leftBoundaryMapES A (p + p) p).range.starProjection -
-        (groundSpaceES A (p + p + p)).starProjection := by
+        ((groundSpace A (p + p + p)).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection := by
     apply ContinuousLinearMap.ext
     intro v
     simp only [ContinuousLinearMap.comp_apply, X, sub_apply]
@@ -275,7 +280,8 @@ theorem blockTensor_threeSite_openChain_defect_norm_eq
     have hLp' : (leftBoundaryMapES A (p + p) p).range.starProjection v =
         U (L.starProjection (U.symm v)) := by
       simpa only [hL] using hLp
-    have hGp' : (groundSpaceES A (p + p + p)).starProjection v =
+    have hGp' : ((groundSpace A (p + p + p)).map (WithLp.linearEquiv 2 ℂ
+        _).symm.toLinearMap).starProjection v =
         U (G.starProjection (U.symm v)) := by
       simpa only [hG] using hGp
     rw [hLp', hGp', map_sub]
@@ -328,7 +334,8 @@ private theorem _root_.Kraus.HasComplementaryFixedPointGap.exists_blockTensor_an
   have hBlockedDefect :
       ‖openChainTailGroundProjectionES B 1 2 ∘L
             openChainLeftGroundProjectionES B 2 -
-          (groundSpaceES B 3).starProjection‖ ≤ 7 / 16 := by
+          ((groundSpace B 3).map (WithLp.linearEquiv 2 ℂ
+              _).symm.toLinearMap).starProjection‖ ≤ 7 / 16 := by
     rw [blockTensor_threeSite_openChain_defect_norm_eq A p]
     simpa only [B, Nat.add_assoc] using hDefect
   let T₀ := Matrix.toEuclideanLin ((parentRingInteraction B 2 3).term 0)

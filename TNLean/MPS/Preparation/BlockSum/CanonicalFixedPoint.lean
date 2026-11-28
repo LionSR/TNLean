@@ -26,7 +26,7 @@ open Matrix
 
 namespace MPSTensor.IsLeftCanonicalBNTPresentation
 
-variable {d : ℕ} {P : SectorDecomposition d}
+variable {d : ℕ} {P : SectorDecomposition (Fin d)}
 
 private theorem exists_basisFixedPoint (h : IsLeftCanonicalBNTPresentation P)
     (j : Fin P.basisCount) :

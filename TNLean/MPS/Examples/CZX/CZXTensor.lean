@@ -35,9 +35,9 @@ operator by `(-1)^L`. The decorated, two-qubit-blocked convention of arXiv:2502.
 
 ## Main definitions
 
-* `CZXCompression.czxIntTensor`, `CZXCompression.czxTensor`, `CZXCompression.czxMPS`: the
-  bond-two tensor over the integers, over the complexes, and in the pair-alphabet view.
-* `CZXCompression.identityMPS`: the bond-one identity tensor `δ` in the pair-alphabet view.
+* `CZXCompression.czxIntTensor`, `CZXCompression.czxTensor`: the bond-two tensor over the
+  integers and over the complexes, on the pair alphabet `Fin 2 × Fin 2`.
+* `CZXCompression.identityTensor`: the bond-one identity tensor `δ`.
 * `CZXCompression.negIdentityIntMPS`: the integer matrices of `-δ`.
 * `CZXCompression.czxSquareInt`, `CZXCompression.czxSquare`: the stacked product tensor
   `B^{ij} = ∑_m M^{im} ⊗ M^{mj}` of bond dimension four.
@@ -75,68 +75,40 @@ open MPSTensor
 
 /-! ### The bond-two tensor of the note -/
 
-/-- The integer tensor `M^{ij} = δ_{i,1 ⊕ j} T_j` of the CZX symmetry
+/-- The integer tensor `M^{ij} = δ_{i,1 ⊕ j} T_j` of the CZX symmetry on the pair alphabet
 (construction note, `ex:p5ft-czx`). -/
-def czxIntTensor : Fin 2 → Fin 2 → Matrix (Fin 2) (Fin 2) ℤ
-  | 0, 1 => !![0, 1; 0, -1]
-  | 1, 0 => !![1, 0; 1, 0]
-  | _, _ => 0
+def czxIntTensor : Fin 2 × Fin 2 → Matrix (Fin 2) (Fin 2) ℤ
+  | (0, 1) => !![0, 1; 0, -1]
+  | (1, 0) => !![1, 0; 1, 0]
+  | _ => 0
 
 /-- The CZX tensor of the note as a matrix product operator tensor. -/
-def czxTensor : MPOTensor 2 2 := Function.uncurry fun i j => complexOfInt (czxIntTensor i j)
+def czxTensor : MPOTensor 2 2 := fun ij => complexOfInt (czxIntTensor ij)
 
 /-- The integer tensor of the identity operator, of bond dimension one. -/
-def identityIntTensor : Fin 2 → Fin 2 → Matrix (Fin 1) (Fin 1) ℤ :=
-  fun i j => if i = j then 1 else 0
+def identityIntTensor : Fin 2 × Fin 2 → Matrix (Fin 1) (Fin 1) ℤ :=
+  fun ij => if ij.1 = ij.2 then 1 else 0
 
 /-- The identity operator as a matrix product operator tensor of bond dimension one. -/
-def identityTensor : MPOTensor 2 1 :=
-    Function.uncurry fun i j => complexOfInt (identityIntTensor i j)
-
-/-- The CZX tensor read as a tensor over the pair alphabet `Fin 4`. -/
-def czxMPS : MPSTensor 4 2 := czxTensor.toMPSTensor
-
-/-- The bond-one identity tensor `δ` read as a tensor over the pair alphabet `Fin 4`. -/
-def identityMPS : MPSTensor 4 1 := identityTensor.toMPSTensor
-
-/-- The integer matrices of the pair-alphabet CZX tensor, in the letter order
-`(0,0), (0,1), (1,0), (1,1)`. -/
-def czxIntMPS : Fin 4 → Matrix (Fin 2) (Fin 2) ℤ
-  | 0 => 0
-  | 1 => !![0, 1; 0, -1]
-  | 2 => !![1, 0; 1, 0]
-  | 3 => 0
-
-/-- The integer matrices of the pair-alphabet identity tensor. -/
-def identityIntMPS : Fin 4 → Matrix (Fin 1) (Fin 1) ℤ
-  | 0 => 1
-  | 1 => 0
-  | 2 => 0
-  | 3 => 1
-
-theorem czxMPS_eq (a : Fin 4) : czxMPS a = complexOfInt (czxIntMPS a) := by
-  fin_cases a <;> rfl
-
-theorem identityMPS_eq (a : Fin 4) : identityMPS a = complexOfInt (identityIntMPS a) := by
-  fin_cases a <;> rfl
+def identityTensor : MPOTensor 2 1 := fun ij => complexOfInt (identityIntTensor ij)
 
 /-- The integer matrices of the identity tensor carried with the weight `-1`. -/
-def negIdentityIntMPS (a : Fin 4) : Matrix (Fin 1) (Fin 1) ℤ := -identityIntMPS a
+def negIdentityIntMPS (a : Fin 2 × Fin 2) : Matrix (Fin 1) (Fin 1) ℤ := -identityIntTensor a
 
-theorem negIdentityMPS_eq (a : Fin 4) :
-    ((-1 : ℂ) • identityMPS) a = complexOfInt (negIdentityIntMPS a) := by
-  rw [negIdentityIntMPS, complexOfInt_neg, ← identityMPS_eq]
-  simp
+theorem negIdentityMPS_eq (a : Fin 2 × Fin 2) :
+    ((-1 : ℂ) • identityTensor) a = complexOfInt (negIdentityIntMPS a) := by
+  rw [negIdentityIntMPS, complexOfInt_neg]
+  simp [identityTensor]
 
 /-! ### Normality of the bond-two tensor -/
 
 /-- **The bond-two tensor of the note is normal.** Its length-two words span the full
 two-by-two matrix algebra (construction note, `ex:p5ft-czx`): twice each matrix unit is the sum
-or the difference of `M² M²` and `M¹ M²` (first column) or of `M² M¹` and `M¹ M¹` (second
-column). -/
-theorem czxMPS_isNormal : Kraus.IsNormal czxMPS :=
-  isNormal_of_complexOfRing_smul_single (Int.castRingHom ℂ) czxIntMPS czxMPS_eq
-    (by norm_num : 0 < 2) (fun _ j k => ![![2, 1] k, ![2, 1] j])
+or the difference of `M^{10} M^{10}` and `M^{01} M^{10}` (first column) or of `M^{10} M^{01}` and
+`M^{01} M^{01}` (second column). -/
+theorem czxMPS_isNormal : Kraus.IsNormal czxTensor :=
+  isNormal_of_complexOfRing_smul_single (Int.castRingHom ℂ) czxIntTensor (fun _ => rfl)
+    (by norm_num : 0 < 2) (fun _ j k => ![![(1, 0), (0, 1)] k, ![(1, 0), (0, 1)] j])
     (fun i j => ![1, (-1) ^ (i + j : ℕ)])
     (c := 2) (by norm_num) (by decide)
 
@@ -144,21 +116,18 @@ theorem czxMPS_isNormal : Kraus.IsNormal czxMPS :=
 
 /-- The integer matrices of the stacked product tensor
 `B^{ij} = ∑_m M^{im} ⊗ M^{mj}` of bond dimension four (construction note, `ex:p5ft-czx`). -/
-def czxSquareInt : Fin 4 → Matrix (Fin 4) (Fin 4) ℤ
-  | 0 => !![0, 0, 1, 0; 0, 0, 1, 0; 0, 0, -1, 0; 0, 0, -1, 0]
-  | 1 => 0
-  | 2 => 0
-  | 3 => !![0, 1, 0, 0; 0, -1, 0, 0; 0, 1, 0, 0; 0, -1, 0, 0]
+def czxSquareInt : Fin 2 × Fin 2 → Matrix (Fin 4) (Fin 4) ℤ
+  | (0, 0) => !![0, 0, 1, 0; 0, 0, 1, 0; 0, 0, -1, 0; 0, 0, -1, 0]
+  | (1, 1) => !![0, 1, 0, 0; 0, -1, 0, 0; 0, 1, 0, 0; 0, -1, 0, 0]
+  | _ => 0
 
-/-- The stacked product tensor of Example D, in the pair-alphabet view. -/
-def czxSquare : MPSTensor 4 4 := (MPOTensor.mulTensor czxTensor czxTensor).toMPSTensor
+/-- The stacked product tensor of Example D. -/
+def czxSquare : MPOTensor 2 4 := MPOTensor.mulTensor czxTensor czxTensor
 
-theorem czxSquare_eq (a : Fin 4) : czxSquare a = complexOfInt (czxSquareInt a) := by
-  have h : czxSquare a = complexOfInt (mulIntTensor czxIntTensor czxIntTensor
-      (Fin.divNat (m := 2) (n := 2) a) (Fin.modNat (m := 2) (n := 2) a)) :=
-    mulTensor_complexOfRing _ czxIntTensor czxIntTensor _ _
-  have hint : ∀ b : Fin 4, mulIntTensor czxIntTensor czxIntTensor
-      (Fin.divNat (m := 2) (n := 2) b) (Fin.modNat (m := 2) (n := 2) b) = czxSquareInt b := by
+theorem czxSquare_eq (a : Fin 2 × Fin 2) : czxSquare a = complexOfInt (czxSquareInt a) := by
+  have h : czxSquare a = complexOfInt (mulIntTensor czxIntTensor czxIntTensor a) :=
+    mulTensor_complexOfRing _ czxIntTensor czxIntTensor a
+  have hint : ∀ b, mulIntTensor czxIntTensor czxIntTensor b = czxSquareInt b := by
     decide
   rw [h, hint]
 

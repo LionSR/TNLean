@@ -5,7 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Tensor.Words.CyclicTraceForcedBond
 import TNLean.MPS.Examples.Z3.Z3ClockDefect
-import TNLean.MPS.Operator.Periodic.BondOneOperator
+import TNLean.MPS.Operator.Periodic.OperatorCyclicSum
 import TNLean.MPS.Operator.Defs
 import TNLean.MPS.CanonicalForm.SimpleMPO.SimpleScaling
 import TNLean.MPS.FundamentalTheorem.OperatorGroup.AnomalyObstruction
@@ -219,39 +219,37 @@ private theorem det_scaled_vandermonde_ne_zero {n : ℕ} {x c : Fin n → ℂ}
 
 /-- The letter `(j + 1, j)` of `α U` is the matrix whose only nonzero column is the column `j`,
 with entries `α ω^{l j}`. -/
-theorem toMPSTensor_normUTensor (j : Fin 3) :
-    (normUTensor α).toMPSTensor (finProdFinEquiv (j + 1, j)) =
+theorem normUTensor_apply (j : Fin 3) :
+    normUTensor α (j + 1, j) =
       Matrix.of fun l r ↦ if r = j then α * phaseChar (uWeight l j) else 0 := by
   ext l r
-  rw [toMPSTensor_finProdFinEquiv]
   simp [normUTensor, uTensor, clockTensor_apply]
 
 /-- The letter `(j + 2, j)` of `α² ω V` is the matrix whose only nonzero column is the column
 `j`, with entries `α² ω ω^{2 l j + 2 j}`. -/
-theorem toMPSTensor_normVTensor (j : Fin 3) :
-    (normVTensor α).toMPSTensor (finProdFinEquiv (j + 2, j)) =
+theorem normVTensor_apply (j : Fin 3) :
+    normVTensor α (j + 2, j) =
       Matrix.of fun l r ↦ if r = j then α ^ 2 * omega * phaseChar (vWeight l j) else 0 := by
   ext l r
-  rw [toMPSTensor_finProdFinEquiv]
   simp [normVTensor, vTensor, clockTensor_apply]
 
 /-- **`α U` is normal**: its letters `(j + 1, j)` carry the columns of the invertible matrix
 `(α ω^{l j})`. -/
-theorem normUTensor_isNormal (hα : α ^ 3 = omega) : Kraus.IsNormal (normUTensor α).toMPSTensor := by
+theorem normUTensor_isNormal (hα : α ^ 3 = omega) : Kraus.IsNormal (normUTensor α) := by
   have hα0 := ne_zero_of_pow_three_eq_omega hα
-  refine isNormal_of_forced_column (fun j ↦ finProdFinEquiv (j + 1, j))
-    (fun j l ↦ α * phaseChar (uWeight l j)) toMPSTensor_normUTensor
+  refine isNormal_of_forced_column (fun j ↦ (j + 1, j))
+    (fun j l ↦ α * phaseChar (uWeight l j)) normUTensor_apply
     (fun _ _ ↦ mul_ne_zero hα0 (phaseChar_ne_zero _)) ?_
   simpa only [uWeight, phaseChar_mul] using
     det_scaled_vandermonde_ne_zero phaseChar_injective fun _ ↦ hα0
 
 /-- **`α² ω V` is normal**: its letters `(j + 2, j)` carry the columns of the invertible matrix
 `(α² ω ω^{2 l j + 2 j})`. -/
-theorem normVTensor_isNormal (hα : α ^ 3 = omega) : Kraus.IsNormal (normVTensor α).toMPSTensor := by
+theorem normVTensor_isNormal (hα : α ^ 3 = omega) : Kraus.IsNormal (normVTensor α) := by
   have hα0 := ne_zero_of_pow_three_eq_omega hα
   have hc : α ^ 2 * omega ≠ 0 := mul_ne_zero (pow_ne_zero _ hα0) omega_ne_zero
-  refine isNormal_of_forced_column (fun j ↦ finProdFinEquiv (j + 2, j))
-    (fun j l ↦ α ^ 2 * omega * phaseChar (vWeight l j)) toMPSTensor_normVTensor
+  refine isNormal_of_forced_column (fun j ↦ (j + 2, j))
+    (fun j l ↦ α ^ 2 * omega * phaseChar (vWeight l j)) normVTensor_apply
     (fun _ _ ↦ mul_ne_zero hc (phaseChar_ne_zero _)) ?_
   have hv : ∀ l j : Fin 3, α ^ 2 * omega * phaseChar (vWeight l j) =
       (α ^ 2 * omega * phaseChar (2 * j)) * phaseChar (2 * j) ^ (l : ℕ) := by

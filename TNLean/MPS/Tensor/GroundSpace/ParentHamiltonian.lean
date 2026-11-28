@@ -60,27 +60,24 @@ function space equipped with the canonical ℓ² inner product via `WithLp 2`
 `WithLp.linearEquiv` to view the local ground space in this ℓ² realization, where
 Mathlib provides `InnerProductSpace` and orthogonal projection. -/
 
-/-- The local ground space \(G_L(A)\) in the canonical ℓ² realization of the
-\(L\)-site configuration space. -/
-noncomputable def groundSpaceES (A : MPSTensor d D) (L : ℕ) :
-    Submodule ℂ (EuclideanSpace ℂ (Cfg d L)) :=
-  (groundSpace A L).map (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm.toLinearMap
+/-- Every subspace of a finite-dimensional inner product space has an orthogonal projection.
+The instance is stated for every subspace at once, so that rewriting a subspace under
+`Submodule.starProjection`, such as the image of a local ground space, keeps the instance argument
+well typed. -/
+instance (priority := high) _root_.Submodule.hasOrthogonalProjection_of_finiteDimensional
+    {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+    [FiniteDimensional 𝕜 E] (K : Submodule 𝕜 E) : K.HasOrthogonalProjection :=
+  haveI : CompleteSpace K := FiniteDimensional.complete 𝕜 K
+  Submodule.HasOrthogonalProjection.ofCompleteSpace K
 
 /-- Membership in the canonical ℓ² realization of \(G_L(A)\) is the same as
 membership of the corresponding function in the original local ground space. -/
-theorem mem_groundSpaceES_iff (A : MPSTensor d D) (L : ℕ)
+theorem mem_map_groundSpace_iff (A : MPSTensor d D) (L : ℕ)
     (v : EuclideanSpace ℂ (Cfg d L)) :
-    v ∈ groundSpaceES A L ↔
+    v ∈ ((groundSpace A L).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) ↔
       (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)) v ∈ groundSpace A L := by
-  rw [groundSpaceES]
   exact Submodule.mem_map_equiv (p := groundSpace A L)
     (e := (WithLp.linearEquiv 2 ℂ (NSiteSpace d L)).symm) (x := v)
-
-/-- The finite-dimensional local ground space \(G_L(A)\) admits an orthogonal projection. -/
-theorem groundSpaceES_hasOrthogonalProjection
-    (A : MPSTensor d D) (L : ℕ) : (groundSpaceES A L).HasOrthogonalProjection := by
-  let : CompleteSpace (groundSpaceES A L) := FiniteDimensional.complete ℂ _
-  exact Submodule.HasOrthogonalProjection.ofCompleteSpace _
 
 /-! ### Parent interaction -/
 
@@ -93,7 +90,8 @@ orthogonal projector onto \(G_L(A)\). This is a PSD operator with
 noncomputable def parentInteraction (A : MPSTensor d D) (L : ℕ) :
     NSiteSpace d L →ₗ[ℂ] NSiteSpace d L :=
   let e := WithLp.linearEquiv 2 ℂ (NSiteSpace d L)
-  e.toLinearMap.comp ((groundSpaceES A L)ᗮ.starProjection.toLinearMap.comp e.symm.toLinearMap)
+  e.toLinearMap.comp (((groundSpace A L).map (WithLp.linearEquiv 2 ℂ
+      _).symm.toLinearMap)ᗮ.starProjection.toLinearMap.comp e.symm.toLinearMap)
 
 /-! ### Window extraction and replacement (periodic boundary conditions) -/
 

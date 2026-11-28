@@ -8,6 +8,7 @@ import TNLean.MPS.Transfer.ReductionExistence
 import TNLean.MPS.CanonicalForm.NormalBlocks.NormalTensorGauge
 import TNLean.MPS.FundamentalTheorem.OperatorProduct.MPOProduct
 import TNLean.MPS.MPU.Simple.RectangularSourceRanks
+import TNLean.MPS.CanonicalForm.SimpleMPU.TransferMatrix
 import TNLean.MPS.MPU.Index.RepresentativeIndex
 import TNLean.MPS.Operator.Unitary.StandardForm
 import TNLean.MPS.CanonicalForm.SimpleMPU.SimpleBlocking
@@ -528,7 +529,7 @@ theorem IsMPUCanonicalFormII.compositionRanks_of_isReduction
     (hSR : IsMPUSimple (MPOTensor.blockTensor R 4))
     {A : Matrix (Fin E) (Fin (D₁ * D₂)) ℂ}
     {B : Matrix (Fin (D₁ * D₂)) (Fin E) ℂ}
-    (hred : MPTensor.IsReduction (mulTensor U V).toMPSTensor R.toMPSTensor A B) :
+    (hred : MPTensor.IsReduction (mulTensor U V) R A B) :
     r[MPOTensor.blockTensor R 4] = d ^ 2 * r[U] * r[V] ∧
       ℓ[MPOTensor.blockTensor R 4] = d ^ 2 * ℓ[U] * ℓ[V] := by
   apply eq_and_eq_of_pos_of_le_of_mul_le_mul
@@ -556,7 +557,7 @@ theorem exists_isReduction_of_mpo_eq_cfii
     (hEq : ∀ N : ℕ, 0 < N → mpo U N = mpo V N) :
     ∃ (A : Matrix (Fin E) (Fin D) ℂ)
       (B : Matrix (Fin D) (Fin E) ℂ),
-      MPTensor.IsReduction U.toMPSTensor V.toMPSTensor A B := by
+      MPTensor.IsReduction U V A B := by
   let _ : NeZero d := hV.neZero_phys
   let _ : NeZero E := hV.neZero_bond
   have hsqrt : (Real.sqrt d : ℂ) ≠ 0 := by
@@ -564,14 +565,9 @@ theorem exists_isReduction_of_mpo_eq_cfii
   have hζ : ((Real.sqrt d : ℂ)⁻¹) ≠ 0 := inv_ne_zero hsqrt
   have hNormalNorm : Kraus.IsNormal V.normalizedFlattening :=
     hV.isNormalTensor_normalizedFlattening.isNormal
-  have hNormalRaw : Kraus.IsNormal V.toMPSTensor := by
-    apply (MPSTensor.isNormal_smul_iff hζ V.toMPSTensor).mp
-    exact hNormalNorm
-  have hSame : MPTensor.SameMPV₂Pos U.toMPSTensor V.toMPSTensor := by
-    intro N hN σ
-    rw [mpv_toMPSTensor, mpv_toMPSTensor, hEq N hN]
-  exact MPSTensor.exists_isReduction_of_isNormal_of_sameMPV₂Pos
-    V.toMPSTensor U.toMPSTensor hNormalRaw hSame
+  have hNormalRaw : Kraus.IsNormal V := (MPSTensor.isNormal_smul_iff hζ V).mp hNormalNorm
+  exact MPSTensor.exists_isReduction_of_isNormal_of_sameMPV₂Pos V U hNormalRaw
+    (sameMPV₂Pos_iff_mpo_eq.2 hEq)
 
 /-- A canonical representative of a composition has the sum of the indices
 of its canonical factors. CPSV17, arXiv:1703.09188, Theorem `IndexTh` (ii),
@@ -592,13 +588,10 @@ theorem IsMPUCanonicalFormII.index_eq_add_of_mpo_eq_mulTensor
     letI := hR.neZero_bond
     hU.isMPU.exists_common_blockTensor_isMPUSimple_three hV.isMPU hR.isMPU
   have hredK : MPTensor.IsReduction
-      (mulTensor (MPOTensor.blockTensor U k)
-        (MPOTensor.blockTensor V k)).toMPSTensor
-      (MPOTensor.blockTensor R k).toMPSTensor A B := by
+      (mulTensor (MPOTensor.blockTensor U k) (MPOTensor.blockTensor V k))
+      (MPOTensor.blockTensor R k) A B := by
     rw [← blockTensor_mulTensor]
-    simpa only [toMPSTensor_blockTensor] using
-      (hred.blockTensor k).reindexPhysical
-        (blockedDoubledIndexEquiv d k)
+    exact isReduction_blockTensor hred k
   have hRanks := (hU.blockTensor k hcommon.1).compositionRanks_of_isReduction
     (hV.blockTensor k hcommon.1)
     (hR.blockTensor k hcommon.1)

@@ -25,24 +25,21 @@ variable {d D : ℕ}
 /-- Restriction to the retained physical corner recovers a scalar-gauge
 relation between the original operator tensors. -/
 theorem gaugePhaseEquiv_of_operatorPhysicalPadding {O P : MPOTensor d D}
-    (h : MPTensor.GaugePhaseEquiv (operatorPhysicalPadding O).toMPSTensor
-      (operatorPhysicalPadding P).toMPSTensor) :
-    MPTensor.GaugePhaseEquiv O.toMPSTensor P.toMPSTensor := by
+    (h : MPTensor.GaugePhaseEquiv (operatorPhysicalPadding O)
+      (operatorPhysicalPadding P)) :
+    MPTensor.GaugePhaseEquiv O P := by
   obtain ⟨X, ζ, hζ, hrel⟩ := h
-  refine ⟨X, ζ, hζ, fun q ↦ ?_⟩
-  simpa [toMPSTensor] using
-    hrel (finProdFinEquiv (q.divNat.castSucc, q.modNat.castSucc))
+  exact ⟨X, ζ, hζ, fun q ↦ by simpa using hrel (q.1.castSucc, q.2.castSucc)⟩
 
 /-- Restriction to the retained physical column recovers a scalar-gauge
 relation between the original state tensors. -/
 theorem gaugePhaseEquiv_of_statePhysicalPadding {A B : MPSTensor d D}
-    (h : MPTensor.GaugePhaseEquiv (statePhysicalPadding A).toMPSTensor
-      (statePhysicalPadding B).toMPSTensor) : MPTensor.GaugePhaseEquiv A B := by
+    (h : MPTensor.GaugePhaseEquiv (statePhysicalPadding A)
+      (statePhysicalPadding B)) : MPTensor.GaugePhaseEquiv A B := by
   obtain ⟨X, ζ, hζ, hrel⟩ := h
-  refine ⟨X, ζ, hζ, fun i ↦ ?_⟩
-  simpa [toMPSTensor] using hrel (finProdFinEquiv (i.castSucc, Fin.last d))
+  exact ⟨X, ζ, hζ, fun i ↦ by simpa using hrel (i.castSucc, Fin.last d)⟩
 
-private theorem not_isInjective_of_forall_eq_zero {A : MPSTensor d D}
+private theorem not_isInjective_of_forall_eq_zero {α : Type*} {A : MPTensor α (Fin D)}
     (hD : 0 < D) (hA : ∀ i, A i = 0) : ¬ Kraus.IsInjective A := by
   intro hInj
   have hle : Submodule.span ℂ (Set.range A) ≤
@@ -63,24 +60,21 @@ injective state of positive virtual dimension: its last column is zero. -/
 theorem not_gaugePhaseEquiv_operatorPhysicalPadding_statePhysicalPadding
     (O : MPOTensor d D) {A : MPSTensor d D} (hD : 0 < D)
     (hA : Kraus.IsInjective A) :
-    ¬ MPTensor.GaugePhaseEquiv (operatorPhysicalPadding O).toMPSTensor
-      (statePhysicalPadding A).toMPSTensor := by
+    ¬ MPTensor.GaugePhaseEquiv (operatorPhysicalPadding O) (statePhysicalPadding A) := by
   rintro ⟨X, ζ, _, hrel⟩
   apply not_isInjective_of_forall_eq_zero hD ?_ hA
   intro i
-  simpa [toMPSTensor] using hrel (finProdFinEquiv (i.castSucc, Fin.last d))
+  simpa using hrel (i.castSucc, Fin.last d)
 
 /-- A padded state cannot be scalar-gauge equivalent to a padded
 injective operator of positive virtual dimension: its retained corner is zero. -/
 theorem not_gaugePhaseEquiv_statePhysicalPadding_operatorPhysicalPadding
     (A : MPSTensor d D) {O : MPOTensor d D} (hD : 0 < D)
-    (hO : Kraus.IsInjective O.toMPSTensor) :
-    ¬ MPTensor.GaugePhaseEquiv (statePhysicalPadding A).toMPSTensor
-      (operatorPhysicalPadding O).toMPSTensor := by
+    (hO : Kraus.IsInjective O) :
+    ¬ MPTensor.GaugePhaseEquiv (statePhysicalPadding A) (operatorPhysicalPadding O) := by
   rintro ⟨X, ζ, _, hrel⟩
   apply not_isInjective_of_forall_eq_zero hD ?_ hO
   intro q
-  simpa [toMPSTensor] using
-    hrel (finProdFinEquiv (q.divNat.castSucc, q.modNat.castSucc))
+  simpa using hrel (q.1.castSucc, q.2.castSucc)
 
 end MPOTensor

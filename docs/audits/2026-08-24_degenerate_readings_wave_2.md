@@ -100,7 +100,7 @@ and `RescalingStableSourceSimple.lean` are unchanged in this pass.
 | `MPOTensor.RescalingStableLengthDependentRFP.transferMap_blockTensor_R_toMPSTensor_quasi_idempotent` | None; only the non-simplicity proof used it. |
 | `MPOTensor.RescalingStableLengthDependentRFP.blockTensor_R_not_isHorizontalCF` | None. |
 | `MPOTensor.IsHorizontalCF.eq_one_of_transferMap_comp_self_eq_smul` | None. |
-| `MPSTensor.IsBNTCanonicalForm.eq_one_of_transferMap_comp_self_eq_smul` | None; the deleted horizontal-form version was its only consumer. |
+| `MPSTensor.IsLeftCanonicalBNTPresentation.eq_one_of_transferMap_comp_self_eq_smul` | None; the deleted horizontal-form version was its only consumer. |
 | `MPOTensor.SimpleVanishingCounterexample.*` (whole namespace) | None; the module is deleted. |
 
 The private helper `R_mpo_ne_zero` went with

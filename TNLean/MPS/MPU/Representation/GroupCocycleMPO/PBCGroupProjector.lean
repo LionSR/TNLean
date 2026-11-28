@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPU.Representation.GroupCocycleMPO.FusionTensors
 import QICLean.Kraus.Word
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # The virtual support projector of the periodic group construction
@@ -228,40 +229,38 @@ theorem fusionProjector_mul_mulTensor_mul_fusionW {ω : ScalarThreeCochain G}
 
 Source: consequence of the projected identity at arXiv:2203.12563v3, lines 2243–2263. -/
 theorem fusionProjector_mul_evalWord {ω : ScalarThreeCochain G}
-    (hω : ScalarThreeCochain.IsCocycle ω) (g h : G) (w : List (Fin (n * n))) :
-    fusionProjector e h *
-        Kraus.evalWord (mulTensor (tensor e ω g) (tensor e ω h)).toMPSTensor w =
-      fusionW e ω g h * Kraus.evalWord (tensor e ω (g * h)).toMPSTensor w * fusionV e ω g h := by
-  have hw := Kraus.evalWord_intertwine (tensor e ω (g * h)).toMPSTensor
-    (mulTensor (tensor e ω g) (tensor e ω h)).toMPSTensor (fusionV e ω g h)
-    (fun ij ↦ (fusionV_mul_mulTensor e hω g h ij.divNat ij.modNat).symm) w
+    (hω : ScalarThreeCochain.IsCocycle ω) (g h : G) (w : List (Fin n × Fin n)) :
+    fusionProjector e h * Kraus.evalWord (mulTensor (tensor e ω g) (tensor e ω h)) w =
+      fusionW e ω g h * Kraus.evalWord (tensor e ω (g * h)) w * fusionV e ω g h := by
+  have hw := Kraus.evalWord_intertwine (tensor e ω (g * h))
+    (mulTensor (tensor e ω g) (tensor e ω h)) (fusionV e ω g h)
+    (fun ij ↦ (fusionV_mul_mulTensor e hω g h ij.1 ij.2).symm) w
   rw [← fusionW_mul_fusionV e ω g h, Matrix.mul_assoc, ← hw, ← Matrix.mul_assoc]
 
 /-- The outgoing support restriction persists along every nonempty chain.
 
 Source: arXiv:2203.12563v3, line 2287. -/
 theorem evalWord_mul_fusionProjector (ω : ScalarThreeCochain G) (g h : G)
-    (w : List (Fin (n * n))) (hw : w ≠ []) :
-    Kraus.evalWord (mulTensor (tensor e ω g) (tensor e ω h)).toMPSTensor w *
-        fusionProjector e h =
-      Kraus.evalWord (mulTensor (tensor e ω g) (tensor e ω h)).toMPSTensor w := by
+    (w : List (Fin n × Fin n)) (hw : w ≠ []) :
+    Kraus.evalWord (mulTensor (tensor e ω g) (tensor e ω h)) w * fusionProjector e h =
+      Kraus.evalWord (mulTensor (tensor e ω g) (tensor e ω h)) w := by
   rw [← fusionW_mul_fusionV e ω g h]
   apply Kraus.evalWord_mul_of_right_absorb
-    (mulTensor (tensor e ω g) (tensor e ω h)).toMPSTensor
+    (mulTensor (tensor e ω g) (tensor e ω h))
     (fusionV e ω g h) (fusionW e ω g h) _ w hw
   intro ij
   rw [fusionW_mul_fusionV]
-  exact mulTensor_mul_fusionProjector e ω g h ij.divNat ij.modNat
+  exact mulTensor_mul_fusionProjector e ω g h ij.1 ij.2
 
 /-- Closing a nonempty chain makes the projector act as the identity: inserting it at the
 cut leaves every periodic coefficient unchanged.
 
 Source: arXiv:2203.12563v3, line 2287. -/
 theorem trace_fusionProjector_mul_evalWord (ω : ScalarThreeCochain G) (g h : G)
-    (w : List (Fin (n * n))) (hw : w ≠ []) :
+    (w : List (Fin n × Fin n)) (hw : w ≠ []) :
     Matrix.trace (fusionProjector e h *
-        Kraus.evalWord (mulTensor (tensor e ω g) (tensor e ω h)).toMPSTensor w) =
-      Matrix.trace (Kraus.evalWord (mulTensor (tensor e ω g) (tensor e ω h)).toMPSTensor w) := by
+        Kraus.evalWord (mulTensor (tensor e ω g) (tensor e ω h)) w) =
+      Matrix.trace (Kraus.evalWord (mulTensor (tensor e ω g) (tensor e ω h)) w) := by
   rw [Matrix.trace_mul_comm, evalWord_mul_fusionProjector ω g h w hw]
 
 /-- The projected factorization and periodic support recover the unprojected closed-chain
@@ -270,9 +269,9 @@ fusion law without a normality assumption.
 Source: arXiv:2203.12563v3, lines 2243–2287. -/
 theorem trace_evalWord_mulTensor_eq {ω : ScalarThreeCochain G}
     (hω : ScalarThreeCochain.IsCocycle ω) (g h : G)
-    (w : List (Fin (n * n))) (hw : w ≠ []) :
-    Matrix.trace (Kraus.evalWord (mulTensor (tensor e ω g) (tensor e ω h)).toMPSTensor w) =
-      Matrix.trace (Kraus.evalWord (tensor e ω (g * h)).toMPSTensor w) := by
+    (w : List (Fin n × Fin n)) (hw : w ≠ []) :
+    Matrix.trace (Kraus.evalWord (mulTensor (tensor e ω g) (tensor e ω h)) w) =
+      Matrix.trace (Kraus.evalWord (tensor e ω (g * h)) w) := by
   rw [← trace_fusionProjector_mul_evalWord ω g h w hw, fusionProjector_mul_evalWord hω,
     Matrix.trace_mul_comm, ← Matrix.mul_assoc, fusionV_mul_fusionW, Matrix.one_mul]
 

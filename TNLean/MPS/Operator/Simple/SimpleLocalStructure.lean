@@ -33,10 +33,10 @@ arXiv:1606.00608 (Cirac–Pérez-García–Schuch–Verstraete).
 - `MPOTensor.inverseMapThreeSiteContraction` /
   `MPOTensor.inverseMapThreeSiteContraction_eq`: the double inverse-map
   contraction at lines 1415--1438 of Appendix C.2 in arXiv:1606.00608.
-- `MPOTensor.physRealize` / `MPOTensor.physRealize_spec` /
-  `MPOTensor.physRealize_mul`: the physical realization of right virtual
-  insertions and its multiplicativity.
-- `MPOTensor.physRealizeLeft` / `MPOTensor.physRealizeLeft_spec`: the left-bond
+- `MPSTensor.physRealize` / `MPSTensor.physRealize_spec` /
+  `MPSTensor.physRealize_mul`, applied to the tensor on the pair alphabet: the physical
+  realization of right virtual insertions and its multiplicativity.
+- `MPSTensor.physRealizeLeft` / `MPSTensor.physRealizeLeft_spec`: the left-bond
   analogue of the physical realization map.
 - `MPOTensor.EtaStructure`: the quantum-Markov decomposition on the middle
   subsystem supplied by equality in strong subadditivity.
@@ -94,8 +94,8 @@ In the paper, Lemma C.2 supplies the Markov direct-sum decomposition. Lemma C.4
 then constructs the explicit operators `η_{k,h}` by applying local inverse maps
 coming from the injectivity of the simple tensor. The present file now contains
 that inverse-map layer for an injective simple MPO tensor, given by
-`MPOTensor.inverseTensor`, `MPOTensor.physRealize`, and
-`MPOTensor.physRealizeLeft`.
+`MPOTensor.inverseTensor`, `MPSTensor.physRealize`, and
+`MPSTensor.physRealizeLeft`.
 
 `MPOTensor.ExplicitEtaOperators.ofHayashiMarkov` constructs a canonical family
 directly from the Hayashi decomposition witness as the Kronecker product of

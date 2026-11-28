@@ -190,6 +190,27 @@ lemma decodeBlock_blockedDoubledIndexEquiv (d L : ℕ)
   simp [blockedDoubledIndexEquiv, Equiv.arrowCongr,
     Kraus.decodeBlockEquiv_apply]
 
+/-- The pairing of a blocked ket index and a blocked bra index with the word of pairs of
+letters they encode. -/
+noncomputable def blockedPairIndexEquiv (d L : ℕ) :
+    Fin (Kraus.blockPhysDim d L) × Fin (Kraus.blockPhysDim d L) ≃ (Fin L → Fin d × Fin d) :=
+  (Equiv.prodCongr (Kraus.decodeBlockEquiv d L) (Kraus.decodeBlockEquiv d L)).trans
+    (Equiv.arrowProdEquivProdArrow (Fin L) (fun _ ↦ Fin d) (fun _ ↦ Fin d)).symm
+
+/-- The blocked operator tensor is the blocking `Kraus.block` of the tensor on the pair
+alphabet, relabelled by the pairing of the blocked ket and bra indices. -/
+theorem blockTensor_eq_reindexPhysical_block (M : MPOTensor d D) (L : ℕ) :
+    blockTensor M L = Kraus.reindexPhysical (blockedPairIndexEquiv d L) (Kraus.block M L) :=
+  rfl
+
+/-- A blocked operator tensor is injective exactly when the blocking of the tensor on the pair
+alphabet is. -/
+theorem isInjective_blockTensor_iff (M : MPOTensor d D) {L : ℕ} :
+    Kraus.IsInjective (blockTensor M L) ↔ Kraus.IsInjective (Kraus.block M L) := by
+  have h : Set.range (blockTensor M L) = Set.range (Kraus.block M L) :=
+    (blockedPairIndexEquiv d L).surjective.range_comp _
+  simp only [Kraus.IsInjective, h]
+
 /-- Physical blocking commutes with passing from an MPO tensor to its
 doubled-index MPS tensor, up to the canonical pairing of the blocked ket and
 bra words. -/

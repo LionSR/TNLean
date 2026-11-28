@@ -52,7 +52,8 @@ irreducible block with transfer spectral radius one; `A` is that block with weig
 
 Source: arXiv:1703.09188, canonical form, lines 258--267, with the normalization of the blocks;
 the Perron eigenvalue is Wolf, Theorem 6.3. -/
-theorem isMPUCanonicalForm_of_isIrreducibleFamily [NeZero D] (A : MPSTensor d D)
+theorem isMPUCanonicalForm_of_isIrreducibleFamily [NeZero D] {α : Type*} [Fintype α]
+    (A : MPTensor α (Fin D))
     (hIrr : Kraus.IsIrreducibleFamily A) (hA : ∃ i, A i ≠ 0) : IsMPUCanonicalForm A := by
   obtain ⟨ρ, r, hρ, hr, hEig⟩ := exists_posDef_transferMap_eigenvector_of_irreducible A hIrr hA
   set c : ℂ := ((Real.sqrt r : ℝ) : ℂ)
@@ -61,7 +62,7 @@ theorem isMPUCanonicalForm_of_isIrreducibleFamily [NeZero D] (A : MPSTensor d D)
   have hcc : c⁻¹ * starRingEnd ℂ c⁻¹ = (r : ℂ)⁻¹ := by
     rw [map_inv₀, Complex.conj_ofReal, ← mul_inv, ← Complex.ofReal_mul,
       Real.mul_self_sqrt hr.le]
-  have hfix : Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => c⁻¹ • A i) ρ = ρ := by
+  have hfix : Kraus.transferMap (ι := α) (n := Fin D) (fun i => c⁻¹ • A i) ρ = ρ := by
     rw [transferMap_smul, hcc, hEig, smul_smul, inv_mul_cancel₀ hr_ne, one_smul]
   have hIrrScaled : Kraus.IsIrreducibleFamily (fun i => c⁻¹ • A i) :=
     isIrreducibleFamily_smul (inv_ne_zero hc) A hIrr
@@ -69,7 +70,7 @@ theorem isMPUCanonicalForm_of_isIrreducibleFamily [NeZero D] (A : MPSTensor d D)
     refine ⟨hIrrScaled, ?_⟩
     simpa using
       (spectralRadius_eq_of_posDef_eigenvector_of_irreducible_cp
-        (Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => c⁻¹ • A i))
+        (Kraus.transferMap (ι := α) (n := Fin D) (fun i => c⁻¹ • A i))
         (Kraus.transferMap_isCPMap _)
         (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily _ hIrrScaled)
         ρ 1 hρ (by norm_num) (by simpa using hfix))
@@ -157,7 +158,7 @@ theorem exists_isMPUCanonicalForm_twoSiteStandardFormData [NeZero d] [NeZero ℓ
     (u : Matrix (Fin ℓ × Fin r) (Fin d × Fin d) ℂ) (v : Matrix (Fin d × Fin d) (Fin r × Fin ℓ) ℂ)
     (hu : u.IsUnitaryBetween) (hv : v.IsUnitaryBetween) :
     ∃ (K : ℕ) (W : MPOTensor (d * d) K),
-      MPTensor.IsMPUCanonicalForm W.toMPSTensor ∧ Nonempty (TwoSiteStandardFormData W u v) ∧
+      MPTensor.IsMPUCanonicalForm W ∧ Nonempty (TwoSiteStandardFormData W u v) ∧
         ∀ N : ℕ, 0 < N → mpo W N = mpo (standardFormTensorOfGates u v) N := by
   classical
   set V := shiftedGateCut v
@@ -216,14 +217,12 @@ theorem exists_isMPUCanonicalForm_twoSiteStandardFormData [NeZero d] [NeZero ℓ
       _ ≤ B.rank := Matrix.rank_mul_le_left B C
       _ = Bᵀ.rank := (Matrix.rank_transpose B).symm
   -- The letters span every matrix unit.
-  have hinj : Kraus.IsInjective W.toMPSTensor := by
+  have hinj : Kraus.IsInjective W := by
     refine Submodule.eq_top_of_forall_single_mem _ fun a b ↦ ?_
-    set T := Submodule.span ℂ (Set.range W.toMPSTensor)
+    set T := Submodule.span ℂ (Set.range W)
     have hletter : ∀ (i₁ i₂ : Fin d) (j : Fin d × Fin d),
-        W (finProdFinEquiv (i₁, i₂), finProdFinEquiv j) ∈ T := fun i₁ i₂ j ↦ by
-      refine Submodule.subset_span ⟨finProdFinEquiv (finProdFinEquiv (i₁, i₂),
-        finProdFinEquiv j), ?_⟩
-      simp [toMPSTensor]
+        W (finProdFinEquiv (i₁, i₂), finProdFinEquiv j) ∈ T := fun _ _ _ ↦
+      Submodule.subset_span ⟨_, rfl⟩
     -- Each outer product of a column of `X₂` with a row of `X₁` is in the span.
     have houter : ∀ (i₁ i₂ : Fin d) (t : Fin ℓ) (s : Fin r),
         Matrix.vecMulVec (fun α => X₂ (α, i₁) t) (fun γ => X₁ (i₂, γ) s) ∈ T := by
@@ -257,14 +256,14 @@ theorem exists_isMPUCanonicalForm_twoSiteStandardFormData [NeZero d] [NeZero ℓ
     rw [hunit]
     exact Submodule.sum_mem _ fun p _ ↦ Submodule.sum_mem _ fun q _ ↦
       Submodule.smul_mem _ _ (houter p.1 q.1 p.2 q.2)
-  have hne : ∃ i, W.toMPSTensor i ≠ 0 := by
+  have hne : ∃ i, W i ≠ 0 := by
     by_contra h
     simp only [not_exists, not_not] at h
-    have hspan : Submodule.span ℂ (Set.range W.toMPSTensor) = ⊥ := by
+    have hspan : Submodule.span ℂ (Set.range W) = ⊥ := by
       rw [Submodule.span_eq_bot]
       rintro _ ⟨i, rfl⟩
       exact h i
-    have h1 : (1 : Matrix (Fin K) (Fin K) ℂ) ∈ Submodule.span ℂ (Set.range W.toMPSTensor) := by
+    have h1 : (1 : Matrix (Fin K) (Fin K) ℂ) ∈ Submodule.span ℂ (Set.range W) := by
       rw [hinj.span_eq_top]
       exact Submodule.mem_top
     rw [hspan, Submodule.mem_bot] at h1

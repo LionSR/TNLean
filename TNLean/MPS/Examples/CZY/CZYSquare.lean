@@ -6,8 +6,9 @@ Authors: Sirui Lu
 import TNLean.MPS.Examples.CZX.CZXSquare
 import TNLean.MPS.Examples.CZY.CZYTensor
 import TNLean.MPS.FundamentalTheorem.Compression.Splitting
-import TNLean.MPS.Operator.Periodic.BondOneOperator
+import TNLean.MPS.Operator.Periodic.OperatorCyclicSum
 import TNLean.MPS.Operator.Defs
+import TNLean.MPS.Operator.PairAlphabetBridge
 import TNLean.MPS.Operator.Periodic.OperatorFromWordTrace
 
 /-!
@@ -67,12 +68,12 @@ open MPSTensor CZXCompression
 
 /-! ### The target and the gauge -/
 
-/-- The single target: the bond-one identity tensor `δ` in the pair-alphabet view. -/
-def czySquareTarget : (s : Unit) → MPSTensor 4 (squareDim s) := fun _ => identityMPS
+/-- The single target: the bond-one identity tensor `δ`. -/
+def czySquareTarget : (s : Unit) → MPOTensor 2 (squareDim s) := fun _ => identityTensor
 
-theorem czySquareTarget_eq (s : Unit) (a : Fin 4) :
-    czySquareTarget s a = complexOfInt (identityIntMPS a) :=
-  identityMPS_eq a
+theorem czySquareTarget_eq (s : Unit) (a : Fin 2 × Fin 2) :
+    czySquareTarget s a = complexOfInt (identityIntTensor a) :=
+  rfl
 
 /-- The identity tensor of the CZX files is the general bond-one identity tensor. -/
 theorem identityTensor_eq_idTensor : identityTensor = MPOTensor.idTensor 2 := by
@@ -106,39 +107,39 @@ def czySquareGauge : (Fin 4 → ℂ) ≃ₗ[ℂ] (BlockSpace squareDim oneSlot 3
     czySquareGauge_mul_inv czySquareGaugeInv_mul
 
 /-- The letters in the flag basis: upper triangular, with `δ` on the second diagonal entry. -/
-def czySquareConjInt : Fin 4 → Matrix (Fin 4) (Fin 4) ℤ
-  | 0 => !![0, 0, 0, 0; 0, 1, -1, 1; 0, 0, 0, 0; 0, 0, 0, 0]
-  | 1 => 0
-  | 2 => 0
-  | 3 => !![0, -1, -1, 1; 0, 1, 1, -1; 0, 0, 0, 0; 0, 0, 0, 0]
+def czySquareConjInt : Fin 2 × Fin 2 → Matrix (Fin 4) (Fin 4) ℤ
+  | (0, 0) => !![0, 0, 0, 0; 0, 1, -1, 1; 0, 0, 0, 0; 0, 0, 0, 0]
+  | (0, 1) => 0
+  | (1, 0) => 0
+  | (1, 1) => !![0, -1, -1, 1; 0, 1, 1, -1; 0, 0, 0, 0; 0, 0, 0, 0]
 
-theorem czySquare_conj_int (i : Fin 4) :
+theorem czySquare_conj_int (i : Fin 2 × Fin 2) :
     czySquareGaugeInt * czySquareInt i * czySquareGaugeInvInt = czySquareConjInt i := by
   revert i
   decide
 
-theorem czySquare_conjMatrix (i : Fin 4) :
+theorem czySquare_conjMatrix (i : Fin 2 × Fin 2) :
     conjMatrix czySquareGauge (czySquare i) =
       (complexOfInt (czySquareConjInt i)).submatrix czxSquareTau czxSquareTau := by
   rw [czySquareGauge, conjMatrix_gaugeOfRingMatrix _ _ _ _ (czySquare_eq i), czySquare_conj_int]
 
 /-! ### The compression datum -/
 
-private theorem czySquare_triangular_int (i : Fin 4)
+private theorem czySquare_triangular_int (i : Fin 2 × Fin 2)
     (x y : BlockSpace squareDim oneSlot 3) (h : czxSquareOrd y.1 < czxSquareOrd x.1) :
     czySquareConjInt i (czxSquareTau x) (czxSquareTau y) = 0 := by
   revert i x y
   decide
 
-private theorem czySquare_matched_int (i : Fin 4) (p q : Fin 1) :
+private theorem czySquare_matched_int (i : Fin 2 × Fin 2) (p q : Fin 1) :
     czySquareConjInt i (czxSquareTau ⟨Sum.inl oneSlotMem, p⟩)
-        (czxSquareTau ⟨Sum.inl oneSlotMem, q⟩) = identityIntMPS i p q := by
+        (czxSquareTau ⟨Sum.inl oneSlotMem, q⟩) = identityIntTensor i p q := by
   obtain rfl : p = 0 := Subsingleton.elim p 0
   obtain rfl : q = 0 := Subsingleton.elim q 0
   revert i
   decide
 
-private theorem czySquare_unmatched_int (i : Fin 4) (t : Fin 3) (p q : Fin 1) :
+private theorem czySquare_unmatched_int (i : Fin 2 × Fin 2) (t : Fin 3) (p q : Fin 1) :
     czySquareConjInt i (czxSquareTau ⟨Sum.inr t, p⟩) (czxSquareTau ⟨Sum.inr t, q⟩) = 0 := by
   revert i t p q
   decide
@@ -148,7 +149,7 @@ three zero slots (arXiv:2509.03600, main.tex lines 219–240, read through the m
 asymmetric compression theorem). -/
 def czySquare_compression : MultiBlockCompression czySquare oneSlot czySquareTarget :=
   MultiBlockCompression.ofRing (Int.castRingHom ℂ) czxSquareOrd czxSquareTau czySquareGauge
-    czySquareConjInt czySquare_conjMatrix (fun _ => identityIntMPS) czySquareTarget_eq
+    czySquareConjInt czySquare_conjMatrix (fun _ => identityIntTensor) czySquareTarget_eq
     czySquare_triangular_int
     (fun i s p q => by
       obtain rfl := eq_oneSlotMem s
@@ -158,9 +159,9 @@ def czySquare_compression : MultiBlockCompression czySquare oneSlot czySquareTar
 /-! ### The periodic operator -/
 
 /-- The stacked tensor has the word traces of `δ` on every nonempty word. -/
-theorem czySquare_trace_evalWord (w : List (Fin 4)) (hw : w ≠ []) :
+theorem czySquare_trace_evalWord (w : List (Fin 2 × Fin 2)) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord czySquare w) =
-      Matrix.trace (Kraus.evalWord identityMPS w) := by
+      Matrix.trace (Kraus.evalWord identityTensor w) := by
   rw [czySquare_compression.trace_evalWord_eq_sum w hw, Finset.sum_singleton]
   rfl
 
@@ -168,7 +169,8 @@ theorem czySquare_trace_evalWord (w : List (Fin 4)) (hw : w ≠ []) :
 main.tex line 240). The source's claim holds for all `N ≥ 1`, odd lengths included. -/
 theorem mpo_czySquare (N : ℕ) (hN : 0 < N) :
     MPOTensor.mpo (MPOTensor.mulTensor czyTensor czyTensor) N = 1 := by
-  rw [MPOTensor.mpo_eq_of_trace_evalWord _ identityTensor czySquare_trace_evalWord N hN,
+  rw [show MPOTensor.mulTensor czyTensor czyTensor = czySquare from rfl,
+    MPOTensor.mpo_eq_of_forall_trace_evalWord czySquare_trace_evalWord hN,
     identityTensor_eq_idTensor, MPOTensor.mpo_idTensor]
 
 /-- **The CZY operator squares to the identity** at every positive length:
@@ -220,7 +222,7 @@ theorem czySquare_isReduction :
   rwa [czySquare_left_eq, czySquare_right_eq] at h
 
 /-- **Nilpotency of the remainder**, with the length `1 + 3 = 4` of the compression theorem. -/
-theorem czySquare_evalWord_remainder_eq_zero (w : List (Fin 4)) (hw : 4 ≤ w.length) :
+theorem czySquare_evalWord_remainder_eq_zero (w : List (Fin 2 × Fin 2)) (hw : 4 ≤ w.length) :
     Kraus.evalWord
       (fun i => czySquare i - czySquareRight * czySquareTarget () i * czySquareLeft) w = 0 := by
   have hsum : (fun i => czySquare i - czySquareRight * czySquareTarget () i * czySquareLeft) =
@@ -243,7 +245,8 @@ theorem czySquare_dim_eq : (4 : ℕ) = ∑ s ∈ oneSlot, squareDim s + 3 :=
 theorem czySquare_right_intertwiner_eq_zero (X : Matrix (Fin 4) (Fin 1) ℂ)
     (h : ∀ i, czySquare i * X = X * czySquareTarget () i) : X = 0 :=
   right_intertwiner_eq_zero_of_ringCertificate (Int.castRingHom ℂ) czySquareInt czySquare_eq
-    identityIntMPS (czySquareTarget_eq ()) ![(0, 0, 0), (0, 2, 0), (0, 3, 0), (3, 1, 0)]
+    identityIntTensor (czySquareTarget_eq ())
+    ![((0, 0), 0, 0), ((0, 0), 2, 0), ((0, 0), 3, 0), ((1, 1), 1, 0)]
     (Matrix.of fun x => ![![-1, 0, 0, 0], ![0, 0, 0, -1], ![0, -1, 0, 0], ![0, 0, -1, 0]] x.1)
     (c := 1) (by norm_num) (by decide) X h
 
@@ -251,7 +254,8 @@ theorem czySquare_right_intertwiner_eq_zero (X : Matrix (Fin 4) (Fin 1) ℂ)
 theorem czySquare_left_intertwiner_eq_zero (Y : Matrix (Fin 1) (Fin 4) ℂ)
     (h : ∀ i, Y * czySquare i = czySquareTarget () i * Y) : Y = 0 :=
   left_intertwiner_eq_zero_of_ringCertificate (Int.castRingHom ℂ) czySquareInt czySquare_eq
-    identityIntMPS (czySquareTarget_eq ()) ![(0, 0, 0), (0, 2, 0), (0, 3, 0), (3, 0, 0)]
+    identityIntTensor (czySquareTarget_eq ())
+    ![((0, 0), 0, 0), ((0, 0), 2, 0), ((0, 0), 3, 0), ((1, 1), 0, 0)]
     (Matrix.of fun x =>
       ![![-1, 1, 0, -1], ![-1, -1, 0, 1], ![1, -1, 0, -1], ![-1, -1, -2, 1]] x.1)
     (c := 2) (by norm_num) (by decide) Y h
@@ -268,9 +272,8 @@ would give a nonzero sitewise right intertwiner with the normal target `δ`. -/
 theorem czySquare_not_starClosed :
     ¬ ∀ i, (czySquare i)ᴴ ∈ Algebra.adjoin ℂ (Set.range czySquare) :=
   MPSTensor.not_forall_conjTranspose_mem_adjoin_of_forall_right_intertwiner_eq_zero
-    oneSlot czySquareTarget (fun s _ => czySquareTarget_isNormal s)
-    (fun _ _ => Nat.one_pos) czySquare
-    (fun w hw => czySquare_compression.trace_evalWord_eq_sum w hw) oneSlotMem
+    oneSlot czySquareTarget (fun s _ => czySquareTarget_isNormal s) (fun _ _ => Nat.one_pos)
+    czySquare (fun w hw => czySquare_compression.trace_evalWord_eq_sum w hw) oneSlotMem
     czySquare_right_intertwiner_eq_zero
 
 end CZYCompression

@@ -35,11 +35,11 @@ namespace MPSTensor
 
 /-! ## Elementary tensors -/
 
-/-- The one-letter bond-dimension-one tensor whose sole matrix is `1`. -/
-def scalarUnitTensor : MPSTensor 1 1 := fun _ => 1
+/-- The bond-dimension-one tensor every letter of which is the matrix `1`. -/
+def scalarUnitTensor {α : Type*} : MPTensor α (Fin 1) := fun _ => 1
 
 /-- Every word of the scalar unit tensor evaluates to the identity matrix. -/
-@[simp] theorem scalarUnitTensor_evalWord (w : List (Fin 1)) :
+@[simp] theorem scalarUnitTensor_evalWord {α : Type*} (w : List α) :
     Kraus.evalWord scalarUnitTensor w = 1 := by
   induction w with
   | nil => rfl
@@ -47,8 +47,8 @@ def scalarUnitTensor : MPSTensor 1 1 := fun _ => 1
       rw [Kraus.evalWord_cons, ih]
       simp [scalarUnitTensor]
 
-private theorem scalarUnitTensor_transferMap :
-    Kraus.transferMap scalarUnitTensor = LinearMap.id := by
+private theorem scalarUnitTensor_transferMap {α : Type*} [Fintype α] [Unique α] :
+    Kraus.transferMap (scalarUnitTensor : MPTensor α (Fin 1)) = LinearMap.id := by
   apply LinearMap.ext
   intro X
   ext a b
@@ -59,8 +59,8 @@ private theorem scalarUnitTensor_transferMap :
 /-- The one-dimensional scalar unit tensor is normal.
 
 Source: arXiv:1606.00608, canonical-form normal-block condition, lines 233--245. -/
-theorem scalarUnitTensor_isNormalTensor :
-    IsNormalTensor scalarUnitTensor :=
+theorem scalarUnitTensor_isNormalTensor {α : Type*} [Fintype α] [Unique α] :
+    IsNormalTensor (scalarUnitTensor : MPTensor α (Fin 1)) :=
   isNormalTensor_of_bondDim_one_of_transferMap_eq_id
     scalarUnitTensor scalarUnitTensor_transferMap
 
@@ -84,7 +84,7 @@ noncomputable example
 /-- The single-sector two-copy decomposition of `C` with raw weights
 `(1, -1)`. -/
 @[reducible] noncomputable def signFlipDecomp (C : MPSTensor d D) :
-    SectorDecomposition d where
+    SectorDecomposition (Fin d) where
   basisCount := 1
   basisDim := fun _ => D
   basis := fun _ => C
@@ -120,7 +120,7 @@ noncomputable example
 `(1, e^{iθ})`, illustrating equal-modulus grouping with a non-trivial
 phase. -/
 @[reducible] noncomputable def phaseDecomp (C : MPSTensor d D) (θ : ℝ) :
-    SectorDecomposition d where
+    SectorDecomposition (Fin d) where
   basisCount := 1
   basisDim := fun _ => D
   basis := fun _ => C
@@ -207,7 +207,7 @@ unit modulus, which fails here because `|1| ≠ |1/2|`. -/
 /-- The single-sector two-copy decomposition of `C` with raw weights
 `(1, 1/2)`, demonstrating admissibility of unequal-modulus copies. -/
 @[reducible] noncomputable def halvedDecomp (C : MPSTensor d D) :
-    SectorDecomposition d where
+    SectorDecomposition (Fin d) where
   basisCount := 1
   basisDim := fun _ => D
   basis := fun _ => C

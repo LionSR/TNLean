@@ -61,7 +61,7 @@ the eventual ground-state degeneracy used in Beigi, J. Phys. A 45 (2012)
 025306, Section IV. Documented in
 `docs/paper-gaps/cpsv16_nncph_ground_state_scope.tex`. -/
 theorem HasBNTSectorData.eventually_parentHamiltonian_groundSpace_finrank_eq
-    {d : ℕ} {P : SectorDecomposition d}
+    {d : ℕ} {P : SectorDecomposition (Fin d)}
     (hBNT : HasBNTSectorData P)
     (hNNCPH : HasNNCPHGroundSpaces P.toTensor P.basis) :
     ∃ N₀ : ℕ, ∀ N : ℕ, ∀ hN : N₀ < N, haveI : NeZero N := ⟨Nat.ne_zero_of_lt hN⟩;
@@ -79,7 +79,7 @@ theorem HasBNTSectorData.eventually_parentHamiltonian_groundSpace_finrank_eq
     convert hLI N hN₁ using 1
     funext j
     ext σ
-    simp [Function.comp_apply, mpvState_apply]
+    simp [Function.comp_apply]
   have hCoefficients : LinearIndependent ℂ
       (fun j : Fin P.basisCount ↦ (mpv (P.basis j) : NSiteSpace d N)) :=
     LinearIndependent.of_comp
@@ -215,7 +215,7 @@ sector loops.
 Source: CPSV16, Definition 3.9 and Theorem 3.10, lines 517--540; Beigi,
 J. Phys. A 45 (2012) 025306, Section IV. -/
 theorem groundSpace_hamiltonian_parentRingInteraction_finrank_eq_card_loop_of_hasBNTSectorData
-    {P : SectorDecomposition d} (F : BeigiSectorGraphData P.toTensor)
+    {P : SectorDecomposition (Fin d)} (F : BeigiSectorGraphData P.toTensor)
     (hBNT : HasBNTSectorData P)
     (hNNCPH : HasNNCPHGroundSpaces P.toTensor P.basis)
     {N : ℕ} (hN : 2 < N) :

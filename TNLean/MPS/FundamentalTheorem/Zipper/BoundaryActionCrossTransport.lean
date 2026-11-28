@@ -63,8 +63,8 @@ variable {d r s : ℕ} {χ : Fin r → ℕ} {D : Fin s → ℕ}
   (WA : ∀ a x y, Fin (M a x y) → Matrix (Fin (χ a * D x)) (Fin (D y)) ℂ)
   {O : ∀ a, MPOTensor d (χ a)} {A : ∀ x, MPSTensor d (D x)}
   (hF : ∀ a b,
-    MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b)).toMPSTensor
-      (fun q : (c : Fin r) × Fin (N a b c) ↦ (O q.1).toMPSTensor)
+    MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b))
+      (fun q : (c : Fin r) × Fin (N a b c) ↦ O q.1)
       (fun q ↦ VF a b q.1 q.2) (fun q ↦ WF a b q.1 q.2))
   (hA : ∀ a x,
     MPSTensor.IsBiorthogonalDecomposition (actTensor (O a) (A x))
@@ -103,8 +103,8 @@ variable {d r D : ℕ} {χ : Fin r → ℕ}
   (WA : ∀ a, Fin (m a) → Matrix (Fin (χ a * D)) (Fin D) ℂ)
   {O : ∀ a, MPOTensor d (χ a)} {A : MPSTensor d D}
   (hF : ∀ a b,
-    MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b)).toMPSTensor
-      (fun q : (c : Fin r) × Fin (N a b c) ↦ (O q.1).toMPSTensor)
+    MPSTensor.IsBiorthogonalDecomposition (mulTensor (O a) (O b))
+      (fun q : (c : Fin r) × Fin (N a b c) ↦ O q.1)
       (fun q ↦ VF a b q.1 q.2) (fun q ↦ WF a b q.1 q.2))
   (hA : ∀ a, MPSTensor.IsBiorthogonalDecomposition (actTensor (O a) A)
     (fun _ : Fin (m a) ↦ A) (VA a) (WA a))
@@ -195,14 +195,14 @@ variable {d₀ d₁ r D₀ D₁ : ℕ} {χ₀ χ₁ : Fin r → ℕ}
   {O₀ : ∀ a, MPOTensor d₀ (χ₀ a)} {A₀ : MPSTensor d₀ D₀}
   {O₁ : ∀ a, MPOTensor d₁ (χ₁ a)} {A₁ : MPSTensor d₁ D₁}
   (hF₀ : ∀ a b,
-    MPSTensor.IsBiorthogonalDecomposition (mulTensor (O₀ a) (O₀ b)).toMPSTensor
-      (fun q : (c : Fin r) × Fin (N a b c) ↦ (O₀ q.1).toMPSTensor)
+    MPSTensor.IsBiorthogonalDecomposition (mulTensor (O₀ a) (O₀ b))
+      (fun q : (c : Fin r) × Fin (N a b c) ↦ O₀ q.1)
       (fun q ↦ VF₀ a b q.1 q.2) (fun q ↦ WF₀ a b q.1 q.2))
   (hA₀ : ∀ a, MPSTensor.IsBiorthogonalDecomposition (actTensor (O₀ a) A₀)
     (fun _ : Fin (m a) ↦ A₀) (VA₀ a) (WA₀ a))
   (hF₁ : ∀ a b,
-    MPSTensor.IsBiorthogonalDecomposition (mulTensor (O₁ a) (O₁ b)).toMPSTensor
-      (fun q : (c : Fin r) × Fin (N a b c) ↦ (O₁ q.1).toMPSTensor)
+    MPSTensor.IsBiorthogonalDecomposition (mulTensor (O₁ a) (O₁ b))
+      (fun q : (c : Fin r) × Fin (N a b c) ↦ O₁ q.1)
       (fun q ↦ VF₁ a b q.1 q.2) (fun q ↦ WF₁ a b q.1 q.2))
   (hA₁ : ∀ a, MPSTensor.IsBiorthogonalDecomposition (actTensor (O₁ a) A₁)
     (fun _ : Fin (m a) ↦ A₁) (VA₁ a) (WA₁ a))
@@ -329,14 +329,14 @@ variable {d₀ d₁ r D₀ D₁ : ℕ} {χ₀ χ₁ : Fin r → ℕ}
   {O₀ : ∀ a, MPOTensor d₀ (χ₀ a)} {A₀ : MPSTensor d₀ D₀}
   {O₁ : ∀ a, MPOTensor d₁ (χ₁ a)} {A₁ : MPSTensor d₁ D₁}
   (hF₀ : ∀ a b,
-    MPSTensor.IsBiorthogonalDecomposition (mulTensor (O₀ a) (O₀ b)).toMPSTensor
-      (fun q : (c : Fin r) × Fin (N a b c) ↦ (O₀ q.1).toMPSTensor)
+    MPSTensor.IsBiorthogonalDecomposition (mulTensor (O₀ a) (O₀ b))
+      (fun q : (c : Fin r) × Fin (N a b c) ↦ O₀ q.1)
       (fun q ↦ VF₀ a b q.1 q.2) (fun q ↦ WF₀ a b q.1 q.2))
   (hA₀ : ∀ a, MPSTensor.IsBiorthogonalDecomposition (actTensor (O₀ a) A₀)
     (fun _ : Fin (m a) ↦ A₀) (VA₀ a) (WA₀ a))
   (hF₁ : ∀ a b,
-    MPSTensor.IsBiorthogonalDecomposition (mulTensor (O₁ a) (O₁ b)).toMPSTensor
-      (fun q : (c : Fin r) × Fin (N a b c) ↦ (O₁ q.1).toMPSTensor)
+    MPSTensor.IsBiorthogonalDecomposition (mulTensor (O₁ a) (O₁ b))
+      (fun q : (c : Fin r) × Fin (N a b c) ↦ O₁ q.1)
       (fun q ↦ VF₁ a b q.1 q.2) (fun q ↦ WF₁ a b q.1 q.2))
   (hA₁ : ∀ a, MPSTensor.IsBiorthogonalDecomposition (actTensor (O₁ a) A₁)
     (fun _ : Fin (m a) ↦ A₁) (VA₁ a) (WA₁ a))

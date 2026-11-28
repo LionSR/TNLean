@@ -64,8 +64,8 @@ theorem isInvariantUnderSymmetry_conjugation_reindexPhysical {d' D : ℕ} (e : F
 of both endpoints, whenever the relabelled endpoints are in canonical form. -/
 theorem StrictlyEquivalentUnderSymmetry.reindexPhysical_conjugation {d' D₁ D₂ : ℕ}
     (e : Fin d' ≃ Fin d) {U : MPOTensor d D₁} {V : MPOTensor d D₂}
-    (hU : MPTensor.IsMPUCanonicalForm (reindexPhysical e U).toMPSTensor)
-    (hV : MPTensor.IsMPUCanonicalForm (reindexPhysical e V).toMPSTensor)
+    (hU : MPTensor.IsMPUCanonicalForm (reindexPhysical e U))
+    (hV : MPTensor.IsMPUCanonicalForm (reindexPhysical e V))
     (h : StrictlyEquivalentUnderSymmetry (conjugationSymmetry d) U V rfl) :
     StrictlyEquivalentUnderSymmetry (conjugationSymmetry d')
       (reindexPhysical e U) (reindexPhysical e V) rfl := by
@@ -190,7 +190,7 @@ theorem equivalentUnderSymmetry_conjugation_of_blockTensor_blockTwo
   have : NeZero d := h₁.neZero_phys
   have hcf : ∀ {E : ℕ} {W : MPOTensor d E}, IsMPUCanonicalFormII W →
       MPTensor.IsMPUCanonicalForm (reindexPhysical (fourSiteEquiv d).symm
-        (blockTensor (blockTwo W) 2)).toMPSTensor := fun {E W} hW ↦ by
+        (blockTensor (blockTwo W) 2)) := fun {E W} hW ↦ by
     rw [blockTensor_blockTwo_two, reindexPhysical_symm_reindexPhysical]
     exact (hW.blockTensor 4 (by norm_num)).isMPUCanonicalForm
   have H4 := H.reindexPhysical_conjugation (fourSiteEquiv d).symm (hcf h₁) (hcf h₂)

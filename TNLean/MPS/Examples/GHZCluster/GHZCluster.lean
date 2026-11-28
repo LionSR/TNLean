@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.Tensor.BondReindex
 import TNLean.MPS.Tensor.Physical.TensorProductSpan
+import TNLean.MPS.Transfer.Irreducible.PhysicalReindexTransport
 import TNLean.MPS.Examples.Cluster.Cluster
 import TNLean.MPS.Examples.GHZ.GHZ
 import TNLean.MPS.CanonicalForm.RenormalizationFixedPoint.BNTOrthogonality
@@ -47,15 +48,18 @@ noncomputable section
 namespace MPSTensor
 
 /-- The Z4 × Z2 example tensor from arXiv:2502.20257, equation `eq:z4z2MPS`:
-the GHZ tensor tensored with the once-blocked cluster tensor. -/
+the GHZ tensor tensored with the once-blocked cluster tensor, with the pair
+physical alphabet numbered by `finProdFinEquiv`. -/
 def z4z2GHZClusterTensor : MPSTensor 8 4 :=
-  tensorProduct ghzTensor clusterBlocked
+  Kraus.reindexPhysical (finProdFinEquiv (m := 2) (n := 4)).symm
+    (tensorProduct ghzTensor clusterBlocked)
 
 /-- The block labeled by the GHZ value `x`, on the full eight-dimensional
 physical alphabet.  This is the product of the one-dimensional GHZ sector and
 the blocked cluster tensor. -/
 def z4z2GHZClusterBlock (x : Fin 2) : MPSTensor 8 2 :=
-  tensorProduct (ghzSectorTensor x) clusterBlocked
+  Kraus.reindexPhysical (finProdFinEquiv (m := 2) (n := 4)).symm
+    (tensorProduct (ghzSectorTensor x) clusterBlocked)
 
 private theorem finProdFinEquiv_zero_two (a : Fin 2) :
     finProdFinEquiv ((0 : Fin 1), a) = a := by
@@ -70,15 +74,15 @@ $A^{(x),(p,q)} = \delta_{x,p} C^q$. -/
   have h := tensorProduct_apply (ghzSectorTensor x) clusterBlocked p q 0 0 a b
   rw [finProdFinEquiv_zero_two, finProdFinEquiv_zero_two] at h
   by_cases hpx : p = x <;>
-    simpa [z4z2GHZClusterBlock, ghzSectorTensor, hpx] using h
+    simpa [z4z2GHZClusterBlock, Kraus.reindexPhysical, ghzSectorTensor, hpx] using h
 
 /-- Each of the two GHZ-cluster blocks is injective.  This is the tensor-product
 injectivity theorem applied to a one-dimensional GHZ sector and the existing
 injective blocked cluster tensor. -/
 theorem z4z2GHZClusterBlock_isInjective (x : Fin 2) :
     Kraus.IsInjective (z4z2GHZClusterBlock x) :=
-  isInjective_tensorProduct _ _ (ghzSectorTensor_isInjective x)
-    clusterBlocked_isInjective
+  (isInjective_reindexPhysical_equiv (finProdFinEquiv (m := 2) (n := 4)).symm _).2
+    (isInjective_tensorProduct _ _ (ghzSectorTensor_isInjective x) clusterBlocked_isInjective)
 
 /-- The two blocks are locally orthogonal because their GHZ physical supports
 are disjoint.  The proof is the direct termwise mixed-map calculation described
@@ -124,7 +128,9 @@ private theorem z4z2GHZClusterTensor_apply (p x y : Fin 2) (q : Fin 4)
     z4z2GHZClusterTensor (finProdFinEquiv (p, q))
         (finProdFinEquiv (x, a)) (finProdFinEquiv (y, b)) =
       if x = y then if p = x then clusterBlocked q a b else 0 else 0 := by
-  rw [z4z2GHZClusterTensor, tensorProduct_apply]
+  rw [z4z2GHZClusterTensor]
+  simp only [Kraus.reindexPhysical, Equiv.symm_apply_apply]
+  rw [tensorProduct_apply]
   simp only [ghzTensor_apply, Matrix.diagonal_apply, Pi.single_apply]
   by_cases hxy : x = y
   · subst y

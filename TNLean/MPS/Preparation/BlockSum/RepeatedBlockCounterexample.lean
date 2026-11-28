@@ -320,7 +320,7 @@ theorem not_approximationError_le_repeatedBlockTensor {lam₂ : ℂ} (h0 : 0 < �
 normal blocks `A_1 = (1, 0)` and `A_2 = (0, 1)`, multiplicities `m_j ≥ 1`, and nonzero weights
 `μ_{j,k}`. -/
 abbrev repeatedBlockBasisSector (m : Fin 2 → ℕ) (hm : ∀ j, 0 < m j)
-    (μ : (j : Fin 2) → Fin (m j) → ℂ) (hμ : ∀ j k, μ j k ≠ 0) : SectorDecomposition 2 where
+    (μ : (j : Fin 2) → Fin (m j) → ℂ) (hμ : ∀ j k, μ j k ≠ 0) : SectorDecomposition (Fin 2) where
   basisCount := 2
   basisDim := fun _ => 1
   basis := repeatedBlockBasis
@@ -367,7 +367,7 @@ theorem isLeftCanonicalBNTPresentation_repeatedBlockBasisSector
 /-- The canonical form of arXiv:2307.01696, eq. (S2), of `repeatedBlockTensor`: the basis of
 the two one-dimensional normal blocks `A_1 = (1, 0)` and `A_2 = (0, 1)`, with multiplicities
 `m = (2, 1)` and every weight `μ_{j,k} = 1`. -/
-abbrev repeatedBlockSector : SectorDecomposition 2 :=
+abbrev repeatedBlockSector : SectorDecomposition (Fin 2) :=
   repeatedBlockBasisSector repeatedBlockMult
     (fun j => by fin_cases j <;> simp [repeatedBlockMult]) repeatedBlockWeight
     (fun _ _ => one_ne_zero)

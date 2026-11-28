@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.MPDO.RFP.AlgebraStructure
 import TNLean.MPS.MPDO.RFP.FusionIsometries
 import TNLean.MPS.MPDO.Purification.PureRecovery
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Counterexample to the support-algebra converse
@@ -139,21 +140,20 @@ private theorem phaseFlipTensor_transferMap_pow_fixed_iff
     exact phaseFlipTensor_transferMap_pow_fixed hX n
 
 private theorem phaseFlipMPO_isTP :
-    Kraus.IsTP phaseFlipTensor.toMPOTensor.toMPSTensor := by
+    Kraus.IsTP phaseFlipTensor.toMPOTensor := by
   suffices hAdjointOne :
-      Kraus.adjointMap phaseFlipTensor.toMPOTensor.toMPSTensor 1 = 1 by
+      Kraus.adjointMap phaseFlipTensor.toMPOTensor 1 = 1 by
     simpa [Kraus.IsTP, Kraus.adjointMap, Matrix.mul_one] using hAdjointOne
   have hadj :
-      (Kraus.transferMap phaseFlipTensor.toMPOTensor.toMPSTensor).adjoint =
-        Kraus.adjointMapLM phaseFlipTensor.toMPOTensor.toMPSTensor := by
+      (Kraus.transferMap phaseFlipTensor.toMPOTensor).adjoint =
+        Kraus.adjointMapLM phaseFlipTensor.toMPOTensor := by
     rw [← Kraus.mapLM_conjTranspose_eq_adjoint]
     ext X
     simp [Kraus.mapLM_apply, Kraus.adjointMapLM_apply, Kraus.adjointMap]
   rw [← Kraus.adjointMapLM_apply, ← hadj]
-  have hMap : Kraus.transferMap phaseFlipTensor.toMPOTensor.toMPSTensor =
+  have hMap : Kraus.transferMap phaseFlipTensor.toMPOTensor =
       Kraus.transferMap phaseFlipTensor := by
-    rw [← MPOTensor.transferMap_eq_toMPSTensor,
-      MPSTensor.toMPOTensor_transferMap]
+    rw [← MPOTensor.transferMap_eq_kraus_transferMap, MPSTensor.toMPOTensor_transferMap]
   rw [hMap, phaseFlipTensor_transferMap_adjoint]
   apply Matrix.ext
   intro i j
@@ -211,7 +211,7 @@ formula and the length-one idempotent trace identity, neither of which is part
 of `HasBlockedAdjointFixedPointAlgebraTower`. -/
 theorem exists_hasBlockedAdjointFixedPointAlgebraTower_not_isZCL :
     ∃ (M : MPOTensor 2 2) (ρ : Matrix (Fin 2) (Fin 2) ℂ),
-      Kraus.IsTP M.toMPSTensor ∧ ρ.PosDef ∧ MPOTensor.transferMap M ρ = ρ ∧
+      Kraus.IsTP M ∧ ρ.PosDef ∧ MPOTensor.transferMap M ρ = ρ ∧
         HasBlockedAdjointFixedPointAlgebraTower M ∧ ¬ IsZCL M :=
   ⟨phaseFlipTensor.toMPOTensor, 1, phaseFlipMPO_isTP,
     Matrix.PosDef.one (n := Fin 2) (R := ℂ), phaseFlipMPO_one_fixed,

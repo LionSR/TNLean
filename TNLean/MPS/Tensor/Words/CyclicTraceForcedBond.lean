@@ -163,14 +163,14 @@ open scoped BigOperators Matrix
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} {D : ℕ}
 
 /-- **Two-site block injectivity of a tensor with a forced outgoing bond.** If for every bond
 label `j` the letter `ℓ j` is the matrix whose only nonzero column is the column `j`, equal to
 `v j`, if no entry of the vectors `v j` vanishes, and if the vectors `v j` are the columns of an
 invertible matrix, then the words of length two span the full matrix algebra. -/
-theorem isNBlkInjective_two_of_forced_column {A : Fin d → Matrix (Fin D) (Fin D) ℂ}
-    (ℓ : Fin D → Fin d) (v : Fin D → Fin D → ℂ)
+theorem isNBlkInjective_two_of_forced_column {A : α → Matrix (Fin D) (Fin D) ℂ}
+    (ℓ : Fin D → α) (v : Fin D → Fin D → ℂ)
     (hA : ∀ j, A (ℓ j) = Matrix.of fun l r ↦ if r = j then v j l else 0)
     (hv : ∀ j k, v k j ≠ 0) (hdet : (Matrix.of fun l j ↦ v j l).det ≠ 0) :
     Kraus.IsNBlkInjective A 2 := by
@@ -207,8 +207,8 @@ theorem isNBlkInjective_two_of_forced_column {A : Fin d → Matrix (Fin D) (Fin 
 
 /-- **Normality of a tensor with a forced outgoing bond**: under the hypotheses of
 `isNBlkInjective_two_of_forced_column` the tensor is normal. -/
-theorem isNormal_of_forced_column {A : Fin d → Matrix (Fin D) (Fin D) ℂ}
-    (ℓ : Fin D → Fin d) (v : Fin D → Fin D → ℂ)
+theorem isNormal_of_forced_column {A : α → Matrix (Fin D) (Fin D) ℂ}
+    (ℓ : Fin D → α) (v : Fin D → Fin D → ℂ)
     (hA : ∀ j, A (ℓ j) = Matrix.of fun l r ↦ if r = j then v j l else 0)
     (hv : ∀ j k, v k j ≠ 0) (hdet : (Matrix.of fun l j ↦ v j l).det ≠ 0) :
     Kraus.IsNormal A :=

@@ -171,8 +171,8 @@ variable {d r s : ℕ} {χ : Fin r → ℕ} {D : Fin s → ℕ}
   (WA : ∀ a x y, Fin (M a x y) → Matrix (Fin (χ a * D x)) (Fin (D y)) ℂ)
   {O : ∀ a, MPOTensor d (χ a)} {A : ∀ x, MPSTensor d (D x)}
   (hF : ∀ a b,
-    IsBiorthogonalDecomposition (MPOTensor.mulTensor (O a) (O b)).toMPSTensor
-      (fun q : (c : Fin r) × Fin (N a b c) ↦ (O q.1).toMPSTensor)
+    IsBiorthogonalDecomposition (MPOTensor.mulTensor (O a) (O b))
+      (fun q : (c : Fin r) × Fin (N a b c) ↦ O q.1)
       (fun q ↦ VF a b q.1 q.2) (fun q ↦ WF a b q.1 q.2))
   (hA : ∀ a x,
     IsBiorthogonalDecomposition (MPOTensor.actTensor (O a) (A x))
@@ -249,16 +249,16 @@ variable {d₀ d₁ r s : ℕ} {χ₀ χ₁ : Fin r → ℕ} {D₀ D₁ : Fin s 
   {O₀ : ∀ a, MPOTensor d₀ (χ₀ a)} {A₀ : ∀ x, MPSTensor d₀ (D₀ x)}
   {O₁ : ∀ a, MPOTensor d₁ (χ₁ a)} {A₁ : ∀ x, MPSTensor d₁ (D₁ x)}
   (hF₀ : ∀ a b,
-    IsBiorthogonalDecomposition (MPOTensor.mulTensor (O₀ a) (O₀ b)).toMPSTensor
-      (fun q : (c : Fin r) × Fin (N a b c) ↦ (O₀ q.1).toMPSTensor)
+    IsBiorthogonalDecomposition (MPOTensor.mulTensor (O₀ a) (O₀ b))
+      (fun q : (c : Fin r) × Fin (N a b c) ↦ O₀ q.1)
       (fun q ↦ VF₀ a b q.1 q.2) (fun q ↦ WF₀ a b q.1 q.2))
   (hA₀ : ∀ a x,
     IsBiorthogonalDecomposition (MPOTensor.actTensor (O₀ a) (A₀ x))
       (fun q : (y : Fin s) × Fin (M a x y) ↦ A₀ q.1)
       (fun q ↦ VA₀ a x q.1 q.2) (fun q ↦ WA₀ a x q.1 q.2))
   (hF₁ : ∀ a b,
-    IsBiorthogonalDecomposition (MPOTensor.mulTensor (O₁ a) (O₁ b)).toMPSTensor
-      (fun q : (c : Fin r) × Fin (N a b c) ↦ (O₁ q.1).toMPSTensor)
+    IsBiorthogonalDecomposition (MPOTensor.mulTensor (O₁ a) (O₁ b))
+      (fun q : (c : Fin r) × Fin (N a b c) ↦ O₁ q.1)
       (fun q ↦ VF₁ a b q.1 q.2) (fun q ↦ WF₁ a b q.1 q.2))
   (hA₁ : ∀ a x,
     IsBiorthogonalDecomposition (MPOTensor.actTensor (O₁ a) (A₁ x))
@@ -533,8 +533,8 @@ theorem operatorSector_fusion_entry {r s : ℕ} {χ : Fin r → ℕ} {D : Fin s 
     (VF : ∀ a b c, Fin (N a b c) → Matrix (Fin (χ c)) (Fin (χ a * χ b)) ℂ)
     (WF : ∀ a b c, Fin (N a b c) → Matrix (Fin (χ a * χ b)) (Fin (χ c)) ℂ)
     (a b : Fin r)
-    (h : IsBiorthogonalDecomposition (MPOTensor.mulTensor (O a) (O b)).toMPSTensor
-      (fun q : (c : Fin r) × Fin (N a b c) ↦ (O q.1).toMPSTensor)
+    (h : IsBiorthogonalDecomposition (MPOTensor.mulTensor (O a) (O b))
+      (fun q : (c : Fin r) × Fin (N a b c) ↦ O q.1)
       (fun q ↦ VF a b q.1 q.2) (fun q ↦ WF a b q.1 q.2))
     (y x : Fin s) (r₀ s₀ : Fin (D y)) (k₀ l₀ : Fin (D x))
     (α γ : Fin (χ a)) (β δ : Fin (χ b)) :
@@ -547,10 +547,9 @@ theorem operatorSector_fusion_entry {r s : ℕ} {χ : Fin r → ℕ} {D : Fin s 
           (finProdFinEquiv (α, β)) (finProdFinEquiv (γ, δ)) := by
   have he := congrArg
     (fun Z ↦ Z (finProdFinEquiv (α, β)) (finProdFinEquiv (γ, δ)))
-    (h.letter (finProdFinEquiv (finSigmaFinEquiv ⟨y, finProdFinEquiv (r₀, s₀)⟩,
-      finSigmaFinEquiv ⟨x, finProdFinEquiv (k₀, l₀)⟩)))
-  simp only [MPOTensor.toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
-    MPSTensor.finProdFinEquiv_modNat, MPOTensor.mulTensor, Matrix.submatrix_apply,
+    (h.letter (finSigmaFinEquiv ⟨y, finProdFinEquiv (r₀, s₀)⟩,
+      finSigmaFinEquiv ⟨x, finProdFinEquiv (k₀, l₀)⟩))
+  simp only [MPOTensor.mulTensor, Matrix.submatrix_apply,
     Equiv.symm_apply_apply, Matrix.sum_apply, Matrix.kroneckerMap_apply,
     Fintype.sum_sigma, Matrix.mul_assoc] at he
   rw [← finSigmaFinEquiv.sum_comp, Fintype.sum_sigma] at he
@@ -576,16 +575,16 @@ variable {r s : ℕ} {χ₀ χ₁ : Fin r → ℕ} {D₀ D₁ : Fin s → ℕ}
   (VA₁ : ∀ a x y, Fin (M a x y) → Matrix (Fin (D₁ y)) (Fin (χ₁ a * D₁ x)) ℂ)
   (WA₁ : ∀ a x y, Fin (M a x y) → Matrix (Fin (χ₁ a * D₁ x)) (Fin (D₁ y)) ℂ)
   (hF₀ : ∀ a b,
-    IsBiorthogonalDecomposition (MPOTensor.mulTensor (O₀ a) (O₀ b)).toMPSTensor
-      (fun q : (c : Fin r) × Fin (N a b c) ↦ (O₀ q.1).toMPSTensor)
+    IsBiorthogonalDecomposition (MPOTensor.mulTensor (O₀ a) (O₀ b))
+      (fun q : (c : Fin r) × Fin (N a b c) ↦ O₀ q.1)
       (fun q ↦ VF₀ a b q.1 q.2) (fun q ↦ WF₀ a b q.1 q.2))
   (hA₀ : ∀ a x,
     IsBiorthogonalDecomposition (MPOTensor.actTensor (O₀ a) (sectorTensor A₀ x))
       (fun q : (y : Fin s) × Fin (M a x y) ↦ sectorTensor A₀ q.1)
       (fun q ↦ VA₀ a x q.1 q.2) (fun q ↦ WA₀ a x q.1 q.2))
   (hF₁ : ∀ a b,
-    IsBiorthogonalDecomposition (MPOTensor.mulTensor (O₁ a) (O₁ b)).toMPSTensor
-      (fun q : (c : Fin r) × Fin (N a b c) ↦ (O₁ q.1).toMPSTensor)
+    IsBiorthogonalDecomposition (MPOTensor.mulTensor (O₁ a) (O₁ b))
+      (fun q : (c : Fin r) × Fin (N a b c) ↦ O₁ q.1)
       (fun q ↦ VF₁ a b q.1 q.2) (fun q ↦ WF₁ a b q.1 q.2))
   (hA₁ : ∀ a x,
     IsBiorthogonalDecomposition (MPOTensor.actTensor (O₁ a) (sectorTensor A₁ x))
@@ -608,10 +607,10 @@ theorem isBiorthogonalDecomposition_blockMixedMPO (a b : Fin r)
     IsBiorthogonalDecomposition
       (MPOTensor.mulTensor
         (blockMixedMPO (O₀ a) (O₁ a) (VA₀ a) (VA₁ a) (WA₀ a) (WA₁ a))
-        (blockMixedMPO (O₀ b) (O₁ b) (VA₀ b) (VA₁ b) (WA₀ b) (WA₁ b))).toMPSTensor
+        (blockMixedMPO (O₀ b) (O₁ b) (VA₀ b) (VA₁ b) (WA₀ b) (WA₁ b)))
       (fun q : (c : Fin r) × Fin (N a b c) ↦
         (blockMixedMPO (O₀ q.1) (O₁ q.1) (VA₀ q.1) (VA₁ q.1)
-          (WA₀ q.1) (WA₁ q.1)).toMPSTensor)
+          (WA₀ q.1) (WA₁ q.1)))
       (fun q ↦ mixedEndpointMPOFusionAnalysis (VF₀ a b q.1 q.2) (VF₁ a b q.1 q.2))
       (fun q ↦ mixedEndpointMPOFusionSynthesis (WF₀ a b q.1 q.2) (WF₁ a b q.1 q.2)) where
   retract q := by
@@ -630,9 +629,7 @@ theorem isBiorthogonalDecomposition_blockMixedMPO (a b : Fin r)
       fun x => (isInjective_sectorTensor_iff A₁ x).2 (hInj₁ x)
     have hSpan₀ := wordTupleSpanTop_sectorTensor A₀ hInj₀
     have hSpan₁ := wordTupleSpanTop_sectorTensor A₁ hInj₁
-    obtain ⟨⟨i, j⟩, rfl⟩ := finProdFinEquiv.surjective p
-    simp only [MPOTensor.toMPSTensor, MPSTensor.finProdFinEquiv_divNat,
-      MPSTensor.finProdFinEquiv_modNat]
+    obtain ⟨i, j⟩ := p
     obtain ⟨⟨y, t⟩, rfl⟩ := finSigmaFinEquiv.surjective i
     obtain ⟨⟨x, u⟩, rfl⟩ := finSigmaFinEquiv.surjective j
     obtain ⟨⟨p₁, p₂⟩, rfl⟩ := (mixedEndpointPhysicalEquiv (D₀ y) (D₁ y)).surjective t

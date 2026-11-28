@@ -9,6 +9,7 @@ import TNLean.MPS.ParentHamiltonian.ParentInteraction.Transport
 import TNLean.MPS.Operator.Boundary.BlockBoundarySelector
 import TNLean.MPS.Operator.Boundary.DualRepresentationAdjointBoundary
 import TNLean.MPS.Operator.Boundary.BlockSumAdjointBoundary
+import TNLean.MPS.Operator.PairAlphabetBridge
 
 /-!
 # Periodic canonical parents for arbitrary-boundary MPO symmetries
@@ -96,7 +97,7 @@ theorem IsBoundaryCompatible.parentInteraction_matrix_commute_mpoWithBoundary
       (mpoWithBoundary T X L) :=
   MPSTensor.commute_toMatrix'_parentInteraction_of_starAlgebra_invariant A
     (StarAlgebra.adjoin ℂ (Set.range (fun Y ↦ mpoWithBoundary T Y L)))
-    (h.groundSpaceES_invariant_boundaryStarAlgebra hL hstar)
+    (h.map_groundSpace_invariant_boundaryStarAlgebra hL hstar)
     (StarAlgebra.subset_adjoin ℂ _ ⟨X, rfl⟩)
 
 /-- The matrix of the canonical local parent commutes with every boundary
@@ -117,7 +118,7 @@ theorem parentInteraction_matrix_commute_mpoWithBoundary_of_forall_isBoundaryCom
     obtain ⟨j, Y, hY⟩ := hstar i X
     exact ⟨j, Y, hY.symm⟩
   · rintro B ⟨i, X, rfl⟩
-    exact (h i).groundSpaceES_mem_invtSubmodule X hL
+    exact (h i).map_groundSpace_mem_invtSubmodule X hL
 
 /-- Every cyclic translate, including a wrapping window, of the canonical local
 parent commutes with each globally commuting-boundary MPO. Source: GLM23,
@@ -279,7 +280,7 @@ injectivity hypothesis on the compatible state tensor is needed. -/
 theorem IsBoundaryCompatible.commute_hamiltonian_parentRingInteraction_mpo_block_of_periodicAdjoint
     (h : IsBoundaryCompatible (blockSum O) A)
     (hAdjoint : IsPeriodicAdjointFamily O dual) (hdual : Function.Involutive dual)
-    (hNormal : ∀ a, Kraus.IsNormal (O a).toMPSTensor)
+    (hNormal : ∀ a, Kraus.IsNormal (O a))
     (hDim : ∀ a, 0 < dim a) (hL : 0 < L) (hLN : L ≤ N) (a : Fin r) :
     haveI : NeZero N := ⟨by omega⟩;
     Commute (MPSTensor.parentRingInteraction A L N).hamiltonian (mpo (O a) N) := by

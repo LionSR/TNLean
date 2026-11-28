@@ -5,6 +5,7 @@ Authors: TNLean contributors
 -/
 import TNLean.MPS.MPDO.PhysicalSector.InverseMapActiveSectorPrimitivity
 import TNLean.MPS.MPDO.CyclicActiveSector.LemmaC5CaseI
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # The literal normal Case-I coefficient theorem from saturation of the area law
@@ -47,9 +48,9 @@ inverse-map factors. See
 Source: arXiv:1606.00608, Appendix C.2, Case I, Lemmas C.4--C.5, lines
 1374--1505. -/
 theorem exists_rephased_inverseMap_caseI_rank_one_coefficients_witnesses
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hSAL : IsSAL K)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K) (hSAL : IsSAL K)
     (hZCL_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K)
-    (hK_normal : MPTensor.IsNormalTensor K.toMPSTensor) :
+    (hK_normal : MPTensor.IsNormalTensor K) :
     ∃ (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
       (a b : F.ActiveSector p → ℝ),
       (∀ k, 0 ≤ p k) ∧ (∑ k, p k) = 1 ∧
@@ -95,9 +96,9 @@ coefficient-rescaled Case-II result. See
 Source: arXiv:1606.00608, Appendix C.2, Case I, Lemmas C.4--C.5 and the
 corollary, lines 1374--1505. -/
 theorem exists_activeSectorTraceMatrix_rank_one_coefficients_of_isSAL_of_literal_ZCL
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hSAL : IsSAL K)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K) (hSAL : IsSAL K)
     (hZCL_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K)
-    (hK_normal : MPTensor.IsNormalTensor K.toMPSTensor) :
+    (hK_normal : MPTensor.IsNormalTensor K) :
     ∃ (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
       (a b : F.ActiveSector p → ℝ),
       (∀ k, 0 ≤ p k) ∧ (∑ k, p k) = 1 ∧
@@ -125,9 +126,9 @@ claim. See <https://sirui-lu.com/QICLean/paper-gaps/cpgsv17_pf_rank_one.pdf>.
 Source: arXiv:1606.00608, Appendix C.2, Case I, Lemmas C.4--C.5 and the
 corollary, lines 1374--1505. -/
 theorem exists_neighboringOperator_trace_rank_one_coefficients_of_isSAL_of_literal_ZCL
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hSAL : IsSAL K)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K) (hSAL : IsSAL K)
     (hZCL_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K)
-    (hK_normal : MPTensor.IsNormalTensor K.toMPSTensor) :
+    (hK_normal : MPTensor.IsNormalTensor K) :
     ∃ (F : PhysicalSectorFactorization K) (p : Fin F.sectorCount → ℝ)
       (aActive bActive : F.ActiveSector p → ℝ)
       (a b : Fin F.sectorCount → ℝ),
@@ -200,9 +201,9 @@ scale-invariant ZCL or Case-II claim. See
 Source: arXiv:1606.00608, Appendix C.2, the corollary after Lemma C.5, lines
 1503--1506. -/
 theorem exists_physicalSectorFactorization_rank_one_coefficients_of_isSAL_of_literal_ZCL
-    (K : MPOTensor d D) (hK : Kraus.IsInjective K.toMPSTensor) (hSAL : IsSAL K)
+    (K : MPOTensor d D) (hK : Kraus.IsInjective K) (hSAL : IsSAL K)
     (hZCL_sq : physTraceTransfer K * physTraceTransfer K = physTraceTransfer K)
-    (hK_normal : MPTensor.IsNormalTensor K.toMPSTensor) :
+    (hK_normal : MPTensor.IsNormalTensor K) :
     ∃ F : PhysicalSectorFactorization K, ∃ a b : Fin F.sectorCount → ℝ,
       (∀ k h, (F.neighboringOperator k h).PosSemidef) ∧
         (∀ k h, (F.neighboringOperator k h).trace = (a k * b h : ℂ)) ∧

@@ -41,7 +41,7 @@ noncomputable def collapsedBntSectorDecomp
     {r : ℕ} {dim : Fin r → ℕ}
     (μ : Fin r → ℂ)
     (blocks : (k : Fin r) → MPSTensor d (dim k))
-    (hμne : ∀ k, μ k ≠ 0) : SectorDecomposition d :=
+    (hμne : ∀ k, μ k ≠ 0) : SectorDecomposition (Fin d) :=
   let classes := mpvPhaseClassData blocks
   let ζFn : (j : Fin classes.g) → Fin (classes.copies j) → ℂ :=
     fun j q => (classes.enum_phase j q).choose
@@ -171,7 +171,7 @@ theorem collapsedBntSectorDecomp_hasBNT
     (hIrr : ∀ k, Kraus.IsIrreducibleFamily (blocks k))
     (hPrim : ∀ k, _root_.IsPrimitive (Kraus.transferMap (ι := Fin d) (n := Fin (dim k)) (blocks k)))
     (hμne : ∀ k, μ k ≠ 0) :
-    HasBNTSectorData (d := d) (collapsedBntSectorDecomp (d := d) μ blocks hμne) := by
+    HasBNTSectorData (collapsedBntSectorDecomp (d := d) μ blocks hμne) := by
   classical
   let classes := mpvPhaseClassData blocks
   let P := collapsedBntSectorDecomp (d := d) μ blocks hμne
@@ -190,7 +190,7 @@ theorem collapsedBntSectorDecomp_hasBNT
         (fun j => hIrr (classes.repr j))
         (fun j => hTP (classes.repr j))
         classes.blocks_not_equiv i j hij
-  simpa [HasBNTSectorData, P, collapsedBntSectorDecomp, classes] using hLI
+  exact hLI
 
 
 

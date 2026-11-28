@@ -267,10 +267,9 @@ theorem shiftTensor_mpo_eq_translate [NeZero N] : shiftTensor.mpo N = translate 
   classical
   ext a b
   change Matrix.trace (MPOTensor.evalWord shiftTensor (List.ofFn a) (List.ofFn b)) = _
-  rw [← MPOTensor.evalWord_toMPSTensor_pairConfig,
-    MPSTensor.trace_evalWord_eq_sum_cyclic]
+  rw [← MPOTensor.kraus_evalWord_ofFn_pair, MPSTensor.trace_evalWord_eq_sum_cyclic]
   have hlocal (j : Fin N) (g : Fin N → Fin 2) :
-      shiftTensor.toMPSTensor (finProdFinEquiv (a j, b j)) (g j) (g (j + 1)) =
+      shiftTensor (a j, b j) (g j) (g (j + 1)) =
         if g j = b j ∧ g (j + 1) = a j then 1 else 0 := by
     generalize a j = x, b j = y
     fin_cases x <;> fin_cases y <;> exact shiftTensor_apply _ _ _ _

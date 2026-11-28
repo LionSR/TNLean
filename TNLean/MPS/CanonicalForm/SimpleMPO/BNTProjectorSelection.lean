@@ -509,23 +509,12 @@ theorem singleKrausMap_sitewise_bntSectorProjection_mpo_basis
   · simp [hsi]
   · simp [hsi, mpo_zero_of_pos hN]
 
-/-- The MPO representative obtained by absorbing the common copy weight into
-the BNT representative.
-
-Source: arXiv:1606.00608, Appendix C.2, equation `CFK`, lines 1660--1665. -/
-noncomputable def commonWeightAbsorbedBasisMPOTensor
-    (S : MPSTensor.SectorDecomposition (d * d))
-    (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
-      S.weight j q = S.weight j q') (j : Fin S.basisCount) :
-    MPOTensor d (S.basisDim j) :=
-  fun (a, b) => S.commonWeight hWeight j • S.basisMPOTensor j (a, b)
-
 /-- The matching BNT projection fixes the ket index after the common copy
 weight has been absorbed into the normal representative.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1660--1665 and 1733--1770. -/
 theorem ketLeftMul_bntSectorProjection_commonWeightAbsorbedBasis
-    (S : MPSTensor.SectorDecomposition (d * d))
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     {R : (s : Fin S.basisCount) →
@@ -533,84 +522,63 @@ theorem ketLeftMul_bntSectorProjection_commonWeightAbsorbedBasis
     {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
     {C : Matrix (MPSTensor.BlockEntryIndex S.basisDim) (Fin d × Fin d) ℂ}
     (hC : MPSTensor.IsMPOBlockLeftInverse
-      (fun j ↦ S.basisMPOTensor j) C)
-    (hρ : IsThreeSiteFamilyClosure (fun j ↦ S.basisMPOTensor j) R ρ)
+      (fun j ↦ S.basis j) C)
+    (hρ : IsThreeSiteFamilyClosure (fun j ↦ S.basis j) R ρ)
     (hη : EtaStructure ρ) (hR : ∀ s : Fin S.basisCount, R s ≠ 0)
     (s : Fin S.basisCount) :
-    (commonWeightAbsorbedBasisMPOTensor S hWeight s).ketLeftMul
+    MPOTensor.ketLeftMul (S.commonWeightAbsorbedBasis hWeight s)
         (bntSectorProjection hC hρ hη hR s) =
-      commonWeightAbsorbedBasisMPOTensor S hWeight s := by
+      S.commonWeightAbsorbedBasis hWeight s := by
   ext ⟨a, b⟩ β α
   have h := congrFun (congrFun (congrFun
     (ketLeftMul_bntSectorProjection_basis hC hρ hη hR s) (a, b)) β) α
-  simp only [ketLeftMul, commonWeightAbsorbedBasisMPOTensor,
+  simp only [ketLeftMul, MPSTensor.SectorDecomposition.commonWeightAbsorbedBasis,
     Matrix.sum_apply, Matrix.smul_apply, smul_eq_mul] at h ⊢
   calc
     ∑ x, bntSectorProjection hC hρ hη hR s a x *
-        (S.commonWeight hWeight s * S.basisMPOTensor s (x, b) β α) =
+        (S.commonWeight hWeight s * S.basis s (x, b) β α) =
         S.commonWeight hWeight s *
           ∑ x, bntSectorProjection hC hρ hη hR s a x *
-            S.basisMPOTensor s (x, b) β α := by
+            S.basis s (x, b) β α := by
       simpa only [mul_comm, mul_left_comm, mul_assoc] using
         Fintype.sum_mul_mul_eq_mul_sum_mul (S.commonWeight hWeight s)
           (fun x => bntSectorProjection hC hρ hη hR s a x)
-          (fun x => S.basisMPOTensor s (x, b) β α)
+          (fun x => S.basis s (x, b) β α)
     _ = _ := by rw [h]
-
-/-- Returning the absorbed-weight MPO representative to doubled-index MPS
-coordinates gives the absorbed representative defined in
-`CommonWeightAbsorption.lean`. -/
-@[simp] theorem commonWeightAbsorbedBasisMPOTensor_toMPSTensor
-    (S : MPSTensor.SectorDecomposition (d * d))
-    (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
-      S.weight j q = S.weight j q') (j : Fin S.basisCount) :
-    (commonWeightAbsorbedBasisMPOTensor S hWeight j).toMPSTensor =
-      S.commonWeightAbsorbedBasis hWeight j := by
-  funext ab
-  change S.commonWeight hWeight j •
-      S.basis j (finProdFinEquiv (ab.divNat, ab.modNat)) =
-    S.commonWeight hWeight j • S.basis j ab
-  exact congrArg (fun x => S.commonWeight hWeight j • S.basis j x)
-    (finProdFinEquiv.apply_symm_apply ab)
 
 /-- Absorbing the common weight scales the length-`N` MPO by its `N`-th
 power. -/
-theorem mpo_commonWeightAbsorbedBasisMPOTensor
-    (S : MPSTensor.SectorDecomposition (d * d))
+theorem mpo_commonWeightAbsorbedBasis
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q') (j : Fin S.basisCount)
     {N : ℕ} (u v : Fin N → Fin d) :
-    mpo (commonWeightAbsorbedBasisMPOTensor S hWeight j) N u v =
-      (S.commonWeight hWeight j) ^ N * mpo (S.basisMPOTensor j) N u v := by
-  rw [← MPSTensor.mpv_toMPSTensor_pairConfig,
-    commonWeightAbsorbedBasisMPOTensor_toMPSTensor]
-  change MPTensor.mpv
-      (fun i => S.commonWeight hWeight j • S.basis j i)
-      (fun n => finProdFinEquiv (u n, v n)) = _
-  rw [MPSTensor.mpv_smul, ← MPSTensor.mpv_toMPSTensor_pairConfig,
-    S.basisMPOTensor_toMPSTensor]
+    mpo (S.commonWeightAbsorbedBasis hWeight j) N u v =
+      (S.commonWeight hWeight j) ^ N * mpo (S.basis j) N u v := by
+  rw [← mpv_pair, ← mpv_pair]
+  exact S.mpv_commonWeightAbsorbedBasis hWeight j _
 
 /-- The positive-length MPO is the sum of the absorbed normal
 representatives, each multiplied by its copy number.
 
 Source: arXiv:1606.00608, Appendix C.2, lines 1660--1665 and 1753--1770. -/
-theorem mpo_eq_sum_copies_smul_commonWeightAbsorbedBasisMPOTensor
+theorem mpo_eq_sum_copies_smul_commonWeightAbsorbedBasis
     {D : ℕ} (M : MPOTensor d D)
-    (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
+    (hM : MPTensor.SameMPV₂Pos M S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     {N : ℕ} (hN : 0 < N) :
     mpo M N = ∑ s : Fin S.basisCount,
-      (S.copies s : ℂ) • mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) N := by
+      (S.copies s : ℂ) • mpo (S.commonWeightAbsorbedBasis hWeight s) N := by
   ext u v
   rw [Matrix.sum_apply]
   simp only [Matrix.smul_apply, smul_eq_mul]
-  rw [S.mpo_eq_sum_coeff_basisMPOTensor M hM hN u v]
+  rw [S.mpo_eq_sum_coeff_basis M hM hN u v]
   apply Finset.sum_congr rfl
   intro s _
   rw [S.coeff_eq_copies_mul_commonWeight_pow hWeight,
-    mpo_commonWeightAbsorbedBasisMPOTensor]
+    mpo_commonWeightAbsorbedBasis]
   ring
 
 /-- Compressing the full MPO by the sitewise BNT projection selects the
@@ -623,8 +591,8 @@ from common blocking and SAL.
 Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNKj`, lines 1756--1759. -/
 theorem singleKrausMap_sitewise_bntSectorProjection_mpo
     {D : ℕ} (M : MPOTensor d D)
-    (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
+    (hM : MPTensor.SameMPV₂Pos M S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     {R : (s : Fin S.basisCount) →
@@ -632,22 +600,22 @@ theorem singleKrausMap_sitewise_bntSectorProjection_mpo
     {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
     {C : Matrix (MPSTensor.BlockEntryIndex S.basisDim) (Fin d × Fin d) ℂ}
     (hC : MPSTensor.IsMPOBlockLeftInverse
-      (fun j ↦ S.basisMPOTensor j) C)
-    (hρ : IsThreeSiteFamilyClosure (fun j ↦ S.basisMPOTensor j) R ρ)
+      (fun j ↦ S.basis j) C)
+    (hρ : IsThreeSiteFamilyClosure (fun j ↦ S.basis j) R ρ)
     (hη : EtaStructure ρ) (hR : ∀ s : Fin S.basisCount, R s ≠ 0)
     {N : ℕ} (hN : 0 < N) (s : Fin S.basisCount) :
     singleKrausMap
         (Matrix.piKronecker fun _ : Fin N ↦ (bntSectorProjection hC hρ hη hR s))
         (mpo M N) =
       (S.copies s : ℂ) •
-        mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) N := by
+        mpo (S.commonWeightAbsorbedBasis hWeight s) N := by
   classical
   have hmpo : mpo M N = ∑ j : Fin S.basisCount,
-      S.coeff N j • mpo (S.basisMPOTensor j) N := by
+      S.coeff N j • mpo (S.basis j) N := by
     ext u v
     rw [Matrix.sum_apply]
     simp only [Matrix.smul_apply, smul_eq_mul]
-    exact S.mpo_eq_sum_coeff_basisMPOTensor M hM hN u v
+    exact S.mpo_eq_sum_coeff_basis M hM hN u v
   rw [hmpo, map_sum]
   simp_rw [map_smul]
   simp_rw [singleKrausMap_sitewise_bntSectorProjection_mpo_basis
@@ -657,7 +625,7 @@ theorem singleKrausMap_sitewise_bntSectorProjection_mpo
     ext u v
     simp only [Matrix.smul_apply, smul_eq_mul]
     rw [S.coeff_eq_copies_mul_commonWeight_pow hWeight,
-      mpo_commonWeightAbsorbedBasisMPOTensor]
+      mpo_commonWeightAbsorbedBasis]
     ring
   · intro t _ hts
     simp [Ne.symm hts]
@@ -675,8 +643,8 @@ orthogonal one-site projection has a Hermitian sitewise tensor power.
 Source: arXiv:1606.00608, Appendix C.2, equation `sigmaNKj`, lines 1756--1759. -/
 theorem sitewise_bntSectorProjection_mul_mpo_mul_self
     {D : ℕ} (M : MPOTensor d D)
-    (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
+    (hM : MPTensor.SameMPV₂Pos M S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     {R : (s : Fin S.basisCount) →
@@ -684,14 +652,14 @@ theorem sitewise_bntSectorProjection_mul_mpo_mul_self
     {ρ : Matrix (Fin d × Fin d × Fin d) (Fin d × Fin d × Fin d) ℂ}
     {C : Matrix (MPSTensor.BlockEntryIndex S.basisDim) (Fin d × Fin d) ℂ}
     (hC : MPSTensor.IsMPOBlockLeftInverse
-      (fun j ↦ S.basisMPOTensor j) C)
-    (hρ : IsThreeSiteFamilyClosure (fun j ↦ S.basisMPOTensor j) R ρ)
+      (fun j ↦ S.basis j) C)
+    (hρ : IsThreeSiteFamilyClosure (fun j ↦ S.basis j) R ρ)
     (hη : EtaStructure ρ) (hR : ∀ s : Fin S.basisCount, R s ≠ 0)
     {N : ℕ} (hN : 0 < N) (s : Fin S.basisCount) :
     let P := (Matrix.piKronecker fun _ : Fin N ↦ (bntSectorProjection hC hρ hη hR s))
     P * mpo M N * P =
       (S.copies s : ℂ) •
-        mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) N := by
+        mpo (S.commonWeightAbsorbedBasis hWeight s) N := by
   dsimp only
   let P := (Matrix.piKronecker fun _ : Fin N ↦ (bntSectorProjection hC hρ hη hR s))
   have hP : P.IsHermitian := Matrix.IsHermitian.piKronecker fun _ : Fin N ↦
@@ -729,25 +697,25 @@ Source: arXiv:1606.00608, Appendix C.2, equations `PjKiPj`, `generateMPDO`,
 and `sigmaNKj`, lines 1680--1759. -/
 theorem exists_bntProjectorSelection_positiveLength_of_sameMPV₂Pos_isSAL
     {D : ℕ} (M : MPOTensor d D)
-    (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
+    (hM : MPTensor.SameMPV₂Pos M S.toTensor)
     (hWeight : ∀ (j : Fin S.basisCount) (q q' : Fin (S.copies j)),
       S.weight j q = S.weight j q')
     (hnonNil : ∀ j,
-      ¬ IsNilpotent (doubledPhysTraceTransfer d (S.basis j)))
+      ¬ IsNilpotent (physTraceTransfer (S.basis j)))
     (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
     (hSAL : IsSAL M) :
     ∃ W : ThreeSiteClosureWitness M S,
       (∀ (i s t : Fin S.basisCount), s ≠ t ∨ i ≠ s →
           ∀ (β α : Fin (S.basisDim i)),
             bntSectorProjection W.hC W.hρ W.hη W.hR s *
-                physicalSlice (S.basisMPOTensor i) β α *
+                physicalSlice (S.basis i) β α *
                 bntSectorProjection W.hC W.hρ W.hη W.hR t = 0) ∧
         (∀ (N : ℕ), 0 < N → ∀ s : Fin S.basisCount,
           let P := (Matrix.piKronecker fun _ : Fin N ↦ (bntSectorProjection W.hC W.hρ W.hη W.hR s))
           P * mpo M N * P =
             (S.copies s : ℂ) •
-              mpo (commonWeightAbsorbedBasisMPOTensor S hWeight s) N) := by
+              mpo (S.commonWeightAbsorbedBasis hWeight s) N) := by
   obtain ⟨W, _hunique, _hproj, _horth, _hsum⟩ :=
     exists_bntSectorProjectors_four_of_sameMPV₂Pos_isSAL
       M S hM hWeight hnonNil hSpan hSAL

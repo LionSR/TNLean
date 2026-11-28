@@ -54,19 +54,19 @@ open scoped Matrix Kronecker
 
 namespace MPSTensor
 
-variable {R : Type*} [CommRing R] (f : R →+* ℂ) {d D D₁ D₂ : ℕ}
+variable {R : Type*} [CommRing R] (f : R →+* ℂ) {α : Type*} {d D D₁ D₂ : ℕ}
 
 /-! ### Word evaluation -/
 
 /-- Word evaluation of a tensor over a commutative ring, `A^{i₁} ⋯ A^{iₙ}`, matching
 `Kraus.evalWord`. -/
-def evalWordR (A : Fin d → Matrix (Fin D) (Fin D) R) :
-    List (Fin d) → Matrix (Fin D) (Fin D) R
+def evalWordR (A : α → Matrix (Fin D) (Fin D) R) :
+    List α → Matrix (Fin D) (Fin D) R
   | [] => 1
   | i :: w => A i * evalWordR A w
 
 /-- Word evaluation commutes with the entrywise image. -/
-theorem evalWord_complexOfRing (A : Fin d → Matrix (Fin D) (Fin D) R) (w : List (Fin d)) :
+theorem evalWord_complexOfRing (A : α → Matrix (Fin D) (Fin D) R) (w : List α) :
     Kraus.evalWord (fun i => Matrix.complexOfRing f (A i)) w = Matrix.complexOfRing f (evalWordR A
         w) := by
   induction w with
@@ -77,16 +77,16 @@ theorem evalWord_complexOfRing (A : Fin d → Matrix (Fin D) (Fin D) R) (w : Lis
 `E_{ij}` finitely many words of one length `N` of a tensor over `R` combine, with coefficients in
 `R`, to `c • E_{ij}` for one `c` whose image is nonzero, then the words of length `N` of the
 complex tensor span the full matrix algebra. -/
-theorem isNBlkInjective_of_complexOfRing_smul_single {A : Fin d → Matrix (Fin D) (Fin D) ℂ}
-    (AR : Fin d → Matrix (Fin D) (Fin D) R) (hA : ∀ a, A a = Matrix.complexOfRing f (AR a)) {N : ℕ}
-    {κ : Type*} [Fintype κ] (word : Fin D → Fin D → κ → Fin N → Fin d)
+theorem isNBlkInjective_of_complexOfRing_smul_single {A : α → Matrix (Fin D) (Fin D) ℂ}
+    (AR : α → Matrix (Fin D) (Fin D) R) (hA : ∀ a, A a = Matrix.complexOfRing f (AR a)) {N : ℕ}
+    {κ : Type*} [Fintype κ] (word : Fin D → Fin D → κ → Fin N → α)
     (coeff : Fin D → Fin D → κ → R) {c : R} (hc : f c ≠ 0)
     (h : ∀ i j, ∑ k, coeff i j k • evalWordR AR (List.ofFn (word i j k)) =
       c • Matrix.single i j 1) :
     Kraus.IsNBlkInjective A N := by
   rw [Kraus.IsNBlkInjective, Kraus.wordSpan]
   set T := Submodule.span ℂ
-    (Set.range fun w : Fin N → Fin d => Kraus.evalWord A (List.ofFn w)) with hT
+    (Set.range fun w : Fin N → α => Kraus.evalWord A (List.ofFn w)) with hT
   have hA' : A = fun a => Matrix.complexOfRing f (AR a) := funext hA
   refine T.eq_top_of_forall_single_mem fun i j => ?_
   have h1 := congrArg (Matrix.complexOfRing f) (h i j)
@@ -102,9 +102,9 @@ theorem isNBlkInjective_of_complexOfRing_smul_single {A : Fin d → Matrix (Fin 
 /-- **Normality from a decided table of scaled matrix units**: the certificate of
 `isNBlkInjective_of_complexOfRing_smul_single` at a positive length `N` shows that the complex
 tensor is normal at blocking length `N`. -/
-theorem isNormal_of_complexOfRing_smul_single {A : Fin d → Matrix (Fin D) (Fin D) ℂ}
-    (AR : Fin d → Matrix (Fin D) (Fin D) R) (hA : ∀ a, A a = Matrix.complexOfRing f (AR a)) {N : ℕ}
-    (hN : 0 < N) {κ : Type*} [Fintype κ] (word : Fin D → Fin D → κ → Fin N → Fin d)
+theorem isNormal_of_complexOfRing_smul_single {A : α → Matrix (Fin D) (Fin D) ℂ}
+    (AR : α → Matrix (Fin D) (Fin D) R) (hA : ∀ a, A a = Matrix.complexOfRing f (AR a)) {N : ℕ}
+    (hN : 0 < N) {κ : Type*} [Fintype κ] (word : Fin D → Fin D → κ → Fin N → α)
     (coeff : Fin D → Fin D → κ → R) {c : R} (hc : f c ≠ 0)
     (h : ∀ i j, ∑ k, coeff i j k • evalWordR AR (List.ofFn (word i j k)) =
       c • Matrix.single i j 1) :
@@ -113,9 +113,9 @@ theorem isNormal_of_complexOfRing_smul_single {A : Fin d → Matrix (Fin D) (Fin
 
 /-- **Normality from a decided table of matrix units**: the unscaled case `c = 1` of
 `isNormal_of_complexOfRing_smul_single`. -/
-theorem isNormal_of_complexOfRing_single {A : Fin d → Matrix (Fin D) (Fin D) ℂ}
-    (AR : Fin d → Matrix (Fin D) (Fin D) R) (hA : ∀ a, A a = Matrix.complexOfRing f (AR a)) {N : ℕ}
-    (hN : 0 < N) {κ : Type*} [Fintype κ] (word : Fin D → Fin D → κ → Fin N → Fin d)
+theorem isNormal_of_complexOfRing_single {A : α → Matrix (Fin D) (Fin D) ℂ}
+    (AR : α → Matrix (Fin D) (Fin D) R) (hA : ∀ a, A a = Matrix.complexOfRing f (AR a)) {N : ℕ}
+    (hN : 0 < N) {κ : Type*} [Fintype κ] (word : Fin D → Fin D → κ → Fin N → α)
     (coeff : Fin D → Fin D → κ → R)
     (h : ∀ i j, ∑ k, coeff i j k • evalWordR AR (List.ofFn (word i j k)) =
       Matrix.single i j 1) :
@@ -127,9 +127,9 @@ theorem isNormal_of_complexOfRing_single {A : Fin d → Matrix (Fin D) (Fin D) �
 images of matrices over `R` rescaled by one nonzero complex number, and every matrix unit
 `E_{xy}` is a multiple, with a coefficient of nonzero image, of one letter, then the letters
 span the full matrix algebra and the tensor is normal at blocking length one. -/
-theorem isNormal_of_complexOfRing_letter_eq_smul_single {A : Fin d → Matrix (Fin D) (Fin D) ℂ}
-    (AR : Fin d → Matrix (Fin D) (Fin D) R) {c : ℂ} (hc : c ≠ 0)
-    (hA : ∀ a, A a = c • Matrix.complexOfRing f (AR a)) (ℓ : Fin D → Fin D → Fin d)
+theorem isNormal_of_complexOfRing_letter_eq_smul_single {A : α → Matrix (Fin D) (Fin D) ℂ}
+    (AR : α → Matrix (Fin D) (Fin D) R) {c : ℂ} (hc : c ≠ 0)
+    (hA : ∀ a, A a = c • Matrix.complexOfRing f (AR a)) (ℓ : Fin D → Fin D → α)
     (w : Fin D → Fin D → R) (hw : ∀ x y, f (w x y) ≠ 0)
     (h : ∀ x y, AR (ℓ x y) = w x y • Matrix.single x y 1) :
     Kraus.IsNormal A := by
@@ -143,54 +143,55 @@ theorem isNormal_of_complexOfRing_letter_eq_smul_single {A : Fin d → Matrix (F
 
 /-! ### Bond-space products and actions -/
 
-/-- The bond-space product of two tensors over a commutative ring,
-`(M · N)^{ik} = ∑_j M^{ij} ⊗ N^{jk}`, in the bond order of `finProdFinEquiv`, matching
+/-- The bond-space product of two tensors over a commutative ring on the pair alphabet,
+`(M · N)^{(i,k)} = ∑_j M^{(i,j)} ⊗ N^{(j,k)}`, in the bond order of `finProdFinEquiv`, matching
 `MPOTensor.mulTensor`. -/
-def mulTensorR (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) R)
-    (N : Fin d → Fin d → Matrix (Fin D₂) (Fin D₂) R) (i k : Fin d) :
+def mulTensorR (M : Fin d × Fin d → Matrix (Fin D₁) (Fin D₁) R)
+    (N : Fin d × Fin d → Matrix (Fin D₂) (Fin D₂) R) (ik : Fin d × Fin d) :
     Matrix (Fin (D₁ * D₂)) (Fin (D₁ * D₂)) R :=
-  (∑ j : Fin d, (M i j) ⊗ₖ (N j k)).submatrix finProdFinEquiv.symm finProdFinEquiv.symm
+  (∑ j : Fin d, (M (ik.1, j)) ⊗ₖ (N (j, ik.2))).submatrix finProdFinEquiv.symm
+    finProdFinEquiv.symm
 
 /-- The bond-space action of a matrix product operator tensor over a commutative ring on a
-matrix product state tensor over the same ring, `(M · A)^i = ∑_j M^{ij} ⊗ A^j`, in the bond
+matrix product state tensor over the same ring, `(M · A)^i = ∑_j M^{(i,j)} ⊗ A^j`, in the bond
 order of `finProdFinEquiv`, matching `MPOTensor.actTensor`. -/
-def actTensorR (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) R)
+def actTensorR (M : Fin d × Fin d → Matrix (Fin D₁) (Fin D₁) R)
     (A : Fin d → Matrix (Fin D₂) (Fin D₂) R) (i : Fin d) :
     Matrix (Fin (D₁ * D₂)) (Fin (D₁ * D₂)) R :=
-  (∑ j : Fin d, (M i j) ⊗ₖ (A j)).submatrix finProdFinEquiv.symm finProdFinEquiv.symm
+  (∑ j : Fin d, (M (i, j)) ⊗ₖ (A j)).submatrix finProdFinEquiv.symm finProdFinEquiv.symm
 
 /-- The bond-space product of two tensors rescaled by one complex scalar is the entrywise image
 of their bond-space product, rescaled by the square of that scalar. -/
 theorem mulTensor_smul_complexOfRing (c : ℂ)
-    (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) R)
-    (N : Fin d → Fin d → Matrix (Fin D₂) (Fin D₂) R) (i k : Fin d) :
-    MPOTensor.mulTensor (Function.uncurry fun i j => c • Matrix.complexOfRing f (M i j))
-        (Function.uncurry fun i j => c • Matrix.complexOfRing f (N i j)) (i, k) =
-      (c * c) • Matrix.complexOfRing f (mulTensorR M N i k) := by
+    (M : Fin d × Fin d → Matrix (Fin D₁) (Fin D₁) R)
+    (N : Fin d × Fin d → Matrix (Fin D₂) (Fin D₂) R) (ik : Fin d × Fin d) :
+    MPOTensor.mulTensor (fun ij => c • Matrix.complexOfRing f (M ij))
+        (fun ij => c • Matrix.complexOfRing f (N ij)) ik =
+      (c * c) • Matrix.complexOfRing f (mulTensorR M N ik) := by
+  obtain ⟨i, k⟩ := ik
   ext x y
   simp only [MPOTensor.mulTensor_apply, mulTensorR, Matrix.submatrix_apply, Matrix.sum_apply,
     Matrix.smul_apply, Matrix.kroneckerMap_apply, Matrix.complexOfRing_apply, smul_eq_mul, map_sum,
-    map_mul, Function.uncurry_apply_pair]
+    map_mul]
   rw [Finset.mul_sum]
   exact Finset.sum_congr rfl fun j _ => by ring
 
 /-- The bond-space product commutes with the entrywise image. -/
-theorem mulTensor_complexOfRing (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) R)
-    (N : Fin d → Fin d → Matrix (Fin D₂) (Fin D₂) R) (i k : Fin d) :
-    MPOTensor.mulTensor (Function.uncurry fun i j => Matrix.complexOfRing f (M i j))
-        (Function.uncurry fun i j => Matrix.complexOfRing f (N i j)) (i, k) =
-      Matrix.complexOfRing f (mulTensorR M N i k) := by
-  simpa using mulTensor_smul_complexOfRing f 1 M N i k
+theorem mulTensor_complexOfRing (M : Fin d × Fin d → Matrix (Fin D₁) (Fin D₁) R)
+    (N : Fin d × Fin d → Matrix (Fin D₂) (Fin D₂) R) (ik : Fin d × Fin d) :
+    MPOTensor.mulTensor (fun ij => Matrix.complexOfRing f (M ij))
+        (fun ij => Matrix.complexOfRing f (N ij)) ik =
+      Matrix.complexOfRing f (mulTensorR M N ik) := by
+  simpa using mulTensor_smul_complexOfRing f 1 M N ik
 
 /-- The bond-space action commutes with the entrywise image. -/
-theorem actTensor_complexOfRing (M : Fin d → Fin d → Matrix (Fin D₁) (Fin D₁) R)
+theorem actTensor_complexOfRing (M : Fin d × Fin d → Matrix (Fin D₁) (Fin D₁) R)
     (A : Fin d → Matrix (Fin D₂) (Fin D₂) R) (i : Fin d) :
-    MPOTensor.actTensor (Function.uncurry fun i j => Matrix.complexOfRing f (M i j))
+    MPOTensor.actTensor (fun ij => Matrix.complexOfRing f (M ij))
         (fun j => Matrix.complexOfRing f (A j)) i =
       Matrix.complexOfRing f (actTensorR M A i) := by
   ext x y
   simp only [MPOTensor.actTensor_apply, actTensorR, Matrix.submatrix_apply, Matrix.sum_apply,
-    Matrix.kroneckerMap_apply, Matrix.complexOfRing_apply, map_sum, map_mul,
-    Function.uncurry_apply_pair]
+    Matrix.kroneckerMap_apply, Matrix.complexOfRing_apply, map_sum, map_mul]
 
 end MPSTensor

@@ -53,9 +53,11 @@ private theorem toTensorFromBlocks_eq_sum_blockInclusion {r : ℕ} {dim : Fin r 
 
 namespace SectorDecomposition
 
+variable {α : Type*}
+
 /-- The nonzero weights of the retained copies in arXiv:2307.01696, eq. (S2),
 with the positive multiplicities already supplied by the sector decomposition. -/
-def copyWeights (P : SectorDecomposition d) : CopyWeights P.basisCount P.copies where
+def copyWeights (P : SectorDecomposition α) : CopyWeights P.basisCount P.copies where
   weight := P.weight
   mult_pos := P.copies_pos
   weight_ne_zero := P.weight_ne_zero
@@ -63,13 +65,13 @@ def copyWeights (P : SectorDecomposition d) : CopyWeights P.basisCount P.copies 
 /-- The copy-weight power sum is the sector coefficient
 `βⱼ = ∑ₖ μ_{j,k}^N` of arXiv:2307.01696, eq. (S4). -/
 @[simp]
-theorem bntWeight_copyWeights (P : SectorDecomposition d) (N : ℕ) :
+theorem bntWeight_copyWeights (P : SectorDecomposition α) (N : ℕ) :
     bntWeight P.copyWeights N = P.coeff N :=
   rfl
 
 /-- Distinct retained copies occupy disjoint bond coordinates in the direct sum of
 arXiv:2307.01696, eq. (S2), even when they are copies of the same basis block. -/
-theorem copyCoord_disjoint (P : SectorDecomposition d)
+theorem copyCoord_disjoint (P : SectorDecomposition α)
     (p p' : (j : Fin P.basisCount) × Fin (P.copies j)) (h : p ≠ p')
     (a : Fin (P.basisDim p.1)) (a' : Fin (P.basisDim p'.1)) :
     P.copyCoord p.1 p.2 a ≠ P.copyCoord p'.1 p'.2 a' := by
@@ -80,7 +82,7 @@ theorem copyCoord_disjoint (P : SectorDecomposition d)
 /-- The assembled sector tensor is exactly the repeated block sum of arXiv:2307.01696,
 eq. (S2), on its canonical copy coordinates. This is equality of tensors, so the
 identification also preserves the blocked physical matrix and its polar factors. -/
-theorem toTensor_eq_repeatedBlockSum (P : SectorDecomposition d) :
+theorem toTensor_eq_repeatedBlockSum {d : ℕ} (P : SectorDecomposition (Fin d)) :
     P.toTensor = repeatedBlockSum P.basis P.copyCoord P.copyWeights := by
   classical
   funext i

@@ -6,6 +6,7 @@ Authors: TNLean contributors
 import TNLean.MPS.Examples.BondTwoSingleton.BondTwoSingletonGramBoundary
 import TNLean.MPS.Operator.Periodic.CyclicEdgeWeightTensor
 import TNLean.MPS.MPDO.SectorMaps.VerticalSectorCoordinates
+import TNLean.MPS.CanonicalForm.PhysicalReindex
 
 /-!
 # An all-length positive base model for the bond-two singleton
@@ -180,24 +181,22 @@ theorem baseSymbolTensor_isNormalTensor (a : Fin 4) :
 def baseSymbolBlocks : (a : Fin 4) → MPSTensor 4 1 :=
   baseSymbolTensor
 
-/-- The doubled-index tensor of the ambient MPO is literally the direct sum of
-its four bond-one symbol blocks, each with weight one. -/
-theorem baseMPO_toMPSTensor_eq_symbolBlocks :
-    baseMPO.toMPSTensor =
-      MPTensor.toTensorFromBlocks (fun _ : Fin 4 ↦ (1 : ℂ)) baseSymbolBlocks := by
+/-- The ambient MPO is literally the direct sum of its four bond-one symbol blocks, each with
+weight one, read on the pair alphabet through the symbol `finProdFinEquiv (i, j)`. -/
+theorem baseMPO_eq_symbolBlocks :
+    baseMPO = Kraus.reindexPhysical (finProdFinEquiv : I × I → Fin 4)
+      (MPTensor.toTensorFromBlocks (dim := fun _ : Fin 4 ↦ 1) (fun _ ↦ (1 : ℂ))
+        baseSymbolBlocks) := by
   let e : (Σ _k : Fin 4, Fin 1) ≃ Fin 4 := finSigmaFinEquiv
   have hflat (k : Fin 4) : e ⟨k, 0⟩ = k := by
     fin_cases k <;> rfl
   have hflat_symm (k : Fin 4) : e.symm k = ⟨k, 0⟩ := by
     apply e.injective
     rw [e.apply_symm_apply, hflat]
-  funext p
-  obtain ⟨⟨i, j⟩, rfl⟩ :=
-    (finProdFinEquiv : I × I ≃ Fin 4).surjective p
+  funext ⟨i, j⟩
   ext x y
-  simp only [baseMPO, toMPSTensor, MPTensor.toTensorFromBlocks,
-    baseSymbolBlocks, baseSymbolTensor, Matrix.reindex_apply, one_smul,
-    MPSTensor.finProdFinEquiv_divNat, MPSTensor.finProdFinEquiv_modNat]
+  simp only [baseMPO, Kraus.reindexPhysical, MPTensor.toTensorFromBlocks,
+    baseSymbolBlocks, baseSymbolTensor, Matrix.reindex_apply, one_smul]
   change Matrix.single (finProdFinEquiv (i, j)) (finProdFinEquiv (i, j)) 1 x y =
     Matrix.blockDiagonal' (fun k : Fin 4 ↦ baseSymbolTensor k (finProdFinEquiv (i, j)))
       (e.symm x) (e.symm y)
@@ -210,15 +209,15 @@ theorem baseMPO_toMPSTensor_eq_symbolBlocks :
     simp [Matrix.single]
     aesop
 
-/-- The ambient doubled-index MPS is in literal CPSV canonical form via the
+/-- The ambient MPO, a tensor on the pair alphabet, is in literal CPSV canonical form via the
 four displayed bond-one symbol blocks. -/
-theorem baseMPO_toMPSTensor_isCPSVCanonicalForm :
-    MPTensor.IsCPSVCanonicalForm baseMPO.toMPSTensor := by
-  rw [baseMPO_toMPSTensor_eq_symbolBlocks]
-  exact (MPTensor.CPSVCanonicalFormData.ofBlocks
+theorem baseMPO_isCPSVCanonicalForm :
+    MPTensor.IsCPSVCanonicalForm baseMPO := by
+  rw [baseMPO_eq_symbolBlocks]
+  exact MPTensor.IsCPSVCanonicalForm.reindexPhysical (MPTensor.CPSVCanonicalFormData.ofBlocks
     (fun _ : Fin 4 ↦ by simp)
     (fun _ : Fin 4 ↦ (1 : ℂ)) (fun _ ↦ one_ne_zero) baseSymbolBlocks
-    (fun a ↦ baseSymbolTensor_isNormalTensor a)).isCPSVCanonicalForm
+    (fun a ↦ baseSymbolTensor_isNormalTensor a)).isCPSVCanonicalForm _
 
 /-! ### Raw retained cyclic-edge projections -/
 
@@ -444,21 +443,9 @@ theorem mpo_verticalBNTMPO_normalizedSingletonTensor
       ((singletonScale : ℂ) ^ L) •
         mpo (verticalBNTMPO singletonTensor) L := by
   ext sigma tau
-  rw [← MPSTensor.mpv_toMPSTensor_pairConfig,
-    verticalBNTMPO_toMPSTensor]
-  change MPTensor.mpv
-      (fun v ↦ (singletonScale : ℂ) • singletonTensor v)
-      (fun n ↦ finProdFinEquiv (sigma n, tau n)) = _
-  rw [MPSTensor.mpv_smul]
-  change (singletonScale : ℂ) ^ L *
-      MPTensor.mpv singletonTensor
-        (fun n ↦ finProdFinEquiv (sigma n, tau n)) =
-    (singletonScale : ℂ) ^ L *
-      mpo (verticalBNTMPO singletonTensor) L sigma tau
-  congr 1
-  simpa only [verticalBNTMPO_toMPSTensor] using
-    MPSTensor.mpv_toMPSTensor_pairConfig
-      (verticalBNTMPO singletonTensor) sigma tau
+  rw [Matrix.smul_apply, smul_eq_mul, ← MPOTensor.mpv_pair, ← MPOTensor.mpv_pair,
+    mpv_verticalBNTMPO, mpv_verticalBNTMPO]
+  exact MPSTensor.mpv_smul (singletonScale : ℂ) singletonTensor _
 
 /-- The normalized one-label operator algebra has coefficient
 `singletonScale ^ L`. -/

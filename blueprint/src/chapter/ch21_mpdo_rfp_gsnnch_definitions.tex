@@ -91,7 +91,7 @@ without sector projections.
 \begin{lemma}[Injective restriction to a BNT projector range]
     \label{thm:mpdo_bnt_physical_support_restriction}
     \lean{MPOTensor.exists_physicalSupportRestrictionData}
-    \lean{MPOTensor.commonWeightAbsorbedBasisMPOTensor_isInjective}
+    \lean{MPOTensor.commonWeightAbsorbedBasis_isInjective}
     \lean{MPOTensor.nonempty_physicalSupportRestrictionData_commonWeightAbsorbedBasis}
     \leanok
     \uses{def:mpdo_physical_support_restriction}
@@ -979,9 +979,9 @@ without sector projections.
 \begin{theorem}[A compatible sector decomposition with ambient ZCL satisfies SAL]
     \label{thm:mpdo_canonical_bnt_proportional_sectors_zcl_sal}
     \lean{MPOTensor.%
-        isSAL_of_commonWeightAbsorbedBasisMPOTensor_of_proportionalSectors_of_isSourceZCL}
+        isSAL_of_commonWeightAbsorbedBasis_of_proportionalSectors_of_isSourceZCL}
     \leanok
-    \uses{def:mpo_tensor,def:sector_weight_data,def:global_gauge_of_blocks,def:same_mpv2_pos,def:blockwise_product_word_span,def:mpdo_doubled_phys_trace_transfer,def:mpdo_common_sector_weight_absorption,def:mpdo_proportional_orthogonal_commuting_sector_family,def:mpo_source_zcl,def:is_sal}
+    \uses{def:mpo_tensor,def:sector_weight_data,def:global_gauge_of_blocks,def:same_mpv2_pos,def:blockwise_product_word_span,def:mpo_physical_trace_transfer,def:mpdo_common_sector_weight_absorption,def:mpdo_proportional_orthogonal_commuting_sector_family,def:mpo_source_zcl,def:is_sal}
     Establishing \cite[Proposition~C.14]{Cirac2016MPDO_arXiv} with the
     ambient zero-correlation-length and one-site positivity hypotheses made
     explicit (see \cite{gap:cpsv16_commuting_form_to_sal}), let $S$ be a
@@ -1018,7 +1018,7 @@ without sector projections.
 
 \begin{corollary}[Orthogonal BNT sector sums preserve SAL]
     \label{cor:mpdo_bnt_orthogonal_sector_sum_sal}
-    \lean{MPOTensor.isSAL_of_commonWeightAbsorbedBasisMPOTensor_of_orthogonalCommutingSectorFamily}
+    \lean{MPOTensor.isSAL_of_commonWeightAbsorbedBasis_of_orthogonalCommutingSectorFamily}
     \leanok
     \uses{cor:mpdo_orthogonal_commuting_sector_sum_sal,def:same_mpv2_pos}
     Let $M$ have a nonempty basis-of-normal-tensors decomposition with
@@ -1038,7 +1038,7 @@ without sector projections.
 
 \begin{lemma}[Orthogonal BNT sector products give the GSNNCH form]
     \label{cor:mpdo_bnt_orthogonal_commuting_sectors_gsnnch}
-    \lean{MPOTensor.hasGSNNCHForm_of_commonWeightAbsorbedBasisMPOTensor}
+    \lean{MPOTensor.hasGSNNCHForm_of_commonWeightAbsorbedBasis}
     \leanok
     \uses{def:same_mpv2_pos,thm:mpdo_orthogonal_commuting_sectors_gsnnch}
     Let $M$ be an MPO tensor and let its BNT canonical form have normal

@@ -169,24 +169,24 @@ such that the unitary conjugate tensor
 This is the formal analogue of bringing a block into **Canonical Form II** (CFII) *after*
 one has already chosen a TP representative; it does not say that the original pre-TP-gauge tensor
 is related to a CFII representative by a unitary similarity alone. -/
-theorem exists_CFII_data_of_TP_of_isIrreducibleFamily
-    (A : MPSTensor d D)
-    (hTP : ∑ i : Fin d, (A i)ᴴ * A i = 1)
-    (hIrr : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) A)
+theorem exists_CFII_data_of_TP_of_isIrreducibleFamily {α : Type*} [Fintype α]
+    (A : MPTensor α (Fin D))
+    (hTP : ∑ i : α, (A i)ᴴ * A i = 1)
+    (hIrr : Kraus.IsIrreducibleFamily (ι := α) (n := Fin D) A)
     (hD : 0 < D) :
     ∃ (U : Matrix.unitaryGroup (Fin D) ℂ)
       (Λ : Matrix (Fin D) (Fin D) ℂ),
-        let B : MPSTensor d D :=
+        let B : MPTensor α (Fin D) :=
           fun i =>
             (↑U : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * (↑U : Matrix (Fin D) (Fin D) ℂ);
         SameMPV₂ A B ∧
         Λ.PosDef ∧ Λ.IsDiag ∧
-        (∑ i : Fin d, (B i)ᴴ * (B i) = 1) ∧
-        Kraus.transferMap (ι := Fin d) (n := Fin D) B Λ = Λ := by
+        (∑ i : α, (B i)ᴴ * (B i) = 1) ∧
+        Kraus.transferMap (ι := α) (n := Fin D) B Λ = Λ := by
   classical
   obtain ⟨U, Λ, hΛ_pd, hΛ_diag, hTP_conj, hΛ_fix⟩ :=
     exists_unitary_diag_posDef_fixedPoint_of_TP_of_isIrreducibleFamily
-      (d := d) (D := D) A hTP hIrr hD
+      (D := D) A hTP hIrr hD
   refine ⟨U, Λ, ?_⟩
   -- MPV is invariant under unitary conjugation.
   have hSame :
@@ -194,7 +194,7 @@ theorem exists_CFII_data_of_TP_of_isIrreducibleFamily
         (fun i =>
           (↑U : Matrix (Fin D) (Fin D) ℂ)ᴴ * A i * (↑U : Matrix (Fin D) (Fin D) ℂ)) := by
     intro N σ
-    exact sameMPV_conj_unitary (d := d) (D := D) A U N σ
+    exact sameMPV_conj_unitary (D := D) A U N σ
   -- Collect the statements under the `let B := ...` binder.
   exact ⟨hSame, hΛ_pd, hΛ_diag, hTP_conj, hΛ_fix⟩
 

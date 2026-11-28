@@ -137,7 +137,7 @@ theorem eventually_toTensorFromBlocks_hamiltonian_parentRingInteraction_gap_ge_o
     rw [hεsqrt]
     nlinarith [sq_nonneg η]
   obtain ⟨L₀, hL₀, hKernel⟩ :=
-    exists_ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_groundSpaceES
+    exists_ker_hamiltonian_parentChainInteraction_toTensorFromBlocks_eq_map_groundSpace
       μ A hμ ρ hP hρ hDistinct
   filter_upwards [eventually_ge_atTop (max L₀ 1),
     eventually_toTensorFromBlocks_projector_defect_le μ A hμ ρ hP hρ hDistinct hε]

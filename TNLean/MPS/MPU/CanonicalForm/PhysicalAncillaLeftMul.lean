@@ -40,8 +40,8 @@ property.
 
 ### Canonical form under a unitary on the physical output
 
-A unitary on the physical output of an MPO tensor acts on its flattened MPS
-alphabet as \(P\otimes I\). This physical rotation preserves every irreducible
+A unitary on the physical output of an MPO tensor acts on its pair alphabet
+as \(P\otimes I\). This physical rotation preserves every irreducible
 canonical block and its transfer normalization. In particular, it preserves the
 canonical endpoints used in symmetry-preserving MPU paths.
 
@@ -82,9 +82,9 @@ open scoped Matrix BigOperators Kronecker
 namespace MPSTensor
 variable {d D : ℕ}
 
-private noncomputable def rotateMPUCanonicalFormData
-    {A : MPSTensor d D} (data : MPUCanonicalFormData A)
-    (P : Matrix (Fin d) (Fin d) ℂ) (hP : P ∈ Matrix.unitaryGroup (Fin d) ℂ) :
+private noncomputable def rotateMPUCanonicalFormData {α : Type*} [Fintype α] [DecidableEq α]
+    {A : MPTensor α (Fin D)} (data : MPUCanonicalFormData A)
+    (P : Matrix α α ℂ) (hP : P ∈ Matrix.unitaryGroup α ℂ) :
     MPUCanonicalFormData (rotatePhysical P A) := by
   refine
     { r := data.r
@@ -115,43 +115,39 @@ namespace MPOTensor
 variable {d D : ℕ}
 
 private noncomputable def ketLeftPhysicalMatrix
-    (P : Matrix (Fin d) (Fin d) ℂ) : Matrix (Fin (d * d)) (Fin (d * d)) ℂ :=
-  Matrix.reindex finProdFinEquiv finProdFinEquiv
-    (P ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ))
+    (P : Matrix (Fin d) (Fin d) ℂ) : Matrix (Fin d × Fin d) (Fin d × Fin d) ℂ :=
+  P ⊗ₖ (1 : Matrix (Fin d) (Fin d) ℂ)
 
 private theorem ketLeftPhysicalMatrix_mem_unitaryGroup
     (P : Matrix (Fin d) (Fin d) ℂ) (hP : P ∈ Matrix.unitaryGroup (Fin d) ℂ) :
-    ketLeftPhysicalMatrix P ∈ Matrix.unitaryGroup (Fin (d * d)) ℂ :=
-  Matrix.reindex_mem_unitaryGroup _ _ (Matrix.kronecker_mem_unitary hP (one_mem _))
+    ketLeftPhysicalMatrix P ∈ Matrix.unitaryGroup (Fin d × Fin d) ℂ :=
+  Matrix.kronecker_mem_unitary hP (one_mem _)
 
-private theorem toMPSTensor_ketLeftMul (M : MPOTensor d D)
+private theorem ketLeftMul_eq_rotatePhysical (M : MPOTensor d D)
     (P : Matrix (Fin d) (Fin d) ℂ) :
-    (M.ketLeftMul P).toMPSTensor =
-      MPSTensor.rotatePhysical (ketLeftPhysicalMatrix P) M.toMPSTensor := by
+    M.ketLeftMul P = MPSTensor.rotatePhysical (ketLeftPhysicalMatrix P) M := by
   classical
-  funext p
+  funext ⟨i, j⟩
   symm
-  change (∑ q : Fin (d * d), _ • M (q.divNat, q.modNat)) =
-    ∑ k : Fin d, P p.divNat k • M (k, p.modNat)
-  rw [← finProdFinEquiv.sum_comp, Fintype.sum_prod_type]
-  simp [ketLeftPhysicalMatrix, Matrix.reindex_apply,
-    Matrix.one_apply, MPSTensor.finProdFinEquiv_divNat,
-    MPSTensor.finProdFinEquiv_modNat]
+  change (∑ q : Fin d × Fin d, ketLeftPhysicalMatrix P (i, j) q • M q) =
+    ∑ k : Fin d, P i k • M (k, j)
+  rw [Fintype.sum_prod_type]
+  simp [ketLeftPhysicalMatrix, Matrix.kroneckerMap_apply, Matrix.one_apply]
 
 /-- Multiplication on the physical output by a unitary preserves MPU canonical form.
 
-Each canonical block is rotated by the doubled physical unitary \(P\otimes I\).
+Each canonical block is rotated by the physical unitary \(P\otimes I\) on the pair alphabet.
 The block dimensions, weights, and ambient coisometry are unchanged; the rotation
 preserves irreducibility and the transfer map.
 
 Source: arXiv:1703.09188, canonical form at lines 259--267 and the symmetry
 transformation in Section `othersymmetries`, lines 1295--1332. -/
 theorem isMPUCanonicalForm_ketLeftMul (M : MPOTensor d D)
-    (hM : MPTensor.IsMPUCanonicalForm M.toMPSTensor)
+    (hM : MPTensor.IsMPUCanonicalForm M)
     (P : Matrix (Fin d) (Fin d) ℂ) (hP : P ∈ Matrix.unitaryGroup (Fin d) ℂ) :
-    MPTensor.IsMPUCanonicalForm (M.ketLeftMul P).toMPSTensor := by
+    MPTensor.IsMPUCanonicalForm (M.ketLeftMul P) := by
   obtain ⟨data⟩ := hM
-  rw [toMPSTensor_ketLeftMul]
+  rw [ketLeftMul_eq_rotatePhysical]
   exact ⟨MPSTensor.rotateMPUCanonicalFormData data _
     (ketLeftPhysicalMatrix_mem_unitaryGroup P hP)⟩
 

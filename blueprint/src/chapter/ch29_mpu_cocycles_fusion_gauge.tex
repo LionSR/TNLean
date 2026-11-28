@@ -1161,7 +1161,7 @@ space of $(MN)P$.
     \label{thm:mpug_reduction_dagger}
     \lean{MPTensor.IsReduction.physicalAdjointTensor,
         MPTensor.IsReduction.mapStar,
-        MPOTensor.toMPSTensor_physicalAdjointTensor,
+        MPOTensor.physicalAdjointTensor_eq_reindexPhysical_mapStar,
         MPTensor.IsReduction.of_target_intertwine,
         MPTensor.IsReduction.of_reindexBond_source,
         MPOTensor.mulTensor_mul_idKron_of_intertwine}
@@ -1222,10 +1222,10 @@ space of $(MN)P$.
         MPSTensor.reindexBondMatrix_mul_symm,
         MPSTensor.reindexBondMatrix_gauge_mul_inv,
         MPSTensor.reindexBondMatrix_gauge_inv_mul,
-        MPOTensor.GroupFamily.reindex_toMPSTensor_congr,
+        MPOTensor.GroupFamily.reindex_tensor_congr,
         MPOTensor.GroupFamily.IsRepresentation.daggerLegGauge_mul_inv,
         MPOTensor.GroupFamily.IsRepresentation.tensor_mul_daggerLegGaugeInv,
-        MPOTensor.GroupFamily.IsRepresentation.toMPSTensor_mul_daggerTargetGauge,
+        MPOTensor.GroupFamily.IsRepresentation.tensor_mul_daggerTargetGauge,
         MPOTensor.GroupFamily.IsRepresentation.daggerTargetGauge_mul_inv}
     \leanok
     \uses{def:mpug_dagger_fusion_tensors,thm:mpug_dagger_inverse_gauge}

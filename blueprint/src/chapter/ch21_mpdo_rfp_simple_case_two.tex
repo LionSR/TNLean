@@ -5,7 +5,7 @@
     \lean{MPOTensor.%
         weighted_basis_physTraceTransfer_sq_of_literal_ZCL}
     \leanok
-    \uses{def:mpo_physical_trace_idempotence,def:mpdo_doubled_phys_trace_transfer,lem:mpdo_doubled_phys_trace_transfer_to_mps,lem:mpdo_doubled_phys_trace_transfer_blockwise}
+    \uses{def:mpo_physical_trace_idempotence,def:mpo_physical_trace_transfer,lem:mpdo_phys_trace_transfer_blockwise}
     As in \cite[Appendix~C.2, lines~1652--1657]{Cirac2016MPDO_arXiv}, suppose a
     tensor satisfying the unscaled zero-correlation-length equation is gauge
     equivalent, through block-diagonal copy gauges, to a sector decomposition;
@@ -29,7 +29,7 @@
     \label{thm:mpdo_simple_weight_copy_independent}
     \lean{MPOTensor.weight_copy_independent_of_isPhysicalTraceIdempotent}
     \leanok
-    \uses{def:mpo_physical_trace_idempotence,def:mpdo_doubled_phys_trace_transfer,lem:mpdo_doubled_phys_trace_transfer_to_mps,lem:mpdo_doubled_phys_trace_transfer_blockwise,lem:mpdo_simple_blockwise_zcl_equation}
+    \uses{def:mpo_physical_trace_idempotence,def:mpo_physical_trace_transfer,lem:mpdo_phys_trace_transfer_blockwise,lem:mpdo_simple_blockwise_zcl_equation}
     Let a tensor satisfying the unscaled zero-correlation-length equation be
     gauge equivalent, through block-diagonal copy gauges, to a sector
     decomposition whose basis elements all have non-nilpotent physical-trace
@@ -45,8 +45,7 @@
     transfer of the sector decomposition, then conjugation gives
     $\mathcal T_S^{2}=\mathcal T_S$.
     By
-    Lemmas~\ref{lem:mpdo_doubled_phys_trace_transfer_to_mps}
-    and~\ref{lem:mpdo_doubled_phys_trace_transfer_blockwise}, the identity
+    Lemma~\ref{lem:mpdo_phys_trace_transfer_blockwise}, the identity
     descends to every copy:
     \begin{align}
         \mu_{j,q}^{2}\mathcal T_{A_j}^{2}
@@ -85,7 +84,7 @@
     \lean{MPOTensor.%
         exists_weighted_basis_physTraceTransfer_sq_of_isSourceZCL}
     \leanok
-    \uses{def:mpo_source_zcl,def:mpdo_doubled_phys_trace_transfer,lem:mpdo_doubled_phys_trace_transfer_to_mps,lem:mpdo_doubled_phys_trace_transfer_blockwise}
+    \uses{def:mpo_source_zcl,def:mpo_physical_trace_transfer,lem:mpdo_phys_trace_transfer_blockwise}
     Suppose a tensor with scale-invariant source zero correlation length is
     gauge equivalent, through block-diagonal copy gauges, to a sector
     decomposition. There is a scalar $\lambda>0$ such that every copy
@@ -360,7 +359,6 @@
 
 \begin{lemma}[Normalized three-site BNT family closure]
     \label{thm:mpdo_normalized_three_site_bnt_family_closure}
-    \lean{MPSTensor.SectorDecomposition.basisMPOTensor}
     \lean{MPSTensor.SectorDecomposition.normalizedThreeSiteClosingMatrix}
     \lean{MPOTensor.%
         reducedBlockState_reindex_isThreeSiteFamilyClosure_of_sameMPV₂Pos}

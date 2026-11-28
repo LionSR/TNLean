@@ -26,6 +26,12 @@ nonminimal tensor need not be normal, so the MPU normality capstone below still
 assumes full support for that named tensor and does not claim bare `IsMPU`
 implies its ambient normality. See
 `docs/paper-gaps/mpu_canonical_form_full_support.tex`.
+
+**Bridge (T.2b):** The blocking step of this module still reads an operator tensor through
+`MPOTensor.toMPSTensor`, because the Fin-encoded blocking `Kraus.blockTensor` (with
+`MPOTensor.toMPSTensor_blockTensor`, `MPOTensor.toMPSTensor_blockTwo`) is stated on the alphabet
+`Fin (d * d)`. The bridge is removed when the blocking moves to `Kraus.block` (step T.2b of
+`docs/tensor_type_unification.md`).
 -/
 
 open MPTensor
@@ -34,7 +40,7 @@ open scoped Matrix BigOperators Matrix.Norms.Operator ComplexOrder Kraus
 
 namespace MPSTensor
 
-variable {d D : ℕ} {A : MPSTensor d D}
+variable {α : Type*} [Fintype α] {d D : ℕ} {A : MPTensor α (Fin D)}
 
 section CPSVCanonicalFormData
 
@@ -47,13 +53,14 @@ describes the intended reduced representative used in arXiv:1703.09188, Proposit
 `prop:normal-tensor`, lines 319--326 and 344--354, rather than every tensor satisfying
 the paper's literal canonical-form definition. See
 `docs/paper-gaps/mpu_canonical_form_full_support.tex`. -/
-def _root_.MPTensor.CPSVCanonicalFormData.HasFullSupport (data : CPSVCanonicalFormData A) : Prop :=
+def _root_.MPTensor.CPSVCanonicalFormData.HasFullSupport (data : CPSVCanonicalFormData A) :
+    Prop :=
   ∑ k, data.dim k = D
 
 /-- Full support is preserved by blocking a positive number of sites.
 
 Source: arXiv:1703.09188, Section II, lines 297--305, and Section III, line 356. -/
-theorem _root_.MPTensor.CPSVCanonicalFormData.hasFullSupport_blockTensor
+theorem _root_.MPTensor.CPSVCanonicalFormData.hasFullSupport_blockTensor {A : MPSTensor d D}
     (data : CPSVCanonicalFormData A)
     (hfull : data.HasFullSupport) (p : ℕ) (hp : 0 < p) :
     (data.blockTensor p hp).HasFullSupport := by
@@ -61,9 +68,9 @@ theorem _root_.MPTensor.CPSVCanonicalFormData.hasFullSupport_blockTensor
   exact hfull
 
 /-- Full support is unchanged by a bijective relabeling of the physical alphabet. -/
-theorem _root_.MPTensor.CPSVCanonicalFormData.hasFullSupport_reindexPhysical {d' : ℕ}
-    (data : CPSVCanonicalFormData A)
-    (hfull : data.HasFullSupport) (e : Fin d' ≃ Fin d) :
+theorem _root_.MPTensor.CPSVCanonicalFormData.hasFullSupport_reindexPhysical
+    {α' : Type*} [Fintype α'] (data : CPSVCanonicalFormData A)
+    (hfull : data.HasFullSupport) (e : α' ≃ α) :
     (data.reindexPhysical e).HasFullSupport := by
   change ∑ k, data.dim k = D
   exact hfull
@@ -74,7 +81,7 @@ namespace CPSVCanonicalFormIIData
 
 /-- Full support is preserved when canonical-form-II data are cast along an equality of
 ambient tensors. -/
-theorem hasFullSupport_cast {A B : MPSTensor d D} (data : CPSVCanonicalFormIIData B)
+theorem hasFullSupport_cast {A B : MPTensor α (Fin D)} (data : CPSVCanonicalFormIIData B)
     (hfull : data.toCPSVCanonicalFormData.HasFullSupport) (h : A = B) :
     (h.symm ▸ data).toCPSVCanonicalFormData.HasFullSupport := by
   subst h
@@ -86,9 +93,10 @@ section CPSVCanonicalFormData
 
 open MPTensor.CPSVCanonicalFormData
 
+omit [Fintype α] in
 /-- Tensor irreducibility is invariant under simultaneous bond-index reindexing. -/
 private theorem _root_.MPTensor.CPSVCanonicalFormData.isIrreducibleFamily_reindexBond
-    {n m : ℕ} (e : Fin n ≃ Fin m) (B : MPSTensor d n)
+    {n m : ℕ} (e : Fin n ≃ Fin m) (B : MPTensor α (Fin n))
     (hB : Kraus.IsIrreducibleFamily B) :
     Kraus.IsIrreducibleFamily (fun i => Matrix.reindex e e (B i)) := by
   classical
@@ -163,7 +171,7 @@ theorem _root_.MPTensor.CPSVCanonicalFormData.isIrreducibleFamily_of_dim_eq
   let eBlock : Fin (data.dim k) ≃ Fin D := finCongr hDim
   let U : Matrix (Fin D) (Fin D) ℂ :=
     data.ambient_coisometry.submatrix eTotal.symm (Equiv.refl _)
-  let B : MPSTensor d D := fun i => Matrix.reindex eBlock eBlock (data.blocks k i)
+  let B : MPTensor α (Fin D) := fun i => Matrix.reindex eBlock eBlock (data.blocks k i)
   have hUcois : U * Uᴴ = 1 := by
     unfold U
     rw [Matrix.conjTranspose_submatrix]
@@ -180,7 +188,7 @@ theorem _root_.MPTensor.CPSVCanonicalFormData.isIrreducibleFamily_of_dim_eq
       (data.blocks_normal k).no_invariant_proj
   have hassembled : ∀ i,
       Matrix.reindex eTotal eTotal
-          (toTensorFromBlocks (α := Fin d) data.weights data.blocks i) =
+          (toTensorFromBlocks (α := α) data.weights data.blocks i) =
         data.weights k • B i := by
     intro i
     ext x y
@@ -397,7 +405,7 @@ theorem neZero_phys {U : MPOTensor d D} (hU : IsMPUCanonicalFormII U) : NeZero d
     rw [Kraus.transferMap_apply] at hfix
     have hzero : hU.ρ = 0 := by
       rw [← hfix]
-      exact Finset.sum_eq_zero fun i _ ↦ absurd i.isLt (by omega)
+      exact Finset.sum_eq_zero fun i _ ↦ absurd i.1.isLt (by omega)
     have h := hU.ρ_trace
     rw [hzero] at h
     simp at h⟩
@@ -414,8 +422,8 @@ private theorem sqrt_blockPhysDim (d p : ℕ) :
       rw [pow_succ, Nat.cast_mul, Real.sqrt_mul (by positivity), ih]
       simp [pow_succ]
 
-/-- Normalized MPO flattening commutes with physical blocking, up to the canonical equivalence
-between a doubled blocked index and a block of doubled indices.
+/-- Normalization commutes with physical blocking: the normalized tensor of the blocked
+operator tensor is the blocked normalized tensor.
 
 The identity holds for every blocking length; positivity is required only when it is used to
 preserve the full support and normal blocks.
@@ -424,34 +432,57 @@ Source: arXiv:1703.09188, definition `blocking`, equation `MPUblock`, equation
 `eq:transfer-op`, and line 356. -/
 theorem normalizedFlattening_blockTensor (U : MPOTensor d D) (p : ℕ) :
     (MPOTensor.blockTensor U p).normalizedFlattening =
-      Kraus.reindexPhysical (blockedDoubledIndexEquiv d p)
-        (Kraus.blockTensor U.normalizedFlattening p) := by
-  funext ij
-  rw [normalizedFlattening, toMPSTensor_blockTensor]
-  simp only [Kraus.blockTensor, Kraus.reindexPhysical, Kraus.block_apply]
-  change _ = Kraus.evalWord
-    (fun i => ((Real.sqrt d : ℂ)⁻¹) • U.toMPSTensor i) _
-  rw [Kraus.evalWord_smul, List.length_ofFn]
+      MPOTensor.blockTensor U.normalizedFlattening p := by
   have hsqrtC : (Real.sqrt (Kraus.blockPhysDim d p) : ℂ) =
       (Real.sqrt d : ℂ) ^ p := by
     rw [sqrt_blockPhysDim]
     exact Complex.ofReal_pow _ _
-  rw [hsqrtC, inv_pow]
+  funext ij
+  change ((Real.sqrt (Kraus.blockPhysDim d p) : ℂ)⁻¹) • Kraus.evalWord U (List.ofFn _) =
+    Kraus.evalWord (fun i ↦ ((Real.sqrt d : ℂ)⁻¹) • U i) (List.ofFn _)
+  rw [Kraus.evalWord_smul, List.length_ofFn, hsqrtC, inv_pow]
 
-/-- Construct canonical-form-II data for a positively blocked MPO normalized flattening.
+/-- A blocked operator tensor is the doubled-index blocking of its relabelling, relabelled
+back to the pair alphabet. This bridges to the canonical-form blocking statements that are still
+stated on a `Fin` alphabet. -/
+theorem blockTensor_eq_reindexPhysical (X : MPOTensor d D) (p : ℕ) :
+    MPOTensor.blockTensor X p = Kraus.reindexPhysical finProdFinEquiv
+      (Kraus.reindexPhysical (blockedDoubledIndexEquiv d p)
+        (Kraus.blockTensor (Kraus.reindexPhysical finProdFinEquiv.symm X) p)) := by
+  rw [← toMPSTensor_eq_reindexPhysical, ← toMPSTensor_blockTensor]
+  funext ⟨i, j⟩
+  simp [Kraus.reindexPhysical, toMPSTensor]
 
-The blocked MPS data are relabeled by `blockedDoubledIndexEquiv`, matching the index orientation in
-`normalizedFlattening_blockTensor`.
+/-- Construct canonical-form-II data for a positively blocked normalized MPO tensor.
+
+The data are blocked on the doubled index and relabelled back to the pair alphabet of the
+blocked tensor.
 
 Source: arXiv:1703.09188, Section II, lines 297--305, and Section III, line 356. -/
 noncomputable def blockTensorCFIIData (U : MPOTensor d D)
     (data : MPSTensor.CPSVCanonicalFormIIData U.normalizedFlattening)
     (p : ℕ) (hp : 0 < p) :
-    MPSTensor.CPSVCanonicalFormIIData (MPOTensor.blockTensor U p).normalizedFlattening := by
-  rw [normalizedFlattening_blockTensor]
-  exact (data.blockTensor p hp).reindexPhysical (blockedDoubledIndexEquiv d p)
+    MPSTensor.CPSVCanonicalFormIIData (MPOTensor.blockTensor U p).normalizedFlattening :=
+  ((normalizedFlattening_blockTensor U p).trans
+    (blockTensor_eq_reindexPhysical U.normalizedFlattening p)).symm ▸
+    (((data.reindexPhysical finProdFinEquiv.symm).blockTensor p hp).reindexPhysical
+      (blockedDoubledIndexEquiv d p)).reindexPhysical finProdFinEquiv
 
-/-- The normalized flattening of an MPU is normal when the chosen CPSV canonical-form
+/-- Full support of canonical-form-II data is preserved by any positive physical blocking.
+
+Source: arXiv:1703.09188, lines 269--281 and 297--305. -/
+theorem hasFullSupport_blockTensorCFIIData {U : MPOTensor d D}
+    (data : MPSTensor.CPSVCanonicalFormIIData U.normalizedFlattening)
+    (hfull : data.toCPSVCanonicalFormData.HasFullSupport)
+    (p : ℕ) (hp : 0 < p) :
+    (blockTensorCFIIData U data p hp).toCPSVCanonicalFormData.HasFullSupport := by
+  unfold blockTensorCFIIData
+  refine MPSTensor.CPSVCanonicalFormIIData.hasFullSupport_cast _ ?_
+    ((normalizedFlattening_blockTensor U p).trans
+      (blockTensor_eq_reindexPhysical U.normalizedFlattening p))
+  exact hfull
+
+/-- The normalized tensor of an MPU is normal when the chosen CPSV canonical-form
 representative has full support.
 
 **Scope restriction (full support):** Bare `IsMPU` does not imply normality for a

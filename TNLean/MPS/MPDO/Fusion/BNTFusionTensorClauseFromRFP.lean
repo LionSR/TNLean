@@ -70,8 +70,7 @@ theorem eventuallyLinearIndependent_verticalBNTOperatorFamily
     change (∑ j, c j • mpo (verticalBNTMPO (A j)) L) ket bra =
       (0 : Matrix (Fin L → Fin D) (Fin L → Fin D) ℂ) ket bra at hentry
     simp only [Matrix.sum_apply, Matrix.smul_apply, Matrix.zero_apply] at hentry
-    simp_rw [← MPSTensor.mpv_toMPSTensor_pairConfig] at hentry
-    simp only [verticalBNTMPO_toMPSTensor] at hentry
+    simp_rw [← mpv_pair, mpv_verticalBNTMPO] at hentry
     have hcfg : (fun n ↦ finProdFinEquiv (ket n, bra n)) = σ := by
       funext n
       exact Equiv.apply_symm_apply finProdFinEquiv (σ n)
@@ -452,7 +451,7 @@ the exact reconstruction. Documented in
 Source: CPSV16, Theorem 4.14(i),(iii), lines 972--993, and Appendix C.4,
 lines 1929--2046. -/
 theorem of_isRFPViaTS (M : MPOTensor d D)
-    (hCanonical : MPTensor.IsCPSVCanonicalForm M.toMPSTensor)
+    (hCanonical : MPTensor.IsCPSVCanonicalForm M)
     (hM : IsMPDO M) (hRFP : IsRFPViaTS M) :
     HasBNTFusionTensorClause M :=
   of_isRFPViaTS_of_productInputs M

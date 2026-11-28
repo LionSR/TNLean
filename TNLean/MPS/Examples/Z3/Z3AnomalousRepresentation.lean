@@ -171,23 +171,23 @@ private theorem rowDifference_apply (X : Matrix (Fin 2) (Fin 2) ℂ) :
 first column, so the nine letters span a proper subspace of the two-by-two matrices. Hence
 `family` does not satisfy `GroupFamily.IsRawRepresentation`; the blocked family does
 (`family_block_two_isRawRepresentation`). -/
-theorem uMPS_not_isInjective : ¬ Kraus.IsInjective uMPS := by
+theorem uMPS_not_isInjective : ¬ Kraus.IsInjective uTensor := by
   intro h
-  have hle : Submodule.span ℂ (Set.range uMPS) ≤ LinearMap.ker rowDifference := by
+  have hle : Submodule.span ℂ (Set.range uTensor) ≤ LinearMap.ker rowDifference := by
     rw [Submodule.span_le]
     rintro _ ⟨a, rfl⟩
     rw [SetLike.mem_coe, LinearMap.mem_ker, rowDifference_apply]
     fin_cases a <;>
-      simp [uMPS, MPOTensor.toMPSTensor, uTensor_apply, occupied, Fin.divNat, Fin.modNat]
+      simp [uTensor_apply, occupied]
   have h1 := hle (h ▸ Submodule.mem_top (x := Matrix.single (0 : Fin 2) (0 : Fin 2) (1 : ℂ)))
   simp [rowDifference_apply] at h1
 
 /-! ### Injectivity after blocking -/
 
 private theorem repTensor_isNBlkInjective_two (a : Fin 3) :
-    Kraus.IsNBlkInjective (repTensor a).toMPSTensor 2 := by
+    Kraus.IsNBlkInjective (repTensor a) 2 := by
   fin_cases a
-  · exact MPTensor.isNBlkInjective_mul_of_isNBlkInjective identityMPS (m := 2) two_pos
+  · exact MPTensor.isNBlkInjective_mul_of_isNBlkInjective identityTensor (m := 2) two_pos
       identityMPS_isNBlkInjective_one
   · exact uMPS_isNBlkInjective_two
   · exact uDagMPS_isNBlkInjective_two

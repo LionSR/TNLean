@@ -62,7 +62,7 @@ end MPSTensor
 
 namespace MPSTensor.IsLeftCanonicalBNTPresentation
 
-variable {d : ℕ} {P : SectorDecomposition d}
+variable {d : ℕ} {P : SectorDecomposition (Fin d)}
 
 /-- The minimal BNT representatives have full simultaneous word-tuple span at
 every sufficiently large length once they have already been made injective by
@@ -95,7 +95,7 @@ theorem eventuallyRepresentativeWordTupleSpan_of_basis_injective
   have hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (P.basis k) (P.basis k) N)
       Filter.atTop (nhds (1 : ℂ)) :=
     hCF.basis_normalized_self_overlap
-  have hBlocks : BlocksNotGaugePhaseEquiv (d := d) P.basis :=
+  have hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) P.basis :=
     hCF.basis_distinct
   have hPair : HasPairBlockSeparatingWords P.basis 6 := by
     simpa using
@@ -152,7 +152,7 @@ private theorem pairTraceSeparatingAt_six_mul_of_common_isNBlkInjective
   have hOverlap : ∀ k, Filter.Tendsto (fun N => mpvOverlap (α := Fin d) (P.basis k) (P.basis k) N)
       Filter.atTop (nhds (1 : ℂ)) :=
     hCF.basis_normalized_self_overlap
-  have hBlocks : BlocksNotGaugePhaseEquiv (d := d) P.basis :=
+  have hBlocks : BlocksNotGaugePhaseEquiv (α := Fin d) P.basis :=
     hCF.basis_distinct
   have hL₀ : 0 < L₀ := by
     dsimp [L₀]
@@ -222,15 +222,9 @@ theorem eventuallyRepresentativeWordTupleSpan_blockTensor
     (P.blockTensor p).basis (p := 1) hSelectors (by omega)
       (fun j => hBlkPos j 1 (by omega))
 
-/-- The representatives of a BNT canonical form have eventual simultaneous word-tuple span.
-
-Choose a common positive block-injectivity length `p`.  Block injectivity propagates to every
-length at least `p`.  The three-block separation argument then gives pairwise separating words
-of length `6 * p`; multiplying them gives one selector for each representative.  Appending a
-long enough block-injective prefix spans the full product of representative matrix algebras.
-
-Source: arXiv:1606.00608, lines 318--344 and Appendix C.3, lines 1848--1858. -/
-theorem eventuallyRepresentativeWordTupleSpan
+/-- The eventual simultaneous word-tuple span on the alphabet `Fin d`;
+`eventuallyRepresentativeWordTupleSpan` below transports it to an arbitrary finite alphabet. -/
+private theorem eventuallyRepresentativeWordTupleSpan_fin
     (hCF : IsLeftCanonicalBNTPresentation P) :
     P.EventuallyRepresentativeWordTupleSpan := by
   classical
@@ -305,17 +299,10 @@ theorem insertedTensor_basis_eq_of_firstSiteActionAgree_of_common_blockInjective
     insertedTensor (firstSiteActionOnBlock L Z) (blockTensor (P.basis j) (L + 1)) at hEqj
   exact hEqj
 
-/-- Representative-grouped Lemma L for an unblocked BNT canonical form.
-
-Irreducibility, left-canonicality, and normalized self-overlap force each basis
-representative to have period one and hence to be normal.  A common positive
-block-injectivity length for the finite representative family then supplies
-the blocking hypothesis of the preceding theorem.
-
-Source: arXiv:1606.00608, lines 318--344 and Appendix C.3, Lemma L,
-lines 1835--1858; the period-one characterization is the non-periodic
-canonical-form condition of arXiv:2011.12127, lines 1815--1837. -/
-theorem insertedTensor_basis_eq_of_firstSiteActionAgree
+/-- Representative-grouped Lemma L for an unblocked BNT canonical form on the alphabet
+`Fin d`; `insertedTensor_basis_eq_of_firstSiteActionAgree` below transports it to an
+arbitrary finite alphabet. -/
+private theorem insertedTensor_basis_eq_of_firstSiteActionAgree_fin
     (hCF : IsLeftCanonicalBNTPresentation P)
     {Y Z : Matrix (Fin d) (Fin d) ℂ}
     (hAct : FirstSiteActionAgree P.toTensor Y Z) :
@@ -324,17 +311,80 @@ theorem insertedTensor_basis_eq_of_firstSiteActionAgree
   exact hCF.insertedTensor_basis_eq_of_firstSiteActionAgree_of_common_blockInjective
     L hL hInj hAct
 
+end MPSTensor.IsLeftCanonicalBNTPresentation
+
+namespace MPSTensor.IsLeftCanonicalBNTPresentation
+
+variable {α : Type*} [Fintype α] {Q : SectorDecomposition α}
+
+/-- The representatives of a BNT canonical form have eventual simultaneous word-tuple span.
+
+Choose a common positive block-injectivity length `p`.  Block injectivity propagates to every
+length at least `p`.  The three-block separation argument then gives pairwise separating words
+of length `6 * p`; multiplying them gives one selector for each representative.  Appending a
+long enough block-injective prefix spans the full product of representative matrix algebras.
+
+The physical alphabet is relabelled by `Fin (Fintype.card α)`, on which the blocking argument is
+carried out.
+
+Source: arXiv:1606.00608, lines 318--344 and Appendix C.3, lines 1848--1858. -/
+theorem eventuallyRepresentativeWordTupleSpan
+    (hCF : IsLeftCanonicalBNTPresentation Q) :
+    Q.EventuallyRepresentativeWordTupleSpan := by
+  classical
+  let e : Fin (Fintype.card α) ≃ α := (Fintype.equivFin α).symm
+  obtain ⟨L₀, hSpan⟩ := eventuallyRepresentativeWordTupleSpan_fin
+    (SectorDecomposition.IsLeftCanonicalBNTPresentation.reindexPhysical hCF e)
+  refine ⟨L₀, fun L hL ↦ ?_⟩
+  have hL := hSpan L hL
+  change WordTupleSpanTop Q.basis L
+  change WordTupleSpanTop (fun j ↦ Kraus.reindexPhysical e (Q.basis j)) L at hL
+  rw [WordTupleSpanTop, eq_top_iff, ← hL]
+  apply Submodule.span_mono
+  rintro _ ⟨w, rfl⟩
+  refine ⟨fun n ↦ e (w n), ?_⟩
+  funext k
+  simp [wordTuple, Kraus.evalWord_reindexPhysical, List.map_ofFn, Function.comp_def]
+
+/-- Representative-grouped Lemma L for an unblocked BNT canonical form.
+
+Irreducibility, left-canonicality, and normalized self-overlap force each basis
+representative to have period one and hence to be normal.  A common positive
+block-injectivity length for the finite representative family then supplies
+the blocking hypothesis of the preceding theorem.  The physical alphabet is relabelled by
+`Fin (Fintype.card α)`, on which the blocking is carried out.
+
+Source: arXiv:1606.00608, lines 318--344 and Appendix C.3, Lemma L,
+lines 1835--1858; the period-one characterization is the non-periodic
+canonical-form condition of arXiv:2011.12127, lines 1815--1837. -/
+theorem insertedTensor_basis_eq_of_firstSiteActionAgree
+    (hCF : IsLeftCanonicalBNTPresentation Q)
+    {Y Z : Matrix α α ℂ}
+    (hAct : FirstSiteActionAgree Q.toTensor Y Z) :
+    ∀ j, insertedTensor Y (Q.basis j) = insertedTensor Z (Q.basis j) := by
+  classical
+  let e : Fin (Fintype.card α) ≃ α := (Fintype.equivFin α).symm
+  have h := insertedTensor_basis_eq_of_firstSiteActionAgree_fin
+    (SectorDecomposition.IsLeftCanonicalBNTPresentation.reindexPhysical hCF e)
+    (hAct.reindexPhysical e)
+  intro j
+  have hj : insertedTensor (Y.submatrix e e) (Kraus.reindexPhysical e (Q.basis j)) =
+      insertedTensor (Z.submatrix e e) (Kraus.reindexPhysical e (Q.basis j)) := h j
+  rw [insertedTensor_reindexPhysical, insertedTensor_reindexPhysical] at hj
+  funext i
+  simpa only [Kraus.reindexPhysical, Equiv.apply_symm_apply] using congrFun hj (e.symm i)
+
 /-- Same-MPV transport of representative-grouped Lemma L for an unblocked BNT
 canonical form.
 
 Source: arXiv:1606.00608, lines 318--344 and Appendix C.3, Lemma L,
 lines 1835--1858. -/
 theorem insertedTensor_basis_eq_of_sameMPV₂Pos_firstSiteActionAgree
-    {D : ℕ} (A : MPSTensor d D) (hCF : IsLeftCanonicalBNTPresentation P)
-    (hAP : SameMPV₂Pos A P.toTensor)
-    {Y Z : Matrix (Fin d) (Fin d) ℂ}
+    {D : ℕ} (A : MPTensor α (Fin D)) (hCF : IsLeftCanonicalBNTPresentation Q)
+    (hAP : SameMPV₂Pos A Q.toTensor)
+    {Y Z : Matrix α α ℂ}
     (hAct : FirstSiteActionAgree A Y Z) :
-    ∀ j, insertedTensor Y (P.basis j) = insertedTensor Z (P.basis j) := by
+    ∀ j, insertedTensor Y (Q.basis j) = insertedTensor Z (Q.basis j) := by
   exact hCF.insertedTensor_basis_eq_of_firstSiteActionAgree (hAct.of_sameMPVPos hAP)
 
 end MPSTensor.IsLeftCanonicalBNTPresentation

@@ -30,12 +30,12 @@ boundary-map ranges on \(3p\) original sites, rather than with an original one-s
 
 * `MPSTensor.blockedConfigLinearIsometryEquiv_groundSpaceMapES` — intertwining of the
   Euclidean boundary maps.
-* `MPSTensor.groundSpaceES_blockTensor_map` — exact transport of the local ground space.
-* `MPSTensor.starProjection_groundSpaceES_blockTensor_map_apply` — pointwise conjugacy of
+* `MPSTensor.map_groundSpace_blockTensor_map` — exact transport of the local ground space.
+* `MPSTensor.starProjection_map_groundSpace_blockTensor_map_apply` — pointwise conjugacy of
   the orthogonal ground-space projectors.
-* `MPSTensor.starProjection_groundSpaceES_blockTensor_conj` — operator-level projector
+* `MPSTensor.starProjection_map_groundSpace_blockTensor_conj` — operator-level projector
   conjugacy for an arbitrary number of blocked sites.
-* `MPSTensor.starProjection_groundSpaceES_three_blockTensor_conj` — operator-level projector
+* `MPSTensor.starProjection_map_groundSpace_three_blockTensor_conj` — operator-level projector
   conjugacy for three blocked sites.
 
 ## References
@@ -109,10 +109,10 @@ theorem blockedConfigLinearIsometryEquiv_groundSpaceMapES
 
 /-- Physical blocking transports the local ground space on \(N\) blocked sites exactly to the
 local ground space on \(N p\) original sites. -/
-theorem groundSpaceES_blockTensor_map (A : MPSTensor d D) (p N : ℕ) :
-    (groundSpaceES (blockTensor A p) N).map
+theorem map_groundSpace_blockTensor_map (A : MPSTensor d D) (p N : ℕ) :
+    ((groundSpace (blockTensor A p) N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).map
         (blockedConfigLinearIsometryEquiv d N p).toLinearEquiv.toLinearMap =
-      groundSpaceES A (N * p) := by
+      ((groundSpace A (N * p)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   rw [← range_groundSpaceMapES, ← range_groundSpaceMapES]
   ext v
   constructor
@@ -123,41 +123,45 @@ theorem groundSpaceES_blockTensor_map (A : MPSTensor d D) (p N : ℕ) :
       blockedConfigLinearIsometryEquiv_groundSpaceMapES A p N x⟩
 
 /-- Pointwise conjugacy of orthogonal ground-space projectors under physical blocking. -/
-theorem starProjection_groundSpaceES_blockTensor_map_apply
+theorem starProjection_map_groundSpace_blockTensor_map_apply
     (A : MPSTensor d D) (p N : ℕ)
     (v : EuclideanSpace ℂ (Cfg d (N * p))) :
-    (groundSpaceES A (N * p)).starProjection v =
+    ((groundSpace A (N * p)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection v =
       blockedConfigLinearIsometryEquiv d N p
-        ((groundSpaceES (blockTensor A p) N).starProjection
+        (((groundSpace (blockTensor A p) N).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection
           ((blockedConfigLinearIsometryEquiv d N p).symm v)) := by
-  rw [← groundSpaceES_blockTensor_map A p N]
+  rw [← map_groundSpace_blockTensor_map A p N]
   exact Submodule.starProjection_map_apply
-    (blockedConfigLinearIsometryEquiv d N p) (groundSpaceES (blockTensor A p) N) v
+    (blockedConfigLinearIsometryEquiv d N p) ((groundSpace (blockTensor A p) N).map
+        (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) v
 
 /-- Operator conjugacy of orthogonal ground-space projectors under physical blocking. -/
-theorem starProjection_groundSpaceES_blockTensor_conj
+theorem starProjection_map_groundSpace_blockTensor_conj
     (A : MPSTensor d D) (p N : ℕ) :
-    (groundSpaceES A (N * p)).starProjection =
+    ((groundSpace A (N * p)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection =
       (blockedConfigLinearIsometryEquiv d N p).toContinuousLinearEquiv.toContinuousLinearMap.comp
-        ((groundSpaceES (blockTensor A p) N).starProjection.comp
+        (((groundSpace (blockTensor A p) N).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection.comp
           (ContinuousLinearEquiv.toContinuousLinearMap
             (blockedConfigLinearIsometryEquiv d N p).symm.toContinuousLinearEquiv)) := by
   apply ContinuousLinearMap.ext
   intro v
-  exact starProjection_groundSpaceES_blockTensor_map_apply A p N v
+  exact starProjection_map_groundSpace_blockTensor_map_apply A p N v
 
 set_option synthInstance.maxHeartbeats 100000 in
 -- The expanded finite-dimensional projector-conjugacy equality requires extra synthesis budget.
 /-- Three blocked sites correspond to \(3p\) original sites, with exact transport of the
 orthogonal ground-space projector.  This is the direct three-block specialization used in
 blocked overlap estimates; it does not replace a one-site spectator by one original site. -/
-theorem starProjection_groundSpaceES_three_blockTensor_conj
+theorem starProjection_map_groundSpace_three_blockTensor_conj
     (A : MPSTensor d D) (p : ℕ) :
-    (groundSpaceES A (3 * p)).starProjection =
+    ((groundSpace A (3 * p)).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap).starProjection =
       (blockedConfigLinearIsometryEquiv d 3 p).toContinuousLinearEquiv.toContinuousLinearMap.comp
-        ((groundSpaceES (blockTensor A p) 3).starProjection.comp
+        (((groundSpace (blockTensor A p) 3).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection.comp
           (ContinuousLinearEquiv.toContinuousLinearMap
             (blockedConfigLinearIsometryEquiv d 3 p).symm.toContinuousLinearEquiv)) :=
-  starProjection_groundSpaceES_blockTensor_conj A p 3
+  starProjection_map_groundSpace_blockTensor_conj A p 3
 
 end MPSTensor

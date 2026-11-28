@@ -59,7 +59,7 @@ sites. Its singlet and triplet sectors are proved in `AKLTSpinSectors`.
 
 ## Main results
 
-* `MPSTensor.aklt_ker_hamiltonian_parentChainInteraction_two_eq_groundSpaceES`
+* `MPSTensor.aklt_ker_hamiltonian_parentChainInteraction_two_eq_map_groundSpace`
 * `MPSTensor.aklt_finrank_ker_hamiltonian_parentChainInteraction_two`
 * `MPSTensor.aklt_ker_hamiltonian_parentChainInteraction_two_eq_span_openState`
 * `MPSTensor.aklt_finrank_ker_hamiltonian_parentChainInteraction_three`
@@ -92,10 +92,10 @@ every three-site window restricts on both sides to nonwrapping two-site
 windows, and the hand check of arXiv:2011.12127, line 2095, grows these
 constraints to the three-site window; the open-chain growth theorem for the
 block-injective AKLT tensor (\(L_0 = 2\)) then covers the whole chain. -/
-theorem aklt_ker_hamiltonian_parentChainInteraction_two_le_groundSpaceES {N : ℕ}
+theorem aklt_ker_hamiltonian_parentChainInteraction_two_le_map_groundSpace {N : ℕ}
     (hN : 2 ≤ N) :
     LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction akltTensor 2 N).hamiltonian) ≤
-      groundSpaceES akltTensor N := by
+      ((groundSpace akltTensor N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) := by
   rcases hN.eq_or_lt with rfl | hN3
   · rw [hamiltonian_parentChainInteraction_self]
     intro v hv
@@ -103,7 +103,7 @@ theorem aklt_ker_hamiltonian_parentChainInteraction_two_le_groundSpaceES {N : �
       (LinearMap.mem_ker.1 hv)
   · intro v hv
     have hNpos : 0 < N := by omega
-    rw [mem_groundSpaceES_iff]
+    rw [mem_map_groundSpace_iff]
     apply contiguous_mem_groundSpace_of_isNBlkInjective aklt_isNBlkInjective_two
       (by norm_num) (by omega : 2 + 1 ≤ N)
     intro s hs τ
@@ -131,12 +131,12 @@ open-boundary ground space of line 1174, and the hand check
 \(\mathcal G_{1,2}\cap\mathcal G_{2,3}=\mathcal G_{1,2,3}\) of line 2095, which
 the review prints for the periodic chain and which is a local identity reused
 here on nonwrapping windows. -/
-theorem aklt_ker_hamiltonian_parentChainInteraction_two_eq_groundSpaceES {N : ℕ}
+theorem aklt_ker_hamiltonian_parentChainInteraction_two_eq_map_groundSpace {N : ℕ}
     (hN : 2 ≤ N) :
     LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction akltTensor 2 N).hamiltonian) =
-      groundSpaceES akltTensor N :=
-  le_antisymm (aklt_ker_hamiltonian_parentChainInteraction_two_le_groundSpaceES hN)
-    (groundSpaceES_le_ker_hamiltonian_parentChainInteraction akltTensor 2 N)
+      ((groundSpace akltTensor N).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap) :=
+  le_antisymm (aklt_ker_hamiltonian_parentChainInteraction_two_le_map_groundSpace hN)
+    (map_groundSpace_le_ker_hamiltonian_parentChainInteraction akltTensor 2 N)
 
 /-- For \(N \ge 2\), the open-chain two-site projector parent Hamiltonian of
 the AKLT tensor has a four-dimensional kernel. The fourfold count in
@@ -146,8 +146,8 @@ Hamiltonian of that passage is identified with the shifted projector sum in
 theorem aklt_finrank_ker_hamiltonian_parentChainInteraction_two {N : ℕ} (hN : 2 ≤ N) :
     Module.finrank ℂ (LinearMap.ker
       (Matrix.toEuclideanLin (parentChainInteraction akltTensor 2 N).hamiltonian)) = 4 := by
-  rw [aklt_ker_hamiltonian_parentChainInteraction_two_eq_groundSpaceES hN,
-    groundSpaceES_finrank_eq_of_isNBlkInjective
+  rw [aklt_ker_hamiltonian_parentChainInteraction_two_eq_map_groundSpace hN,
+    map_groundSpace_finrank_eq_of_isNBlkInjective
       (Kraus.isNBlkInjective_of_le (by norm_num) aklt_isNBlkInjective_two hN)]
   norm_num
 
@@ -160,8 +160,8 @@ theorem aklt_ker_hamiltonian_parentChainInteraction_two_eq_span_openState {N : �
     LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction akltTensor 2 N).hamiltonian) =
       Submodule.span ℂ (Set.range fun p : (Fin 2 → ℂ) × (Fin 2 → ℂ) =>
         WithLp.toLp 2 (openState p.1 p.2 akltTensor N)) := by
-  rw [aklt_ker_hamiltonian_parentChainInteraction_two_eq_groundSpaceES hN, groundSpaceES,
-    groundSpace_eq_span_openState, Submodule.map_span, ← Set.range_comp]
+  rw [aklt_ker_hamiltonian_parentChainInteraction_two_eq_map_groundSpace hN,
+      groundSpace_eq_span_openState, Submodule.map_span, ← Set.range_comp]
   rfl
 
 /-- Project result: for \(N \ge 3\), the open-chain three-site AKLT parent

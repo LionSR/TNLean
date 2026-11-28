@@ -228,7 +228,7 @@ private lemma trace_evalWord_same_mul_loop (i : Fin 4) (w : List (Fin 4)) :
 
 private lemma trace_mpo_tensor (N : ℕ) (hN : 0 < N) :
     (mpo tensor N).trace = 1 := by
-  rw [trace_mpo_eq_trace_verticalLoop_pow, verticalLoop_eq_physTraceTransfer]
+  rw [trace_mpo_eq_trace_physTraceTransfer_pow]
   have hIdem : IsIdempotentElem (physTraceTransfer tensor) :=
     physTraceTransfer_tensor_idempotent
   rw [hIdem.pow_eq hN.ne']
@@ -262,7 +262,7 @@ private lemma reducedBlockState_apply_of_trace_one {d D : ℕ}
     (htrace : (mpo M N).trace = 1) (u v : Fin m → Fin d) :
     M.reducedBlockState N m hm u v =
       Matrix.trace
-        (M.evalWord (List.ofFn u) (List.ofFn v) * M.verticalLoop ^ (N - m)) := by
+        (M.evalWord (List.ofFn u) (List.ofFn v) * M.physTraceTransfer ^ (N - m)) := by
   rw [MPOTensor.reducedBlockState_eq_sum]
   simp only [normalizedMPO, htrace, inv_one, one_smul, mpo_apply, mpoMatrixEntry]
   have hwords (a : Fin m → Fin d) (w : Fin (N - m) → Fin d) :
@@ -280,7 +280,7 @@ private lemma reducedBlockState_apply_of_trace_one {d D : ℕ}
   simp_rw [heval]
   rw [← Matrix.trace_sum]
   congr 1
-  rw [← Finset.mul_sum, M.sum_evalWord_diag_eq_verticalLoop_pow]
+  rw [← Finset.mul_sum, M.sum_evalWord_diag_eq_physTraceTransfer_pow]
 
 private lemma reducedBlockState_pred_eq_diagonal
     {N m : ℕ} (hN : 2 ≤ N) (hm : m = N - 1) (hle : m ≤ N) :
@@ -288,7 +288,7 @@ private lemma reducedBlockState_pred_eq_diagonal
       Matrix.diagonal fun u => ((1 / 4 : ℂ) * pathWeight (List.ofFn u)) := by
   ext u v
   rw [reducedBlockState_apply_of_trace_one tensor hle (trace_mpo_tensor N (by omega))]
-  rw [verticalLoop_eq_physTraceTransfer, show N - m = 1 by omega, pow_one]
+  rw [show N - m = 1 by omega, pow_one]
   by_cases huv : u = v
   · subst v
     rw [Matrix.diagonal_apply_eq]
@@ -505,7 +505,7 @@ standing hypotheses. Documented in
 Source: arXiv:1606.00608, Appendix C.2, Case I at lines 1374--1381 and Lemma
 `SALZCL` at lines 1473--1499. -/
 theorem tensor_has_sal_sourceZCL_and_non_rankOne_activeTraceMatrix :
-    Kraus.IsInjective tensor.toMPSTensor ∧ tensor.IsSAL ∧ tensor.IsSourceZCL ∧
+    Kraus.IsInjective tensor ∧ tensor.IsSAL ∧ tensor.IsSourceZCL ∧
       (∀ k h, inverseMapFactorization.neighboringOperator k h =
         factorization.neighboringOperator k h) ∧
       (∀ k h, (inverseMapFactorization.neighboringOperator k h).PosSemidef) ∧

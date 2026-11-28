@@ -81,7 +81,7 @@ This formalizes the CPSV16 matching step: arXiv:1606.00608 (`Cirac2016MPDO_arXiv
 §II.C lines 349–352, Appendix MPV statement lines 1167–1170, and Appendix MPV
 proof line 1182. -/
 lemma exists_nondecaying_overlap_exact_of_eventuallyProportional
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (hP : IsLeftCanonicalBNTPresentation P) (hQ : IsLeftCanonicalBNTPresentation Q)
     (j₀ : Fin P.basisCount)
     (hProp : EventuallyNonzeroProportionalMPV₂ P.toTensor Q.toTensor) :
@@ -180,7 +180,7 @@ This formalizes the CPSV16 matching step: arXiv:1606.00608 (`Cirac2016MPDO_arXiv
 §II.C lines 349–352, Appendix MPV statement lines 1167–1170, and Appendix MPV
 proof line 1182. -/
 theorem exists_block_match_exact_of_eventuallyProportional
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (hP : IsLeftCanonicalBNTPresentation P) (hQ : IsLeftCanonicalBNTPresentation Q)
     (j₀ : Fin P.basisCount)
     (hProp : EventuallyNonzeroProportionalMPV₂ P.toTensor Q.toTensor) :
@@ -205,7 +205,7 @@ Paper anchor: CPSV16 §II.C lines 349–352 (theorem `thm1`);
 Appendix MPV theorem statement lines 1167–1170 and Appendix MPV proof
 line 1182 (matching). -/
 theorem forall_k_exists_j_nondecaying_overlap_of_eventuallyProportional
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (hP : IsLeftCanonicalBNTPresentation P) (hQ : IsLeftCanonicalBNTPresentation Q)
     (hProp : EventuallyNonzeroProportionalMPV₂ P.toTensor Q.toTensor) :
     ∀ k : Fin Q.basisCount,
@@ -247,7 +247,7 @@ variable {d : ℕ}
 Equality at every positive length gives eventual nonzero proportionality with
 scalar one, so this follows from the proportional single-block matcher. -/
 theorem exists_block_match_exact
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (hP : IsLeftCanonicalBNTPresentation P) (hQ : IsLeftCanonicalBNTPresentation Q)
     (j₀ : Fin P.basisCount)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
@@ -313,7 +313,7 @@ gauge-phase equivalence, and non-decaying overlap for every sector of $Q$.
 Paper anchor: CPSV16 Appendix MPV proof, line 1182, the symmetry step
 "$g_A \ge g_B$ and $g_B \ge g_A$". -/
 theorem bijective_match_of_eventuallyProportional
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (hP : IsLeftCanonicalBNTPresentation P) (hQ : IsLeftCanonicalBNTPresentation Q)
     (hProp : EventuallyNonzeroProportionalMPV₂ P.toTensor Q.toTensor) :
     ∃ β : Fin Q.basisCount ≃ Fin P.basisCount,
@@ -347,7 +347,7 @@ per-sector unit-modulus copy-weight hypothesis.  The copy-weight comparison and
 coefficient identities form a separate later statement, not a restriction on
 this matching theorem. -/
 theorem ft_sector_bnt_proportional_sector_match_witnesses
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (hP : IsLeftCanonicalBNTPresentation P) (hQ : IsLeftCanonicalBNTPresentation Q)
     (hProp : EventuallyNonzeroProportionalMPV₂ P.toTensor Q.toTensor) :
     ∃ (β : Fin Q.basisCount ≃ Fin P.basisCount)
@@ -446,7 +446,7 @@ conversion `SameMPV₂Pos.toNonzeroProportionalMPV₂.eventually`.
 Paper anchor: CPSV16 Appendix MPV proof, line 1182 (arXiv:1606.00608), CPSV21
 Definition 4.2 lines 1846–1850, and the two-layer display at lines 1864–1884. -/
 theorem forall_k_exists_j_nondecaying_overlap_of_sameMPV
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (hP : IsLeftCanonicalBNTPresentation P) (hQ : IsLeftCanonicalBNTPresentation Q)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
     ∀ k : Fin Q.basisCount, ∃ (j : Fin P.basisCount) (h : P.basisDim j = Q.basisDim k),
@@ -474,7 +474,7 @@ The bijection step is the shared construction `bijection_from_matches`,
 applied to both directions of
 `forall_k_exists_j_nondecaying_overlap_of_sameMPV`. -/
 theorem bijective_match_of_sameMPV
-    {P Q : SectorDecomposition d}
+    {P Q : SectorDecomposition (Fin d)}
     (hP : IsLeftCanonicalBNTPresentation P) (hQ : IsLeftCanonicalBNTPresentation Q)
     (hEqual : SameMPV₂Pos P.toTensor Q.toTensor) :
     ∃ β : Fin Q.basisCount ≃ Fin P.basisCount,

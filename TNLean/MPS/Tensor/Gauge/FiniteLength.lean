@@ -85,16 +85,16 @@ open scoped Matrix
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} {D : ℕ}
 
 /-- If `T = 0` and `T(A i) = B i` with `SameMPV A B`, then we get a contradiction.
 
 Uses `trace_ne_zero_of_injective` from `TracePairing`. -/
-private theorem linearExtension_nonzero {D' : ℕ} {A B : MPSTensor d (Nat.succ D')}
+private theorem linearExtension_nonzero {D' : ℕ} {A B : MPTensor α (Fin (Nat.succ D'))}
     (hA : Kraus.IsInjective A) (hAB : SameMPV A B)
     {T : Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ →ₗ[ℂ]
          Matrix (Fin (Nat.succ D')) (Fin (Nat.succ D')) ℂ}
-    (hT : ∀ i : Fin d, T (A i) = B i) : T ≠ 0 := by
+    (hT : ∀ i : α, T (A i) = B i) : T ≠ 0 := by
   intro h0
   exact trace_ne_zero_of_injective hA hAB (fun i => by simpa [h0] using (hT i).symm)
 
@@ -102,9 +102,10 @@ private theorem linearExtension_nonzero {D' : ℕ} {A B : MPSTensor d (Nat.succ 
 
 If `A` is injective and `A` and `B` generate the same MPV family, then they are gauge equivalent,
 meaning `B i = X * A i * X⁻¹` for some invertible matrix `X`. -/
-theorem fundamentalTheorem_singleBlock {A B : MPSTensor d D}
+theorem fundamentalTheorem_singleBlock [Finite α] {A B : MPTensor α (Fin D)}
     (hA : Kraus.IsInjective A) (hAB : SameMPV A B) : GaugeEquiv A B := by
   classical
+  have := Fintype.ofFinite α
   cases D with
   | zero =>
       -- All `0×0` matrices are equal.
@@ -121,7 +122,7 @@ theorem fundamentalTheorem_singleBlock {A B : MPSTensor d D}
       exact (hT i).symm.trans (hX (A i))
 
 /-- For injective `A`, MPV equality with any `B` is equivalent to gauge equivalence. -/
-theorem sameMPV_iff_gaugeEquiv_of_injective {A B : MPSTensor d D}
+theorem sameMPV_iff_gaugeEquiv_of_injective [Finite α] {A B : MPTensor α (Fin D)}
     (hA : Kraus.IsInjective A) :
     SameMPV A B ↔ GaugeEquiv A B :=
   ⟨fundamentalTheorem_singleBlock hA, GaugeEquiv.sameMPV⟩
@@ -136,21 +137,21 @@ open scoped Matrix BigOperators
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} {D : ℕ}
 
 /-! ## Definition: finite-length MPV agreement -/
 
 /-- Two tensors generate the same MPV family **from system size `N₀` onwards**. -/
-def SameMPVFrom (N₀ : ℕ) (A B : MPSTensor d D) : Prop :=
-  ∀ (N : ℕ), N₀ ≤ N → ∀ (σ : Fin N → Fin d), mpv A σ = mpv B σ
+def SameMPVFrom (N₀ : ℕ) (A B : MPTensor α (Fin D)) : Prop :=
+  ∀ (N : ℕ), N₀ ≤ N → ∀ (σ : Fin N → α), mpv A σ = mpv B σ
 
 /-- `SameMPV` implies `SameMPVFrom N₀` for any `N₀`. -/
-theorem _root_.MPTensor.SameMPV.sameMPVFrom {A B : MPSTensor d D} (h : SameMPV A B) (N₀ : ℕ) :
+theorem _root_.MPTensor.SameMPV.sameMPVFrom {A B : MPTensor α (Fin D)} (h : SameMPV A B) (N₀ : ℕ) :
     SameMPVFrom N₀ A B :=
   fun N _ σ => h N σ
 
 /-- `SameMPVFrom 0` is equivalent to `SameMPV`. -/
-theorem sameMPVFrom_zero_iff {A B : MPSTensor d D} :
+theorem sameMPVFrom_zero_iff {A B : MPTensor α (Fin D)} :
     SameMPVFrom 0 A B ↔ SameMPV A B :=
   ⟨fun h N σ => h N (Nat.zero_le N) σ, fun h => h.sameMPVFrom 0⟩
 
@@ -159,8 +160,8 @@ theorem sameMPVFrom_zero_iff {A B : MPSTensor d D} :
 /-- If `SameMPVFrom N₀ A B`, then `tr(Kraus.evalWord A w) = tr(Kraus.evalWord B w)` for
 all words `w` of length `|w| ≥ N₀`. -/
 lemma SameMPVFrom.trace_evalWord_of_length_ge
-    {A B : MPSTensor d D} {N₀ : ℕ}
-    (h : SameMPVFrom N₀ A B) {w : List (Fin d)} (hw : N₀ ≤ w.length) :
+    {A B : MPTensor α (Fin D)} {N₀ : ℕ}
+    (h : SameMPVFrom N₀ A B) {w : List α} (hw : N₀ ≤ w.length) :
     Matrix.trace (Kraus.evalWord A w) = Matrix.trace (Kraus.evalWord B w) := by
   have := h w.length hw w.get
   simp only [mpv, coeff, List.ofFn_get] at this
@@ -169,10 +170,11 @@ lemma SameMPVFrom.trace_evalWord_of_length_ge
 /-! ## Auxiliary: word span for injective tensors -/
 
 /-- For an injective tensor, `Kraus.wordSpan A n = ⊤` for all `n ≥ 1`. -/
-theorem wordSpan_eq_top_of_isInjective
-    {A : MPSTensor d D} (hA : Kraus.IsInjective A)
+theorem wordSpan_eq_top_of_isInjective [Finite α]
+    {A : MPTensor α (Fin D)} (hA : Kraus.IsInjective A)
     {n : ℕ} (hn : 0 < n) : Kraus.wordSpan A n = ⊤ := by
   classical
+  have := Fintype.ofFinite α
   obtain ⟨c, hc⟩ := hA.exists_decomposition 1
   induction n with
   | zero => omega
@@ -210,11 +212,12 @@ If `SameMPVFrom N₀ A B` with `A` injective, then `SameMPV A B`.  The proof
 proceeds in three steps: (1) `Kraus.wordSpan B N₀ = ⊤` by composition identity
 and finrank transfer; (2) `S = Σ cᵢ Bⁱ = 1` by trace nondegeneracy;
 (3) downward induction on word length using the `A`-decomposition of `1`. -/
-theorem sameMPV_of_sameMPVFrom_of_injective [NeZero D]
-    {A B : MPSTensor d D}
+theorem sameMPV_of_sameMPVFrom_of_injective [NeZero D] [Finite α]
+    {A B : MPTensor α (Fin D)}
     (hA : Kraus.IsInjective A)
     {N₀ : ℕ} (hFrom : SameMPVFrom N₀ A B) :
     SameMPV A B := by
+  have := Fintype.ofFinite α
   -- Handle N₀ = 0 trivially.
   rcases N₀.eq_zero_or_pos with rfl | hN₀
   · exact sameMPVFrom_zero_iff.mp hFrom
@@ -223,12 +226,12 @@ theorem sameMPV_of_sameMPVFrom_of_injective [NeZero D]
   obtain ⟨c, hc⟩ := hA.exists_decomposition 1
   -- ── Step 1: Kraus.wordSpan B N₀ = ⊤ (composition identity) ──
   have hWB : Kraus.wordSpan B N₀ = ⊤ := by
-    let genA := fun σ : Fin N₀ → Fin d => Kraus.evalWord A (List.ofFn σ)
-    let genB := fun σ : Fin N₀ → Fin d => Kraus.evalWord B (List.ofFn σ)
+    let genA := fun σ : Fin N₀ → α => Kraus.evalWord A (List.ofFn σ)
+    let genB := fun σ : Fin N₀ → α => Kraus.evalWord B (List.ofFn σ)
     let lcA := Fintype.linearCombination ℂ genA
     let lcB := Fintype.linearCombination ℂ genB
-    let ΦA := traceMulRightPi (d := d) (D := D) A
-    let ΦB := traceMulRightPi (d := d) (D := D) B
+    let ΦA := traceMulRightPi (D := D) A
+    let ΦB := traceMulRightPi (D := D) B
     have hSurjA : Function.Surjective lcA :=
       (span_range_eq_top_iff_surjective_fintypeLinearCombination ℂ genA).mp
         (wordSpan_eq_top_of_isInjective hA hN₀)
@@ -286,7 +289,7 @@ theorem sameMPV_of_sameMPVFrom_of_injective [NeZero D]
     have hf : (Matrix.traceLinearMap (Fin D) ℂ ℂ).comp
         (LinearMap.mulLeft ℂ (S - 1)) = 0 := by
       apply LinearMap.ext_on_range
-        (v := fun σ : Fin N₀ → Fin d => Kraus.evalWord B (List.ofFn σ))
+        (v := fun σ : Fin N₀ → α => Kraus.evalWord B (List.ofFn σ))
         (hv := hWB)
       intro σ
       simp only [LinearMap.comp_apply, LinearMap.mulLeft_apply,
@@ -313,11 +316,11 @@ theorem sameMPV_of_sameMPVFrom_of_injective [NeZero D]
     simpa [Matrix.traceLinearMap_apply, LinearMap.mulLeft_apply]
       using congrFun (congrArg DFunLike.coe hf) N
   -- ── Step 3: SameMPV by downward induction ──
-  suffices h_all : ∀ w : List (Fin d),
+  suffices h_all : ∀ w : List α,
       Matrix.trace (Kraus.evalWord A w) = Matrix.trace (Kraus.evalWord B w) by
     intro N σ; simpa [mpv, coeff] using h_all (List.ofFn σ)
   -- Induction on k = N₀ − |w|
-  suffices h_k : ∀ k, ∀ w : List (Fin d), w.length + k = N₀ →
+  suffices h_k : ∀ k, ∀ w : List α, w.length + k = N₀ →
       Matrix.trace (Kraus.evalWord A w) = Matrix.trace (Kraus.evalWord B w) by
     intro w
     by_cases hle : N₀ ≤ w.length
@@ -329,7 +332,7 @@ theorem sameMPV_of_sameMPVFrom_of_injective [NeZero D]
     intro w hw
     -- Decompose using A: tr(w_A) = Σ cᵢ tr((w++[i])_A)
     have hA_sum : Matrix.trace (Kraus.evalWord A w) =
-        ∑ i : Fin d, c i * Matrix.trace (Kraus.evalWord A (w ++ [i])) := by
+        ∑ i : α, c i * Matrix.trace (Kraus.evalWord A (w ++ [i])) := by
       conv_lhs => rw [show Kraus.evalWord A w = Kraus.evalWord A w * 1 from (mul_one _).symm, hc,
         Finset.mul_sum]
       simp only [Algebra.mul_smul_comm, Matrix.trace_sum, Matrix.trace_smul, smul_eq_mul]
@@ -337,7 +340,7 @@ theorem sameMPV_of_sameMPVFrom_of_injective [NeZero D]
       rw [show A i = Kraus.evalWord A [i] from by simp, ← Kraus.evalWord_append]
     -- Decompose using B (S = 1): tr(w_B) = Σ cᵢ tr((w++[i])_B)
     have hB_sum : Matrix.trace (Kraus.evalWord B w) =
-        ∑ i : Fin d, c i * Matrix.trace (Kraus.evalWord B (w ++ [i])) := by
+        ∑ i : α, c i * Matrix.trace (Kraus.evalWord B (w ++ [i])) := by
       conv_lhs => rw [show Kraus.evalWord B w = Kraus.evalWord B w * 1 from (mul_one _).symm,
         show (1 : Matrix (Fin D) (Fin D) ℂ) = S from hS.symm, Finset.mul_sum]
       simp only [Algebra.mul_smul_comm, Matrix.trace_sum, Matrix.trace_smul, smul_eq_mul]
@@ -351,8 +354,8 @@ theorem sameMPV_of_sameMPVFrom_of_injective [NeZero D]
 
 If `A` is injective and `SameMPVFrom N₀ A B` for any threshold `N₀`, then
 `A` and `B` are gauge equivalent. -/
-theorem fundamentalTheorem_singleBlock_finiteLength [NeZero D]
-    {A B : MPSTensor d D}
+theorem fundamentalTheorem_singleBlock_finiteLength [NeZero D] [Finite α]
+    {A B : MPTensor α (Fin D)}
     (hA : Kraus.IsInjective A)
     {N₀ : ℕ} (hFrom : SameMPVFrom N₀ A B) :
     GaugeEquiv A B :=

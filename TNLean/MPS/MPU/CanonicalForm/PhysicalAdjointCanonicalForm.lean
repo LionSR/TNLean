@@ -17,7 +17,6 @@ full-active-support condition when it holds for the original data.
 
 ## Main definitions
 
-* `MPOTensor.physicalPairSwapEquiv`: exchange of the two flattened physical coordinates.
 * `MPSTensor.CPSVCanonicalFormIIData.physicalAdjointNormalizedFlattening`: transformed CFII data.
 
 ## References
@@ -34,34 +33,17 @@ namespace MPOTensor
 
 variable {d D : ℕ}
 
-/-- Exchange the two coordinates of a flattened physical pair.
-
-This is the existing pair-swap equivalence, named here for its role on the physical alphabet rather
-than its role on a doubled virtual bond. -/
-def physicalPairSwapEquiv (d : ℕ) : Fin (d * d) ≃ Fin (d * d) :=
-  bondPairSwapEquiv d
-
-/-- The physical-pair swap exchanges the two coordinates under `finProdFinEquiv`. -/
-@[simp] theorem physicalPairSwapEquiv_finProdFinEquiv (i j : Fin d) :
-    physicalPairSwapEquiv d (finProdFinEquiv (i, j)) = finProdFinEquiv (j, i) := by
-  rw [physicalPairSwapEquiv, bondPairSwapEquiv_apply, bondPairSwap_finProdFinEquiv]
-
-/-- The physical-pair swap is its own inverse. -/
-@[simp] theorem physicalPairSwapEquiv_symm :
-    (physicalPairSwapEquiv d).symm = physicalPairSwapEquiv d := by
-  rw [physicalPairSwapEquiv, bondPairSwapEquiv_symm]
-
-/-- The normalized flattening of the physical adjoint is obtained by applying entrywise complex
-conjugation to every virtual matrix entry and exchanging the two flattened physical coordinates. -/
+/-- The normalized tensor of the physical adjoint is obtained by applying entrywise complex
+conjugation to every virtual matrix entry and exchanging the two physical indices of the pair
+alphabet. -/
 theorem normalizedFlattening_physicalAdjointTensor (U : MPOTensor d D) :
     (physicalAdjointTensor U).normalizedFlattening =
-      Kraus.reindexPhysical (physicalPairSwapEquiv d)
+      Kraus.reindexPhysical (Equiv.prodComm (Fin d) (Fin d))
         (MPSTensor.mapStar U.normalizedFlattening) := by
-  ext ij β α
-  rw [show ij = finProdFinEquiv (ij.divNat, ij.modNat) by
-    exact (finProdFinEquiv.apply_symm_apply ij).symm]
+  funext ⟨i, j⟩
+  ext β α
   simp [normalizedFlattening, Kraus.reindexPhysical, MPSTensor.mapStar,
-    MPOTensor.toMPSTensor, Matrix.smul_apply, Matrix.map_apply, RCLike.star_def]
+    Matrix.smul_apply, Matrix.map_apply, RCLike.star_def]
 
 end MPOTensor
 
@@ -72,7 +54,7 @@ variable {d D : ℕ} {U : MPOTensor d D}
 /-- Transport literal CPSV canonical-form-II data through physical adjunction.
 
 The block count and dimensions are unchanged. We conjugate the weights, blocks, and ambient
-coisometry entrywise, then exchange the two physical coordinates. A diagonal positive-definite
+coisometry entrywise, then exchange the two physical indices. A diagonal positive-definite
 fixed point is real, so the same matrix remains fixed by the transformed transfer map.
 
 The literal canonical-form-II structure is from arXiv:1606.00608, Appendix A,
@@ -87,11 +69,11 @@ noncomputable def physicalAdjointNormalizedFlattening
   dim_pos := data.dim_pos
   weights := fun k ↦ star (data.weights k)
   weights_ne_zero := fun k ↦ star_ne_zero.mpr (data.weights_ne_zero k)
-  blocks := fun k ↦ Kraus.reindexPhysical (MPOTensor.physicalPairSwapEquiv d)
+  blocks := fun k ↦ Kraus.reindexPhysical (Equiv.prodComm (Fin d) (Fin d))
     (MPSTensor.mapStar (data.blocks k))
   blocks_normal := fun k ↦
     (MPTensor.IsNormalTensor.mapStar (data.blocks_normal k)).reindexPhysical
-      (MPOTensor.physicalPairSwapEquiv d)
+      (Equiv.prodComm (Fin d) (Fin d))
   total_dim_le := data.total_dim_le
   ambient_coisometry := data.ambient_coisometry.map (starRingEnd ℂ)
   coisometric := by
@@ -102,20 +84,20 @@ noncomputable def physicalAdjointNormalizedFlattening
     intro i
     rw [MPOTensor.normalizedFlattening_physicalAdjointTensor]
     have hmap := congrArg (fun M ↦ M.map (starRingEnd ℂ))
-      (data.reconstruct (MPOTensor.physicalPairSwapEquiv d i))
+      (data.reconstruct (Equiv.prodComm (Fin d) (Fin d) i))
     have hmiddle :
         (MPTensor.toTensorFromBlocks data.weights data.blocks
-          (MPOTensor.physicalPairSwapEquiv d i)).map (starRingEnd ℂ) =
+          (Equiv.prodComm (Fin d) (Fin d) i)).map (starRingEnd ℂ) =
           MPTensor.toTensorFromBlocks (fun k ↦ star (data.weights k))
-            (fun k ↦ Kraus.reindexPhysical (MPOTensor.physicalPairSwapEquiv d)
+            (fun k ↦ Kraus.reindexPhysical (Equiv.prodComm (Fin d) (Fin d))
               (MPSTensor.mapStar (data.blocks k))) i := by
       simp only [MPTensor.toTensorFromBlocks, Kraus.reindexPhysical]
       rw [show ((Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv)
           (Matrix.blockDiagonal' fun k => data.weights k •
-            data.blocks k (MPOTensor.physicalPairSwapEquiv d i))).map (starRingEnd ℂ) =
+            data.blocks k (Equiv.prodComm (Fin d) (Fin d) i))).map (starRingEnd ℂ) =
           (Matrix.reindex finSigmaFinEquiv finSigmaFinEquiv)
             ((Matrix.blockDiagonal' fun k => data.weights k •
-              data.blocks k (MPOTensor.physicalPairSwapEquiv d i)).map (starRingEnd ℂ)) by
+              data.blocks k (Equiv.prodComm (Fin d) (Fin d) i)).map (starRingEnd ℂ)) by
         ext β α
         rfl]
       rw [Matrix.blockDiagonal'_map _ _ (by simp)]
@@ -129,7 +111,7 @@ noncomputable def physicalAdjointNormalizedFlattening
     exact hmap
   blocks_left_canonical := fun k ↦
     (Kraus.isTP_reindexPhysical_iff
-      (MPOTensor.physicalPairSwapEquiv d) _).2
+      (Equiv.prodComm (Fin d) (Fin d)) _).2
       (MPTensor.IsLeftCanonical.mapStar (data.blocks_left_canonical k))
   blocks_fixed_point := by
     intro k
@@ -159,7 +141,7 @@ noncomputable def physicalAdjointNormalizedFlattening
 @[simp] theorem physicalAdjointNormalizedFlattening_blocks
     (data : CPSVCanonicalFormIIData U.normalizedFlattening) (k : Fin data.r) :
     data.physicalAdjointNormalizedFlattening.blocks k =
-      Kraus.reindexPhysical (MPOTensor.physicalPairSwapEquiv d)
+      Kraus.reindexPhysical (Equiv.prodComm (Fin d) (Fin d))
         (MPSTensor.mapStar (data.blocks k)) := rfl
 
 /-- The transported ambient coisometry is the entrywise conjugate of the original one. -/

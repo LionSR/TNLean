@@ -232,7 +232,8 @@ theorem exists_cyclic_sector_decomp_after_blocking_with_letter_and_isometry
   -- Step 4: Blocked tensor is TP
   have hTP_blocked : ∑ i : Fin (blockPhysDim d m),
       (blockTensor A m i)ᴴ * blockTensor A m i = 1 :=
-    Kraus.IsTP.blockTensor (A := A) hTP m
+    (Kraus.isTP_reindexPhysical_iff (Kraus.decodeBlockEquiv _ _) _).2
+      (Kraus.IsTP.block (A := A) hTP m)
   -- Step 5: Apply the CyclicSectors decomposition
   obtain ⟨dim, blocks, φ, V, hLC, hMPV_hTrace⟩ :=
     exists_blockDecomp_of_adjoint_fixed_projections_with_letter_and_isometry

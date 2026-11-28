@@ -9,6 +9,7 @@ import TNLean.MPS.FundamentalTheorem.PhysicalSupport.PhysicalSupportBondTranspor
 import TNLean.MPS.MPDO.BNTSectors.BNTSectorCoefficientPositivity
 import TNLean.MPS.MPDO.CommutingForm.GSNNCHSectorRescaling
 import TNLean.MPS.Operator.PhysicalSector.NeighboringPreparation
+import TNLean.MPS.Operator.PairAlphabet
 
 /-!
 # Positive bonds from the active physical compression
@@ -67,7 +68,7 @@ theorem exists_commutingForm_supported_of_twoSidedPhysicalSlice
     {K : MPOTensor d D} (F : PhysicalSectorFactorization K)
     (P : Matrix (Fin d) (Fin d) ℂ)
     (hP : IsOrthogonalProjection P)
-    (hK : Kraus.IsInjective K.toMPSTensor)
+    (hK : Kraus.IsInjective K)
     (hSupport : ∀ β α,
       P * physicalSlice K β α = physicalSlice K β α ∧
         physicalSlice K β α * P = physicalSlice K β α)
@@ -117,7 +118,7 @@ theorem nonempty_orthogonalCommutingSectorFamily_of_ambientPhysicalSectorFactori
     (P : Fin g → Matrix (Fin d) (Fin d) ℂ)
     (hP : ∀ s, IsOrthogonalProjection (P s))
     (hPorth : ∀ {s t}, s ≠ t → P s * P t = 0)
-    (hInjective : ∀ s, Kraus.IsInjective (K s).toMPSTensor)
+    (hInjective : ∀ s, Kraus.IsInjective (K s))
     (hSupport : ∀ s β α,
       P s * physicalSlice (K s) β α = physicalSlice (K s) β α ∧
         physicalSlice (K s) β α * P s = physicalSlice (K s) β α)
@@ -163,7 +164,7 @@ GSNNCH form without copy independence.
 The orthogonality hypothesis is `AppKxKy=0`; the physical-sector
 factorizations are `AppUkU=rl`; and each neighboring trace factorization
 contains `Appetakhetc`, `Apptralktrrk`, and `AppPsiPhi`. All five hypotheses
-are imposed on the raw BNT representatives `S.basisMPOTensor`. The resulting
+are imposed on the raw BNT representatives `S.basis`. The resulting
 GSNNCH multiplicities are the natural copy numbers `S.copies`.
 
 Global MPDO positivity is the standing Case II assumption at CPSV16 lines
@@ -183,24 +184,20 @@ Source: arXiv:1606.00608, Appendix C.2, Case II and equation `biCFK`, lines
 1626--1639 and 1666--1676; Proposition `prop3to4`, lines 1786--1796. -/
 theorem hasGSNNCHForm_of_bntLayerOrthogonal_of_physicalSectorFactorization
     {D : ℕ} (M : MPOTensor d D)
-    (S : MPSTensor.SectorDecomposition (d * d))
-    (hM : MPTensor.SameMPV₂Pos M.toMPSTensor S.toTensor)
+    (S : MPSTensor.SectorDecomposition (Fin d × Fin d))
+    (hM : MPTensor.SameMPV₂Pos M S.toTensor)
     (hMPDO : IsMPDO M)
     (hBasisDim : ∀ s, 0 < S.basisDim s)
     (hSpan : MPSTensor.WordTupleSpanTop S.basis 1)
-    (hLayer : IsBNTLayerOrthogonal (fun s ↦ S.basisMPOTensor s))
+    (hLayer : IsBNTLayerOrthogonal (fun s ↦ S.basis s))
     (F : (s : Fin S.basisCount) →
-      PhysicalSectorFactorization (S.basisMPOTensor s))
+      PhysicalSectorFactorization (S.basis s))
     (hTrace : ∀ s,
       PhysicalSectorFactorization.NeighboringTraceFactorization (F s)) :
     HasGSNNCHForm M := by
   let K : (s : Fin S.basisCount) → MPOTensor d (S.basisDim s) :=
-    fun s ↦ S.basisMPOTensor s
-  have hInjective : ∀ s, Kraus.IsInjective (K s).toMPSTensor := by
-    intro s
-    dsimp only [K]
-    rw [S.basisMPOTensor_toMPSTensor]
-    exact hSpan.isInjective_one s
+    fun s ↦ S.basis s
+  have hInjective : ∀ s, Kraus.IsInjective (K s) := fun s ↦ hSpan.isInjective_one s
   have hSectorMPDO : ∀ s, IsMPDO (K s) := by
     intro s
     exact (F s).isMPDO_of_neighboringOperator_pos
@@ -218,24 +215,17 @@ theorem hasGSNNCHForm_of_bntLayerOrthogonal_of_physicalSectorFactorization
     ext u v
     rw [Matrix.sum_apply]
     simp only [Matrix.smul_apply, smul_eq_mul, K]
-    exact S.mpo_eq_sum_coeff_basisMPOTensor M hM (by omega) u v
+    exact S.mpo_eq_sum_coeff_basis M hM (by omega) u v
   have hSectorNe : ∀ s, mpo (K s) N ≠ 0 := by
     intro s hzero
     let : NeZero (S.basisDim s) := ⟨Nat.ne_of_gt (hBasisDim s)⟩
-    have hmpv : (MPTensor.mpv (K s).toMPSTensor :
-        MPSTensor.NSiteSpace (d * d) N) ≠ 0 := by
+    have hmpv : (MPTensor.mpv (K s) : (Fin N → Fin d × Fin d) → ℂ) ≠ 0 := by
       apply MPSTensor.mpv_ne_zero_of_isNBlkInjective
         (Kraus.isNBlkInjective_one_of_isInjective (hInjective s)) Nat.one_pos
       omega
     apply hmpv
     funext ρ
-    let u : Fin N → Fin d := fun n ↦ (ρ n).divNat
-    let v : Fin N → Fin d := fun n ↦ (ρ n).modNat
-    have hρ : ρ = fun n ↦ finProdFinEquiv (u n, v n) := by
-      funext n
-      exact (finProdFinEquiv.apply_symm_apply (ρ n)).symm
-    rw [hρ, MPSTensor.mpv_toMPSTensor_pairConfig]
-    rw [hzero]
+    rw [MPOTensor.mpv_eq_mpo, hzero]
     rfl
   obtain ⟨coefficient, hCoefficient, hCoefficientEq⟩ :=
     exists_nonnegative_real_eq_sectorCoefficient_of_orthogonalSupport

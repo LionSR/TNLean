@@ -61,7 +61,6 @@ variable {d D : ℕ}
 
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-attribute [local instance] groundSpaceES_hasOrthogonalProjection
 
 /-- Display (6.1) of Nachtergaele, arXiv:cond-mat/9410110, lines 2401--2412, at a fixed
 interaction length. Given the geometric bound \(a(m)\le c\lambda^m<1\) on the source
@@ -78,7 +77,8 @@ theorem wholeIncrement_groundProjection_defect_le_fnw_geometric [NeZero D]
     (r ℓ : ℕ) (hℓ : 0 < ℓ) :
     ‖(reassocTailBoundaryMapES A r m ℓ).range.starProjection ∘L
           (leftBoundaryMapES A (r + m) ℓ).range.starProjection -
-        (groundSpaceES A (r + m + ℓ)).starProjection‖ ≤
+        ((groundSpace A (r + m + ℓ)).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection‖ ≤
       c * lam ^ m * (1 + c * lam ^ m) / (1 - c * lam ^ m) := by
   have ha0 : 0 ≤ fnwMixingQuantity ρ hρ A htr m :=
     fnwMixingQuantity_nonneg ρ hρ A htr m
@@ -94,7 +94,8 @@ theorem wholeIncrement_groundProjection_defect_le_fnw_geometric [NeZero D]
   calc
     ‖(reassocTailBoundaryMapES A r m ℓ).range.starProjection ∘L
           (leftBoundaryMapES A (r + m) ℓ).range.starProjection -
-        (groundSpaceES A (r + m + ℓ)).starProjection‖ ≤
+        ((groundSpace A (r + m + ℓ)).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection‖ ≤
         fnwMixingQuantity ρ hρ A htr m * (1 + fnwMixingQuantity ρ hρ A htr m) /
           fnwLowerBoundaryConstant ρ hρ A m :=
       wholeIncrement_groundProjection_defect_le_fnw_factored
@@ -112,7 +113,6 @@ open MPSTensor
 variable {d D : ℕ}
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-attribute [local instance] MPSTensor.groundSpaceES_hasOrthogonalProjection
 
 /-- A primitive matrix-product state satisfies display (6.1) of Nachtergaele,
 arXiv:cond-mat/9410110, lines 2401--2412, with a rate strictly below one and a positive
@@ -131,7 +131,8 @@ theorem exists_wholeIncrement_groundProjection_defect_le_fnw_geometric
         ∀ m : ℕ, L ≤ m → c * lam ^ m < 1 → ∀ r ℓ : ℕ, 0 < ℓ →
           ‖(reassocTailBoundaryMapES A r m ℓ).range.starProjection ∘L
                 (leftBoundaryMapES A (r + m) ℓ).range.starProjection -
-              (groundSpaceES A (r + m + ℓ)).starProjection‖ ≤
+              ((groundSpace A (r + m + ℓ)).map (WithLp.linearEquiv 2 ℂ
+                  _).symm.toLinearMap).starProjection‖ ≤
             c * lam ^ m * (1 + c * lam ^ m) / (1 - c * lam ^ m) := by
   set σ : Mat := (Matrix.trace ρ)⁻¹ • ρ with hσ_def
   have hσ : σ.PosDef := hρ.inv_trace_smul
@@ -162,7 +163,6 @@ noncomputable section
 
 variable {d D : ℕ}
 
-attribute [local instance] groundSpaceES_hasOrthogonalProjection
 
 /-- The open-chain projector defect at overlap length \(l\) is the whole-increment defect
 with a one-site suffix. -/
@@ -170,10 +170,12 @@ theorem openChain_groundProjection_defect_eq_wholeIncrement
     (A : MPSTensor d D) (K l : ℕ) :
     openChainTailGroundProjectionES A K (l + 1) ∘L
           openChainLeftGroundProjectionES A (K + l) -
-        (groundSpaceES A (K + l + 1)).starProjection =
+        ((groundSpace A (K + l + 1)).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection =
       (reassocTailBoundaryMapES A K l 1).range.starProjection ∘L
           (leftBoundaryMapES A (K + l) 1).range.starProjection -
-        (groundSpaceES A (K + l + 1)).starProjection := by
+        ((groundSpace A (K + l + 1)).map (WithLp.linearEquiv 2 ℂ
+            _).symm.toLinearMap).starProjection := by
   simp only [openChainTailGroundProjectionES, openChainLeftGroundProjectionES,
     reassocTailBoundaryMapES_one, range_tailBoundaryMapES, range_leftBoundaryMapES_one]
 
@@ -188,7 +190,6 @@ open MPSTensor
 variable {d D : ℕ}
 local notation "Mat" => Matrix (Fin D) (Fin D) ℂ
 
-attribute [local instance] MPSTensor.groundSpaceES_hasOrthogonalProjection
 
 /-- The open-chain form of display (6.1) of Nachtergaele, arXiv:cond-mat/9410110,
 lines 1180--1194: any prefix length and an overlap length beyond the interaction
@@ -204,7 +205,8 @@ theorem exists_openChain_groundProjection_defect_le_fnw_geometric
         ∀ l : ℕ, L ≤ l → c * lam ^ l < 1 → ∀ K : ℕ,
           ‖openChainTailGroundProjectionES A K (l + 1) ∘L
                 openChainLeftGroundProjectionES A (K + l) -
-              (groundSpaceES A (K + l + 1)).starProjection‖ ≤
+              ((groundSpace A (K + l + 1)).map (WithLp.linearEquiv 2 ℂ
+                  _).symm.toLinearMap).starProjection‖ ≤
             c * lam ^ l * (1 + c * lam ^ l) / (1 - c * lam ^ l) := by
   obtain ⟨c, lam, L, hc, hlam, hlam_one, hL, hInj, hDefect⟩ :=
     hP.exists_wholeIncrement_groundProjection_defect_le_fnw_geometric hρ

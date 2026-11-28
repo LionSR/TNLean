@@ -95,12 +95,12 @@ abbrev pairTargetDim (ab : Fin 3 × Fin 3) : ℕ := summandDim (ab.1 + ab.2)
 
 /-- The target of the pair `(g, h)`: the summand `U_{g+h}`, with multiplicity one and weight
 one (data file §2.5). -/
-def pairTarget (ab : Fin 3 × Fin 3) : MPSTensor 9 (pairTargetDim ab) := summandMPS (ab.1 + ab.2)
+def pairTarget (ab : Fin 3 × Fin 3) : MPOTensor 3 (pairTargetDim ab) := summandMPS (ab.1 + ab.2)
 
 /-- The Eisenstein matrices of the target of the pair `(g, h)`. -/
 def pairTargetEis (ab : Fin 3 × Fin 3) :
-    Fin 9 → Matrix (Fin (pairTargetDim ab)) (Fin (pairTargetDim ab)) EisensteinInt :=
-  summandEisMPS (ab.1 + ab.2)
+    Fin 3 × Fin 3 → Matrix (Fin (pairTargetDim ab)) (Fin (pairTargetDim ab)) EisensteinInt :=
+  summandEis (ab.1 + ab.2)
 
 /-- The slots of the square: all nine pairs of summands. -/
 abbrev squareSlots : Finset (Fin 3 × Fin 3) := Finset.univ
@@ -109,7 +109,7 @@ abbrev squareSlots : Finset (Fin 3 × Fin 3) := Finset.univ
 
 /-- The stacked product `U_g ⊗ U_h` of two summands: the stacked tensors of the four nontrivial
 fusions, and the stacked products with the identity summand on the other five pairs. -/
-def pairStackMPS : (ab : Fin 3 × Fin 3) → MPSTensor 9 (pairBlockDim ab)
+def pairStackMPS : (ab : Fin 3 × Fin 3) → MPOTensor 3 (pairBlockDim ab)
   | (0, 0) => fun a => complexOfEisenstein (pairStackEis (0, 0) a)
   | (0, 1) => fun a => complexOfEisenstein (pairStackEis (0, 1) a)
   | (0, 2) => fun a => complexOfEisenstein (pairStackEis (0, 2) a)
@@ -120,7 +120,7 @@ def pairStackMPS : (ab : Fin 3 × Fin 3) → MPSTensor 9 (pairBlockDim ab)
   | (2, 1) => duStack
   | (2, 2) => ddStack
 
-theorem pairStackMPS_eq (ab : Fin 3 × Fin 3) (a : Fin 9) :
+theorem pairStackMPS_eq (ab : Fin 3 × Fin 3) (a : Fin 3 × Fin 3) :
     pairStackMPS ab a = complexOfEisenstein (pairStackEis ab a) := by
   obtain ⟨g, h⟩ := ab
   fin_cases g <;> fin_cases h
@@ -128,7 +128,7 @@ theorem pairStackMPS_eq (ab : Fin 3 × Fin 3) (a : Fin 9) :
 
 /-- **The stacked square is block diagonal over the nine pairs of summands**, the `(g, h)`
 block being the stacked product `U_g ⊗ U_h` (data file §2.5). -/
-theorem defectSquare_eq_blockDiagonal (a : Fin 9) :
+theorem defectSquare_eq_blockDiagonal (a : Fin 3 × Fin 3) :
     defectSquare a =
       (Matrix.blockDiagonal' fun ab => pairStackMPS ab a).submatrix squareBond.symm
         squareBond.symm := by
@@ -141,45 +141,45 @@ theorem defectSquare_eq_blockDiagonal (a : Fin 9) :
 /-! On the five pairs involving the identity summand, the stacked product is the target itself
 under the natural bond identification (data file §2.5). -/
 
-private theorem stack00_eq (a : Fin 9) :
-    (pairStackEis (0, 0) a : Matrix (Fin 1) (Fin 1) EisensteinInt) = identityEisMPS a := by
+private theorem stack00_eq (a : Fin 3 × Fin 3) :
+    (pairStackEis (0, 0) a : Matrix (Fin 1) (Fin 1) EisensteinInt) = identityEis a := by
   refine Matrix.ext fun i j => ?_
   fin_cases a <;> fin_cases i <;> fin_cases j <;> rfl
 
-private theorem pairStack00_eq (a : Fin 9) : pairStackMPS (0, 0) a = pairTarget (0, 0) a :=
-  (congrArg complexOfEisenstein (stack00_eq a)).trans (identityMPS_eq a).symm
+private theorem pairStack00_eq (a : Fin 3 × Fin 3) : pairStackMPS (0, 0) a = pairTarget (0, 0) a :=
+  (congrArg complexOfEisenstein (stack00_eq a))
 
-private theorem stack01_eq (a : Fin 9) :
-    (pairStackEis (0, 1) a : Matrix (Fin 2) (Fin 2) EisensteinInt) = uEisMPS a := by
+private theorem stack01_eq (a : Fin 3 × Fin 3) :
+    (pairStackEis (0, 1) a : Matrix (Fin 2) (Fin 2) EisensteinInt) = uEis a := by
   refine Matrix.ext fun i j => ?_
   fin_cases a <;> fin_cases i <;> fin_cases j <;> rfl
 
-private theorem pairStack01_eq (a : Fin 9) : pairStackMPS (0, 1) a = pairTarget (0, 1) a :=
-  (congrArg complexOfEisenstein (stack01_eq a)).trans (uMPS_eq a).symm
+private theorem pairStack01_eq (a : Fin 3 × Fin 3) : pairStackMPS (0, 1) a = pairTarget (0, 1) a :=
+  (congrArg complexOfEisenstein (stack01_eq a))
 
-private theorem stack02_eq (a : Fin 9) :
-    (pairStackEis (0, 2) a : Matrix (Fin 2) (Fin 2) EisensteinInt) = uDagEisMPS a := by
+private theorem stack02_eq (a : Fin 3 × Fin 3) :
+    (pairStackEis (0, 2) a : Matrix (Fin 2) (Fin 2) EisensteinInt) = uDagEis a := by
   refine Matrix.ext fun i j => ?_
   fin_cases a <;> fin_cases i <;> fin_cases j <;> rfl
 
-private theorem pairStack02_eq (a : Fin 9) : pairStackMPS (0, 2) a = pairTarget (0, 2) a :=
-  (congrArg complexOfEisenstein (stack02_eq a)).trans (uDagMPS_eq a).symm
+private theorem pairStack02_eq (a : Fin 3 × Fin 3) : pairStackMPS (0, 2) a = pairTarget (0, 2) a :=
+  (congrArg complexOfEisenstein (stack02_eq a))
 
-private theorem stack10_eq (a : Fin 9) :
-    (pairStackEis (1, 0) a : Matrix (Fin 2) (Fin 2) EisensteinInt) = uEisMPS a := by
+private theorem stack10_eq (a : Fin 3 × Fin 3) :
+    (pairStackEis (1, 0) a : Matrix (Fin 2) (Fin 2) EisensteinInt) = uEis a := by
   refine Matrix.ext fun i j => ?_
   fin_cases a <;> fin_cases i <;> fin_cases j <;> rfl
 
-private theorem pairStack10_eq (a : Fin 9) : pairStackMPS (1, 0) a = pairTarget (1, 0) a :=
-  (congrArg complexOfEisenstein (stack10_eq a)).trans (uMPS_eq a).symm
+private theorem pairStack10_eq (a : Fin 3 × Fin 3) : pairStackMPS (1, 0) a = pairTarget (1, 0) a :=
+  (congrArg complexOfEisenstein (stack10_eq a))
 
-private theorem stack20_eq (a : Fin 9) :
-    (pairStackEis (2, 0) a : Matrix (Fin 2) (Fin 2) EisensteinInt) = uDagEisMPS a := by
+private theorem stack20_eq (a : Fin 3 × Fin 3) :
+    (pairStackEis (2, 0) a : Matrix (Fin 2) (Fin 2) EisensteinInt) = uDagEis a := by
   refine Matrix.ext fun i j => ?_
   fin_cases a <;> fin_cases i <;> fin_cases j <;> rfl
 
-private theorem pairStack20_eq (a : Fin 9) : pairStackMPS (2, 0) a = pairTarget (2, 0) a :=
-  (congrArg complexOfEisenstein (stack20_eq a)).trans (uDagMPS_eq a).symm
+private theorem pairStack20_eq (a : Fin 3 × Fin 3) : pairStackMPS (2, 0) a = pairTarget (2, 0) a :=
+  (congrArg complexOfEisenstein (stack20_eq a))
 
 /-- The compression datum of each pair block: the data of the four nontrivial fusions
 (`Z3AnomalousFusion.lean`, `Z3AnomalousInverseFusion.lean`), and, on the five pairs involving the
@@ -201,7 +201,7 @@ def pairCompression :
 /-- **Every word of length at least three vanishes in the remainder of each pair block**: the
 four nontrivial fusions have remainders nilpotent of order three, and the five pairs involving
 the identity summand have zero remainder. -/
-theorem pairCompression_evalWord_remainder_eq_zero (ab : Fin 3 × Fin 3) (w : List (Fin 9))
+theorem pairCompression_evalWord_remainder_eq_zero (ab : Fin 3 × Fin 3) (w : List (Fin 3 × Fin 3))
     (hw : 3 ≤ w.length) : Kraus.evalWord (pairCompression ab).remainder w = 0 := by
   have htriv : ∀ ab, (pairCompression ab).remainder = 0 →
       Kraus.evalWord (pairCompression ab).remainder w = 0 := by
@@ -236,31 +236,31 @@ theorem defectSquare_compression_z : defectSquare_compression.z = 10 := rfl
 
 /-- **The identity `A² = 3A` at the level of word traces** (data file §2.5): at every positive
 length the stacked square has three times the word traces of each summand. -/
-theorem defectSquare_trace_evalWord (w : List (Fin 9)) (hw : w ≠ []) :
+theorem defectSquare_trace_evalWord (w : List (Fin 3 × Fin 3)) (hw : w ≠ []) :
     Matrix.trace (Kraus.evalWord defectSquare w) =
-      3 * (Matrix.trace (Kraus.evalWord identityMPS w) + Matrix.trace (Kraus.evalWord uMPS w) +
-        Matrix.trace (Kraus.evalWord uDagMPS w)) := by
+      3 * (Matrix.trace (Kraus.evalWord identityTensor w) +
+        Matrix.trace (Kraus.evalWord uTensor w) + Matrix.trace (Kraus.evalWord uDagTensor w)) := by
   have h := defectSquare_compression.trace_evalWord_eq_sum w hw
   rw [Fintype.sum_prod_type, Fin.sum_univ_three, Fin.sum_univ_three, Fin.sum_univ_three,
     Fin.sum_univ_three] at h
   have e00 : Matrix.trace (Kraus.evalWord (pairTarget (0, 0)) w) =
-      Matrix.trace (Kraus.evalWord identityMPS w) := rfl
+      Matrix.trace (Kraus.evalWord identityTensor w) := rfl
   have e01 : Matrix.trace (Kraus.evalWord (pairTarget (0, 1)) w) =
-      Matrix.trace (Kraus.evalWord uMPS w) := rfl
+      Matrix.trace (Kraus.evalWord uTensor w) := rfl
   have e02 : Matrix.trace (Kraus.evalWord (pairTarget (0, 2)) w) =
-      Matrix.trace (Kraus.evalWord uDagMPS w) := rfl
+      Matrix.trace (Kraus.evalWord uDagTensor w) := rfl
   have e10 : Matrix.trace (Kraus.evalWord (pairTarget (1, 0)) w) =
-      Matrix.trace (Kraus.evalWord uMPS w) := rfl
+      Matrix.trace (Kraus.evalWord uTensor w) := rfl
   have e11 : Matrix.trace (Kraus.evalWord (pairTarget (1, 1)) w) =
-      Matrix.trace (Kraus.evalWord uDagMPS w) := rfl
+      Matrix.trace (Kraus.evalWord uDagTensor w) := rfl
   have e12 : Matrix.trace (Kraus.evalWord (pairTarget (1, 2)) w) =
-      Matrix.trace (Kraus.evalWord identityMPS w) := rfl
+      Matrix.trace (Kraus.evalWord identityTensor w) := rfl
   have e20 : Matrix.trace (Kraus.evalWord (pairTarget (2, 0)) w) =
-      Matrix.trace (Kraus.evalWord uDagMPS w) := rfl
+      Matrix.trace (Kraus.evalWord uDagTensor w) := rfl
   have e21 : Matrix.trace (Kraus.evalWord (pairTarget (2, 1)) w) =
-      Matrix.trace (Kraus.evalWord identityMPS w) := rfl
+      Matrix.trace (Kraus.evalWord identityTensor w) := rfl
   have e22 : Matrix.trace (Kraus.evalWord (pairTarget (2, 2)) w) =
-      Matrix.trace (Kraus.evalWord uMPS w) := rfl
+      Matrix.trace (Kraus.evalWord uTensor w) := rfl
   rw [h, e00, e01, e02, e10, e11, e12, e20, e21, e22]
   ring
 
@@ -272,10 +272,10 @@ theorem mpo_defect_mul_defect (L : ℕ) (hL : 0 < L) :
       (3 : ℂ) • MPOTensor.mpo defectTensor L := by
   rw [← MPOTensor.mpo_mulTensor]
   ext σ τ
-  rw [Matrix.smul_apply, MPOTensor.mpo_apply_toMPSTensor, MPOTensor.mpo_apply_toMPSTensor,
-    smul_eq_mul]
-  exact (defectSquare_trace_evalWord _ (MPOTensor.ofFn_pairConfig_ne_nil hL σ τ)).trans
-    (congrArg (fun t => 3 * t) (defectMPS_trace_evalWord _)).symm
+  rw [Matrix.smul_apply, MPOTensor.mpo_apply_eq_trace_kraus_evalWord,
+    MPOTensor.mpo_apply_eq_trace_kraus_evalWord, smul_eq_mul]
+  exact (defectSquare_trace_evalWord _ (MPOTensor.ofFn_pair_ne_nil hL σ τ)).trans
+    (congrArg (fun t ↦ 3 * t) (defectMPS_trace_evalWord _)).symm
 
 /-- The nine targets have total bond dimension `3 · (1 + 2 + 2) = 15`. -/
 theorem sum_pairTargetDim : ∑ s ∈ squareSlots, pairTargetDim s = 15 := by decide
@@ -288,23 +288,23 @@ theorem defectSquare_dim_eq : (25 : ℕ) = ∑ s ∈ squareSlots, pairTargetDim 
 §2.5): every word of length at least three vanishes in the remainder, sharpening the generic
 bound `|S| + z = 9 + 10 = 19` of clause (vi). The remainder is the direct sum of the remainders
 of the nine pair blocks, each of which vanishes on words of length three. -/
-theorem defectSquare_evalWord_remainder_eq_zero (w : List (Fin 9)) (hw : 3 ≤ w.length) :
+theorem defectSquare_evalWord_remainder_eq_zero (w : List (Fin 3 × Fin 3)) (hw : 3 ≤ w.length) :
     Kraus.evalWord defectSquare_compression.remainder w = 0 :=
   MultiBlockCompression.evalWord_remainder_directSum_eq_zero _ _ _ w fun ab =>
     pairCompression_evalWord_remainder_eq_zero ab w hw
 
 /-- **The nilpotency order three is exact** (data file §2.5): the product of the remainder
-letters `1` and `5` does not vanish, because it does not vanish in the block `U ⊗ U`. -/
+letters `(0, 1)` and `(1, 2)` does not vanish, because it does not vanish in the block `U ⊗ U`. -/
 theorem defectSquare_remainder_mul_ne_zero :
-    defectSquare_compression.remainder 1 * defectSquare_compression.remainder 5 ≠ 0 := by
+    defectSquare_compression.remainder (0, 1) * defectSquare_compression.remainder (1, 2) ≠ 0 := by
   have h := MultiBlockCompression.evalWord_remainder_directSum_ne_zero pairCompression squareBond
-    defectSquare_eq_blockDiagonal [1, 5] (1, 1) (by
-      change uu_compression.remainder 1 *
-        (uu_compression.remainder 5 * (1 : Matrix (Fin 4) (Fin 4) ℂ)) ≠ 0
+    defectSquare_eq_blockDiagonal [(0, 1), (1, 2)] (1, 1) (by
+      change uu_compression.remainder (0, 1) *
+        (uu_compression.remainder (1, 2) * (1 : Matrix (Fin 4) (Fin 4) ℂ)) ≠ 0
       rw [Matrix.mul_one]
       exact uu_remainder_mul_ne_zero)
-  change defectSquare_compression.remainder 1 *
-    (defectSquare_compression.remainder 5 * (1 : Matrix (Fin 25) (Fin 25) ℂ)) ≠ 0 at h
+  change defectSquare_compression.remainder (0, 1) *
+    (defectSquare_compression.remainder (1, 2) * (1 : Matrix (Fin 25) (Fin 25) ℂ)) ≠ 0 at h
   rwa [Matrix.mul_one] at h
 
 end Z3Anomalous

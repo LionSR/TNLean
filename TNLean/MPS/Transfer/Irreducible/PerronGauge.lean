@@ -73,19 +73,18 @@ positive definite matrix `σ` and a positive real `r` with
 `∑ (A i)ᴴ * σ * A i = r • σ` (the adjoint eigenvector equation).
 
 This is the transfer-map form of `Kraus.exists_posDef_adjoint_eigenvector`. -/
-theorem exists_posDef_adjoint_eigenvector
+theorem exists_posDef_adjoint_eigenvector {α : Type*} [Fintype α]
     [NeZero D]
-    (A : MPSTensor d D)
-    (hIrr : Kraus.IsIrreducibleFamily (ι := Fin d) (n := Fin D) A)
+    (A : MPTensor α (Fin D))
+    (hIrr : Kraus.IsIrreducibleFamily A)
     (hA : ∃ i, A i ≠ 0) :
     ∃ (σ : Matrix (Fin D) (Fin D) ℂ) (r : ℝ),
       σ.PosDef ∧ 0 < r ∧
-      Kraus.transferMap (ι := Fin d) (n := Fin D) (fun i => (A i)ᴴ) σ = (r : ℂ) • σ := by
+      Kraus.transferMap (fun i => (A i)ᴴ) σ = (r : ℂ) • σ := by
   obtain ⟨σ, r, hσ_pd, hr_pos, hσ_eig⟩ :=
     Kraus.exists_posDef_adjoint_eigenvector (K := A)
       (Kraus.isIrreducibleMap_mapLM_of_isIrreducibleFamily A hIrr) hA
-  refine ⟨σ, r, hσ_pd, hr_pos, ?_⟩
-  exact hσ_eig
+  exact ⟨σ, r, hσ_pd, hr_pos, hσ_eig⟩
 
 /-- **TP / left-canonical gauge data for an irreducible MPS tensor.**
 
@@ -160,7 +159,7 @@ theorem exists_unital_data_of_irreducible
     intro h
     exact hi (Matrix.conjTranspose_eq_zero.mp (by simpa [Aadj] using h))
   obtain ⟨ρ, r, hρ, hr, hρ_eig_adj⟩ :=
-    exists_posDef_adjoint_eigenvector (d := d) (D := D) Aadj hIrrAdj hAadj
+    exists_posDef_adjoint_eigenvector (D := D) Aadj hIrrAdj hAadj
   have hρ_eig : Kraus.transferMap (ι := Fin d) (n := Fin D) A ρ = (r : ℂ) • ρ := by
     simpa [Aadj, Matrix.conjTranspose_conjTranspose] using hρ_eig_adj
   let B : MPSTensor d D := Kraus.spectralUnitalGauge (ι := Fin d) (D := D) A r ρ
@@ -171,7 +170,7 @@ theorem exists_unital_data_of_irreducible
   have hGauge : GaugeEquiv (α := Fin d) (β := Fin D)
       (fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • A i) B := by
     convert
-      gaugeEquiv_unitalGauge (d := d) (D := D)
+      gaugeEquiv_unitalGauge (α := Fin d) (D := D)
         (fun i => (↑((Real.sqrt r)⁻¹) : ℂ) • A i) ρ hρ using 1
     ext i
     simp [B, Kraus.spectralUnitalGauge, Kraus.unitalGauge]

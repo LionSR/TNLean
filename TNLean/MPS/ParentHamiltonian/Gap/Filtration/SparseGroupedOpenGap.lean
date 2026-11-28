@@ -74,10 +74,11 @@ theorem grouped_martingaleDifference_norm_le_of_projector_defect_of_le
     (A : MPSTensor d D) {p N M : ℕ} (hp : 0 < p) (hMN : p * M ≤ N)
     (hKernel : ∀ n, 2 * p ≤ n →
       LinearMap.ker (Matrix.toEuclideanLin (parentChainInteraction A (2 * p) n).hamiltonian) =
-          groundSpaceES A n)
+          ((groundSpace A n).map (WithLp.linearEquiv 2 ℂ _).symm.toLinearMap))
     {ε : ℝ} (hε : 0 ≤ ε)
     (hDefect : ∀ K : ℕ,
-      ‖(groundSpaceES A (K + p + p)).starProjection -
+      ‖((groundSpace A (K + p + p)).map (WithLp.linearEquiv 2 ℂ
+          _).symm.toLinearMap).starProjection -
         (leftBoundaryMapES A (K + p) p).range.starProjection.comp
           (reassocTailBoundaryMapES A K p p).range.starProjection‖ ≤ ε) :
     ∀ n ∈ Finset.range M,
