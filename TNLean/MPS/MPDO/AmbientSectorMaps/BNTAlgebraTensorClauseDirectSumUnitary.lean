@@ -96,9 +96,9 @@ structure UnitarySectorConjugacy (S : TwoSiteExactSectorGauge H) where
         (Fin (S.decomposition.bondDim (S.relabel γ))) ℂ)ᴴ
 
 private theorem reindexAlgEquiv_finCongr_apply_eq_cast
-    {p q e : ℕ} (h : p = q) (A : MPSTensor e p) (i : Fin e) :
+    {κ : Type*} {p q : ℕ} (h : p = q) (A : MPTensor κ (Fin p)) (i : κ) :
     Matrix.reindexAlgEquiv ℂ ℂ (finCongr h) (A i) =
-      (cast (congrArg (MPSTensor e) h) A) i := by
+      (cast (congrArg (fun k ↦ MPTensor κ (Fin k)) h) A) i := by
   subst q
   rfl
 

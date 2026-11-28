@@ -474,34 +474,13 @@ theorem exists_blockedBNT_gaugePhase_of_flatBlock
       (retainedVerticalProductTensor dim mult weight B)
       (fun γ ↦ ⟨dim₂ γ, A₂ γ⟩) :=
     hBNT₂.of_sameMPV₂Pos hSame
-  -- The characterization of bases of normal tensors is stated on an alphabet `Fin d`; apply it
-  -- to the bond-pair letters relabelled along `Fintype.equivFin`.
-  let e : Fin (Fintype.card (Fin D × Fin D)) ≃ Fin D × Fin D := (Fintype.equivFin _).symm
   have hCharacterization :=
     (MPSTensor.isCPSVBasisOfNormalTensors_iff_canonicalForm_covered_and_minimal
-      (Kraus.reindexPhysical e (retainedVerticalProductTensor dim mult weight B))
-      S.flatCoefficient (fun j ↦ Kraus.reindexPhysical e (S.flatBlock j))
-      (fun γ ↦ Kraus.reindexPhysical e (A₂ γ))
-      (fun j ↦ (S.flatBlock_normal j).reindexPhysical e) S.flatCoefficient_ne
-      (fun N hN σ ↦ by
-        change MPTensor.mpv (Kraus.reindexPhysical e _) σ =
-          MPTensor.mpv (Kraus.reindexPhysical e
-            (MPTensor.toTensorFromBlocks S.flatCoefficient S.flatBlock)) σ
-        rw [MPTensor.mpv_reindexPhysical, MPTensor.mpv_reindexPhysical]
-        exact S.flat_sameMPV₂Pos N hN _)).mp
-      (hBNTProduct.reindexPhysical e)
-  have hcast : ∀ {n m : ℕ} (h : n = m) (A : MPOTensor D n) (ab : Fin D × Fin D),
-      (cast (congr_arg (MPSTensor (Fintype.card (Fin D × Fin D))) h)
-        (Kraus.reindexPhysical e A)) (e.symm ab) = (cast (congr_arg (MPOTensor D) h) A) ab := by
-    intro n m h A ab
-    subst h
-    simp [Kraus.reindexPhysical]
+      (retainedVerticalProductTensor dim mult weight B)
+      S.flatCoefficient S.flatBlock A₂ S.flatBlock_normal S.flatCoefficient_ne
+      S.flat_sameMPV₂Pos).mp hBNTProduct
   intro j
-  obtain ⟨γ, hdim, X, ζ, hζ, hrel⟩ := hCharacterization.2.1 j
-  refine ⟨γ, hdim, X, ζ, hζ, fun ab ↦ ?_⟩
-  have h := hrel (e.symm ab)
-  rw [hcast hdim] at h
-  simpa [Kraus.reindexPhysical] using h
+  exact hCharacterization.2.1 j
 
 /-- A simultaneous choice of the blocked BNT label, dimension equality,
 gauge, and phase for every enumerated active product corner.
