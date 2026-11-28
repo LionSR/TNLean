@@ -22,7 +22,7 @@ open scoped Matrix ComplexOrder BigOperators Matrix.Norms.Operator Kraus
 
 namespace MPSTensor
 
-variable {d D : ℕ}
+variable {α : Type*} [Fintype α] {D : ℕ}
 
 /-- Scaling an MPS tensor by `c` scales the transfer map by `c * star c`. -/
 theorem transferMap_smul (c : ℂ) {α : Type*} [Fintype α] (A : MPTensor α (Fin D))
@@ -35,7 +35,7 @@ theorem transferMap_smul (c : ℂ) {α : Type*} [Fintype α] (A : MPTensor α (F
 /-- Multiplying every tensor letter by a unit-norm scalar leaves the transfer
 map unchanged. -/
 theorem transferMap_smul_eq_of_norm_eq_one
-    (A : MPSTensor d D) (c : ℂ) (hc : ‖c‖ = 1) :
+    (A : MPTensor α (Fin D)) (c : ℂ) (hc : ‖c‖ = 1) :
     Kraus.transferMap (fun i => c • A i) = Kraus.transferMap A := by
   apply LinearMap.ext
   intro X
@@ -46,7 +46,7 @@ theorem transferMap_smul_eq_of_norm_eq_one
 
 /-- The transfer spectral radius scales by the squared modulus of the tensor scalar. -/
 theorem spectralRadius_transferMap_smul [Nonempty (Fin D)]
-    (c : ℂ) (hc : c ≠ 0) (A : MPSTensor d D) :
+    (c : ℂ) (hc : c ≠ 0) (A : MPTensor α (Fin D)) :
     spectralRadius ℂ
         ((Module.End.toContinuousLinearMap (Matrix (Fin D) (Fin D) ℂ))
           (Kraus.transferMap (fun i => c • A i))) =
@@ -77,8 +77,8 @@ theorem spectralRadius_transferMap_smul [Nonempty (Fin D)]
 
 /-- Unit-norm scaling preserves left-canonical normalization. -/
 theorem leftCanonical_smul_of_norm_one (c : ℂ) (hc : ‖c‖ = 1)
-    (A : MPSTensor d D) (hA : ∑ i : Fin d, (A i)ᴴ * (A i) = 1) :
-    ∑ i : Fin d, (c • A i)ᴴ * (c • A i) = 1 := by
+    (A : MPTensor α (Fin D)) (hA : ∑ i : α, (A i)ᴴ * (A i) = 1) :
+    ∑ i : α, (c • A i)ᴴ * (c • A i) = 1 := by
   simp only [Matrix.conjTranspose_smul]
   simp_rw [smul_mul_smul_comm]
   rw [← Finset.smul_sum, hA]
@@ -93,15 +93,15 @@ unit norm.
 This is the scalar normalization used in arXiv:1708.00029, Appendix A,
 lines 1082--1084: once sectorwise proportionality has been extracted, the
 left-canonical equations force the proportionality scalar to be a phase. -/
-theorem norm_eq_one_of_leftCanonical_smul [NeZero D] (c : ℂ) (A : MPSTensor d D)
+theorem norm_eq_one_of_leftCanonical_smul [NeZero D] (c : ℂ) (A : MPTensor α (Fin D))
     (hA : IsLeftCanonical A) (hcA : IsLeftCanonical (fun i => c • A i)) :
     ‖c‖ = 1 := by
   unfold IsLeftCanonical at hA hcA
   have hscaled : (star c * c) • (1 : Matrix (Fin D) (Fin D) ℂ) = 1 := by
     calc
       (star c * c) • (1 : Matrix (Fin D) (Fin D) ℂ)
-          = (star c * c) • ∑ i : Fin d, (A i)ᴴ * A i := by rw [hA]
-      _ = ∑ i : Fin d, (c • A i)ᴴ * (c • A i) := by
+          = (star c * c) • ∑ i : α, (A i)ᴴ * A i := by rw [hA]
+      _ = ∑ i : α, (c • A i)ᴴ * (c • A i) := by
         simp only [Matrix.conjTranspose_smul]
         simp_rw [smul_mul_smul_comm]
         rw [← Finset.smul_sum]
@@ -127,11 +127,11 @@ the normalization step in arXiv:1708.00029, Appendix A, lines 1082--1084, after
 the \(\Omega_u\)-contraction and scalar extraction have produced the sector
 relation. -/
 theorem kappa_norm_eq_one_of_leftCanonical_smul [NeZero D]
-    {κ ξ : ℂ} (hξ : ‖ξ‖ = 1) (A B : MPSTensor d D)
+    {κ ξ : ℂ} (hξ : ‖ξ‖ = 1) (A B : MPTensor α (Fin D))
     (hA : IsLeftCanonical A) (hB : IsLeftCanonical B)
-    (hAB : ∀ i : Fin d, A i = (κ * ξ) • B i) :
+    (hAB : ∀ i : α, A i = (κ * ξ) • B i) :
     ‖κ‖ = 1 := by
-  have hscaled : IsLeftCanonical (fun i : Fin d => (κ * ξ) • B i) := by
+  have hscaled : IsLeftCanonical (fun i : α => (κ * ξ) • B i) := by
     unfold IsLeftCanonical Kraus.IsTP at hA ⊢
     simpa [hAB] using hA
   have hκξ : ‖κ * ξ‖ = 1 :=
@@ -141,7 +141,7 @@ theorem kappa_norm_eq_one_of_leftCanonical_smul [NeZero D]
 /-- Unit-norm scaling preserves periodicity data. -/
 theorem isPeriodic_smul_of_norm_one
     {m : ℕ} {c : ℂ} (hc : ‖c‖ = 1)
-    (A : MPSTensor d D) (hA : IsPeriodic m A) :
+    (A : MPTensor α (Fin D)) (hA : IsPeriodic m A) :
     IsPeriodic m (fun i => c • A i) := by
   have hc_ne : c ≠ 0 := Complex.ne_zero_of_norm_eq_one hc
   have hTransfer : Kraus.transferMap (fun i => c • A i) = Kraus.transferMap A :=
@@ -159,12 +159,12 @@ theorem phase_norm_one {μ : ℂ} (hμ : μ ≠ 0) :
 
 /-- Multiplying every block weight by the same scalar multiplies length-`N`
 MPV coefficients by `c ^ N`. -/
-theorem mpv_toTensorFromBlocks_weight_mul_left {r : ℕ} {dim : Fin r → ℕ}
-    (c : ℂ) (μ : Fin r → ℂ)
-    (A : (k : Fin r) → MPSTensor d (dim k))
-    {N : ℕ} (σ : Fin N → Fin d) :
-    mpv (toTensorFromBlocks (α := Fin d) (μ := fun k => c * μ k) A) σ =
-      c ^ N * mpv (toTensorFromBlocks (α := Fin d) (μ := μ) A) σ := by
+theorem mpv_toTensorFromBlocks_weight_mul_left {α : Type*} [Fintype α] {r : ℕ}
+    {dim : Fin r → ℕ} (c : ℂ) (μ : Fin r → ℂ)
+    (A : (k : Fin r) → MPTensor α (Fin (dim k)))
+    {N : ℕ} (σ : Fin N → α) :
+    mpv (toTensorFromBlocks (α := α) (μ := fun k => c * μ k) A) σ =
+      c ^ N * mpv (toTensorFromBlocks (α := α) (μ := μ) A) σ := by
   rw [mpv_toTensorFromBlocks_eq_sum, mpv_toTensorFromBlocks_eq_sum]
   rw [Finset.mul_sum]
   refine Finset.sum_congr rfl fun k _ => ?_

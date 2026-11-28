@@ -267,8 +267,13 @@ theorem exists_eventually_linearIndependent_of_periodic_blocks_not_repeated
       (fun j k hjk h => hNonrep (e.symm j) (e.symm k)
         (fun hEq => hjk (by simpa using congrArg e hEq)) h)
   refine ⟨N₀, fun N hN => ?_⟩
-  convert (hLI N hN).comp e e.injective using 1
-  funext k
-  simp only [Function.comp_apply, Equiv.symm_apply_apply, mpvState]
+  show LinearIndependent ℂ (fun k : ι => mpvState (α := β) (A k) (p * N))
+  have hfun :
+      ((fun k : Fin (Fintype.card ι) => mpvState (α := β) (A (e.symm k)) (p * N)) ∘ e) =
+        fun k : ι => mpvState (α := β) (A k) (p * N) := by
+    funext k
+    exact congrArg (fun y : ι => mpvState (α := β) (A y) (p * N)) (e.symm_apply_apply k)
+  rw [← hfun]
+  exact (hLI N hN).comp e e.injective
 
 end MPSTensor

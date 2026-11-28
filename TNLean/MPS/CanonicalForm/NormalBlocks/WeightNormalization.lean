@@ -118,7 +118,7 @@ theorem PGVWC07PositiveLengthWitness.exists_weight_normalization
           rw [hfun]
       _ = (scale : ℂ) ^ N *
             mpv (toTensorFromBlocks (α := Fin d) (μ := ν) W.blocks) σ :=
-          mpv_toTensorFromBlocks_weight_mul_left (d := d) (c := (scale : ℂ))
+          mpv_toTensorFromBlocks_weight_mul_left (α := Fin d) (c := (scale : ℂ))
             (μ := ν) W.blocks σ
 
 /-- A nonzero positive-length MPV coefficient forces the PGVWC07 witness to
