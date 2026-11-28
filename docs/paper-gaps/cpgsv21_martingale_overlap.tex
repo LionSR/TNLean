@@ -755,7 +755,7 @@ backward transport results replace this conditional route. The theorem
 \leanid{Submodule.re_inner_anticommutator_starProjection_orthogonal_ge_neg_of_friedrichs_bound}
 uses the intersection identity
 (\ref{eq:cpgsv21_martingale_overlap_common_ground_space}), equivalently
-\leanid{MPSTensor.parentRingInteraction_term_zero_one_eq_zero_iff_mem_groundSpaceES_succ}; it does not
+\leanid{MPSTensor.parentRingInteraction_term_zero_one_eq_zero_iff_mem_map_groundSpace_succ}; it does not
 require a small bound on $\lVert p_ip_j\rVert$.
 
 \section{Relation to the blueprint}
@@ -1065,11 +1065,12 @@ proves
     \label{eq:cpgsv21_martingale_overlap_inverse_gram_identity_bound}
 \end{align}
 
-Assume that $L_0>0$ and $A$ is $L_0$-block injective. The theorems
-\leanid{MPSTensor.groundSpaceMapES_injective_of_isNBlkInjective} and
-\leanid{MPSTensor.groundSpaceMapES_injective_of_isNBlkInjective_of_le} show
-that $\Gamma_L^{\mathrm{ES}}$ is injective for every $L\geq L_0$. Therefore
-\leanid{MPSTensor.groundSpaceES_starProjection_eq_groundSpaceMapES_comp_inverseGram_comp_adjoint}
+Assume that $L_0>0$ and $A$ is $L_0$-block injective. Then $A$ is
+$L$-block injective for every $L\geq L_0$, and
+\leanid{MPSTensor.groundSpaceMap_injective_of_isNBlkInjective} shows that
+$\Gamma_L$, hence its Euclidean form $\Gamma_L^{\mathrm{ES}}$, is injective
+for every $L\geq L_0$. Therefore
+\leanid{MPSTensor.map_groundSpace_starProjection_eq_groundSpaceMapES_comp_inverseGram_comp_adjoint}
 gives
 \begin{align}
     P_{\mathcal G_L^{\mathrm{ES}}(A)}
